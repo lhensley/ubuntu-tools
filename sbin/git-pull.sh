@@ -17,15 +17,16 @@ git checkout $BRANCH
 # Pull down a copy of the repository
 git pull
 # Set permissions for git directory
-sudo chmod -R 400 /var/local/git
+chmod -R 400 /var/local/git
 # Copy scripts into /usr/local/sbin
-sudo cp -r /var/local/git/go/sbin /usr/local
+rm -rf /usr/local/sbin
+cp -r /var/local/git/go/sbin /usr/local
 # Set ownership and permissions in /usr/local/sbin
-sudo chown -R root:lhensley /usr/local/sbin
-sudo find /usr/local/sbin -type d -print0 | sudo xargs -0 chmod 750
-sudo find /usr/local/sbin -type f -print0 | sudo xargs -0 chmod 440
-sudo chmod -R 400 /usr/local/sbin/setup/configs
-sudo chmod 540 /usr/local/sbin/*.sh /usr/local/sbin/setup/*.sh /usr/local/sbin/*.py /usr/local/sbin/ccextractor
+chown -R root:lhensley /usr/local/sbin
+find /usr/local/sbin -type d -print0 | xargs -0 chmod 750
+find /usr/local/sbin -type f -print0 | xargs -0 chmod 440
+chmod -R 400 /usr/local/sbin/setup/configs
+chmod 540 /usr/local/sbin/*.sh /usr/local/sbin/setup/*.sh /usr/local/sbin/*.py /usr/local/sbin/ccextractor
 
 
 
