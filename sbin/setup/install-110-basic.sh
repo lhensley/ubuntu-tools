@@ -64,7 +64,7 @@ cp $PROGRAM_DIRECTORY/configs/lane-applications /etc/ufw/applications.d/
 chown root:root /etc/ufw/applications.d/lane-applications
 chmod 644 /etc/ufw/applications.d/lane-applications
 ufw app update lane-applications
-
+echo Here.
 exit
 
 # CRITICAL: Install this first.

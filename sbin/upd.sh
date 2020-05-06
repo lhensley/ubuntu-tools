@@ -36,7 +36,7 @@ chmod 540 /usr/local/sbin/*.sh /usr/local/sbin/setup/*.sh /usr/local/sbin/*.py /
 cd
 # Update /home/$USER_ME/.ssh/authorized_keys
 cp /var/local/git/go/ssh/$USER_ME/authorized_keys /home/$USER_ME/.ssh
-cp /var/local/git/go/ssh/$USER_UBUNTU/authorized_keys /home/$USER_ME/.ssh
+cp /var/local/git/go/ssh/$USER_ME/authorized_keys /home/$UBUNTU_ME/.ssh
 chown $USER_ME:$USER_ME /home/$USER_ME/.ssh/authorized_keys
 chown $USER_UBUNTU:$USER_UBUNTU /home/$USER_UBUNTU/.ssh/authorized_keys
 chmod 644 /home/$USER_ME/.ssh/authorized_keys
