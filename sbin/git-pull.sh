@@ -27,7 +27,7 @@ find /usr/local/sbin -type d -print0 | xargs -0 chmod 750
 find /usr/local/sbin -type f -print0 | xargs -0 chmod 440
 chmod -R 400 /usr/local/sbin/setup/configs
 chmod 540 /usr/local/sbin/*.sh /usr/local/sbin/setup/*.sh /usr/local/sbin/*.py /usr/local/sbin/ccextractor
-echo Update complete.
+echo git update complete.
 
 
 
