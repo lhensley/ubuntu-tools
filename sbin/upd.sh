@@ -7,13 +7,11 @@
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/source.sh
 
-HOME_DIRECTORY="/home/lhensley"
-
 # Changed apt-get to apt 1/31/19.
 # See https://itsfoss.com/apt-vs-apt-difference/ for rationale.
 
 # This section re-pulls all go files from github and updates /usr/local/sbin
-USERNAME="lhensley"
+USERNAME=$USER_ME
 REPOSITORY="/var/local/git/go"
 BRANCH="master"
 # Change to local repository directory
@@ -36,6 +34,13 @@ find /usr/local/sbin -type f -print0 | xargs -0 chmod 440
 chmod -R 400 /usr/local/sbin/setup/configs
 chmod 540 /usr/local/sbin/*.sh /usr/local/sbin/setup/*.sh /usr/local/sbin/*.py /usr/local/sbin/ccextractor
 cd
+# Update ~/.ssh/authorized_keys
+cp /var/local/git/go/ssh/$USER_ME/authorized_keys ~/.ssh
+cp /var/local/git/go/ssh/$USER_UBUNTU/authorized_keys ~/.ssh
+chown $USER_ME:$USER_ME ~/.ssh/authorized_keys
+chown $USER_UBUNTU:$USER_UBUNTU /home/$USER_UBUNTU/.ssh/authorized_keys
+chmod 644 ~/.ssh/authorized_keys
+chmod 644 /home/$USER_UBUNTU/.ssh/authorized_keys
 echo git update complete.
 
 # "update" downloads package information from all configured sources

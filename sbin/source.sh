@@ -19,6 +19,9 @@ if [[ $EUID -ne 0 ]]; then
 fi
 # Set local Variables
 HOST_NAME=$(/bin/hostname -s)
+USER_ME="lhensley"
+USER_UBUNTU="ubuntu"
+HOME_DIRECTORY="/home/$USER_ME"
 case $HOST_NAME in
   nell )
     ADDRESS=192.168.168.21

@@ -4,7 +4,7 @@ Utilities for installation and management of an Ubuntu server
 **INSTALLATION INSTRUCTIONS**
 
 1.	Install the Ubuntu operating system and get to a shell.
-2.	Issue these commands:
+2.	Issue these commands (OK to copy the whole thing and paste it at a bash shell prompt):
 ```bash
 # Install git and ufw and open the git port
 sudo apt-get update && sudo apt-get install -y git ufw && sudo ufw allow git
@@ -16,4 +16,5 @@ sudo rm -rf /var/local/git /usr/local/sbin
 sudo mkdir -p /var/local/git && sudo chmod 775 /var/local/git && cd /var/local/git && sudo git clone https://github.com/lhensley/go.git && sudo chmod -R 400 /var/local/git && cd
 # Copy scripts into /usr/local/sbin
 sudo cp -r /var/local/git/go/sbin /usr/local && sudo chown -R root:lhensley /usr/local/sbin && sudo find /usr/local/sbin -type d -print0 | sudo xargs -0 chmod 750 && sudo find /usr/local/sbin -type f -print0 | sudo xargs -0 chmod 440 && sudo chmod -R 400 /usr/local/sbin/setup/configs && sudo chmod 540 /usr/local/sbin/*.sh /usr/local/sbin/setup/*.sh /usr/local/sbin/*.py /usr/local/sbin/ccextractor
+
 ```

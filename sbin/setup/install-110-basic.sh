@@ -1,10 +1,8 @@
 #!/bin/bash
-# initial-setup.sh
-# Revised 2020-05-05
+# install-110-basic.sh
+# Revised 2020-05-06
 # PURPOSE: Sets up some basic things. See comments for details.
 # IMPORTANT: Check variables at the top of the script before running it!
-# Should have owner root:root
-# Should have permissions 700
 # vi commands to delete all: :1,$d
 
 # Still to add:
@@ -62,6 +60,8 @@ cp configs/lane-applications /etc/ufw/applications.d/
 chown root:root /etc/ufw/applications.d/lane-applications
 chmod 644 /etc/ufw/applications.d/lane-applications
 ufw app update lane-applications
+
+exit
 
 # CRITICAL: Install this first.
 if $install_curl ; then
