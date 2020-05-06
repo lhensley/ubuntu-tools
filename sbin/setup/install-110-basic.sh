@@ -14,7 +14,7 @@
 
 # Include header file
 PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/source.sh
+source $PROGRAM_DIRECTORY/../source.sh
 
 USER_ME=lhensley
 USER_UBUNTU=ubuntu
@@ -60,7 +60,7 @@ fi
 apt-get update && apt -y dist-upgrade && apt -y clean && apt -y autoremove
 
 # Add custom application definitions for ufw
-cp $PROGRAM_DIRECTORY/setup/configs/lane-applications /etc/ufw/applications.d/
+cp $PROGRAM_DIRECTORY/configs/lane-applications /etc/ufw/applications.d/
 chown root:root /etc/ufw/applications.d/lane-applications
 chmod 644 /etc/ufw/applications.d/lane-applications
 ufw app update lane-applications
@@ -126,11 +126,11 @@ if $install_openssh_server ; then
   apt-get install -y openssh-server
   ufw allow ssh
   ufw limit ssh
-  cp /var/local/git/go/ssh/$USER_ME/authorized_keys ~/.ssh
-  cp /var/local/git/go/ssh/$USER_UBUNTU/authorized_keys ~/.ssh
-  chown $USER_ME:$USER_ME ~/.ssh/authorized_keys
+  cp /var/local/git/go/ssh/$USER_ME/authorized_keys /home/$USER_ME/.ssh
+  cp /var/local/git/go/ssh/$USER_UBUNTU/authorized_keys /home/$USER_ME/.ssh
+  chown $USER_ME:$USER_ME /home/$USER_ME/.ssh/authorized_keys
   chown $USER_UBUNTU:$USER_UBUNTU /home/$USER_UBUNTU/.ssh/authorized_keys
-  chmod 644 ~/.ssh/authorized_keys
+  chmod 644 /home/$USER_ME/.ssh/authorized_keys
   chmod 644 /home/$USER_UBUNTU/.ssh/authorized_keys
   fi
 
@@ -212,7 +212,7 @@ if $enable_ufw ; then
   fi
 
 # Edit .vimrc settings
-touch ~/.vimrc && cp ~/.vimrc ~/.vimrc.backup.$(date "+%Y.%m.%d-%H.%M.%S") && echo "set background=dark" > ~/.vimrc && echo "set visualbell" >> ~/.vimrc
+touch /home/$USER_ME/.vimrc && cp /home/$USER_ME/.vimrc /home/$USER_ME/.vimrc.backup.$(date "+%Y.%m.%d-%H.%M.%S") && echo "set background=dark" > /home/$USER_ME/.vimrc && echo "set visualbell" >> /home/$USER_ME/.vimrc
 
 # Make $USER_ME and $USER_UBUNTU users and give them sudo access and ssh access
 useradd $USER_ME
