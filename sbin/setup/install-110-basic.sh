@@ -71,7 +71,6 @@ if $install_curl ; then
   apt-get install -y curl
   fi
 # echo curl installed.
-exit
 
 # Install this early.
 if $install_unzip ; then
@@ -84,6 +83,7 @@ exit
 if $install_wget ; then
   apt-get install -y wget
   fi
+exit
 
 if $install_apache2 ; then
   apt-get install -y apache2
