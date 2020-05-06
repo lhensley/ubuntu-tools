@@ -12,6 +12,10 @@
 #    turn off password
 #    If a clone, make some things unique: hostname, address, keys (ssh, ssl, mysql, webmin)
 
+# Include header file
+PROGRAM_DIRECTORY=$(dirname $0)
+source $PROGRAM_DIRECTORY/source.sh
+
 USER_ME=lhensley
 USER_UBUNTU=ubuntu
 
@@ -56,7 +60,7 @@ fi
 apt-get update && apt -y dist-upgrade && apt -y clean && apt -y autoremove
 
 # Add custom application definitions for ufw
-cp configs/lane-applications /etc/ufw/applications.d/
+cp $PROGRAM_DIRECTORY/setup/configs/lane-applications /etc/ufw/applications.d/
 chown root:root /etc/ufw/applications.d/lane-applications
 chmod 644 /etc/ufw/applications.d/lane-applications
 ufw app update lane-applications
