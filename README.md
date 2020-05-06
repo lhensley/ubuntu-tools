@@ -1,7 +1,7 @@
 # go
 Utilities for installation and management of an Ubuntu server
 
-INSTALLATION INSTRUCTIONS
+**INSTALLATION INSTRUCTIONS**
 
 1.	Install the Ubuntu operating system and get to a shell.
 2.	Issue these commands:
