@@ -64,37 +64,40 @@ cp $PROGRAM_DIRECTORY/configs/lane-applications /etc/ufw/applications.d/
 chown root:root /etc/ufw/applications.d/lane-applications
 chmod 644 /etc/ufw/applications.d/lane-applications
 ufw app update lane-applications
-# echo Special LANE applications installed to ufw.
+echo Special LANE applications installed to ufw.
 
 # CRITICAL: Install this first.
 if $install_curl ; then
   apt-get install -y curl
+  echo curl installed.
   fi
-# echo curl installed.
 
 # Install this early.
 if $install_unzip ; then
   apt-get install -y unzip
+  echo unzip installed.
   fi
-# echo unzip installed.
-exit
 
 # Install this early.
 if $install_wget ; then
   apt-get install -y wget
+  echo wget installed.
   fi
-exit
 
 if $install_apache2 ; then
   apt-get install -y apache2
-  ufw allow 'Apache' && ufw allow 'Apache Full'
+  ufw allow 'Apache'
+  ufw allow 'Apache Full'
   ufw allow http
   ufw allow https
+  echo wget installed.
   fi
 
 if $install_fail2ban ; then
   apt-get install -y fail2ban
+  echo fail2ban installed.
   fi
+exit
 
 # ASKS QUESTIONS! Choose Smart Host: mail.twc.com
 if $install_mailutils ; then
