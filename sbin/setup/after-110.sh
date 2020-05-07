@@ -1,9 +1,8 @@
 #!/bin/bash
-# install-110-basic.sh
-# Revised 2020-05-06
-# PURPOSE: Sets up some basic things. See comments for details.
+# XXX.sh
+# Revised 2020-05-07
+# PURPOSE:
 # IMPORTANT: Check variables at the top of the script before running it!
-# vi commands to delete all: :1,$d
 
 # Still to add:
 #    wordpress
@@ -36,7 +35,6 @@ install_sysbench=true
 install_tasksel=true
 install_unzip=true
 # NOTE: xrdp will allow remote desktop protocol. Use with care.
-install_webmin=true
 # Strongly recommended
 install_wget=true
 install_xrdp=true
@@ -87,19 +85,6 @@ if $install_mysql_server ; then
 #  ufw allow mysql
   fi
 
-# phpMyAdmin should be installed AFTER php and MySQL Server
-# BUG: mcrypt module missing. Also, what to do as php value changes. TBD
-if $install_php ; then
-  apt-get install -y php libapache2-mod-php
-  apt-get install -y php-mysql php-gd php-curl php-imap php-ldap
-  apt-get install -y libmcrypt-dev php7.2-mbstring
-  apt-get install -y php-dev php-pear
-  pecl channel-update pecl.php.net
-  pecl install mcrypt-1.0.1
-  phpenmod gd curl imap ldap mbstring
-  service apache2 restart
-  fi
-
 # phpMyAdmin should be installed AFTER php and MySQL
 # ASKS QUESTIONS!
 if $install_phpmyadmin ; then
@@ -131,13 +116,3 @@ if $install_plexmediaserver ; then
   ufw allow plexmediaserver
   fi
 
-# NOTE: Install Webmin last, so it picks up on installed applications.
-if $install_webmin ; then
-  wget http://www.webmin.com/download/deb/webmin-current.deb
-  apt-get -y install perl libnet-ssleay-perl openssl libauthen-pam-perl \
-  libpam-runtime libio-pty-perl apt-show-versions python
-  dpkg --install webmin-current.deb
-  rm webmin-current.deb
-  ufw allow webmin
-  fi
-  

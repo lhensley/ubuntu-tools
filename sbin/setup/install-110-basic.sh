@@ -1,9 +1,8 @@
 #!/bin/bash
 # install-110-basic.sh
-# Revised 2020-05-06
-# PURPOSE: Sets up some basic things. See comments for details.
+# Revised 2020-05-07
+# PURPOSE: Installs basic software.
 # IMPORTANT: Check variables at the top of the script before running it!
-# vi commands to delete all: :1,$d
 
 # Still to add:
 #    wordpress
@@ -27,6 +26,7 @@ install_fail2ban=true
 install_net_tools=true
 install_openssh_server=true
 install_openssl=true
+install_php=true
 install_sysbench=true
 install_tasksel=true
 install_unzip=true
@@ -121,8 +121,18 @@ if $install_net_tools ; then
   fi
 
 if $install_openssl ; then
-  apt-get install -y openssl
+  apt-get install -y openssl libcurl4-openssl-dev libssl-dev
   echo openssl installed.
+  fi
+
+if $install_php ; then
+  apt-get install -y php libapache2-mod-php
+  apt-get install -y php-mysql php-gd php-curl php-imap php-ldap
+  apt-get install -y libmcrypt-dev php-mbstring
+  apt-get install -y php-dev php-pear
+  phpenmod gd curl imap ldap mbstring
+  systemctl restart apache2
+  echo php installed.
   fi
 
 if $install_sysbench ; then
