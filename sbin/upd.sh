@@ -35,8 +35,10 @@ chmod -R 400 /usr/local/sbin/setup/configs
 chmod 540 /usr/local/sbin/*.sh /usr/local/sbin/setup/*.sh /usr/local/sbin/*.py /usr/local/sbin/ccextractor
 cd
 # Update /home/$USER_ME/.ssh/authorized_keys
-cp /var/local/git/go/ssh/$USER_ME/authorized_keys /home/$USER_ME/.ssh
-cp /var/local/git/go/ssh/$USER_ME/authorized_keys /home/$UBUNTU_ME/.ssh
+mkdir -p /home/$USER_ME/.ssh/
+mkdir -p /home/$UBUNTU_ME/.ssh/
+cp /var/local/git/go/ssh/$USER_ME/authorized_keys /home/$USER_ME/.ssh/
+cp /var/local/git/go/ssh/$USER_ME/authorized_keys /home/$UBUNTU_ME/.ssh/
 chown $USER_ME:$USER_ME /home/$USER_ME/.ssh/authorized_keys
 chown $USER_UBUNTU:$USER_UBUNTU /home/$USER_UBUNTU/.ssh/authorized_keys
 chmod 644 /home/$USER_ME/.ssh/authorized_keys
