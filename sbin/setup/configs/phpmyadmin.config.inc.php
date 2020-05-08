@@ -69,40 +69,6 @@ $i = 0;
 // $cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';
 
 /**
- * Server L9
- */
-$i++;
-$cfg['Servers'][$i]['verbose'] = 'L9';
-$cfg['Servers'][$i]['AllowNoPassword'] = false;
-$cfg['Servers'][$i]['host'] = 'l9.local';
-$cfg['Servers'][$i]['port'] = '';
-$cfg['Servers'][$i]['socket'] = '';
-$cfg['Servers'][$i]['connect_type'] = 'tcp';
-$cfg['Servers'][$i]['extension'] = 'mysqli';
-$cfg['Servers'][$i]['auth_type'] = 'cookie';
-$cfg['Servers'][$i]['ssl'] = true;
-$cfg['Servers'][$i]['ssl_key'] = '/usr/share/phpmyadmin/client-certs/L9-MySQL-client-key.pem';
-$cfg['Servers'][$i]['ssl_cert'] = '/usr/share/phpmyadmin/client-certs/L9-MySQL-client-cert.pem';
-$cfg['Servers'][$i]['ssl_ca'] = '/usr/share/phpmyadmin/client-certs/L9-MySQL-ca.pem';
-$cfg['Servers'][$i]['compress'] = false;
-/**
- * Server nell
- */
-$i++;
-$cfg['Servers'][$i]['verbose'] = 'nell';
-$cfg['Servers'][$i]['host'] = 'localhost';
-$cfg['Servers'][$i]['port'] = '';
-$cfg['Servers'][$i]['socket'] = '';
-$cfg['Servers'][$i]['connect_type'] = 'tcp';
-$cfg['Servers'][$i]['extension'] = 'mysqli';
-$cfg['Servers'][$i]['auth_type'] = 'cookie';
-$cfg['Servers'][$i]['AllowNoPassword'] = false;
-#$cfg['Servers'][$i]['ssl'] = true;
-#$cfg['Servers'][$i]['ssl_key'] = '/usr/share/phpmyadmin/client-certs/nell-MySQL-client-key.pem';
-#$cfg['Servers'][$i]['ssl_cert'] = '/usr/share/phpmyadmin/client-certs/nell-MySQL-client-cert.pem';
-#$cfg['Servers'][$i]['ssl_ca'] = '/usr/share/phpmyadmin/client-certs/nell-MySQL-ca.pem';
-$cfg['Servers'][$i]['compress'] = false;
-/**
  * Server nuc01
 */
 $i++;

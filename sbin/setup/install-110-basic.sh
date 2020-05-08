@@ -18,11 +18,18 @@ source $PROGRAM_DIRECTORY/../source.sh
 USER_ME=lhensley
 USER_UBUNTU=ubuntu
 
+# mailutils options
+MAILNAME="$(hostname)"
+MAIN_MAILER_TYPE="'Internet with smarthost'"
+RELAYHOST="mail.twc.com" # Spectrum Internet
+# RELAYHOST="mail.mchsi.com" # Mediacom Cable Internet
+
 install_apache2=true
 install_certbot=true
 # Strongly recommended to install curl. Other installs depend on it.
 install_curl=true
 install_fail2ban=true
+install_mailutils=true
 install_net_tools=true
 install_openssh_server=true
 install_openssl=true
@@ -35,6 +42,7 @@ install_wget=true
 # NOTE: xrdp will allow remote desktop protocol. Use with care.
 install_xrdp=true
 enable_ufw=true
+install_webmin=true
 
 work_directory=$(pwd)
 
@@ -154,6 +162,25 @@ if $install_xrdp ; then
 if $enable_certbot ; then
   apt install -y certbot python3-certbot-apache
   echo certbot installed.
+  fi
+
+if $install_webmin ; then
+  wget http://www.webmin.com/download/deb/webmin-current.deb
+  apt-get install -y openssl libcurl4-openssl-dev libssl-dev
+  apt-get install -y perl libnet-ssleay-perl libauthen-pam-perl \
+  libpam-runtime libio-pty-perl apt-show-versions python
+  dpkg --install webmin-current.deb
+  rm webmin-current.deb
+  ufw allow webmin
+  echo Webmin installed.
+  fi
+
+if $install_mailutils ; then
+  debconf-set-selections <<< "postfix postfix/relayhost $RELAYHOST"
+  debconf-set-selections <<< "postfix postfix/mailname string $MAILNAME"
+  debconf-set-selections <<< "postfix postfix/main_mailer_type string $MAIN_MAILER_TYPE"
+  apt-get install -y mailutils
+  ufw allow mail
   fi
 
 # Edit .vimrc settings

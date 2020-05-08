@@ -19,8 +19,8 @@ USER_ME=lhensley
 USER_UBUNTU=ubuntu
 
 install_apache2=true
-# Strongly recommended to install curl. Other installs depend on it.
 install_certbot=true
+# Strongly recommended to install curl. Other installs depend on it.
 install_curl=true
 install_fail2ban=true
 install_mailutils=true
@@ -34,9 +34,9 @@ install_plexmediaserver=false
 install_sysbench=true
 install_tasksel=true
 install_unzip=true
-# NOTE: xrdp will allow remote desktop protocol. Use with care.
 # Strongly recommended
 install_wget=true
+# NOTE: xrdp will allow remote desktop protocol. Use with care.
 install_xrdp=true
 enable_ufw=true
 
@@ -60,20 +60,14 @@ apt-get update && apt -y dist-upgrade && apt -y clean && apt -y autoremove
 
 
 
-# ASKS QUESTIONS! Choose Smart Host: mail.twc.com
-if $install_mailutils ; then
-  apt-get install -y mailutils
-  ufw allow mail
-  fi
-
 # phpMyAdmin should be installed AFTER php and MySQL
 if $install_mysql_server ; then
-  apt-get install -y openssl
+  apt-get install -y openssl libcurl4-openssl-dev libssl-dev
   apt-get install -y mysql-server
-  mysql_secure_installation
+  mysql_secure_installation --use-default
   cp /etc/mysql/mysql.conf.d/mysqld.cnf \
   /etc/mysql/mysql.conf.d/mysqld.cnf-$(date '+%Y%m%d%H%M%S')
-  cp configs/mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
+  cp $(dirname $0)/configs/mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
   chown root:root /etc/mysql/mysql.conf.d/mysqld.cnf
   chmod 644 /etc/mysql/mysql.conf.d/mysqld.cnf
   mysql_ssl_rsa_setup
