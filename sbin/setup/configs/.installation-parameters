@@ -1,0 +1,62 @@
+#!/bin/bash
+# .installation-parameters
+# Revised 2020-05-09
+
+debug_mode=false
+#debug_mode=true
+if $debug_mode ; then
+  set -x
+  fi
+
+EXCLUDED_PASSWORD_CHARACTERS=" \$\'\"\\\#\|\<\>\;\*\&\~\!\I\l\1\O\0\`\/\?"
+
+###################################################
+######### IMPORTANT! ##############################
+######### Fill in this section carefully, #########
+######### copy-and-paste it into Roboform #########
+######### BEFORE running install script ###########
+HOSTNAME="$(hostname)"
+USER_ME="lhensley"
+PASSWORD_ME="$(apg -s -a 1 -m 32 -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)"
+USER_UBUNTU="ubuntu"
+PASSWORD_UBUNTU=""
+MYSQL_ROOT_PASSWORD="aiZEG86BKF$gZQf@EM6fnc5eJsaAVzbt"
+PHPMYADMIN_APP_PASS=""
+PHPMYADMIN_ROOT_PASS=""
+PHPMYADMIN_APP_DB_PASS=""
+PHPMYADMIN_BLOWFISH_SECRET=""
+MAILNAME="$(hostname)"
+MAIN_MAILER_TYPE="'Internet with smarthost'"
+RELAYHOST="mail.twc.com" # Spectrum Internet
+# RELAYHOST="mail.mchsi.com" # Mediacom Cable Internet
+######### END password information ################
+###################################################
+
+install_apache2=true
+install_certbot=true
+# Strongly recommended to install curl. Other installs depend on it.
+install_curl=true
+install_fail2ban=true
+install_mailutils=true
+install_mysql_server=true
+install_net_tools=true
+install_openssh_server=true
+install_openssl=true
+install_php=true
+install_phpmyadmin=true
+install_plexmediaserver=false
+install_sysbench=true
+install_tasksel=true
+install_unzip=true
+install_webmin=true
+# Strongly recommended
+install_wget=true
+# NOTE: xrdp will allow remote desktop protocol. Use with care.
+install_xrdp=true
+enable_ufw=true
+
+source /etc/os-release
+work_directory=$(pwd)
+running_directory=$(dirname $0)
+configs_directory="$running_directory/configs"
+

@@ -58,10 +58,10 @@ fi
 apt-get update && apt -y dist-upgrade && apt -y clean && apt -y autoremove
 
 
-
-
 # phpMyAdmin should be installed AFTER php and MySQL
 if $install_mysql_server ; then
+  debconf-set-selections <<< "mysql-server mysql-server/root_password password $MYSQL_ROOT_PASSWORD"
+  debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $MYSQL_ROOT_PASSWORD"
   apt-get install -y openssl libcurl4-openssl-dev libssl-dev
   apt-get install -y mysql-server
   mysql_secure_installation --use-default
@@ -82,7 +82,17 @@ if $install_mysql_server ; then
 # phpMyAdmin should be installed AFTER php and MySQL
 # ASKS QUESTIONS!
 if $install_phpmyadmin ; then
-  apt-get install -y phpmyadmin php-mbstring php-gettext
+# Based on https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04
+  PHPMYADMIN_APP_PASS="8hBUeXCmATanaSwP6^mci4mUUUzfJ!ih"
+  PHPMYADMIN_ROOT_PASS="YtMhe5rY#Qs2fFb&%n#qDtAi3k!Q3mUN"
+  PHPMYADMIN_APP_DB_PASS="BL%4yFUevWJ*bag2mX#gP^VjnGnW8S49"
+  debconf-set-selections <<< "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2"
+  debconf-set-selections <<< "phpmyadmin phpmyadmin/dbconfig-install boolean true"
+  debconf-set-selections <<< "phpmyadmin phpmyadmin/app-password-confirm password $PHPMYADMIN_APP_PASS"
+  debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/admin-pass password $PHPMYADMIN_ROOT_PASS"
+  debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_APP_DB_PASS"
+  apt install phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+
   cd /usr/share
   rm -R phpmyadmin
   wget -P /usr/share/ "https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.zip"
