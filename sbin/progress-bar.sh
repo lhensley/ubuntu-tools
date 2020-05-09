@@ -25,6 +25,22 @@ function spaces () {
         done
 }
 
+if [[ -z $ITEMS ]]; then
+    $ITEMS=0
+    fi
+
+if [[ $ITEMS="" ]]; then
+    $ITEMS=0
+    fi
+
+if [[ -z $DONE ]]; then
+    $ITEMS=0
+    fi
+
+if [[ $DONE="" ]]; then
+    $ITEMS=0
+    fi
+
 if [[ ${WIDTH} -lt 10 ]]; then
     exit
     fi
