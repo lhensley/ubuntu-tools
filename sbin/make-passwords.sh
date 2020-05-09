@@ -15,4 +15,4 @@ if $debug_mode ; then
 
 apt-get update
 apt-get install -y apg
-apg -s -a 1 -m $LENGTH_OF_PASSWORDS -n $NUMBER_OF_PASSWORDS -E $TEST
+apg -s -a 1 -m $LENGTH_OF_PASSWORDS -n $NUMBER_OF_PASSWORDS -E $EXCLUDED_PASSWORD_CHARACTERS
