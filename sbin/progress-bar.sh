@@ -25,7 +25,7 @@ function spaces () {
         done
 }
 
-if [[ ${$WIDTH} -lt 10 ]]; then
+if [[ ${WIDTH} -lt 10 ]]; then
     exit
     fi
 
@@ -56,35 +56,13 @@ if [[ ${ITEMS} -eq 0 ]]; then
     exit
     fi
 
-let RANGE=$WIDTH-10
-let POUNDS=$ITEMS-$DONE
-let POUNDS=$POUNDS/$RANGE
-let POUNDS=$POUNDS*$DONE
-let SPACES=$RANGE-$POUNDS
-let PERCENT=$DONE/$ITEMS
+let RANGE=WIDTH-10
+let POUNDS=DONE*RANGE/ITEMS
+let SPACES=RANGE-POUNDS
+let PERCENT=100*DONE/ITEMS
 
-echo Width: $WIDTH
-echo Items: $ITEMS
-echo Done: $DONE
-echo Range: $RANGE
-echo Pounds: $POUNDS
-echo Spaces: $SPACES
-echo Percent $PERCENT
-echo ""
+printf "%3d [" 0
+pounds $POUNDS
+spaces $SPACES
+printf "]"
 
-$WIDTH=$(printf "%.0f\n" $WIDTH)
-$ITEMS=$(printf "%.0f\n" $ITEMS)
-$DONE=$(printf "%.0f\n" $DONE)
-$RANGE=$(printf "%.0f\n" $RANGE)
-$POUNDS=$(printf "%.0f\n" $POUNDS)
-$SPACES=$(printf "%.0f\n" $SPACES)
-$PERCENT=$(printf "%.0f\n" $PERCENT)
-
-echo Width: $WIDTH
-echo Items: $ITEMS
-echo Done: $DONE
-echo Range: $RANGE
-echo Pounds: $POUNDS
-echo Spaces: $SPACES
-echo Percent $PERCENT
-echo ""
