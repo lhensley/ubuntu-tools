@@ -4,7 +4,7 @@
 # PURPOSE: Create strong passwords with no problematic characters.
 
 NUMBER_OF_PASSWORDS=20
-LENGTH_OF_PASSWORDS=32
+LENGTH_OF_PASSWORDS=63
 EXCLUDED_PASSWORD_CHARACTERS=" \$\'\"\\\#\|\<\>\;\*\&\~\!\I\l\1\O\0\`\/\?"
 
 debug_mode=false
