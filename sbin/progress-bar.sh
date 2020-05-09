@@ -63,10 +63,30 @@ LET POUNDS=$POUNDS*$DONE
 LET SPACES=$RANGE-$POUNDS
 LET PERCENT=$DONE/$ITEMS
 
+echo Width: $WIDTH
 echo Items: $ITEMS
 echo Done: $DONE
 echo Range: $RANGE
 echo Pounds: $POUNDS
 echo Spaces: $SPACES
 echo Percent $PERCENT
+echo ""
+
+$WIDTH=$(printf "%.0f\n" $WIDTH)
+$ITEMS=$(printf "%.0f\n" $ITEMS)
+$DONE=$(printf "%.0f\n" $DONE)
+$RANGE=$(printf "%.0f\n" $RANGE)
+$POUNDS=$(printf "%.0f\n" $POUNDS)
+$SPACES=$(printf "%.0f\n" $SPACES)
+$PERCENT=$(printf "%.0f\n" $PERCENT)
+
+echo Width: $WIDTH
+echo Items: $ITEMS
+echo Done: $DONE
+echo Range: $RANGE
+echo Pounds: $POUNDS
+echo Spaces: $SPACES
+echo Percent $PERCENT
+echo ""
+
 
