@@ -30,7 +30,7 @@ if [[ -z "$ITEMS" ]]; then
 if [[ -z "$DONE" ]]; then
     DONE=0
     fi
-    .
+
 if [[ ${WIDTH} -lt 10 ]]; then
     exit
     fi
