@@ -25,38 +25,38 @@ function spaces () {
         done
 }
 
-if [ "$WIDTH" -lt 10 ]; then
+if [[ ${$WIDTH} -lt 10 ]]; then
     exit
     fi
 
-if [ "$ITEMS" -lt 0 ]; then
+if [[ ${ITEMS} -lt 0 ]]; then
     DONE=0
     fi
 
-if [ "$DONE" -lt 0 ]; then
+if [[ ${DONE} -lt 0 ]]; then
     DONE=0
     fi
 
-if [ "$DONE" -gt $ITEMS ]; then
+if [[ ${DONE} -gt "$ITEMS" ]]; then
     DONE=$ITEMS
     fi
 
-if [ "$ITEMS" -lt 0 ]; then
+if [[ ${ITEMS} -lt 0 ]]; then
     DONE=0
     fi
 
-if [ "$WIDTH" -lt 10 ]; then
+if [[ ${WIDTH} -lt 10 ]]; then
     exit
     fi
 
 let ERASE=$WIDTH-2
-if [ "$ITEMS" -eq 0 ]; then
-    spaces($ERASE)
+if [[ ${ITEMS} -eq 0 ]]; then
+    spaces $ERASE
     echo -ne "\r"
     exit
     fi
 
-let RANGE=$WIDTH=10
+let RANGE=$WIDTH-10
 let POUNDS=$ITEMS-$DONE
 let POUNDS=$POUNDS/$RANGE
 let POUNDS=$POUNDS*$DONE
