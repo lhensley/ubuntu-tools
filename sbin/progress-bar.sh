@@ -25,20 +25,12 @@ function spaces () {
         done
 }
 
-if [[ -z $ITEMS ]]; then
-    $ITEMS=0
+if [[ -z "$ITEMS" ]]; then
+    ITEMS=0
     fi
 
-if [[ $ITEMS="" ]]; then
-    $ITEMS=0
-    fi
-
-if [[ -z $DONE ]]; then
-    $ITEMS=0
-    fi
-
-if [[ $DONE="" ]]; then
-    $ITEMS=0
+if [[ -z "$DONE" ]]; then
+    DONE=0
     fi
 
 if [[ ${WIDTH} -lt 10 ]]; then
@@ -65,7 +57,7 @@ if [[ ${WIDTH} -lt 10 ]]; then
     exit
     fi
 
-let ERASE=$WIDTH-2
+let ERASE=WIDTH-2
 if [[ ${ITEMS} -eq 0 ]]; then
     spaces $ERASE
     echo -ne "\r"
