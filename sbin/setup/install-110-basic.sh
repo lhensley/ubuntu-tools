@@ -11,41 +11,6 @@
 #    turn off password
 #    If a clone, make some things unique: hostname, address, keys (ssh, ssl, mysql, webmin)
 
-# Include header file
-PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/../source.sh
-
-USER_ME=lhensley
-USER_UBUNTU=ubuntu
-
-# mailutils options
-MAILNAME="$(hostname)"
-MAIN_MAILER_TYPE="'Internet with smarthost'"
-RELAYHOST="mail.twc.com" # Spectrum Internet
-# RELAYHOST="mail.mchsi.com" # Mediacom Cable Internet
-
-install_apache2=true
-install_certbot=true
-# Strongly recommended to install curl. Other installs depend on it.
-install_curl=true
-install_fail2ban=true
-install_mailutils=true
-install_net_tools=true
-install_openssh_server=true
-install_openssl=true
-install_php=true
-install_sysbench=true
-install_tasksel=true
-install_unzip=true
-# Strongly recommended
-install_wget=true
-# NOTE: xrdp will allow remote desktop protocol. Use with care.
-install_xrdp=true
-enable_ufw=true
-install_webmin=true
-
-work_directory=$(pwd)
-
 debug_mode=false
 #debug_mode=true
 if $debug_mode ; then
@@ -57,6 +22,14 @@ if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as root." 1>&2
   exit 1
 fi
+
+# Include header file
+PROGRAM_DIRECTORY=$(dirname $0)
+source $PROGRAM_DIRECTORY/../source.sh
+source $PROGRAM_DIRECTORY/configs/installation-configs
+
+echo "The buck stops here."
+exit
 
 # Do updates
 apt-get update && apt -y dist-upgrade && apt -y clean && apt -y autoremove
