@@ -13,6 +13,9 @@ if $debug_mode ; then
   set -x
   fi
 
-apt-get update
-apt-get install -y apg
-apg -s -a 1 -m $LENGTH_OF_PASSWORDS -n $NUMBER_OF_PASSWORDS -E $EXCLUDED_PASSWORD_CHARACTERS
+if ! [ -x "$(command -v apg)" ]; then
+  apt-get update
+  apt-get install -y apg
+fi
+
+uuidgen -r | sed 's/-//g' | apg -s -a 1 -m $LENGTH_OF_PASSWORDS -n $NUMBER_OF_PASSWORDS -E $EXCLUDED_PASSWORD_CHARACTERS
