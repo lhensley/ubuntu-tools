@@ -44,12 +44,12 @@ echo "" >> /tmp/passwords.sh
 for ((i = 1; i <= $NUMBER_OF_EXTRA_PASSWORDS; i++)); do
     echo "ADDITIONAL_PASSWORD_$i=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> /tmp/passwords.sh
     let COUNTER=i+NUMBER_OF_DESIGNATED_PASSWORDS
-    progress-bar.sh $TOTAL_PASSWORDS TOTAL_PASSWORDS COUNTER
+    progress-bar.sh $TOTAL_PASSWORDS COUNTER
 done
 
 echo "" >> /tmp/passwords.sh
 
 chown root:root /tmp/passwords.sh
-chmod 400 /tmp/passwords.sh
+chmod 500 /tmp/passwords.sh
 progress-bar.sh
 cat /tmp/passwords.sh

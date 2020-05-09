@@ -74,5 +74,5 @@ let PERCENT=100*DONE/ITEMS
 printf "%3d%% [" $PERCENT
 pounds $POUNDS
 spaces $SPACES
-printf "]"
+printf "]\r"
 # echo ""
