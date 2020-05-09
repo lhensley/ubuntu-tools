@@ -1,5 +1,5 @@
 #!/bin/bash
-# install-110-basic.sh
+# setup-os.sh
 # Revised 2020-05-07
 # PURPOSE: Installs basic software.
 # IMPORTANT: Check variables at the top of the script before running it!
@@ -26,7 +26,7 @@ fi
 # Include header file
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/../source.sh
-source $PROGRAM_DIRECTORY/configs/installation-configs
+source $PROGRAM_DIRECTORY/configs/installation-configs.sh
 
 echo "The buck stops here."
 exit
