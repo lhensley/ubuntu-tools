@@ -12,18 +12,14 @@ DONE=$2
 let WIDTH=$(tput cols)-2
 
 function pounds () {
-    for i in {1..$1}
-        do
-    	        echo -ne "#"
-        done
-}
+for ((i = 1; i = $1; i++)); do
+    echo -ne "#"
+done
 
 function spaces () {
-    for i in {1..$1}
-        do
-    	        echo -ne " "
-        done
-}
+for ((i = 1; i = $1; i++)); do
+    echo -ne " "
+done
 
 if [[ -z "$ITEMS" ]]; then
     ITEMS=0
@@ -69,8 +65,16 @@ let POUNDS=DONE*RANGE/ITEMS
 let SPACES=RANGE-POUNDS
 let PERCENT=100*DONE/ITEMS
 
-printf "%3d [" 0
+echo "Items: " $ITEMS
+echo "Done: " $DONE
+echo "Range: " $RANGE
+echo "Pounds: " $POUNDS
+echo "Spaces: " $SPACES
+echo "Percent: " $PERCENT
+echo "Erase: " $ERASE
+
+printf "%3d [" $PERCENT
 pounds $POUNDS
 spaces $SPACES
 printf "]"
-
+printf "\n"
