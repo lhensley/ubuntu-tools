@@ -18,4 +18,4 @@ if ! [ -x "$(command -v apg)" ]; then
   apt-get install -y apg
 fi
 
-uuidgen -r | sed 's/-//g' | apg -s -a 1 -m $LENGTH_OF_PASSWORDS -n $NUMBER_OF_PASSWORDS -E $EXCLUDED_PASSWORD_CHARACTERS
+apg -s -a 1 -m $LENGTH_OF_PASSWORDS -n $NUMBER_OF_PASSWORDS -E $EXCLUDED_PASSWORD_CHARACTERS
