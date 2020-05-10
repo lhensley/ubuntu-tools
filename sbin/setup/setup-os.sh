@@ -34,7 +34,6 @@ source $PROGRAM_DIRECTORY/../source.sh
 ######### Fill in this section carefully, ############
 ######### copy-and-paste it into Roboform ############
 ######### BEFORE running install script ##############
-NUMBER_OF_EXTRA_PASSWORDS=5
 LENGTH_OF_PASSWORDS=32
 HOSTNAME="$(hostname)"
 USER_ME="lhensley"
@@ -72,7 +71,6 @@ enable_ufw=true
 work_directory=$(pwd)
 running_directory=$(dirname $0)
 configs_directory="$running_directory/configs"
-
 source /etc/os-release
 
 # Do updates
@@ -109,6 +107,11 @@ progress-bar.sh
 source $TEMP_PASSWORD_INCLUDE
 rm $TEMP_PASSWORD_INCLUDE
 
+# Update hostname
+hostnamectl set-hostname $HOSTNAME
+echo $HOSTNAME > /etc/hostname
+chmod 644 /etc/hostname
+chown root:root /etc/hostname
 
 # Make $USER_ME and $USER_UBUNTU users and give them sudo access and ssh access
 useradd $USER_ME
@@ -117,15 +120,7 @@ echo $PASSWORD_ME | passwd --stdin $USER_ME
 echo $PASSWORD_UBUNTU | passwd --stdin $USER_UBUNTU
 usermod -aG sudo $USER_ME
 usermod -aG sudo $USER_UBUNTU
-printf "\n\nAllowUsers $USER_ME $USER_UBUNTU\n\n" >> vi /etc/ssh/sshd_config
-systemctl restart sshd
-echo Users $USER_ME and $USER_UBUNTU installed.
-
-echo "$USER_ME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/lane-NOPASSWD-users
-echo "$USER_UBUNTU ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/lane-NOPASSWD-users
-chmod 440 /etc/sudoers.d/lane-NOPASSWD-users
-passwd -d $USER_ME
-passwd -d $USER_UBUNTU
+printf "\n\nAllowUsers $USER_ME $USER_UBUNTU\n\n" /etc/ssh/sshd_config
 sed -i 's/#PasswordAuthentication no/PasswordAuthentication no/g' /etc/ssh/sshd_config
 sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
@@ -133,6 +128,14 @@ sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords no/g' /etc/ssh/sshd_conf
 sed -i 's/#PermitEmptyPasswords yes/PermitEmptyPasswords no/g' /etc/ssh/sshd_config
 sed -i 's/PermitEmptyPasswords yes/PermitEmptyPasswords no/g' /etc/ssh/sshd_config
 chmod 755 /etc/ssh/sshd_config
+systemctl restart sshd
+echo Users $USER_ME and $USER_UBUNTU installed and configured for ssh.
+
+echo "$USER_ME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/lane-NOPASSWD-users
+echo "$USER_UBUNTU ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/lane-NOPASSWD-users
+chmod 440 /etc/sudoers.d/lane-NOPASSWD-users
+passwd -d $USER_ME
+passwd -d $USER_UBUNTU
 echo Passwords removed for $USER_ME and $USER_UBUNTU
 
 # Add custom application definitions for ufw
