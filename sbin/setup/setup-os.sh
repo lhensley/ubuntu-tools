@@ -11,6 +11,8 @@
 #    turn off password
 #    If a clone, make some things unique: hostname, address, keys (ssh, ssl, mysql, webmin)
 
+echo "Starting setup ..."
+
 debug_mode=false
 #debug_mode=true
 if $debug_mode ; then
@@ -107,29 +109,12 @@ progress-bar.sh
 source $TEMP_PASSWORD_INCLUDE
 rm $TEMP_PASSWORD_INCLUDE
 
-echo ""
-echo "# IMPORTANT: Copy these passwords into Roboform before continuing."
-echo "# Once you continue, they cannot be recovered."
-echo ""
-echo "PASSWORD_ME = $PASSWORD_ME"
-echo "MYSQL_ROOT_PASSWORD = $MYSQL_ROOT_PASSWORD"
-echo "PHPMYADMIN_APP_PASS = $PHPMYADMIN_APP_PASS"
-echo "PHPMYADMIN_ROOT_PASS = $PHPMYADMIN_ROOT_PASS"
-echo "PHPMYADMIN_APP_DB_PASS = $PHPMYADMIN_APP_DB_PASS"
-echo "PHPMYADMIN_BLOWFISH_SECRET = $PHPMYADMIN_BLOWFISH_SECRET"
-echo ""
-
-echo Version ID: $VERSION_ID
-echo PHPMYADMIN_ROOT_PASS: $PHPMYADMIN_ROOT_PASS
-echo install_php: $install_php
-
-echo "The buck stops here."
-rm $TEMP_PASSWORD_INCLUDE
-exit
 
 # Make $USER_ME and $USER_UBUNTU users and give them sudo access and ssh access
 useradd $USER_ME
 useradd $USER_UBUNTU
+echo $PASSWORD_ME | passwd --stdin $USER_ME
+echo $PASSWORD_UBUNTU | passwd --stdin $USER_UBUNTU
 usermod -aG sudo $USER_ME
 usermod -aG sudo $USER_UBUNTU
 printf "\n\nAllowUsers $USER_ME $USER_UBUNTU\n\n" >> vi /etc/ssh/sshd_config
@@ -253,5 +238,28 @@ if $install_mailutils ; then
 touch /home/$USER_ME/.vimrc && cp /home/$USER_ME/.vimrc /home/$USER_ME/.vimrc.backup.$(date "+%Y.%m.%d-%H.%M.%S") && echo "set background=dark" > /home/$USER_ME/.vimrc && echo "set visualbell" >> /home/$USER_ME/.vimrc
 echo .vimrc edited.
 
-echo $0 complete.
-echo You MUST reboot NOW.
+
+echo ""
+echo "# IMPORTANT: Copy these passwords into Roboform IMMEDIATELY and reboot."
+echo "# Once you continue, these passwords cannot be recovered."
+echo ""
+echo "PASSWORD_ME: $PASSWORD_ME"
+echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD"
+echo "PHPMYADMIN_APP_PASS: $PHPMYADMIN_APP_PASS"
+echo "PHPMYADMIN_ROOT_PASS: $PHPMYADMIN_ROOT_PASS"
+echo "PHPMYADMIN_APP_DB_PASS: $PHPMYADMIN_APP_DB_PASS"
+echo "PHPMYADMIN_BLOWFISH_SECRET: $PHPMYADMIN_BLOWFISH_SECRET"
+echo ""
+
+echo Version ID: $VERSION_ID
+if [[ $NAME = "Ubuntu" ]]; then
+  echo "This is Ubuntu."
+else
+  echo "This is NOT Ubuntu."
+fi
+if [[ $(echo $VERSION_ID | cut -c1-3) = "18." ]]; then
+  echo "This is version 18."
+else
+  echo "This is NOT version 18."
+fi
+echo install_php: $install_php

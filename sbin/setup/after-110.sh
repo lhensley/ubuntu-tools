@@ -55,11 +55,12 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Do updates
-apt-get update && apt -y dist-upgrade && apt -y clean && apt -y autoremove
+# apt-get update && apt -y dist-upgrade && apt -y clean && apt -y autoremove
 
 
 # phpMyAdmin should be installed AFTER php and MySQL
 if $install_mysql_server ; then
+  MYSQL_ROOT_PASSWORD="YtMhe5rY#Qs2fFb&%n#qDtAi3k!Q3mUN"
   debconf-set-selections <<< "mysql-server mysql-server/root_password password $MYSQL_ROOT_PASSWORD"
   debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $MYSQL_ROOT_PASSWORD"
   apt-get install -y openssl libcurl4-openssl-dev libssl-dev
@@ -72,11 +73,6 @@ if $install_mysql_server ; then
   chmod 644 /etc/mysql/mysql.conf.d/mysqld.cnf
   mysql_ssl_rsa_setup
   chown -R mysql:mysql /var/lib/mysql
-#  Try to avoid granting access outside localhost
-#  If you do add outside access, edit /etc/mysql/mysql.conf.d/mysqld.conf
-#    to expand the "listen" scope, and reset MySQL with
-#      service mysql restart
-#  ufw allow mysql
   fi
 
 # phpMyAdmin should be installed AFTER php and MySQL
