@@ -35,7 +35,7 @@ source $PROGRAM_DIRECTORY/../source.sh
 ######### copy-and-paste it into Roboform ############
 ######### BEFORE running install script ##############
 NUMBER_OF_EXTRA_PASSWORDS=5
-LENGTH_OF_PASSWORDS=63
+LENGTH_OF_PASSWORDS=32
 HOSTNAME="$(hostname)"
 USER_ME="lhensley"
 USER_UBUNTU="ubuntu"
