@@ -60,11 +60,11 @@ fi
 
 # phpMyAdmin should be installed AFTER php and MySQL
 if $install_mysql_server ; then
-  $MYSQL_ROOT_PASSWORD="(9m+KAB8Q{JKCwEe[Sc-Ao,=s.W^,j4z"
+  MYSQL_ROOT_PASSWORD="(9m+KAB8Q{JKCwEe[Sc-Ao,=s.W^,j4z"
   apt-get install -y openssl libcurl4-openssl-dev libssl-dev
   apt-get install -y mysql-server
 # This is interactive and problematic to automate. MUST USE SUDO
-  printf("N\n$MYSQL_ROOT_PASSWORD\n$MYSQL_ROOT_PASSWORD\nY\nY\nY\nY\n" | mysql_secure_installation
+  printf "N\n$MYSQL_ROOT_PASSWORD\n$MYSQL_ROOT_PASSWORD\nY\nY\nY\nY\n" | mysql_secure_installation
 #  cp /etc/mysql/mysql.conf.d/mysqld.cnf \
 #  /etc/mysql/mysql.conf.d/mysqld.cnf-$(date '+%Y%m%d%H%M%S')
 #  cp $(dirname $0)/configs/mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
