@@ -61,12 +61,9 @@ fi
 # phpMyAdmin should be installed AFTER php and MySQL
 if $install_mysql_server ; then
   apt-get install -y openssl libcurl4-openssl-dev libssl-dev
-  MYSQL_ROOT_PASSWORD='zvr)88T7HD)MbCG]Q{^]rfNw_Fy3e:dhK]M}m_SWB:KM,.sQD,{FxngUccdqEFL'
-  echo "mysql-server mysql-server/root_password password" $MYSQL_ROOT_PASSWORD | debconf-set-selections
-  echo "mysql-server mysql-server/root_password_again password" $MYSQL_ROOT_PASSWORD | debconf-set-selections
   apt-get install -y mysql-server
-exit
-  echo "4523Tibbs^(\n4523Tibbs^(\nY" | mysql_secure_installation --use-default
+# This is interactive and problematic to automate. MUST USE SUDO
+  mysql_secure_installation
 #  cp /etc/mysql/mysql.conf.d/mysqld.cnf \
 #  /etc/mysql/mysql.conf.d/mysqld.cnf-$(date '+%Y%m%d%H%M%S')
 #  cp $(dirname $0)/configs/mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
