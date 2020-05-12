@@ -11,7 +11,6 @@
 #    MySQL keys
 #    Webman keys
 
-
 debug_mode=false
 #debug_mode=true
 if $debug_mode ; then
@@ -51,7 +50,6 @@ echo "Starting setup ..."
 work_directory=$(pwd)
 running_directory=$(dirname $0)
 configs_directory="$running_directory/configs"
-source /etc/os-release
 
 # Do updates
 apt-get update && apt -y dist-upgrade && apt -y clean && apt -y autoremove
@@ -60,9 +58,7 @@ if ! [ -x "$(command -v apg)" ]; then
   apt-get install -y apg
 fi
 
-EXCLUDED_PASSWORD_CHARACTERS=" \$\'\"\\\#\|\<\>\;\*\&\~\!\I\l\1\O\0\`\/\?"
 NUMBER_OF_DESIGNATED_PASSWORDS=7
-TEMP_PASSWORD_INCLUDE="/tmp/passwords.sh"
 echo "" > $TEMP_PASSWORD_INCLUDE
 progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 0
 echo "PASSWORD_ME=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
@@ -96,14 +92,14 @@ chown root:root /etc/hostname
 # Generate new SSH server keys and update configs
 rm /etc/ssh/ssh_host_*
 /usr/sbin/dpkg-reconfigure openssh-server
-printf "\n\nAllowUsers $USER_ME $USER_UBUNTU\n\n" >> /etc/ssh/sshd_config
-sed -i 's/#PasswordAuthentication no/PasswordAuthentication no/g' /etc/ssh/sshd_config
-sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
-sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
-sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords no/g' /etc/ssh/sshd_config
-sed -i 's/#PermitEmptyPasswords yes/PermitEmptyPasswords no/g' /etc/ssh/sshd_config
-sed -i 's/PermitEmptyPasswords yes/PermitEmptyPasswords no/g' /etc/ssh/sshd_config
-chmod 755 /etc/ssh/sshd_config
+printf "\n\nAllowUsers $USER_ME $USER_UBUNTU\n\n" >> $SSHD_CONFIG
+sed -i 's/#PasswordAuthentication no/PasswordAuthentication no/g' $SSHD_CONFIG
+sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' $SSHD_CONFIG
+sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' $SSHD_CONFIG
+sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords no/g' $SSHD_CONFIG
+sed -i 's/#PermitEmptyPasswords yes/PermitEmptyPasswords no/g' $SSHD_CONFIG
+sed -i 's/PermitEmptyPasswords yes/PermitEmptyPasswords no/g' $SSHD_CONFIG
+chmod 755 $SSHD_CONFIG
 systemctl restart sshd
 
 echo Done.

@@ -11,6 +11,7 @@ if $debug_mode ; then
   fi
 
 # echo "$(/bin/date) Starting up."
+source /etc/os-release
 
 # Make sure only root can run our script
 if [[ $EUID -ne 0 ]]; then
@@ -59,13 +60,23 @@ START_DAYSTAMP=$(/bin/date '+%d')
 START_WEEKDAYSTAMP=$(/bin/date '+%a')
 START_MONTHSTAMP=$(/bin/date '+%Y-%m')
 START_TIMESTAMP=$(/bin/date)
+EXCLUDED_PASSWORD_CHARACTERS=" \$\'\"\\\#\|\<\>\;\*\&\~\!\I\l\1\O\0\`\/\?"
 UUID=$(uuidgen)
 ARCHIVE_DIRECTORY=/var/local/archives/$(hostname -s)
+GIT=/var/local/git
+GO=$GIT/go
+GO_CONFIGS=$GO/configs
+GO_SBIN=$GO/sbin
+GO_SETUP=$GO_SBIN/setup
 HOME_RELATIVE=home/$USER_NAME
 HOME_DIR=/$HOME_RELATIVE
 MYSQL_DUMP_DIR=$HOME_DIR/mysql-dumps
 LANE_SCRIPTS_PREFIX="lane-scripts"
+SBIN_PARENT="/usr/local"
+SBIN_DIR="$SBIN_PARENT/sbin"
+SSHD_CONFIG="/etc/ssh/sshd_config"
 TEMP_DATABASES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-databases.tmp"
+TEMP_PASSWORD_INCLUDE="/tmp/passwords.sh"
 TEMP_INCLUDES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-includes.tmp"
 SOCKETS_TEMP_FILE="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-socket-files.tmp"
 TEMP_LOG="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-log.tmp"

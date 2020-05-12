@@ -12,7 +12,7 @@ source $PROGRAM_DIRECTORY/source.sh
 
 # This section re-pulls all go files from github and updates /usr/local/sbin
 USERNAME=$USER_ME
-REPOSITORY="/var/local/git/go"
+REPOSITORY=$GO
 BRANCH="master"
 # Change to local repository directory
 cd $REPOSITORY
@@ -23,26 +23,26 @@ git checkout $BRANCH
 # Pull down a copy of the repository
 git pull
 # Set permissions for git directory
-chmod -R 400 /var/local/git
+chmod -R 400 $GIT
 # Copy scripts into /usr/local/sbin
-rm -rf /usr/local/sbin
-cp -r /var/local/git/go/sbin /usr/local
+rm -rf $SBIN_DIR
+cp -r $GO_SBIN $SBIN_PARENT
 # Set ownership and permissions in /usr/local/sbin
-chown -R root:lhensley /usr/local/sbin
-find /usr/local/sbin -type d -print0 | xargs -0 chmod 750
-find /usr/local/sbin -type f -print0 | xargs -0 chmod 440
-chmod -R 400 /usr/local/sbin/setup/configs
-chmod 540 /usr/local/sbin/*.sh /usr/local/sbin/setup/*.sh /usr/local/sbin/*.py /usr/local/sbin/ccextractor
+chown -R root:lhensley $SBIN_DIR
+find $SBIN_DIR -type d -print0 | xargs -0 chmod 750
+find $SBIN_DIR -type f -print0 | xargs -0 chmod 440
+chmod -R 400 $SBIN_DIR/setup/configs
+chmod 540 $SBIN_DIR/*.sh $SBIN_DIR/setup/*.sh $SBIN_DIR/*.py $SBIN_DIR/ccextractor
 cd
 # Update /home/$USER_ME/.ssh/authorized_keys
 mkdir -p /home/$USER_ME/.ssh/
-mkdir -p /home/$UBUNTU_ME/.ssh/
-cp /var/local/git/go/ssh/$USER_ME/authorized_keys /home/$USER_ME/.ssh/
-cp /var/local/git/go/ssh/$USER_ME/authorized_keys /home/$UBUNTU_ME/.ssh/
+# mkdir -p /home/$UBUNTU_ME/.ssh/
+cp $GO_CONFIGS/ssh/$USER_ME/authorized_keys /home/$USER_ME/.ssh/
+# cp $GO_CONFIGS/ssh/$USER_ME/authorized_keys /home/$USER_ME/.ssh/
 chown $USER_ME:$USER_ME /home/$USER_ME/.ssh/authorized_keys
-chown $USER_UBUNTU:$USER_UBUNTU /home/$USER_UBUNTU/.ssh/authorized_keys
+# chown $USER_UBUNTU:$USER_UBUNTU /home/$USER_UBUNTU/.ssh/authorized_keys
 chmod 644 /home/$USER_ME/.ssh/authorized_keys
-chmod 644 /home/$USER_UBUNTU/.ssh/authorized_keys
+# chmod 644 /home/$USER_UBUNTU/.ssh/authorized_keys
 echo git update complete.
 
 # "update" downloads package information from all configured sources
