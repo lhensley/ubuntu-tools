@@ -5,11 +5,8 @@
 # IMPORTANT: Check variables at the top of the script before running it!
 
 # Still to add:
-#    wordpress
-#    ssh keys
 #    lets encrypt
 #    turn off password
-#    If a clone, make some things unique: hostname, address, keys (ssh, ssl, mysql, webmin)
 
 echo "Starting setup ..."
 
@@ -35,7 +32,7 @@ source $PROGRAM_DIRECTORY/../source.sh
 ######### copy-and-paste it into Roboform ############
 ######### BEFORE running install script ##############
 LENGTH_OF_PASSWORDS=63
-MAX_MYSQL_PASSWORD_LENGTH
+MAX_MYSQL_PASSWORD_LENGTH=32
 HOSTNAME="$(hostname)"
 USER_ME="lhensley"
 MYSQL_ADMIN_NAME="kai"
@@ -265,9 +262,9 @@ if $install_phpmyadmin ; then
   cp $configs_directory/phpmyadmin.config.inc.php /usr/share/phpmyadmin/config.inc.php
   chown -R www-data:www-data /usr/share/phpmyadmin
   chmod 644 /usr/share/phpmyadmin/config.inc.php
-  cp $configs_directory/html/.htaccess.html.www.var /var/www/html/.htaccess
-  chown -R www-data:www-data /var/www/html/.htaccess
-  chmod 644 /var/www/html/.htaccess
+#  cp $configs_directory/html/.htaccess.html.www.var /var/www/html/.htaccess
+#  chown -R www-data:www-data /var/www/html/.htaccess
+#  chmod 644 /var/www/html/.htaccess
   systemctl restart apache2
   fi
 
