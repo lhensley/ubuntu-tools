@@ -4,12 +4,13 @@
 	a. Display -> Maximum Guest Screen Size -> None
 	b. Extensions: Install Oracle VM VirtualBox Extension Pack
 2. Install from a USB stick, or create/clone a VirtualBox with an ISO file.
-3. If installing by creating a new VirtualBox, here are recommended base specs: 2048MB RAM; create a virtual hard disk, VDI type, dynamically allocated, 32GB. (Tried 16GB 5/6/2020)
-	a. General -> Advanced -> Shared Clipboard: Bidirectional
-	b. Display -> Screen -> Video Memory -> 128MB
-	c. Display -> Screen -> Scale Factor -> 300% (adjust after OS is installed)
-	d. Display -> Remote Display -> Enable Server
-	e. Network -> Adapter 1 -> Advanced -> Port ForwardingDon’t specify any IP addresses. Just port Numbers. Establish unique port numbers here.
+3. If installing by creating a new VirtualBox, here are recommended base specs: 2048MB RAM; create a virtual hard disk, VDI type, dynamically allocated, 32GB. (Tried 16GB 5/6/2020)
+   a. General -> Advanced -> Shared Clipboard: Bidirectional
+   b. Display -> Screen -> Video Memory -> 128MB
+   c. Display -> Screen -> Scale Factor -> 300% (adjust after OS is installed)
+   d. Display -> Remote Display -> Enable Server
+   e. Network -> Adapter 1 -> Advanced -> Port Forwarding
+        Don’t specify any IP addresses. Just port Numbers. Establish unique port numbers here.
 4. Run the OS installation.
 5. In the GUI, go to Settings and select
 	a. Displays -> 1440x900 (recommended for L10)
