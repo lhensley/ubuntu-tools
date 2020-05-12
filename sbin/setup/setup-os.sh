@@ -34,9 +34,11 @@ source $PROGRAM_DIRECTORY/../source.sh
 ######### Fill in this section carefully, ############
 ######### copy-and-paste it into Roboform ############
 ######### BEFORE running install script ##############
-LENGTH_OF_PASSWORDS=32
+LENGTH_OF_PASSWORDS=63
+MAX_MYSQL_PASSWORD_LENGTH
 HOSTNAME="$(hostname)"
 USER_ME="lhensley"
+MYSQL_ADMIN_NAME="kai"
 USER_UBUNTU="ubuntu"
 MAILNAME="$(hostname)"
 MAIN_MAILER_TYPE="'Internet with smarthost'"
@@ -96,21 +98,21 @@ EXCLUDED_PASSWORD_CHARACTERS=" \$\'\"\\\#\|\<\>\;\*\&\~\!\I\l\1\O\0\`\/\?"
 NUMBER_OF_DESIGNATED_PASSWORDS=7
 TEMP_PASSWORD_INCLUDE="/tmp/passwords.sh"
 echo "" > $TEMP_PASSWORD_INCLUDE
-progress-bar.sh $TOTAL_PASSWORDS 0
+progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 0
 echo "PASSWORD_ME=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-progress-bar.sh $TOTAL_PASSWORDS 1
+progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 1
 echo "PASSWORD_UBUNTU=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-progress-bar.sh $TOTAL_PASSWORDS 2
-echo "MYSQL_ROOT_PASSWORD=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-progress-bar.sh $TOTAL_PASSWORDS 3
+progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 2
+echo "MYSQL_ROOT_PASSWORD=\"$(apg -c cl_seed -a 1 -m $MAX_MYSQL_PASSWORD_LENGTH -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
+progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 3
+echo "MYSQL_ADMIN_PASSWORD=\"$(apg -c cl_seed -a 1 -m $MAX_MYSQL_PASSWORD_LENGTH -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
+progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 5
 echo "PHPMYADMIN_APP_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-progress-bar.sh $TOTAL_PASSWORDS 4
+progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 5
 echo "PHPMYADMIN_ROOT_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-progress-bar.sh $TOTAL_PASSWORDS 5
+progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 6
 echo "PHPMYADMIN_APP_DB_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-progress-bar.sh $TOTAL_PASSWORDS 6
-echo "PHPMYADMIN_BLOWFISH_SECRET=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-progress-bar.sh $TOTAL_PASSWORDS 7
+progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 7
 echo "" >> $TEMP_PASSWORD_INCLUDE
 
 chown root:root $TEMP_PASSWORD_INCLUDE
@@ -245,6 +247,8 @@ if $install_mysql_server ; then
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User=''"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%'"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$MYSQL_ADMIN_NAME'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_ADMIN_PASSWORD'"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_ADMIN_NAME'@'localhost'"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES"
   fi
 
@@ -258,6 +262,12 @@ if $install_phpmyadmin ; then
   debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_APP_DB_PASS'
   apt install -y phpmyadmin php-mbstring php-zip php-gd php-json php-curl
   phpenmod mbstring
+  cp $configs_directory/phpmyadmin.config.inc.php /usr/share/phpmyadmin/config.inc.php
+  chown -R www-data:www-data /usr/share/phpmyadmin
+  chmod 644 /usr/share/phpmyadmin/config.inc.php
+  cp $configs_directory/html/.htaccess.html.www.var /var/www/html/.htaccess
+  chown -R www-data:www-data /var/www/html/.htaccess
+  chmod 644 /var/www/html/.htaccess
   systemctl restart apache2
   fi
 
@@ -292,10 +302,11 @@ echo "# Once you continue, these passwords cannot be recovered."
 echo ""
 echo 'PASSWORD_ME: $PASSWORD_ME'
 echo 'MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD'
+echo 'MYSQL_ADMIN_NAME: $MYSQL_ADMIN_NAME'
+echo 'MYSQL_ADMIN_PASSWORD: $MYSQL_ADMIN_PASSWORD'
 echo 'PHPMYADMIN_APP_PASS: $PHPMYADMIN_APP_PASS'
 echo 'PHPMYADMIN_ROOT_PASS: $PHPMYADMIN_ROOT_PASS'
 echo 'PHPMYADMIN_APP_DB_PASS: $PHPMYADMIN_APP_DB_PASS'
-# echo 'PHPMYADMIN_BLOWFISH_SECRET: $PHPMYADMIN_BLOWFISH_SECRET'
 echo ""
 
 echo Done.

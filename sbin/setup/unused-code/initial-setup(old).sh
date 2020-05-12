@@ -18,7 +18,7 @@ USER_ME=lhensley
 USER_UBUNTU=ubuntu
 
 install_apache2=true
-# Strongly recommended to install curl. Other installs depend on it.
+# Strongly recommended to install curl. Other installs depend on it
 install_certbot=true
 install_curl=true
 install_fail2ban=true
