@@ -16,7 +16,7 @@
  * cookie. Needs to be 32 chars long.
  * THE ONE SHOWN IS A PLACE HOLDER. MAKE YOUR OWN!
  */
-$cfg['Blowfish Secret'] = 'YjX&yJpkSEh*e%ejZUjBd4tg8kKm*j6f'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
+$cfg['Blowfish Secret'] = 'Qok7qxYX,=UZtDTTcv@(H^UE@JRLXwyu'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
 
 $cfg['ForceSSL'] = true;
 

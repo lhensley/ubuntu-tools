@@ -63,7 +63,19 @@ if $install_mysql_server ; then
   MYSQL_ROOT_PASSWORD="(9m+KAB8Q{JKCwEe[Sc-Ao,=s.W^,j4z"
   apt-get install -y openssl libcurl4-openssl-dev libssl-dev
   apt-get install -y mysql-server
+# u20a THRU HERE
 # This is interactive and problematic to automate. MUST USE SUDO
+
+MYSQL_ROOT_PASSWORD='(9m+KAB8Q{JKCwEe[Sc-Ao,=s.W^,j4z'
+
+mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
+# mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "UPDATE mysql.user SET Password=PASSWORD('$MYSQL_ROOT_PASSWORD') WHERE User='root'"
+# mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD'"
+mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
+mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User=''"
+mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%'"
+mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES"
+
   printf "N\n$MYSQL_ROOT_PASSWORD\n$MYSQL_ROOT_PASSWORD\nY\nY\nY\nY\n" | mysql_secure_installation
 #  cp /etc/mysql/mysql.conf.d/mysqld.cnf \
 #  /etc/mysql/mysql.conf.d/mysqld.cnf-$(date '+%Y%m%d%H%M%S')
@@ -80,15 +92,17 @@ exit
 # ASKS QUESTIONS!
 if $install_phpmyadmin ; then
 # Based on https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04
-  PHPMYADMIN_APP_PASS="8hBUeXCmATanaSwP6^mci4mUUUzfJ!ih"
-  PHPMYADMIN_ROOT_PASS="YtMhe5rY#Qs2fFb&%n#qDtAi3k!Q3mUN"
-  PHPMYADMIN_APP_DB_PASS="BL%4yFUevWJ*bag2mX#gP^VjnGnW8S49"
+PHPMYADMIN_APP_PASS='Dh247(.D(y34=+hs{uP8-@mfq:EVqiy{'
+PHPMYADMIN_ROOT_PASS=']2x4[(uZXHtsR=spqWDdN9Q3jYcA@NL-'
+PHPMYADMIN_APP_DB_PASS='Wvf7]hu^4{WyX:jSJB3(omG8i-H@9@_@'
   debconf-set-selections <<< "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2"
   debconf-set-selections <<< "phpmyadmin phpmyadmin/dbconfig-install boolean true"
   debconf-set-selections <<< "phpmyadmin phpmyadmin/app-password-confirm password $PHPMYADMIN_APP_PASS"
   debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/admin-pass password $PHPMYADMIN_ROOT_PASS"
   debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_APP_DB_PASS"
-  apt install phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+  apt install -y phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+  phpenmod mbstring
+  systemctl restart apache2
 
   cd /usr/share
   rm -R phpmyadmin
@@ -98,14 +112,12 @@ if $install_phpmyadmin ; then
   mv phpMyAdmin-* phpmyadmin
   mkdir phpmyadmin/tmp
   cd $work_directory
-  phpenmod mbstring
   touch /usr/share/phpmyadmin/config.inc.php
   cp /usr/share/phpmyadmin/config.inc.php \
   /usr/share/phpmyadmin/config.inc.php-$(date '+%Y%m%d%H%M%S')
   cp configs/phpmyadmin.config.inc.php /usr/share/phpmyadmin/config.inc.php
   chown -R www-data:www-data /usr/share/phpmyadmin
   chmod 644 /usr/share/phpmyadmin/config.inc.php
-  systemctl restart apache2
   fi
 
 if $install_plexmediaserver ; then

@@ -1,6 +1,6 @@
 #!/bin/bash
 # setup-os.sh
-# Revised 2020-05-09
+# Revised 2020-05-11
 # PURPOSE: Installs basic software.
 # IMPORTANT: Check variables at the top of the script before running it!
 
@@ -57,7 +57,7 @@ install_openssh_server=true
 install_openssl=true
 install_php=true
 install_phpmyadmin=true
-install_plexmediaserver=false
+install_plexmediaserver=false # CAUTION: NOT TESTED FOR UBUNTU 20
 install_sysbench=true
 install_tasksel=true
 install_unzip=true
@@ -72,6 +72,18 @@ work_directory=$(pwd)
 running_directory=$(dirname $0)
 configs_directory="$running_directory/configs"
 source /etc/os-release
+
+if [[ $NAME = "Ubuntu" ]]; then
+    if [[ $(echo $VERSION_ID | cut -c1-3) = "20." ]]; then
+      echo "Ubuntu version 20 confirmed."
+    else
+      echo "This script does not support version $VERSION_ID of Ubuntu."
+      exit 1
+    fi
+else
+  echo "This script works only on Ubuntu."
+  exit 1
+fi
 
 # Do updates
 apt-get update && apt -y dist-upgrade && apt -y clean && apt -y autoremove
@@ -218,6 +230,47 @@ if $enable_certbot ; then
   echo certbot installed.
   fi
 
+if $install_mailutils ; then
+  debconf-set-selections <<< "postfix postfix/relayhost $RELAYHOST"
+  debconf-set-selections <<< "postfix postfix/mailname string $MAILNAME"
+  debconf-set-selections <<< "postfix postfix/main_mailer_type string $MAIN_MAILER_TYPE"
+  apt-get install -y mailutils
+  ufw allow mail
+  fi
+
+if $install_mysql_server ; then
+  apt-get install -y openssl libcurl4-openssl-dev libssl-dev
+  apt-get install -y mysql-server
+  mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User=''"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%'"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES"
+  fi
+
+# phpMyAdmin should be installed AFTER php and MySQL
+if $install_phpmyadmin ; then
+  # Based on https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04
+  debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2'
+  debconf-set-selections <<< 'phpmyadmin phpmyadmin/dbconfig-install boolean true'
+  debconf-set-selections <<< 'phpmyadmin phpmyadmin/app-password-confirm password $PHPMYADMIN_APP_PASS'
+  debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/admin-pass password $PHPMYADMIN_ROOT_PASS'
+  debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_APP_DB_PASS'
+  apt install -y phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+  phpenmod mbstring
+  systemctl restart apache2
+  fi
+
+if $install_plexmediaserver ; then
+# CAUTION: NOT TESTED FOR UBUNTU 20
+  rm /etc/apt/sources.list.d/plexmediaserver.list
+  deb https://downloads.plex.tv/repo/deb public main | tee /etc/apt/sources.list.d/plexmediaserver.list
+  curl https://downloads.plex.tv/plex-keys/PlexSign.key | apt-key add -
+  apt update
+  apt install plexmediaserver
+  ufw allow plexmediaserver
+  fi
+
 if $install_webmin ; then
   wget http://www.webmin.com/download/deb/webmin-current.deb
   apt-get install -y openssl libcurl4-openssl-dev libssl-dev
@@ -229,40 +282,21 @@ if $install_webmin ; then
   echo Webmin installed.
   fi
 
-if $install_mailutils ; then
-  debconf-set-selections <<< "postfix postfix/relayhost $RELAYHOST"
-  debconf-set-selections <<< "postfix postfix/mailname string $MAILNAME"
-  debconf-set-selections <<< "postfix postfix/main_mailer_type string $MAIN_MAILER_TYPE"
-  apt-get install -y mailutils
-  ufw allow mail
-  fi
-
 # Edit .vimrc settings
 touch /home/$USER_ME/.vimrc && cp /home/$USER_ME/.vimrc /home/$USER_ME/.vimrc.backup.$(date "+%Y.%m.%d-%H.%M.%S") && echo "set background=dark" > /home/$USER_ME/.vimrc && echo "set visualbell" >> /home/$USER_ME/.vimrc
 echo .vimrc edited.
-
 
 echo ""
 echo "# IMPORTANT: Copy these passwords into Roboform IMMEDIATELY and reboot."
 echo "# Once you continue, these passwords cannot be recovered."
 echo ""
-echo "PASSWORD_ME: $PASSWORD_ME"
-echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD"
-echo "PHPMYADMIN_APP_PASS: $PHPMYADMIN_APP_PASS"
-echo "PHPMYADMIN_ROOT_PASS: $PHPMYADMIN_ROOT_PASS"
-echo "PHPMYADMIN_APP_DB_PASS: $PHPMYADMIN_APP_DB_PASS"
-echo "PHPMYADMIN_BLOWFISH_SECRET: $PHPMYADMIN_BLOWFISH_SECRET"
+echo 'PASSWORD_ME: $PASSWORD_ME'
+echo 'MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD'
+echo 'PHPMYADMIN_APP_PASS: $PHPMYADMIN_APP_PASS'
+echo 'PHPMYADMIN_ROOT_PASS: $PHPMYADMIN_ROOT_PASS'
+echo 'PHPMYADMIN_APP_DB_PASS: $PHPMYADMIN_APP_DB_PASS'
+# echo 'PHPMYADMIN_BLOWFISH_SECRET: $PHPMYADMIN_BLOWFISH_SECRET'
 echo ""
 
-echo Version ID: $VERSION_ID
-if [[ $NAME = "Ubuntu" ]]; then
-  echo "This is Ubuntu."
-else
-  echo "This is NOT Ubuntu."
-fi
-if [[ $(echo $VERSION_ID | cut -c1-3) = "18." ]]; then
-  echo "This is version 18."
-else
-  echo "This is NOT version 18."
-fi
-echo install_php: $install_php
+echo Done.
+exit 0
