@@ -17,7 +17,7 @@
 	a. Display -> Screen -> Scale Factor -> 200% (recommended for L10)
 7. In the GUI, load a terminal (CTRL-ALT-T) and issues these commands:
 ```bash
-	sudo apt-get install -y ssh && sudo ufw allow ssh
+sudo apt-get install -y ssh && sudo ufw allow ssh
 ```
 8. SSH into the VirtualBox (port 101XX).
 9.	Install the Ubuntu operating system and get to a shell.
