@@ -70,7 +70,7 @@ enable_ufw=true
 work_directory=$(pwd)
 running_directory=$(dirname $0)
 configs_directory="$running_directory/configs"
-source /etc/os-release
+chown -R $USER_ME:$USER_ME /home/$USER_ME/.ssh
 
 if [[ $NAME = "Ubuntu" ]]; then
     if [[ $(echo $VERSION_ID | cut -c1-3) = "20." ]]; then
@@ -126,21 +126,22 @@ chown root:root /etc/hostname
 
 # Make $USER_ME and $USER_UBUNTU users and give them sudo access and ssh access
 useradd $USER_ME
-useradd $USER_UBUNTU
+# useradd $USER_UBUNTU
 echo $PASSWORD_ME | passwd --stdin $USER_ME
-echo $PASSWORD_UBUNTU | passwd --stdin $USER_UBUNTU
+# echo $PASSWORD_UBUNTU | passwd --stdin $USER_UBUNTU
 usermod -aG sudo $USER_ME
-usermod -aG sudo $USER_UBUNTU
-printf "\n\nAllowUsers $USER_ME $USER_UBUNTU\n\n" /etc/ssh/sshd_config
-sed -i 's/#PasswordAuthentication no/PasswordAuthentication no/g' /etc/ssh/sshd_config
-sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
-sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
-sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords no/g' /etc/ssh/sshd_config
-sed -i 's/#PermitEmptyPasswords yes/PermitEmptyPasswords no/g' /etc/ssh/sshd_config
-sed -i 's/PermitEmptyPasswords yes/PermitEmptyPasswords no/g' /etc/ssh/sshd_config
-chmod 755 /etc/ssh/sshd_config
+# usermod -aG sudo $USER_UBUNTU
+printf "\n\nAllowUsers $USER_ME $USER_UBUNTU\n\n" >> $SSHD_CONFIG
+sed -i 's/#PasswordAuthentication no/PasswordAuthentication no/g' $SSHD_CONFIG
+sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' $SSHD_CONFIG
+sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' $SSHD_CONFIG
+sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords no/g' $SSHD_CONFIG
+sed -i 's/#PermitEmptyPasswords yes/PermitEmptyPasswords no/g' $SSHD_CONFIG
+sed -i 's/PermitEmptyPasswords yes/PermitEmptyPasswords no/g' $SSHD_CONFIG
+chmod 755 $SSHD_CONFIG
 systemctl restart sshd
-echo Users $USER_ME and $USER_UBUNTU installed and configured for ssh.
+# echo Users $USER_ME and $USER_UBUNTU installed and configured for ssh.
+# echo User $USER_ME installed and configured for ssh.
 
 echo "$USER_ME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/lane-NOPASSWD-users
 echo "$USER_UBUNTU ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/lane-NOPASSWD-users
@@ -291,6 +292,7 @@ if $install_webmin ; then
 
 # Edit .vimrc settings
 touch /home/$USER_ME/.vimrc && cp /home/$USER_ME/.vimrc /home/$USER_ME/.vimrc.backup.$(date "+%Y.%m.%d-%H.%M.%S") && echo "set background=dark" > /home/$USER_ME/.vimrc && echo "set visualbell" >> /home/$USER_ME/.vimrc
+chown $USER_ME:$USER_ME /home/USER_ME/.vi*
 echo .vimrc edited.
 
 echo ""

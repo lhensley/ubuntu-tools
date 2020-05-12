@@ -39,7 +39,7 @@ mkdir -p /home/$USER_ME/.ssh/
 # mkdir -p /home/$UBUNTU_ME/.ssh/
 cp $GO_CONFIGS/ssh/$USER_ME/authorized_keys /home/$USER_ME/.ssh/
 # cp $GO_CONFIGS/ssh/$USER_ME/authorized_keys /home/$USER_ME/.ssh/
-chown $USER_ME:$USER_ME /home/$USER_ME/.ssh/authorized_keys
+chown -R $USER_ME:$USER_ME /home/$USER_ME/.ssh
 # chown $USER_UBUNTU:$USER_UBUNTU /home/$USER_UBUNTU/.ssh/authorized_keys
 chmod 644 /home/$USER_ME/.ssh/authorized_keys
 # chmod 644 /home/$USER_UBUNTU/.ssh/authorized_keys
