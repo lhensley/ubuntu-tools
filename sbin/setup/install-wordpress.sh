@@ -5,7 +5,7 @@
 # Should have permissions 700
 # vi commands to delete all: :1,$d
 
-# To store MySQL root password in a config, create .my.cnf in the home directory, with permissions 600, owner [user]:[user] and  with this format:
+# To store MySQL root password in a config, create .my.cnf in the home directory, with permissions 600, owner [user]:[user] and with this format:
 #
 # 	[client]
 # 	user="MYSQL_USERNAME"
@@ -18,14 +18,14 @@
 # For the root user, copy the file to /root with permissions 600, owner root:root
 
 # DEFINE THESE VARIABLES BEFORE RUNNING THE SCRIPT!
-fqdn="hal.gotdns.org"
+fqdn="father-lane.gets-it.net"
 web_admin_user="lhensley"
 web_admin_email="lane.hensley@alumni.duke.edu"
 remove=false
 #remove=true
 
-mysql_root_user="MYSQL_USERNAME"
-mysql_root_password="MYSQL_PASSWORD"
+mysql_root_user="root"
+mysql_root_password="(9m+KAB8Q{JKCwEe[Sc-Ao,=s.W^,j4z"
 
 script_name=install-wordpress.sh
 current_directory=$(pwd)
@@ -86,14 +86,17 @@ if [ -d "$docroot" ]; then # If docroot already exists
 
 # Do updates and install needed tools
 apt-get update && apt -y dist-upgrade && apt -y clean && apt -y autoremove
-apt-get install -y wget apg certbot python python-certbot-apache
+# For Ubuntu 18
+# apt-get install -y wget apg certbot python python-certbot-apache
+# For Ubuntu 18
+apt-get install -y wget apg certbot python3-certbot-apache
 
 # Generate a MySQL password for the Wordpress database
 admin_wp_pwd=$(apg -a 1 -m 20 -n 1 -MCLN)
 mysql_wp_pwd=$(apg -a 1 -m 20 -n 1 -MCLN)
 
 # Add MySQL database and user
-query="DROP USER IF EXISTS 'wp_$fqdn'@'localhost'; FLUSH PRIVILEGES; CREATE USER 'wp_$fqdn'@'localhost' IDENTIFIED BY '$mysql_wp_pwd'; GRANT USAGE ON *.* TO 'wp_$fqdn'@'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;CREATE DATABASE IF NOT EXISTS \`wp_$fqdn\`;GRANT ALL PRIVILEGES ON \`wp_$fqdn\`.* TO 'wp_$fqdn'@'localhost'; FLUSH PRIVILEGES;"
+query="DROP USER IF EXISTS 'wp_$fqdn'@'localhost'; FLUSH PRIVILEGES; CREATE USER 'wp_$fqdn'@'localhost' IDENTIFIED WITH sha256_password BY '$mysql_wp_pwd'; GRANT USAGE ON *.* TO 'wp_$fqdn'@'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;CREATE DATABASE IF NOT EXISTS \`wp_$fqdn\`;GRANT ALL PRIVILEGES ON \`wp_$fqdn\`.* TO 'wp_$fqdn'@'localhost'; FLUSH PRIVILEGES;"
 # if ! mysql -u $mysql_root_user -p$mysql_root_password -e "$query" > /dev/null 2> /dev/null; then
 if ! mysql -e "$query" > /dev/null 2> /dev/null; then
   backout
