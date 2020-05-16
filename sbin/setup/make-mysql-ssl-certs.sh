@@ -138,6 +138,7 @@ openssl ca -cert $DIR/ca.pem -policy policy_anything \
 echo E
 openssl req -new -keyout $DIR/client-key.pem -out \
     $DIR/client-req.pem -days 3600 \
+    -passin env:PWD -passout env:PWD \
     -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$LANE_EMAIL"
 #   -config $DIR/openssl.cnf
 
