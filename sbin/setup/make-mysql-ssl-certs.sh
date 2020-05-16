@@ -5,7 +5,9 @@
 # Adapted from https://dev.mysql.com/doc/refman/8.0/en/creating-ssl-files-using-openssl.html
 #
 #
-DIR=~/openssl
+source /usr/local/sbin/source.sh
+
+DIR=$HOME_DIRECTORY/openssl
 OPEN_SSL_CONFIGS=/etc/ssl
 PRIV=$DIR/private
 PWD=$(uuidgen)
@@ -24,12 +26,10 @@ echo "01" > $DIR/serial
 # Generation of Certificate Authority(CA)
 #
 
-echo A
 openssl req -new -x509 -keyout $PRIV/cakey.pem -out $DIR/ca.pem \
     -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$(uuidgen)" \
     -days 3600 -passin env:PWD -passout env:PWD
 #   -config $DIR/openssl.cnf
-exit
 
 # Sample output:
 # Using configuration from /home/jones/openssl/openssl.cnf
@@ -59,9 +59,9 @@ exit
 #
 # Create server request and key
 #
-echo B
 openssl req -new -keyout $DIR/server-key.pem -out \
-    $DIR/server-req.pem -days 3600 -config $DIR/openssl.cnf
+    $DIR/server-req.pem -days 3600 -passin env:PWD -passout env:PWD 
+#   -config $DIR/openssl.cnf
 
 # Sample output:
 # Using configuration from /home/jones/openssl/openssl.cnf
@@ -102,9 +102,11 @@ openssl rsa -in $DIR/server-key.pem -out $DIR/server-key.pem
 # Sign server cert
 #
 openssl ca -cert $DIR/ca.pem -policy policy_anything \
-    -out $DIR/server-cert.pem -config $DIR/openssl.cnf \
-    -infiles $DIR/server-req.pem
-
+    -out $DIR/server-cert.pem \
+    -infiles $DIR/server-req.pem \
+    -passin env:PWD -passout env:PWD
+# -config $DIR/openssl.cnf 
+#
 # Sample output:
 # Using configuration from /home/jones/openssl/openssl.cnf
 # Enter PEM pass phrase:
