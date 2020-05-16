@@ -26,7 +26,6 @@ echo "01" > $DIR/serial
 # Generation of Certificate Authority(CA)
 #
 
-echo A
 openssl req -new -x509 -keyout $PRIV/cakey.pem -out $DIR/ca.pem \
     -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$(uuidgen)" \
     -days 3600 -passin env:PWD -passout env:PWD
@@ -60,7 +59,6 @@ openssl req -new -x509 -keyout $PRIV/cakey.pem -out $DIR/ca.pem \
 #
 # Create server request and key
 #
-echo B
 openssl req -new -keyout $DIR/server-key.pem -out \
     $DIR/server-req.pem -days 3600 -passin env:PWD -passout env:PWD \
     -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$(uuidgen)"
@@ -99,14 +97,12 @@ openssl req -new -keyout $DIR/server-key.pem -out \
 #
 # Remove the passphrase from the key
 #
-echo C
 openssl rsa -in $DIR/server-key.pem -out $DIR/server-key.pem \
     -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$(uuidgen)"
 
 #
 # Sign server cert
 #
-echo D
 openssl ca -cert $DIR/ca.pem -policy policy_anything \
     -out $DIR/server-cert.pem \
     -infiles $DIR/server-req.pem \
@@ -175,6 +171,7 @@ openssl req -new -keyout $DIR/client-key.pem -out \
 #
 # Remove the passphrase from the key
 #
+echo F
 openssl rsa -in $DIR/client-key.pem -out $DIR/client-key.pem
 
 #
