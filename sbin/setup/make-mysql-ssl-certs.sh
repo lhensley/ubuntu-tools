@@ -7,6 +7,8 @@
 #
 source /usr/local/sbin/source.sh
 
+set -x
+
 DIR=$HOME_DIRECTORY/openssl
 OPEN_SSL_CONFIGS=/etc/ssl
 PRIV=$DIR/private
@@ -110,6 +112,7 @@ echo D
 openssl ca -cert $DIR/ca.pem -policy policy_anything \
     -out $DIR/server-cert.pem \
     -infiles $DIR/server-req.pem $DIR/server-key.pem \
+    -key $DIR/server-key.pem \
     -passin env:PWD -passout env:PWD \
     -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$(uuidgen)"
 # -config $DIR/openssl.cnf 
