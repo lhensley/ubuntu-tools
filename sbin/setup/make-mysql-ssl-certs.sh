@@ -12,7 +12,6 @@ PRIV=$DIR/private
 mkdir -p $DIR $PRIV $DIR/newcerts
 cp $OPEN_SSL_CONFIGS/openssl.cnf $DIR
 # replace ./demoCA $DIR -- $DIR/openssl.cnf
-exit
 
 # Create necessary files: $database, $serial and $new_certs_dir
 # directory (optional)
