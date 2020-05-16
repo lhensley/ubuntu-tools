@@ -31,7 +31,7 @@ cp -r $GO_SBIN $SBIN_PARENT
 chown -R root:lhensley $SBIN_DIR
 find $SBIN_DIR -type d -print0 | xargs -0 chmod 750
 find $SBIN_DIR -type f -print0 | xargs -0 chmod 440
-chmod -R 400 $SBIN_DIR/setup/configs
+# chmod -R 400 $SBIN_DIR/setup/configs
 chmod 540 $SBIN_DIR/*.sh $SBIN_DIR/setup/*.sh $SBIN_DIR/*.py $SBIN_DIR/ccextractor
 cd
 # Update /home/$USER_ME/.ssh/authorized_keys

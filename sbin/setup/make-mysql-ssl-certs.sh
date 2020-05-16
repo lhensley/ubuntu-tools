@@ -6,11 +6,15 @@
 #
 #
 DIR=~/openssl
+OPEN_SSL_CONFIGS=/etc/ssl
 PRIV=$DIR/private
 
-mkdir $DIR $PRIV $DIR/newcerts
-cp /usr/share/ssl/openssl.cnf $DIR
-replace ./demoCA $DIR -- $DIR/openssl.cnf
+apt install mariadb-server
+
+mkdir -p $DIR $PRIV $DIR/newcerts
+cp $OPEN_SSL_CONFIGS/openssl.cnf $DIR
+# replace ./demoCA $DIR -- $DIR/openssl.cnf
+exit
 
 # Create necessary files: $database, $serial and $new_certs_dir
 # directory (optional)
