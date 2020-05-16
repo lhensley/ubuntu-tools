@@ -62,7 +62,7 @@ openssl req -new -x509 -keyout $PRIV/cakey.pem -out $DIR/ca.pem \
 #
 echo B
 openssl req -new -keyout $DIR/server-key.pem -out \
-    $DIR/server-req.pem -days 3600 -passin env:PWD -passout env:PWD \
+    $DIR/server-req.pem -passin env:PWD -passout env:PWD \
     -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$(uuidgen)"
 #   -config $DIR/openssl.cnf
 
@@ -100,8 +100,7 @@ openssl req -new -keyout $DIR/server-key.pem -out \
 # Remove the passphrase from the key
 #
 echo C
-openssl rsa -in $DIR/server-key.pem -out $DIR/server-key.pem \
-    -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$(uuidgen)"
+openssl rsa -in $DIR/server-key.pem -out $DIR/server-key.pem
 
 #
 # Sign server cert
@@ -109,7 +108,7 @@ openssl rsa -in $DIR/server-key.pem -out $DIR/server-key.pem \
 echo D
 openssl ca -cert $DIR/ca.pem -policy policy_anything \
     -out $DIR/server-cert.pem \
-    -infiles $DIR/server-req.pem \
+    -infiles $DIR/server-req.pem $DIR/server-key.pem \
     -passin env:PWD -passout env:PWD \
     -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$(uuidgen)"
 # -config $DIR/openssl.cnf 
@@ -137,7 +136,7 @@ openssl ca -cert $DIR/ca.pem -policy policy_anything \
 #
 echo E
 openssl req -new -keyout $DIR/client-key.pem -out \
-    $DIR/client-req.pem -days 3600 \
+    $DIR/client-req.pem \
     -passin env:PWD -passout env:PWD \
     -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$LANE_EMAIL"
 #   -config $DIR/openssl.cnf
