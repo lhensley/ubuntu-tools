@@ -25,7 +25,10 @@ echo "01" > $DIR/serial
 
 echo A
 openssl req -new -x509 -keyout $PRIV/cakey.pem -out $DIR/ca.pem \
-    -days 3600 -config $DIR/openssl.cnf
+    -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$(uuidgen)" \
+    -days 3600
+#   -config $DIR/openssl.cnf
+exit
 
 # Sample output:
 # Using configuration from /home/jones/openssl/openssl.cnf
@@ -97,7 +100,6 @@ openssl rsa -in $DIR/server-key.pem -out $DIR/server-key.pem
 #
 # Sign server cert
 #
-echo C
 openssl ca -cert $DIR/ca.pem -policy policy_anything \
     -out $DIR/server-cert.pem -config $DIR/openssl.cnf \
     -infiles $DIR/server-req.pem
@@ -160,14 +162,12 @@ openssl req -new -keyout $DIR/client-key.pem -out \
 #
 # Remove the passphrase from the key
 #
-echo E
 openssl rsa -in $DIR/client-key.pem -out $DIR/client-key.pem
 
 #
 # Sign client cert
 #
 
-echo F
 openssl ca -cert $DIR/ca.pem -policy policy_anything \
     -out $DIR/client-cert.pem -config $DIR/openssl.cnf \
     -infiles $DIR/client-req.pem
@@ -194,7 +194,6 @@ openssl ca -cert $DIR/ca.pem -policy policy_anything \
 # Create a my.cnf file that you can use to test the certificates
 #
 
-echo G
 cat <<EOF > $DIR/my.cnf
 [client]
 ssl-ca=$DIR/ca.pem
