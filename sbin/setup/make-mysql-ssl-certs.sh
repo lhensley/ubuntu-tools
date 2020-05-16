@@ -172,7 +172,8 @@ openssl req -new -keyout $DIR/client-key.pem -out \
 # Remove the passphrase from the key
 #
 echo F
-openssl rsa -in $DIR/client-key.pem -out $DIR/client-key.pem
+openssl rsa -in $DIR/client-key.pem -out $DIR/client-key.pem \
+    -passin env:PWD
 
 #
 # Sign client cert
