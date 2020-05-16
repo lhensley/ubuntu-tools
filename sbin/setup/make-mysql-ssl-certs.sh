@@ -8,6 +8,7 @@
 DIR=~/openssl
 OPEN_SSL_CONFIGS=/etc/ssl
 PRIV=$DIR/private
+PWD=$(uuidgen)
 
 mkdir -p $DIR $PRIV $DIR/newcerts
 cp $OPEN_SSL_CONFIGS/openssl.cnf $DIR
@@ -26,7 +27,7 @@ echo "01" > $DIR/serial
 echo A
 openssl req -new -x509 -keyout $PRIV/cakey.pem -out $DIR/ca.pem \
     -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$(uuidgen)" \
-    -days 3600
+    -days 3600 -pass end:PWD
 #   -config $DIR/openssl.cnf
 exit
 
