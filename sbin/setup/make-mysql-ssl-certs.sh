@@ -100,7 +100,8 @@ openssl req -new -keyout $DIR/server-key.pem -out \
 # Remove the passphrase from the key
 #
 echo C
-openssl rsa -in $DIR/server-key.pem -out $DIR/server-key.pem
+openssl rsa -in $DIR/server-key.pem -out $DIR/server-key.pem \
+    -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$(uuidgen)"
 
 #
 # Sign server cert
