@@ -9,8 +9,6 @@ DIR=~/openssl
 OPEN_SSL_CONFIGS=/etc/ssl
 PRIV=$DIR/private
 
-apt install mariadb-server
-
 mkdir -p $DIR $PRIV $DIR/newcerts
 cp $OPEN_SSL_CONFIGS/openssl.cnf $DIR
 # replace ./demoCA $DIR -- $DIR/openssl.cnf
