@@ -111,8 +111,8 @@ openssl rsa -in $DIR/server-key.pem -out $DIR/server-key.pem \
 echo D
 openssl ca -cert $DIR/ca.pem -policy policy_anything \
     -out $DIR/server-cert.pem \
-    -infiles $DIR/server-req.pem $DIR/server-key.pem \
-    -key $DIR/server-key.pem \
+    -infiles $DIR/server-req.pem $DIR/server-key.pem $PRIV/cakey.pem \
+#    -key $DIR/server-key.pem \
     -passin env:PWD -passout env:PWD \
     -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$(uuidgen)"
 # -config $DIR/openssl.cnf 
