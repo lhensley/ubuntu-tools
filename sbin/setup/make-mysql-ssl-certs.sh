@@ -27,7 +27,7 @@ echo "01" > $DIR/serial
 echo A
 openssl req -new -x509 -keyout $PRIV/cakey.pem -out $DIR/ca.pem \
     -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$(uuidgen)" \
-    -days 3600 -pass env:PWD
+    -days 3600 -passin env:PWD
 #   -config $DIR/openssl.cnf
 exit
 
