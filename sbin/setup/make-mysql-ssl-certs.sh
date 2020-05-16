@@ -61,6 +61,7 @@ openssl req -new -x509 -keyout $PRIV/cakey.pem -out $DIR/ca.pem \
 #
 openssl req -new -keyout $DIR/server-key.pem -out \
     $DIR/server-req.pem -days 3600 -passin env:PWD -passout env:PWD 
+    -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$(uuidgen)" \
 #   -config $DIR/openssl.cnf
 
 # Sample output:
@@ -105,6 +106,7 @@ openssl ca -cert $DIR/ca.pem -policy policy_anything \
     -out $DIR/server-cert.pem \
     -infiles $DIR/server-req.pem \
     -passin env:PWD -passout env:PWD
+    -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$(uuidgen)" \
 # -config $DIR/openssl.cnf 
 #
 # Sample output:
@@ -130,7 +132,9 @@ openssl ca -cert $DIR/ca.pem -policy policy_anything \
 #
 echo D
 openssl req -new -keyout $DIR/client-key.pem -out \
-    $DIR/client-req.pem -days 3600 -config $DIR/openssl.cnf
+    $DIR/client-req.pem -days 3600 \
+    -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$LANE_EMAIL" \
+#   -config $DIR/openssl.cnf
 
 # Sample output:
 # Using configuration from /home/jones/openssl/openssl.cnf

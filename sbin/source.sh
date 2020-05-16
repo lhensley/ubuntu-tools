@@ -55,6 +55,7 @@ case $HOST_NAME in
 esac
 
 # Set basic Variables
+LANE_EMAIL=lane.hensley@alumni.duke.edu
 START_DATESTAMP=$(/bin/date '+%Y-%m-%d')
 START_DAYSTAMP=$(/bin/date '+%d')
 START_WEEKDAYSTAMP=$(/bin/date '+%a')
