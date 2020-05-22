@@ -52,7 +52,7 @@ function backout {
   rm -f $site_conf
   query="DROP DATABASE IF EXISTS \`wp_$fqdn\`; DROP USER IF EXISTS 'wp_$fqdn'@'localhost'; FLUSH PRIVILEGES;"
 #  mysql -u $mysql_root_user -p$mysql_root_password -e "$query" > /dev/null 2> /dev/null
-  mysql -u $mysql_root_user -p'$mysql_root_password' -e "$query" > /dev/null 2> /dev/null
+  mysql -u $mysql_root_user -p$mysql_root_password -e "$query" > /dev/null 2> /dev/null
   systemctl restart apache2
   }
 
@@ -97,7 +97,7 @@ echo "A"
 query="DROP USER IF EXISTS 'wp_$fqdn'@'localhost'; FLUSH PRIVILEGES; CREATE USER 'wp_$fqdn'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$mysql_wp_pwd';GRANT USAGE ON *.* TO 'wp_$fqdn'@'localhost';ALTER USER 'wp_$fqdn'@'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;CREATE DATABASE IF NOT EXISTS `wp_$fqdn`;GRANT ALL PRIVILEGES ON `wp_$fqdn`.* TO 'wp_$fqdn'@'localhost';"
 echo "B"
 # if ! mysql -u $mysql_root_user -p'$mysql_root_password' -e "$query" > /dev/null 2> /dev/null; then
-if ! mysql -u $mysql_root_user -p'$mysql_root_password' -e "$query"; then
+if ! mysql -u $mysql_root_user -p$mysql_root_password -e "$query"; then
 echo "C"
   backout
 echo "D"
