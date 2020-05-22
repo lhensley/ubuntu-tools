@@ -38,8 +38,8 @@ docroot=$docroot_base/$fqdn
 site_conf=$apache2_configs/sites-available/$fqdn.conf
 site_enabled=$apache2_configs/sites-enabled/$fqdn.conf
 
-#debug_mode=false
-debug_mode=true
+debug_mode=false
+#debug_mode=true
 if $debug_mode ; then
   set -x
   fi
@@ -52,7 +52,7 @@ function backout {
   rm -f $site_conf
   query="DROP DATABASE IF EXISTS \`wp_$fqdn\`; DROP USER IF EXISTS 'wp_$fqdn'@'localhost'; FLUSH PRIVILEGES;"
 #  mysql -u $mysql_root_user -p$mysql_root_password -e "$query" > /dev/null 2> /dev/null
-  mysql -e "$query" > /dev/null 2> /dev/null
+  mysql -u $mysql_root_user -p'$mysql_root_password' -e "$query" > /dev/null 2> /dev/null
   systemctl restart apache2
   }
 
@@ -94,11 +94,7 @@ mysql_wp_pwd="$(apg -a 1 -m 20 -n 1 -MCLN)"
 
 # Add MySQL database and user
 query="DROP USER IF EXISTS 'wp_$fqdn'@'localhost'; FLUSH PRIVILEGES; CREATE USER 'wp_$fqdn'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$mysql_wp_pwd';GRANT USAGE ON *.* TO 'wp_$fqdn'@'localhost';ALTER USER 'wp_$fqdn'@'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;CREATE DATABASE IF NOT EXISTS `wp_$fqdn`;GRANT ALL PRIVILEGES ON `wp_$fqdn`.* TO 'wp_$fqdn'@'localhost';"
-echo $query
-echo "'$mysql_wp_pwd'"
-echo "*.*"
-read xxx
-if ! mysql -e "$query" > /dev/null 2> /dev/null; then
+if ! mysql -u $mysql_root_user -p'$mysql_root_password' -e "$query" > /dev/null 2> /dev/null; then
   backout
   echo "Could not add MySQL database and user."
   echo "Aborted."
