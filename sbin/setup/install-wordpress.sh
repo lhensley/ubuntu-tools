@@ -95,18 +95,43 @@ mysql_wp_pwd="$(apg -a 1 -m 20 -n 1 -MCLN)"
 # Add MySQL database and user
 echo "A"
 # query="DROP USER IF EXISTS 'wp_$fqdn'@'localhost'; FLUSH PRIVILEGES; CREATE USER 'wp_$fqdn'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$mysql_wp_pwd';GRANT USAGE ON *.* TO 'wp_$fqdn'@'localhost';ALTER USER 'wp_$fqdn'@'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;CREATE DATABASE IF NOT EXISTS `wp_$fqdn`;GRANT ALL PRIVILEGES ON `wp_$fqdn`.* TO 'wp_$fqdn'@'localhost';"
-query="DROP USER IF EXISTS 'wp_$fqdn'@'localhost';"
 echo "B"
+query="DROP USER IF EXISTS 'wp_$fqdn'@'localhost';"
+echo "C01"
+mysql -u $mysql_root_user -p$mysql_root_password -e "$query"
+echo "D01"
+query="FLUSH PRIVILEGES; "
+echo "C02"
+mysql -u $mysql_root_user -p$mysql_root_password -e "$query"
+echo "D02"
+query="CREATE USER 'wp_$fqdn'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$mysql_wp_pwd';"
+echo "C03"
+mysql -u $mysql_root_user -p$mysql_root_password -e "$query"
+echo "D03"
+query="GRANT USAGE ON *.* TO 'wp_$fqdn'@'localhost';"
+echo "C04"
+mysql -u $mysql_root_user -p$mysql_root_password -e "$query"
+echo "D04"
+query="ALTER USER 'wp_$fqdn'@'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;"
+echo "C05"
+mysql -u $mysql_root_user -p$mysql_root_password -e "$query"
+echo "D05"
+query="CREATE DATABASE IF NOT EXISTS `wp_$fqdn`;"
+echo "C06"
+mysql -u $mysql_root_user -p$mysql_root_password -e "$query"
+echo "D06"
+query="GRANT ALL PRIVILEGES ON `wp_$fqdn`.* TO 'wp_$fqdn'@'localhost';"
+echo "C07"
+mysql -u $mysql_root_user -p$mysql_root_password -e "$query"
+echo "D07"
+exit 1
 # if ! mysql -u $mysql_root_user -p'$mysql_root_password' -e "$query" > /dev/null 2> /dev/null; then
 if ! mysql -u $mysql_root_user -p$mysql_root_password -e "$query"; then
-echo "C"
   backout
-echo "D"
   echo "Could not add MySQL database and user."
   echo "Aborted."
   exit 1
   fi
-exit 1
 
 # Move to docroot
 if ! cd "$docroot"; then
