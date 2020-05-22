@@ -239,8 +239,10 @@ if $install_mailutils ; then
   fi
 
 if $install_mysql_server ; then
+###### EXTREMELY IMPORTANT: Edit /etc/mysql/mysql.conf.d/mysqld.cnf and open up bind-address * ###########
   apt-get install -y openssl libcurl4-openssl-dev libssl-dev
   apt-get install -y mysql-server
+  ufw allow mysql
   mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User=''"
@@ -248,6 +250,13 @@ if $install_mysql_server ; then
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$MYSQL_ADMIN_NAME'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_ADMIN_PASSWORD'"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_ADMIN_NAME'@'localhost'"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES"
+  MYSQL_SERVER_BIN_DIR="/var/lib/mysql"
+  MYSQL_CLIENT_CERTS_DIR="$HOME_DIRECTORY/certs"
+  mkdir -p $MYSQL_CLIENT_CERTS_DIR
+  cp "$MYSQL_SERVER_BIN_DIR/ca.pem" "$MYSQL_CLIENT_CERTS_DIR/$(hostname)-MySQL-ca.pem"
+  cp "$MYSQL_SERVER_BIN_DIR/client-cert.pem" "$MYSQL_CLIENT_CERTS_DIR/$(hostname)-MySQL-client-cert.pem"
+  cp "$MYSQL_SERVER_BIN_DIR/client-key.pem" "$MYSQL_CLIENT_CERTS_DIR/$(hostname)-MySQL-client-key.pem"
+  chown -R $USER_ME:$USER_ME "$MYSQL_CLIENT_CERTS_DIR"
   fi
 
 # phpMyAdmin should be installed AFTER php and MySQL

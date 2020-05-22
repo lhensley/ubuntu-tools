@@ -111,7 +111,7 @@ openssl rsa -in $DIR/server-key.pem -out $DIR/server-key.pem \
 echo D
 openssl ca -cert $DIR/ca.pem -policy policy_anything \
     -out $DIR/server-cert.pem \
-    -infiles $DIR/server-req.pem $DIR/server-key.pem $PRIV/cakey.pem \
+    -infiles $DIR/server-req.pem $DIR/server-key.pem \
 #    -key $DIR/server-key.pem \
     -passin env:PWD -passout env:PWD \
     -subj "/C=US/ST=Iowa/L=Des Moines/O=Man Is Alone, Inc./OU=Hog Heaven/CN=$(uuidgen)"
@@ -222,3 +222,24 @@ ssl_ca=$DIR/ca.pem
 ssl_cert=$DIR/server-cert.pem
 ssl_key=$DIR/server-key.pem
 EOF
+
+
+
+
+USER_ME="lhensley"
+HOME_DIRECTORY="/home/$USER_ME"
+
+MYSQL_SERVER_BIN_DIR="/var/lib/mysql"
+MYSQL_CLIENT_CERTS_DIR="$HOME_DIRECTORY/certs"
+mkdir -p $MYSQL_CLIENT_CERTS_DIR
+cp "$MYSQL_SERVER_BIN_DIR/ca.pem" "$MYSQL_CLIENT_CERTS_DIR/$(hostname)-MySQL-ca.pem"
+cp "$MYSQL_SERVER_BIN_DIR/client-cert.pem" "$MYSQL_CLIENT_CERTS_DIR/$(hostname)-MySQL-client-cert.pem"
+cp "$MYSQL_SERVER_BIN_DIR/client-key.pem" "$MYSQL_CLIENT_CERTS_DIR/$(hostname)-MySQL-client-key.pem"
+chown -R $USER_ME:$USER_ME "$MYSQL_CLIENT_CERTS_DIR"
+
+
+
+
+
+
+
