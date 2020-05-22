@@ -15,14 +15,14 @@
 # For the root user, copy the file to /root with permissions 600, owner root:root
 
 # DEFINE THESE VARIABLES BEFORE RUNNING THE SCRIPT!
-fqdn="tmp.from-ia.com"
-web_admin_user="lhensley"
-web_admin_email="lane.hensley@alumni.duke.edu"
+fqdn='tmp.from-ia.com'
+web_admin_user='lhensley'
+web_admin_email='lane.hensley@alumni.duke.edu'
 remove=false
 #remove=true
 
-mysql_root_user="kai"
-mysql_root_password="Qok7qxYX,=UZtDTTcv@(H^U8@JRLXwyu"
+mysql_root_user='kai'
+mysql_root_password='Qok7qxYX,=UZtDTTcv@(H^U8@JRLXwyu'
 
 script_name=install-wordpress.sh
 current_directory=$(pwd)
