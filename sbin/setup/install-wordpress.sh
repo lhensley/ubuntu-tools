@@ -236,8 +236,8 @@ chown root:root $site_enabled
 
 # Restart apache2
 systemctl restart apache2
-if ! systemctl status apache2 ; then
-echo "Error Code $?"
+if systemctl status apache2 ; then
+  echo "Error Code $?"
   rm $site_enabled
   rm $site_conf
   if ! systemctl restart apache2; then
