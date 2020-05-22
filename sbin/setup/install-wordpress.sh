@@ -38,8 +38,8 @@ docroot=$docroot_base/$fqdn
 site_conf=$apache2_configs/sites-available/$fqdn.conf
 site_enabled=$apache2_configs/sites-enabled/$fqdn.conf
 
-debug_mode=false
-#debug_mode=true
+#debug_mode=false
+debug_mode=true
 if $debug_mode ; then
   set -x
   fi
