@@ -235,20 +235,17 @@ if ! ln -s $site_conf $site_enabled; then
 chown root:root $site_enabled
 
 # Restart apache2
-if ! systemctl restart apache2; then
+systemctl restart apache2
+if ! systemctl status apache2 > /dev/null ; then
   rm $site_enabled
   rm $site_conf
   if ! systemctl restart apache2; then
-    systemctl status apache2.service
-    journalctl -xe
     backout
     echo "Error restarting apache2."
     echo "Aborted."
     exit 1
   else
     backout
-    systemctl status apache2.service
-    journalctl -xe
     echo "Apache2 will not start with virtual host $fqdn defined."
     echo "Virtual host $fqdn has been deleted."
     echo "Apache2 is running."
