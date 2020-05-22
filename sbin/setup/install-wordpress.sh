@@ -21,8 +21,8 @@ web_admin_email='lane.hensley@alumni.duke.edu'
 remove=false
 #remove=true
 
-mysql_root_user='kai'
-mysql_root_password='Qok7qxYX,=UZtDTTcv@(H^U8@JRLXwyu'
+mysql_root_user='USER'
+mysql_root_password='PASSWORD'
 
 script_name=install-wordpress.sh
 current_directory=$(pwd)
@@ -236,7 +236,7 @@ chown root:root $site_enabled
 
 # Restart apache2
 systemctl restart apache2
-if systemctl status apache2 ; then
+if ! systemctl status apache2 > /dev/null ; then
   echo "Error Code $?"
   rm $site_enabled
   rm $site_conf

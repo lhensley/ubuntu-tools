@@ -181,7 +181,8 @@ if $install_apache2 ; then
   ufw allow 'Apache Full'
   ufw allow http
   ufw allow https
-  echo wget installed.
+  a2enmod ssl rewrite
+  echo apache2 installed.
   fi
 
 if $install_fail2ban ; then
