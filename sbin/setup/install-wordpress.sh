@@ -208,7 +208,7 @@ echo "ServerName $fqdn" >> $site_conf
 echo "SSLCertificateFile $certificate_live_dir/$fqdn/fullchain.pem" >> $site_conf
 echo "SSLCertificateKeyFile $certificate_live_dir/$fqdn/privkey.pem" >> $site_conf
 echo "Include $certificate_conf_dir/options-ssl-apache.conf" >> $site_conf
-echo "SSLProtocol +TLSv1.1 +TLSv1.2" >> $site_conf
+echo "SSLProtocol +TLSv1.2" >> $site_conf
 echo "</VirtualHost>" >> $site_conf
 echo "<VirtualHost *:80>" >> $site_conf
 echo "DocumentRoot \"$docroot\"" >> $site_conf
