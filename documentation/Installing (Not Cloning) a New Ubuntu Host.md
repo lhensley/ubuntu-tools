@@ -33,7 +33,7 @@ sudo rm -rf /var/local/git /usr/local/sbin
 # Clone go.git and set restrictive permissions
 sudo mkdir -p /var/local/git && sudo chmod 775 /var/local/git && cd /var/local/git && sudo git clone https://github.com/lhensley/go.git && sudo chmod -R 400 /var/local/git && cd
 # Copy scripts into /usr/local/sbin
-sudo cp -r /var/local/git/go/sbin /usr/local && sudo chown -R root:lhensley /usr/local/sbin && sudo find /usr/local/sbin -type d -print0 | sudo xargs -0 chmod 750 && sudo find /usr/local/sbin -type f -print0 | sudo xargs -0 chmod 440 && sudo chmod -R 400 /usr/local/sbin/setup/configs && sudo chmod 540 /usr/local/sbin/*.sh /usr/local/sbin/setup/*.sh /usr/local/sbin/*.py /usr/local/sbin/ccextractor
+sudo cp -r /var/local/git/go/sbin /usr/local && sudo chown -R root:lhensley /usr/local/sbin && sudo find /usr/local/sbin -type d -print0 | sudo xargs -0 chmod 750 && sudo find /usr/local/sbin -type f -print0 | sudo xargs -0 chmod 440 && sudo chmod -R 400 /var/local/git/go/configs && sudo chmod 540 /usr/local/sbin/*.sh /usr/local/sbin/setup/*.sh /usr/local/sbin/*.py /usr/local/sbin/ccextractor
 # Run initialization script
 # THIS REQUIRES REBOOT AFTER RUNNING
 sudo /usr/local/sbin/setup/setup-os.sh
