@@ -189,8 +189,7 @@ if $install_wget ; then
 
 if $install_apache2 ; then
   echo "Installing apache2"
-  apt-get install -y apache2 apach
-  e2-doc apache2-suexec-pristine
+  apt-get install -y apache2 apache2-doc apache2-suexec-pristine
   ufw allow 'Apache'
   ufw allow 'Apache Full'
   ufw allow http
@@ -202,7 +201,7 @@ if $install_apache2 ; then
 
 if $install_fail2ban ; then
   echo "Installing fail2ban"
-  apt-get install -y fail2ban mailx monit sqlite3 python-pyinotify-doc
+  apt-get install -y fail2ban monit sqlite3 python-pyinotify-doc
   echo fail2ban installed.
   fi
 
@@ -269,16 +268,16 @@ if $install_mysql_server ; then
   echo "Installing mysql server"
 ###### EXTREMELY IMPORTANT: Edit /etc/mysql/mysql.conf.d/mysqld.cnf and open up bind-address * ###########
   apt-get install -y openssl libcurl4-openssl-dev libssl-dev
-  apt-get install -y php-dbase php-libsodium php-mcrypt php-gmp php-symfony-service-implementation php-imagick php-twig-doc php-mcrypt
-  apt-get install -y php-symfony-translation php-recode php-gd2 php-pragmarx-google2fa php-bacon-qr-code php-samyoul-u2f-php-server
+  apt-get install -y php-gmp php-symfony-service-implementation php-imagick php-twig-doc
+  apt-get install -y php-symfony-translation
   apt-get install -y mysql-server
   ufw allow mysql
   mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User=''"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%'"
-  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$MYSQL_ADMIN_NAME'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_ADMIN_PASSWORD'"
-  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_ADMIN_NAME'@'localhost'"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER `$MYSQL_ADMIN_NAME`@`localhost` IDENTIFIED WITH caching_sha2_password BY '$MYSQL_ADMIN_PASSWORD'"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO `$MYSQL_ADMIN_NAME`@`localhost`"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES"
   MYSQL_SERVER_BIN_DIR="/var/lib/mysql"
   MYSQL_CLIENT_CERTS_DIR="$HOME_DIRECTORY/certs"
