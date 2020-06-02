@@ -35,7 +35,7 @@ LENGTH_OF_PASSWORDS=63
 MAX_MYSQL_PASSWORD_LENGTH=32
 HOSTNAME="$(hostname)"
 USER_ME="lhensley"
-MYSQL_ADMIN_NAME="kai"
+MYSQL_ADMIN_NAME="admin"
 USER_UBUNTU="ubuntu"
 MAILNAME="$(hostname)"
 MAIN_MAILER_TYPE="'Internet with smarthost'"
@@ -123,12 +123,14 @@ source $TEMP_PASSWORD_INCLUDE
 rm $TEMP_PASSWORD_INCLUDE
 
 # Update hostname
+echo "Updating hostname"
 hostnamectl set-hostname $HOSTNAME
 echo $HOSTNAME > /etc/hostname
 chmod 644 /etc/hostname
 chown root:root /etc/hostname
 
 # Make $USER_ME and $USER_UBUNTU users and give them sudo access and ssh access
+echo "Making $USER_ME and $USER_UBUNTU users and give them sudo access and ssh access"
 useradd $USER_ME
 # useradd $USER_UBUNTU
 # TWO PROBLEMS WITH THE COMMANDS BELOW: The --stdin flag doesn't work in this version of Linux, and my password is going to be dropped anyway.
@@ -153,10 +155,12 @@ echo "$USER_ME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/lane-NOPASSWD-users
 echo "$USER_UBUNTU ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/lane-NOPASSWD-users
 echo Removing passwords for $USER_ME and $USER_UBUNTU
 chmod 440 /etc/sudoers.d/lane-NOPASSWD-users
-passwd -d $USER_ME
+# Not sure I want to drop my password. Still don't need it for ssh. 6/1/2020
+# passwd -d $USER_ME
 # This probably will fail, and that's fine.'
-passwd -d $USER_UBUNTU
-echo Passwords removed for $USER_ME and $USER_UBUNTU
+# passwd -d $USER_UBUNTU
+echo "Passwords removed for $USER_ME and $USER_UBUNTU"
+echo "Or not"
 
 # Add custom application definitions for ufw
 echo "Adding custom application definitions for ufw"
@@ -164,27 +168,27 @@ cp $configs_directory/lane-applications /etc/ufw/applications.d/
 chown root:root /etc/ufw/applications.d/lane-applications
 chmod 644 /etc/ufw/applications.d/lane-applications
 ufw app update lane-applications
-echo Special LANE applications installed to ufw.
+echo "Special LANE applications installed to ufw.""
 
 # CRITICAL: Install this first.
 if $install_curl ; then
   echo "Installing curl"
   apt-get install -y curl
-  echo curl installed.
+  echo "curl installed."
   fi
 
 # Install this early.
 if $install_unzip ; then
   echo "Installing unzip"
   apt-get install -y unzip
-  echo unzip installed.
+  echo "unzip installed."
   fi
 
 # Install this early.
 if $install_wget ; then
   echo "Installing wget"
   apt-get install -y wget
-  echo wget installed.
+  echo "wget installed."
   fi
 
 if $install_apache2 ; then
@@ -196,13 +200,13 @@ if $install_apache2 ; then
   ufw allow https
   a2enmod ssl rewrite
   systemctl restart apache2
-  echo apache2 installed.
+  echo "apache2 installed."
   fi
 
 if $install_fail2ban ; then
   echo "Installing fail2ban"
   apt-get install -y fail2ban monit sqlite3 python-pyinotify-doc
-  echo fail2ban installed.
+  echo "fail2ban installed."
   fi
 
 if $install_net_tools ; then
@@ -282,7 +286,7 @@ if $install_mysql_server ; then
   echo "Test point mysql-server D"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$MYSQL_ADMIN_NAME'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_ADMIN_PASSWORD'"
   echo "Test point mysql-server E"
-  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_ADMIN_NAME'@localhost"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_ADMIN_NAME'@localhost WITH GRANT OPTION"
   echo "Test point mysql-server F"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES"
   echo "Test point mysql-server G"
@@ -300,11 +304,11 @@ if $install_mysql_server ; then
 if $install_phpmyadmin ; then
   echo "Instlling phpmyadmin"
   # Based on https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04
-  debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2'
-  debconf-set-selections <<< 'phpmyadmin phpmyadmin/dbconfig-install boolean true'
-  debconf-set-selections <<< 'phpmyadmin phpmyadmin/app-password-confirm password $PHPMYADMIN_APP_PASS'
-  debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/admin-pass password $PHPMYADMIN_ROOT_PASS'
-  debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_APP_DB_PASS'
+  debconf-set-selections <<< "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2"
+  debconf-set-selections <<< "phpmyadmin phpmyadmin/dbconfig-install boolean true"
+  debconf-set-selections <<< "phpmyadmin phpmyadmin/app-password-confirm password $PHPMYADMIN_APP_PASS"
+  debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/admin-pass password $PHPMYADMIN_ROOT_PASS"
+  debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_APP_DB_PASS"
   apt install -y phpmyadmin php-mbstring php-zip php-gd php-json php-curl
   phpenmod mbstring
   cp $configs_directory/phpmyadmin.config.inc.php /usr/share/phpmyadmin/config.inc.php
@@ -326,7 +330,7 @@ if $install_plexmediaserver ; then
   apt update
   apt install plexmediaserver
   ufw allow plexmediaserver
-  echo "Plex Media Server installed"
+  echo "Plex Media Server installed."
   fi
 
 if $install_webmin ; then
@@ -342,15 +346,16 @@ if $install_webmin ; then
   fi
 
 # Edit .vimrc settings
+echo "Editing .vimrc settings"
 touch /home/$USER_ME/.vimrc && cp /home/$USER_ME/.vimrc /home/$USER_ME/.vimrc.backup.$(date "+%Y.%m.%d-%H.%M.%S") && echo "set background=dark" > /home/$USER_ME/.vimrc && echo "set visualbell" >> /home/$USER_ME/.vimrc
 chown $USER_ME:$USER_ME /home/$USER_ME/.vi*
-echo .vimrc edited.
+echo ".vimrc edited."
 
 echo ""
 echo "# IMPORTANT: Copy these passwords into Roboform IMMEDIATELY and reboot."
 echo "# Once you continue, these passwords cannot be recovered."
 echo ""
-echo "PASSWORD_ME: $PASSWORD_ME"
+# echo "PASSWORD_ME: $PASSWORD_ME"
 echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD"
 echo "MYSQL_ADMIN_NAME: $MYSQL_ADMIN_NAME"
 echo "MYSQL_ADMIN_PASSWORD: $MYSQL_ADMIN_PASSWORD"
