@@ -273,11 +273,11 @@ if $install_mysql_server ; then
   apt-get install -y mysql-server
   ufw allow mysql
   mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
-  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
-  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User=''"
-  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%'"
-  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER `$MYSQL_ADMIN_NAME`@`localhost` IDENTIFIED WITH caching_sha2_password BY '$MYSQL_ADMIN_PASSWORD'"
-  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO `$MYSQL_ADMIN_NAME`@`localhost`"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User=\'root\' AND Host NOT IN (\'localhost\', \'127.0.0.1\', \'::1\')"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User=\'\'"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.db WHERE Db=\'test\' OR Db=\'test\_%\'"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER \'$MYSQL_ADMIN_NAME\'@\'localhost\' IDENTIFIED WITH caching_sha2_password BY \'$MYSQL_ADMIN_PASSWORD\'"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO \'$MYSQL_ADMIN_NAME\'@\'localhost\'"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES"
   MYSQL_SERVER_BIN_DIR="/var/lib/mysql"
   MYSQL_CLIENT_CERTS_DIR="$HOME_DIRECTORY/certs"
