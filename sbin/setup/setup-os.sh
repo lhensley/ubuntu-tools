@@ -168,7 +168,7 @@ cp $configs_directory/lane-applications /etc/ufw/applications.d/
 chown root:root /etc/ufw/applications.d/lane-applications
 chmod 644 /etc/ufw/applications.d/lane-applications
 ufw app update lane-applications
-echo "Special LANE applications installed to ufw.""
+echo "Special LANE applications installed to ufw."
 
 # CRITICAL: Install this first.
 if $install_curl ; then
