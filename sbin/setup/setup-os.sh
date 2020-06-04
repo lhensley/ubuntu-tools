@@ -4,11 +4,49 @@
 # PURPOSE: Installs basic software.
 # IMPORTANT: Check variables at the top of the script before running it!
 
-# Still to add:
-#    lets encrypt
-#    turn off password
+######################################################
+######### IMPORTANT! #################################
+######### Fill in this section carefully, ############
+######### copy-and-paste it into Roboform ############
+######### BEFORE running install script ##############
+MAIN_MAILER_TYPE="'Internet with smarthost'"
+RELAYHOST="mail.twc.com" # Spectrum Internet
+# RELAYHOST="mail.mchsi.com" # Mediacom Cable Internet
+######### END password information ###################
+######################################################
 
-echo "Starting setup ..."
+# Strongly recommended to install curl. Other installs depend on it.
+install_curl=true
+install_unzip=true
+# Strongly recommended
+install_wget=true
+install_apache2=true
+install_fail2ban=true
+install_net_tools=true
+install_openssl=true
+install_php=true
+install_sysbench=true
+install_tasksel=true
+# NOTE: xrdp will allow remote desktop protocol. Use with care.
+install_xrdp=true
+install_certbot=true
+install_mailutils=true
+install_mysql_server=true
+install_phpmyadmin=true
+install_plexmediaserver=false # CAUTION: NOT TESTED FOR UBUNTU 20
+install_webmin=true
+install_zoom=true
+install_chrome=true
+install_handbrake=true
+install_filezilla=true
+install_gimp=true
+
+echo "#########################################################################"
+echo "#########################################################################"
+echo "#########################################################################"
+echo "Starting setup ...  #####################################################"
+echo "#########################################################################"
+echo "#########################################################################"
 
 debug_mode=false
 #debug_mode=true
@@ -16,64 +54,9 @@ if $debug_mode ; then
   set -x
   fi
 
-# Make sure only root can run our script
-if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as root." 1>&2
-  exit 1
-fi
-
 # Include header file
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/../source.sh
-
-######################################################
-######### IMPORTANT! #################################
-######### Fill in this section carefully, ############
-######### copy-and-paste it into Roboform ############
-######### BEFORE running install script ##############
-LENGTH_OF_PASSWORDS=63
-MAX_MYSQL_PASSWORD_LENGTH=32
-HOSTNAME="$(hostname)"
-USER_ME="lhensley"
-MYSQL_ADMIN_NAME="admin"
-USER_UBUNTU="ubuntu"
-MAILNAME="$(hostname)"
-MAIN_MAILER_TYPE="'Internet with smarthost'"
-RELAYHOST="mail.twc.com" # Spectrum Internet
-# RELAYHOST="mail.mchsi.com" # Mediacom Cable Internet
-######### END password information ###################
-######################################################
-
-install_apache2=true
-install_certbot=true
-# Strongly recommended to install curl. Other installs depend on it.
-install_curl=true
-install_fail2ban=true
-install_mailutils=true
-install_mysql_server=true
-install_net_tools=true
-install_openssh_server=true
-install_openssl=true
-install_php=true
-install_phpmyadmin=true
-install_plexmediaserver=false # CAUTION: NOT TESTED FOR UBUNTU 20
-install_sysbench=true
-install_tasksel=true
-install_unzip=true
-install_webmin=true
-# Strongly recommended
-install_wget=true
-# NOTE: xrdp will allow remote desktop protocol. Use with care.
-install_xrdp=true
-enable_ufw=true
-
-work_directory=$(pwd)
-running_directory=$(dirname $0)
-git_directory="/var/local/git"
-go_directory="$git_directory/go"
-configs_directory="$go_directory/configs"
-mkdir -p /home/$USER_ME/.ssh
-chown -R $USER_ME:$USER_ME /home/$USER_ME/.ssh
 
 if [[ $NAME = "Ubuntu" ]]; then
     if [[ $(echo $VERSION_ID | cut -c1-3) = "20." ]]; then
@@ -95,49 +78,55 @@ if ! [ -x "$(command -v apg)" ]; then
   apt-get install -y apg
 fi
 
-EXCLUDED_PASSWORD_CHARACTERS=" \$\'\"\\\#\|\<\>\;\*\&\~\!\I\l\1\O\0\`\/\?"
-NUMBER_OF_DESIGNATED_PASSWORDS=7
+# NUMBER_OF_DESIGNATED_PASSWORDS=7
 TEMP_PASSWORD_INCLUDE="/tmp/passwords.sh"
 echo "" > $TEMP_PASSWORD_INCLUDE
-progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 0
+# progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 0
 echo "PASSWORD_ME=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 1
+# progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 1
 echo "PASSWORD_UBUNTU=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 2
+# progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 2
 echo "MYSQL_ROOT_PASSWORD=\"$(apg -c cl_seed -a 1 -m $MAX_MYSQL_PASSWORD_LENGTH -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 3
+# progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 3
 echo "MYSQL_ADMIN_PASSWORD=\"$(apg -c cl_seed -a 1 -m $MAX_MYSQL_PASSWORD_LENGTH -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 5
+# progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 5
 echo "PHPMYADMIN_APP_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 5
+# progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 5
 echo "PHPMYADMIN_ROOT_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 6
+# progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 6
 echo "PHPMYADMIN_APP_DB_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 7
+# progress-bar.sh $NUMBER_OF_DESIGNATED_PASSWORDS 7
 echo "" >> $TEMP_PASSWORD_INCLUDE
 
 chown root:root $TEMP_PASSWORD_INCLUDE
 chmod 500 $TEMP_PASSWORD_INCLUDE
-progress-bar.sh
+# progress-bar.sh
 source $TEMP_PASSWORD_INCLUDE
 rm $TEMP_PASSWORD_INCLUDE
 
 # Update hostname
 echo "Updating hostname"
-hostnamectl set-hostname $HOSTNAME
-echo $HOSTNAME > /etc/hostname
+hostnamectl set-hostname $HOST_NAME
+echo $HOST_NAME > /etc/hostname
 chmod 644 /etc/hostname
 chown root:root /etc/hostname
 
 # Make $USER_ME and $USER_UBUNTU users and give them sudo access and ssh access
 echo "Making $USER_ME and $USER_UBUNTU users and give them sudo access and ssh access"
-useradd $USER_ME
+# useradd $USER_ME
 # useradd $USER_UBUNTU
 # TWO PROBLEMS WITH THE COMMANDS BELOW: The --stdin flag doesn't work in this version of Linux, and my password is going to be dropped anyway.
 # echo $PASSWORD_ME | passwd --stdin $USER_ME
 # echo $PASSWORD_UBUNTU | passwd --stdin $USER_UBUNTU
 usermod -aG sudo $USER_ME
 # usermod -aG sudo $USER_UBUNTU
+mkdir -p /home/$USER_ME/.ssh
+chown -R $USER_ME:$USER_ME /home/$USER_ME/.ssh
+touch $HOME_ME/.ssh/id_rsa $HOME_ME/.ssh/id_rsa.pub
+SSH_KEY_NAME="$HOST_NAME-$(date "+%Y%m%d-%H%M%S")"
+mv $HOME_ME/.ssh/id_rsa $HOME_ME/.ssh/id_rsa.$(date "+%Y.%m.%d-%H.%M.%S")
+mv $HOME_ME/.ssh/id_rsa.pub $HOME_ME/.ssh/id_rsa.pub.$(date "+%Y.%m.%d-%H.%M.%S")
+ssh-keygen -C "$SSH_KEY_NAME" -P "" -f "$HOME_ME/.ssh/id_rsa"
 printf "\n\nAllowUsers $USER_ME $USER_UBUNTU\n\n" >> $SSHD_CONFIG
 sed -i 's/#PasswordAuthentication no/PasswordAuthentication no/g' $SSHD_CONFIG
 sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' $SSHD_CONFIG
@@ -164,7 +153,7 @@ echo "Or not"
 
 # Add custom application definitions for ufw
 echo "Adding custom application definitions for ufw"
-cp $configs_directory/lane-applications /etc/ufw/applications.d/
+cp $GO_CONFIGS/lane-applications /etc/ufw/applications.d/
 chown root:root /etc/ufw/applications.d/lane-applications
 chmod 644 /etc/ufw/applications.d/lane-applications
 ufw app update lane-applications
@@ -217,17 +206,19 @@ if $install_net_tools ; then
 
 if $install_openssl ; then
   echo "Installing openssl"
-  apt-get install -y openssl libcurl4-openssl-dev libssl-dev libcurl4-doc libidn11-dev libkrb5-dev libldap2-dev librtmp-dev libssh2-1-dev zlib1g-dev libssl-doc
+  OPENSSL_PACKAGES="openssl libcurl4-openssl-dev libssl-dev libcurl4-doc"
+  OPENSSL_PACKAGES="$OPENSSL_PACKAGES libidn11-dev libkrb5-dev libldap2-dev "
+  OPENSSL_PACKAGES="$OPENSSL_PACKAGES librtmp-dev libssh2-1-dev zlib1g-dev libssl-doc"
+  apt-get install -y 
   echo "openssl installed."
   fi
 
 if $install_php ; then
   echo "Installing php"
-  apt-get install -y php libapache2-mod-php
-  apt-get install -y php-mysql php-gd php-curl php-imap php-ldap
-  apt-get install -y libmcrypt-dev php-mbstring
-  apt-get install -y php-dev php-pear
-  apt-get install -y libc-client2007e mlock php-curl php-gd php-imap php-ldap php-mysql uw-mailutils
+  PHP_PACKAGES="php libapache2-mod-php php-mysql php-gd php-curl php-imap php-ldap"
+  PHP_PACKAGES="$PHP_PACKAGES libmcrypt-dev php-mbstring php-dev php-pear"
+  PHP_PACKAGES="$PHP_PACKAGES libc-client2007e mlock php-curl php-imap uw-mailutils"
+  apt-get install -y $PHP_PACKAGES
   phpenmod gd curl imap ldap mbstring
   systemctl restart apache2
   echo "php installed."
@@ -271,38 +262,34 @@ if $install_mailutils ; then
 if $install_mysql_server ; then
   echo "Installing mysql server"
 ###### EXTREMELY IMPORTANT: Edit /etc/mysql/mysql.conf.d/mysqld.cnf and open up bind-address * ###########
-  apt-get install -y openssl libcurl4-openssl-dev libssl-dev
-  apt-get install -y php-gmp php-symfony-service-implementation php-imagick php-twig-doc
-  apt-get install -y php-symfony-translation
-  apt-get install -y mysql-server
+  MYSQL_PACKAGES="mysql-server openssl libcurl4-openssl-dev libssl-dev php-gmp php-symfony-service-implementation php-imagick php-twig-doc php-symfony-translation"
+  apt-get install -y $MYSQL_PACKAGES
   ufw allow mysql
   mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
-  echo "Test point mysql-server A"
+#  echo "Test point mysql-server A"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
-  echo "Test point mysql-server B"
+#  echo "Test point mysql-server B"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User=''"
-  echo "Test point mysql-server C"
+#  echo "Test point mysql-server C"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test_%'"
-  echo "Test point mysql-server D"
+#  echo "Test point mysql-server D"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$MYSQL_ADMIN_NAME'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_ADMIN_PASSWORD'"
-  echo "Test point mysql-server E"
+#  echo "Test point mysql-server E"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_ADMIN_NAME'@localhost WITH GRANT OPTION"
-  echo "Test point mysql-server F"
+#  echo "Test point mysql-server F"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES"
-  echo "Test point mysql-server G"
-  MYSQL_SERVER_BIN_DIR="/var/lib/mysql"
-  MYSQL_CLIENT_CERTS_DIR="$HOME_DIRECTORY/certs"
+#  echo "Test point mysql-server G"
   mkdir -p $MYSQL_CLIENT_CERTS_DIR
-  cp "$MYSQL_SERVER_BIN_DIR/ca.pem" "$MYSQL_CLIENT_CERTS_DIR/$(hostname)-MySQL-ca.pem"
-  cp "$MYSQL_SERVER_BIN_DIR/client-cert.pem" "$MYSQL_CLIENT_CERTS_DIR/$(hostname)-MySQL-client-cert.pem"
-  cp "$MYSQL_SERVER_BIN_DIR/client-key.pem" "$MYSQL_CLIENT_CERTS_DIR/$(hostname)-MySQL-client-key.pem"
+  cp "$MYSQL_SERVER_BIN_DIR/ca.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOST_NAME-MySQL-ca.pem"
+  cp "$MYSQL_SERVER_BIN_DIR/client-cert.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOST_NAME-MySQL-client-cert.pem"
+  cp "$MYSQL_SERVER_BIN_DIR/client-key.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOST_NAME-MySQL-client-key.pem"
   chown -R $USER_ME:$USER_ME "$MYSQL_CLIENT_CERTS_DIR"
-  echo "mysql server installed"
+  echo "MySQL server installed."
   fi
 
 # phpMyAdmin should be installed AFTER php and MySQL
 if $install_phpmyadmin ; then
-  echo "Instlling phpmyadmin"
+  echo "Installing phpMyAdmin"
   # Based on https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04
   debconf-set-selections <<< "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2"
   debconf-set-selections <<< "phpmyadmin phpmyadmin/dbconfig-install boolean true"
@@ -311,14 +298,14 @@ if $install_phpmyadmin ; then
   debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_APP_DB_PASS"
   apt install -y phpmyadmin php-mbstring php-zip php-gd php-json php-curl
   phpenmod mbstring
-  cp $configs_directory/phpmyadmin.config.inc.php /usr/share/phpmyadmin/config.inc.php
-  chown -R www-data:www-data /usr/share/phpmyadmin
-  chmod 644 /usr/share/phpmyadmin/config.inc.php
-#  cp $configs_directory/html/.htaccess.html.www.var /var/www/html/.htaccess
-#  chown -R www-data:www-data /var/www/html/.htaccess
-#  chmod 644 /var/www/html/.htaccess
+  cp $GO_CONFIGS/phpmyadmin.config.inc.php $PHPMYADMIN_DIR/config.inc.php
+  chown -R www-data:www-data $PHPMYADMIN_DIR
+  chmod 644 $PHPMYADMIN_DIR/config.inc.php
+#  cp $GO_CONFIGS/html/.htaccess.html.www.var $THIS_WEB_ROOT/.htaccess
+#  chown -R www-data:www-data $THIS_WEB_ROOT/.htaccess
+#  chmod 644 $THIS_WEB_ROOT/.htaccess
   systemctl restart apache2
-  echo "phpmyadmin installed."
+  echo "phpMyAdmin installed."
   fi
 
 if $install_plexmediaserver ; then
@@ -336,20 +323,90 @@ if $install_plexmediaserver ; then
 if $install_webmin ; then
   echo "Installing Webmin"
   wget http://www.webmin.com/download/deb/webmin-current.deb
-  apt-get install -y openssl libcurl4-openssl-dev libssl-dev
-  apt-get install -y perl libnet-ssleay-perl libauthen-pam-perl \
-  libpam-runtime libio-pty-perl apt-show-versions python
+  WEBMIN_PACKAGES="openssl libcurl4-openssl-dev libssl-dev perl libnet-ssleay-perl libauthen-pam-perl"
+  WEBMIN_PACKAGES="$WEBMIN_PACKAGES libnet-ssleay-perl libauthen-pam-perl libpam-runtime"
+  WEBMIN_PACKAGES="$WEBMIN_PACKAGES libio-pty-perl apt-show-versions python"
+  apt-get install -y $WEBMIN_PACKAGES
   dpkg --install webmin-current.deb
   rm webmin-current.deb
   ufw allow webmin
   echo "Webmin installed."
   fi
 
+# Install Zoom Client
+if $install_zoom ; then
+  echo "Installing Zoom Client"
+  wget https://zoom.us/client/latest/zoom_amd64.deb
+  apt-get install -y ./zoom_amd64.deb
+  rm ./zoom_amd64.deb
+  echo "Zoom Client installed."
+  fi
+
+# Install Google Chrome
+if $install_chrome ; then
+  echo "Installing Google Chrome"
+  apt-get install -y gdebi-core
+  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  gdebi --n google-chrome-stable_current_amd64.deb
+  rm ./google-chrome-stable_current_amd64.deb
+  echo "Google Chrome installed."
+  fi
+
+# Install MakeMKV
+if $install_makemkv ; then
+  echo "Installing MakeMKV"
+  snap install makemkv
+  snap connect makemkv:hardware-observe
+  echo "MakeMKV installed."
+  echo "NOT configured: License must be applied."
+  fi
+
+if $install_handbrake ; then
+  echo "Installing HandBrake"
+  add-apt-repository -y ppa:stebbins/handbrake-releases
+  apt-get update
+  apt-get install -y handbrake-gtk
+  apt-get install -y handbrake-cli
+  echo "HandBrake installed."
+  echo "NOT configured: Presets need to be added."
+  fi
+
+# Install Filezilla
+if $install_filezilla ; then
+  echo "Installing Filezilla."
+  apt-get install -y filezilla
+  echo "Filezilla installed."
+  fi
+
+# Install Gimp
+if $install_gimp ; then
+  echo "Installing Gimp."
+  apt-get install -y gimp
+  echo "Gimp installed."
+  fi
+
 # Edit .vimrc settings
 echo "Editing .vimrc settings"
-touch /home/$USER_ME/.vimrc && cp /home/$USER_ME/.vimrc /home/$USER_ME/.vimrc.backup.$(date "+%Y.%m.%d-%H.%M.%S") && echo "set background=dark" > /home/$USER_ME/.vimrc && echo "set visualbell" >> /home/$USER_ME/.vimrc
-chown $USER_ME:$USER_ME /home/$USER_ME/.vi*
+touch $HOME_ME/.vimrc
+cp $HOME_ME/.vimrc $HOME_ME/.vimrc.backup.$(date "+%Y.%m.%d-%H.%M.%S")
+echo "set background=dark" > $HOME_ME/.vimrc
+echo "set visualbell" >> $HOME_ME/.vimrc
+chown $USER_ME:$USER_ME $HOME_ME/.vi*
 echo ".vimrc edited."
+
+# Set up some cron jobs
+echo "Adding cronjobs"
+crontab -l > $TEMP_CRON
+if grep -Fxq "ddclient" $TEMP_CRON
+then
+    unlink $TEMP_CRON
+else
+    echo "@reboot /usr/sbin/ddclient -daemon 600 -syslog #Updates dyndns.org" >> $TEMP_CRON
+    echo "@reboot echo \"$(hostname) booted\" | mail $LANE_CELL #Bootup Notification" >> $TEMP_CRON
+    echo "59 23 * * * $SBIN_DIR/secureserver.sh #Secure Server" >> $TEMP_CRON
+    crontab $TEMP_CRON
+    unlink $TEMP_CRON
+fi
 
 echo ""
 echo "# IMPORTANT: Copy these passwords into Roboform IMMEDIATELY and reboot."
@@ -363,6 +420,11 @@ echo "PHPMYADMIN_APP_PASS: $PHPMYADMIN_APP_PASS"
 echo "PHPMYADMIN_ROOT_PASS: $PHPMYADMIN_ROOT_PASS"
 echo "PHPMYADMIN_APP_DB_PASS: $PHPMYADMIN_APP_DB_PASS"
 echo ""
+echo "# Add to $GO_CONFIGS/ssh/$USER_ME/authorized_keys:"
+echo ""
+echo "# $SSH_KEY_NAME"
+echo "$HOME_ME/.ssh/id_rsa.pub"
+echo "#"
 
 echo Done.
 exit 0

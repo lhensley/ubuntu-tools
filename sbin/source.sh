@@ -4,13 +4,34 @@
 # Should have owner root:$USER_NAME
 # Should have permissions 770
 #
+
 debug_mode=false
 #debug_mode=true
 if $debug_mode ; then
   set -x
   fi
 
-# echo "$(/bin/date) Starting up."
+# Start timestamps
+START_DATESTAMP=$(/bin/date '+%Y-%m-%d')
+START_DAYSTAMP=$(/bin/date '+%d')
+START_WEEKDAYSTAMP=$(/bin/date '+%a')
+START_MONTHSTAMP=$(/bin/date '+%Y-%m')
+START_TIMESTAMP=$(/bin/date)
+
+# Load a lot of environment variables 
+# Sample:
+#    NAME="Ubuntu"
+#    VERSION="18.04.4 LTS (Bionic Beaver)"
+#    ID=ubuntu
+#    ID_LIKE=debian
+#    PRETTY_NAME="Ubuntu 18.04.4 LTS"
+#    VERSION_ID="18.04"
+#    HOME_URL="https://www.ubuntu.com/"
+#    SUPPORT_URL="https://help.ubuntu.com/"
+#    BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+#    PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+#    VERSION_CODENAME=bionic
+#    UBUNTU_CODENAME=bionic
 source /etc/os-release
 
 # Make sure only root can run our script
@@ -18,11 +39,51 @@ if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as root."
   exit 1
 fi
+
+# Me
+USER_ME="lhensley"
+HOME_ME="/home/$USER_ME"
+LANE_EMAIL="lane.hensley@alumni.duke.edu"
+LANE_CELL="7608514641@vtext.com"
+
 # Set local Variables
 HOST_NAME=$(/bin/hostname -s)
-USER_ME="lhensley"
+USER_NAME=$USER_ME
+HOME_DIRECTORY="/home/$USER_NAME"
+
+# Apache2
+WEB_ROOTS="/var/www"
+THIS_WEB_ROOT="$WEB_ROOTS/html"
+
+# Passwords
+LENGTH_OF_PASSWORDS=63
+MAX_MYSQL_PASSWORD_LENGTH=32
+EXCLUDED_PASSWORD_CHARACTERS=" \$\'\"\\\#\|\<\>\;\*\&\~\!\I\l\1\O\0\`\/\?"
+
+# Git
+GIT=/var/local/git
+GO=$GIT/go
+GO_CONFIGS=$GO/configs
+GO_SBIN=$GO/sbin
+GO_SETUP=$GO_SBIN/setup
+
+# MySQL
+MYSQL_ADMIN_NAME="admin"
+MYSQL_CLIENT_CERTS_DIR="$HOME_DIRECTORY/certs"
+MYSQL_CONFIGS="/etc/mysql/conf.d"
+MYSQL_DUMP_DIR=$HOME_DIR/mysql-dumps
+MYSQL_SERVER_BIN_DIR="/var/lib/mysql"
+
+# phpMyAdmin
+PHPMYADMIN_DIR="/usr/share/phpmyadmin"
+
+# System User (Amazon AWS servers only)
 USER_UBUNTU="ubuntu"
-HOME_DIRECTORY="/home/$USER_ME"
+
+# Mail
+MAILNAME=$HOST_NAME
+
+# Time to sunset this section?
 case $HOST_NAME in
   nell )
     ADDRESS=192.168.168.21
@@ -55,27 +116,16 @@ case $HOST_NAME in
 esac
 
 # Set basic Variables
-LANE_EMAIL=lane.hensley@alumni.duke.edu
-START_DATESTAMP=$(/bin/date '+%Y-%m-%d')
-START_DAYSTAMP=$(/bin/date '+%d')
-START_WEEKDAYSTAMP=$(/bin/date '+%a')
-START_MONTHSTAMP=$(/bin/date '+%Y-%m')
-START_TIMESTAMP=$(/bin/date)
-EXCLUDED_PASSWORD_CHARACTERS=" \$\'\"\\\#\|\<\>\;\*\&\~\!\I\l\1\O\0\`\/\?"
+
 UUID=$(uuidgen)
 ARCHIVE_DIRECTORY=/var/local/archives/$(hostname -s)
-GIT=/var/local/git
-GO=$GIT/go
-GO_CONFIGS=$GO/configs
-GO_SBIN=$GO/sbin
-GO_SETUP=$GO_SBIN/setup
 HOME_RELATIVE=home/$USER_NAME
 HOME_DIR=/$HOME_RELATIVE
-MYSQL_DUMP_DIR=$HOME_DIR/mysql-dumps
 LANE_SCRIPTS_PREFIX="lane-scripts"
 SBIN_PARENT="/usr/local"
 SBIN_DIR="$SBIN_PARENT/sbin"
 SSHD_CONFIG="/etc/ssh/sshd_config"
+TEMP_CRON="/tmp/cron-$UUID.tmp"
 TEMP_DATABASES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-databases.tmp"
 TEMP_PASSWORD_INCLUDE="/tmp/passwords.sh"
 TEMP_INCLUDES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-includes.tmp"
@@ -101,12 +151,12 @@ find $SCRIPTS_INCLUDES -name "*.sh" -type f | while read INFILE
 # Commands to execute every time ######################################
 
 # Set key file ownerships #############################################
-/bin/chown root:root /etc/mysql/conf.d/mysqldump.cnf >> /dev/null 2>&1
+/bin/chown root:root $MYSQL_CONFIGS/mysqldump.cnf >> /dev/null 2>&1
 /bin/chown -R root:$USER_NAME $SCRIPTS_DIRECTORY >> /dev/null 2>&1
-/bin/chown -R www-data:www-data /var/www/html/ >> /dev/null 2>&1
+/bin/chown -R www-data:www-data $THIS_WEB_ROOT/ >> /dev/null 2>&1
 
 # Set key file permissions ############################################
-/bin/chmod 600 /etc/mysql/conf.d/mysqldump.cnf >> /dev/null 2>&1
+/bin/chmod 600 $MYSQL_CONFIGS/mysqldump.cnf >> /dev/null 2>&1
 /bin/chmod -R 770 $SCRIPTS_DIRECTORY >> /dev/null 2>&1
 
 # Echo variable values in debug mode
