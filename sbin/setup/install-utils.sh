@@ -8,8 +8,8 @@ PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/../source.sh
 
 function install() {
-   logger Installing %1
-   apt-get install -y %1 %2 %3 %4 %5 %6
+   logger Installing $1
+   apt-get install -y $1
 }
 
 # Get to work
@@ -22,7 +22,8 @@ install gimp
 install git && ufw allow git
 install net-tools
 install openssl
-install openvpn bridge-utils
+install openvpn
+    install bridge-utils
 install ssh && ufw allow ssh
 install sysbench
 install tasksel
