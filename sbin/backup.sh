@@ -44,14 +44,14 @@ printf '\n\nDumping MySQL database contents to the filesystem.\n' >> $BACKUPLOG 
 echo $(date) >>$BACKUPLOG 2>&1
 # Redundant
 # logger Dumping MySQL database contents to the filesystem.
+USERS_FILE="users.txt"
 mysql -B -N -e 'show databases' >> $TEMP_DATABASES
+mysql -e "SELECT user, host FROM mysql. user;" > $ARCHIVE_MYSQL_DB$USERS_FILE
 for db in $(cat $TEMP_DATABASES); do
   if [ $db != 'information_schema' ] && [ $db != 'performance_schema' ] ; then
     logger Dumping MySQL database $db to $ARCHIVE_MYSQL_DB$db.sql
     mysqldump --databases $db --routines --force \
       > "$ARCHIVE_MYSQL_DB$db.sql" 2>> $BACKUPLOG
-    USERS_FILE="users.txt"
-    mysql -e "SELECT user, host FROM mysql. user;" > $ARCHIVE_MYSQL_DB$USERS_FILE
     fi
   done
 logger Moving $ARCHIVE_DIRECTORY/*.sql to $MYSQL_DUMP_DIR and setting ownership and privileges.
