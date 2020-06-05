@@ -7,5 +7,5 @@
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/../source.sh
 
-$SBIN/setup/instill-utils.sh
+$SBIN_DIR/setup/install-utils.sh
 df
