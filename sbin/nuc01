@@ -1,0 +1,4 @@
+#!/bin/bash
+# nuc01
+
+ssh lane.is-a-geek.org -p 10103

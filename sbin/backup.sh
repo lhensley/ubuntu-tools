@@ -43,7 +43,8 @@ rm -f -R $MYSQL_DUMP_DIR
 # echo $ARCHIVE_SQL_FULL
 printf '\n\nDumping MySQL database contents to the filesystem.\n' >> $BACKUPLOG 2>&1
 echo $(date) >>$BACKUPLOG 2>&1
-logger Dumping MySQL database contents to the filesystem.
+# Redundant
+# logger Dumping MySQL database contents to the filesystem.
 mysql -B -N -e 'show databases' >> $TEMP_DATABASES
 for db in $(cat $TEMP_DATABASES); do
   if [ $db != 'information_schema' ] && [ $db != 'performance_schema' ] ; then
@@ -63,14 +64,16 @@ cat $SCRIPTS_INCLUDES/files-excluded.txt >> $SOCKETS_TEMP_FILE
 
 # Run the backup.
 printf '\n\nRunning the actual backup.\n' >> $BACKUPLOG 2>&1
-logger Running $EXEC_BACKUP
+logger Running "$EXEC_BACKUP"
 echo $(date) >>$BACKUPLOG 2>&1
 $EXEC_BACKUP >>$BACKUPLOG 2>&1
 logger Exit code $?
 
 # Remove any remaining SQL dumps
-logger Removing MySQL dumps at $MYSQL_DUMP_DIR
-rm -R $MYSQL_DUMP_DIR
+# logger Removing MySQL dumps at $MYSQL_DUMP_DIR
+# rm -R $MYSQL_DUMP_DIR
+# Can't remember why I wanted to drop these, except for security reasons.
+# Permissions already are set very strictly above.
 
 # Copy the weekday backup to the monthly version
 printf '\n\nCopying backup file to monthly version.\n' >>$BACKUPLOG 2>&1
@@ -102,6 +105,6 @@ rm $ARCHIVE_DIRECTORY/.* >/dev/null 2>&1
 # Remove all remaining tempfiles. #####################################
 printf '\n\nExiting.\n' >> $BACKUPLOG 2>&1
 echo $(date) >>$BACKUPLOG 2>&1
-source $SCRIPTS_DIRECTORY/cleanup-and-exit.sh
 logger Backup details recorded to $BACKUPLOG
 logger End $0
+source $SCRIPTS_DIRECTORY/cleanup-and-exit.sh

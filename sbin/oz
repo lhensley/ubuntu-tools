@@ -1,0 +1,4 @@
+#!/bin/bash
+# oz
+
+ssh oz.lanehensley.org -p 10104

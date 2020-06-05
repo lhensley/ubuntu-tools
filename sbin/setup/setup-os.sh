@@ -203,17 +203,11 @@ if $install_mysql_server ; then
   apt-get install -y $MYSQL_PACKAGES
   ufw allow mysql
   mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
-#  echo "Test point mysql-server A"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
-#  echo "Test point mysql-server B"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User=''"
-#  echo "Test point mysql-server C"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test_%'"
-#  echo "Test point mysql-server D"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$MYSQL_ADMIN_NAME'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_ADMIN_PASSWORD'"
-#  echo "Test point mysql-server E"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_ADMIN_NAME'@localhost WITH GRANT OPTION"
-#  echo "Test point mysql-server F"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES"
 #  echo "Test point mysql-server G"
   mkdir -p $MYSQL_CLIENT_CERTS_DIR
@@ -221,6 +215,20 @@ if $install_mysql_server ; then
   cp "$MYSQL_SERVER_BIN_DIR/client-cert.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOST_NAME-MySQL-client-cert.pem"
   cp "$MYSQL_SERVER_BIN_DIR/client-key.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOST_NAME-MySQL-client-key.pem"
   chown -R $USER_ME:$USER_ME "$MYSQL_CLIENT_CERTS_DIR"
+  # Install .my.cnf in home directory
+    backup-file.sh $HOME_ME/.my.cnf
+    cp $GO_CONFIGS/mysql/home_directory_.my.cnf $HOME_ME/.my.cnf
+    replace-in-file.sh "$HOME_ME/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
+    replace-in-file.sh "$HOME_ME/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
+    chown $USER_ME:$USER_ME "$HOME_ME/.my.cnf*"
+    chmod 600 "$HOME_ME/.my.cnf*"
+  # Install .my.cnf for root user
+    backup-file.sh /root/.my.cnf
+    cp $GO_CONFIGS/mysql/home_directory_.my.cnf /root/.my.cnf
+    replace-in-file.sh "root/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
+    replace-in-file.sh "root/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
+    chown root:root "/root/.my.cnf*"
+    chmod 600 "root/.my.cnf*"
   echo "MySQL server installed."
   fi
 
@@ -311,7 +319,9 @@ if $install_handbrake ; then
 # Edit .vimrc settings
 echo "Editing .vimrc settings"
 touch $HOME_ME/.vimrc
-cp $HOME_ME/.vimrc $HOME_ME/.vimrc.backup.$(date "+%Y.%m.%d-%H.%M.%S")
+backup-file.sh "$HOME_ME/.vimrc"
+# Retaining the following command in case the prior command fails.
+# cp $HOME_ME/.vimrc $HOME_ME/.vimrc.backup.$(date "+%Y.%m.%d-%H.%M.%S")
 echo "set background=dark" > $HOME_ME/.vimrc
 echo "set visualbell" >> $HOME_ME/.vimrc
 chown $USER_ME:$USER_ME $HOME_ME/.vi*
