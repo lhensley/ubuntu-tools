@@ -59,6 +59,7 @@ mkdir -p $MYSQL_DUMP_DIR
 mv $ARCHIVE_DIRECTORY/*.sql $MYSQL_DUMP_DIR/
 /bin/chown -R $USER_NAME:$USER_NAME $MYSQL_DUMP_DIR
 /bin/chmod -R 600 $MYSQL_DUMP_DIR
+/bin/chmod 700 $MYSQL_DUMP_DIR
 
 # Append known backup exceptions to list of socket files.
 cat $SCRIPTS_INCLUDES/files-excluded.txt >> $SOCKETS_TEMP_FILE
