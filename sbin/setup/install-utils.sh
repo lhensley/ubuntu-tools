@@ -2,6 +2,7 @@
 # install-utils.sh
 # Revised 2020-06-04
 # PURPOSE: Install uncomplicated, no-down-side utilities.
+# NOTE: This install script can run safely even if the software already is installed.
 
 # Include header file
 PROGRAM_DIRECTORY=$(dirname $0)
@@ -24,6 +25,7 @@ install net-tools
 install openssl
 install openvpn
     install bridge-utils
+    install ifupdown
 install ssh && ufw allow ssh
 install sysbench
 install tasksel

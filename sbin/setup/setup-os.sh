@@ -15,20 +15,9 @@ RELAYHOST="mail.twc.com" # Spectrum Internet
 ######### END password information ###################
 ######################################################
 
-# Strongly recommended to install curl. Other installs depend on it.
-install_curl=true
-install_unzip=true
-# Strongly recommended
-install_wget=true
 install_apache2=true
-install_fail2ban=true
-install_net_tools=true
 install_openssl=true
 install_php=true
-install_sysbench=true
-install_tasksel=true
-# NOTE: xrdp will allow remote desktop protocol. Use with care.
-install_xrdp=true
 install_certbot=true
 install_mailutils=true
 install_mysql_server=true
@@ -38,8 +27,6 @@ install_webmin=true
 install_zoom=true
 install_chrome=true
 install_handbrake=true
-install_filezilla=true
-install_gimp=true
 
 echo "#########################################################################"
 echo "#########################################################################"
@@ -78,6 +65,9 @@ if ! [ -x "$(command -v apg)" ]; then
   apt-get install -y apg
 fi
 
+# Install uncomplicated, no-down-side utilities.
+$SBIN_DIR/setup/install-utils.sh
+
 # NUMBER_OF_DESIGNATED_PASSWORDS=7
 TEMP_PASSWORD_INCLUDE="/tmp/passwords.sh"
 echo "" > $TEMP_PASSWORD_INCLUDE
@@ -102,7 +92,6 @@ chown root:root $TEMP_PASSWORD_INCLUDE
 chmod 500 $TEMP_PASSWORD_INCLUDE
 # progress-bar.sh
 source $TEMP_PASSWORD_INCLUDE
-rm $TEMP_PASSWORD_INCLUDE
 
 # Update hostname
 echo "Updating hostname"
@@ -159,27 +148,6 @@ chmod 644 /etc/ufw/applications.d/lane-applications
 ufw app update lane-applications
 echo "Special LANE applications installed to ufw."
 
-# CRITICAL: Install this first.
-if $install_curl ; then
-  echo "Installing curl"
-  apt-get install -y curl
-  echo "curl installed."
-  fi
-
-# Install this early.
-if $install_unzip ; then
-  echo "Installing unzip"
-  apt-get install -y unzip
-  echo "unzip installed."
-  fi
-
-# Install this early.
-if $install_wget ; then
-  echo "Installing wget"
-  apt-get install -y wget
-  echo "wget installed."
-  fi
-
 if $install_apache2 ; then
   echo "Installing apache2"
   apt-get install -y apache2 apache2-doc apache2-suexec-pristine
@@ -190,18 +158,6 @@ if $install_apache2 ; then
   a2enmod ssl rewrite
   systemctl restart apache2
   echo "apache2 installed."
-  fi
-
-if $install_fail2ban ; then
-  echo "Installing fail2ban"
-  apt-get install -y fail2ban monit sqlite3 python-pyinotify-doc
-  echo "fail2ban installed."
-  fi
-
-if $install_net_tools ; then
-  echo "installing net_tools"
-  apt-get install -y net-tools
-  echo net-tools installed.
   fi
 
 if $install_openssl ; then
@@ -222,25 +178,6 @@ if $install_php ; then
   phpenmod gd curl imap ldap mbstring
   systemctl restart apache2
   echo "php installed."
-  fi
-
-if $install_sysbench ; then
-  echo "Installing sysbench"
-  apt-get install -y sysbench
-  echo "sysbench installed."
-  fi
-
-if $install_tasksel ; then
-  echo "Installing tasksel"
-  apt-get install -y tasksel
-  echo "tasksel installed."
-  fi
-
-if $install_xrdp ; then
-  echo "Installing xrdp"
-  apt-get install -y xrdp
-  ufw allow from 192.168.1.0/24 to any port 3389 proto tcp
-  echo "xrdp installed."
   fi
 
 if $enable_certbot ; then
@@ -371,20 +308,6 @@ if $install_handbrake ; then
   echo "NOT configured: Presets need to be added."
   fi
 
-# Install Filezilla
-if $install_filezilla ; then
-  echo "Installing Filezilla."
-  apt-get install -y filezilla
-  echo "Filezilla installed."
-  fi
-
-# Install Gimp
-if $install_gimp ; then
-  echo "Installing Gimp."
-  apt-get install -y gimp
-  echo "Gimp installed."
-  fi
-
 # Edit .vimrc settings
 echo "Editing .vimrc settings"
 touch $HOME_ME/.vimrc
@@ -425,6 +348,7 @@ echo ""
 echo "# $SSH_KEY_NAME"
 echo "$HOME_ME/.ssh/id_rsa.pub"
 echo "#"
+rm $TEMP_PASSWORD_INCLUDE
 
 echo Done.
 exit 0

@@ -4,6 +4,7 @@
 # Should have permissions 770
 #
 # Include header file
+logger Begin $0
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/source.sh
 

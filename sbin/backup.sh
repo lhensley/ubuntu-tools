@@ -21,6 +21,7 @@
 #
 # Include header file
 # echo "$(/bin/date) Running setup routine."
+logger Begin $0
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/source.sh
 

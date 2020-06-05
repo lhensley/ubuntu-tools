@@ -11,6 +11,8 @@ if $debug_mode ; then
   set -x
   fi
 
+logger Running source.sh from $0
+
 # Start timestamps
 START_DATESTAMP=$(/bin/date '+%Y-%m-%d')
 START_DAYSTAMP=$(/bin/date '+%d')
