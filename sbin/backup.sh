@@ -1,7 +1,5 @@
 #!/bin/bash
 # backup.sh
-# Should have owner root:$USER_NAME
-# Should have permissions 770
 
 # For mysqldump to work in unattended move, we need, in /root/ and in $HOME_DIR:
 #   File .my.cnf, containing this text:
@@ -20,55 +18,24 @@
 #   mysql --batch --skip-column-names --execute "show databases"
 #
 # Include header file
-# echo "$(/bin/date) Running setup routine."
-logger Begin $0
-PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/source.sh
+source $(dirname $0)/source.sh
 
+################ DELETE THIS SECTION? ##################################################
 # echo "$(/bin/date) Setting backup parameters."
+# The definition below seems not to be used. Delete it?
 LOGFILE=$ARCHIVE_DIRECTORY/backup.log
-DIRECTORY_FROM=/
 
-ARCHIVE_TAR_FILE="$HOST_NAME-$START_DATESTAMP.gz"
-ARCHIVE_TAR_FULL="$ARCHIVE_DIRECTORY/$ARCHIVE_TAR_FILE"
-ARCHIVE_TAR_WEEKDAY_FILE="$HOST_NAME-weekday-$START_WEEKDAYSTAMP.gz"
-ARCHIVE_TAR_FULL_WEEKDAY="$ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
-ARCHIVE_TAR_DAY_FILE="$HOST_NAME-day-$START_DAYSTAMP.gz"
-ARCHIVE_TAR_FULL_DAY="$ARCHIVE_DIRECTORY/$ARCHIVE_TAR_DAY_FILE"
-ARCHIVE_TAR_MONTH_FILE="$HOST_NAME-month-$START_MONTHSTAMP.gz"
-ARCHIVE_TAR_FULL_MONTH="$ARCHIVE_DIRECTORY/$ARCHIVE_TAR_MONTH_FILE"
-ARCHIVE_MYSQL_FILE="$HOST_NAME-$START_DATESTAMP.sql"
-ARCHIVE_MYSQL_FULL="$ARCHIVE_DIRECTORY/$ARCHIVE_MYSQL_FILE"
-ARCHIVE_MYSQL_LITURGY="$ARCHIVE_DIRECTORY/$HOST_NAME-liturgy.sql"
-ARCHIVE_MYSQL_DB="$ARCHIVE_DIRECTORY/$HOST_NAME-$START_DATESTAMP-"
-
-TAR="/bin/tar"
-EXEC_BACKUP="$TAR --create --gzip --auto-compress --preserve-permissions"
-EXEC_BACKUP="$EXEC_BACKUP --file=$ARCHIVE_TAR_FULL_WEEKDAY"
-EXEC_BACKUP="$EXEC_BACKUP --exclude-backups"
-EXEC_BACKUP="$EXEC_BACKUP --exclude-vcs --exclude-caches"
-EXEC_BACKUP="$EXEC_BACKUP --totals"
-# EXEC_BACKUP="$EXEC_BACKUP --verbose"
-EXEC_BACKUP="$EXEC_BACKUP --exclude-from=$SOCKETS_TEMP_FILE"
-EXEC_BACKUP="$EXEC_BACKUP /etc /home /root /usr/local/sbin /var/www"
-# EXEC_BACKUP="$EXEC_BACKUP /var/local/archives/*.sql"
-
-# NOTE: -t flag removed from next line 3/28/19. Generates error.
-RSYNC_NO_DELETE="rsync -aopqrzE -e 'ssh -p $OFFSITE_PORT'"
-RSYNC_SU="$RSYNC_NO_DELETE '$ARCHIVE_DIRECTORY'"
-RSYNC_SU="$RSYNC_SU $OFFSITE_SERVER:$OFFSITE_PATH"
-
-# Create archive directory
+# Create archive directory, defined in source.sh
 mkdir -p $ARCHIVE_DIRECTORY
 
 # Delete old backup log and start another one.
-BACKUPLOG=$ARCHIVE_DIRECTORY/$HOST_NAME-backup.log
-rm $BACKUPLOG 2>> /dev/null
-date > $BACKUPLOG
-printf "\n" >> $BACKUPLOG
+rm -f $BACKUPLOG
+printf "$(date)\n" > $BACKUPLOG
 
 # Dump old SQL backups
+logger Removing MySQL dumps at $ARCHIVE_DIRECTORY and $MYSQL_DUMP_DIR
 /bin/rm -f $ARCHIVE_DIRECTORY/*.sql >> $BACKUPLOG 2>&1
+rm -f -R $MYSQL_DUMP_DIR
 
 # Dump last weekday backup
 /bin/rm -f $ARCHIVE_TAR_FULL_WEEKDAY >> $BACKUPLOG 2>&1
@@ -76,13 +43,16 @@ printf "\n" >> $BACKUPLOG
 # echo $ARCHIVE_SQL_FULL
 printf '\n\nDumping MySQL database contents to the filesystem.\n' >> $BACKUPLOG 2>&1
 echo $(date) >>$BACKUPLOG 2>&1
+logger Dumping MySQL database contents to the filesystem.
 mysql -B -N -e 'show databases' >> $TEMP_DATABASES
 for db in $(cat $TEMP_DATABASES); do
   if [ $db != 'information_schema' ] && [ $db != 'performance_schema' ] ; then
+    logger Dumping MySQL database $db to $ARCHIVE_MYSQL_DB$db.sql
     mysqldump --databases $db --routines --force \
       > "$ARCHIVE_MYSQL_DB$db.sql" 2>> $BACKUPLOG
     fi
   done
+logger Moving $ARCHIVE_DIRECTORY/*.sql to $MYSQL_DUMP_DIR and setting ownership and privileges.
 mkdir -p $MYSQL_DUMP_DIR
 mv $ARCHIVE_DIRECTORY/*.sql $MYSQL_DUMP_DIR/
 /bin/chown -R $USER_NAME:$USER_NAME $MYSQL_DUMP_DIR
@@ -93,27 +63,34 @@ cat $SCRIPTS_INCLUDES/files-excluded.txt >> $SOCKETS_TEMP_FILE
 
 # Run the backup.
 printf '\n\nRunning the actual backup.\n' >> $BACKUPLOG 2>&1
+logger Running $EXEC_BACKUP
 echo $(date) >>$BACKUPLOG 2>&1
 $EXEC_BACKUP >>$BACKUPLOG 2>&1
+logger Exit code $?
 
-# Remove the SQL dumps
+# Remove any remaining SQL dumps
+logger Removing MySQL dumps at $MYSQL_DUMP_DIR
 rm -R $MYSQL_DUMP_DIR
 
 # Copy the weekday backup to the monthly version
 printf '\n\nCopying backup file to monthly version.\n' >>$BACKUPLOG 2>&1
 echo $(date) >>$BACKUPLOG 2>&1
+logger Copying $ARCHIVE_TAR_FULL_WEEKDAY to $ARCHIVE_TAR_FULL_MONTH
 /bin/cp $ARCHIVE_TAR_FULL_WEEKDAY $ARCHIVE_TAR_FULL_MONTH >>$BACKUPLOG 2>&1
 
 # Set permissions of files in the archive directory
 printf '\n\nSetting permissions on archives files.\n' >>$BACKUPLOG 2>&1
 echo $(date) >>$BACKUPLOG 2>&1
+logger Setting permisssions for $ARCHIVE_DIRECTORY and its contents.
 /bin/chown $USER_NAME:$USER_NAME $ARCHIVE_DIRECTORY/* >>$BACKUPLOG 2>&1
 /bin/chmod 600 $ARCHIVE_DIRECTORY/* >>$BACKUPLOG 2>&1
 
 # Sync to offsite server
 printf '\n\nSyncing backup to $OFFSITE_SERVER.\n' >> $BACKUPLOG 2>&1
 echo $(date) >>$BACKUPLOG 2>&1
+logger Attempting to sync to $OFFSITE_SERVER
 su -c "$RSYNC_SU" $USER_NAME >> $BACKUPLOG 2>&1
+logger Exit code $?
 
 # Add footer to backup log
 printf '\n\nCONTENTS OF $ARCHIVE_DIRECTORY\n' >>$BACKUPLOG
@@ -126,3 +103,5 @@ rm $ARCHIVE_DIRECTORY/.* >/dev/null 2>&1
 printf '\n\nExiting.\n' >> $BACKUPLOG 2>&1
 echo $(date) >>$BACKUPLOG 2>&1
 source $SCRIPTS_DIRECTORY/cleanup-and-exit.sh
+logger Backup details recorded to $BACKUPLOG
+logger End $0

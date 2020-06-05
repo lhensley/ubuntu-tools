@@ -11,16 +11,11 @@ if $debug_mode ; then
   set -x
   fi
 
-logger Running source.sh from $0
-
-# Start timestamps
-START_DATESTAMP=$(/bin/date '+%Y-%m-%d')
-START_DAYSTAMP=$(/bin/date '+%d')
-START_WEEKDAYSTAMP=$(/bin/date '+%a')
-START_MONTHSTAMP=$(/bin/date '+%Y-%m')
-START_TIMESTAMP=$(/bin/date)
-
-# Load a lot of environment variables 
+# Basic setup
+logger Begin $0
+logger $0 invoking source.sh
+source /etc/os-release
+# /etc/os-release defines a lot of environment variables 
 # Sample:
 #    NAME="Ubuntu"
 #    VERSION="18.04.4 LTS (Bionic Beaver)"
@@ -34,7 +29,6 @@ START_TIMESTAMP=$(/bin/date)
 #    PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
 #    VERSION_CODENAME=bionic
 #    UBUNTU_CODENAME=bionic
-source /etc/os-release
 
 # Make sure only root can run our script
 if [[ $EUID -ne 0 ]]; then
@@ -42,16 +36,98 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-# Me
+# Start timestamps
+START_DATESTAMP=$(/bin/date '+%Y-%m-%d')
+START_DAYSTAMP=$(/bin/date '+%d')
+START_MONTHSTAMP=$(/bin/date '+%Y-%m')
+START_TIMESTAMP=$(/bin/date)
+START_WEEKDAYSTAMP=$(/bin/date '+%a')
+
+# Information about Lane
 USER_ME="lhensley"
 HOME_ME="/home/$USER_ME"
 LANE_EMAIL="lane.hensley@alumni.duke.edu"
 LANE_CELL="7608514641@vtext.com"
 
-# Set local Variables
+# General local and program variables
+PROGRAM_DIRECTORY=$(dirname $0)
 HOST_NAME=$(/bin/hostname -s)
 USER_NAME=$USER_ME
-HOME_DIRECTORY="/home/$USER_NAME"
+HOME_DIRECTORY=$HOME_ME
+LANE_SCRIPTS_PREFIX="lane-scripts"
+UUID=$(uuidgen)
+logger UUID $UUID
+HOME_RELATIVE=home/$USER_NAME
+HOME_DIR=$HOME_DIRECTORY
+SBIN_PARENT="/usr/local"
+SBIN_DIR="$SBIN_PARENT/sbin"
+TEMP_DATABASES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-databases.tmp"
+TEMP_PASSWORD_INCLUDE="/tmp/passwords.sh"
+TEMP_INCLUDES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-includes.tmp"
+TEMP_LOG="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-log.tmp"
+SCRIPTS_DIRECTORY=$SBIN_DIR
+# As of 2020-06-05, $SCRIPTS_INCLUDES still us used by backup.sh
+SCRIPTS_INCLUDES=$SCRIPTS_DIRECTORY/include
+
+
+# Host-specific deinitions. These need to come earlier because other definitions below use them.
+case $HOST_NAME in
+  red )
+    ADDRESS=192.168.168.23
+    USER_NAME=lhensley
+    OFFSITE_SERVER=nuc01.local
+    OFFSITE_PORT=22
+    OFFSITE_PATH=/var/local/archives
+    ;;
+  nuc01 )
+    ADDRESS=192.168.168.31
+    USER_NAME=lhensley
+    OFFSITE_SERVER=oz.lanehensley.org
+    OFFSITE_PORT=10104
+    OFFSITE_PATH=/var/local/archives
+    ;;
+  oz )
+    # ADDRESS=192.168.168.31
+    USER_NAME=lhensley
+    OFFSITE_SERVER=lane.is-a-geek.org
+    OFFSITE_PORT=10103
+    OFFSITE_PATH=/var/local/archives
+    ;;
+esac
+
+# Backup definitions
+# THESE VARIABLES NEED TO BE DEFINED BEFORE THIS SECTION RUNS:
+# $HOST_NAME $LANE_SCRIPTS_PREFIX $OFFSITE_PORT $START_DATESTAMP $START_WEEKDAYSTAMP $UUID
+DIRECTORY_FROM=/
+ARCHIVE_DIRECTORY=/var/local/archives/$HOST_NAME
+SOCKETS_TEMP_FILE="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-socket-files.tmp"
+ARCHIVE_TAR_FILE="$HOST_NAME-$START_DATESTAMP.gz"
+ARCHIVE_TAR_FULL="$ARCHIVE_DIRECTORY/$ARCHIVE_TAR_FILE"
+ARCHIVE_TAR_WEEKDAY_FILE="$HOST_NAME-weekday-$START_WEEKDAYSTAMP.gz"
+ARCHIVE_TAR_FULL_WEEKDAY="$ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
+ARCHIVE_TAR_DAY_FILE="$HOST_NAME-day-$START_DAYSTAMP.gz"
+ARCHIVE_TAR_FULL_DAY="$ARCHIVE_DIRECTORY/$ARCHIVE_TAR_DAY_FILE"
+ARCHIVE_TAR_MONTH_FILE="$HOST_NAME-month-$START_MONTHSTAMP.gz"
+ARCHIVE_TAR_FULL_MONTH="$ARCHIVE_DIRECTORY/$ARCHIVE_TAR_MONTH_FILE"
+ARCHIVE_MYSQL_FILE="$HOST_NAME-$START_DATESTAMP.sql"
+ARCHIVE_MYSQL_FULL="$ARCHIVE_DIRECTORY/$ARCHIVE_MYSQL_FILE"
+ARCHIVE_MYSQL_LITURGY="$ARCHIVE_DIRECTORY/$HOST_NAME-liturgy.sql"
+ARCHIVE_MYSQL_DB="$ARCHIVE_DIRECTORY/$HOST_NAME-$START_DATESTAMP-"
+TAR="/bin/tar"
+EXEC_BACKUP="$TAR --create --gzip --auto-compress --preserve-permissions"
+EXEC_BACKUP="$EXEC_BACKUP --file=$ARCHIVE_TAR_FULL_WEEKDAY"
+EXEC_BACKUP="$EXEC_BACKUP --exclude-backups"
+EXEC_BACKUP="$EXEC_BACKUP --exclude-vcs --exclude-caches"
+EXEC_BACKUP="$EXEC_BACKUP --totals"
+# EXEC_BACKUP="$EXEC_BACKUP --verbose"
+EXEC_BACKUP="$EXEC_BACKUP --exclude-from=$SOCKETS_TEMP_FILE"
+EXEC_BACKUP="$EXEC_BACKUP /etc /home /root /usr/local/sbin /var/www"
+# EXEC_BACKUP="$EXEC_BACKUP /var/local/archives/*.sql"
+# NOTE: -t flag removed from next line 3/28/19. Generates error.
+RSYNC_NO_DELETE="rsync -aopqrzE -e 'ssh -p $OFFSITE_PORT'"
+RSYNC_SU="$RSYNC_NO_DELETE '$ARCHIVE_DIRECTORY'"
+RSYNC_SU="$RSYNC_SU $OFFSITE_SERVER:$OFFSITE_PATH"
+BACKUPLOG=$ARCHIVE_DIRECTORY/$HOST_NAME-backup.log
 
 # Apache2
 WEB_ROOTS="/var/www"
@@ -61,6 +137,9 @@ THIS_WEB_ROOT="$WEB_ROOTS/html"
 LENGTH_OF_PASSWORDS=63
 MAX_MYSQL_PASSWORD_LENGTH=32
 EXCLUDED_PASSWORD_CHARACTERS=" \$\'\"\\\#\|\<\>\;\*\&\~\!\I\l\1\O\0\`\/\?"
+
+# cron
+TEMP_CRON="/tmp/cron-$UUID.tmp"
 
 # Git
 GIT=/var/local/git
@@ -79,78 +158,20 @@ MYSQL_SERVER_BIN_DIR="/var/lib/mysql"
 # phpMyAdmin
 PHPMYADMIN_DIR="/usr/share/phpmyadmin"
 
+# ssh
+SSHD_CONFIG="/etc/ssh/sshd_config"
+
 # System User (Amazon AWS servers only)
 USER_UBUNTU="ubuntu"
 
 # Mail
 MAILNAME=$HOST_NAME
 
-# Time to sunset this section?
-case $HOST_NAME in
-  nell )
-    ADDRESS=192.168.168.21
-    USER_NAME=lhensley
-    OFFSITE_SERVER=nuc01.local
-    OFFSITE_PORT=22
-    OFFSITE_PATH=/var/local/archives
-    ;;
-  pearl )
-    ADDRESS=192.168.0.36
-    USER_NAME=lhensley
-    OFFSITE_SERVER=lane.is-a-geek.org
-    OFFSITE_PORT=10103
-    OFFSITE_PATH=/var/local/archives
-    ;;
-  red )
-    ADDRESS=192.168.168.23
-    USER_NAME=lhensley
-    OFFSITE_SERVER=nuc01.local
-    OFFSITE_PORT=22
-    OFFSITE_PATH=/var/local/archives
-    ;;
-  nuc01 )
-    ADDRESS=192.168.168.31
-    USER_NAME=lhensley
-    OFFSITE_SERVER=nell.local
-    OFFSITE_PORT=22
-    OFFSITE_PATH=/var/local/archives
-    ;;
-esac
-
-# Set basic Variables
-
-UUID=$(uuidgen)
-ARCHIVE_DIRECTORY=/var/local/archives/$(hostname -s)
-HOME_RELATIVE=home/$USER_NAME
-HOME_DIR=/$HOME_RELATIVE
-LANE_SCRIPTS_PREFIX="lane-scripts"
-SBIN_PARENT="/usr/local"
-SBIN_DIR="$SBIN_PARENT/sbin"
-SSHD_CONFIG="/etc/ssh/sshd_config"
-TEMP_CRON="/tmp/cron-$UUID.tmp"
-TEMP_DATABASES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-databases.tmp"
-TEMP_PASSWORD_INCLUDE="/tmp/passwords.sh"
-TEMP_INCLUDES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-includes.tmp"
-SOCKETS_TEMP_FILE="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-socket-files.tmp"
-TEMP_LOG="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-log.tmp"
-SCRIPTS_DIRECTORY=/usr/local/sbin
-SCRIPTS_INCLUDES=$SCRIPTS_DIRECTORY/include
-
-# Make a list of all the include files
-# /usr/bin/find $SCRIPTS_INCLUDES/ -type f -name "*.sh" \
-#   >> "$TEMP_INCLUDES" 2>/dev/null
-# Loop through the file, integrating the file indicated in each line
-# Not clear on what IFS is doing here.
-# See https://stackoverflow.com/questions/10929453/read-a-file-line-by-line-assigning-the-value-to-a-variable
+# Basically, this section means look for *.sh in the "includes" directory and invoke them.
 find $SCRIPTS_INCLUDES -name "*.sh" -type f | while read INFILE
   do
     source "$INFILE"
   done
-# while IFS='' read -r line || [[ -n "$line" ]]; do
-#   source "$line"
-# done < "$TEMP_INCLUDES"
-
-# Commands to execute every time ######################################
 
 # Set key file ownerships #############################################
 /bin/chown root:root $MYSQL_CONFIGS/mysqldump.cnf >> /dev/null 2>&1
