@@ -50,7 +50,7 @@ for db in $(cat $TEMP_DATABASES); do
     logger Dumping MySQL database $db to $ARCHIVE_MYSQL_DB$db.sql
     mysqldump --databases $db --routines --force \
       > "$ARCHIVE_MYSQL_DB$db.sql" 2>> $BACKUPLOG
-    $USERS_FILE=users.txt
+    USERS_FILE="users.txt"
     mysql -e "SELECT user, host FROM mysql. user;" > $ARCHIVE_MYSQL_DB$USERS_FILE
     fi
   done
