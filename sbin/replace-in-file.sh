@@ -8,4 +8,4 @@
 logger Begin $0
 source $(dirname $0)/source.sh
 
-sed -i 's/$2/$3/g' $1
+sed -i "s/$2/$3/g" $1

@@ -51,6 +51,7 @@ for db in $(cat $TEMP_DATABASES); do
     logger Dumping MySQL database $db to $ARCHIVE_MYSQL_DB$db.sql
     mysqldump --databases $db --routines --force \
       > "$ARCHIVE_MYSQL_DB$db.sql" 2>> $BACKUPLOG
+    mysql -e "SELECT user, host FROM mysql. user;" > $ARCHIVE_MYSQL_DBmysql_users.txt
     fi
   done
 logger Moving $ARCHIVE_DIRECTORY/*.sql to $MYSQL_DUMP_DIR and setting ownership and privileges.
