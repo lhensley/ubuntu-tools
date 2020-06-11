@@ -54,9 +54,10 @@ for db in $(cat $TEMP_DATABASES); do
       > "$ARCHIVE_MYSQL_DB$db.sql" 2>> $BACKUPLOG
     fi
   done
-logger Moving $ARCHIVE_DIRECTORY/*.sql to $MYSQL_DUMP_DIR and setting ownership and privileges.
+logger Moving $ARCHIVE_DIRECTORY .sql and .txt files to $MYSQL_DUMP_DIR and setting ownership and privileges.
 mkdir -p $MYSQL_DUMP_DIR
 mv $ARCHIVE_DIRECTORY/*.sql $MYSQL_DUMP_DIR/
+mv $ARCHIVE_DIRECTORY/*.txt $MYSQL_DUMP_DIR/
 /bin/chown -R $USER_NAME:$USER_NAME $MYSQL_DUMP_DIR
 /bin/chmod -R 600 $MYSQL_DUMP_DIR
 /bin/chmod 700 $MYSQL_DUMP_DIR

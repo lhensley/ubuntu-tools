@@ -1,6 +1,5 @@
 #!/bin/bash
 # setup-os.sh
-# Revised 2020-05-11
 # PURPOSE: Installs basic software.
 # IMPORTANT: Check variables at the top of the script before running it!
 
@@ -298,10 +297,13 @@ if $install_chrome ; then
   fi
 
 # Install MakeMKV
+# DON'T USE THE SNAP INSTALLER
 if $install_makemkv ; then
   echo "Installing MakeMKV"
-  snap install makemkv
-  snap connect makemkv:hardware-observe
+  add-apt-repository ppa:heyarje/makemkv-beta
+  apt-get update
+  apt-get install -y makemkv-bin makemkv-oss
+  usermod -a -G cdrom $USER_ME
   echo "MakeMKV installed."
   echo "NOT configured: License must be applied."
   fi
