@@ -45,6 +45,11 @@ find $SBIN_DIR -type f -print0 | xargs -0 chmod 400
 # chmod 500 $SBIN_DIR/ccextractor
 chmod 500 $SBIN_DIR/*.sh $SBIN_DIR/setup/*.sh $SBIN_DIR/*.py
 cd
+echo git update complete.
+
+# Copy in config files
+# ddclient configs
+cp $GO_CONFIGS/ddclient/$HOST_NAME/ddclient.conf /etc/
 # Update /home/$USER_ME/.ssh/authorized_keys
 mkdir -p /home/$USER_ME/.ssh/
 # mkdir -p /home/$UBUNTU_ME/.ssh/
@@ -54,7 +59,6 @@ chown -R $USER_ME:$USER_ME /home/$USER_ME/.ssh
 # chown $USER_UBUNTU:$USER_UBUNTU /home/$USER_UBUNTU/.ssh/authorized_keys
 chmod 600 /home/$USER_ME/.ssh/authorized_keys
 # chmod 600 /home/$USER_UBUNTU/.ssh/authorized_keys
-echo git update complete.
 
 # "update" downloads package information from all configured sources
 apt -y update
