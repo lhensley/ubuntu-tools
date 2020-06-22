@@ -11,6 +11,13 @@ source $PROGRAM_DIRECTORY/source.sh
 # Changed apt-get to apt 1/31/19.
 # See https://itsfoss.com/apt-vs-apt-difference/ for rationale.
 
+# Install git token
+# To get a new token, go to https://github.com/settings/tokens.
+MY_GIT_TOKEN=4b662b7d4431ec1956127aa9d4fdbd8d75ec821a
+git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
+git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
+git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
+chmod 400 ~/.gitconfigs
 # This section re-pulls all go files from github and updates /usr/local/sbin
 USERNAME=$USER_ME
 REPOSITORY=$GO
@@ -29,12 +36,13 @@ chmod -R 400 $GIT
 rm -rf $SBIN_DIR
 cp -r $GO_SBIN $SBIN_PARENT
 # Set ownership and permissions in /usr/local/sbin
+# 6/22/2020: Read access for root ONLY.
 chown -R root:lhensley $SBIN_DIR
-find $SBIN_DIR -type d -print0 | xargs -0 chmod 750
-find $SBIN_DIR -type f -print0 | xargs -0 chmod 440
+find $SBIN_DIR -type d -print0 | xargs -0 chmod 700
+find $SBIN_DIR -type f -print0 | xargs -0 chmod 400
 # chmod -R 400 $SBIN_DIR/setup/configs
-# chmod 540 $SBIN_DIR/ccextractor
-chmod 540 $SBIN_DIR/*.sh $SBIN_DIR/setup/*.sh $SBIN_DIR/*.py
+# chmod 500 $SBIN_DIR/ccextractor
+chmod 500 $SBIN_DIR/*.sh $SBIN_DIR/setup/*.sh $SBIN_DIR/*.py
 cd
 # Update /home/$USER_ME/.ssh/authorized_keys
 mkdir -p /home/$USER_ME/.ssh/
@@ -43,8 +51,8 @@ cp $GO_CONFIGS/ssh/$USER_ME/authorized_keys /home/$USER_ME/.ssh/
 # cp $GO_CONFIGS/ssh/$USER_ME/authorized_keys /home/$USER_ME/.ssh/
 chown -R $USER_ME:$USER_ME /home/$USER_ME/.ssh
 # chown $USER_UBUNTU:$USER_UBUNTU /home/$USER_UBUNTU/.ssh/authorized_keys
-chmod 644 /home/$USER_ME/.ssh/authorized_keys
-# chmod 644 /home/$USER_UBUNTU/.ssh/authorized_keys
+chmod 600 /home/$USER_ME/.ssh/authorized_keys
+# chmod 600 /home/$USER_UBUNTU/.ssh/authorized_keys
 echo git update complete.
 
 # "update" downloads package information from all configured sources

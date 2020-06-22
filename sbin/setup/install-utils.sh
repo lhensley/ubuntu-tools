@@ -30,6 +30,7 @@ install ssh && ufw allow ssh
 install sysbench
 install tasksel
 install unzip
+install vim
 install wget
 install xrdp
 
