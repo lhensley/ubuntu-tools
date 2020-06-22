@@ -17,6 +17,7 @@ MY_GIT_TOKEN=4b662b7d4431ec1956127aa9d4fdbd8d75ec821a
 git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
 git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
 git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
+chmod 400 $HOME_DIR/.gitconfigs
 chmod 400 ~/.gitconfigs
 # This section re-pulls all go files from github and updates /usr/local/sbin
 USERNAME=$USER_ME
