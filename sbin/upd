@@ -38,18 +38,22 @@ rm -rf $SBIN_DIR
 cp -r $GO_SBIN $SBIN_PARENT
 # Set ownership and permissions in /usr/local/sbin
 # 6/22/2020: Read access for root ONLY.
-chown -R root:lhensley $SBIN_DIR
-find $SBIN_DIR -type d -print0 | xargs -0 chmod 700
+chown -R root:$USER_ME $SBIN_DIR
+find $SBIN_DIR -type d -print0 | xargs -0 chmod 750
 find $SBIN_DIR -type f -print0 | xargs -0 chmod 400
-# chmod -R 400 $SBIN_DIR/setup/configs
-# chmod 500 $SBIN_DIR/ccextractor
-chmod 500 $SBIN_DIR/* $SBIN_DIR/setup/*
+chmod -R 500 $SBIN_DIR
 cd
 echo git update complete.
 
 # Copy in config files
-# ddclient configs
+# ddclient
 cp $GO_CONFIGS/ddclient/$HOST_NAME/ddclient.conf /etc/
+chmod 600 /etc/ddclient.conf
+chown root:root /etc/ddclient.conf
+cp $GO_CONFIGS/etc-default-ddclient /etc/default/ddclient
+chmod 600 /etc/default/ddclient
+chown root:root /etc/default/ddclient
+
 # Update /home/$USER_ME/.ssh/authorized_keys
 mkdir -p /home/$USER_ME/.ssh/
 # mkdir -p /home/$UBUNTU_ME/.ssh/
@@ -61,6 +65,24 @@ chmod 600 /home/$USER_ME/.ssh/authorized_keys
 # chmod 600 /home/$USER_UBUNTU/.ssh/authorized_keys
 # HandBrake config file
 mkdir -p $HOME_DIR/.HandBrake
+cp $GO_CONFIGS/handbrake/* $HOME_DIR/.HandBrake
+chmod 600 $HOME_DIR/.HandBrake/*
+chown $USER_ME:$USER_ME $HOME_DIR/.HandBrake/*
+cp $HOME_DIR/.HandBrake /root/
+chown -R root:root /root/.HandBrake
+# Vim and vi config file
+cp $GO_CONFIGS/vim/.vimrc $HOME_DIR
+chmod 600 $HOME_DIR/.vimrc
+chown $USER_ME:$USER_ME $HOME_DIR/.vimrc
+cp $HOME_DIR/.vimrc /root/
+chown root:root /root/.vimrc
+# SSHD config file
+cp $GO_CONFIGS/ssh/etc-ssh/sshd_config /etc/ssh/sshd_config
+chmod 644 /etc/ssh/sshd_config
+chown root:root /etc/ssh/sshd_config
+systemctl restart ssh
+
+# Configure vi and vim
 cp $GO_CONFIGS/handbrake/* $HOME_DIR/.HandBrake
 
 # "update" downloads package information from all configured sources

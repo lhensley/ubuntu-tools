@@ -1,11 +1,9 @@
 #!/bin/bash
-# secureserver.sh
-# Should have owner root:$USER_NAME
-# Should have permissions 700
+# secureserver
 #
 # Include header file
 PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/source.sh
+source $PROGRAM_DIRECTORY/script-setup
 
 HOME_DIRECTORY="/home/lhensley"
 

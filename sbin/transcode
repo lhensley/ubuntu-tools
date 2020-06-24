@@ -1,7 +1,5 @@
 #!/bin/bash
 # rip
-# Should have owner root:$USER_NAME
-# Should have permissions 770
 
 production_mode=true
 debug_mode=false

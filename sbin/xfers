@@ -1,7 +1,5 @@
 #!/bin/bash
-# push-utilities.sh
-# Should have owner root:$USER_NAME
-# Should have permissions 770
+# push-utilities
 
 # This should go BEFORE header so nothing runs on the wrong server.
 ONLY_SERVER="nuc01"
@@ -16,7 +14,7 @@ CONTAINER="/var/local/xfers"
 FROM_CONTAINER="$CONTAINER/from"
 TO_CONTAINER="$CONTAINER/to"
 PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/source.sh
+source $PROGRAM_DIRECTORY/script-setup
 
 
 SOURCE_DIRECTORY="$TO_CONTAINER/red/*"

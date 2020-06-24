@@ -131,6 +131,5 @@ IgnoreRhosts yes
 IgnoreUserKnownHosts no
 StrictModes yes
 PubkeyAuthentication yes
-RSAAuthentication no
 PermitRootLogin no
 PermitEmptyPasswords no

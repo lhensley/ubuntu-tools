@@ -1,7 +1,6 @@
 #!/bin/bash
-# progress-bar.sh
-# Revised 2020-05-09
-# PURPOSE: Create, update, or erase a progress bar to standard output.
+# progress-bar
+#
 # Usage #-OF-ITEMS #-DONE
 # If #-OF-ITEMS = 0, the progress bar is erased.
 # If #-DONE < 0, #-DONE = 0

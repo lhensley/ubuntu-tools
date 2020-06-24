@@ -1,5 +1,5 @@
 #!/bin/bash
-# setup-os.sh
+# setup-os
 # PURPOSE: Installs basic software.
 # IMPORTANT: Check variables at the top of the script before running it!
 
@@ -25,6 +25,7 @@ install_plexmediaserver=false # CAUTION: NOT TESTED FOR UBUNTU 20
 install_webmin=true
 install_zoom=true
 install_chrome=true
+install_makemkv=true
 install_handbrake=true
 
 echo "#########################################################################"
@@ -42,7 +43,7 @@ if $debug_mode ; then
 
 # Include header file
 PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/../source.sh
+source $PROGRAM_DIRECTORY/../script-setup
 
 if [[ $NAME = "Ubuntu" ]]; then
     if [[ $(echo $VERSION_ID | cut -c1-3) = "20." ]]; then
@@ -65,10 +66,10 @@ if ! [ -x "$(command -v apg)" ]; then
 fi
 
 # Install uncomplicated, no-down-side utilities.
-$SBIN_DIR/setup/install-utils.sh
+$SBIN_DIR/setup/install-utils
 
 # NUMBER_OF_DESIGNATED_PASSWORDS=7
-TEMP_PASSWORD_INCLUDE="/tmp/passwords.sh"
+TEMP_PASSWORD_INCLUDE="/tmp/passwords"
 echo "" > $TEMP_PASSWORD_INCLUDE
 echo "PASSWORD_ME=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
 echo "PASSWORD_UBUNTU=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
@@ -106,17 +107,11 @@ SSH_KEY_NAME="$HOST_NAME-$(date "+%Y%m%d-%H%M%S")"
 mv $HOME_ME/.ssh/id_rsa $HOME_ME/.ssh/id_rsa.$(date "+%Y.%m.%d-%H.%M.%S")
 mv $HOME_ME/.ssh/id_rsa.pub $HOME_ME/.ssh/id_rsa.pub.$(date "+%Y.%m.%d-%H.%M.%S")
 ssh-keygen -C "$SSH_KEY_NAME" -P "" -f "$HOME_ME/.ssh/id_rsa"
-printf "\n\nAllowUsers $USER_ME $USER_UBUNTU\n\n" >> $SSHD_CONFIG
-sed -i 's/#PasswordAuthentication no/PasswordAuthentication no/g' $SSHD_CONFIG
-sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' $SSHD_CONFIG
-sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' $SSHD_CONFIG
-sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords no/g' $SSHD_CONFIG
-sed -i 's/#PermitEmptyPasswords yes/PermitEmptyPasswords no/g' $SSHD_CONFIG
-sed -i 's/PermitEmptyPasswords yes/PermitEmptyPasswords no/g' $SSHD_CONFIG
-chmod 755 $SSHD_CONFIG
+# SSHD config file
+cp $GO_CONFIGS/ssh/etc-ssh/sshd_config /etc/ssh/sshd_config
+chmod 644 /etc/ssh/sshd_config
+chown root:root /etc/ssh/sshd_config
 systemctl restart sshd
-# echo Users $USER_ME and $USER_UBUNTU installed and configured for ssh.
-# echo User $USER_ME installed and configured for ssh.
 
 echo Configure sudo $USER_ME and $USER_UBUNTU as sudo users
 echo "$USER_ME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/lane-NOPASSWD-users
@@ -199,24 +194,23 @@ if $install_mysql_server ; then
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$MYSQL_ADMIN_NAME'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_ADMIN_PASSWORD'"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_ADMIN_NAME'@localhost WITH GRANT OPTION"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES"
-#  echo "Test point mysql-server G"
   mkdir -p $MYSQL_CLIENT_CERTS_DIR
   cp "$MYSQL_SERVER_BIN_DIR/ca.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOST_NAME-MySQL-ca.pem"
   cp "$MYSQL_SERVER_BIN_DIR/client-cert.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOST_NAME-MySQL-client-cert.pem"
   cp "$MYSQL_SERVER_BIN_DIR/client-key.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOST_NAME-MySQL-client-key.pem"
   chown -R $USER_ME:$USER_ME "$MYSQL_CLIENT_CERTS_DIR"
   # Install .my.cnf in home directory
-    backup-file.sh $HOME_ME/.my.cnf
+    backup-file $HOME_ME/.my.cnf
     cp $GO_CONFIGS/mysql/home_directory_.my.cnf $HOME_ME/.my.cnf
-    replace-in-file.sh "$HOME_ME/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
-    replace-in-file.sh "$HOME_ME/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
+    replace-in-file "$HOME_ME/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
+    replace-in-file "$HOME_ME/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
     chown $USER_ME:$USER_ME "$HOME_ME/.my.cnf*"
     chmod 600 "$HOME_ME/.my.cnf*"
   # Install .my.cnf for root user
-    backup-file.sh /root/.my.cnf
+    backup-file /root/.my.cnf
     cp $GO_CONFIGS/mysql/home_directory_.my.cnf /root/.my.cnf
-    replace-in-file.sh "root/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
-    replace-in-file.sh "root/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
+    replace-in-file "root/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
+    replace-in-file "root/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
     chown root:root "/root/.my.cnf*"
     chmod 600 "root/.my.cnf*"
   echo "MySQL server installed."
@@ -293,32 +287,27 @@ if $install_makemkv ; then
   echo "Installing MakeMKV"
   add-apt-repository ppa:heyarje/makemkv-beta
   apt-get update
-  apt-get install -y makemkv-bin makemkv-oss
+  apt-get install -y makemkv-bin makemkv-oss ccextractor
   usermod -a -G cdrom $USER_ME
   echo "MakeMKV installed."
   echo "NOT configured: License must be applied."
   fi
 
-if $install_handbrake ; then
-  echo "Installing HandBrake"
-  add-apt-repository -y ppa:stebbins/handbrake-releases
-  apt-get update
-  apt-get install -y handbrake-gtk
-  apt-get install -y handbrake-cli
-  echo "HandBrake installed."
-  echo "NOT configured: Presets need to be added."
-  fi
+# Vim and vi config file
+cp $GO_CONFIGS/vim/.vimrc $HOME_DIR
+chmod 600 $HOME_DIR/.vimrc
+chown $USER_ME:$USER_ME $HOME_DIR/.vimrc
+cp $HOME_DIR/.vimrc /root/
+chown root:root /root/.vimrc
 
-# Edit .vimrc settings
-echo "Editing .vimrc settings"
-touch $HOME_ME/.vimrc
-backup-file.sh "$HOME_ME/.vimrc"
-# Retaining the following command in case the prior command fails.
-# cp $HOME_ME/.vimrc $HOME_ME/.vimrc.backup.$(date "+%Y.%m.%d-%H.%M.%S")
-echo "set background=dark" > $HOME_ME/.vimrc
-echo "set visualbell" >> $HOME_ME/.vimrc
-chown $USER_ME:$USER_ME $HOME_ME/.vi*
-echo ".vimrc edited."
+# Set up ddclient
+# ddclient configs
+cp $GO_CONFIGS/ddclient/$HOST_NAME/ddclient.conf /etc/
+chmod 600 /etc/ddclient.conf
+chown root:root /etc/ddclient.conf
+cp $GO_CONFIGS/etc-default-ddclient /etc/default/ddclient
+chmod 600 /etc/default/ddclient
+chown root:root /etc/default/ddclient
 
 # Set up some cron jobs
 echo "Adding cronjobs"
@@ -327,12 +316,28 @@ if grep -Fxq "ddclient" $TEMP_CRON
 then
     unlink $TEMP_CRON
 else
-    echo "@reboot /usr/sbin/ddclient -daemon 600 -syslog #Updates dyndns.org" >> $TEMP_CRON
+    echo "@reboot /usr/sbin/ddclient -daemon 7200 -syslog #Updates dyndns.org" >> $TEMP_CRON
     echo "@reboot echo \"$(hostname) booted\" | mail $LANE_CELL #Bootup Notification" >> $TEMP_CRON
-    echo "59 23 * * * $SBIN_DIR/secureserver.sh #Secure Server" >> $TEMP_CRON
+    echo "59 23 * * * $SBIN_DIR/secureserver #Secure Server" >> $TEMP_CRON
     crontab $TEMP_CRON
     unlink $TEMP_CRON
 fi
+
+if $install_handbrake ; then
+  echo "Installing HandBrake"
+  add-apt-repository -y ppa:stebbins/handbrake-releases
+  apt-get update
+  apt-get install -y handbrake-gtk handbrake-cli
+  # HandBrake config file
+  mkdir -p $HOME_DIR/.HandBrake
+  cp $GO_CONFIGS/handbrake/* $HOME_DIR/.HandBrake
+  chmod 600 $HOME_DIR/.HandBrake/*
+  chown $USER_ME:$USER_ME $HOME_DIR/.HandBrake/*
+  cp $HOME_DIR/.HandBrake /root/
+  chown -R root:root /root/.HandBrake
+  echo "HandBrake installed."
+  echo "GUI version is NOT configured: Presets ($HOME_DIR/.HandBrake/*) need to be added."
+  fi
 
 echo ""
 echo "# IMPORTANT: Copy these passwords into Roboform IMMEDIATELY and reboot."

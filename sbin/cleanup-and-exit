@@ -1,7 +1,5 @@
 #!/bin/bash
-# cleanup-and-exit.sh
-# Should have owner root:$USER_NAME
-# Should have permissions 770
+# cleanup-and-exit
 #
 
 # Remove all remaining tempfiles. #####################################

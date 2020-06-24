@@ -1,8 +1,5 @@
 #!/bin/bash
-# /usr/local/sbin/source-2019-03-20.sh
-# Source file for lane scripts
-# Should have owner root:$USER_NAME
-# Should have permissions 770
+# /usr/local/sbin/script-setup
 #
 
 debug_mode=false
@@ -13,7 +10,7 @@ if $debug_mode ; then
 
 # Basic setup
 logger Begin $0
-logger $0 invoking source.sh
+logger $0 invoking script-setup
 source /etc/os-release
 # /etc/os-release defines a lot of environment variables 
 # Sample:
@@ -62,11 +59,11 @@ HOME_DIR=$HOME_DIRECTORY
 SBIN_PARENT="/usr/local"
 SBIN_DIR="$SBIN_PARENT/sbin"
 TEMP_DATABASES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-databases.tmp"
-TEMP_PASSWORD_INCLUDE="/tmp/passwords.sh"
+TEMP_PASSWORD_INCLUDE="/tmp/passwords"
 TEMP_INCLUDES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-includes.tmp"
 TEMP_LOG="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-log.tmp"
 SCRIPTS_DIRECTORY=$SBIN_DIR
-# As of 2020-06-05, $SCRIPTS_INCLUDES still us used by backup.sh
+# As of 2020-06-05, $SCRIPTS_INCLUDES still us used by backup
 SCRIPTS_INCLUDES=$SCRIPTS_DIRECTORY/include
 
 

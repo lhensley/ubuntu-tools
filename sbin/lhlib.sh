@@ -1,7 +1,5 @@
 #!/bin/bash
 # lhlib
-# Should have owner root:$USER_NAME
-# Should have permissions 770
 
 # Hoping to develop
 # lh_has_files

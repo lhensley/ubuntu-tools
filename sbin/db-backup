@@ -1,7 +1,5 @@
 #!/bin/bash
-# db-backup.sh
-# Should have owner root:$USER_NAME
-# Should have permissions 770
+# db-backup
 
 # For mysqldump to work in unattended move, we need, in /root/ and in $HOME_DIR:
 #   File .my.cnf, containing this text:
@@ -22,7 +20,7 @@
 # Include header file
 # echo "$(/bin/date) Running setup routine."
 PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/source.sh
+source $PROGRAM_DIRECTORY/script-setup
 
 # echo "$(/bin/date) Setting backup parameters."
 LOGFILE=$ARCHIVE_DIRECTORY/backup.log
@@ -116,4 +114,4 @@ printf "\n\nBACKUP SCRIPT VARIABLES:\n" >>$BACKUPLOG 2>&1
 
 # Remove all remaining tempfiles. #####################################
 echo "$(/bin/date) Exiting."
-source $SCRIPTS_DIRECTORY/cleanup-and-exit.sh
+source $SCRIPTS_DIRECTORY/cleanup-and-exit

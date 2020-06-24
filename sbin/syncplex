@@ -1,11 +1,9 @@
 #!/bin/bash
-# syncplex.sh
-# Should have owner root:$USER_NAME
-# Should have permissions 770
+# syncplex
 
 # Include header file
 PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/source.sh
+source $PROGRAM_DIRECTORY/script-setup
 
 # Set key file permissions ############################################
 find /mnt/cloteal/Plex -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
@@ -53,7 +51,7 @@ mount $ARCSILVER5TA > /dev/null 2> /dev/null &
 mount $ARCSILVER5TB > /dev/null 2> /dev/null &
 
 # Run a system update
-$PROGRAM_DIRECTORY/upd.sh > /dev/null 2> /dev/null &
+$PROGRAM_DIRECTORY/upd > /dev/null 2> /dev/null &
 
 # Kill renmants of earlier instances
 killall -9 timeout > /dev/null 2> /dev/null &
@@ -102,4 +100,4 @@ $RSYNC \
 #   $ARCBERTHA > /dev/null 2> /dev/null &
 
 # Remove all remaining tempfiles. #####################################
-source $SCRIPTS_DIRECTORY/cleanup-and-exit.sh
+source $SCRIPTS_DIRECTORY/cleanup-and-exit

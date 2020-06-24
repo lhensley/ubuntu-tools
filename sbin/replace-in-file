@@ -1,11 +1,11 @@
 #!/bin/bash
-# replace-in-file.sh
+# replace-in-file
 
-# Usage: replace-in-file.sh path_and_filename search_text replace_text
+# Usage: replace-in-file path_and_filename search_text replace_text
 # Until I do some more work on this, the search and replace strings cannot include / \1 through \9 " ' or &
 
 # Include header file
 logger Begin $0
-source $(dirname $0)/source.sh
+source $(dirname $0)/script-setup
 
 sed -i "s/$2/$3/g" $1

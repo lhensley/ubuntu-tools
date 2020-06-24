@@ -1,16 +1,16 @@
 #!/bin/bash
-# purge-openvpn.sh
+# purge-openvpn
 
 # Include header file
 PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/../source.sh
+source $PROGRAM_DIRECTORY/../script-setup
 
 systemctl stop openvpn@client.service
 systemctl stop openvpn@server.service
 systemctl disable openvpn@client.service
 systemctl disable openvpn@server.service
 logger Purging OpenVPN
-upd.sh
+upd
 apt-get -f install
 apt-get purge -y openvpn
 

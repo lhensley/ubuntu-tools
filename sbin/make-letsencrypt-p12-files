@@ -1,11 +1,11 @@
 #!/bin/bash
-# make-letsencrypt-p12-files.sh
+# make-letsencrypt-p12-files
 # Should have owner root:$USER_NAME
 # Should have permissions 700
 #
 # Include header file
 PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/source.sh
+source $PROGRAM_DIRECTORY/script-setup
 
 letsencrypt_live_directory="/etc/letsencrypt/live"
 

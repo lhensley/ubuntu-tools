@@ -1,6 +1,6 @@
 #!/bin/bash
-# install-wordpress.sh
-# Revised 2020-05-05
+# install-wordpresssh
+
 
 # To store MySQL root password in a config, create .my.cnf in the home directory, with permissions 600, owner [user]:[user] and with this format:
 #
@@ -24,7 +24,7 @@ remove=false
 mysql_root_user='USER'
 mysql_root_password='PASSWORD'
 
-script_name=install-wordpress.sh
+script_name=install-wordpress
 current_directory=$(pwd)
 docroot_base="/var/www"
 apache2_configs="/etc/apache2"

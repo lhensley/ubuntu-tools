@@ -1,11 +1,12 @@
 #!/bin/bash
-# make-mysql-ssl-certs.sh
-# Revised 2020-05-15
+# make-mysql-ssl-certs
 #
 # Adapted from https://dev.mysql.com/doc/refman/8.0/en/creating-ssl-files-using-openssl.html
 #
 #
-source /usr/local/sbin/source.sh
+# Include header file
+PROGRAM_DIRECTORY=$(dirname $0)
+source $PROGRAM_DIRECTORY/../script-setup
 
 set -x
 

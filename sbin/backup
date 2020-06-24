@@ -1,5 +1,5 @@
 #!/bin/bash
-# backup.sh
+# backup
 
 # For mysqldump to work in unattended move, we need, in /root/ and in $HOME_DIR:
 #   File .my.cnf, containing this text:
@@ -18,14 +18,14 @@
 #   mysql --batch --skip-column-names --execute "show databases"
 #
 # Include header file
-source $(dirname $0)/source.sh
+source $(dirname $0)/script-setup
 
 ################ DELETE THIS SECTION? ##################################################
 # echo "$(/bin/date) Setting backup parameters."
 # The definition below seems not to be used. Delete it?
 LOGFILE=$ARCHIVE_DIRECTORY/backup.log
 
-# Create archive directory, defined in source.sh
+# Create archive directory, defined in script-setup
 mkdir -p $ARCHIVE_DIRECTORY
 
 # Delete old backup log and start another one.
@@ -110,4 +110,4 @@ printf '\n\nExiting.\n' >> $BACKUPLOG 2>&1
 echo $(date) >>$BACKUPLOG 2>&1
 logger Backup details recorded to $BACKUPLOG
 logger End $0
-source $SCRIPTS_DIRECTORY/cleanup-and-exit.sh
+source $SCRIPTS_DIRECTORY/cleanup-and-exit

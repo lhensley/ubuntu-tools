@@ -1,7 +1,5 @@
 #!/bin/bash
-# stopwatch.sh
-# Should have owner root:$USER_NAME
-# Should have permissions 770
+# stopwatch
 #
 SWDIR="/tmp"
 SW="$SWDIR/stopwatch"
@@ -9,11 +7,11 @@ NOW=$(($(date +%s%N)/1000000))
 
 if [ -z "$1" ]; then
 	echo "Usage: "
-	echo "stopwatch.sh name start (e.g., stopwatch \"Test Stopwatch\" start):" 
+	echo "stopwatch name start (e.g., stopwatch \"Test Stopwatch\" start):" 
 	echo "          Starts the counter from zero."
-	echo "stopwatch.sh name lap (e.g., stopwatch \"Test Stopwatch\" lap):"
+	echo "stopwatch name lap (e.g., stopwatch \"Test Stopwatch\" lap):"
 	echo "          Marks a lap and displays all laps. Can be used multiple times."
-	echo "stopwatch.sh name # (e.g., stopwatch \"Test Stopwatch\" 60 ):"
+	echo "stopwatch name # (e.g., stopwatch \"Test Stopwatch\" 60 ):"
 	echo "          Displays \"yes\" and returns 0 if specified number of seconds has elapsed."
 	echo "          Displays \"no\" and returns 1 if specified number of seconds has not elapsed."
 	exit 2
