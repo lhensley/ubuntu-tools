@@ -1,5 +1,5 @@
 #!/bin/bash
-# lhlib.sh
+# lhlib
 # Should have owner root:$USER_NAME
 # Should have permissions 770
 

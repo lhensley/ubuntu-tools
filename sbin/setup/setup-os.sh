@@ -260,7 +260,7 @@ if $install_webmin ; then
   wget http://www.webmin.com/download/deb/webmin-current.deb
   WEBMIN_PACKAGES="openssl libcurl4-openssl-dev libssl-dev perl libnet-ssleay-perl libauthen-pam-perl"
   WEBMIN_PACKAGES="$WEBMIN_PACKAGES libnet-ssleay-perl libauthen-pam-perl libpam-runtime"
-  WEBMIN_PACKAGES="$WEBMIN_PACKAGES libio-pty-perl apt-show-versions python"
+  WEBMIN_PACKAGES="$WEBMIN_PACKAGES libio-pty-perl apt-show-versions python libsocket6-perl"
   apt-get install -y $WEBMIN_PACKAGES
   dpkg --install webmin-current.deb
   rm webmin-current.deb

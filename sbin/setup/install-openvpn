@@ -1,12 +1,12 @@
 #!/bin/bash
-# install-openvpn.sh
+# install-openvpn
 
 # Include header file
 PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/../source.sh
+source $PROGRAM_DIRECTORY/../source
 
 logger Installing OpenVPN
-upd.sh
+upd
 
 # Following https://www.cyberciti.biz/faq/ubuntu-20-04-lts-set-up-openvpn-server-in-5-minutes/
 apt-get update && apt-get -y install ca-certificates wget net-tools gnupg

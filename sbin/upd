@@ -1,12 +1,12 @@
 #!/bin/bash
-# upd.sh
+# upd
 # Should have owner root:$USER_NAME
 # Should have permissions 770
 #
 # Include header file
 logger Begin $0
 PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/source.sh
+source $PROGRAM_DIRECTORY/script-setup
 
 # Changed apt-get to apt 1/31/19.
 # See https://itsfoss.com/apt-vs-apt-difference/ for rationale.
@@ -43,7 +43,7 @@ find $SBIN_DIR -type d -print0 | xargs -0 chmod 700
 find $SBIN_DIR -type f -print0 | xargs -0 chmod 400
 # chmod -R 400 $SBIN_DIR/setup/configs
 # chmod 500 $SBIN_DIR/ccextractor
-chmod 500 $SBIN_DIR/*.sh $SBIN_DIR/setup/*.sh $SBIN_DIR/*.py
+chmod 500 $SBIN_DIR/* $SBIN_DIR/setup/*
 cd
 echo git update complete.
 
@@ -59,6 +59,9 @@ chown -R $USER_ME:$USER_ME /home/$USER_ME/.ssh
 # chown $USER_UBUNTU:$USER_UBUNTU /home/$USER_UBUNTU/.ssh/authorized_keys
 chmod 600 /home/$USER_ME/.ssh/authorized_keys
 # chmod 600 /home/$USER_UBUNTU/.ssh/authorized_keys
+# HandBrake config file
+mkdir -p $HOME_DIR/.HandBrake
+cp $GO_CONFIGS/handbrake/* $HOME_DIR/.HandBrake
 
 # "update" downloads package information from all configured sources
 apt -y update

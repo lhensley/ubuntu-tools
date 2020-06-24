@@ -94,9 +94,9 @@ logger Setting permisssions for $ARCHIVE_DIRECTORY and its contents.
 # Sync to offsite server
 printf '\n\nSyncing backup to $OFFSITE_SERVER.\n' >> $BACKUPLOG 2>&1
 echo $(date) >>$BACKUPLOG 2>&1
-logger Attempting to sync to $OFFSITE_SERVER
+logger Attempting to sync to $OFFSITE_SERVER as $USER_NAME
 su -c "$RSYNC_SU" $USER_NAME >> $BACKUPLOG 2>&1
-logger Exit code $?
+logger Exit code for attempted sync to $OFFSITE_SERVER as $USER_NAME: $?
 
 # Add footer to backup log
 printf '\n\nCONTENTS OF $ARCHIVE_DIRECTORY\n' >>$BACKUPLOG

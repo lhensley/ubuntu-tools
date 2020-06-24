@@ -1,5 +1,5 @@
 #!/bin/bash
-# rip.sh
+# rip
 # Should have owner root:$USER_NAME
 # Should have permissions 770
 
@@ -11,11 +11,13 @@ if $debug_mode ; then
   fi
 
 PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/lhlib.sh
+source $PROGRAM_DIRECTORY/lhlib
 
 HANDBRAKE="HandBrakeCLI"
-MKV_BASE_PATH="/mnt/bertha/mkv"
-M4V_PATH="/mnt/cloteal/m4v"
+# MKV_BASE_PATH="/mnt/bertha/mkv"
+MKV_BASE_PATH="/var/local/lhensley/Video/MakeMKV Completed"
+# M4V_PATH="/mnt/cloteal/m4v"
+M4V_PATH="/var/local/lhensley/Video/HandBrake Completed"
 PRESET='/home/lhensley/.HandBrake/Lane 1080p (BluRay).json'
 MAKEMKV_PROCESS=makemkvcon
 
