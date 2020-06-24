@@ -1,25 +1,39 @@
 ﻿# Installing (Not Cloning) a New Ubuntu Host.md
 
 1. Install from a USB stick with an ISO file.
-2. In the GUI, invoke this document from Firefox, open a terminal (CTRL-ALT-T) and cut-and-paste this into the shell:
+2. In the GUI, start Firefox and log into Dashlane, and retrieve the Github password.
+3. Invoke this document Github in Firefox and copy the text below to the clipboard.
 ```bash
 # Install ssh
-sudo apt-get install -y ssh && sudo ufw allow ssh
+sudo apt-get update
+sudo apt-get install -y ufw ssh
+sudo ufw allow ssh
 # Install Google Chrome
-apt-get install -y gdebi-core
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-gdebi --n google-chrome-stable_current_amd64.deb
-rm ./google-chrome-stable_current_amd64.deb
+sudo apt-get install -y wget gdebi-core
+sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo gdebi --n google-chrome-stable_current_amd64.deb
+sudo rm ./google-chrome-stable_current_amd64.deb
 # Install git and ufw and open the git port
-sudo apt-get update && sudo apt-get install -y git ufw && sudo ufw allow git
+sudo apt-get install -y git
+sudo ufw allow git
 # Configure git
-cd && git config --global user.name "Lane Hensley" && git config --global user.email "lane.hensley@alumni.duke.edu" && git config --global credential.helper store && git config --global credential.helper cache && git config --global credential.helper 'cache --timeout=600'
+sudo cd
+sudo git config --global user.name "Lane Hensley"
+sudo git config --global user.email "lane.hensley@alumni.duke.edu"
+sudo git config --global credential.helper store
+sudo git config --global credential.helper cache
+sudo git config --global credential.helper 'cache --timeout=600'
 # Install git token
 # To get a new token, go to https://github.com/settings/tokens.
 MY_GIT_TOKEN=4b662b7d4431ec1956127aa9d4fdbd8d75ec821a
-git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
-git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
-git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
+sudo git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
+sudo git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
+sudo git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
+sudo cp /root/.gitconfig $HOME_DIR/.gitconfig
+sudo chown root:root /root/.gitconfig
+sudo chown $USER_ME:$USER_ME $HOME_DIR/.gitconfig
+sudo chmod 600 $HOME_DIR/.gitconfig
+sudo chmod 600 ~/.gitconfig
 # Wipe out existing git and /usr/local/sbin
 sudo rm -rf /var/local/git /usr/local/sbin
 # Clone go.git and set restrictive permissions
@@ -30,4 +44,11 @@ sudo cp -r /var/local/git/go/sbin /usr/local && sudo chown -R root:lhensley /usr
 # THIS REQUIRES REBOOT AFTER RUNNING
 sudo /usr/local/sbin/setup/setup-os
 ```
-3. Close Firefox, run Chrome, and install Dashlane extension.
+
+4. Open a terminal (CTRL-ALT-T), abd issue some command like
+```bash
+sudo ls
+```
+   to get sudo active, then paste the text into the terminal window.
+
+5. Close Firefox, run Chrome, and install Dashlane extension. 
