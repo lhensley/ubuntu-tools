@@ -1,29 +1,15 @@
 ﻿# Installing (Not Cloning) a New Ubuntu Host.md
 
-1. BEFORE creating a VirtualBox, set the Oracle VM VirtualBox Manager Preferences:
-	a. Display -> Maximum Guest Screen Size -> None
-	b. Extensions: Install Oracle VM VirtualBox Extension Pack
-2. Install from a USB stick, or create/clone a VirtualBox with an ISO file.
-3. If installing by creating a new VirtualBox, here are recommended base specs: 2048MB RAM; create a virtual hard disk, VDI type, dynamically allocated, 32GB. (Tried 16GB 5/6/2020)
-   a. General -> Advanced -> Shared Clipboard: Bidirectional
-   b. Display -> Screen -> Video Memory -> 128MB
-   c. Display -> Screen -> Scale Factor -> 300% (adjust after OS is installed)
-   d. Display -> Remote Display -> Enable Server
-   e. Network -> Adapter 1 -> Advanced -> Port Forwarding
-        Don't specify any IP addresses. Just port Numbers. Establish unique port numbers here.
-4. Run the OS installation.
-5. In the GUI, go to Settings and select
-	a. Displays -> 1440x900 (recommended for L10)
-6. In VM Machine -> Settings, select
-	a. Display -> Screen -> Scale Factor -> 200% (recommended for L10)
-7. In the GUI, load a terminal (CTRL-ALT-T) and issues these commands:
+1. Install from a USB stick with an ISO file.
+2. In the GUI, invoke this document from Firefox, open a terminal (CTRL-ALT-T) and cut-and-paste this into the shell:
 ```bash
+# Install ssh
 sudo apt-get install -y ssh && sudo ufw allow ssh
-```
-8. SSH into the VirtualBox (port 101XX).
-9.	Install the Ubuntu operating system and get to a shell.
-10.	Issue these commands (OK to copy the whole thing and paste it at a bash shell prompt):
-```bash
+# Install Google Chrome
+apt-get install -y gdebi-core
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+gdebi --n google-chrome-stable_current_amd64.deb
+rm ./google-chrome-stable_current_amd64.deb
 # Install git and ufw and open the git port
 sudo apt-get update && sudo apt-get install -y git ufw && sudo ufw allow git
 # Configure git
@@ -44,7 +30,4 @@ sudo cp -r /var/local/git/go/sbin /usr/local && sudo chown -R root:lhensley /usr
 # THIS REQUIRES REBOOT AFTER RUNNING
 sudo /usr/local/sbin/setup/setup-os
 ```
-11. Load the Firefox Web Browser and login using Lion credentials.
-12. Install Roboform extension to Firefox and log in.
-13. In the GUI, run Settings, Online Accounts and fill in where possible.
-14. At Setup / Settings on the desktop, go to Sharing and turn on Screen Sharing.
+3. Close Firefox, run Chrome, and install Dashlane extension.
