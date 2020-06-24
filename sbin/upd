@@ -57,8 +57,8 @@ chown root:root /etc/default/ddclient
 # Update /home/$USER_ME/.ssh/authorized_keys
 mkdir -p /home/$USER_ME/.ssh/
 # mkdir -p /home/$UBUNTU_ME/.ssh/
-cp $GO_CONFIGS/ssh/$USER_ME/authorized_keys /home/$USER_ME/.ssh/
-# cp $GO_CONFIGS/ssh/$USER_ME/authorized_keys /home/$USER_ME/.ssh/
+cp $GO_CONFIGS/ssh/home-.ssh-authorized_keys /home/$USER_ME/.ssh/
+# cp $GO_CONFIGS/ssh/home-.ssh-authorized_keys /home/$USER_ME/.ssh/
 chown -R $USER_ME:$USER_ME /home/$USER_ME/.ssh
 # chown $USER_UBUNTU:$USER_UBUNTU /home/$USER_UBUNTU/.ssh/authorized_keys
 chmod 600 /home/$USER_ME/.ssh/authorized_keys
@@ -77,7 +77,7 @@ chown $USER_ME:$USER_ME $HOME_DIR/.vimrc
 cp $HOME_DIR/.vimrc /root/
 chown root:root /root/.vimrc
 # SSHD config file
-cp $GO_CONFIGS/ssh/etc-ssh/sshd_config /etc/ssh/sshd_config
+cp $GO_CONFIGS/ssh/etc-ssh-sshd_config /etc/ssh/sshd_config
 chmod 644 /etc/ssh/sshd_config
 chown root:root /etc/ssh/sshd_config
 systemctl restart ssh

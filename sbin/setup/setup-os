@@ -107,8 +107,12 @@ SSH_KEY_NAME="$HOST_NAME-$(date "+%Y%m%d-%H%M%S")"
 mv $HOME_ME/.ssh/id_rsa $HOME_ME/.ssh/id_rsa.$(date "+%Y.%m.%d-%H.%M.%S")
 mv $HOME_ME/.ssh/id_rsa.pub $HOME_ME/.ssh/id_rsa.pub.$(date "+%Y.%m.%d-%H.%M.%S")
 ssh-keygen -C "$SSH_KEY_NAME" -P "" -f "$HOME_ME/.ssh/id_rsa"
+echo "# $SSH_KEY_NAME" >> $GO_CONFIGS/ssh/home-.ssh-authorized_keys
+#   cat $HOME_ME/.ssh/id_rsa.pub >> $GO_CONFIGS/ssh/home-.ssh-authorized_keys
+#   echo "" >> $GO_CONFIGS/ssh/home-.ssh-authorized_keys
+#   echo "#" >> $GO_CONFIGS/ssh/home-.ssh-authorized_keys
 # SSHD config file
-cp $GO_CONFIGS/ssh/etc-ssh/sshd_config /etc/ssh/sshd_config
+cp $GO_CONFIGS/ssh/etc-ssh-sshd_config /etc/ssh/sshd_config
 chmod 644 /etc/ssh/sshd_config
 chown root:root /etc/ssh/sshd_config
 systemctl restart sshd
@@ -351,7 +355,7 @@ echo "PHPMYADMIN_APP_PASS: $PHPMYADMIN_APP_PASS"
 echo "PHPMYADMIN_ROOT_PASS: $PHPMYADMIN_ROOT_PASS"
 echo "PHPMYADMIN_APP_DB_PASS: $PHPMYADMIN_APP_DB_PASS"
 echo ""
-echo "# Add to $GO_CONFIGS/ssh/$USER_ME/authorized_keys:"
+echo "# Add to $GO_CONFIGS/ssh/home-.ssh-authorized_keys:"
 echo ""
 echo "# $SSH_KEY_NAME"
 echo "$HOME_ME/.ssh/id_rsa.pub"
