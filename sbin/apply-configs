@@ -1,4 +1,4 @@
-#!/bin/bash
+#!$Sbin/bash
 # apply-configs
 #
 # Include header file
@@ -18,7 +18,11 @@ chmod -R 400 $GIT
 
 # Set ownership and permissions in /usr/local/sbin
 # 6/22/2020: Read access for root ONLY.
-chown -R root:$USER_ME $SBIN_DIR
+chown -R root:root $SBIN_DIR
+chmod -R 500 $SBIN_DIR
+chmod 444 $SBIN_DIR
+chmod 444 $SBIN/SETUP
+
 find $SBIN_DIR -type d -print0 | xargs -0 chmod 750
 find $SBIN_DIR -type f -print0 | xargs -0 chmod 400
 chmod -R 500 $SBIN_DIR

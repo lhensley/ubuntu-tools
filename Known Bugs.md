@@ -1,5 +1,4 @@
 # Known Bugs
-* Videos, not Video in scripts & configs
 * rip shouldn't run as sudo because it makes root own all the files.
 * Need to work on rip naming conventions
 * root owns much of home directory
