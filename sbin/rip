@@ -33,7 +33,7 @@ if [ "$2" == "" ]; then
 
 HANDBRAKE="HandBrakeCLI"
 # MKV_BASE_PATH="/mnt/bertha/mkv"
-MKV_BASE_PATH="/var/local/lhensley/Videos/MakeMKV-Completed"
+MKV_BASE_PATH="/home/lhensley/Videos/MakeMKV-Completed"
 MKV_PATH=$MKV_BASE_PATH/$1
 BASH_SHELL="/bin/bash"
 TRANSCODE_UTILITY="/usr/local/sbin/transcode"

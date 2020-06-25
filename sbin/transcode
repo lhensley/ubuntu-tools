@@ -13,10 +13,10 @@ source $PROGRAM_DIRECTORY/lhlib
 
 HANDBRAKE="HandBrakeCLI"
 # MKV_BASE_PATH="/mnt/bertha/mkv"
-MKV_BASE_PATH="$HOME_DIR/Videos/MakeMKV-Completed"
+MKV_BASE_PATH="/home/lhensley/Videos/MakeMKV-Completed"
 # M4V_PATH="/mnt/cloteal/m4v"
-M4V_PATH="$HOME_DIR/Videos/HandBrake-Completed"
-PRESET="$HOME_DIR/.HandBrake/Lane 1080p (BluRay).json"
+M4V_PATH="/home/lhensley/Videos/HandBrake-Completed"
+PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 MAKEMKV_PROCESS=makemkvcon
 
 if [ $(lh_is_running "$HANDBRAKE") == "true" ] ; then
