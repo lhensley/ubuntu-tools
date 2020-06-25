@@ -39,8 +39,8 @@ chown root:root /etc/default/ddclient
 # Update DNS resolution
 mkdir -p /etc/resolvconf/resolv.conf.f
 cp $GO_CONFIGS/resolvconf/head /etc/resolvconf/resolv.conf.d/
-chown root:root /etc/resolvconf/resolv.conf.d/*
-chmod 644 /etc/resolvconf/resolv.conf.d/*
+chown root:root /etc/resolvconf/resolv.conf.d/head
+chmod 644 /etc/resolvconf/resolv.conf.d/head
 
 # Update /home/$USER_ME/.ssh/authorized_keys
 mkdir -p /home/$USER_ME/.ssh
@@ -55,13 +55,21 @@ chown root:root /etc/ssh/sshd_config
 systemctl restart ssh
 
 # MakeMKV config file
+echo "A"
 mkdir -p $HOME_DIR/.MakeMKV
+echo "B"
 mkdir -p /root/.MakeMKV
+echo "C"
 cp $GO_CONFIGS/makemkv/* $HOMEDIR/.MakeMKV/
+echo "D"
 chmod 600 $HOME_DIR/.MakeMKV/*
+echo "E"
 chown -R $USER_ME:$USER_ME $HOME_DIR/.MakeMKV
+echo "F"
 cp $HOME_DIR/.MakeMKV/* /root/.MakeMKV/
+echo "G"
 chown -R root:root /root/.MakeMKV
+echo "H"
 
 # HandBrake config file
 mkdir -p $HOME_DIR/.HandBrake
