@@ -9,6 +9,18 @@ source $PROGRAM_DIRECTORY/script-setup
 # Changed apt-get to apt 1/31/19.
 # See https://itsfoss.com/apt-vs-apt-difference/ for rationale.
 
+# Set ownership and permissions in /usr/local/sbin
+# 6/22/2020: Read access for root ONLY.
+chown -R root:root $SBIN_DIR
+chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
+chmod -R 500 $SBIN_DIR/*
+
+# Exceptions: These can be read or run by anyone
+# These based on functional requirements
+chmod 755 /usr/local/sbin/lhlib /usr/local/sbin/rip /usr/local/sbin/transcode
+# These based on desire. CAUTION: Don't expose anything that has a password or code in it.
+chmod 740 /usr/local/sbin/upd /usr/local/sbin/script-setup /usr/local/sbin/apply-configs
+
 # Git
 chmod 600 /root/.gitconfig
 cp /root/.gitconfig $HOME_DIR/.gitconfig
@@ -66,18 +78,4 @@ chmod 600 $HOME_DIR/.vimrc
 chown $USER_ME:$USER_ME $HOME_DIR/.vimrc
 cp $HOME_DIR/.vimrc /root/
 chown root:root /root/.vimrc
-
-# Set ownership and permissions in /usr/local/sbin
-# 6/22/2020: Read access for root ONLY.
-chown -R root:root $SBIN_DIR
-# Directories themselves first
-chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
-# Here's the problem. See you in the morning.
-chmod -R 500 $SBIN_DIR/*
-
-# Exceptions: These can be read or run by anyone
-# These based on functional requirements
-chmod 755 /usr/local/sbin/lhlib /usr/local/sbin/rip /usr/local/sbin/transcode
-# These based on desire. CAUTION: Don't expose anything that has a password or code in it.
-chmod 740 /usr/local/sbin/upd /usr/local/sbin/script-setup /usr/local/sbin/apply-configs
 

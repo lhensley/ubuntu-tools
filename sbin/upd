@@ -35,8 +35,13 @@ cp -r $GO_SBIN $SBIN_PARENT
 cd
 echo git update complete.
 
+# Reset permisions for /usr/local/sbin/*
+chown -R root:root $SBIN_DIR
+chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
+chmod -R 500 $SBIN_DIR/*
+
 # Invoke /usr/local/sbin/apply-configs
-# chmod 777 $SBIN_DIR/apply-configs
+chmod 500 $SBIN_DIR/apply-configs
 $SBIN_DIR/apply-configs
 
 # Update Dynamic DNS
