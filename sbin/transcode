@@ -77,5 +77,4 @@ while [ $(lh_has_subdirectories "$MKV_BASE_PATH") == "true" ] \
 
 echo "Transcoding is complete." | mail lanecell
 echo Done.
-eject
 exit 0

@@ -49,5 +49,5 @@ if [ $exit_status -eq 0 ] ; then
     fi
   else echo "$1: Disk ripping FAILED. Code $exit_status" | mail lanecell
   fi
-
+eject
 exit $?
