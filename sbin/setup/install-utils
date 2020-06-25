@@ -17,6 +17,7 @@ function install() {
 install ufw
 install apg
 install curl
+install ddclient
 install fail2ban
 install filezilla
 install gimp

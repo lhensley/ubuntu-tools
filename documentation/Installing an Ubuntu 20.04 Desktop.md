@@ -33,7 +33,7 @@ sudo cp /root/.gitconfig $HOME_DIR/.gitconfig
 sudo chown root:root /root/.gitconfig
 sudo chown $USER_ME:$USER_ME $HOME_DIR/.gitconfig
 sudo chmod 600 $HOME_DIR/.gitconfig
-sudo chmod 600 ~/.gitconfig
+sudo chmod 600 /root/.gitconfig
 # Wipe out existing git and /usr/local/sbin
 sudo rm -rf /var/local/git /usr/local/sbin
 # Clone go.git and set restrictive permissions

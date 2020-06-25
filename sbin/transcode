@@ -13,9 +13,9 @@ source $PROGRAM_DIRECTORY/lhlib
 
 HANDBRAKE="HandBrakeCLI"
 # MKV_BASE_PATH="/mnt/bertha/mkv"
-MKV_BASE_PATH="/var/local/lhensley/Video/MakeMKV Completed"
+MKV_BASE_PATH="/var/local/lhensley/Videos/MakeMKV-Completed"
 # M4V_PATH="/mnt/cloteal/m4v"
-M4V_PATH="/var/local/lhensley/Video/HandBrake Completed"
+M4V_PATH="/var/local/lhensley/Videos/HandBrake-Completed"
 PRESET='/home/lhensley/.HandBrake/Lane 1080p (BluRay).json'
 MAKEMKV_PROCESS=makemkvcon
 

@@ -1,0 +1,70 @@
+#!/bin/bash
+# apply-configs
+#
+# Include header file
+logger Begin $0
+PROGRAM_DIRECTORY=$(dirname $0)
+source $PROGRAM_DIRECTORY/script-setup
+
+# Changed apt-get to apt 1/31/19.
+# See https://itsfoss.com/apt-vs-apt-difference/ for rationale.
+
+# Git
+cp /root/.gitconfig $HOME_DIR/.gitconfig
+chown root:root /root/.gitconfig
+chown $USER_ME:$USER_ME $HOME_DIR/.gitconfig
+chmod 600 $HOME_DIR/.gitconfig
+chmod 600 ~/.gitconfig
+chmod -R 400 $GIT
+
+# Set ownership and permissions in /usr/local/sbin
+# 6/22/2020: Read access for root ONLY.
+chown -R root:$USER_ME $SBIN_DIR
+find $SBIN_DIR -type d -print0 | xargs -0 chmod 750
+find $SBIN_DIR -type f -print0 | xargs -0 chmod 400
+chmod -R 500 $SBIN_DIR
+
+# ddclient
+cp $GO_CONFIGS/ddclient/$HOST_NAME/ddclient.conf /etc/
+chmod 600 /etc/ddclient.conf
+chown root:root /etc/ddclient.conf
+cp $GO_CONFIGS/ddclient/etc-default-ddclient /etc/default/ddclient
+chmod 600 /etc/default/ddclient
+chown root:root /etc/default/ddclient
+
+# Update /home/$USER_ME/.ssh/authorized_keys
+mkdir -p /home/$USER_ME/.ssh
+cp $GO_CONFIGS/ssh/home-.ssh-authorized_keys /home/$USER_ME/.ssh/authorized_keys
+chown -R $USER_ME:$USER_ME /home/$USER_ME/.ssh
+chmod 600 /home/$USER_ME/.ssh/authorized_keys
+
+# SSHD config file
+cp $GO_CONFIGS/ssh/etc-ssh-sshd_config /etc/ssh/sshd_config
+chmod 644 /etc/ssh/sshd_config
+chown root:root /etc/ssh/sshd_config
+systemctl restart ssh
+
+# MakeMKV config file
+mkdir -p $HOME_DIR/.MakeMKV
+mkdir -p /root/.MakeMKV
+cp $GO_CONFIGS/makemkv/* $HOMEDIR/.MakeMKV/
+chmod 600 $HOME_DIR/.MakeMKV/*
+chown -R $USER_ME:$USER_ME $HOME_DIR/.MakeMKV
+cp $HOME_DIR/.MakeMKV/* /root/.MakeMKV/
+chown -R root:root /root/.MakeMKV
+
+# HandBrake config file
+mkdir -p $HOME_DIR/.HandBrake
+mkdir -p /root/.HandBrake
+cp $GO_CONFIGS/handbrake/* $HOME_DIR/.HandBrake/
+chmod 600 $HOME_DIR/.HandBrake/*
+chown -R $USER_ME:$USER_ME $HOME_DIR/.HandBrake
+cp $HOME_DIR/.HandBrake/* /root/.HandBrake/
+chown -R root:root /root/.HandBrake
+
+# Vim and vi config file
+cp $GO_CONFIGS/vim/.vimrc $HOME_DIR/
+chmod 600 $HOME_DIR/.vimrc
+chown $USER_ME:$USER_ME $HOME_DIR/.vimrc
+cp $HOME_DIR/.vimrc /root/
+chown root:root /root/.vimrc

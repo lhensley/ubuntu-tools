@@ -24,7 +24,7 @@ install_phpmyadmin=true
 install_plexmediaserver=false # CAUTION: NOT TESTED FOR UBUNTU 20
 install_webmin=true
 install_zoom=true
-install_chrome=true
+install_chrome=false
 install_makemkv=true
 install_handbrake=true
 
@@ -100,22 +100,12 @@ echo "Making $USER_ME and $USER_UBUNTU users and give them sudo access and ssh a
 # echo $PASSWORD_UBUNTU | passwd --stdin $USER_UBUNTU
 usermod -aG sudo $USER_ME
 # usermod -aG sudo $USER_UBUNTU
-mkdir -p /home/$USER_ME/.ssh
-chown -R $USER_ME:$USER_ME /home/$USER_ME/.ssh
-touch $HOME_ME/.ssh/id_rsa $HOME_ME/.ssh/id_rsa.pub
-SSH_KEY_NAME="$HOST_NAME-$(date "+%Y%m%d-%H%M%S")"
-mv $HOME_ME/.ssh/id_rsa $HOME_ME/.ssh/id_rsa.$(date "+%Y.%m.%d-%H.%M.%S")
-mv $HOME_ME/.ssh/id_rsa.pub $HOME_ME/.ssh/id_rsa.pub.$(date "+%Y.%m.%d-%H.%M.%S")
 ssh-keygen -C "$SSH_KEY_NAME" -P "" -f "$HOME_ME/.ssh/id_rsa"
 echo "# $SSH_KEY_NAME" >> $GO_CONFIGS/ssh/home-.ssh-authorized_keys
+#   # This section is a good idea, but the flaw is that writing to the local $GO_CONFIGS file doesn't sync it back up to the master.
 #   cat $HOME_ME/.ssh/id_rsa.pub >> $GO_CONFIGS/ssh/home-.ssh-authorized_keys
 #   echo "" >> $GO_CONFIGS/ssh/home-.ssh-authorized_keys
 #   echo "#" >> $GO_CONFIGS/ssh/home-.ssh-authorized_keys
-# SSHD config file
-cp $GO_CONFIGS/ssh/etc-ssh-sshd_config /etc/ssh/sshd_config
-chmod 644 /etc/ssh/sshd_config
-chown root:root /etc/ssh/sshd_config
-systemctl restart sshd
 
 echo Configure sudo $USER_ME and $USER_UBUNTU as sudo users
 echo "$USER_ME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/lane-NOPASSWD-users
@@ -294,22 +284,14 @@ if $install_makemkv ; then
   apt-get install -y makemkv-bin makemkv-oss ccextractor
   usermod -a -G cdrom $USER_ME
   echo "MakeMKV installed."
-  echo "NOT configured: License must be applied."
   fi
-
-# Vim and vi config file
-cp $GO_CONFIGS/vim/.vimrc $HOME_DIR
-chmod 600 $HOME_DIR/.vimrc
-chown $USER_ME:$USER_ME $HOME_DIR/.vimrc
-cp $HOME_DIR/.vimrc /root/
-chown root:root /root/.vimrc
 
 # Set up ddclient
 # ddclient configs
 cp $GO_CONFIGS/ddclient/$HOST_NAME/ddclient.conf /etc/
 chmod 600 /etc/ddclient.conf
 chown root:root /etc/ddclient.conf
-cp $GO_CONFIGS/etc-default-ddclient /etc/default/ddclient
+cp $GO_CONFIGS/ddclient/etc-default-ddclient /etc/default/ddclient
 chmod 600 /etc/default/ddclient
 chown root:root /etc/default/ddclient
 
@@ -332,34 +314,32 @@ if $install_handbrake ; then
   add-apt-repository -y ppa:stebbins/handbrake-releases
   apt-get update
   apt-get install -y handbrake-gtk handbrake-cli
-  # HandBrake config file
-  mkdir -p $HOME_DIR/.HandBrake
-  cp $GO_CONFIGS/handbrake/* $HOME_DIR/.HandBrake
-  chmod 600 $HOME_DIR/.HandBrake/*
-  chown $USER_ME:$USER_ME $HOME_DIR/.HandBrake/*
-  cp $HOME_DIR/.HandBrake /root/
-  chown -R root:root /root/.HandBrake
   echo "HandBrake installed."
   echo "GUI version is NOT configured: Presets ($HOME_DIR/.HandBrake/*) need to be added."
   fi
 
+# Invoke /usr/local/sbin/apply-configs
+apply-configs
+
+KEYS_FILE=$USER_ME/os-security-info.txt
+echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD" > $KEYS_FILE
+echo "MYSQL_ADMIN_NAME: $MYSQL_ADMIN_NAME" >> $KEYS_FILE
+echo "MYSQL_ADMIN_PASSWORD: $MYSQL_ADMIN_PASSWORD" >> $KEYS_FILE
+echo "PHPMYADMIN_APP_PASS: $PHPMYADMIN_APP_PASS" >> $KEYS_FILE
+echo "PHPMYADMIN_ROOT_PASS: $PHPMYADMIN_ROOT_PASS" >> $KEYS_FILE
+echo "PHPMYADMIN_APP_DB_PASS: $PHPMYADMIN_APP_DB_PASS" >> $KEYS_FILE
+echo "" >> $KEYS_FILE
+echo "# Add to $GO_CONFIGS/ssh/home-.ssh-authorized_keys:" >> $KEYS_FILE
+echo "" >> $KEYS_FILE
+echo "# $SSH_KEY_NAME" >> $KEYS_FILE
+cat "$HOME_ME/.ssh/id_rsa.pub" >> $KEYS_FILE
+echo "#" >> $KEYS_FILE
+chmod 400 $KEYS_FILE
+chown $USER_ME:$USER_ME $KEYS_FILE
 echo ""
-echo "# IMPORTANT: Copy these passwords into Roboform IMMEDIATELY and reboot."
+echo "# IMPORTANT: Move the contents of $KEYS_FILE into Dashlane NOW, delete it, and reboot.
 echo "# Once you continue, these passwords cannot be recovered."
 echo ""
-# echo "PASSWORD_ME: $PASSWORD_ME"
-echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD"
-echo "MYSQL_ADMIN_NAME: $MYSQL_ADMIN_NAME"
-echo "MYSQL_ADMIN_PASSWORD: $MYSQL_ADMIN_PASSWORD"
-echo "PHPMYADMIN_APP_PASS: $PHPMYADMIN_APP_PASS"
-echo "PHPMYADMIN_ROOT_PASS: $PHPMYADMIN_ROOT_PASS"
-echo "PHPMYADMIN_APP_DB_PASS: $PHPMYADMIN_APP_DB_PASS"
-echo ""
-echo "# Add to $GO_CONFIGS/ssh/home-.ssh-authorized_keys:"
-echo ""
-echo "# $SSH_KEY_NAME"
-echo "$HOME_ME/.ssh/id_rsa.pub"
-echo "#"
 rm $TEMP_PASSWORD_INCLUDE
 
 echo Done.

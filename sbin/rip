@@ -12,8 +12,14 @@ if $debug_mode ; then
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/lhlib
 
+# Make sure we are NOT running with sudo
+if [[ $EUID -eq 0 ]]; then
+  echo "This script must NOT be run with sudo."
+  exit 1
+fi
+
 if [ "$1" == "" ]; then
-  echo "Usage: rip \"Title (year)\" &"
+  echo "Usage: rip \"Title (year) [ movie | <minimum_number_of_seconds> ]\" &"
   exit -1
   fi
 
@@ -27,7 +33,7 @@ if [ "$2" == "" ]; then
 
 HANDBRAKE="HandBrakeCLI"
 # MKV_BASE_PATH="/mnt/bertha/mkv"
-MKV_BASE_PATH="/var/local/lhensley/Video/MakeMKV Completed"
+MKV_BASE_PATH="/var/local/lhensley/Videos/MakeMKV Completed"
 MKV_PATH=$MKV_BASE_PATH/$1
 BASH_SHELL="/bin/bash"
 TRANSCODE_UTILITY="/usr/local/sbin/transcode"
