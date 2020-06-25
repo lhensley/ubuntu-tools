@@ -15,11 +15,6 @@ MY_GIT_TOKEN=4b662b7d4431ec1956127aa9d4fdbd8d75ec821a
 git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
 git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
 git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
-cp /root/.gitconfig $HOME_DIR/.gitconfig
-chown root:root /root/.gitconfig
-chown $USER_ME:$USER_ME $HOME_DIR/.gitconfig
-chmod 600 $HOME_DIR/.gitconfig
-chmod 600 ~/.gitconfig
 # This section re-pulls all go files from github and updates /usr/local/sbin
 USERNAME=$USER_ME
 REPOSITORY=$GO
@@ -37,42 +32,14 @@ chmod -R 400 $GIT
 # Copy scripts into /usr/local/sbin
 rm -rf $SBIN_DIR
 cp -r $GO_SBIN $SBIN_PARENT
-# Set ownership and permissions in /usr/local/sbin
-# 6/22/2020: Read access for root ONLY.
-chown -R root:$USER_ME $SBIN_DIR
-find $SBIN_DIR -type d -print0 | xargs -0 chmod 750
-find $SBIN_DIR -type f -print0 | xargs -0 chmod 400
-chmod -R 500 $SBIN_DIR
 cd
 echo git update complete.
 
-# Copy in config files
-# ddclient
-cp $GO_CONFIGS/ddclient/$HOST_NAME/ddclient.conf /etc/
-chmod 600 /etc/ddclient.conf
-chown root:root /etc/ddclient.conf
-cp $GO_CONFIGS/ddclient/etc-default-ddclient /etc/default/ddclient
-chmod 600 /etc/default/ddclient
-chown root:root /etc/default/ddclient
-
-# Update /home/$USER_ME/.ssh/authorized_keys
-mkdir -p /home/$USER_ME/.ssh/
-# mkdir -p /home/$UBUNTU_ME/.ssh/
-cp $GO_CONFIGS/ssh/home-.ssh-authorized_keys /home/$USER_ME/.ssh/
-# cp $GO_CONFIGS/ssh/home-.ssh-authorized_keys /home/$USER_ME/.ssh/
-chown -R $USER_ME:$USER_ME /home/$USER_ME/.ssh
-# chown $USER_UBUNTU:$USER_UBUNTU /home/$USER_UBUNTU/.ssh/authorized_keys
-chmod 600 /home/$USER_ME/.ssh/authorized_keys
-# chmod 600 /home/$USER_UBUNTU/.ssh/authorized_keys
-
-# SSHD config file
-cp $GO_CONFIGS/ssh/etc-ssh-sshd_config /etc/ssh/sshd_config
-chmod 644 /etc/ssh/sshd_config
-chown root:root /etc/ssh/sshd_config
-systemctl restart ssh
-
 # Invoke /usr/local/sbin/apply-configs
 apply-configs
+
+# Update Dynamic DNS
+ddclient -noquiet -verbose -daemon 0
 
 # "update" downloads package information from all configured sources
 apt -y update

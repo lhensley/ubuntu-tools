@@ -140,6 +140,9 @@ EXCLUDED_PASSWORD_CHARACTERS=" \$\'\"\\\#\|\<\>\;\*\&\~\!\I\l\1\O\0\`\/\?"
 # cron
 TEMP_CRON="/tmp/cron-$UUID.tmp"
 
+# ddclient
+DDCLIENT_INTERVAL=7200
+
 # Git
 GIT=/var/local/git
 GO=$GIT/go

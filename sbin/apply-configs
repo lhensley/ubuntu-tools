@@ -10,11 +10,10 @@ source $PROGRAM_DIRECTORY/script-setup
 # See https://itsfoss.com/apt-vs-apt-difference/ for rationale.
 
 # Git
+chmod 600 /root/.gitconfig
 cp /root/.gitconfig $HOME_DIR/.gitconfig
 chown root:root /root/.gitconfig
 chown $USER_ME:$USER_ME $HOME_DIR/.gitconfig
-chmod 600 $HOME_DIR/.gitconfig
-chmod 600 ~/.gitconfig
 chmod -R 400 $GIT
 
 # Set ownership and permissions in /usr/local/sbin
@@ -68,3 +67,10 @@ chmod 600 $HOME_DIR/.vimrc
 chown $USER_ME:$USER_ME $HOME_DIR/.vimrc
 cp $HOME_DIR/.vimrc /root/
 chown root:root /root/.vimrc
+
+# Exceptions: These can be read or run by anyone
+# These based on functional requirements
+chmod 555 /usr/local/sbin/lhlib /usr/local/sbin/rip /usr/local/sbin/transcode
+# These based on desire. CAUTION: Don't expose anything that has a password or code in it.
+chmod 555 /usr/local/sbin/upd /usr/local/sbin/script-setup /usr/local/sbin/apply-configs
+

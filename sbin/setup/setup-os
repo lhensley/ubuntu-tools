@@ -286,15 +286,6 @@ if $install_makemkv ; then
   echo "MakeMKV installed."
   fi
 
-# Set up ddclient
-# ddclient configs
-cp $GO_CONFIGS/ddclient/$HOST_NAME/ddclient.conf /etc/
-chmod 600 /etc/ddclient.conf
-chown root:root /etc/ddclient.conf
-cp $GO_CONFIGS/ddclient/etc-default-ddclient /etc/default/ddclient
-chmod 600 /etc/default/ddclient
-chown root:root /etc/default/ddclient
-
 # Set up some cron jobs
 echo "Adding cronjobs"
 crontab -l > $TEMP_CRON
@@ -302,7 +293,7 @@ if grep -Fxq "ddclient" $TEMP_CRON
 then
     unlink $TEMP_CRON
 else
-    echo "@reboot /usr/sbin/ddclient -daemon 7200 -syslog #Updates dyndns.org" >> $TEMP_CRON
+    echo "@reboot /usr/sbin/ddclient -daemon $DDCLIENT_INTERVAL -syslog #Updates dyndns.org" >> $TEMP_CRON
     echo "@reboot echo \"$(hostname) booted\" | mail $LANE_CELL #Bootup Notification" >> $TEMP_CRON
     echo "59 23 * * * $SBIN_DIR/secureserver #Secure Server" >> $TEMP_CRON
     crontab $TEMP_CRON
