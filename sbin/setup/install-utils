@@ -27,6 +27,7 @@ install openssl
 install openvpn
     install bridge-utils
     install ifupdown
+install resolvconf
 install ssh && ufw allow ssh
 install sysbench
 install tasksel
