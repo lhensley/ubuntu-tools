@@ -310,7 +310,8 @@ if $install_handbrake ; then
   fi
 
 # Invoke /usr/local/sbin/apply-configs
-apply-configs
+chmod 777 $SBIN_DIR/apply-configs
+$SBIN_DIR/apply-configs
 
 KEYS_FILE=$USER_ME/os-security-info.txt
 echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD" > $KEYS_FILE

@@ -36,7 +36,8 @@ cd
 echo git update complete.
 
 # Invoke /usr/local/sbin/apply-configs
-apply-configs
+chmod 777 $SBIN_DIR/apply-configs
+$SBIN_DIR/apply-configs
 
 # Update Dynamic DNS
 ddclient -noquiet -verbose -daemon 0
