@@ -55,21 +55,15 @@ chown root:root /etc/ssh/sshd_config
 systemctl restart ssh
 
 # MakeMKV config file
-echo "A"
 mkdir -p $HOME_DIR/.MakeMKV
-echo "B"
 mkdir -p /root/.MakeMKV
 echo "C"
-cp $GO_CONFIGS/makemkv/* $HOMEDIR/.MakeMKV/
+cp $GO_CONFIGS/makemkv/settings.conf $HOMEDIR/.MakeMKV/
 echo "D"
-chmod 600 $HOME_DIR/.MakeMKV/*
-echo "E"
+chmod 600 $HOME_DIR/.MakeMKV/settings.conf
 chown -R $USER_ME:$USER_ME $HOME_DIR/.MakeMKV
-echo "F"
-cp $HOME_DIR/.MakeMKV/* /root/.MakeMKV/
-echo "G"
+cp $HOME_DIR/.MakeMKV/settings.conf /root/.MakeMKV/
 chown -R root:root /root/.MakeMKV
-echo "H"
 
 # HandBrake config file
 mkdir -p $HOME_DIR/.HandBrake
