@@ -57,9 +57,7 @@ systemctl restart ssh
 # MakeMKV config file
 mkdir -p $HOME_DIR/.MakeMKV
 mkdir -p /root/.MakeMKV
-echo "C"
-cp $GO_CONFIGS/makemkv/settings.conf $HOMEDIR/.MakeMKV/
-echo "D"
+cp $GO_CONFIGS/makemkv/settings.conf $HOME_DIR/.MakeMKV/
 chmod 600 $HOME_DIR/.MakeMKV/settings.conf
 chown -R $USER_ME:$USER_ME $HOME_DIR/.MakeMKV
 cp $HOME_DIR/.MakeMKV/settings.conf /root/.MakeMKV/
