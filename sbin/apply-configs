@@ -24,10 +24,6 @@ chmod 111 $SBIN_DIR
 chmod 111 $SBIN_DIR/setup
 chmod 111 $SBIN_DIR/include
 
-find $SBIN_DIR -type d -print0 | xargs -0 chmod 750
-find $SBIN_DIR -type f -print0 | xargs -0 chmod 400
-chmod -R 500 $SBIN_DIR
-
 # ddclient
 cp $GO_CONFIGS/ddclient/$HOST_NAME/ddclient.conf /etc/
 chmod 600 /etc/ddclient.conf
