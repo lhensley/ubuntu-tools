@@ -19,10 +19,10 @@ chmod -R 400 $GIT
 # Set ownership and permissions in /usr/local/sbin
 # 6/22/2020: Read access for root ONLY.
 chown -R root:root $SBIN_DIR
-chmod -R 500 $SBIN_DIR
-chmod 111 $SBIN_DIR
-chmod 111 $SBIN_DIR/setup
-chmod 111 $SBIN_DIR/include
+chmod 555 $SBIN_DIR
+chmod 555 $SBIN_DIR/setup
+chmod 555 $SBIN_DIR/include
+chmod -R 500 $SBIN_DIR/*
 
 # ddclient
 cp $GO_CONFIGS/ddclient/$HOST_NAME/ddclient.conf /etc/
