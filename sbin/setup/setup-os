@@ -101,7 +101,7 @@ echo "Making $USER_ME and $USER_UBUNTU users and give them sudo access and ssh a
 usermod -aG sudo $USER_ME
 # usermod -aG sudo $USER_UBUNTU
 ssh-keygen -C "$SSH_KEY_NAME" -P "" -f "$HOME_ME/.ssh/id_rsa"
-echo "# $SSH_KEY_NAME" >> $GO_CONFIGS/ssh/home-.ssh-authorized_keys
+#   echo "# $SSH_KEY_NAME" >> $GO_CONFIGS/ssh/home-.ssh-authorized_keys
 #   # This section is a good idea, but the flaw is that writing to the local $GO_CONFIGS file doesn't sync it back up to the master.
 #   cat $HOME_ME/.ssh/id_rsa.pub >> $GO_CONFIGS/ssh/home-.ssh-authorized_keys
 #   echo "" >> $GO_CONFIGS/ssh/home-.ssh-authorized_keys

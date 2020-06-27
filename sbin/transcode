@@ -1,5 +1,5 @@
 #!/bin/bash
-# rip
+# transcode
 
 production_mode=true
 debug_mode=false
