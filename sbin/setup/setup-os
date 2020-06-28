@@ -241,6 +241,18 @@ if $install_plexmediaserver ; then
   apt install plexmediaserver
   ufw allow plexmediaserver
   echo "Plex Media Server installed."
+  # Install Tautulli for https://this-server:8181
+  See https://tautulli.com/
+  apt-get install python python-setuptools tzdata
+  cd /opt
+  git clone https://github.com/Tautulli/Tautulli.git
+  addgroup tautulli && sudo adduser --system --no-create-home tautulli --ingroup tautulli
+  chown tautulli:tautulli -R /opt/Tautulli
+  systemctl daemon-reload
+  systemctl enable tautulli.service
+  systemctl start tautulli.service
+  ufw allow 8181
+  cd
   fi
 
 if $install_webmin ; then
