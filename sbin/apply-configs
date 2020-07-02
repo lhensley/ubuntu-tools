@@ -50,9 +50,12 @@ chmod 644 /etc/resolvconf/resolv.conf.d/head
 
 # Update /home/$USER_ME/.ssh/authorized_keys
 mkdir -p /home/$USER_ME/.ssh
+mkdir -p /root/.ssh
 cp $GO_CONFIGS/ssh/home-.ssh-authorized_keys /home/$USER_ME/.ssh/authorized_keys
 chown -R $USER_ME:$USER_ME /home/$USER_ME/.ssh
 chmod 600 /home/$USER_ME/.ssh/authorized_keys
+cp /home/$USER_ME/.ssh/* /root/.ssh/
+chown -R root:root /root/.ssh
 
 # SSHD config file
 cp $GO_CONFIGS/ssh/etc-ssh-sshd_config /etc/ssh/sshd_config

@@ -291,7 +291,7 @@ if $install_chrome ; then
 # Install lsyncd
 if $install_lsyncd ; then
   echo "Installing lsyncd"
-  apt-get install -y lsyncd
+  apt-get install -y lsyncd rsync
   mkdir -p /etc/lsyncd
   mkdir -p /var/log/lsyncd
   systemctl start lsyncd
