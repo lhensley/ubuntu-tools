@@ -1,0 +1,22 @@
+### Basic HTTPS configuration file for ddclient
+#
+# /etc/ddclient.conf
+# nuc01
+# root:root 600
+#
+syslog=yes
+mail=lane.hensley@alumni.duke.edu
+mail-failure=root
+daemon=7200
+pid=/var/run/ddclient.pid
+
+# DynDns.org
+protocol=dyndns2
+ssl=yes
+usev6=if, if=eno1
+use=web
+server=members.dyndns.org
+wildcard=YES
+login='lhensley'
+password='C9XvzZ8H!UD652Z@Uak&'
+lanehensley-nuc01.dyndns.org, lane.is-a-geek.org, lane.likes-pie.com, nuc01.from-ia.com, survey.for-our.info, music.from-tx.com, lgh.gets-it.net
