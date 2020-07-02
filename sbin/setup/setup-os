@@ -25,7 +25,7 @@ install_plexmediaserver=false # CAUTION: NOT TESTED FOR UBUNTU 20
 install_webmin=true
 install_zoom=true
 install_chrome=true
-install_Lsyncd=true
+install_lsyncd=true
 install_makemkv=true
 install_handbrake=true
 
@@ -288,14 +288,14 @@ if $install_chrome ; then
   echo "Google Chrome installed."
   fi
 
-# Install Lsyncd
-if $install_Lsyncd ; then
-  echo "Installing Lsyncd"
-  apt-get install -y Lsyncd
-  mkdir -p /etc/Lsyncd
+# Install lsyncd
+if $install_lsyncd ; then
+  echo "Installing lsyncd"
+  apt-get install -y lsyncd
+  mkdir -p /etc/lsyncd
   systemctl start lsyncd
   systemctl enable lsyncd
-  echo "Lsyncd installed."
+  echo "lsyncd installed."
   fi
 
 # Install MakeMKV

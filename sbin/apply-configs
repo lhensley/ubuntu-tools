@@ -36,10 +36,10 @@ cp $GO_CONFIGS/ddclient/etc-default-ddclient /etc/default/ddclient
 chmod 600 /etc/default/ddclient
 chown root:root /etc/default/ddclient
 
-# Lsyncd
-cp $GO_CONFIGS/Lsyncd/$HOST_NAME/lsyncd.conf.lua /etc/Lsyncd
-chmod 600 /etc/Lsyncd/lsyncd.conf.lua
-chown root:root /etc/Lsyncd/lsyncd.conf.lua
+# lsyncd
+cp $GO_CONFIGS/lsyncd/$HOST_NAME/lsyncd.conf.lua /etc/lsyncd
+chmod 600 /etc/lsyncd/lsyncd.conf.lua
+chown root:root /etc/lsyncd/lsyncd.conf.lua
 systemctl restart lsyncd
 
 # Update DNS resolution
