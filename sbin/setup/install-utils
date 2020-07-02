@@ -22,7 +22,6 @@ install fail2ban
 install filezilla
 install gimp
 install git && ufw allow git
-install Lsyncd
 install net-tools
 install openssl
 install openvpn

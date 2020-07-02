@@ -293,6 +293,7 @@ if $install_lsyncd ; then
   echo "Installing lsyncd"
   apt-get install -y lsyncd
   mkdir -p /etc/lsyncd
+  mkdir -p /var/log/lsyncd
   systemctl start lsyncd
   systemctl enable lsyncd
   echo "lsyncd installed."
