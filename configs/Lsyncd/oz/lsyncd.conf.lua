@@ -5,8 +5,20 @@ settings {
 	nodaemon = false
 }
 
+--[[
+sync {
+	default.rsyncssh,
+	source = "/home/lhensley/to/nuc01",
+	host = "nuc01.lanehensley.org",
+	targetdir = "/home/lhensley/from/oz",
+	rsync = { rsh = "ssh -l lhensley -i /home/lhensley/.ssh/id_rsa -o UserKnownHostsFile=/home/lhensley/.ssh/known_hosts -o User=lhensley" }
+}
+--]]
+
 sync {
 	default.rsyncssh,
 	source = "/home/lhensley/Videos/HandBrake-Completed",
-	target = "lhensley@nuc01.lanehensley.org:/mnt/cloteal/Plex/Pool02-1TB/in/"
+	host = "nuc01.lanehensley.org",
+	targetdir = "/mnt/cloteal/Plex/Pool02-1TB/in/",
+	rsync = { rsh = "ssh -l lhensley -i /home/lhensley/.ssh/id_rsa -o UserKnownHostsFile=/home/lhensley/.ssh/known_hosts -o User=lhensley" }
 }
