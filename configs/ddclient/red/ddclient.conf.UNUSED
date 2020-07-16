@@ -12,7 +12,7 @@ pid=/var/run/ddclient.pid
 
 protocol=dyndns2
 ssl=yes
-usev6=if, if=eno1
+usev6=if, if=enp4s0
 use=web
 server=members.dyndns.org
 wildcard=YES
@@ -23,7 +23,7 @@ lanehensley-red.dyndns.org
 #Google Domains
 protocol=googledomains
 ssl=yes
-usev6=if, if=eno1
+usev6=if, if=enp4s0
 #use=web, web=http://ipv4.nsupdate.info/myip
 server=domains.google.com
 login='NJr9Xm3RAmWQ9lNX'
@@ -33,7 +33,7 @@ red.lanehensley.org
 #Google Domains
 protocol=googledomains
 ssl=yes
-#usev6=if, if=eno1
+#usev6=if, if=enp4s0
 use=web, web=http://ipv4.nsupdate.info/myip
 server=domains.google.com
 login='BK2LEhhNX74Ur397'
@@ -43,8 +43,8 @@ red-4.lanehensley.org
 #Google Domains
 protocol=googledomains
 ssl=yes
-usev6=if, if=eno1
-#use=web, web=http://ipv4.nsupdate.info/myip
+# usev6=if, if=enp4s0
+use=web, web=http://ipv4.nsupdate.info/myip
 server=domains.google.com
 login='WS3bym709LqD9IwI'
 password='Jad5tbMCmsyFB5LL'
