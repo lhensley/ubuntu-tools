@@ -65,7 +65,7 @@ TEMP_LOG="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-log.tmp"
 SCRIPTS_DIRECTORY=$SBIN_DIR
 # As of 2020-06-05, $SCRIPTS_INCLUDES still us used by backup
 SCRIPTS_INCLUDES=$SCRIPTS_DIRECTORY/include
-
+IPV4_PUBLIC_ADDRESS=$(dig +short myip.opendns.com @resolver1.opendns.com)
 
 # Host-specific deinitions. These need to come earlier because other definitions below use them.
 case $HOST_NAME in

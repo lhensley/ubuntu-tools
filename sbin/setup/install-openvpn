@@ -3,15 +3,30 @@
 
 # Include header file
 PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/../source
+source $PROGRAM_DIRECTORY/../script-setup
 
 logger Installing OpenVPN
-upd
 
+# Run apt updates
+/usr/local/sbin/_run_apt_updates
+
+# NOTE: IPv4 Public Address is in IPV4_PUBLIC_ADDRESS
+
+# NOTES about installation tutorials
+#
+# https://www.cyberciti.biz/faq/ubuntu-20-04-lts-set-up-openvpn-server-in-5-minutes/
+#   June 16, 2020
+#   The problem I have with this is the installation script you have to download from them (openvpn-ubuntu-install.sh).
+# https://www.digitalocean.com/community/tutorials/how-to-set-up-and-configure-an-openvpn-server-on-ubuntu-20-04
+#   May 6, 2020
+
+
+
+# Abandoned code fragment from cyerciti.biz installation tutorial
 # Following https://www.cyberciti.biz/faq/ubuntu-20-04-lts-set-up-openvpn-server-in-5-minutes/
-apt-get update && apt-get -y install ca-certificates wget net-tools gnupg
-wget -qO - https://as-repository.openvpn.net/as-repo-public.gpg | apt-key add -
-echo "deb http://as-repository.openvpn.net/as/debian $UBUNTU_CODENAME main">/etc/apt/sources.list.d/openvpn-as-repo.list
-apt update && apt -y install openvpn-as
-apt-get install -y openvpn
+# apt-get update && apt-get -y install ca-certificates wget net-tools gnupg
+# wget -qO - https://as-repository.openvpn.net/as-repo-public.gpg | apt-key add -
+# echo "deb http://as-repository.openvpn.net/as/debian $UBUNTU_CODENAME main">/etc/apt/sources.list.d/openvpn-as-repo.list
+# apt update && apt -y install openvpn-as
+# apt-get install -y openvpn
 

@@ -6,9 +6,6 @@ logger Begin $0
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/script-setup
 
-# Changed apt-get to apt 1/31/19.
-# See https://itsfoss.com/apt-vs-apt-difference/ for rationale.
-
 # Install git token
 # To get a new token, go to https://github.com/settings/tokens.
 MY_GIT_TOKEN=4b662b7d4431ec1956127aa9d4fdbd8d75ec821a
@@ -47,19 +44,5 @@ $SBIN_DIR/apply-configs
 # Update Dynamic DNS
 ddclient -noquiet -verbose -daemon 0
 
-# "update" downloads package information from all configured sources
-apt -y update
-# "upgrade" is an extraneous subset of "dist-upgrade" below
-#    sudo apt -y upgrade \
-# "dist-upgrade" installs available upgrades of all packages
-# currently installed on the system and intelligently handles
-# changing dependencies with new versions of packages
-apt -y dist-upgrade
-# "clean" clears out the local repository of retrieved package files.
-apt -y clean
-# "autoremove" removes those dependencies that were installed with
-# now-removed applications and that are no longer used
-# by anything else on the system
-apt -y autoremove
-# Install any *.deb files in the home directory
-# apt-get install -y $HOME_DIRECTORY/*.deb && rm -f $HOME_DIRECTORY/*.deb
+# Run apt updates
+/usr/local/sbin/_run_apt_updates
