@@ -1,0 +1,56 @@
+#!/bin/bash
+# syncvault
+
+# Include header file
+PROGRAM_DIRECTORY=$(dirname $0)
+source $PROGRAM_DIRECTORY/script-setup
+
+BASEDIR='~/cryfs-basedir'
+MOUNTDIR='~/vault'
+
+# Check for presence of remote host argument.
+if [ "$#" -eq 0 ]; then
+    echo "Usage: syncvault remote-hostname[.domain.tld]"
+fi
+
+# Open local vault
+cryfs $BASEDIR $MOUNTDIR
+if [ $? -ne 0 ]
+then
+  echo "Could not open $MOUNTDIR on localhost."
+  echo "Unmounting local vault."
+  cryfs-unmount $MOUNTDIR
+fi
+
+# Open remote vault
+ssh $1 'cryfs $BASEDIR $MOUNTDIR'
+if [ $? -ne 0 ]
+then
+  echo "Could not open $MOUNTDIR on $1."
+  echo "Unmounting vault on $1."
+  ssh $1 'cryfs-unmount $MOUNTDIR'
+  if [ $? -ne 0 ]
+  then
+	echo "Count not unmount vault on $1."
+  fi
+  echo "Unmounting local vault."
+  cryfs-unmount $MOUNTDIR
+fi
+
+# Do the sync
+nice rsync -aE --delete "$MOUNTDIR/$(hostname -s)" "$1:$MOUNTDIR/$(hostname -s)/"
+
+# Unmount remote vault
+echo "Unmounting vault on $1."
+ssh $1 'cryfs-unmount $MOUNTDIR'
+if [ $? -ne 0 ]
+then
+  echo "Count not unmount vault on $1."
+fi
+
+# Unmount local vault
+echo "Unmounting local vault."
+cryfs-unmount $MOUNTDIR
+
+# Exit with error code 0
+exit 0

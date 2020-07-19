@@ -1,0 +1,18 @@
+#!/bin/bash
+# syncvault
+
+# Include header file
+PROGRAM_DIRECTORY=$(dirname $0)
+source $PROGRAM_DIRECTORY/script-setup
+
+BASEDIR='~/cryfs-basedir'
+MOUNTDIR='~/vault'
+
+# Open local vault
+cryfs $BASEDIR $MOUNTDIR
+if [ $? -ne 0 ]
+then
+  echo "Could not open $MOUNTDIR on localhost."
+  echo "Unmounting local vault."
+  cryfs-unmount $MOUNTDIR
+fi

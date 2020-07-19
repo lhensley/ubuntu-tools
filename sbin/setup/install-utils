@@ -16,6 +16,7 @@ function install() {
 # Get to work
 install ufw
 install apg
+install cryfs
 install curl
 install ddclient
 install fail2ban

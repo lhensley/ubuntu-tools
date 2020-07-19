@@ -60,8 +60,7 @@ echo 'set_var EASYRSA_DIGEST         "sha512"' >> vars
 # Fix permissions
 chown -R lhensley:lhensley ~/easy-rsa
 
-# Copy Certificate Authority’s Public Certificate to nuc01
+# Display ca.crt location
 sftp nuc01.lanehensley.org <<EOF
-put ~/easy-rsa/pki/ca.crt
-EOF
+echo "Done. Now copy ONLY ~/easy-rsa/pki/ca.crt to clients and servers."
 
