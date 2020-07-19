@@ -5,8 +5,8 @@
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/script-setup
 
-BASEDIR='$HOME_DIR/cryfs-basedir'
-MOUNTDIR='$HOME_DIR/vault'
+BASEDIR="$HOME_DIR/cryfs-basedir"
+MOUNTDIR="$HOME_DIR/vault"
 
 # Close local vault
 echo $MOUNTDIR
