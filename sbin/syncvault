@@ -5,8 +5,8 @@
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/script-setup
 
-BASEDIR='~/cryfs-basedir'
-MOUNTDIR='~/vault'
+BASEDIR="$HOME_DIR/.cryfs-basedir"
+MOUNTDIR="$HOME_DIR/vault"
 
 # Check for presence of remote host argument.
 if [ "$#" -eq 0 ]; then
@@ -23,12 +23,12 @@ then
 fi
 
 # Open remote vault
-ssh $1 'cryfs $BASEDIR $MOUNTDIR'
+ssh $1 "cryfs $BASEDIR $MOUNTDIR"
 if [ $? -ne 0 ]
 then
   echo "Could not open $MOUNTDIR on $1."
   echo "Unmounting vault on $1."
-  ssh $1 'cryfs-unmount $MOUNTDIR'
+  ssh $1 "cryfs-unmount $MOUNTDIR"
   if [ $? -ne 0 ]
   then
 	echo "Count not unmount vault on $1."
@@ -42,7 +42,7 @@ nice rsync -aE --delete "$MOUNTDIR/$(hostname -s)" "$1:$MOUNTDIR/$(hostname -s)/
 
 # Unmount remote vault
 echo "Unmounting vault on $1."
-ssh $1 'cryfs-unmount $MOUNTDIR'
+ssh $1 "cryfs-unmount $MOUNTDIR"
 if [ $? -ne 0 ]
 then
   echo "Count not unmount vault on $1."

@@ -10,10 +10,7 @@ MOUNTDIR="$HOME_DIR/vault"
 
 # Close local vault
 echo $MOUNTDIR
-pwd
-sudo -u $USER_ME $MOUNTDIR
-sudo pwd
-sudo -u $USER_ME cryfs-unmount $MOUNTDIR
+cryfs-unmount $MOUNTDIR
 if [ $? -ne 0 ]
 then
   echo "Could not close $MOUNTDIR on localhost."
