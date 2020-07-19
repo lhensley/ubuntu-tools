@@ -9,7 +9,7 @@ BASEDIR='~/cryfs-basedir'
 MOUNTDIR='~/vault'
 
 # Close local vault
-cryfs-unmount $MOUNTDIR
+sudo -u $USER_ME cryfs-unmount $MOUNTDIR
 if [ $? -ne 0 ]
 then
   echo "Could not close $MOUNTDIR on localhost."
