@@ -5,10 +5,14 @@
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/script-setup
 
-BASEDIR='~/cryfs-basedir'
-MOUNTDIR='~/vault'
+BASEDIR='$HOME_DIR/cryfs-basedir'
+MOUNTDIR='$HOME_DIR/vault'
 
 # Close local vault
+echo $MOUNTDIR
+pwd
+sudo -u $USER_ME $MOUNTDIR
+sudo pwd
 sudo -u $USER_ME cryfs-unmount $MOUNTDIR
 if [ $? -ne 0 ]
 then
