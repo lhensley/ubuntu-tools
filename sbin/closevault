@@ -9,9 +9,15 @@ BASEDIR="$HOME_DIR/cryfs-basedir"
 MOUNTDIR="$HOME_DIR/vault"
 
 # Close local vault
-echo $MOUNTDIR
-cryfs-unmount $MOUNTDIR
-if [ $? -ne 0 ]
-then
-  echo "Could not close $MOUNTDIR on localhost."
+echo "Closing $MOUNTDIR"
+if grep -qs "$MOUNTDIR " /proc/mounts; then
+    cryfs-unmount $MOUNTDIR
+    if [ $? -ne 0 ]
+    then
+      echo "  Could not close $MOUNTDIR on localhost."
+    else
+      echo "  $MOUNTDIR closed successfully."
+    fi
+else
+    echo "  $MOUNTDIR is already closed."
 fi
