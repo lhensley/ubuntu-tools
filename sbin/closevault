@@ -1,23 +1,19 @@
 #!/bin/bash
-# syncvault
+# closevault
 
-# Include header file
-PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/script-setup
-
-BASEDIR="$HOME_DIR/cryfs-basedir"
-MOUNTDIR="$HOME_DIR/vault"
+BASEDIR="/home/lhensley/.cryfs-basedir"
+MOUNTDIR="/home/lhensley/vault"
 
 # Close local vault
-echo "Closing $MOUNTDIR"
+echo "Closing $MOUNTDIR directory."
 if grep -qs "$MOUNTDIR " /proc/mounts; then
     cryfs-unmount $MOUNTDIR
     if [ $? -ne 0 ]
     then
-      echo "  Could not close $MOUNTDIR on localhost."
+      echo "Could not close $MOUNTDIR on localhost."
     else
-      echo "  $MOUNTDIR closed successfully."
+      echo "$MOUNTDIR closed successfully."
     fi
 else
-    echo "  $MOUNTDIR is already closed."
+    echo "$MOUNTDIR is already closed."
 fi
