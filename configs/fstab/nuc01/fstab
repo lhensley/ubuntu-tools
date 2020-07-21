@@ -1,0 +1,41 @@
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+#
+#
+# SWAP UUID=26a8fe61-5a1d-4d44-b33a-3c5ab6f7c832
+UUID=26a8fe61-5a1d-4d44-b33a-3c5ab6f7c832 / ext4 errors=remount-ro 0       1
+#
+# ROOT (Internal 2TB) UUID=811D-18FE
+# /boot/efi was on /dev/sda1 during installation
+UUID=811D-18FE /boot/efi vfat umask=0077 0 1
+#
+# SWAP
+/swapfile none swap sw 0 0
+#
+# Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE
+UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs       noauto    0       0
+#
+# bertha (3TB) UUID=d28256f9-c258-451e-b299-d4849cf19e0b
+UUID=d28256f9-c258-451e-b299-d4849cf19e0b /mnt/bertha ext4 defaults 0 0
+#
+# cloteal (10TB) UUID=4e356144-2e69-4812-8958-d035a9ebc28e
+UUID=4e356144-2e69-4812-8958-d035a9ebc28e /mnt/cloteal ext4 defaults 0 0
+#
+# MyBook3T01 (3TB) UUID=C6B89CABB89C9B8D
+UUID=C6B89CABB89C9B8D /mnt/MyBook3T01 ntfs noauto 0 0
+#
+# Silver5TB-A (5TB) UUID=0A538B3244DE3676
+UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs defaults 0 0
+#
+# Silver5TB-B (5TB) UUID 634B5E207BE18E54
+UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0
+#
+# Bind mount
+#/mnt/cloteal/PlexUploads /home/plex-swap/uploads none bind 0 0
+#/mnt/cloteal/Plex /home/plex-swap/downloads none bind 0 0
+
