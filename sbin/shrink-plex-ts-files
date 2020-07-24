@@ -15,11 +15,6 @@ HANDBRAKE="HandBrakeCLI"
 TS_BASE_PATH="/var/plex/DVR"
 PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 
-# While $TS_BASE_PATH is not empty
-PRODUCTIVE=true
-while [ $(lh_has_subdirectories "$TS_BASE_PATH") == "true" ] \
-    && [ $PRODUCTIVE == "true" ] ; do # Subdirs found under base
-  PRODUCTIVE=false
   for j in "$TS_BASE_PATH/"*; do # For each subdirectory found under $TS_BASE_PATH ...
     if [ -d "$j" ]; then # If if really is a subdirectory ...
 
@@ -29,18 +24,18 @@ while [ $(lh_has_subdirectories "$TS_BASE_PATH") == "true" ] \
       for i in "$k/"*.ts; do # For each .ts file in that subdirectory ...
         if [ -f "$i" ]; then # If it really is a file ...
           if [ -n "$(lsof "$i" 2>/dev/null)" ]; then # If source file IS in use and can't be processed ...
+            true
           else # Source file is NOT in use, and ready to be processed.
             VIDEONAME=${i%.ts}.m4v
 #            if [ -f "$VIDEONAME" ]; then rm -Rf "$VIDEONAME"; fi
             $HANDBRAKE --preset-import-file "$PRESET" \
               -i "$i" -o "$VIDEONAME"
-exit
             exit_status=$?
+            chown plex:plex "$VIDEONAME"
             if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
               echo "Transcoding to $VIDEONAME FAILED." | mail lanecell
             else
               rm "$i" # Delete source file
-              PRODUCTIVE=true
               fi # End of check for transcoding failure
             fi # End of check for source file in use or not
           fi # End of check that source file really is a file
@@ -52,7 +47,6 @@ exit
     done # Next subdirectory under $j (iterating through them)
       fi # End of check to confirm that there are any files in the subdirectory
     done # Next subdirectory under $TS_BASE_PATH (iterating through them)
-  done # End of check to confirm that this are any subdirectories under $MKS_BASE_PATH
 
 echo "Transcoding is complete." | mail lanecell
 exit 0
