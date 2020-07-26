@@ -33,13 +33,13 @@ cd
 echo git update complete.
 
 # Reset permisions for /usr/local/sbin/*
+# This kind of locks things down, and the apply-configs section below opens things up.
 chown -R root:root $SBIN_DIR
-# chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
-# chmod -R 500 $SBIN_DIR/*
-chmod -R 755 $SBIN_DIR/*
+chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
+chmod -R 500 $SBIN_DIR/*
 
 # Invoke /usr/local/sbin/apply-configs
-chmod 500 $SBIN_DIR/apply-configs
+# chmod 500 $SBIN_DIR/apply-configs
 $SBIN_DIR/apply-configs
 
 # Update Dynamic DNS

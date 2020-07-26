@@ -13,7 +13,7 @@ source $PROGRAM_DIRECTORY/script-setup
 # 6/22/2020: Read access for root ONLY.
 chown -R root:root $SBIN_DIR
 chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
-chmod -R 500 $SBIN_DIR/*
+chmod -R 755 $SBIN_DIR/*
 
 # Exceptions: These can be read or run by anyone
 # These based on functional requirements
