@@ -1,0 +1,24 @@
+#!/bin/bash
+# timeformat
+
+if [ "$#" -lt 1 ]; then
+  echo "Usage: timeformat number-of-seconds"
+  exit 1
+fi
+
+t=$1
+d=$((t/60/60/24))
+h=$((t/60/60%24))
+m=$((t/60%60))
+s=$((t%60))
+
+if [ $d -gt 0 ]; then
+  printf "%02d:" $d
+fi
+
+if [ $h -gt 0 ] || [ $d -gt 0 ]; then
+  printf "%02d:" $h
+fi
+
+printf "%02d:%02d\n" $m $s
+exit 0

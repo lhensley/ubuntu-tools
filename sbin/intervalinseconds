@@ -1,0 +1,11 @@
+#!/bin/bash
+# intervalinseconds
+
+if [ "$#" -lt 1 ]; then
+  echo "Usage: intervalinseconds start-time-in-seconds"
+  exit 1
+fi
+
+current=$(date +%s)
+start=$1
+echo $((current-start))

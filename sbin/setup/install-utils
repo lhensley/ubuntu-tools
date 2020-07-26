@@ -23,12 +23,15 @@ install fail2ban
 install filezilla
 install gimp
 install git && ufw allow git
+install gpg
+install inotify-tools
 install net-tools
 install openssl
 install openvpn
-    install bridge-utils
-    install ifupdown
+install bridge-utils
+install ifupdown
 install resolvconf
+install ripmime
 install ssh && ufw allow ssh
 install sysbench
 install tasksel
