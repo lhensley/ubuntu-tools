@@ -12,7 +12,7 @@ PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/lhlib
 
 HANDBRAKE="HandBrakeCLI"
-TS_BASE_PATH="/var/plex/DVR"
+TS_BASE_PATH="/media/lhensley/rerun"
 PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 
   for j in "$TS_BASE_PATH/"*; do # For each subdirectory found under $TS_BASE_PATH ...

@@ -13,5 +13,5 @@ then
   echo "Unmounting local vault."
   cryfs-unmount $MOUNTDIR
 else
-  "Vault opened successfully."
+  echo "Vault opened successfully."
 fi
