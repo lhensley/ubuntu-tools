@@ -40,7 +40,8 @@ PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
               logger "Transcoding to $VIDEONAME FAILED."
              else
               rm "$i" # Delete source file
-              logger "Transcoding to $VIDEONAME complete. Run time $(timeformat $(( currenttimeinseconds - TIMESTART )))"
+              logger "Transcoding to $VIDEONAME complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))"
+              echo "Transcoding to $VIDEONAME complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" || mail lanecell
               fi # End of check for transcoding failure
             fi # End of check for source file in use or not
           fi # End of check that source file really is a file
@@ -78,8 +79,8 @@ TS_BASE_PATH=$TS_BASE_PATH2
               logger "Transcoding to $VIDEONAME FAILED."
              else
               rm "$i" # Delete source file
-              logger "Transcoding to $VIDEONAME complete. Run time $(timeformat $(( currenttimeinseconds - TIMESTART )))"
-              echo "Transcoding to $VIDEONAME complete. Run time $(timeformat $(( currenttimeinseconds - TIMESTART )))" || mail lanecell
+              logger "Transcoding to $VIDEONAME complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))"
+              echo "Transcoding to $VIDEONAME complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" || mail lanecell
               fi # End of check for transcoding failure
             fi # End of check for source file in use or not
           fi # End of check that source file really is a file

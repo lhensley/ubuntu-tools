@@ -2,6 +2,10 @@
 # testme
 
             TIMESTART=$(currenttimeinseconds)
+            echo $TIMESTART
             sleep 69
-              echo "Transcoding to $VIDEONAME complete. Run time $(timeformat $(( currenttimeinseconds - TIMESTART )))"
+            echo $(currenttimeinseconds)
+            echo $(($(currenttimeinseconds) - TIMESTART ))
+            echo $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))
+              echo "Transcoding to $VIDEONAME complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))"
 exit 0
