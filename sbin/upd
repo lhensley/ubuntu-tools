@@ -43,7 +43,7 @@ chmod -R 500 $SBIN_DIR/*
 $SBIN_DIR/apply-configs
 
 # Update Dynamic DNS
-ddclient -noquiet -verbose -daemon 0
+ddclient -daemon 0
 
 # Run apt updates
 /usr/local/sbin/_run_apt_updates
