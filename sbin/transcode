@@ -76,9 +76,10 @@ while [ $(lh_has_subdirectories "$MKV_BASE_PATH") == "true" ] \
     done # Next subdirectory under $MKV_BASE_PATH (iterating through them)
   done # End of check to confirm that this are any subdirectories under $MKS_BASE_PATH
 
+chown plex:plex $M4V_PATH/*
 sudo -u lhensley rsync -rvE $M4V_PATH/ $RSYNC_TARGET
 exit_status=$?
-if [ $exit_status eq 0 ] ; then
+if [ $exit_status -eq 0 ] ; then
   rm $M4V_PATH/*
   fi
 
