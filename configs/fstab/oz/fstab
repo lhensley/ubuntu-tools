@@ -12,4 +12,8 @@ UUID=E06D-5890  /boot/efi       vfat    umask=0077      0       1
 /swapfile                                 none            swap    sw              0       0
 
 # Internal SSD drive, 1B
-UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb	ext4 defaults 0 0
+UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb   ext4 defaults 0 0
+
+# External Hard Drive for Plex, 10TB
+UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/rerun    ext4 defaults 0 0
+

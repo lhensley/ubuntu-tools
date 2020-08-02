@@ -18,6 +18,7 @@ MKV_BASE_PATH="/home/lhensley/Videos/MakeMKV-Completed"
 M4V_PATH="/home/lhensley/Videos/HandBrake-Completed"
 PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 MAKEMKV_PROCESS=makemkvcon
+RSYNC_TARGET="lhensley@nuc01.lanehensley.org:/mnt/cloteal/Plex/uploads"
 
 if [ $(lh_is_running "$HANDBRAKE") == "true" ] ; then
   echo "Transcode operation already running. Exiting."
@@ -74,6 +75,12 @@ while [ $(lh_has_subdirectories "$MKV_BASE_PATH") == "true" ] \
       fi # End of check to confirm that there are any files in the subdirectory
     done # Next subdirectory under $MKV_BASE_PATH (iterating through them)
   done # End of check to confirm that this are any subdirectories under $MKS_BASE_PATH
+
+sudo -u lhensley rsync -rvE $M4V_PATH/ $RSYNC_TARGET
+exit_status=$?
+if [ $exit_status eq 0 ] ; then
+  rm $M4V_PATH/*
+  fi
 
 echo "Transcoding is complete." | mail lanecell
 echo Done.
