@@ -1,0 +1,7 @@
+#!/bin/bash
+# testme
+
+            TIMESTART=$(currenttimeinseconds)
+            sleep 69
+              echo "Transcoding to $VIDEONAME complete. Run time $(timeformat $(( currenttimeinseconds - TIMESTART )))"
+exit 0
