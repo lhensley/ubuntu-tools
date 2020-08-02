@@ -19,12 +19,11 @@ PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
   for j in "$TS_BASE_PATH/"*; do # For each subdirectory found under $TS_BASE_PATH ...
     if [ -d "$j" ]; then # If if really is a subdirectory ...
 
-  [[ $j == "ABC World News"* ]] || [[ $j == "BBC World News"* ]] \
+    if [[ $j == "ABC World News"* ]] || [[ $j == "BBC World News"* ]] \
         || [[ $j == "ABC World News"* ]] || [[ $j == "CBS Evening News"* ]] \
         || [[ $j == "CBS Weekend News"* ]] || [[ $j == "Face the Nation"* ]] \
         || [[ $j == "KXAN News"* ]] || [[ $j == "Meet the Press"* ]] \
-        || [[ $j == "NBC Nightly News"* ]] || [[ $j == "Today (195"* ]]; \
-        then
+        || [[ $j == "NBC Nightly News"* ]] || [[ $j == "Today (195"* ]]; then
     echo "News program" > /dev/null
         else
 
@@ -57,9 +56,9 @@ PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
             sleep 1 # Do nothing ...
             fi # End of check for more files in source subdirectory
         done # Next file in the subdirectory ...
-        fi
       fi # End of check to confirm that there are any files in the subdirectory
     done # Next subdirectory under $j (iterating through them)
+    fi
       fi # End of check to confirm that there are any files in the subdirectory
     done # Next subdirectory under $TS_BASE_PATH (iterating through them)
 
