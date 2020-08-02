@@ -16,7 +16,9 @@ TS_BASE_PATH="/mnt/rerun/plex/TV-Austin"
 TS_BASE_PATH2="/mnt/rerun/plex/Movies"
 PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 
-  for j in "$TS_BASE_PATH/"*; do # For each subdirectory found under $TS_BASE_PATH ...
+for THIS_PATH in TS_BASE_PATH TS_BASE_PATH2; do
+
+  for j in "$THIS_PATH/"*; do # For each subdirectory found under $THIS_PATH ...
     if [ -d "$j" ]; then # If if really is a subdirectory ...
 
   for k in "$j/"*; do # For each subdirectory found under $j ...
@@ -29,19 +31,16 @@ PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
           else # Source file is NOT in use, and ready to be processed.
             TIMESTART=$(currenttimeinseconds)
             VIDEONAME=${i%.ts}.m4v
-            logger "Start transcoding to $VIDEONAME"
-#            if [ -f "$VIDEONAME" ]; then rm -Rf "$VIDEONAME"; fi
+            logger-and-lanecell "Start transcoding to $VIDEONAME"
             $HANDBRAKE --preset-import-file "$PRESET" \
               -i "$i" -o "$VIDEONAME"
             exit_status=$?
             chown plex:plex "$VIDEONAME"
             if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-#              echo "Transcoding to $VIDEONAME FAILED." | mail lanecell
-              logger "Transcoding to $VIDEONAME FAILED."
+              logger-and-lanecell "Transcoding to $VIDEONAME FAILED."
              else
               rm "$i" # Delete source file
-              logger "Transcoding to $VIDEONAME complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))"
-              echo "Transcoding to $VIDEONAME complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" || mail lanecell
+              logger-and-lanecell "Transcoding to $VIDEONAME complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))"
               fi # End of check for transcoding failure
             fi # End of check for source file in use or not
           fi # End of check that source file really is a file
@@ -52,46 +51,8 @@ PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
       fi # End of check to confirm that there are any files in the subdirectory
     done # Next subdirectory under $j (iterating through them)
       fi # End of check to confirm that there are any files in the subdirectory
-    done # Next subdirectory under $TS_BASE_PATH (iterating through them)
+    done # Next subdirectory under $THIS_PATH (iterating through them)
+done
 
-TS_BASE_PATH=$TS_BASE_PATH2
-
-  for j in "$TS_BASE_PATH/"*; do # For each subdirectory found under $TS_BASE_PATH ...
-
-  for k in "$j/"*; do # For each subdirectory found under $j ...
-    if [ -d "$k" ]; then # If if really is a subdirectory ...
-
-      for i in "$k/"*.ts; do # For each .ts file in that subdirectory ...
-        if [ -f "$i" ]; then # If it really is a file ...
-          if [ -n "$(lsof "$i" 2>/dev/null)" ]; then # If source file IS in use and can't be processed ...
-            true
-          else # Source file is NOT in use, and ready to be processed.
-            TIMESTART=$(currenttimeinseconds)
-            VIDEONAME=${i%.ts}.m4v
-            logger "Start transcoding to $VIDEONAME"
-#            if [ -f "$VIDEONAME" ]; then rm -Rf "$VIDEONAME"; fi
-            $HANDBRAKE --preset-import-file "$PRESET" \
-              -i "$i" -o "$VIDEONAME"
-            exit_status=$?
-            chown plex:plex "$VIDEONAME"
-            if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-#              echo "Transcoding to $VIDEONAME FAILED." | mail lanecell
-              logger "Transcoding to $VIDEONAME FAILED."
-             else
-              rm "$i" # Delete source file
-              logger "Transcoding to $VIDEONAME complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))"
-              echo "Transcoding to $VIDEONAME complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" || mail lanecell
-              fi # End of check for transcoding failure
-            fi # End of check for source file in use or not
-          fi # End of check that source file really is a file
-          if find "$j" -mindepth 1 -print -quit 2>/dev/null | grep -q .; then # If more files in subdirectory ...
-            sleep 1 # Do nothing ...
-            fi # End of check for more files in source subdirectory
-        done # Next file in the subdirectory ...
-      fi # End of check to confirm that there are any files in the subdirectory
-    done # Next subdirectory under $j (iterating through them)
-      fi # End of check to confirm that there are any files in the subdirectory
-    done # Next subdirectory under $TS_BASE_PATH (iterating through them)
-
-echo "Transcoding oz DVR files is complete." | mail lanecell
+logger-and-lanecell "Transcoding oz DVR files is complete." | mail lanecell
 exit 0
