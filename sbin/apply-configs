@@ -29,12 +29,14 @@ chown $USER_ME:$USER_ME $HOME_DIR/.gitconfig
 chmod -R 400 $GIT
 
 # ddclient
-cp $GO_CONFIGS/ddclient/$HOST_NAME/ddclient.conf /etc/
-chmod 600 /etc/ddclient.conf
-chown root:root /etc/ddclient.conf
-cp $GO_CONFIGS/ddclient/etc-default-ddclient /etc/default/ddclient
-chmod 600 /etc/default/ddclient
-chown root:root /etc/default/ddclient
+if [ -f $GO_CONFIGS/ddclient/$HOST_NAME/ddclient.conf ]; then
+	cp $GO_CONFIGS/ddclient/$HOST_NAME/ddclient.conf /etc/
+	chmod 600 /etc/ddclient.conf
+	chown root:root /etc/ddclient.conf
+	cp $GO_CONFIGS/ddclient/etc-default-ddclient /etc/default/ddclient
+	chmod 600 /etc/default/ddclient
+	chown root:root /etc/default/ddclient
+	fi
 
 # lsyncd
 if [ -f $GO_CONFIGS/lsyncd/$HOST_NAME/lsyncd.conf.lua ]; then
@@ -55,7 +57,7 @@ mkdir -p /home/$USER_ME/.ssh
 mkdir -p /root/.ssh
 cp $GO_CONFIGS/ssh/home-.ssh-authorized_keys /home/$USER_ME/.ssh/authorized_keys
 chown -R $USER_ME:$USER_ME /home/$USER_ME/.ssh/*
-chmod 600 /home/$USER_ME/.ssh/authorized_keys/*
+chmod 600 /home/$USER_ME/.ssh/authorized_keys
 cp /home/$USER_ME/.ssh/* /root/.ssh/
 chown -R root:root /root/.ssh/*
 
