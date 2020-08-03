@@ -21,7 +21,7 @@ if [ "$(ls -A $SCAN_MAIL_DIR )" ]; then # If files exist in $SCAN_MAIL_DIR
 	if [ $? -eq 0 ]; then # If no error, that means it's running.
 		true # Dummy value indicating everything is OK because rclone already is running
 	else
-		rclone move "$SCAN_MAIL_DIR"/* $SCAN_ONEDRIVE # Move files to OneDrive
+		rclone move "$SCAN_MAIL_DIR" $SCAN_ONEDRIVE # Move files to OneDrive
 	fi
 	EXIT_STATUS=$? # Check the status of rclone or true, as the case may be
 	if [ $EXIT_STATUS -ne 0 ]; then
