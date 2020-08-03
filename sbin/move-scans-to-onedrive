@@ -16,7 +16,7 @@ SCAN_ONEDRIVE="onedrive-personal:Brother"
 
 if [ "$(ls -A $SCAN_MAIL_DIR )" ]; then # If files exist in $SCAN_MAIL_DIR 
 	rm -f $SCAN_MAIL_DIR/textfile*
-	rclone move $SCAN_MAIL_DIR $SCAN_ONEDRIVE
+	rclone move "$SCAN_MAIL_DIR"/* $SCAN_ONEDRIVE
 	EXIT_STATUS=$?
 	if [ $EXIT_STATUS -ne 0 ]; then
 		lanelog "Failed to upload scan(s) to OneDrive."
