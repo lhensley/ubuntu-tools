@@ -15,7 +15,7 @@ SCAN_MAIL_DIR="/var/scans"
 SCAN_ONEDRIVE="onedrive-personal:Brother"
 RCLONE="rclone"
 
-if [ $( ls -A $SCAN_MAIL_DIR ) ]; then # If files exist in $SCAN_MAIL_DIR 
+if [ "$( ls -A $SCAN_MAIL_DIR" ) ]; then # If files exist in $SCAN_MAIL_DIR 
 	rm -f $SCAN_MAIL_DIR/textfile*
 	ps -C "$RCLONE" >/dev/null # Check whether rclone is running
 	if [ $? -eq 0 ]; then # If no error, that means it's running.
