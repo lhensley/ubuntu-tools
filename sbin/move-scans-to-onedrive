@@ -11,4 +11,17 @@ if $debug_mode ; then
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/script-setup
 
-rm -f nonexist
+SCAN_MAIL_DIR="/var/scans"
+SCAN_ONEDRIVE="onedrive-personal:Brother"
+
+if [ "$(ls -A SCAN_MAIL_DIR )" ]; then # If files exist in SCAN_MAIL_DIR 
+	rm -f $SCAN_MAIL_DIR/textfile*
+	rclone move SCAN_MAIL_DIR SCAN_ONEDRIVE
+	EXIT_STATUS=$?
+	if [ $EXIT_STATUS -ne 0 ]; then
+		lanelog "Failed to upload scan(s) to OneDrive."
+	else
+		lanelog "Uploaded scan(s) to OneDrive"
+	fi
+fi
+exit $EXIT_STATUS
