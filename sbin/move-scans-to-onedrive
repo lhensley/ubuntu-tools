@@ -13,7 +13,7 @@ source $PROGRAM_DIRECTORY/script-setup
 
 SCAN_MAIL_DIR="/var/scans"
 SCAN_ONEDRIVE="onedrive-personal:Brother"
-RCLOnE="rclone"
+RCLONE="rclone"
 
 if [ $( ls -A $SCAN_MAIL_DIR ) ]; then # If files exist in $SCAN_MAIL_DIR 
 	rm -f $SCAN_MAIL_DIR/textfile*
