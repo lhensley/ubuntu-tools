@@ -11,20 +11,20 @@ if $debug_mode ; then
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/script-setup
 
-SCAN_MAIL_DIR="/var/scans"
-SCAN_ONEDRIVE="onedrive-personal:Brother"
+SCANS_MAIL_DIR="/var/scans"
+SCANS_ONEDRIVE="onedrive-personal:Brother"
 RCLONE="rclone"
 
-if [ $(ls -A "$SCAN_MAIL_DIR") ]; then # If files exist in $SCAN_MAIL_DIR
+if [ "$(ls -A $SCANS_MAIL_DIR)" ]; then # If files exist in $SCANS_MAIL_DIR
 	lanelog "Directory not empty."
-	rm -f $SCAN_MAIL_DIR/textfile*
+	rm -f $SCANS_MAIL_DIR/textfile*
 	ps -C "$RCLONE" >/dev/null # Check whether rclone is running
 	if [ $? -eq 0 ]; then # If no error, that means it's running.
 		lanelog "Not making the move."
 		true # Dummy value indicating everything is OK because rclone already is running
 	else
 		lanelog "Making the move."
-		rclone move "$SCAN_MAIL_DIR" $SCAN_ONEDRIVE # Move files to OneDrive
+		rclone move "$SCANS_MAIL_DIR" $SCANS_ONEDRIVE # Move files to OneDrive
 	fi
 	EXIT_STATUS=$? # Check the status of rclone or true, as the case may be
 	if [ $EXIT_STATUS -ne 0 ]; then
