@@ -16,14 +16,11 @@ SCANS_ONEDRIVE="onedrive-personal:Brother"
 RCLONE="rclone"
 
 if [ "$(ls -A $SCANS_MAIL_DIR)" ]; then # If files exist in $SCANS_MAIL_DIR
-	lanelog "Directory not empty."
 	rm -f $SCANS_MAIL_DIR/textfile*
 	ps -C "$RCLONE" >/dev/null # Check whether rclone is running
 	if [ $? -eq 0 ]; then # If no error, that means it's running.
-		lanelog "Not making the move."
 		true # Dummy value indicating everything is OK because rclone already is running
 	else
-		lanelog "Making the move."
 		rclone move "$SCANS_MAIL_DIR" $SCANS_ONEDRIVE # Move files to OneDrive
 	fi
 	EXIT_STATUS=$? # Check the status of rclone or true, as the case may be
