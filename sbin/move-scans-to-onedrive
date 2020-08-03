@@ -15,7 +15,7 @@ SCANS_MAIL_DIR="/var/scans"
 SCANS_ONEDRIVE="onedrive-personal:Brother"
 RCLONE="rclone"
 
-lanelog "Log test."
+/usr/local/sbin/lanelog "Log test."
 if [ "$(ls -A SCANS_MAIL_DIR)" ]; then # If files exist in $SCANS_MAIL_DIR
 	rm -f $SCANS_MAIL_DIR/textfile*
 	ps -C "$RCLONE" >/dev/null # Check whether rclone is running
@@ -26,9 +26,9 @@ if [ "$(ls -A SCANS_MAIL_DIR)" ]; then # If files exist in $SCANS_MAIL_DIR
 	fi
 	EXIT_STATUS=$? # Check the status of rclone or true, as the case may be
 	if [ $EXIT_STATUS -ne 0 ]; then
-		lanelog "Failed to upload scan(s) to OneDrive."
+		/usr/local/sbin/lanelog "Failed to upload scan(s) to OneDrive."
 	else
-		lanelog "Uploaded scan(s) to OneDrive"
+		/usr/local/sbin/lanelog "Uploaded scan(s) to OneDrive"
 	fi
 fi
 exit $EXIT_STATUS
