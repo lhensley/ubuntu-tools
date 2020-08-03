@@ -54,5 +54,5 @@ for THIS_PATH in TS_BASE_PATH TS_BASE_PATH2; do
     done # Next subdirectory under $THIS_PATH (iterating through them)
 done
 
-logger-and-lanecell "Transcoding oz DVR files is complete." | mail lanecell
+logger-and-lanecell "Transcoding oz DVR files is complete."
 exit 0
