@@ -16,7 +16,7 @@ SCANS_ONEDRIVE="onedrive-personal:Brother"
 RCLONE="rclone"
 
 /usr/local/sbin/lanelog "Log test."
-if [ "$(ls -A SCANS_MAIL_DIR)" ]; then # If files exist in $SCANS_MAIL_DIR
+if [ "$(ls -A $SCANS_MAIL_DIR)" ]; then # If files exist in $SCANS_MAIL_DIR
 	rm -f $SCANS_MAIL_DIR/textfile*
 	ps -C "$RCLONE" >/dev/null # Check whether rclone is running
 	if [ $? -eq 0 ]; then # If no error, that means it's running.
