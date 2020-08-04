@@ -36,21 +36,21 @@ function f_process {
 for THIS_PATH in $TS_BASE_PATH $TS_BASE_PATH2; do
 
   for j in "$THIS_PATH/"*; do # For each subdirectory found under $THIS_PATH ...
-    echo "Trying: $j"
+#    echo "Trying: $j" # For testing only.
     if [ -d "$j" ]; then # If if really is a subdirectory ...
-    echo "Base path: $j"
+#    echo "Base path: $j" # For testing only.
 
   for k in "$j/"*; do # For each subdirectory found under $j ...
     if [ -d "$k" ]; then # If if really is a subdirectory ...
-    echo "Sub path: $k"
+#    echo "Sub path: $k" # For testing only.
 
       for i in "$k/"*.ts; do # For each .ts file in that subdirectory ...
         if [ -f "$i" ]; then # If it really is a file ...
           if [ -n "$(lsof "$i" 2>/dev/null)" ]; then # If source file IS in use and can't be processed ...
               true
             else # Source file is NOT in use, and ready to be processed.
-#              f_process "$i" "${i%.ts}.m4v"
-              echo "Bluff $i to ${i%.ts}.m4v"
+              f_process "$i" "${i%.ts}.m4v"
+#              echo "Bluff $i to ${i%.ts}.m4v" # for testing only
             fi # End of check for source file in use or not
           fi # End of check that source file really is a file
           if find "$j" -mindepth 1 -print -quit 2>/dev/null | grep -q .; then # If more files in subdirectory ...
