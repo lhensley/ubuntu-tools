@@ -1,22 +1,21 @@
 #!/bin/bash
-# install-wordpresssh
-
-
-# To store MySQL root password in a config, create .my.cnf in the home directory, with permissions 600, owner [user]:[user] and with this format:
-#
-# 	[client]
-# 	user="MYSQL_USERNAME"
-# 	password="MYSQL_PASSWORD"
-#
-# 	[mysqldump]
-# 	user="MYSQL_USERNAME"
-# 	password="MYSQL_PASSWORD"
-#
-# For the root user, copy the file to /root with permissions 600, owner root:root
+# install-apache2-site
+# Options: install-apache2-site [options] FQDN
+#    -a    Apache2 Configs Directory (default: /etc/apache2)
+#    -c    Certificate Config Directory (default: /etc/letsencrypt)
+#    -d    Document Root Container Directory (default: /var/www)
+#    -e    Error log file (default: /var/log/apache2/error.log)
+#    -f    Custom log file (default: /var/log/apache2/access.log)
+#    -l    Live Certificate Config Directory (default: "live" in directory specified with -c)
+#    -p    MySQL Password; only needed if WordPress is being installed
+#    -u    MySQL User Name; only needed if WordPress is being installed
+#    -w    Web Admin User's Full Name (default: "Lane Hensley")
+#    -x    Web Admin User's Email Address (default "lane.hensley@alumni.duke.edu")
+#    -z    Remove the Site
 
 # DEFINE THESE VARIABLES BEFORE RUNNING THE SCRIPT!
-fqdn='tmp.from-ia.com'
-web_admin_user='lhensley'
+fqdn='domain.tld'
+web_admin_user='Lane Hensley'
 web_admin_email='lane.hensley@alumni.duke.edu'
 remove=false
 #remove=true
@@ -62,6 +61,28 @@ if [[ $EUID -ne 0 ]]; then
   echo "Aborted."
   exit 1
   fi
+
+while getopts ":acdeflpuwxz" opt; do
+    case ${opt} in
+      \? ) echo "Usage: install-apache2-site [options] FQDN"
+           echo "  -a    Apache2 Configs Directory (default: /etc/apache2)"
+           echo "  -c    Certificate Config Directory (default: /etc/letsencrypt)"
+           echo "  -d    Document Root Container Directory (default: /var/www)"
+           echo "  -e    Error log file (default: /var/log/apache2/error.log)"
+           echo "  -f    Custom log file (default: /var/log/apache2/access.log)"
+           echo "  -l    Live Certificate Config Directory (default: /"live/" in directory specified with -c)"
+           echo "  -p    MySQL Password; only needed if WordPress is being installed"
+           echo "  -u    MySQL User Name; only needed if WordPress is being installed"
+           echo "  -w    Web Admin User's Full Name (default: /"Lane Hensley/")"
+           echo "  -x    Web Admin User's Email Address (default /"lane.hensley@alumni.duke.edu/")"
+           echo "  -z    Remove/uninstall the Site"
+           ;;
+  esac
+done
+
+exit -1
+
+
 
 # Check for removal option
 if $remove ; then
