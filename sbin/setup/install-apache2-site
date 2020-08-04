@@ -14,28 +14,21 @@
 #    -z    Remove the Site
 
 # DEFINE THESE VARIABLES BEFORE RUNNING THE SCRIPT!
-fqdn='domain.tld'
+# fqdn='domain.tld'
 web_admin_user='Lane Hensley'
 web_admin_email='lane.hensley@alumni.duke.edu'
 remove=false
-#remove=true
-
-mysql_root_user='USER'
-mysql_root_password='PASSWORD'
-
-script_name=install-wordpress
+mysql_root_user=''
+mysql_root_password=''
+script_name=install-apache2-site
 current_directory=$(pwd)
 docroot_base="/var/www"
 apache2_configs="/etc/apache2"
 error_log="/var/log/apache2/error.log"
 custom_log="/var/log/apache2/access.log"
 certificate_conf_dir="/etc/letsencrypt"
-certificate_live_dir="$certificate_conf_dir/live"
+certificate_live_dir="live"
 excluded_password_characters="\";\$\`\!\*\@"
-
-docroot=$docroot_base/$fqdn
-site_conf=$apache2_configs/sites-available/$fqdn.conf
-site_enabled=$apache2_configs/sites-enabled/$fqdn.conf
 
 debug_mode=false
 #debug_mode=true
@@ -62,23 +55,83 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
   fi
 
-while getopts ":acdeflpuwxz" opt; do
+function print_usage {
+  echo "Usage: install-apache2-site [options] FQDN"
+  echo "  -a    Apache2 Configs Directory (default: /etc/apache2)"
+  echo "  -c    Certificate Config Directory (default: /etc/letsencrypt)"
+  echo "  -d    Document Root Container Directory (default: /var/www)"
+  echo "  -e    Error log file (default: /var/log/apache2/error.log)"
+  echo "  -f    Custom log file (default: /var/log/apache2/access.log)"
+  echo "  -h    Display this help message"
+  echo "  -l    Live Certificate Config Directory (default: \"live\" in directory specified with -c)"
+  echo "  -p    MySQL Password; only needed if WordPress is being installed"
+  echo "  -u    MySQL User Name; only needed if WordPress is being installed"
+  echo "  -w    Web Admin User's Full Name (default: \"Lane Hensley\")"
+  echo "  -x    Web Admin User's Email Address (default \"lane.hensley@alumni.duke.edu\")"
+  echo "  -z    Remove/uninstall the Site"
+}
+
+# Following tutorial at https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/
+while getopts ":a:c:d:e:f:hl:p:u:w:x:z" opt; do
     case ${opt} in
-      \? ) echo "Usage: install-apache2-site [options] FQDN"
-           echo "  -a    Apache2 Configs Directory (default: /etc/apache2)"
-           echo "  -c    Certificate Config Directory (default: /etc/letsencrypt)"
-           echo "  -d    Document Root Container Directory (default: /var/www)"
-           echo "  -e    Error log file (default: /var/log/apache2/error.log)"
-           echo "  -f    Custom log file (default: /var/log/apache2/access.log)"
-           echo "  -l    Live Certificate Config Directory (default: /"live/" in directory specified with -c)"
-           echo "  -p    MySQL Password; only needed if WordPress is being installed"
-           echo "  -u    MySQL User Name; only needed if WordPress is being installed"
-           echo "  -w    Web Admin User's Full Name (default: /"Lane Hensley/")"
-           echo "  -x    Web Admin User's Email Address (default /"lane.hensley@alumni.duke.edu/")"
-           echo "  -z    Remove/uninstall the Site"
+      a )  apache2_configs=$OPTARG
+           ;;
+      c )  certificate_conf_dir=$OPTARG
+           ;;
+      d )  docroot_base=$OPTARG
+           ;;
+      e )  error_log=$OPTARG
+           ;;
+      f )  custom_log=$OPTARG
+           ;;
+      h )  print_usage
+           exit 0
+           ;;
+      l )  certificate_live_dir=$OPTARG
+           ;;
+      p )  mysql_root_password=$OPTARG
+           ;;
+      u )  mysql_root_user=$OPTARG
+           ;;
+      w )  web_admin_user=$OPTARG
+           ;;
+      x )  web_admin_email=$OPTARG
+           ;;
+      z )  remove=true
+           ;;
+      \? ) print_usage
+           ;;
+      : )  echo "Invalid option: $OPTARG requires an argument" 1>&2
            ;;
   esac
 done
+shift $((OPTIND -1))
+fqdn=$1
+
+certificate_live_dir="$certificate_conf_dir/$certificate_live_dir"
+docroot=$docroot_base/$fqdn
+site_conf=$apache2_configs/sites-available/$fqdn.conf
+site_enabled=$apache2_configs/sites-enabled/$fqdn.conf
+
+echo "basename:                      $(basename $0)"
+echo "fqdn:                          $fqdn"
+echo "docroot:                       $docroot"
+echo "site_conf:                     $site_conf"
+echo "site_enabled:                  $site_enabled"
+echo "web_admin_user:                $web_admin_user"
+echo "web_admin_email:               $web_admin_email"
+echo "remove:                        $remove"
+echo "mysql_root_user:               $mysql_root_user"
+echo "mysql_root_password:           $mysql_root_password"
+echo "script_name:                   $script_name"
+echo "current_directory:             $current_directory"
+echo "docroot_base:                  $docroot_base"
+echo "apache2_configs:               $apache2_configs"
+echo "error_log:                     $error_log"
+echo "custom_log:                    $custom_log"
+echo "certificate_conf_dir:          $certificate_conf_dir"
+echo "certificate_live_dir:          $certificate_live_dir"
+echo "excluded_password_characters:  $excluded_password_characters"
 
 exit -1
 
