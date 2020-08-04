@@ -20,16 +20,16 @@ function f_process {
 # usage: f_process "INPUTFILE" "OUTPUTFILE"
 # Assumes that $HANDBRAKE and $PRESET variables already are set.
     TIMESTART=$(currenttimeinseconds)
-    lanelog "Start transcoding to $2"
+    logger "Start transcoding to $2"
     $HANDBRAKE --preset-import-file "$PRESET" \
         -i "$1" -o "$2"
     exit_status=$?
     chown plex:plex "$2"
     if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-        lanelog "Transcoding to $2 FAILED."
+        logger "Transcoding to $2 FAILED."
       else
         rm "$i" # Delete source file
-        lanelog "Transcoding to $2 complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))"
+        logger "Transcoding to $2 complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))"
       fi # End of check for transcoding failure
 }
 
@@ -64,4 +64,5 @@ for THIS_PATH in $TS_BASE_PATH $TS_BASE_PATH2; do
 done
 
 lanelog "Transcoding oz DVR files is complete."
+df -Ht ext4 /mnt/rerun | mail lanecell
 exit 0
