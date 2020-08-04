@@ -33,7 +33,7 @@ function f_process {
       fi # End of check for transcoding failure
 }
 
-for THIS_PATH in TS_BASE_PATH TS_BASE_PATH2; do
+for THIS_PATH in $TS_BASE_PATH $TS_BASE_PATH2; do
 
   for j in "$THIS_PATH/"*; do # For each subdirectory found under $THIS_PATH ...
     echo "Trying: $j"
