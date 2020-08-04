@@ -16,32 +16,40 @@ TS_BASE_PATH="/mnt/rerun/plex/TV-Austin"
 TS_BASE_PATH2="/mnt/rerun/plex/Movies"
 PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 
+function f_process {
+# usage: f_process "INPUTFILE" "OUTPUTFILE"
+# Assumes that $HANDBRAKE and $PRESET variables already are set.
+    TIMESTART=$(currenttimeinseconds)
+    lanelog "Start transcoding to $2"
+    $HANDBRAKE --preset-import-file "$PRESET" \
+        -i "$1" -o "$2"
+    exit_status=$?
+    chown plex:plex "$2"
+    if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
+        lanelog "Transcoding to $2 FAILED."
+      else
+        rm "$i" # Delete source file
+        lanelog "Transcoding to $2 complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))"
+      fi # End of check for transcoding failure
+}
+
 for THIS_PATH in TS_BASE_PATH TS_BASE_PATH2; do
 
   for j in "$THIS_PATH/"*; do # For each subdirectory found under $THIS_PATH ...
     if [ -d "$j" ]; then # If if really is a subdirectory ...
+    echo "Base path: $j"
 
   for k in "$j/"*; do # For each subdirectory found under $j ...
     if [ -d "$k" ]; then # If if really is a subdirectory ...
+    echo "Sub path: $k"
 
       for i in "$k/"*.ts; do # For each .ts file in that subdirectory ...
         if [ -f "$i" ]; then # If it really is a file ...
           if [ -n "$(lsof "$i" 2>/dev/null)" ]; then # If source file IS in use and can't be processed ...
-            true
-          else # Source file is NOT in use, and ready to be processed.
-            TIMESTART=$(currenttimeinseconds)
-            VIDEONAME=${i%.ts}.m4v
-            lanelog "Start transcoding to $VIDEONAME"
-            $HANDBRAKE --preset-import-file "$PRESET" \
-              -i "$i" -o "$VIDEONAME"
-            exit_status=$?
-            chown plex:plex "$VIDEONAME"
-            if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-              lanelog "Transcoding to $VIDEONAME FAILED."
-             else
-              rm "$i" # Delete source file
-              lanelog "Transcoding to $VIDEONAME complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))"
-              fi # End of check for transcoding failure
+              true
+            else # Source file is NOT in use, and ready to be processed.
+#              f_process "$i" "${i%.ts}.m4v"
+              echo "Bluff $i to ${i%.ts}.m4v"
             fi # End of check for source file in use or not
           fi # End of check that source file really is a file
           if find "$j" -mindepth 1 -print -quit 2>/dev/null | grep -q .; then # If more files in subdirectory ...

@@ -24,6 +24,7 @@ install filezilla
 install gimp
 install git && ufw allow git
 install gpg
+install gzip
 install inotify-tools
 install net-tools
 install openssl
