@@ -36,6 +36,7 @@ function f_process {
 for THIS_PATH in TS_BASE_PATH TS_BASE_PATH2; do
 
   for j in "$THIS_PATH/"*; do # For each subdirectory found under $THIS_PATH ...
+    echo "Trying: $j"
     if [ -d "$j" ]; then # If if really is a subdirectory ...
     echo "Base path: $j"
 
