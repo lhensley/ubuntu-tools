@@ -37,6 +37,21 @@ for THIS_PATH in $TS_BASE_PATH $TS_BASE_PATH2; do
 
   for j in "$THIS_PATH/"*; do # For each subdirectory found under $THIS_PATH ...
 #    echo "Trying: $j" # For testing only.
+
+    if [[ "$j" != *"ABC World News Tonight"* ]] \
+        && [[ "$j" != *"BBC World News"* ]] \
+        && [[ "$j" != *"CBS Evening News"* ]] \
+        && [[ "$j" != *"CBS Morning News"* ]] \
+        && [[ "$j" != *"CBS This Morning"* ]] \
+        && [[ "$j" != *"CBS Weekend News"* ]] \
+        && [[ "$j" != *"Face the Nation"* ]] \
+        && [[ "$j" != *"KXAN News"* ]] \
+        && [[ "$j" != *"Meet the Press"* ]] \
+        && [[ "$j" != *"NBC Nightly News"* ]] \
+        && [[ "$j" != *"The Late Show"* ]] \
+        && [[ "$j" != *"The Tonight Show"* ]] \
+        && [[ "$j" != *"Today (195"* ]]; then
+
     if [ -d "$j" ]; then # If if really is a subdirectory ...
 #    echo "Base path: $j" # For testing only.
 
@@ -60,6 +75,7 @@ for THIS_PATH in $TS_BASE_PATH $TS_BASE_PATH2; do
       fi # End of check to confirm that there are any files in the subdirectory
     done # Next subdirectory under $j (iterating through them)
       fi # End of check to confirm that there are any files in the subdirectory
+    fi
     done # Next subdirectory under $THIS_PATH (iterating through them)
 done
 
