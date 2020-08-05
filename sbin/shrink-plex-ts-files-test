@@ -23,9 +23,9 @@ for THIS_PATH in $TS_BASE_PATH $TS_BASE_PATH2; do
     if [ -d "$j" ]; then # If if really is a subdirectory ...
 
     if [ "NBC Nightly N"* == $j ] || [ "CBS"* == $j ]; then
-        printf("Block ")
+        printf "Block " 
     else
-        printf(" Keep ")
+        printf " Keep " 
 
     echo $j
 
