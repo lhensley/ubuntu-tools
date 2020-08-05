@@ -1,0 +1,31 @@
+#!/bin/bash
+# shrink-plex-ts-files
+
+production_mode=true
+debug_mode=false
+#debug_mode=true
+if $debug_mode ; then
+  set -x
+  fi
+
+PROGRAM_DIRECTORY=$(dirname $0)
+source $PROGRAM_DIRECTORY/lhlib
+
+HANDBRAKE="HandBrakeCLI"
+TS_BASE_PATH="/mnt/rerun/plex/TV-Austin"
+TS_BASE_PATH2="/mnt/rerun/plex/Movies"
+PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
+
+for THIS_PATH in $TS_BASE_PATH $TS_BASE_PATH2; do
+
+  for j in "$THIS_PATH/"*; do # For each subdirectory found under $THIS_PATH ...
+#    echo "Trying: $j" # For testing only.
+    if [ -d "$j" ]; then # If if really is a subdirectory ...
+
+    echo $j
+
+      fi # End of check to confirm that there are any files in the subdirectory
+    done # Next subdirectory under $THIS_PATH (iterating through them)
+done
+
+exit 0

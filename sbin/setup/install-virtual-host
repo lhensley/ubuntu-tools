@@ -246,6 +246,13 @@ if $install_wordpress ; then
       fi
   fi
 
+# Install SSL certificate.
+echo "If prompted, do NOT choose to redirect"
+certificate_successfully_installed="is"
+if ! certbot certonly --apache -d $fqdn; then
+  certificate_successfully_installed="is not"
+  fi
+
 # Define virtual host in apache2
 if ! echo "<VirtualHost *:443>" > $site_conf; then
   backout
@@ -316,13 +323,6 @@ if ! systemctl status apache2 > /dev/null ; then
     echo "Apache2 is running."
     abort_and_exit
     fi
-  fi
-
-# Install SSL certificate.
-echo "If prompted, do NOT choose to redirect"
-certificate_successfully_installed="is"
-if ! certbot certonly --apache -d $fqdn; then
-  certificate_successfully_installed="is not"
   fi
 
 # Open the firewall for apache2
