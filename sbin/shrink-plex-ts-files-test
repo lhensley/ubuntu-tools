@@ -22,7 +22,7 @@ for THIS_PATH in $TS_BASE_PATH $TS_BASE_PATH2; do
 #    echo "Trying: $j" # For testing only.
     if [ -d "$j" ]; then # If if really is a subdirectory ...
 
-    if [ "NBC Nightly N"* == $j ] || [ "CBS"* == $j ]; then
+    if [ *"NBC Nightly N"* == "$j" ] || [ *"CBS"* == "$j" ]; then
         printf "Block " 
     else
         printf " Keep " 
