@@ -207,7 +207,7 @@ if $install_wordpress ; then
   fi
 
 # Clean up
-rmdir -rf wordpress
+rmdir -f wordpress
 rm -f latest.tar.gz
 chown -R www-data:www-data .
 
@@ -247,8 +247,7 @@ if $install_wordpress ; then
   fi
 
 # Install SSL certificate.
-echo "Choose $fqdn when prompted."
-echo "Do NOT choose to redirect"
+echo "If prompted, do NOT choose to redirect"
 certificate_successfully_installed="is"
 if ! certbot certonly --apache -d $fqdn; then
   certificate_successfully_installed="is not"
@@ -330,14 +329,6 @@ if ! systemctl status apache2 > /dev/null ; then
 ufw allow 'Apache' > /dev/null 2> /dev/null
 ufw allow 'Apache Full' > /dev/null 2> /dev/null
 
-# Install SSL certificate. APACHE MUST ALREADY BE RUNNING THE VIRTUAL HOST
-echo "Choose $fqdn when prompted."
-echo "Do NOT choose to redirect"
-certificate_successfully_installed="is"
-if ! certbot --apache -d $fqdn; then
-  certificate_successfully_installed="is not"
-  fi
-
 # Append to .htaccess to increase max upload size
 if $install_wordpress ; then
     echo "php_value upload_max_filesize 2G" >> $docroot/.htaccess
@@ -348,8 +339,10 @@ if $install_wordpress ; then
   fi
 
 # Apply proper permissions to .htaccess
-chown www-data:www-data $docroot/.htaccess
-chmod 644 $docroot/.htaccess
+if $install_wordpress ; then
+    chown www-data:www-data $docroot/.htaccess
+    chmod 644 $docroot/.htaccess
+  fi
 
 # Report results to end user
 if $install_wordpress ; then
