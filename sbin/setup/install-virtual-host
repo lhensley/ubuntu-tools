@@ -207,7 +207,7 @@ if $install_wordpress ; then
   fi
 
 # Clean up
-rmdir -f wordpress
+rmdir -p --ignore-fail-on-non-empty wordpress
 rm -f latest.tar.gz
 chown -R www-data:www-data .
 
@@ -244,13 +244,6 @@ if $install_wordpress ; then
       echo "Could not set ownership for $docroot/php.ini."
       abort_and_exit
       fi
-  fi
-
-# Install SSL certificate.
-echo "If prompted, do NOT choose to redirect"
-certificate_successfully_installed="is"
-if ! certbot certonly --apache -d $fqdn; then
-  certificate_successfully_installed="is not"
   fi
 
 # Define virtual host in apache2
@@ -323,6 +316,13 @@ if ! systemctl status apache2 > /dev/null ; then
     echo "Apache2 is running."
     abort_and_exit
     fi
+  fi
+
+# Install SSL certificate.
+echo "If prompted, do NOT choose to redirect"
+certificate_successfully_installed="is"
+if ! certbot certonly --apache -d $fqdn; then
+  certificate_successfully_installed="is not"
   fi
 
 # Open the firewall for apache2
