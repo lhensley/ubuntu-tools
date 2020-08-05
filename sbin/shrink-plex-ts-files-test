@@ -26,6 +26,7 @@ for THIS_PATH in $TS_BASE_PATH $TS_BASE_PATH2; do
         printf "Block " 
     else
         printf " Keep " 
+    fi
 
     echo $j
 
