@@ -19,17 +19,17 @@ PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 function f_process {
 # usage: f_process "INPUTFILE" "OUTPUTFILE"
 # Assumes that $HANDBRAKE and $PRESET variables already are set.
-    sudo -u lhensley transcode # Pick up ripped DVDs first, if any
+    sudo -u lhensley transcode >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
     TIMESTART=$(currenttimeinseconds)
     logger "Start transcoding to $2"
     $HANDBRAKE --preset-import-file "$PRESET" \
-        -i "$1" -o "$2"
+        -i "$1" -o "$2"  >> /dev/null 2>&1
     exit_status=$?
-    chown plex:plex "$2"
+    chown plex:plex "$2" >> /dev/null 2>&1
     if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
         logger "Transcoding to $2 FAILED."
       else
-        rm "$i" # Delete source file
+        rm "$i" # Delete source file >> /dev/null 2>&1
         logger "Transcoding to $2 complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))"
       fi # End of check for transcoding failure
 }
@@ -67,7 +67,7 @@ for THIS_PATH in $TS_BASE_PATH $TS_BASE_PATH2; do
           if [ -n "$(lsof "$i" 2>/dev/null)" ]; then # If source file IS in use and can't be processed ...
               true
             else # Source file is NOT in use, and ready to be processed.
-              f_process "$i" "${i%.ts}.m4v"
+              f_process "$i" "${i%.ts}.m4v" >> /dev/null 2>&1
 #              echo "Bluff $i to ${i%.ts}.m4v" # for testing only
             fi # End of check for source file in use or not
           fi # End of check that source file really is a file
