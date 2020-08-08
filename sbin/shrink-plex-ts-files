@@ -34,6 +34,8 @@ function f_process {
       fi # End of check for transcoding failure
 }
 
+sleep 120 # Pause for two minutes to let the system finish booting and mounting disks
+
 while true; do # Endless loop
 
 for THIS_PATH in $TS_BASE_PATH $TS_BASE_PATH2; do
