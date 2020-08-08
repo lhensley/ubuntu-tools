@@ -19,6 +19,7 @@ PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 function f_process {
 # usage: f_process "INPUTFILE" "OUTPUTFILE"
 # Assumes that $HANDBRAKE and $PRESET variables already are set.
+    sudo -u lhensley transcode # Pick up ripped DVDs first, if any
     TIMESTART=$(currenttimeinseconds)
     logger "Start transcoding to $2"
     $HANDBRAKE --preset-import-file "$PRESET" \
@@ -32,6 +33,8 @@ function f_process {
         logger "Transcoding to $2 complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))"
       fi # End of check for transcoding failure
 }
+
+while true; do # Endless loop
 
 for THIS_PATH in $TS_BASE_PATH $TS_BASE_PATH2; do
 
@@ -79,6 +82,11 @@ for THIS_PATH in $TS_BASE_PATH $TS_BASE_PATH2; do
     done # Next subdirectory under $THIS_PATH (iterating through them)
 done
 
-lanelog "Transcoding oz DVR files is complete."
-df -Ht ext4 /mnt/rerun | mail lanecell
-exit 0
+sleep 1800 # Wait 30 minutes
+
+done # Endless loop
+
+
+# lanelog "Transcoding oz DVR files is complete."
+# df -Ht ext4 /mnt/rerun | mail lanecell
+# exit 0
