@@ -1,0 +1,7 @@
+#!/bin/bash
+# plexstatus
+
+cat /var/log/syslog | grep rerun
+df -Ht ext4
+ls /mnt/rerun/plex/TV-Austin/
+systemctl status plexmediaserver
