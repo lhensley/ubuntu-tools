@@ -12,8 +12,10 @@ PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/lhlib
 
 HANDBRAKE="HandBrakeCLI"
-TS_BASE_PATH="/mnt/rerun/plex/TV-Austin"
-TS_BASE_PATH2="/mnt/rerun/plex/Movies"
+TS_BASE_PATH01"/mnt/ssd1tb/plex/TV-Austin"
+TS_BASE_PATH02="/mnt/ssd1tb/plex/Movies"
+TS_BASE_PATH03="/mnt/rerun/plex/TV-Austin"
+TS_BASE_PATH04="/mnt/rerun/plex/Movies"
 PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 
 function f_process {
@@ -38,7 +40,7 @@ sleep 120 # Pause for two minutes to let the system finish booting and mounting 
 
 while true; do # Endless loop
 
-for THIS_PATH in $TS_BASE_PATH $TS_BASE_PATH2; do
+for THIS_PATH in $TS_BASE_PATH01 $TS_BASE_PATH02 $TS_BASE_PATH03 $TS_BASE_PATH04; do
 
   for j in "$THIS_PATH/"*; do # For each subdirectory found under $THIS_PATH ...
 #    echo "Trying: $j" # For testing only.

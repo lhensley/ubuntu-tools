@@ -38,6 +38,14 @@ chown -R root:root $SBIN_DIR
 chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
 chmod -R 500 $SBIN_DIR/*
 
+# Change permissions for Plex libraries
+if [ $HOST_NAME == "oz" ]; then
+	find /mnt/rerun/plex -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
+	find /mnt/rerun/plex -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
+	find /mnt/ssd1tb/plex -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
+	find /mnt/ssd1tb/plex -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
+	fi
+
 # Invoke /usr/local/sbin/apply-configs
 # chmod 500 $SBIN_DIR/apply-configs
 $SBIN_DIR/apply-configs
