@@ -1,0 +1,9 @@
+#!/bin/bash
+# process_ts
+# Usage: process_ts <input_file> <root_work_path> <root_storage_path>
+# No final / on either path. For system root, use ""
+
+echo "In: $1"
+echo "Prefix length: ${#2}"
+echo "Without prefix: ${$1: -${#2}}"
+echo ""

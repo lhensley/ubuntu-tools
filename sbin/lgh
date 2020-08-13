@@ -1,5 +1,5 @@
 #!/bin/bash
-# shrink-plex-ts-files
+# lgh
 
 production_mode=true
 debug_mode=false
@@ -12,6 +12,7 @@ PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/lhlib
 
 HANDBRAKE="HandBrakeCLI"
+PROCESS_TS="process_ts"
 ROOT_WORK=/mnt/ssd1tb/plex
 ROOT_STORAGE=/mnt/rerun/plex
 
@@ -35,6 +36,7 @@ function f_process {
       fi # End of check for transcoding failure
 }
 
+
 function f_test {
 # usage: f_test "INPUTFILE"
     echo "In: $1"
@@ -44,7 +46,7 @@ function f_test {
 }
 
 
-find $ROOT_WORK -type f -name "*" -print -exec f_test {} \;
+find $ROOT_WORK -type f -name "*" -print -exec $PROCESS_TS {} \;
 
 # find $ROOT_WORK -type f -name "*.ts" -print -exec f_convert_ts {} \;
 
