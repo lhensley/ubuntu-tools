@@ -37,21 +37,11 @@ function f_process {
 }
 
 
-function f_test {
-# usage: f_test "INPUTFILE"
-    echo "In: $1"
-    echo "Prefix length: ${#ROOT_WORK}"
-    echo "Without prefix: ${$1: -${#ROOT_WORK}}"
-    echo ""
-}
-
-
 find $ROOT_WORK -type f -name "*" -print -exec $PROCESS_TS {} \;
 
 # find $ROOT_WORK -type f -name "*.ts" -print -exec f_convert_ts {} \;
 
 exit 0
-
 
 
 sleep 120 # Pause for two minutes to let the system finish booting and mounting disks
