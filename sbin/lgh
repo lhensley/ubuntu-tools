@@ -12,10 +12,9 @@ PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/lhlib
 
 HANDBRAKE="HandBrakeCLI"
-TS_BASE_PATH01="/mnt/ssd1tb/plex/TV-Austin"
-TS_BASE_PATH02="/mnt/ssd1tb/plex/Movies"
-TS_BASE_PATH03="/mnt/rerun/plex/TV-Austin"
-TS_BASE_PATH04="/mnt/rerun/plex/Movies"
+ROOT_WORK=/mnt/ssd1tb/plex
+ROOT_STORAGE=/mnt/rerun/plex
+
 PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 
 function f_process {
@@ -35,6 +34,23 @@ function f_process {
         logger "Transcoding to $2 complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))"
       fi # End of check for transcoding failure
 }
+
+function f_test {
+# usage: f_test "INPUTFILE"
+    echo "In: $1"
+    echo "Prefix length: ${#ROOT_WORK}"
+    echo "Without prefix: ${$1: -${#ROOT_WORK}}"
+    echo ""
+}
+
+
+find $ROOT_WORK -type f -name "*" -print -exec f_test {} \;
+
+# find $ROOT_WORK -type f -name "*.ts" -print -exec f_convert_ts {} \;
+
+exit 0
+
+
 
 sleep 120 # Pause for two minutes to let the system finish booting and mounting disks
 
