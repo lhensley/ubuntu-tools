@@ -37,7 +37,7 @@ function f_process {
 }
 
 
-find $ROOT_WORK -type f -name "*" -print -exec $PROCESS_TS {} \;
+find $ROOT_WORK -type f -name "*" -print -exec $PROCESS_TS {} $ROOT_WORK $ROOT_STORAGE \;
 
 # find $ROOT_WORK -type f -name "*.ts" -print -exec f_convert_ts {} \;
 
