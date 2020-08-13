@@ -1,0 +1,41 @@
+#!/bin/bash
+# _git
+#
+# Include header file
+logger Begin $0
+PROGRAM_DIRECTORY=$(dirname $0)
+source $PROGRAM_DIRECTORY/script-setup
+
+# Install git token
+# To get a new token, go to https://github.com/settings/tokens.
+MY_GIT_TOKEN=4b662b7d4431ec1956127aa9d4fdbd8d75ec821a
+git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
+git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
+git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
+# This section re-pulls all go files from github and updates /usr/local/sbin
+USERNAME=$USER_ME
+REPOSITORY=$GO
+BRANCH="master"
+# Change to local repository directory
+cd $REPOSITORY
+# Blow away any local changes not uploaded to github
+git reset --hard
+# Select the designated branch
+git checkout $BRANCH
+# Pull down a copy of the repository
+git pull
+# Set permissions for git directory
+chmod -R 400 $GIT
+# Copy scripts into /usr/local/sbin
+rm -rf $SBIN_DIR
+cp -r $GO_SBIN $SBIN_PARENT
+cd
+echo git update complete.
+
+# Reset permisions for /usr/local/sbin/*
+# This kind of locks things down, and the apply-configs section below opens things up.
+chown -R root:root $SBIN_DIR
+chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
+chmod -R 500 $SBIN_DIR/*
+
+exit 0
