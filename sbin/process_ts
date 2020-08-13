@@ -9,6 +9,8 @@ ROOT_STORAGE_PATH=$3
 
 echo "In: $INSTRING"
 echo "2 length: ${#2}"
-echo "Prefix length: ${#ROOT_WORK_PATH}"
-echo "Without prefix: ${$INSTRING: -${#ROOT_WORK_PATH}}"
+echo "Work length: ${#ROOT_WORK_PATH}"
+echo "Work: $ROOT_WORK_PATH"
+echo "Storage: $ROOT_STORAGE_PATH"
+echo "Without Work: ${$INSTRING: -${#ROOT_WORK_PATH}}"
 echo ""
