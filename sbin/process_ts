@@ -3,7 +3,11 @@
 # Usage: process_ts <input_file> <root_work_path> <root_storage_path>
 # No final / on either path. For system root, use ""
 
-echo "In: $1"
-echo "Prefix length: ${#2}"
-echo "Without prefix: ${$1: -${#2}}"
+INSTRING=$1
+ROOT_WORK_PATH=$2
+ROOT_STORAGE_PATH=$3
+
+echo "In: $INSTRING"
+echo "Prefix length: ${#INSTRING}"
+echo "Without prefix: ${$INSTRING: -${#ROOT_WORK_PATH}}"
 echo ""
