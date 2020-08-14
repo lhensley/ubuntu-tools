@@ -3,6 +3,13 @@
 # Usage: process_ts <input_file> <root_work_path> <root_storage_path>
 # No final / on either path. For system root, use ""
 
+production_mode=true
+debug_mode=false
+debug_mode=true
+if $debug_mode ; then
+  set -x
+  fi
+
 IN_PATH=$1
 ROOT_WORK_PATH=$2
 ROOT_STORAGE_PATH=$3
