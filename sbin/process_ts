@@ -13,13 +13,19 @@ RELATIVE_PATH_LENGTH=$[INSTRING_LENGTH-ROOT_WORK_PATH_LENGTH]
 RELATIVE_PATH=${INSTRING: -$RELATIVE_PATH_LENGTH+1}
 OUTSTRING=$3/$RELATIVE_PATH
 
-echo "Instring length: $INSTRING_LENGTH"
-echo "Root work path length: $ROOT_WORK_PATH_LENGTH"
-echo "Relative path length: $RELATIVE_PATH_LENGTH"
+# So ...
+# $ROOT_WORK_PATH
+# $ROOT_STORAGE_PATH
+$ $RELATIVE_PATH
+# $INSTRING
+# $OUTSTRING
 
-echo " In: $INSTRING"
-echo "Root Work Path: $ROOT_WORK_PATH"
-echo "Relative Path: $RELATIVE_PATH"
-
-echo " Out: $OUTSTRING"
+# # This section is for testing only. Normally, just comment it out.
+echo "ROOT_WORK_PATH:     $ROOT_WORK_PATH
+echo "ROOT_STORAGE_PATH:  $ROOT_STORAGE_PATH
+echo "RELATIVE_PATH:      $RELATIVE_PATH
+echo "INSTRING:           $INSTRING
+echo "OUTSTRING:          $OUTSTRING
 echo ""
+
+exit 0
