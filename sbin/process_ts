@@ -72,9 +72,9 @@ if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
       fi # End of check for transcoding failure
 
     # Move the transcoded file to storage
-    rm $IN_PATH >> /dev/null 2>&1
-    sudo -u plex mkdir -p $(dirname $STORE_PATH) >> /dev/null 2>&1 # Create the directory for the stored version
-    mv $OUT_PATH $STORE_PATH >> /dev/null 2>&1
+    rm "$IN_PATH" >> /dev/null 2>&1
+    sudo -u plex mkdir -p "$(dirname $STORE_PATH)" >> /dev/null 2>&1 # Create the directory for the stored version
+    mv "$OUT_PATH" "$STORE_PATH" >> /dev/null 2>&1
     exit_status=$?
     if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
         logger "$0 FAILED to move $OUT_PATH to $(dirname $STORE_PATH)"
@@ -85,10 +85,10 @@ if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
 
     # Change permissions for Plex libraries
     if [ $HOST_NAME == "oz" ]; then
-	    find $ROOT_WORK_PATH -type d -exec chmod 775 {} \; >> /dev/null 2>&1
-	    find $ROOT_WORK_PATH -type f -exec chmod 664 {} \; >> /dev/null 2>&1
-	    find $ROOT_STORAGE_PATH -type d -exec chmod 775 {} \; >> /dev/null 2>&1
-	    find $ROOT_STORAGE_PATH -type f -exec chmod 664 {} \; >> /dev/null 2>&1
+	    find "$ROOT_WORK_PATH" -type d -exec chmod 775 {} \; >> /dev/null 2>&1
+	    find "$ROOT_WORK_PATH" -type f -exec chmod 664 {} \; >> /dev/null 2>&1
+	    find "$ROOT_STORAGE_PATH" -type d -exec chmod 775 {} \; >> /dev/null 2>&1
+	    find "$ROOT_STORAGE_PATH" -type f -exec chmod 664 {} \; >> /dev/null 2>&1
 	    fi
 
     exit $exit_status
