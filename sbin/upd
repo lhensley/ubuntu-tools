@@ -9,14 +9,6 @@ source $PROGRAM_DIRECTORY/script-setup
 # Update from github.com
 _git
 
-# Change permissions for Plex libraries
-if [ $HOST_NAME == "oz" ]; then
-	find /mnt/rerun/plex -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
-	find /mnt/rerun/plex -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
-	find /mnt/ssd1tb/plex -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
-	find /mnt/ssd1tb/plex -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
-	fi
-
 # Invoke /usr/local/sbin/apply-configs
 # chmod 500 $SBIN_DIR/apply-configs
 $SBIN_DIR/apply-configs

@@ -8,89 +8,32 @@ if $debug_mode ; then
   set -x
   fi
 
+# Make sure only root can run our script
+if [[ $EUID -ne 0 ]]; then
+  echo "This script must be run as root."
+  exit 1
+fi
+
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/lhlib
 
 HANDBRAKE="HandBrakeCLI"
-TS_BASE_PATH01="/mnt/ssd1tb/plex/TV-Austin"
-TS_BASE_PATH02="/mnt/ssd1tb/plex/Movies"
-TS_BASE_PATH03="/mnt/rerun/plex/TV-Austin"
-TS_BASE_PATH04="/mnt/rerun/plex/Movies"
 PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 
-function f_process {
-# usage: f_process "INPUTFILE" "OUTPUTFILE"
-# Assumes that $HANDBRAKE and $PRESET variables already are set.
-    sudo -u lhensley transcode >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
-    TIMESTART=$(currenttimeinseconds)
-    logger "Start transcoding to $2"
-    $HANDBRAKE --preset-import-file "$PRESET" \
-        -i "$1" -o "$2"  >> /dev/null 2>&1
-    exit_status=$?
-    chown plex:plex "$2" >> /dev/null 2>&1
-    if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-        logger "Transcoding to $2 FAILED."
-      else
-        rm "$i" # Delete source file >> /dev/null 2>&1
-        logger "Transcoding to $2 complete. Run time $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))"
-      fi # End of check for transcoding failure
-}
+ROOT_WORK="/mnt/ssd1tb/plex"
+ROOT_STORE="/mnt/rerun/plex"
 
+logger "$0 sleeping for two minutes."
 sleep 120 # Pause for two minutes to let the system finish booting and mounting disks
+logger "$0 woke up."
 
 while true; do # Endless loop
 
-for THIS_PATH in $TS_BASE_PATH01 $TS_BASE_PATH02 $TS_BASE_PATH03 $TS_BASE_PATH04; do
-
-  for j in "$THIS_PATH/"*; do # For each subdirectory found under $THIS_PATH ...
-#    echo "Trying: $j" # For testing only.
-
-    if [[ "$j" != *"ABC World News Tonight"* ]] \
-        && [[ "$j" != *"BBC World News"* ]] \
-        && [[ "$j" != *"CBS Evening News"* ]] \
-        && [[ "$j" != *"CBS Morning News"* ]] \
-        && [[ "$j" != *"CBS This Morning"* ]] \
-        && [[ "$j" != *"CBS Weekend News"* ]] \
-        && [[ "$j" != *"Face the Nation"* ]] \
-        && [[ "$j" != *"KXAN News"* ]] \
-        && [[ "$j" != *"Meet the Press"* ]] \
-        && [[ "$j" != *"NBC Nightly News"* ]] \
-        && [[ "$j" != *"The Late Show"* ]] \
-        && [[ "$j" != *"The Tonight Show"* ]] \
-        && [[ "$j" != *"Today (195"* ]]; then
-
-    if [ -d "$j" ]; then # If if really is a subdirectory ...
-#    echo "Base path: $j" # For testing only.
-
-  for k in "$j/"*; do # For each subdirectory found under $j ...
-    if [ -d "$k" ]; then # If if really is a subdirectory ...
-#    echo "Sub path: $k" # For testing only.
-
-      for i in "$k/"*.ts; do # For each .ts file in that subdirectory ...
-        if [ -f "$i" ]; then # If it really is a file ...
-          if [ -n "$(lsof "$i" 2>/dev/null)" ]; then # If source file IS in use and can't be processed ...
-              true
-            else # Source file is NOT in use, and ready to be processed.
-              f_process "$i" "${i%.ts}.m4v" >> /dev/null 2>&1
-#              echo "Bluff $i to ${i%.ts}.m4v" # for testing only
-            fi # End of check for source file in use or not
-          fi # End of check that source file really is a file
-          if find "$j" -mindepth 1 -print -quit 2>/dev/null | grep -q .; then # If more files in subdirectory ...
-            sleep 1 # Do nothing ...
-            fi # End of check for more files in source subdirectory
-        done # Next file in the subdirectory ...
-      fi # End of check to confirm that there are any files in the subdirectory
-    done # Next subdirectory under $j (iterating through them)
-      fi # End of check to confirm that there are any files in the subdirectory
-    fi
-    done # Next subdirectory under $THIS_PATH (iterating through them)
-done
-
-sleep 1800 # Wait 30 minutes
+    find $ROOT_WORK_PATH -type f -exec process_ts {} $ROOT_WORK $ROOT_STORE \; >> /dev/null 2>&1
+    logger "$0 sleeping for one hour."
+    sleep 3600 # Wait one hour
+    logger "$0 woke up."
 
 done # Endless loop
 
-
-# lanelog "Transcoding oz DVR files is complete."
-# df -Ht ext4 /mnt/rerun | mail lanecell
-# exit 0
+exit 0

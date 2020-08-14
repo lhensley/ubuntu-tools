@@ -3,11 +3,11 @@
 # Usage: process_ts <input_file> <root_work_path> <root_storage_path>
 # No final / on either path. For system root, use ""
 
-OUT_EXT="m4v"
-
 IN_PATH=$1
 ROOT_WORK_PATH=$2
 ROOT_STORAGE_PATH=$3
+
+OUT_EXT="m4v"
 
 ROOT_WORK_PATH_LENGTH=${#ROOT_WORK_PATH}
 
@@ -23,6 +23,9 @@ RELATIVE_PATH=${RELATIVE_PATH:0:RELATIVE_PATH_LENGTH} # Then remove IN_EXT
 OUT_PATH="$ROOT_WORK_PATH/$RELATIVE_PATH.$OUT_EXT"
 STORE_PATH="$ROOT_STORAGE_PATH/$RELATIVE_PATH.$OUT_EXT"
 
+HANDBRAKE="HandBrakeCLI"
+PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
+
 # So here are useful variables defined ...
 # $IN_PATH
 # $OUT_PATH
@@ -31,11 +34,63 @@ STORE_PATH="$ROOT_STORAGE_PATH/$RELATIVE_PATH.$OUT_EXT"
 # $ROOT_STORAGE_PATH
 # $RELATIVE_PATH
 
-# # This section is for testing only. Normally, just comment it out.
-echo "STORE_PATH:  @$STORE_PATH@"
-echo "IN_PATH:     @$IN_PATH@"
-echo "OUT_PATH:    @$OUT_PATH@"
-echo "STORE_PATH:  @$STORE_PATH@"
-echo ""
+# Make sure only root can run our script
+if [[ $EUID -ne 0 ]]; then
+  echo "This script must be run as root."
+  exit 1
+fi
 
-exit 0
+if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
+    && [[ "$IN_PATH" != *"BBC World News"* ]] \
+    && [[ "$IN_PATH" != *"CBS Evening News"* ]] \
+    && [[ "$IN_PATH" != *"CBS Morning News"* ]] \
+    && [[ "$IN_PATH" != *"CBS This Morning"* ]] \
+    && [[ "$IN_PATH" != *"CBS Weekend News"* ]] \
+    && [[ "$IN_PATH" != *"Face the Nation"* ]] \
+    && [[ "$IN_PATH" != *"Jimmy Kimmel Life"* ]] \
+    && [[ "$IN_PATH" != *"KXAN News"* ]] \
+    && [[ "$IN_PATH" != *"Meet the Press"* ]] \
+    && [[ "$IN_PATH" != *"NBC Nightly News"* ]] \
+    && [[ "$IN_PATH" != *"Sunday Today"* ]] \
+    && [[ "$IN_PATH" != *"The Late Show"* ]] \
+    && [[ "$IN_PATH" != *"The Tonight Show"* ]] \
+    && [[ "$IN_PATH" != *"Today (195"* ]]; then
+
+    sudo -u lhensley transcode >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
+
+    # Do the transcoding
+    TIMESTART=$(currenttimeinseconds)
+    logger "$HANDBRAKE starting transcoding of $IN_PATH"
+    sudo -y plex $HANDBRAKE --preset-import-file "$PRESET" \
+        -i "$IN_PATH" -o "$OUT_PATH"  >> /dev/null 2>&1
+    exit_status=$?
+    if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
+        logger "$HANDBRAKE transcoding FAILED for $IN_PATH"
+        exit $exit_status
+      else
+        logger "$HANDBRAKE transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART ))) for $OUT_PATH"
+      fi # End of check for transcoding failure
+
+    # Move the transcoded file to storage
+    rm $IN_PATH >> /dev/null 2>&1
+    sudo -u plex mkdir -p $(dirname $STORE_PATH) >> /dev/null 2>&1 # Create the directory for the stored version
+    mv $OUT_PATH $STORE_PATH >> /dev/null 2>&1
+    exit_status=$?
+    if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
+        logger "$0 FAILED to move $OUT_PATH to $(dirname $STORE_PATH)"
+        exit $exit_status
+      else
+        logger "$0 moved $OUT_PATH to $(dirname $STORE_PATH)"
+      fi # End of check for transcoding failure
+
+    # Change permissions for Plex libraries
+    if [ $HOST_NAME == "oz" ]; then
+	    find $ROOT_WORK_PATH -type d -exec chmod 775 {} \; >> /dev/null 2>&1
+	    find $ROOT_WORK_PATH -type f -exec chmod 664 {} \; >> /dev/null 2>&1
+	    find $ROOT_STORAGE_PATH -type d -exec chmod 775 {} \; >> /dev/null 2>&1
+	    find $ROOT_STORAGE_PATH -type f -exec chmod 664 {} \; >> /dev/null 2>&1
+	    fi
+
+    exit $exit_status
+
+fi
