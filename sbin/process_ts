@@ -47,6 +47,12 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+    echo $IN_PATH
+    echo $OUT_PATH
+    echo $STORE_PATH
+    echo
+    exit 0
+
 if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
     && [[ "$IN_PATH" != *"BBC World News"* ]] \
     && [[ "$IN_PATH" != *"CBS Evening News"* ]] \
@@ -63,12 +69,6 @@ if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
     && [[ "$IN_PATH" != *"The Tonight Show"* ]] \
     && [[ "$IN_PATH" != *"Today (195"* ]] \
     && [[ "$IN_PATH" != *".grab"* ]]; then
-
-    echo $IN_PATH
-    echo $OUT_PATH
-    echo $STORE_PATH
-    echo
-    exit 0
 
     sudo -u lhensley transcode >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
 
