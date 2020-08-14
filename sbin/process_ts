@@ -47,11 +47,6 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-echo $IN_PATH
-echo $OUT_PATH
-echo $STORE_PATH
-echo ""
-
 if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
     && [[ "$IN_PATH" != *"BBC World News"* ]] \
     && [[ "$IN_PATH" != *"CBS Evening News"* ]] \
@@ -75,8 +70,7 @@ if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
     TIMESTART=$(currenttimeinseconds)
     logger "$HANDBRAKE starting transcoding of $IN_PATH"
     sudo -u plex $HANDBRAKE --preset-import-file "$PRESET" \
-        -i "$IN_PATH" -o "$OUT_PATH"
-        # >> /dev/null 2>&1
+        -i "$IN_PATH" -o "$OUT_PATH" >> /dev/null 2>&1
     exit_status=$?
     if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
         logger "$HANDBRAKE transcoding FAILED for $IN_PATH"

@@ -29,9 +29,7 @@ logger "$0 woke up."
 
 while true; do # Endless loop
 
-echo "In endless loop"
-    find "$ROOT_WORK" -type f -name "*.ts" -print -exec process_ts "{}" "$ROOT_WORK" "$ROOT_STORE" \; 
-    # >> /dev/null 2>&1
+    find "$ROOT_WORK" -type f -name "*.ts" -print -exec process_ts "{}" "$ROOT_WORK" "$ROOT_STORE" \; >> /dev/null 2>&1
     logger "$0 sleeping for one hour."
     sleep 3600 # Wait one hour
     logger "$0 woke up."
