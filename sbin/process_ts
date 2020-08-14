@@ -9,11 +9,15 @@ ROOT_STORAGE_PATH=$3
 
 ROOT_WORK_PATH_LENGTH=${#2}
 RELATIVE_PATH=${INSTRING: -ROOT_WORK_PATH_LENGTH}
+RELATIVE_PATH_LENGTH=${#INSTRING}-${#RELATIVE_PATH}
 
 echo "In: $INSTRING"
 echo "Work: $ROOT_WORK_PATH"
 echo "2 length: $ROOT_WORK_PATH_LENGTH"
 echo "Work length: $ROOT_WORK_PATH_LENGTH"
+
+echo "Relative path: $RELATIVE_PATH"
+echo "Relative path length: $RELATIVE_PATH_LENGTH"
 
 echo "Storage: $ROOT_STORAGE_PATH"
 echo "Storage length: ${#ROOT_STORAGE_PATH}"
