@@ -1,0 +1,5 @@
+#!/bin/bash
+# _upd
+#
+_run_apt_updates
+
