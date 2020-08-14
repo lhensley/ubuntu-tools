@@ -23,8 +23,8 @@ PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 ROOT_WORK="/mnt/ssd1tb/plex"
 ROOT_STORE="/mnt/rerun/plex"
 
-logger "$0 sleeping for two minutes."
-sleep 120 # Pause for two minutes to let the system finish booting and mounting disks
+logger "$0 sleeping for 10 seconds to let the system finish booting and mounting disks."
+sleep 10 # Pause for ten seconds to let the system finish booting and mounting disks
 logger "$0 woke up."
 
 while true; do # Endless loop
