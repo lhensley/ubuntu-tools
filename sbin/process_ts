@@ -74,6 +74,7 @@ if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
     exit_status=$?
     if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
         logger "$HANDBRAKE transcoding FAILED for $IN_PATH"
+        echo "Transcoding FAILED for $RELATIVE_PATH" | mail lanecell
         exit $exit_status
       else
         logger "$HANDBRAKE transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART ))) for $OUT_PATH"
@@ -86,6 +87,7 @@ if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
     exit_status=$?
     if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
         logger "$0 FAILED to move $OUT_PATH to $(dirname $STORE_PATH)"
+        echo "Failed to move to storage $RELATIVE_PATH" | mail lanecell
         exit $exit_status
       else
         logger "$0 moved $OUT_PATH to $(dirname $STORE_PATH)"
