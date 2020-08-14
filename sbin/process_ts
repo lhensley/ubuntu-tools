@@ -3,6 +3,8 @@
 # Usage: process_ts <input_file> <root_work_path> <root_storage_path>
 # No final / on either path. For system root, use ""
 
+OUT_EXT="m4v"
+
 IN_PATH=$1
 ROOT_WORK_PATH=$2
 ROOT_STORAGE_PATH=$3
@@ -15,32 +17,24 @@ IN_EXT_LENGTH="${#IN_EXT}"
 
 RELATIVE_PATH_LENGTH=$[IN_PATH_LENGTH-ROOT_WORK_PATH_LENGTH-1]
 RELATIVE_PATH=${IN_PATH: -$RELATIVE_PATH_LENGTH} # First remove ROOT_WORK_PATH
-echo "RELATIVE_PATH (1):  @$RELATIVE_PATH@"
 RELATIVE_PATH_LENGTH=$[RELATIVE_PATH_LENGTH-IN_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
 RELATIVE_PATH=${RELATIVE_PATH:0:RELATIVE_PATH_LENGTH} # Then remove IN_EXT
 
-NO_EXT_PATH_LENGTH=$[IN_PATH_LENGTH-IN_EXT_LENGTH-1]
-NO_EXT_PATH=${IN_PATH:0:NO_EXT_PATH_LENGTH}
-STORE_PATH_M4V="$NO_EXT_PATH.m4v"
-STORE_PATH_SAME=$3/$RELATIVE_PATH
+OUT_PATH=$ROOT_WORK_PATH/$RELATIVE_PATH/.$IN_EXT
+STORE_PATH=$ROOT_STORAGE_PATH/$RELATIVE_PATH/.$IN_EXT
 
-# So ...
+# So here are useful variables defined ...
+# $IN_PATH
+# $OUT_PATH
+# $STORE_PATH
 # $ROOT_WORK_PATH
 # $ROOT_STORAGE_PATH
 # $RELATIVE_PATH
-# $IN_PATH
-# $STORE_PATH
 
 # # This section is for testing only. Normally, just comment it out.
-echo "ROOT_WORK_PATH:     @$ROOT_WORK_PATH@"
-echo "ROOT_STORAGE_PATH:  @$ROOT_STORAGE_PATH@"
-echo "RELATIVE_PATH (2):  @$RELATIVE_PATH@"
-echo "IN_EXT:             @$IN_EXT@"
-echo "IN_EXT_LENGTH:      @$IN_EXT_LENGTH@"
-echo "IN_PATH:            @$IN_PATH@"
-echo "STORE_PATH_SAME:    @$STORE_PATH_SAME@"
-echo "STORE_PATH_M4V:     @$STORE_PATH_M4V@"
-echo "NO_EXT_PATH:        @$NO_EXT_PATH@"
+echo "IN_PATH:     @$IN_PATH@"
+echo "OUT_PATH:    @$OUT_PATH@"
+echo "STORE_PATH:  @$STORE_PATH_PATH@"
 echo ""
 
 exit 0
