@@ -13,11 +13,11 @@ RELATIVE_PATH=${INSTRING: -ROOT_WORK_PATH_LENGTH}
 echo "In: $INSTRING"
 echo "2 length: $ROOT_WORK_PATH_LENGTH"
 echo "Work: $ROOT_WORK_PATH"
-echo "Work length: $ROOT_WORTH_PATH_LENGTH"
+echo "Work length: $ROOT_WORK_PATH_LENGTH"
 
 # echo "Storage: $ROOT_STORAGE_PATH"
 # echo "Storage length: ${#ROOT_STORAGE_PATH}"
-echo "Without Work: ${INSTRING: -ROOT_WORK_PATH_LENGTH}"
+echo "Without Work: ${INSTRING: -$ROOT_WORK_PATH_LENGTH}"
 # echo "Without Work: ${INSTRING: -3}"
 echo "Out: $3/${INSTRING: -1-(${#ROOT_WORK_PATH})-1}"
 echo ""
