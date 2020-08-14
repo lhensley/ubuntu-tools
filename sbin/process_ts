@@ -54,7 +54,14 @@ if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
     && [[ "$IN_PATH" != *"Sunday Today"* ]] \
     && [[ "$IN_PATH" != *"The Late Show"* ]] \
     && [[ "$IN_PATH" != *"The Tonight Show"* ]] \
-    && [[ "$IN_PATH" != *"Today (195"* ]]; then
+    && [[ "$IN_PATH" != *"Today (195"* ]] \
+    && [[ "$IN_PATH" != *".grab"* ]]; then
+
+    echo $IN_PATH
+    echo $OUT_PATH
+    echo $STORE_PATH
+    echo
+    exit 0
 
     sudo -u lhensley transcode >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
 
