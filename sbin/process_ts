@@ -16,16 +16,16 @@ OUTSTRING=$3/$RELATIVE_PATH
 # So ...
 # $ROOT_WORK_PATH
 # $ROOT_STORAGE_PATH
-$ $RELATIVE_PATH
+# $RELATIVE_PATH
 # $INSTRING
 # $OUTSTRING
 
 # # This section is for testing only. Normally, just comment it out.
-echo "ROOT_WORK_PATH:     $ROOT_WORK_PATH
-echo "ROOT_STORAGE_PATH:  $ROOT_STORAGE_PATH
-echo "RELATIVE_PATH:      $RELATIVE_PATH
-echo "INSTRING:           $INSTRING
-echo "OUTSTRING:          $OUTSTRING
+echo "ROOT_WORK_PATH:     $ROOT_WORK_PATH"
+echo "ROOT_STORAGE_PATH:  $ROOT_STORAGE_PATH"
+echo "RELATIVE_PATH:      $RELATIVE_PATH"
+echo "INSTRING:           $INSTRING"
+echo "OUTSTRING:          $OUTSTRING"
 echo ""
 
 exit 0
