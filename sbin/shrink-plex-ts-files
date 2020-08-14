@@ -36,6 +36,8 @@ echo "test"
     logger "$0 sleeping for one hour."
     sleep 3600 # Wait one hour
     logger "$0 woke up."
+exit 0
+
 
 done # Endless loop
 
