@@ -47,6 +47,11 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+echo $IN_PATH
+echo $OUT_PATH
+echo $STORE_PATH
+echo ""
+
 if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
     && [[ "$IN_PATH" != *"BBC World News"* ]] \
     && [[ "$IN_PATH" != *"CBS Evening News"* ]] \
