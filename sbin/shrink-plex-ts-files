@@ -3,7 +3,7 @@
 
 production_mode=true
 debug_mode=false
-debug_mode=true
+# debug_mode=true
 if $debug_mode ; then
   set -x
   fi
@@ -24,20 +24,15 @@ ROOT_WORK="/mnt/ssd1tb/plex"
 ROOT_STORE="/mnt/rerun/plex"
 
 logger "$0 sleeping for two minutes."
-sleep 2 # Pause for two minutes to let the system finish booting and mounting disks
+sleep 120 # Pause for two minutes to let the system finish booting and mounting disks
 logger "$0 woke up."
 
 while true; do # Endless loop
 
-echo "test"
-    find "$ROOT_WORK" -type f -name "*.ts" -exec process_ts "{}" "$ROOT_WORK" "$ROOT_STORE" \;
-#    find "$ROOT_WORK" -type f -name "*.ts" -exec process_ts "{}" "$ROOT_WORK" "$ROOT_STORE" \; >> /dev/null 2>&1
-#    find "$ROOT_WORK" -type f -name "*.ts" -exec ls -al "{}" \;
+    find "$ROOT_WORK" -type f -name "*.ts" -print -exec process_ts "{}" "$ROOT_WORK" "$ROOT_STORE" \; >> /dev/null 2>&1
     logger "$0 sleeping for one hour."
     sleep 3600 # Wait one hour
     logger "$0 woke up."
-exit 0
-
 
 done # Endless loop
 

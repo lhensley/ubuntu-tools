@@ -5,7 +5,7 @@
 
 production_mode=true
 debug_mode=false
-debug_mode=true
+# debug_mode=true
 if $debug_mode ; then
   set -x
   fi
@@ -46,12 +46,6 @@ if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as root."
   exit 1
 fi
-
-    echo $IN_PATH
-    echo $OUT_PATH
-    echo $STORE_PATH
-    echo
-    exit 0
 
 if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
     && [[ "$IN_PATH" != *"BBC World News"* ]] \
@@ -99,10 +93,10 @@ if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
 
     # Change permissions for Plex libraries
     if [ $HOST_NAME == "oz" ]; then
-	    find "$ROOT_WORK_PATH" -type d -exec chmod 775 {} \; >> /dev/null 2>&1
-	    find "$ROOT_WORK_PATH" -type f -exec chmod 664 {} \; >> /dev/null 2>&1
-	    find "$ROOT_STORAGE_PATH" -type d -exec chmod 775 {} \; >> /dev/null 2>&1
-	    find "$ROOT_STORAGE_PATH" -type f -exec chmod 664 {} \; >> /dev/null 2>&1
+	    find "$ROOT_WORK_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
+	    find "$ROOT_WORK_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
+	    find "$ROOT_STORAGE_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
+	    find "$ROOT_STORAGE_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
 	    fi
 
     exit $exit_status
