@@ -15,6 +15,7 @@ IN_EXT_LENGTH="${#IN_EXT}"
 
 RELATIVE_PATH_LENGTH=$[IN_PATH_LENGTH-ROOT_WORK_PATH_LENGTH+1]
 RELATIVE_PATH=${IN_PATH: -$RELATIVE_PATH_LENGTH} # First remove ROOT_WORK_PATH
+echo "RELATIVE_PATH (1):  @$RELATIVE_PATH@"
 RELATIVE_PATH_LENGTH=$[RELATIVE_PATH_LENGTH-IN_EXT_LENGTH+1] # Recalculate relative path length by removing extension length
 RELATIVE_PATH=${RELATIVE_PATH:0:RELATIVE_PATH_LENGTH} # Then remove IN_EXT
 
@@ -33,7 +34,7 @@ STORE_PATH_SAME=$3/$RELATIVE_PATH
 # # This section is for testing only. Normally, just comment it out.
 echo "ROOT_WORK_PATH:     @$ROOT_WORK_PATH@"
 echo "ROOT_STORAGE_PATH:  @$ROOT_STORAGE_PATH@"
-echo "RELATIVE_PATH:      @$RELATIVE_PATH@"
+echo "RELATIVE_PATH (2):  @$RELATIVE_PATH@"
 echo "IN_EXT:             @$IN_EXT@"
 echo "IN_EXT_LENGTH:      @$IN_EXT_LENGTH@"
 echo "IN_PATH:            @$IN_PATH@"
