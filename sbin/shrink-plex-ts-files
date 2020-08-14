@@ -24,12 +24,12 @@ ROOT_WORK="/mnt/ssd1tb/plex"
 ROOT_STORE="/mnt/rerun/plex"
 
 logger "$0 sleeping for two minutes."
-sleep 10 # Pause for two minutes to let the system finish booting and mounting disks
+sleep 2 # Pause for two minutes to let the system finish booting and mounting disks
 logger "$0 woke up."
 
 while true; do # Endless loop
 
-    find "$ROOT_WORK_PATH" -type f -exec process_ts {} "$ROOT_WORK" "$ROOT_STORE" \; >> /dev/null 2>&1
+    find "$ROOT_WORK" -type f -exec process_ts {} "$ROOT_WORK" "$ROOT_STORE" \; >> /dev/null 2>&1
     logger "$0 sleeping for one hour."
     sleep 3600 # Wait one hour
     logger "$0 woke up."
