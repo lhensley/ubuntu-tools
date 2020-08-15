@@ -1,5 +1,5 @@
 #!/bin/bash
-# process_ts
+# move-one-file
 # Usage: move-one-file <input_file> <root_in_path> <root_out_path>
 # No final / on either path. For system root, use ""
 
