@@ -34,6 +34,12 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+# Make sure $IN_FILE is not in use
+if [ -n "$(lsof "$IN_FILE" 2>/dev/null)" ]; then
+    logger "$0: File in use and cannot move $IN_FILE"
+    echo "$0: File in use and cannot move $IN_FILE" | mail lanecell
+  fi
+
 # Make the directory for out file
 if [ ! -d $(dirname $OUT_FILE) ]; then
   mkdir -p "$(dirname $OUT_FILE)" >> /dev/null 2>&1 # Create the directory for the out file
