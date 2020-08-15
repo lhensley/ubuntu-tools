@@ -14,6 +14,12 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+# Confirm that this host is oz
+if [[ $(hostname -s) != "oz" ]]; then
+  echo "This script can ony be run on server oz."
+  exit 1
+fi
+
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/lhlib
 

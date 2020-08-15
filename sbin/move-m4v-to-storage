@@ -1,5 +1,6 @@
 #!/bin/bash
 # move-m4v-to-storage
+# Takes no arguments
 
 production_mode=true
 debug_mode=false
@@ -15,33 +16,32 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Confirm that this host is oz
-if [[ $(hostname -s) != "oz" ]]
+if [[ $(hostname -s) != "oz" ]]; then
   echo "This script can ony be run on server oz."
   exit 1
 fi
 
-exit 0
+# PROGRAM_DIRECTORY=$(dirname $0)
+# source $PROGRAM_DIRECTORY/lhlib
 
-PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/lhlib
-
-HANDBRAKE="HandBrakeCLI"
-PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
+# HANDBRAKE="HandBrakeCLI"
+# PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 
 ROOT_WORK="/mnt/ssd1tb/plex"
 ROOT_STORE="/mnt/rerun/plex"
 
-logger "$0 sleeping for 10 seconds to let the system finish booting and mounting disks."
-sleep 10 # Pause for ten seconds to let the system finish booting and mounting disks
-logger "$0 woke up."
+# logger "$0 sleeping for 10 seconds to let the system finish booting and mounting disks."
+# sleep 10 # Pause for ten seconds to let the system finish booting and mounting disks
+# logger "$0 woke up."
 
-while true; do # Endless loop
+# while true; do # Endless loop
 
-    find "$ROOT_WORK" -type f -name "*.ts" -print -exec process_ts "{}" "$ROOT_WORK" "$ROOT_STORE" \; >> /dev/null 2>&1
-    logger "$0 sleeping for one hour."
-    sleep 3600 # Wait one hour
-    logger "$0 woke up."
+    find "$ROOT_WORK" -type f -name "*.mkv" -print 
+    # -exec process_ts "{}" "$ROOT_WORK" "$ROOT_STORE" \; >> /dev/null 2>&1
+#     logger "$0 sleeping for one hour."
+#     sleep 3600 # Wait one hour
+#     logger "$0 woke up."
 
-done # Endless loop
+# done # Endless loop
 
 exit 0
