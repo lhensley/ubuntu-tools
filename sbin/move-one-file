@@ -39,6 +39,7 @@ fi
 if [ ! -f "$IN_FILE" ]; then
   logger "$0 no source file $IN_FILE"
   echo "$(date) $0 no source file" | mail lanecell
+  sleep 1
   echo "$IN_FILE" | mail lanecell
   exit 1
   fi
@@ -47,6 +48,7 @@ if [ ! -f "$IN_FILE" ]; then
 if [ -n "$(lsof "$IN_FILE" 2>/dev/null)" ]; then
     logger "$0: File in use and cannot move $IN_FILE"
     echo "$(date) $0: File in use and cannot move" | mail lanecell
+    sleep 1
     echo "$IN_FILE" | mail lanecell
     exit $exit_status
   fi
@@ -58,6 +60,7 @@ if [ ! -d "$NEW_DIRECTORY" ]; then
   if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
       logger "$0 FAILED to make $NEW_DIRECTORY"
       echo "$(date) $0 Failed to make new directory" | mail lanecell
+      sleep 1
       echo "$NEW_DIRECTORY" | mail lanecell
       exit $exit_status
       fi
@@ -69,6 +72,7 @@ exit_status=$?
 if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
     logger "$0 FAILED to move $IN_FILE to $NEW_DIRECTORY"
     echo "$(date) $0 Failed to move file" | mail lanecell
+    sleep 1
     echo "$IN_FILE" | mail lanecell
     echo "to $OUT_FILE" | mail lanecell
     exit $exit_status
