@@ -1,6 +1,6 @@
 #!/bin/bash
 # process_ts
-# Usage: process_ts <input_file> <root_work_path> <root_storage_path>
+# Usage: move-one-file <input_file> <root_work_path> <root_storage_path>
 # No final / on either path. For system root, use ""
 
 production_mode=true
@@ -14,7 +14,7 @@ IN_PATH=$1
 ROOT_WORK_PATH=$2
 ROOT_STORAGE_PATH=$3
 
-OUT_EXT="m4v"
+# OUT_EXT="m4v"
 
 ROOT_WORK_PATH_LENGTH=${#ROOT_WORK_PATH}
 
@@ -24,8 +24,8 @@ IN_EXT_LENGTH="${#IN_EXT}"
 
 RELATIVE_PATH_LENGTH=$[IN_PATH_LENGTH-ROOT_WORK_PATH_LENGTH-1]
 RELATIVE_PATH=${IN_PATH: -$RELATIVE_PATH_LENGTH} # First remove ROOT_WORK_PATH
-RELATIVE_PATH_LENGTH=$[RELATIVE_PATH_LENGTH-IN_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
-RELATIVE_PATH=${RELATIVE_PATH:0:RELATIVE_PATH_LENGTH} # Then remove IN_EXT
+# RELATIVE_PATH_LENGTH=$[RELATIVE_PATH_LENGTH-IN_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
+# RELATIVE_PATH=${RELATIVE_PATH:0:RELATIVE_PATH_LENGTH} # Then remove IN_EXT
 
 OUT_PATH="$ROOT_WORK_PATH/$RELATIVE_PATH.$OUT_EXT"
 STORE_PATH="$ROOT_STORAGE_PATH/$RELATIVE_PATH.$OUT_EXT"
@@ -95,9 +95,6 @@ if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
     if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
         logger "$0 FAILED to move $OUT_PATH to $(dirname $STORE_PATH)"
         echo "Failed to move to storage $RELATIVE_PATH" | mail lanecell
-        echo "Source $OUT_PATH"
-        echo "Target dir $(dirname $STORE_PATH)"
-        echo "Source $STORE_PATH"
         exit $exit_status
       else
         logger "$0 moved $OUT_PATH to $(dirname $STORE_PATH)"
