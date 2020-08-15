@@ -101,12 +101,10 @@ if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
       fi
 
     # Change permissions for Plex libraries
-    if [ $HOST_NAME == "oz" ]; then
-	    find "$ROOT_WORK_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
-	    find "$ROOT_WORK_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
-	    find "$ROOT_STORAGE_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
-	    find "$ROOT_STORAGE_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
-	    fi
+	find "$ROOT_WORK_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
+	find "$ROOT_WORK_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
+	find "$ROOT_STORAGE_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
+	find "$ROOT_STORAGE_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
 
     exit $exit_status
 
