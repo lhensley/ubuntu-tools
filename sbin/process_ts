@@ -77,11 +77,11 @@ if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
         echo "Transcoding FAILED for $RELATIVE_PATH" | mail lanecell
         exit $exit_status
       else
+        rm "$IN_PATH" >> /dev/null 2>&1 # Delete input file
         logger "$HANDBRAKE transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART ))) for $OUT_PATH"
       fi # End of check for transcoding failure
 
     # Make the directory for storage
-    rm "$IN_PATH" >> /dev/null 2>&1
     mkdir -p "$(dirname $STORE_PATH)" >> /dev/null 2>&1 # Create the directory for the stored version
     exit_status=$?
     if [ $exit_status -ne 0 ]; then # If the transcoding failed ...

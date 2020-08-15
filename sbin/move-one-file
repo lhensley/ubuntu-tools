@@ -23,19 +23,19 @@ IN_EXT="${IN_PATH##*.}"
 IN_EXT_LENGTH="${#IN_EXT}"
 
 RELATIVE_PATH_LENGTH=$[IN_PATH_LENGTH-ROOT_WORK_PATH_LENGTH-1]
-RELATIVE_PATH=${IN_PATH: -$RELATIVE_PATH_LENGTH} # First remove ROOT_WORK_PATH
+RELATIVE_PATH=${IN_PATH: -$RELATIVE_PATH_LENGTH} # Remove ROOT_WORK_PATH
 # RELATIVE_PATH_LENGTH=$[RELATIVE_PATH_LENGTH-IN_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
 # RELATIVE_PATH=${RELATIVE_PATH:0:RELATIVE_PATH_LENGTH} # Then remove IN_EXT
 
-OUT_PATH="$ROOT_WORK_PATH/$RELATIVE_PATH.$OUT_EXT"
-STORE_PATH="$ROOT_STORAGE_PATH/$RELATIVE_PATH.$OUT_EXT"
+STORE_PATH="$ROOT_STORAGE_PATH/$RELATIVE_PATH"
+# OUT_PATH="$ROOT_WORK_PATH/$RELATIVE_PATH.$OUT_EXT"
+# STORE_PATH="$ROOT_STORAGE_PATH/$RELATIVE_PATH.$OUT_EXT"
 
 HANDBRAKE="HandBrakeCLI"
 PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 
 # So here are useful variables defined ...
 # $IN_PATH
-# $OUT_PATH
 # $STORE_PATH
 # $ROOT_WORK_PATH
 # $ROOT_STORAGE_PATH
@@ -47,65 +47,32 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
-    && [[ "$IN_PATH" != *"BBC World News"* ]] \
-    && [[ "$IN_PATH" != *"CBS Evening News"* ]] \
-    && [[ "$IN_PATH" != *"CBS Morning News"* ]] \
-    && [[ "$IN_PATH" != *"CBS This Morning"* ]] \
-    && [[ "$IN_PATH" != *"CBS Weekend News"* ]] \
-    && [[ "$IN_PATH" != *"Face the Nation"* ]] \
-    && [[ "$IN_PATH" != *"Jimmy Kimmel Life"* ]] \
-    && [[ "$IN_PATH" != *"KXAN News"* ]] \
-    && [[ "$IN_PATH" != *"Meet the Press"* ]] \
-    && [[ "$IN_PATH" != *"NBC Nightly News"* ]] \
-    && [[ "$IN_PATH" != *"Sunday Today"* ]] \
-    && [[ "$IN_PATH" != *"The Late Show"* ]] \
-    && [[ "$IN_PATH" != *"The Tonight Show"* ]] \
-    && [[ "$IN_PATH" != *"Today (195"* ]] \
-    && [[ "$IN_PATH" != *".grab"* ]]; then
+# Make the directory for storage
+mkdir -p "$(dirname $STORE_PATH)" >> /dev/null 2>&1 # Create the directory for the stored version
+exit_status=$?
+if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
+    logger "$0 FAILED to make $(dirname $STORE_PATH)"
+    echo "Failed to make $(dirname $STORE_PATH)" | mail lanecell
+    fi
 
-    sudo -u lhensley transcode >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
-
-    # Do the transcoding
-    TIMESTART=$(currenttimeinseconds)
-    logger "$HANDBRAKE starting transcoding of $IN_PATH"
-    $HANDBRAKE --preset-import-file "$PRESET" \
-        -i "$IN_PATH" -o "$OUT_PATH" >> /dev/null 2>&1
-    exit_status=$?
-    if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-        logger "$HANDBRAKE transcoding FAILED for $IN_PATH"
-        echo "Transcoding FAILED for $RELATIVE_PATH" | mail lanecell
-        exit $exit_status
-      else
-        logger "$HANDBRAKE transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART ))) for $OUT_PATH"
-      fi # End of check for transcoding failure
-
-    # Make the directory for storage
-    rm "$IN_PATH" >> /dev/null 2>&1
-    mkdir -p "$(dirname $STORE_PATH)" >> /dev/null 2>&1 # Create the directory for the stored version
-    exit_status=$?
-    if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-        logger "$0 FAILED to make $(dirname $STORE_PATH)"
-        echo "Failed to make $(dirname $STORE_PATH)" | mail lanecell
-      fi
-
-    # Move the transcoded file to storage
-    mv "$OUT_PATH" "$STORE_PATH" >> /dev/null 2>&1
-    exit_status=$?
-    if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-        logger "$0 FAILED to move $OUT_PATH to $(dirname $STORE_PATH)"
-        echo "Failed to move to storage $RELATIVE_PATH" | mail lanecell
-        exit $exit_status
-      else
-        logger "$0 moved $OUT_PATH to $(dirname $STORE_PATH)"
-      fi
-
-    # Change permissions for Plex libraries
-	find "$ROOT_WORK_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
-	find "$ROOT_WORK_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
-	find "$ROOT_STORAGE_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
-	find "$ROOT_STORAGE_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
-
+# Move the transcoded file to storage
+mv "$OUT_PATH" "$STORE_PATH" >> /dev/null 2>&1
+exit_status=$?
+if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
+    logger "$0 FAILED to move $OUT_PATH to $(dirname $STORE_PATH)"
+    echo "Failed to move to storage $RELATIVE_PATH" | mail lanecell
+        echo "Source $OUT_PATH"
+        echo "Target dir $(dirname $STORE_PATH)"
+        echo "Source $STORE_PATH"
     exit $exit_status
+    else
+    logger "$0 moved $OUT_PATH to $(dirname $STORE_PATH)"
+    fi
 
-fi
+# Change permissions for Plex libraries
+find "$ROOT_WORK_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
+find "$ROOT_WORK_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
+find "$ROOT_STORAGE_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
+find "$ROOT_STORAGE_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
+
+exit $exit_status
