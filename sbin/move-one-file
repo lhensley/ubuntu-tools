@@ -1,6 +1,6 @@
 #!/bin/bash
 # process_ts
-# Usage: move-one-file <input_file> <root_work_path> <root_storage_path>
+# Usage: move-one-file <input_file> <root_in_path> <root_out_path>
 # No final / on either path. For system root, use ""
 
 production_mode=true
@@ -10,36 +10,23 @@ if $debug_mode ; then
   set -x
   fi
 
-IN_PATH=$1
-ROOT_WORK_PATH=$2
-ROOT_STORAGE_PATH=$3
+IN_FILE=$1
+ROOT_IN_PATH=$2
+ROOT_OUT_PATH=$3
 
-# OUT_EXT="m4v"
+ROOT_IN_PATH_LENGTH=${#ROOT_IN_PATH}
 
-ROOT_WORK_PATH_LENGTH=${#ROOT_WORK_PATH}
+RELATIVE_FILE_LENGTH=$[IN_FILE_LENGTH-ROOT_IN_PATH_LENGTH-1]
+RELATIVE_FILE=${IN_FILE: -$RELATIVE_FILE_LENGTH} # Remove ROOT_IN_PATH
 
-IN_PATH_LENGTH=${#IN_PATH}
-IN_EXT="${IN_PATH##*.}"
-IN_EXT_LENGTH="${#IN_EXT}"
-
-RELATIVE_PATH_LENGTH=$[IN_PATH_LENGTH-ROOT_WORK_PATH_LENGTH-1]
-RELATIVE_PATH=${IN_PATH: -$RELATIVE_PATH_LENGTH} # Remove ROOT_WORK_PATH
-# RELATIVE_PATH_LENGTH=$[RELATIVE_PATH_LENGTH-IN_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
-# RELATIVE_PATH=${RELATIVE_PATH:0:RELATIVE_PATH_LENGTH} # Then remove IN_EXT
-
-STORE_PATH="$ROOT_STORAGE_PATH/$RELATIVE_PATH"
-# OUT_PATH="$ROOT_WORK_PATH/$RELATIVE_PATH.$OUT_EXT"
-# STORE_PATH="$ROOT_STORAGE_PATH/$RELATIVE_PATH.$OUT_EXT"
-
-HANDBRAKE="HandBrakeCLI"
-PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
+OUT_FILE="$ROOT_OUT_PATH/$RELATIVE_FILE"
 
 # So here are useful variables defined ...
-# $IN_PATH
-# $STORE_PATH
-# $ROOT_WORK_PATH
-# $ROOT_STORAGE_PATH
-# $RELATIVE_PATH
+# $IN_FILE
+# $OUT_FILE
+# $ROOT_IN_PATH
+# $ROOT_OUT_PATH
+# $RELATIVE_FILE
 
 # Make sure only root can run our script
 if [[ $EUID -ne 0 ]]; then
@@ -47,28 +34,28 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-# Make the directory for storage
-if [ ! -d $(dirname $STORE_PATH) ]; then
-  mkdir -p "$(dirname $STORE_PATH)" >> /dev/null 2>&1 # Create the directory for the stored version
+# Make the directory for out file
+if [ ! -d $(dirname $OUT_FILE) ]; then
+  mkdir -p "$(dirname $OUT_FILE)" >> /dev/null 2>&1 # Create the directory for the out file
   exit_status=$?
   if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-      logger "$0 FAILED to make $(dirname $STORE_PATH)"
-      echo "Failed to make $(dirname $STORE_PATH)" | mail lanecell
+      logger "$0 FAILED to make $(dirname $OUT_FILE)"
+      echo "Failed to make $(dirname $OUT_FILE)" | mail lanecell
       fi
   fi
 
-# Move the transcoded file to storage
-mv "$IN_PATH" "$STORE_PATH" >> /dev/null 2>&1
+# Move $IN_FILE to $OUT_FILE
+mv "$IN_FILE" "$OUT_FILE" >> /dev/null 2>&1
 exit_status=$?
 if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-    logger "$0 FAILED to move $IN_PATH to $(dirname $STORE_PATH)"
-    echo "Failed to move to storage $RELATIVE_PATH" | mail lanecell
-    echo "Source $IN_PATH" | mail lanecell
-    echo "Target dir $(dirname $STORE_PATH)" | mail lanecell
-    echo "Source $STORE_PATH" | mail lanecell
+    logger "$0 FAILED to move $IN_FILE to $(dirname $OUT_FILE)"
+    echo "Failed to move to $RELATIVE_FILE" | mail lanecell
+    echo "Source $IN_FILE" | mail lanecell
+    echo "Target dir $(dirname $OUT_FILE)" | mail lanecell
+    echo "Target $OUT_FILE" | mail lanecell
     exit $exit_status
   else
-    logger "$0 moved $IN_PATH to $(dirname $STORE_PATH)"
+    logger "$0 moved $IN_FILE to $(dirname $OUT_FILE)"
   fi
 
 exit 0
