@@ -48,12 +48,14 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Make the directory for storage
-mkdir -p "$(dirname $STORE_PATH)" >> /dev/null 2>&1 # Create the directory for the stored version
-exit_status=$?
-if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-    logger "$0 FAILED to make $(dirname $STORE_PATH)"
-    echo "Failed to make $(dirname $STORE_PATH)" | mail lanecell
-    fi
+if [ ! -d $(dirname $STORE_PATH) ]; then
+  mkdir -p "$(dirname $STORE_PATH)" >> /dev/null 2>&1 # Create the directory for the stored version
+  exit_status=$?
+  if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
+      logger "$0 FAILED to make $(dirname $STORE_PATH)"
+      echo "Failed to make $(dirname $STORE_PATH)" | mail lanecell
+      fi
+  fi
 
 # Move the transcoded file to storage
 mv "$OUT_PATH" "$STORE_PATH" >> /dev/null 2>&1
