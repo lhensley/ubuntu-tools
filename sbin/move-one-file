@@ -34,6 +34,14 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+echo "IN_FILE $IN_FILE" | mail lanecell
+echo "OUT_FILE $OUT_FILE" | mail lanecell
+echo "ROOT_IN_PATH $ROOT_IN_PATH" | mail lanecell
+echo "ROOT_OUT_PATH $ROOT_OUT_PATH" | mail lanecell
+echo "RELATIVE_FILE $RELATIVE_FILE" | mail lanecell
+echo "Dir to make: $(dirname $OUT_FILE)" | mail lanecell
+exit 0
+
 # Make sure $IN_FILE is not in use
 if [ -n "$(lsof "$IN_FILE" 2>/dev/null)" ]; then
     logger "$0: File in use and cannot move $IN_FILE"

@@ -24,6 +24,6 @@ fi
 ROOT_WORK="/mnt/ssd1tb/plex"
 ROOT_STORE="/mnt/rerun/plex"
 
-find "$ROOT_WORK" -type f -name "*.m4v" -print 
+find "$ROOT_WORK" -type f -name "*.m4v" -print -exec move-m4v-to-storage {} "ROOT_WORK" "ROOT_STORE" \;
 
 exit 0
