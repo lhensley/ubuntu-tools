@@ -81,29 +81,7 @@ if [[ "$IN_PATH" != *"ABC World News Tonight"* ]] \
         logger "$HANDBRAKE transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART ))) for $OUT_PATH"
       fi # End of check for transcoding failure
 
-    # Make the directory for storage
-    if [ ! -d $(dirname $STORE_PATH) ]; then
-      mkdir -p "$(dirname $STORE_PATH)" >> /dev/null 2>&1 # Create the directory for the stored version
-      exit_status=$?
-      if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-          logger "$0 FAILED to make $(dirname $STORE_PATH)"
-          echo "Failed to make $(dirname $STORE_PATH)" | mail lanecell
-          fi
-      fi
-
-    # Move the transcoded file to storage
-    mv "$OUT_PATH" "$STORE_PATH" >> /dev/null 2>&1
-    exit_status=$?
-    if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-        logger "$0 FAILED to move $OUT_PATH to $(dirname $STORE_PATH)"
-        echo "Failed to move to storage $RELATIVE_PATH" | mail lanecell
-        echo "Source $OUT_PATH" | mail lanecell
-        echo "Target dir $(dirname $STORE_PATH)" | mail lanecell
-        echo "Source $STORE_PATH" | mail lanecell
-        exit $exit_status
-      else
-        logger "$0 moved $OUT_PATH to $(dirname $STORE_PATH)"
-      fi
+    move-one-file "$OUT_PATH" "$ROOT_WORK_PATH" "$ROOT_STORE_PATH"
 
     # Change permissions for Plex libraries
 	find "$ROOT_WORK_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
