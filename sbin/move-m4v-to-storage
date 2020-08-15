@@ -36,7 +36,7 @@ ROOT_STORE="/mnt/rerun/plex"
 
 # while true; do # Endless loop
 
-    find "$ROOT_WORK" -type f -name "*.mkv" -print 
+    find "$ROOT_WORK" -type f -name "*.m4v" -print 
     # -exec process_ts "{}" "$ROOT_WORK" "$ROOT_STORE" \; >> /dev/null 2>&1
 #     logger "$0 sleeping for one hour."
 #     sleep 3600 # Wait one hour
