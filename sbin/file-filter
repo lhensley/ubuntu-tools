@@ -32,27 +32,27 @@ for ARG in "${ARGS[@]}"; do
   if $INITIAL_STATE; then
     MODE=$ARG
   else
-    if [[ "$IN_FILE" != *"ABC World News Tonight"* ]] \
-        && [[ "$IN_FILE" != *"BBC World News"* ]] \
-        && [[ "$IN_FILE" != *"CBS Evening News"* ]] \
-        && [[ "$IN_FILE" != *"CBS Morning News"* ]] \
-        && [[ "$IN_FILE" != *"CBS This Morning"* ]] \
-        && [[ "$IN_FILE" != *"CBS Weekend News"* ]] \
-        && [[ "$IN_FILE" != *"Face the Nation"* ]] \
-        && [[ "$IN_FILE" != *"Jimmy Kimmel Live"* ]] \
-        && [[ "$IN_FILE" != *"KXAN News"* ]] \
-        && [[ "$IN_FILE" != *"Meet the Press"* ]] \
-        && [[ "$IN_FILE" != *"NBC Nightly News"* ]] \
-        && [[ "$IN_FILE" != *"Sunday Today"* ]] \
-        && [[ "$IN_FILE" != *"The Late Show"* ]] \
-        && [[ "$IN_FILE" != *"The Tonight Show"* ]] \
-        && [[ "$IN_FILE" != *"Today (195"* ]] \
-        && [[ "$IN_FILE" != *".grab"* ]]; then
-          if [$MODE == "out"]; then
-            printf $ARG
+    if [[ "$ARG" != *"ABC World News Tonight"* ]] \
+        && [[ "$ARG" != *"BBC World News"* ]] \
+        && [[ "$ARG" != *"CBS Evening News"* ]] \
+        && [[ "$ARG" != *"CBS Morning News"* ]] \
+        && [[ "$ARG" != *"CBS This Morning"* ]] \
+        && [[ "$ARG" != *"CBS Weekend News"* ]] \
+        && [[ "$ARG" != *"Face the Nation"* ]] \
+        && [[ "$ARG" != *"Jimmy Kimmel Live"* ]] \
+        && [[ "$ARG" != *"KXAN News"* ]] \
+        && [[ "$ARG" != *"Meet the Press"* ]] \
+        && [[ "$ARG" != *"NBC Nightly News"* ]] \
+        && [[ "$ARG" != *"Sunday Today"* ]] \
+        && [[ "$ARG" != *"The Late Show"* ]] \
+        && [[ "$ARG" != *"The Tonight Show"* ]] \
+        && [[ "$ARG" != *"Today (195"* ]] \
+        && [[ "$ARG" != *".grab"* ]]; then
+          if ["$MODE" == "out"]; then
+            printf "%s" $ARG
             fi
-          else if [$MODE == "in"]; then
-            printf $ARG
+          else if ["$MODE" == "in"]; then
+            printf "%s" $ARG
             fi
       fi
     fi
