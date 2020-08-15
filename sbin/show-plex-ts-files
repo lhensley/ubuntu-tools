@@ -20,7 +20,7 @@ if [[ $(hostname -s) != "oz" ]]; then
   exit 1
 fi
 
-ROOT_WORK="/mnt/ssd1tb/plex"
+WORK_ROOT="/mnt/ssd1tb/plex"
 
 find "$WORK_ROOT" -type f -name "*.ts" -print
 
