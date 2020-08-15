@@ -21,9 +21,9 @@ if [[ $(hostname -s) != "oz" ]]; then
   exit 1
 fi
 
-ROOT_WORK="/mnt/ssd1tb/plex"
-ROOT_STORE="/mnt/rerun/plex"
+WORK_ROOT="/mnt/ssd1tb/plex"
+STORE_ROOT="/mnt/rerun/plex"
 
-find "$ROOT_WORK" -type f -name "*.m4v" -print -exec move-m4v-to-storage {} "ROOT_WORK" "ROOT_STORE" \;
+find "$ROOT_WORK" -type f -name "*.m4v" -print -exec move-one-file {} "WORK_ROOT" "STORE_ROOT" \;
 
 exit 0
