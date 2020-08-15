@@ -24,6 +24,6 @@ fi
 WORK_ROOT="/mnt/ssd1tb/plex"
 STORE_ROOT="/mnt/rerun/plex"
 
-find "$ROOT_WORK" -type f -name "*.m4v" -print -exec move-one-file {} "WORK_ROOT" "STORE_ROOT" \;
+find "$WORK_ROOT" -type f -name "*.m4v" -print -exec move-one-file {} "WORK_ROOT" "STORE_ROOT" \;
 
 exit 0
