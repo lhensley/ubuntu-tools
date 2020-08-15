@@ -88,6 +88,8 @@ if [[ "$IN_FILE" != *"ABC World News Tonight"* ]] \
 	find "$WORK_ROOT_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
 	find "$STORE_ROOT_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
 	find "$STORE_ROOT_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
+    chown -R plex:plex "$WORK_ROOT_PATH"
+    chown -R plex:plex "$STORE_ROOT_PATH"
 
     exit $exit_status
 
