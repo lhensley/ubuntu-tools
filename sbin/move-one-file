@@ -20,6 +20,7 @@ RELATIVE_FILE_LENGTH=$[IN_FILE_LENGTH-ROOT_IN_PATH_LENGTH-1]
 RELATIVE_FILE=${IN_FILE: -$RELATIVE_FILE_LENGTH} # Remove ROOT_IN_PATH
 
 OUT_FILE="$ROOT_OUT_PATH/$RELATIVE_FILE"
+NEW_DIRECTORY=$(dirname "$OUTFILE")
 
 # So here are useful variables defined ...
 # $IN_FILE
@@ -39,22 +40,24 @@ echo "OUT_FILE $OUT_FILE" | mail lanecell
 echo "ROOT_IN_PATH $ROOT_IN_PATH" | mail lanecell
 echo "ROOT_OUT_PATH $ROOT_OUT_PATH" | mail lanecell
 echo "RELATIVE_FILE $RELATIVE_FILE" | mail lanecell
-echo "Dir to make: $(dirname $OUT_FILE)" | mail lanecell
+echo "Dir to make: $NEW_DIRECTORY" | mail lanecell
 exit 0
 
 # Make sure $IN_FILE is not in use
 if [ -n "$(lsof "$IN_FILE" 2>/dev/null)" ]; then
     logger "$0: File in use and cannot move $IN_FILE"
     echo "$0: File in use and cannot move $IN_FILE" | mail lanecell
+    exit $exit_status
   fi
 
 # Make the directory for out file
-if [ ! -d $(dirname $OUT_FILE) ]; then
-  mkdir -p "$(dirname $OUT_FILE)" >> /dev/null 2>&1 # Create the directory for the out file
+if [ ! -d "$NEW_DIRECTORY" ]; then
+  mkdir -p "$NEW_DIRECTORY" >> /dev/null 2>&1 # Create the directory for the out file
   exit_status=$?
   if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-      logger "$0 FAILED to make $(dirname $OUT_FILE)"
-      echo "Failed to make $(dirname $OUT_FILE)" | mail lanecell
+      logger "$0 FAILED to make $NEW_DIRECTORY"
+      echo "Failed to make $NEW_DIRECTORY" | mail lanecell
+      exit $exit_status
       fi
   fi
 
@@ -62,14 +65,14 @@ if [ ! -d $(dirname $OUT_FILE) ]; then
 mv "$IN_FILE" "$OUT_FILE" >> /dev/null 2>&1
 exit_status=$?
 if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-    logger "$0 FAILED to move $IN_FILE to $(dirname $OUT_FILE)"
+    logger "$0 FAILED to move $IN_FILE to $NEW_DIRECTORY"
     echo "Failed to move to $RELATIVE_FILE" | mail lanecell
     echo "Source $IN_FILE" | mail lanecell
-    echo "Target dir $(dirname $OUT_FILE)" | mail lanecell
+    echo "Target dir $NEW_DIRECTORY" | mail lanecell
     echo "Target $OUT_FILE" | mail lanecell
     exit $exit_status
   else
-    logger "$0 moved $IN_FILE to $(dirname $OUT_FILE)"
+    logger "$0 moved $IN_FILE to $NEW_DIRECTORY"
   fi
 
 exit 0
