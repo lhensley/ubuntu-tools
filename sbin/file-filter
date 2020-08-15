@@ -48,11 +48,11 @@ for ARG in "${ARGS[@]}"; do
         && [[ "$ARG" != *"The Tonight Show"* ]] \
         && [[ "$ARG" != *"Today (195"* ]] \
         && [[ "$ARG" != *".grab"* ]]; then
-          if ["$MODE" == "out"]; then
-            printf "%s" $ARG
+          if [ "$MODE" == "out" ]; then
+            echo $ARG
             fi
-          else if ["$MODE" == "in"]; then
-            printf "%s" $ARG
+          else if [ "$MODE" == "in" ]; then
+            echo $ARG
             fi
       fi
     fi
