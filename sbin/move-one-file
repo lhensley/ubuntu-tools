@@ -50,7 +50,7 @@ if [ -n "$(lsof "$IN_FILE" 2>/dev/null)" ]; then
     echo "$(date) $0: File in use and cannot move" | mail lanecell
     sleep 1
     echo "$IN_FILE" | mail lanecell
-    exit $exit_status
+    exit 1
   fi
 
 # Make the directory for out file
