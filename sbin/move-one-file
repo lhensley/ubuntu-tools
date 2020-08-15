@@ -35,6 +35,13 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+# Make sure $IN_FILE exists
+if [ ! -f "$IN_FILE" ]; then
+  logger "$0 no source file $IN_FILE"
+  echo "$0 no source file $IN_FILE" | mail lanecell
+  exit 1
+  fi
+
 # Make sure $IN_FILE is not in use
 if [ -n "$(lsof "$IN_FILE" 2>/dev/null)" ]; then
     logger "$0: File in use and cannot move $IN_FILE"
