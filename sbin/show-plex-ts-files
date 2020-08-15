@@ -23,9 +23,9 @@ fi
 WORK_ROOT="/mnt/ssd1tb/plex"
 
 find "$WORK_ROOT" -type f -name "*.ts" -print
-
-ps -ef | grep "HandBrake\|cskipper"
-
+echo ""
+ps -ef | grep "HandBrake\|cskipper\|sleep"
+echo ""
 df -Ht ext4
 
 exit 0
