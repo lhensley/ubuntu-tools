@@ -58,23 +58,17 @@ if [ ! -d $(dirname $STORE_PATH) ]; then
   fi
 
 # Move the transcoded file to storage
-mv "$OUT_PATH" "$STORE_PATH" >> /dev/null 2>&1
+mv "$IN_PATH" "$STORE_PATH" >> /dev/null 2>&1
 exit_status=$?
 if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-    logger "$0 FAILED to move $OUT_PATH to $(dirname $STORE_PATH)"
+    logger "$0 FAILED to move $IN_PATH to $(dirname $STORE_PATH)"
     echo "Failed to move to storage $RELATIVE_PATH" | mail lanecell
-        echo "Source $OUT_PATH"
-        echo "Target dir $(dirname $STORE_PATH)"
-        echo "Source $STORE_PATH"
+    echo "Source $IN_PATH" | mail lanecell
+    echo "Target dir $(dirname $STORE_PATH)" | mail lanecell
+    echo "Source $STORE_PATH" | mail lanecell
     exit $exit_status
-    else
-    logger "$0 moved $OUT_PATH to $(dirname $STORE_PATH)"
-    fi
+  else
+    logger "$0 moved $IN_PATH to $(dirname $STORE_PATH)"
+  fi
 
-# Change permissions for Plex libraries
-find "$ROOT_WORK_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
-find "$ROOT_WORK_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
-find "$ROOT_STORAGE_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
-find "$ROOT_STORAGE_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
-
-exit $exit_status
+exit 0
