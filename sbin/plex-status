@@ -25,8 +25,7 @@ ROOT_STORE="/mnt/rerun/plex"
 
 FILE_COUNT=0
 
-find "$ROOT_WORK" -type f -name "*.ts" -print -exec let "FILE_COUNT=FILE_COUNT+1" \;
-# >> /dev/null 2>&1
+FILE_COUNT=$(find "$ROOT_WORK" -type f -name "*.ts" | wc -l)
 
 echo "Count $FILE_COUNT"
 
