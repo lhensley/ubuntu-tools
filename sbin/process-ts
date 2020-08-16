@@ -61,6 +61,8 @@ if ( ! $(/usr/local/sbin/tv-show-filter-status "$IN_FILE") ) $?; then
     if [ -n "$(lsof "$IN_FILE" 2>/dev/null)" ]; then
         logger "$0: File in use and cannot be processed: $IN_FILE"
         exit 1
+      else
+        logger "$0: Not processed. Filtered out by tv-show-filter-status"
       fi
 
     logger "$0: started running /usr/local/sbin/transcode."
