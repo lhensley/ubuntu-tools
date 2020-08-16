@@ -47,18 +47,6 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-# Make sure $IN_FILE exists
-if [ ! -f "$IN_FILE" ]; then
-  logger "$0 no source file $IN_FILE"
-  exit 1
-  fi
-
-# Make sure $IN_FILE is not in use
-if [ -n "$(lsof "$IN_FILE" 2>/dev/null)" ]; then
-    logger "$0: File in use and cannot be processed: $IN_FILE"
-    exit 1
-  fi
-
 if [[ "$IN_FILE" != *"ABC World News Tonight"* ]] \
     && [[ "$IN_FILE" != *"BBC World News"* ]] \
     && [[ "$IN_FILE" != *"CBS Evening News"* ]] \
@@ -76,7 +64,19 @@ if [[ "$IN_FILE" != *"ABC World News Tonight"* ]] \
     && [[ "$IN_FILE" != *"Today (195"* ]] \
     && [[ "$IN_FILE" != *".grab"* ]]; then
 
-    sudo -u lhensley transcode >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
+    # Make sure $IN_FILE exists
+    if [ ! -f "$IN_FILE" ]; then
+      logger "$0 no source file $IN_FILE"
+      exit 1
+      fi
+
+    # Make sure $IN_FILE is not in use
+    if [ -n "$(lsof "$IN_FILE" 2>/dev/null)" ]; then
+        logger "$0: File in use and cannot be processed: $IN_FILE"
+        exit 1
+      fi
+
+    transcode >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
 
     # Do the transcoding
     TIMESTART=$(currenttimeinseconds)

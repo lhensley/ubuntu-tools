@@ -1,0 +1,11 @@
+#!/bin/bash
+# loop-forever
+
+REPEATING_PROGRAM="sleep 10"
+
+while true; do # Endless loop
+	sleep 10 # Sleep for 10 seconds, just in case
+	logger "$0: Starting $REPEATING_PROGRAM"
+	$REPEATING_PROGRAM
+	logger "$0: Exit Code $? for $REPEATING_PROGRAM"
+done # Endless loop

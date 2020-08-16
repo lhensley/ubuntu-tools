@@ -19,11 +19,11 @@ M4V_PATH="/home/lhensley/Videos/HandBrake-Completed"
 PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 MAKEMKV_PROCESS=makemkvcon
 RSYNC_TARGET="lhensley@nuc01.lanehensley.org:/mnt/cloteal/Plex/uploads"
-
-if [ $(lh_is_running "$HANDBRAKE") == "true" ] ; then
+    
+# if [ $(lh_is_running "$HANDBRAKE") == "true" ] ; then
 #  echo "Transcode operation already running. Exiting." 
-  exit 1
-fi
+#  exit 1
+# fi
 
 mkdir -p "$M4V_PATH"
 
