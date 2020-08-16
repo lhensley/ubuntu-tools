@@ -20,11 +20,11 @@ if [[ "$1" != *"ABC World News Tonight"* ]] \
     && [[ "$1" != *"The Tonight Show"* ]] \
     && [[ "$1" != *"Today (195"* ]] \
     && [[ "$1" != *".grab"* ]]; then
-        echo "$(date) $0 Filtered (Matched)"
-        logger "$0 Filtered (Matched) $1"
-        exit 1
+        echo "$(date) $0 Not filtered (Not matched)"
+        logger "$0 Not filtered (Not matched) $1"
+        exit 0
     fi
 
-echo "$(date) $0 Not filtered (Not matched)"
-logger "$0 Not filtered (Not matched) $1"
-exit 0
+echo "$(date) $0 Filtered (Matched)"
+logger "$0 Filtered (Matched) $1"
+exit 1
