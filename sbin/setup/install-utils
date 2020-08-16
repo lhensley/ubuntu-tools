@@ -17,12 +17,14 @@ function install() {
 install ufw
 # UFW first; others depend on it
 install at
-install apg
-install cryfs
+install apg                     # Password generator 
+install cryfs                   # Encrypted file system
+install comskip                 # Commercial skipper for videos
 install curl
 install ddclient
 install exiftool
 install fail2ban
+install ffmpeg
 install filezilla
 install gimp
 install git && ufw allow git

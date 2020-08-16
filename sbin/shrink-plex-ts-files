@@ -23,19 +23,9 @@ fi
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/lhlib
 
-HANDBRAKE="HandBrakeCLI"
-PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
-
 ROOT_WORK="/mnt/ssd1tb/plex"
-ROOT_WORK_MOUNT="/mnt/ss1tb"
 ROOT_STORE="/mnt/rerun/plex"
 
-logger "$0 sleeping for 10 seconds to let the system finish booting and mounting disks."
-sleep 10 # Pause for ten seconds to let the system finish booting and mounting disks
-logger "$0 woke up."
-
-while true; do # Endless loop
-	find "$ROOT_WORK" -type f -name "*.ts" -print -exec process_ts {} "$ROOT_WORK" "$ROOT_STORE" \; >> /dev/null 2>&1
-done # Endless loop
+find "$ROOT_WORK" -type f -name "*.ts" -print -exec process_ts {} "$ROOT_WORK" "$ROOT_STORE" \; >> /dev/null 2>&1
 
 exit 0
