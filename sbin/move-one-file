@@ -30,7 +30,8 @@ NEW_DIRECTORY=$(dirname "$OUT_FILE")
 # $RELATIVE_FILE
 
 # Make sure only root can run our script
-if [[ $EUID -ne 0 ]]; then
+  if [[ $EUID -ne 0 ]]; then
+  logger "$0: This script must be run as root."
   echo "This script must be run as root."
   exit 1
 fi
@@ -80,4 +81,5 @@ if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
     logger "$0 moved $IN_FILE to $NEW_DIRECTORY"
   fi
 
+logger "$0: Exited without error."
 exit 0
