@@ -47,22 +47,8 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-if [[ "$IN_FILE" != *"ABC World News Tonight"* ]] \
-    && [[ "$IN_FILE" != *"BBC World News"* ]] \
-    && [[ "$IN_FILE" != *"CBS Evening News"* ]] \
-    && [[ "$IN_FILE" != *"CBS Morning News"* ]] \
-    && [[ "$IN_FILE" != *"CBS This Morning"* ]] \
-    && [[ "$IN_FILE" != *"CBS Weekend News"* ]] \
-    && [[ "$IN_FILE" != *"Face the Nation"* ]] \
-    && [[ "$IN_FILE" != *"Jimmy Kimmel Life"* ]] \
-    && [[ "$IN_FILE" != *"KXAN News"* ]] \
-    && [[ "$IN_FILE" != *"Meet the Press"* ]] \
-    && [[ "$IN_FILE" != *"NBC Nightly News"* ]] \
-    && [[ "$IN_FILE" != *"Sunday Today"* ]] \
-    && [[ "$IN_FILE" != *"The Late Show"* ]] \
-    && [[ "$IN_FILE" != *"The Tonight Show"* ]] \
-    && [[ "$IN_FILE" != *"Today (195"* ]] \
-    && [[ "$IN_FILE" != *".grab"* ]]; then
+tv-show-filter-status "$IN_FILE"
+if $?; then
 
     # Make sure $IN_FILE exists
     if [ ! -f "$IN_FILE" ]; then
@@ -82,7 +68,7 @@ if [[ "$IN_FILE" != *"ABC World News Tonight"* ]] \
     TIMESTART=$(currenttimeinseconds)
     logger "$HANDBRAKE starting transcoding of $IN_FILE"
     $HANDBRAKE --preset-import-file "$PRESET" \
-        -i "$IN_FILE" -o "$OUT_FILE" | logger
+        -i "$IN_FILE" -o "$OUT_FILE" >> /dev/null 2>&1
     exit_status=$?
     if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
         logger "$HANDBRAKE transcoding FAILED with $exit_status for $IN_FILE"
