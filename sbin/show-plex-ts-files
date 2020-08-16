@@ -24,7 +24,7 @@ WORK_ROOT="/mnt/ssd1tb/plex"
 
 find "$WORK_ROOT" -type f -name "*.ts" -print
 echo ""
-ps -ef | grep "HandBrake\|cskipper\|sleep"
+ps -ef | grep "HandBrake\|cskipper\|sleep\shrink-plex-ts-files"
 echo ""
 df -Ht ext4
 
