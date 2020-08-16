@@ -86,7 +86,7 @@ if [[ "$IN_FILE" != *"ABC World News Tonight"* ]] \
     exit_status=$?
     if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
         logger "$HANDBRAKE transcoding FAILED for $IN_FILE"
-        echo "Transcoding FAILED with $exit_status for $RELATIVE_FILE" | mail -r "$0" lanecell
+        echo "Transcoding FAILED with $exit_status for $RELATIVE_FILE" | mail -r "process_ts" lanecell
         exit $exit_status
       else
         rm "$IN_FILE" >> /dev/null 2>&1 # Delete input file
