@@ -1,0 +1,26 @@
+#!/bin/bash
+# tv-show-filter-status
+# Usage: tv-show-filter-status <input_file>
+# Returns 0 = Not filtered (i.e., file does not match filter pattern)
+# Returns 1 = Filtered (i.e., file matches filter pattern)
+
+if [[ "$1" != *"ABC World News Tonight"* ]] \
+    && [[ "$1" != *"BBC World News"* ]] \
+    && [[ "$1" != *"CBS Evening News"* ]] \
+    && [[ "$1" != *"CBS Morning News"* ]] \
+    && [[ "$1" != *"CBS This Morning"* ]] \
+    && [[ "$1" != *"CBS Weekend News"* ]] \
+    && [[ "$1" != *"Face the Nation"* ]] \
+    && [[ "$1" != *"Jimmy Kimmel Life"* ]] \
+    && [[ "$1" != *"KXAN News"* ]] \
+    && [[ "$1" != *"Meet the Press"* ]] \
+    && [[ "$1" != *"NBC Nightly News"* ]] \
+    && [[ "$1" != *"Sunday Today"* ]] \
+    && [[ "$1" != *"The Late Show"* ]] \
+    && [[ "$1" != *"The Tonight Show"* ]] \
+    && [[ "$1" != *"Today (195"* ]] \
+    && [[ "$1" != *".grab"* ]]; then
+        exit 1
+    fi
+
+exit 0

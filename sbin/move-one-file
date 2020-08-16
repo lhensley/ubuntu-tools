@@ -38,18 +38,18 @@ fi
 # Make sure $IN_FILE exists
 if [ ! -f "$IN_FILE" ]; then
   logger "$0 no source file $IN_FILE"
-  echo "$(date) $0 no source file" | mail lanecell
+  echo "$(date) $0 no source file" | mail -r move-one-file lanecell
   sleep 1
-  echo "$IN_FILE" | mail lanecell
+  echo "$IN_FILE" | mail -r move-one-file lanecell
   exit 1
   fi
 
 # Make sure $IN_FILE is not in use
 if [ -n "$(lsof "$IN_FILE" 2>/dev/null)" ]; then
     logger "$0: File in use and cannot move $IN_FILE"
-    echo "$(date) $0: File in use and cannot move" | mail lanecell
+    echo "$(date) $0: File in use and cannot move" | mail -r move-one-file lanecell
     sleep 1
-    echo "$IN_FILE" | mail lanecell
+    echo "$IN_FILE" | mail -r move-one-file lanecell
     exit 1
   fi
 
@@ -59,9 +59,9 @@ if [ ! -d "$NEW_DIRECTORY" ]; then
   exit_status=$?
   if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
       logger "$0 FAILED to make $NEW_DIRECTORY"
-      echo "$(date) $0 Failed to make new directory" | mail lanecell
+      echo "$(date) $0 Failed to make new directory" | mail -r move-one-file lanecell
       sleep 1
-      echo "$NEW_DIRECTORY" | mail lanecell
+      echo "$NEW_DIRECTORY" | mail -r move-one-file lanecell
       exit $exit_status
       fi
   fi
@@ -71,10 +71,10 @@ mv "$IN_FILE" "$OUT_FILE" >> /dev/null 2>&1
 exit_status=$?
 if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
     logger "$0 FAILED to move $IN_FILE to $NEW_DIRECTORY"
-    echo "$(date) $0 Failed to move file" | mail lanecell
+    echo "$(date) $0 Failed to move file" | mail -r move-one-file lanecell
     sleep 1
-    echo "$IN_FILE" | mail lanecell
-    echo "to $OUT_FILE" | mail lanecell
+    echo "Infile $IN_FILE" | mail -r move-one-file lanecell
+    echo "Outfile $OUT_FILE" | mail -r move-one-file lanecell
     exit $exit_status
   else
     logger "$0 moved $IN_FILE to $NEW_DIRECTORY"

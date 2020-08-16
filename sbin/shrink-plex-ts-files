@@ -26,6 +26,6 @@ source $PROGRAM_DIRECTORY/lhlib
 ROOT_WORK="/mnt/ssd1tb/plex"
 ROOT_STORE="/mnt/rerun/plex"
 
-find "$ROOT_WORK" -type f -name "*.ts" -print -exec process_ts {} "$ROOT_WORK" "$ROOT_STORE" \; >> /dev/null 2>&1
+find "$ROOT_WORK" -type f -name "*.ts" -print -exec process-ts {} "$ROOT_WORK" "$ROOT_STORE" \; >> /dev/null 2>&1
 
 exit 0
