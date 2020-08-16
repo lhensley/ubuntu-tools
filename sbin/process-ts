@@ -47,7 +47,7 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-tv-show-filter-status "$IN_FILE"
+/usr/local/sbin/tv-show-filter-status "$IN_FILE"
 if $?; then
 
     # Make sure $IN_FILE exists
@@ -62,7 +62,7 @@ if $?; then
         exit 1
       fi
 
-    transcode >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
+    /usr/local/sbin/transcode >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
 
     # Do the transcoding
     TIMESTART=$(currenttimeinseconds)
@@ -79,7 +79,7 @@ if $?; then
         logger "$HANDBRAKE transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART ))) for $OUT_FILE"
       fi # End of check for transcoding failure
 
-    move-one-file "$OUT_FILE" "$WORK_ROOT_PATH" "$STORE_ROOT_PATH"
+    /usr/local/sbin/move-one-file "$OUT_FILE" "$WORK_ROOT_PATH" "$STORE_ROOT_PATH"
 
     # Change permissions for Plex libraries
 	find "$WORK_ROOT_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
