@@ -41,7 +41,7 @@ PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 # $STORE_ROOT_PATH
 # $RELATIVE_FILE
 
-logger "$0 started for \'$1\' from \'$2\' to \'$3\'"
+logger "$0 started for '$1' from '$2' to '$3'"
 
 # Make sure only root can run our script
 if [[ $EUID -ne 0 ]]; then
