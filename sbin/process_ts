@@ -82,11 +82,11 @@ if [[ "$IN_FILE" != *"ABC World News Tonight"* ]] \
     TIMESTART=$(currenttimeinseconds)
     logger "$HANDBRAKE starting transcoding of $IN_FILE"
     $HANDBRAKE --preset-import-file "$PRESET" \
-        -i "$IN_FILE" -o "$OUT_FILE" >> /dev/null 2>&1
+        -i "$IN_FILE" -o "$OUT_FILE" | logger
     exit_status=$?
     if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
         logger "$HANDBRAKE transcoding FAILED for $IN_FILE"
-        echo "Transcoding FAILED for $RELATIVE_FILE" | mail lanecell
+        echo "Transcoding FAILED with $exit_status for $RELATIVE_FILE" | mail -r "$0" lanecell
         exit $exit_status
       else
         rm "$IN_FILE" >> /dev/null 2>&1 # Delete input file
