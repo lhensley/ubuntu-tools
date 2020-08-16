@@ -4,6 +4,7 @@
 # Changed apt-get to apt 1/31/19.
 # See https://itsfoss.com/apt-vs-apt-difference/ for rationale.
 #
+logger "$0 started."
 # "update" downloads package information from all configured sources
 apt -y update
 # "upgrade" is an extraneous subset of "dist-upgrade" below
@@ -20,3 +21,5 @@ apt -y clean
 apt -y autoremove
 # Install any *.deb files in the home directory
 # apt-get install -y $HOME_DIRECTORY/*.deb && rm -f $HOME_DIRECTORY/*.deb
+logger "$0 ended."
+exit 0

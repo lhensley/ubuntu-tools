@@ -2,7 +2,7 @@
 # _git
 #
 # Include header file
-logger Begin $0
+logger $0: Started
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/script-setup
 
@@ -38,4 +38,5 @@ chown -R root:root $SBIN_DIR
 chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
 chmod -R 500 $SBIN_DIR/*
 
+logger "$0 ended without error."
 exit 0

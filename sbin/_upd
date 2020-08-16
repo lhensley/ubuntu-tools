@@ -2,4 +2,5 @@
 # _upd
 #
 _run_apt_updates
+exit $?
 
