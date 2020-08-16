@@ -1,0 +1,8 @@
+#!/bin/bash
+# master-loop
+
+logger "$0: Starting."
+sleep 600 # Sleep for 10 minutes
+logger "$0: Exit code: $?"
+
+exit 0
