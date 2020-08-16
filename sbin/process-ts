@@ -47,8 +47,7 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-/usr/local/sbin/tv-show-filter-status "$IN_FILE"
-if $?; then
+if ( ! $(/usr/local/sbin/tv-show-filter-status "$IN_FILE") ) $?; then
 
     # Make sure $IN_FILE exists
     if [ ! -f "$IN_FILE" ]; then
