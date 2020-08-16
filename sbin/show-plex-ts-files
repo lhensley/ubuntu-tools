@@ -8,15 +8,19 @@ if $debug_mode ; then
   set -x
   fi
 
+logger "$0: Starting."
+
 # Make sure only root can run our script
 if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as root."
+  logger "$0: FAILED. This script must be run as root."
   exit 1
 fi
 
 # Confirm that this host is oz
 if [[ $(hostname -s) != "oz" ]]; then
   echo "This script can ony be run on server oz."
+  logger "$0: FAILED. This script can only be run on server oz."
   exit 1
 fi
 
@@ -28,4 +32,5 @@ ps -ef | grep "HandBrake\|cskipper\|sleep\|shrink-plex-ts-files"
 echo ""
 df -Ht ext4
 
+logger "$0: Ended without error."
 exit 0

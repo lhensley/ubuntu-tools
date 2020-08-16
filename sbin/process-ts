@@ -61,11 +61,13 @@ if ( ! $(/usr/local/sbin/tv-show-filter-status "$IN_FILE") ) $?; then
         exit 1
       fi
 
+    logger "$0: started running /usr/local/sbin/transcode."
     /usr/local/sbin/transcode >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
+    logger "$0: finished running /usr/local/sbin/transcode."
 
     # Do the transcoding
     TIMESTART=$(currenttimeinseconds)
-    logger "$HANDBRAKE starting transcoding of $IN_FILE"
+    logger "$HANDBRAKE started transcoding of $IN_FILE"
     $HANDBRAKE --preset-import-file "$PRESET" \
         -i "$IN_FILE" -o "$OUT_FILE" >> /dev/null 2>&1
     exit_status=$?

@@ -5,6 +5,6 @@ logger "$0: Starting."
 
 /usr/local/sbin/shrink-plex-ts-files
 
-logger "$0: Exit code: $?"
+logger "$0: Ended. Exit code: $?"
 
 exit 0
