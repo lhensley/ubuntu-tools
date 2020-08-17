@@ -53,11 +53,13 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 logger "$0 Test A"
-logger "$0 Test A2 '$FILTER_SCRIPT' '$IN_FILE'"
-logger "$0 Test A3 $($FILTER_SCRIPT '$IN_FILE')"
+# logger "$0 Test A2 '$FILTER_SCRIPT' '$IN_FILE'"
+# logger "$0 Test A3 $($FILTER_SCRIPT '$IN_FILE')"
 
-if [ ! $($FILTER_SCRIPT "$IN_FILE") ]; then
+$FILTER_SCRIPT "$IN_FILE"
+if [ $? -eq 0 ]; then
 
+    logger "#############YES"
     logger "$0 Test B"
 
     # Make sure $IN_FILE exists
@@ -126,6 +128,7 @@ if [ ! $($FILTER_SCRIPT "$IN_FILE") ]; then
 
 else
 
+    logger "#############NO"
     logger "$0: '$1' not processed because it matched in '$FILTER_SCRIPT'."
 
 fi
