@@ -52,7 +52,11 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+logger "$0 Test A"
+
 if ( ! $($FILTER_SCRIPT "$IN_FILE") ) $?; then
+
+    logger "$0 Test B"
 
     # Make sure $IN_FILE exists
     if [ ! -f "$IN_FILE" ]; then
@@ -60,15 +64,21 @@ if ( ! $($FILTER_SCRIPT "$IN_FILE") ) $?; then
       exit 1
       fi
 
+    logger "$0 Test C"
+
     # Make sure $IN_FILE is not in use
     if [ -n "$(lsof "$IN_FILE" 2>/dev/null)" ]; then
         logger "$0: File in use and cannot be processed: $IN_FILE"
         exit 1
       else
 
+    logger "$0 Test D"
+
     logger "$0: started running /usr/local/sbin/transcode."
     /usr/local/sbin/transcode >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
     logger "$0: finished running /usr/local/sbin/transcode."
+
+    logger "$0 Test E"
 
     # Do the transcoding
     TIMESTART=$(currenttimeinseconds)
@@ -85,6 +95,8 @@ if ( ! $($FILTER_SCRIPT "$IN_FILE") ) $?; then
         logger "$HANDBRAKE transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART ))) for $OUT_FILE"
       fi # End of check for transcoding failure
 
+    logger "$0 Test F"
+
     $MOVE_SCRIPT "$OUT_FILE" "$WORK_ROOT_PATH" "$STORE_ROOT_PATH"
     exit_status=$?
     if [ $exit_status -ne 0 ]; then # If the move failed ...
@@ -95,6 +107,7 @@ if ( ! $($FILTER_SCRIPT "$IN_FILE") ) $?; then
         rm "$IN_FILE" >> /dev/null 2>&1 # Delete input file
       fi # End of check for transcoding failure
 
+    logger "$0 Test G"
 
     # Change permissions for Plex libraries
 	find "$WORK_ROOT_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
@@ -103,6 +116,8 @@ if ( ! $($FILTER_SCRIPT "$IN_FILE") ) $?; then
 	find "$STORE_ROOT_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
     chown -R plex:plex "$WORK_ROOT_PATH"
     chown -R plex:plex "$STORE_ROOT_PATH"
+
+    logger "$0 Test H"
 
     logger "$0 exited without error."
     exit $exit_status
