@@ -132,3 +132,5 @@ else
     logger "$0: '$1' not processed because it matched in '$FILTER_SCRIPT'."
 
 fi
+
+logger "########ELSE"
