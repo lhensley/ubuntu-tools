@@ -4,6 +4,8 @@
 # Returns 0 = Not filtered (i.e., file does not match filter pattern)
 # Returns 1 = Filtered (i.e., file matches filter pattern)
 
+logger "$0 started for $1"
+
 if [[ "$1" != *"ABC World News Tonight"* ]] \
     && [[ "$1" != *"BBC World News"* ]] \
     && [[ "$1" != *"CBS Evening News"* ]] \
