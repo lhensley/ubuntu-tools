@@ -53,6 +53,8 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 logger "$0 Test A"
+logger "'$FILTER_SCRIPT' '$IN_FILE'"
+logger "$0 Test A3 $($FILTER_SCRIPT "$IN_FILE")"
 
 if ( ! $($FILTER_SCRIPT "$IN_FILE") ) $?; then
 
