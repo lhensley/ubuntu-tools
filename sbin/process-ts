@@ -16,6 +16,7 @@ STORE_ROOT_PATH=$3
 
 OUT_EXT="m4v"
 MOVE_SCRIPT="/usr/local/sbin/move-one-file"
+FILTER_SCRIPT="/usr/local/sbin/tv-show-filter-status"
 
 WORK_ROOT_PATH_LENGTH=${#WORK_ROOT_PATH}
 
@@ -51,7 +52,7 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-if ( ! $(/usr/local/sbin/tv-show-filter-status "$IN_FILE") ) $?; then
+if ( ! $($FILTER_SCRIPT "$IN_FILE") ) $?; then
 
     # Make sure $IN_FILE exists
     if [ ! -f "$IN_FILE" ]; then
@@ -63,7 +64,7 @@ if ( ! $(/usr/local/sbin/tv-show-filter-status "$IN_FILE") ) $?; then
     if [ -n "$(lsof "$IN_FILE" 2>/dev/null)" ]; then
         logger "$0: File in use and cannot be processed: $IN_FILE"
         exit 1
-      fi
+      else
 
     logger "$0: started running /usr/local/sbin/transcode."
     /usr/local/sbin/transcode >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
@@ -105,5 +106,9 @@ if ( ! $(/usr/local/sbin/tv-show-filter-status "$IN_FILE") ) $?; then
 
     logger "$0 exited without error."
     exit $exit_status
+
+else
+
+    logger "$0: '$1' not processed because it matched in '$FILTER_SCRIPT'."
 
 fi
