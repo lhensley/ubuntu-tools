@@ -59,7 +59,7 @@ logger "$0 Test A"
 $FILTER_SCRIPT "$IN_FILE"
 exit_status=$?
 logger "$0 Test filter status $exit_status"
-if [ $exit_status -eq 0 ]; then
+if [ "$exit_status" == "0" ]; then
 
     logger "#############YES"
     logger "$0 Test B"
