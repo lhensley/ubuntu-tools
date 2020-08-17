@@ -29,10 +29,13 @@ NEW_DIRECTORY=$(dirname "$OUT_FILE")
 # $ROOT_OUT_PATH
 # $RELATIVE_FILE
 
+logger ("$0: started")
+
 # Make sure only root can run our script
   if [[ $EUID -ne 0 ]]; then
   logger "$0: This script must be run as root."
   echo "This script must be run as root."
+  exit ("$0: This script must be run as root.")
   exit 1
 fi
 

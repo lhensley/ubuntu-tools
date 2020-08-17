@@ -15,6 +15,7 @@ WORK_ROOT_PATH=$2
 STORE_ROOT_PATH=$3
 
 OUT_EXT="m4v"
+MOVE_SCRIPT="/usr/local/sbin/move-one-file"
 
 WORK_ROOT_PATH_LENGTH=${#WORK_ROOT_PATH}
 
@@ -62,8 +63,6 @@ if ( ! $(/usr/local/sbin/tv-show-filter-status "$IN_FILE") ) $?; then
     if [ -n "$(lsof "$IN_FILE" 2>/dev/null)" ]; then
         logger "$0: File in use and cannot be processed: $IN_FILE"
         exit 1
-      else
-        logger "$0: Not processed. Filtered out by tv-show-filter-status"
       fi
 
     logger "$0: started running /usr/local/sbin/transcode."
@@ -77,15 +76,24 @@ if ( ! $(/usr/local/sbin/tv-show-filter-status "$IN_FILE") ) $?; then
         -i "$IN_FILE" -o "$OUT_FILE" >> /dev/null 2>&1
     exit_status=$?
     if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-        logger "$HANDBRAKE transcoding FAILED with $exit_status for $IN_FILE"
-        echo "$(date) $0 Transcoding FAILED with $exit_status for $RELATIVE_FILE" | mail -r "process-ts" lanecell
+        logger "$HANDBRAKE FAILED with $exit_status for $IN_FILE"
+        echo "$(date) $HANDBRAKE FAILED with $exit_status for $RELATIVE_FILE" | mail -r "process-ts" lanecell
         exit $exit_status
       else
         rm "$IN_FILE" >> /dev/null 2>&1 # Delete input file
         logger "$HANDBRAKE transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART ))) for $OUT_FILE"
       fi # End of check for transcoding failure
 
-    /usr/local/sbin/move-one-file "$OUT_FILE" "$WORK_ROOT_PATH" "$STORE_ROOT_PATH"
+    $MOVE_SCRIPT "$OUT_FILE" "$WORK_ROOT_PATH" "$STORE_ROOT_PATH"
+    exit_status=$?
+    if [ $exit_status -ne 0 ]; then # If the move failed ...
+        logger "$MOVE_SCRIPT FAILED with $exit_status for $IN_FILE"
+        echo "$(date) $MOVE_SCRIPT FAILED with $exit_status for $RELATIVE_FILE" | mail -r "process-ts" lanecell
+        exit $exit_status
+      else
+        rm "$IN_FILE" >> /dev/null 2>&1 # Delete input file
+      fi # End of check for transcoding failure
+
 
     # Change permissions for Plex libraries
 	find "$WORK_ROOT_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
@@ -95,6 +103,7 @@ if ( ! $(/usr/local/sbin/tv-show-filter-status "$IN_FILE") ) $?; then
     chown -R plex:plex "$WORK_ROOT_PATH"
     chown -R plex:plex "$STORE_ROOT_PATH"
 
+    logger "$0 exited without error."
     exit $exit_status
 
 fi
