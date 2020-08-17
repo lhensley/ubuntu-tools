@@ -56,7 +56,7 @@ logger "$0 Test A"
 logger "$0 Test A2 '$FILTER_SCRIPT' '$IN_FILE'"
 logger "$0 Test A3 $($FILTER_SCRIPT "$IN_FILE")"
 
-if ( ! $($FILTER_SCRIPT "$IN_FILE") ) $?; then
+if [ ! $($FILTER_SCRIPT "$IN_FILE") ]; then
 
     logger "$0 Test B"
 
