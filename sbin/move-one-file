@@ -29,13 +29,12 @@ NEW_DIRECTORY=$(dirname "$OUT_FILE")
 # $ROOT_OUT_PATH
 # $RELATIVE_FILE
 
-logger ("$0: started")
+logger "$0: started"
 
 # Make sure only root can run our script
-  if [[ $EUID -ne 0 ]]; then
+if [[ $EUID -ne 0 ]]; then
   logger "$0: This script must be run as root."
   echo "This script must be run as root."
-  exit ("$0: This script must be run as root.")
   exit 1
 fi
 
@@ -46,16 +45,16 @@ if [ ! -f "$IN_FILE" ]; then
   sleep 1
   echo "$IN_FILE" | mail -r move-one-file lanecell
   exit 1
-  fi
+fi
 
 # Make sure $IN_FILE is not in use
 if [ -n "$(lsof "$IN_FILE" 2>/dev/null)" ]; then
-    logger "$0: File in use and cannot move $IN_FILE"
-    echo "$(date) $0: File in use and cannot move" | mail -r move-one-file lanecell
-    sleep 1
-    echo "$IN_FILE" | mail -r move-one-file lanecell
-    exit 1
-  fi
+  logger "$0: File in use and cannot move $IN_FILE"
+  echo "$(date) $0: File in use and cannot move" | mail -r move-one-file lanecell
+  sleep 1
+  echo "$IN_FILE" | mail -r move-one-file lanecell
+  exit 1
+fi
 
 # Make the directory for out file
 if [ ! -d "$NEW_DIRECTORY" ]; then
@@ -67,8 +66,8 @@ if [ ! -d "$NEW_DIRECTORY" ]; then
       sleep 1
       echo "$NEW_DIRECTORY" | mail -r move-one-file lanecell
       exit $exit_status
-      fi
-  fi
+    fi
+fi
 
 # Move $IN_FILE to $OUT_FILE
 mv "$IN_FILE" "$OUT_FILE" >> /dev/null 2>&1
