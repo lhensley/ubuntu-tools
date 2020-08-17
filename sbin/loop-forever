@@ -11,3 +11,6 @@ while true; do # Endless loop
 	$REPEATING_PROGRAM
 	logger "$0: Exit Code $? for $REPEATING_PROGRAM"
 done # Endless loop
+
+logger "$0 ended."
+exit 1
