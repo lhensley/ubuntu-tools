@@ -29,11 +29,10 @@ source $PROGRAM_DIRECTORY/lhlib
 
 ROOT_WORK="/mnt/ssd1tb/plex"
 ROOT_STORE="/mnt/rerun/plex"
-FILES=0
 
 PROCESS_TS_FILES="/usr/local/sbin/process-ts"
 
-find "$ROOT_WORK" -type f -name "*.ts" -print -exec "$PROCESS_TS_FILES" {} "$ROOT_WORK" "$ROOT_STORE" && let FILES++ \; >> /dev/null 2>&1
+find "$ROOT_WORK" -type f -name "*.ts" -print -exec "$PROCESS_TS_FILES" {} "$ROOT_WORK" "$ROOT_STORE" \; >> /dev/null 2>&1
 
 logger "$0: Ended without errors."
 exit 0
