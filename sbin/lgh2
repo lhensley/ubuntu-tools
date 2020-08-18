@@ -27,7 +27,7 @@ fi
 WORK_ROOT="/mnt/ssd1tb/plex"
 FILES=0
 
-find "$WORK_ROOT" -type f -name "*.ts" -print -exec FILES++
+find "$WORK_ROOT" -type f -name "*.ts" -print -exec let FILES++
 echo ""
 ps -ef | grep "HandBrake\|cskipper\|sleep\|shrink-plex-ts-files"
 echo ""
