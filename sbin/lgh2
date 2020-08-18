@@ -25,15 +25,14 @@ if [[ $(hostname -s) != "oz" ]]; then
 fi
 
 WORK_ROOT="/mnt/ssd1tb/plex"
-FILES=0
 
-find "$WORK_ROOT" -type f -name "*.ts" -print -exec let FILES++
+find "$WORK_ROOT" -type f -name "*.ts" -print -exec printf "." >> /tmp/files
 echo ""
 ps -ef | grep "HandBrake\|cskipper\|sleep\|shrink-plex-ts-files"
 echo ""
 df -Ht ext4
 
-echo Files: $FILES
+echo Files: $(wc /tmp/files -c)
 echo ""
 
 logger "$0: Ended without error."
