@@ -32,7 +32,7 @@ ps -ef | grep "HandBrake\|cskipper\|sleep\|shrink-plex-ts-files"
 echo ""
 df -Ht ext4
 
-echo Files: $(wc /tmp/files -c)
+echo Files: $(wc -c /tmp/files)
 echo ""
 rm /tmp/files
 
