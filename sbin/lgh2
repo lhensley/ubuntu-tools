@@ -34,6 +34,7 @@ df -Ht ext4
 
 echo Files: $(wc /tmp/files -c)
 echo ""
+rm /tmp/files
 
 logger "$0: Ended without error."
 exit 0
