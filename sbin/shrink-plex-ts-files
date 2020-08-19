@@ -8,8 +8,6 @@ if $debug_mode ; then
   set -x
   fi
 
-logger "$0: Started."
-
 # Make sure only root can run our script
 if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as root."
@@ -24,8 +22,11 @@ if [[ $(hostname -s) != "oz" ]]; then
   exit 1
 fi
 
-PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/lhlib
+logger "$0: Started."
+echo "$(date) $Started" | mail -r shrink-plex-ts-files lanecell
+
+# PROGRAM_DIRECTORY=$(dirname $0)
+# source $PROGRAM_DIRECTORY/lhlib
 
 ROOT_WORK="/mnt/ssd1tb/plex"
 ROOT_STORE="/mnt/rerun/plex"
