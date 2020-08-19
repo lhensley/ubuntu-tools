@@ -14,11 +14,11 @@ function f_filter {
     FILTER_VALUES=$(f_get-config $1)
     }
 
-function f_text_alert {
-    # $1: the string value of the text message
-    TEXT_TARGETS=$(f_get-config text-alert-target-emails)
-    if [ "$(f_get-config text-alert-emails" != "" ];
-    }
+# function f_text_alert {
+#     # $1: the string value of the text message
+#     TEXT_TARGETS=$(f_get-config text-alert-target-emails)
+#     if [ "$(f_get-config text-alert-emails" != "" ];
+#    }
 
 # If configured, make sure only root can run our script. Default = "false"
 if [ "$(f_get-config script.$(basename $0).require-root)" == "true" ] && [[ $EUID -ne 0 ]]; then
