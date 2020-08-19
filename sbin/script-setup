@@ -176,6 +176,8 @@ USER_UBUNTU="ubuntu"
 # Mail
 MAILNAME=$HOST_NAME
 
+echo "Test point D"
+
 # Basically, this section means look for *.sh in the "includes" directory and invoke them.
 find $SCRIPTS_INCLUDES -name "*.sh" -type f | while read INFILE
   do
@@ -199,3 +201,4 @@ if $debug_mode ; then
   fi
 
 echo "Test point D"
+echo "Test point E"
