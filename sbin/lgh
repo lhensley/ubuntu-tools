@@ -1,43 +1,10 @@
 #!/bin/bash
-# show-plex-ts-files
+# lgh
 
-production_mode=true
-debug_mode=false
-# debug_mode=true
-if $debug_mode ; then
-  set -x
-  fi
+input="$1"
+while IFS= read -r line
+do
+  echo "$line"
+done < "$input"
 
-logger "$0: Starting."
-
-# Make sure only root can run our script
-if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as root."
-  logger "$0: FAILED. This script must be run as root."
-  exit 1
-fi
-
-# Confirm that this host is oz
-if [[ $(hostname -s) != "oz" ]]; then
-  echo "This script can ony be run on server oz."
-  logger "$0: FAILED. This script can only be run on server oz."
-  exit 1
-fi
-
-WORK_ROOT="/mnt/ssd1tb/plex"
-COUNT_FILE="/tmp/one-dot-per-video-file-waiting-to-be-processed"
-
-rm $COUNT_FILE
-find "$WORK_ROOT" -type f -name "*.ts" -printf "." >> $COUNT_FILE
-find "$WORK_ROOT" -type f -name "*.ts" -print
-echo ""
-ps -ef | grep "HandBrake\|cskipper\|sleep\|shrink-plex-ts-files"
-echo ""
-df -Ht ext4
-echo ""
-
-echo "Files: $(wc -c $COUNT_FILE | awk '{print $1}')"
-rm $COUNT_FILE
-
-logger "$0: Ended without error."
 exit 0
