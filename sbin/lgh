@@ -1,12 +1,11 @@
 #!/bin/bash
 # lgh
 
-function f_test () {
-	echo "trapped"
-	}
+# Include script setup file
+source $(dirname $0)/script-setup
 
-if [ $(f_test) == "trapped" ]; then
-	echo "Yes"
-else
-	echo "No"
-fi
+FILTER=$(f_get-config filter.transcode-excluded)
+
+echo $FILTER
+
+exit 0

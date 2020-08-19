@@ -1,11 +1,8 @@
 #!/bin/bash
 # _git
-#
-# Include header file
-logger $0: Started
-PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/script-setup
-echo "Test point B"
+
+# Include script setup file
+source $(dirname $0)/script-setup
 
 # Install git token
 # To get a new token, go to https://github.com/settings/tokens.

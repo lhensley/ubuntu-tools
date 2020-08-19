@@ -2,25 +2,27 @@
 # /usr/local/sbin/script-setup
 
 function f_get-config {
-    /usr/local/sbin/get-config $1 "~/.lane/lane.conf" "/etc/lane.conf"
+    # $1: the config-name to be searched
+    LANE_CONFIG_FILE_1="~/.lane/lane.conf"
+    LANE_CONFIG_FILE_2="/etc/lane.conf"
+    /usr/local/sbin/get-config "$1" "$LANE_CONFIG_FILE_1" "$LANE_CONFIG_FILE_2"
     }
 
-function f_log () {
-    if [ "$(f_get-config $(basename $0).log-start)" != "true" ]; then
-        echo "Disable log start"
-    else
-        echo "Enable log start"
+function f_filter {
+    # $1: the config-name to be searched; the config-value is a comma-delimited string
+    # $2: the string to be checked against the config-value
+    FILTER_VALUES=$(f_get-config $1)
+    }
+
+# If configured, make sure only root can run our script. Default = "false"
+if [ "$(f_get-config script.$(basename $0).require-root)" == "true" ] && [[ $EUID -ne 0 ]]; then
+        echo "$0 must be run as root." 1>&2
+        exit 1
     fi
-    }
-echo "Test point C"
 
-# Basic setup
-f_log Begin $0
-logger Begin $0
-logger $0 invoking script-setup
-echo "Test point 1"
-source /etc/os-release
-echo "Test point 2"
+# If configured, log the start of script processing. Default = "true"
+if [ "$(f_get-config script.$(basename $0).log-start)" != "true" ]; then logger "$0 start"; fi
+
 # /etc/os-release defines a lot of environment variables 
 # Sample:
 #    NAME="Ubuntu"
@@ -35,12 +37,7 @@ echo "Test point 2"
 #    PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
 #    VERSION_CODENAME=bionic
 #    UBUNTU_CODENAME=bionic
-
-# Make sure only root can run our script
-if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as root."
-  exit 1
-fi
+source /etc/os-release
 
 # Start timestamps
 START_DATESTAMP=$(/bin/date '+%Y-%m-%d')
@@ -178,36 +175,25 @@ USER_UBUNTU="ubuntu"
 # Mail
 MAILNAME=$HOST_NAME
 
-echo "Test point D"
-
 # Basically, this section means look for *.sh in the "includes" directory and invoke them.
 find $SCRIPTS_INCLUDES -name "*.sh" -type f | while read INFILE
   do
     source "$INFILE"
   done
 
-echo "Test point 3"
-
 # Set key file ownerships #############################################
 /bin/chown root:root $MYSQL_CONFIGS/mysqldump.cnf >> /dev/null 2>&1
 /bin/chown -R root:$USER_NAME $SCRIPTS_DIRECTORY >> /dev/null 2>&1
 /bin/chown -R www-data:www-data $THIS_WEB_ROOT/ >> /dev/null 2>&1
 
-echo "Test point 4"
-
 # Set key file permissions ############################################
 /bin/chmod 600 $MYSQL_CONFIGS/mysqldump.cnf >> /dev/null 2>&1
 /bin/chmod -R 770 $SCRIPTS_DIRECTORY >> /dev/null 2>&1
 
-echo "Test point 5"
-
 # Echo variable values in debug mode
 #
-if $debug_mode ; then
-  echo $(date)
-  env
-  fi
+# if $debug_mode ; then
+#   echo $(date)
+#   env
+#  fi
 
-echo "Test point 6"
-
-echo "Test point E"

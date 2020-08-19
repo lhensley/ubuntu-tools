@@ -1,10 +1,8 @@
 #!/bin/bash
 # upd
-#
-# Include header file
-logger Begin $0
-PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/script-setup
+
+# Include script setup file
+source $(dirname $0)/script-setup
 
 # Update from github.com
 _git
