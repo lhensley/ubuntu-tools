@@ -4,8 +4,8 @@
 # Ref: https://unix.stackexchange.com/questions/505258/parse-config-file-and-pass-parameters-to-another-script
 # Exit codes:
 EXIT_SUCCESS=0
-CONFIG_NAME_NOT_FOUND 1
-CONFIG_FILES_NOT_FOUND 2
+CONFIG_NAME_NOT_FOUND=1
+CONFIG_FILES_NOT_FOUND=2
 
 CONFIG_NAME="$1"
 INPUT="$2"
@@ -38,4 +38,4 @@ if [ -z ${CONFIG[$CONFIG_NAME]+x} ]; then # The requested config is undefined
 	exit $CONFIG_NAME_NOT_FOUND
 	fi
 echo ${CONFIG[$CONFIG_NAME]}
-exit EXIT_SUCCESS
+exit $EXIT_SUCCESS
