@@ -1,11 +1,11 @@
 #!/bin/bash
-# /usr/local/sbin/script-setup
+# lgh
 
 function f_test () {
 	echo "trapped"
 	}
 
-if [ $f_test == "trapped" ]
+if [ $(f_test) == "trapped" ]; then
 	echo "Yes"
 else
 	echo "No"
