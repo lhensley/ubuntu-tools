@@ -1,12 +1,13 @@
 #!/bin/bash
 # /usr/local/sbin/script-setup
-#
 
-debug_mode=false
-#debug_mode=true
-if $debug_mode ; then
-  set -x
-  fi
+function f_get-config {
+    /usr/local/sbin/get-config $1 "~/.lane/lane.conf" "/etc/lane.conf"
+    }
+
+function f_log () {
+    echo Hello
+    }
 
 # Basic setup
 logger Begin $0

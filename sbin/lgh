@@ -1,0 +1,12 @@
+#!/bin/bash
+# /usr/local/sbin/script-setup
+
+function f_test () {
+	echo "trapped"
+	}
+
+if [ $f_test == "trapped" ]
+	echo "Yes"
+else
+	echo "No"
+fi

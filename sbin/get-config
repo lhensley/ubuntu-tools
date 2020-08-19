@@ -18,6 +18,7 @@ else
 		INPUT="$3"
 	else
 		exit $CONFIG_FILES_NOT_FOUND
+	fi
 fi
 
 

@@ -32,6 +32,12 @@ cp -r $GO_SBIN $SBIN_PARENT
 cd
 echo git update complete.
 
+# Update /etc/lane.conf
+# NOTE: What about other config files? And should this also run as part of /usr/local/sbin/setup/setup-os ?
+cp $GO_CONFIGS/etc-lane.conf /etc/lane.conf
+chown root:root /etc/lane.conf
+chmod 644 /etc/lane.conf
+
 # Reset permisions for /usr/local/sbin/*
 # This kind of locks things down, and the apply-configs section below opens things up.
 chown -R root:root $SBIN_DIR
