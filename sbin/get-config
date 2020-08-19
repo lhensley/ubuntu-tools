@@ -9,10 +9,12 @@ IFS=$'[ \t]*=[ \t]*'
 # IFS="="
 declare -A CONFIG
 while read -r NAME VALUE
-do					  
-	CONFIG[$NAME]="$VALUE"
-	echo "#$NAME#$NAME#"
-	echo "<next>"
+do	
+	if [ "$NAME" -ne "" ]; then
+	 	CONFIG[$NAME]="$VALUE"
+		echo "#$NAME#$NAME#"
+		echo "<next>"
+	fi
 done < "$INPUT"
 
 echo ""
