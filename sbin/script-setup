@@ -6,11 +6,13 @@ function f_get-config {
     }
 
 function f_log () {
+    echo "$0"
+    echo "$(basename $0)"
     echo "$(f_get-config $(basename $0))"
     if [ "$(f_get-config $(basename $0))" != "false" ]; then
-        echo Yes
+        echo Yes2
     else
-        echo No
+        echo No2
     fi
     }
 
