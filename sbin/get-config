@@ -1,20 +1,21 @@
 #!/bin/bash
 # get-config
 # Usage: get-config <config-name> <primary-config-file> [<alternate-config-file>]
+# Ref: https://unix.stackexchange.com/questions/505258/parse-config-file-and-pass-parameters-to-another-script
 
-config-name="$1"
-input="$2"
+CONFIG_NAME="$1"
+INPUT="$2"
 # IFS=$'[ \t]*=[ \t]*'
 IFS="="
-declare -A config
-while read -r name value
+declare -A CONFIG
+while read -r NAME VALUE
 do
-	config[$name]="$value"
-	echo "#$name#$value#"
-done < "$input"
+	CONFIG[$NAME]="$VALUE"
+	echo "#$NAME#$NAME#"
+done < "$INPUT"
 
 echo ""
-echo config["$config-name"]
+echo CONFIG["$CONFIG_NAME"]
 echo ""
 
 exit 0
