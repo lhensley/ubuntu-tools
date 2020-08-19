@@ -12,6 +12,7 @@ while read -r NAME VALUE
 do					  
 	CONFIG[$NAME]="$VALUE"
 	echo "#$NAME#$NAME#"
+	echo "<next>"
 done < "$INPUT"
 
 echo ""
