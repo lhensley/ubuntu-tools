@@ -186,14 +186,20 @@ find $SCRIPTS_INCLUDES -name "*.sh" -type f | while read INFILE
     source "$INFILE"
   done
 
+echo "Test point 3"
+
 # Set key file ownerships #############################################
 /bin/chown root:root $MYSQL_CONFIGS/mysqldump.cnf >> /dev/null 2>&1
 /bin/chown -R root:$USER_NAME $SCRIPTS_DIRECTORY >> /dev/null 2>&1
 /bin/chown -R www-data:www-data $THIS_WEB_ROOT/ >> /dev/null 2>&1
 
+echo "Test point 4"
+
 # Set key file permissions ############################################
 /bin/chmod 600 $MYSQL_CONFIGS/mysqldump.cnf >> /dev/null 2>&1
 /bin/chmod -R 770 $SCRIPTS_DIRECTORY >> /dev/null 2>&1
+
+echo "Test point 5"
 
 # Echo variable values in debug mode
 #
@@ -201,5 +207,7 @@ if $debug_mode ; then
   echo $(date)
   env
   fi
+
+echo "Test point 6"
 
 echo "Test point E"
