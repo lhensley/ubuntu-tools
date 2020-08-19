@@ -10,15 +10,16 @@ IFS=$'[ \t]*=[ \t]*'
 declare -A CONFIG
 while read -r NAME VALUE
 do	
-	if [ "$NAME" != "" ] && [[ "$NAME" != "#*" ]]; then # Line is not blank and is not a comment
+	if [ "$NAME" != "" ] && [[ "$NAME" != "#"* ]]; then # Line is not blank and is not a comment
 	 	CONFIG[$NAME]="$VALUE"
-		echo "#$NAME#$VALUE#"
-		echo "<next>"
+		# echo "#$NAME#$VALUE#"
+		# echo "<next>"
 	fi
 done < "$INPUT"
 
-echo ""
+# Ref https://stackoverflow.com/questions/3601515/how-to-check-if-a-variable-is-set-in-bash
+if [ -z ${CONFIG[$CONFIG_NAME]+x} ]; then # The requested config is undefined
+	exit 1
+	fi
 echo ${CONFIG[$CONFIG_NAME]}
-echo ""
-
 exit 0
