@@ -6,15 +6,13 @@ function f_get-config {
     }
 
 function f_log () {
-    echo "$0"
-    echo "$(basename $0)"
-    echo "$(f_get-config $(basename $0).log-start)"
-    if [ "$(f_get-config $(basename $0).log-start)" != "false" ]; then
-        echo Yes2
+    if [ "$(f_get-config $(basename $0).log-start)" != "true" ]; then
+        echo "Disable log start"
     else
-        echo No2
+        echo "Enable log start"
     fi
     }
+echo "Test point C"
 
 # Basic setup
 f_log Begin $0
@@ -199,3 +197,5 @@ if $debug_mode ; then
   echo $(date)
   env
   fi
+
+echo "Test point D"
