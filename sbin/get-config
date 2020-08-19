@@ -10,7 +10,7 @@ IFS=$'[ \t]*=[ \t]*'
 declare -A CONFIG
 while read -r NAME VALUE
 do	
-	if [ "$NAME" != "" ]; then
+	if [ "$NAME" != "" ] && [[ "$NAME" != "#*" ]]; then # Line is not blank and is not a comment
 	 	CONFIG[$NAME]="$VALUE"
 		echo "#$NAME#$VALUE#"
 		echo "<next>"
@@ -18,7 +18,7 @@ do
 done < "$INPUT"
 
 echo ""
-echo ${CONFIG[CONFIG_NAME]}
+echo ${CONFIG[$CONFIG_NAME]}
 echo ""
 
 exit 0
