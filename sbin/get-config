@@ -5,17 +5,17 @@
 
 CONFIG_NAME="$1"
 INPUT="$2"
-# IFS=$'[ \t]*=[ \t]*'
-IFS="="
+IFS=$'[ \t]*=[ \t]*'
+# IFS="="
 declare -A CONFIG
 while read -r NAME VALUE
-do
+do					  
 	CONFIG[$NAME]="$VALUE"
 	echo "#$NAME#$NAME#"
 done < "$INPUT"
 
 echo ""
-echo CONFIG["$CONFIG_NAME"]
+echo ${CONFIG[CONFIG_NAME]}
 echo ""
 
 exit 0
