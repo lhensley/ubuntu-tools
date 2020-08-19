@@ -3,12 +3,8 @@
 # Usage: process_ts <input_file> <work_root_path> <store_root_path>
 # No final / on either path. For system root, use ""
 
-production_mode=true
-debug_mode=false
-# debug_mode=true
-if $debug_mode ; then
-  set -x
-  fi
+# Include script setup file
+source $(dirname $0)/script-setup
 
 IN_FILE=$1
 WORK_ROOT_PATH=$2
