@@ -1,6 +1,7 @@
 #!/bin/bash
 # lgh
 
+input="$1"
 IFS="="
 while read -r name value
 do
