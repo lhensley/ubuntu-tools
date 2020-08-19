@@ -1,36 +1,36 @@
 #!/bin/bash
 # /usr/local/sbin/script-setup
 
-function f_get-config {
+function f_get-config () {
     # $1: the config-name to be searched
     LANE_CONFIG_FILE_1="~/.lane/lane.conf"
     LANE_CONFIG_FILE_2="/etc/lane.conf"
     /usr/local/sbin/get-config "$1" "$LANE_CONFIG_FILE_1" "$LANE_CONFIG_FILE_2"
     }
 
-function f_filter {
+function f_filter () {
     # $1: the config-name to be searched; the config-value is a comma-delimited string
     # $2: the string to be checked against the config-value
     FILTER_VALUES=$(f_get-config $1)
     }
 
-# function f_text_alert {
+# function f_text_alert () {
 #     # $1: the string value of the text message
 #     TEXT_TARGETS=$(f_get-config text-alert-target-emails)
 #     if [ "$(f_get-config text-alert-emails" != "" ];
 #    }
 
 # If configured, make sure only root can run our script. Default = "false"
-if [ "$(f_get-config script.$(basename $0).require-root)" == "true" ] && [[ $EUID -ne 0 ]]; then
-        echo "$0 must be run as root." 1>&2
-        exit 1
-    fi
+# if [ "$(f_get-config script.$(basename $0).require-root)" == "true" ] && [[ $EUID -ne 0 ]]; then
+#         echo "$0 must be run as root." 1>&2
+#         exit 1
+#     fi
 
 # If configured, log the start of script processing. Default = "true"
-if [ "$(f_get-config script.$(basename $0).log-start)" != "true" ]; then logger "$0 start"; fi
+# if [ "$(f_get-config script.$(basename $0).log-start)" != "true" ]; then logger "$0 start"; fi
 
 # If configured, send a text message to note the start of script processing. Default = "false"
-if [ "$(f_get-config script.$(basename $0).text-start)" == "true" ]; then f_text_alert "$0 start"; fi
+# if [ "$(f_get-config script.$(basename $0).text-start)" == "true" ]; then f_text_alert "$0 start"; fi
 
 # /etc/os-release defines a lot of environment variables 
 # Sample:
@@ -185,10 +185,10 @@ USER_UBUNTU="ubuntu"
 MAILNAME=$HOST_NAME
 
 # Basically, this section means look for *.sh in the "includes" directory and invoke them.
-find $SCRIPTS_INCLUDES -name "*.sh" -type f | while read INFILE
-  do
-    source "$INFILE"
-  done
+# find $SCRIPTS_INCLUDES -name "*.sh" -type f | while read INFILE
+#   do
+#     source "$INFILE"
+#   done
 
 # Set key file ownerships #############################################
 /bin/chown root:root $MYSQL_CONFIGS/mysqldump.cnf >> /dev/null 2>&1

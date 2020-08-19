@@ -4,7 +4,7 @@
 # Include script setup file
 source $(dirname $0)/script-setup
 
-FILTER=$(f_get-config filter.transcode-excluded)r
+FILTER=$(f_get-config filter.transcode-excluded)
 
 echo $FILTER
 
