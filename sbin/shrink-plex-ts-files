@@ -23,8 +23,8 @@ echo "$(date) $Started" | mail -r shrink-plex-ts-files lanecell
 # PROGRAM_DIRECTORY=$(dirname $0)
 # source $PROGRAM_DIRECTORY/lhlib
 
-ROOT_WORK="/mnt/ssd1tb/plex"
-ROOT_STORE="/mnt/rerun/plex"
+ROOT_WORK="/var/lib/plexmediaserver/Library/work"
+ROOT_STORE="/var/lib/plexmediaserver/Library/store"
 
 PROCESS_TS_FILES="/usr/local/sbin/process-ts"
 

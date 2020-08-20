@@ -248,6 +248,20 @@ if $install_phpmyadmin ; then
 
 if $install_plexmediaserver ; then
 # CAUTION: NOT TESTED FOR UBUNTU 20
+# NOTE: As of 8/20/2020, it is difficult to impossible to automate this because the name 
+# of the latest/current release cannot be anticipated. See instructions 
+# at https://www.plex.tv/media-server-downloads/ 
+# and https://support.plex.tv/articles/200288586-installation/.
+# Copy the deb file to /home/lhensley, and run
+#   sudo dpkg -i ./<debfilename>
+#   sudo ufw allow plexmediaserver
+#   sudo usermod -a -G plex lhensley
+#   sudo mkdir /var/lib/plexmediaserver/Library/work
+#   sudo mkdir /var/lib/plexmediaserver/Library/store
+#   sudo chown plex:plex /var/lib/plexmediaserver/Library/*
+# Mount the drives and add the libraries.
+# Browse to http://<server>:32400/web
+# Ubuntu 18 instructions below:
   echo "Installing Plex Media Server"
   rm /etc/apt/sources.list.d/plexmediaserver.list
   deb https://downloads.plex.tv/repo/deb public main | tee /etc/apt/sources.list.d/plexmediaserver.list
