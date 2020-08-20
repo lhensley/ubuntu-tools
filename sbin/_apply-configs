@@ -39,9 +39,9 @@ if [ -f $GO_CONFIGS/ddclient/$HOST_NAME/ddclient.conf ]; then
 
 # fstab
 if [ -f $GO_CONFIGS/etc-lane.conf ]; then
-	cp $GO_CONFIGS/fstab/$HOST_NAME/fstab /etc/fstab
-	chown root:root /etc/fstab
-	chmod 664 /etc/fstab
+	cp $GO_CONFIGS/fstab/$HOST_NAME/fstab /etc/fstab.from.git
+	chown root:root /etc/fstab.from.git
+	chmod 600 /etc/fstab.from.git
 	fi
 
 # lane.conf
