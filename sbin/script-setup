@@ -17,7 +17,7 @@ function f_filter () {
 # function f_text_alert () {
 #     # $1: the string value of the text message
 #     TEXT_TARGETS=$(f_get-config text-alert-target-emails)
-#     if [ "$(f_get-config text-alert-emails" != "" ];
+#     if [ "$(f_get-config text-alert-emails)" != "" ];
 #    }
 
 # If configured, make sure only root can run our script. Default = "false"
