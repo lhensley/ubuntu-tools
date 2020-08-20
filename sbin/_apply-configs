@@ -18,7 +18,7 @@ chmod -R 755 $SBIN_DIR/*
 # These based on functional requirements
 chmod 755 /usr/local/sbin/lhlib /usr/local/sbin/rip /usr/local/sbin/transcode
 # These based on desire. CAUTION: Don't expose anything that has a password or code in it.
-chmod 740 /usr/local/sbin/upd /usr/local/sbin/script-setup /usr/local/sbin/apply-configs
+chmod 740 /usr/local/sbin/upd /usr/local/sbin/script-setup /usr/local/sbin/_apply-configs
 
 # Git
 chmod 600 /root/.gitconfig
