@@ -36,15 +36,7 @@ echo "Starting setup ...  #####################################################"
 echo "#########################################################################"
 echo "#########################################################################"
 
-debug_mode=false
-#debug_mode=true
-if $debug_mode ; then
-  set -x
-  fi
-
-# Include header file
-PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/../script-setup
+source $(dirname $0)/../script-setup
 
 if [[ $NAME = "Ubuntu" ]]; then
     if [[ $(echo $VERSION_ID | cut -c1-3) = "20." ]]; then
@@ -63,7 +55,7 @@ apt-get update && apt -y dist-upgrade && apt -y clean && apt -y autoremove
 
 if ! [ -x "$(command -v apg)" ]; then
   echo "Installing apg"
-  apt-get install -y apg
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq apg
 fi
 
 # Install uncomplicated, no-down-side utilities.
@@ -91,6 +83,11 @@ hostnamectl set-hostname $HOST_NAME
 echo $HOST_NAME > /etc/hostname
 chmod 644 /etc/hostname
 chown root:root /etc/hostname
+
+# Install ssh
+apt-get update
+DEBIAN_FRONTEND=noninteractive apt-get install -yq ufw ssh
+ufw allow ssh
 
 # Make $USER_ME and $USER_UBUNTU users and give them sudo access and ssh access
 echo "Making $USER_ME and $USER_UBUNTU users and give them sudo access and ssh access"
@@ -128,9 +125,20 @@ chmod 644 /etc/ufw/applications.d/lane-applications
 ufw app update lane-applications
 echo "Special LANE applications installed to ufw."
 
+# Install MakeMKV
+# DON'T USE THE SNAP INSTALLER
+if $install_makemkv ; then
+  echo "Installing MakeMKV"
+  add-apt-repository ppa:heyarje/makemkv-beta
+  apt-get update
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq makemkv-bin makemkv-oss ccextractor
+  usermod -a -G cdrom $USER_ME
+  echo "MakeMKV installed."
+  fi
+
 if $install_apache2 ; then
   echo "Installing apache2"
-  apt-get install -y apache2 apache2-doc apache2-suexec-pristine
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq apache2 apache2-doc apache2-suexec-pristine
   ufw allow 'Apache'
   ufw allow 'Apache Full'
   ufw allow http
@@ -140,12 +148,18 @@ if $install_apache2 ; then
   echo "apache2 installed."
   fi
 
+# Install Google Chrome
+DEBIAN_FRONTEND=noninteractive apt-get install -yq wget gdebi-core
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+gdebi --n google-chrome-stable_current_amd64.deb
+rm ./google-chrome-stable_current_amd64.deb
+
 if $install_openssl ; then
   echo "Installing openssl"
   OPENSSL_PACKAGES="openssl libcurl4-openssl-dev libssl-dev libcurl4-doc"
   OPENSSL_PACKAGES="$OPENSSL_PACKAGES libidn11-dev libkrb5-dev libldap2-dev "
   OPENSSL_PACKAGES="$OPENSSL_PACKAGES librtmp-dev libssh2-1-dev zlib1g-dev libssl-doc"
-  apt-get install -y 
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq $OPENSSL_PACKAGES 
   echo "openssl installed."
   fi
 
@@ -154,7 +168,7 @@ if $install_php ; then
   PHP_PACKAGES="php libapache2-mod-php php-mysql php-gd php-curl php-imap php-ldap"
   PHP_PACKAGES="$PHP_PACKAGES libmcrypt-dev php-mbstring php-dev php-pear"
   PHP_PACKAGES="$PHP_PACKAGES libc-client2007e mlock php-curl php-imap uw-mailutils"
-  apt-get install -y $PHP_PACKAGES
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq $PHP_PACKAGES
   phpenmod gd curl imap ldap mbstring
   systemctl restart apache2
   echo "php installed."
@@ -175,12 +189,12 @@ if $install_mailutils ; then
   ufw allow mail
   echo "mailutils installed."
   fi
-
+  
 if $install_mysql_server ; then
   echo "Installing mysql server"
 ###### EXTREMELY IMPORTANT: Edit /etc/mysql/mysql.conf.d/mysqld.cnf and open up bind-address * ###########
   MYSQL_PACKAGES="mysql-server openssl libcurl4-openssl-dev libssl-dev php-gmp php-symfony-service-implementation php-imagick php-twig-doc php-symfony-translation"
-  apt-get install -y $MYSQL_PACKAGES
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq $MYSQL_PACKAGES
   ufw allow mysql
   mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
@@ -244,7 +258,7 @@ if $install_plexmediaserver ; then
   echo "Plex Media Server installed."
   # Install Tautulli for https://this-server:8181
   See https://tautulli.com/
-  apt-get install python python-setuptools tzdata
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq python python-setuptools tzdata
   cd /opt
   git clone https://github.com/Tautulli/Tautulli.git
   addgroup tautulli && sudo adduser --system --no-create-home tautulli --ingroup tautulli
@@ -262,7 +276,7 @@ if $install_webmin ; then
   WEBMIN_PACKAGES="openssl libcurl4-openssl-dev libssl-dev perl libnet-ssleay-perl libauthen-pam-perl"
   WEBMIN_PACKAGES="$WEBMIN_PACKAGES libnet-ssleay-perl libauthen-pam-perl libpam-runtime"
   WEBMIN_PACKAGES="$WEBMIN_PACKAGES libio-pty-perl apt-show-versions python libsocket6-perl"
-  apt-get install -y $WEBMIN_PACKAGES
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq $WEBMIN_PACKAGES
   dpkg --install webmin-current.deb
   rm webmin-current.deb
   ufw allow webmin
@@ -273,7 +287,7 @@ if $install_webmin ; then
 if $install_zoom ; then
   echo "Installing Zoom Client"
   wget https://zoom.us/client/latest/zoom_amd64.deb
-  apt-get install -y ./zoom_amd64.deb
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq ./zoom_amd64.deb
   rm ./zoom_amd64.deb
   echo "Zoom Client installed."
   fi
@@ -281,7 +295,7 @@ if $install_zoom ; then
 # Install Google Chrome
 if $install_chrome ; then
   echo "Installing Google Chrome"
-  apt-get install -y gdebi-core
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq gdebi-core
   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   gdebi --n google-chrome-stable_current_amd64.deb
   rm ./google-chrome-stable_current_amd64.deb
@@ -291,23 +305,12 @@ if $install_chrome ; then
 # Install lsyncd
 if $install_lsyncd ; then
   echo "Installing lsyncd"
-  apt-get install -y lsyncd rsync
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq lsyncd rsync
   mkdir -p /etc/lsyncd
   mkdir -p /var/log/lsyncd
   systemctl start lsyncd
   systemctl enable lsyncd
   echo "lsyncd installed."
-  fi
-
-# Install MakeMKV
-# DON'T USE THE SNAP INSTALLER
-if $install_makemkv ; then
-  echo "Installing MakeMKV"
-  add-apt-repository ppa:heyarje/makemkv-beta
-  apt-get update
-  apt-get install -y makemkv-bin makemkv-oss ccextractor
-  usermod -a -G cdrom $USER_ME
-  echo "MakeMKV installed."
   fi
 
 # Set up some cron jobs
@@ -328,16 +331,16 @@ if $install_handbrake ; then
   echo "Installing HandBrake"
   add-apt-repository -y ppa:stebbins/handbrake-releases
   apt-get update
-  apt-get install -y handbrake-gtk handbrake-cli
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq handbrake-gtk handbrake-cli
   echo "HandBrake installed."
   echo "GUI version is NOT configured: Presets ($HOME_DIR/.HandBrake/*) need to be added."
   fi
 
 # Invoke /usr/local/sbin/_apply-configs
-# chmod 777 $SBIN_DIR/_apply-configs
+# chmod 777 $SBIN_DIR/_apply-configsHOME
 $SBIN_DIR/_apply-configs
 
-KEYS_FILE=$USER_ME/os-security-info.txt
+KEYS_FILE=$HOME_DIR/os-security-info.txt
 echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD" > $KEYS_FILE
 echo "MYSQL_ADMIN_NAME: $MYSQL_ADMIN_NAME" >> $KEYS_FILE
 echo "MYSQL_ADMIN_PASSWORD: $MYSQL_ADMIN_PASSWORD" >> $KEYS_FILE
@@ -353,10 +356,11 @@ echo "#" >> $KEYS_FILE
 chmod 400 $KEYS_FILE
 chown $USER_ME:$USER_ME $KEYS_FILE
 echo ""
-echo "# IMPORTANT: Move the contents of $KEYS_FILE into Dashlane NOW, delete it, and reboot.
+echo "# IMPORTANT: Move the contents of $KEYS_FILE into 1Password NOW, delete it, and reboot.
 echo "# Once you continue, these passwords cannot be recovered."
 echo ""
 rm $TEMP_PASSWORD_INCLUDE
 
-echo Done.
+source $(dirname $0)/../script-footer
+echo "Done."
 exit 0
