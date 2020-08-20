@@ -20,7 +20,7 @@ git config --global credential.helper cache
 git config --global credential.helper 'cache --timeout=600'
 # Install git token
 # To get a new token, go to https://github.com/settings/tokens.
-MY_GIT_TOKEN=9dc892155bc04869c03d1189d64a6544654d410d
+MY_GIT_TOKEN=8224e3fbc597bf523d30906d038158977763b2e1
 git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
 git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
 git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
