@@ -333,9 +333,9 @@ if $install_handbrake ; then
   echo "GUI version is NOT configured: Presets ($HOME_DIR/.HandBrake/*) need to be added."
   fi
 
-# Invoke /usr/local/sbin/apply-configs
-# chmod 777 $SBIN_DIR/apply-configs
-$SBIN_DIR/apply-configs
+# Invoke /usr/local/sbin/_apply-configs
+# chmod 777 $SBIN_DIR/_apply-configs
+$SBIN_DIR/_apply-configs
 
 KEYS_FILE=$USER_ME/os-security-info.txt
 echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD" > $KEYS_FILE
