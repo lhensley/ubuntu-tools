@@ -3,32 +3,11 @@
 
 source $(dirname $0)/script-setup
 
-# Make sure only root can run our script
-if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as root."
-  logger "$0: FAILED. This script must be run as root."
-  exit 1
-fi
+ROOT_DVR_WORK=$(f_get-config pathname.root-dvr-work)
+ROOT_DVR_STORE=$(f_get-config pathname.root-dvr-store)
+PROCESS_TS_FILES=$(f_get-config script.shrink-plex-ts-files.pathname)
 
-# Confirm that this host is oz
-if [[ $(hostname -s) != "oz" ]]; then
-  echo "This script can only be run on server oz."
-  logger "$0: FAILED. This script can only be run on server oz."
-  exit 1
-fi
+find "$ROOT_DVR_WORK" -type f -name "*.ts" -print -exec "$PROCESS_TS_FILES" {} "$ROOT_DVR_WORK" "$ROOT_DVR_STORE" \; >> /dev/null 2>&1
 
-logger "$0: Started."
-echo "$(date) $Started" | mail -r shrink-plex-ts-files lanecell
-
-# PROGRAM_DIRECTORY=$(dirname $0)
-# source $PROGRAM_DIRECTORY/lhlib
-
-ROOT_WORK="/var/lib/plexmediaserver/Library/work"
-ROOT_STORE="/var/lib/plexmediaserver/Library/store"
-
-PROCESS_TS_FILES="/usr/local/sbin/process-ts"
-
-find "$ROOT_WORK" -type f -name "*.ts" -print -exec "$PROCESS_TS_FILES" {} "$ROOT_WORK" "$ROOT_STORE" \; >> /dev/null 2>&1
-
-logger "$0: Ended without errors."
+source $(dirname $0)/script-footer
 exit 0
