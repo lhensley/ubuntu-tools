@@ -34,21 +34,21 @@ if [ "$(f_get-config system.debug-mode)" == "true" ]; then
 echo "$(date) $0 Point B"
 
 RELATIVE_FILE=${IN_FILE: -$RELATIVE_FILE_LENGTH} # First remove WORK_ROOT_PATH
-if [ "$(f_get-config system.debug-mode" == "true" ]; then 
+if [ "$(f_get-config system.debug-mode)" == "true" ]; then 
     echo "2: $RELATIVE_FILE"
     fi
 
 echo "$(date) $0 Point I"
 
 RELATIVE_FILE_NO_EXT_LENGTH=$[RELATIVE_FILE_LENGTH-IN_FILE_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
-if [ "$(f_get-config system.debug-mode" == "true" ]; then 
+if [ "$(f_get-config system.debug-mode)" == "true" ]; then 
     echo "3: $RELATIVE_FILE_NO_EXT_LENGTH"
     fi
 
 echo "$(date) $0 Point J"
 
 RELATIVE_FILE_NO_EXT=${RELATIVE_FILE:0:RELATIVE_FILE_NO_EXT_LENGTH} # Then remove IN_FILE_EXT
-if [ "$(f_get-config system.debug-mode" == "true" ]; then 
+if [ "$(f_get-config system.debug-mode)" == "true" ]; then 
     echo "4: $RELATIVE_FILE_NO_EXT"
     fi
 
@@ -154,7 +154,7 @@ if [ "$exit_status" == "0" ]; then
 
 else
 
-    if [ "$(f_get-config system.debug-mode" == "true" ]; then 
+    if [ "$(f_get-config system.debug-mode)" == "true" ]; then 
         echo "$0: \$0: $0"
         echo "$0: \$1: $1"
         echo "$(date) $0 Point V"
