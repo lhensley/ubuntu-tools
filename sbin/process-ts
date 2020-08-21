@@ -10,6 +10,10 @@ IN_FILE=$1
 WORK_ROOT_PATH=$2
 STORE_ROOT_PATH=$3
 
+echo "$(date) $0 Point PreA IN_FILE $IN_FILE"
+echo "$(date) $0 Point PreA WORK_ROOT_PATH $IN_FILE"
+echo "$(date) $0 Point PreA STORE_ROOT_PATH $IN_FILE"
+
 OUT_EXT="m4v"
 MOVE_SCRIPT="/usr/local/sbin/move-one-file"
 FILTER_SCRIPT="/usr/local/sbin/tv-show-filter-status"
