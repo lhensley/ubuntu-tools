@@ -1,10 +1,9 @@
 #!/bin/bash
 # master-loop
 
-logger "$0: Starting."
+source $(dirname $0)/script-setup
 
-/usr/local/sbin/shrink-plex-ts-files
+$(f_get-config script.shrink-plex-ts-files.pathname)
 
-logger "$0: Ended. Exit code: $?"
-
+source $(dirname $0)/script-footer
 exit 0
