@@ -3,7 +3,8 @@
 
 source $(dirname $0)/script-setup
 
-ROOT_DVR_WORK="/mnt/ssd1tb/plex"
+ROOT_DVR_WORK=$(f_get-config pathname.root-dvr-work)
+ROOT_DVR_STORE=$(f_get-config pathname.root-dvr-store)
 
 find "$ROOT_DVR_WORK" -type f -name "*.ts" -print
 echo ""
