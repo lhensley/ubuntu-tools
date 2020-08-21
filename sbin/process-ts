@@ -123,6 +123,11 @@ if [ "$exit_status" == "0" ]; then
 
 else
 
+    if [ "$(f_get-config system.debug-mode" == "true" ]; then 
+        echo "$0: \$0: $0"
+        echo "$0: \$1: $1"
+        echo "$0: \$FILTER_SCRIPT: $FILTER_SCRIPT"
+        fi
     logger "$0: '$1' not processed because it matched in '$FILTER_SCRIPT'."
 
 fi
