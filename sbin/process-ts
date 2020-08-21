@@ -11,8 +11,8 @@ WORK_ROOT_PATH=$2
 STORE_ROOT_PATH=$3
 
 echo "$(date) $0 Point PreA IN_FILE $IN_FILE"
-echo "$(date) $0 Point PreA WORK_ROOT_PATH $IN_FILE"
-echo "$(date) $0 Point PreA STORE_ROOT_PATH $IN_FILE"
+echo "$(date) $0 Point PreA WORK_ROOT_PATH $WORK_ROOT_PATH"
+echo "$(date) $0 Point PreA STORE_ROOT_PATH $STORE_ROOT_PATH"
 
 OUT_EXT="m4v"
 MOVE_SCRIPT="/usr/local/sbin/move-one-file"
