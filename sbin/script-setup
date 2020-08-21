@@ -1,6 +1,8 @@
 #!/bin/bash
 # /usr/local/sbin/script-setup
 
+echo "$(date) setup from $0 Point A"
+
 function f_get-config () {
     # $1: the config-name to be searched
     LANE_CONFIG_FILE_1="~/.lane/lane.conf"
@@ -206,3 +208,4 @@ MAILNAME=$HOST_NAME
 #   env
 #  fi
 
+echo "$(date) setup from $0 Point Z"

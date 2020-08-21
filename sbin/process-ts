@@ -24,9 +24,11 @@ echo "$(date) $0 Point A"
 
 RELATIVE_FILE_LENGTH=$[IN_FILE_LENGTH-WORK_ROOT_PATH_LENGTH-1]
 echo "$(date) $0 Point A2"
-if [ "$(f_get-config system.debug-mode" == "true" ]; then 
+echo "$(date) $0 Mode $(f_get-config system.debug-mode)"
+if [ "$(f_get-config system.debug-mode)" == "true" ]; then 
     echo "$(date) $0 Point A3"
     echo "RELATIVE_FILE_LENGTH = $RELATIVE_FILE_LENGTH"
+    echo "$(date) $0 Point A4"
     fi
 
 echo "$(date) $0 Point B"
