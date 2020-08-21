@@ -91,7 +91,7 @@ if [ "$exit_status" == "0" ]; then
 
     # Make sure $IN_FILE exists
     if [ ! -f "$IN_FILE" ]; then
-        echo "$(date) $0 Point O1"
+        echo "$(date) $0 Point O1 $IN_FILE"
       logger "$0 no source file $IN_FILE"
         echo "$(date) $0 Point O2"
       exit 1
