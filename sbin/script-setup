@@ -1,13 +1,27 @@
 #!/bin/bash
 # /usr/local/sbin/script-setup
 
-echo "$(date) setup from $0 Point A"
-
 function f_get-config () {
     # $1: the config-name to be searched
     LANE_CONFIG_FILE_1="~/.lane/lane.conf"
     LANE_CONFIG_FILE_2="/etc/lane.conf"
     /usr/local/sbin/get-config "$1" "$LANE_CONFIG_FILE_1" "$LANE_CONFIG_FILE_2"
+    }
+
+function f_debug () {
+    # $1: message to log
+    if [ "$(f_get-config script.$(basename $0).require-root)" == "true" ]; then
+        logger $0: Debug: $1
+        fi
+    }
+
+function f_debug_variable () {
+    # $1: variable_name
+    # $2: variable_value ("$variable_name")
+    # Example: f_debug_variable "var" "$var"
+    if [ "$(f_get-config script.$(basename $0).require-root)" == "true" ]; then
+        logger $0: Debug: $1 = $2
+        fi
     }
 
 function f_filter () {
@@ -27,6 +41,8 @@ if [ "$(f_get-config script.$(basename $0).require-root)" == "true" ] && [[ $EUI
         echo "Use sudo. $0 must be run as root." 1>&2
         exit 1
     fi
+
+f_debug "script-setup started"
 
 # If configured, log the start of script processing. Default = "true"
 if [ "$(f_get-config script.$(basename $0).log-start)" != "true" ]; then logger "$0 start"; fi

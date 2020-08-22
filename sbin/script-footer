@@ -2,7 +2,9 @@
 # $SBIN_DIR/script-footer
 
 # If configured, log the end of script processing. Default = "true"
-# if [ "$(f_get-config script.$(basename $0).log-end)" != "true" ]; then logger "$0 end"; fi
+if [ "$(f_get-config script.$(basename $0).log-end)" != "true" ]; then logger "$0 end"; fi
 
 # If configured, send a text message to note the end of script processing. Default = "false"
-# if [ "$(f_get-config script.$(basename $0).text-end)" == "true" ]; then f_text_alert "$0 end"; fi
+if [ "$(f_get-config script.$(basename $0).text-end)" == "true" ]; then f_text_alert "$0 end"; fi
+
+exit 0

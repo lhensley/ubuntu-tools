@@ -1,11 +1,10 @@
 #!/bin/bash
 # lgh
 
-# Include script setup file
 source $(dirname $0)/script-setup
 
 FILTER=$(f_get-config filter.transcode-excluded)
 
 echo $FILTER
 
-exit 0
+$(f_get-config script.script-footer.pathname)
