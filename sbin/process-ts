@@ -3,16 +3,15 @@
 # Usage: process_ts <input_file> <work_root_path> <store_root_path>
 # No final / on either path. For system root, use ""
 
-# Include script setup file
 source $(dirname $0)/script-setup
 
 IN_FILE=$1
 WORK_ROOT_PATH=$2
 STORE_ROOT_PATH=$3
 
-echo "$(date) $0 Point PreA IN_FILE $IN_FILE"
-echo "$(date) $0 Point PreA WORK_ROOT_PATH $WORK_ROOT_PATH"
-echo "$(date) $0 Point PreA STORE_ROOT_PATH $STORE_ROOT_PATH"
+f_debug_variable "IN_FILE" "$IN_FILE"
+f_debug_variable "WORK_ROOT_PATH" "$WORK_ROOT_PATH"
+f_debug_variable "STORE_ROOT_PATH" "$STORE_ROOT_PATH"
 
 OUT_EXT="m4v"
 MOVE_SCRIPT="/usr/local/sbin/move-one-file"
