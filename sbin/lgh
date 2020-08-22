@@ -5,7 +5,7 @@ source $(dirname $0)/script-setup
 
 echo "A"
 echo "A2 $(f_get-config filter.transcode-excluded)"
-f_filter "CBS This Morning Saturday" "$(f_get-config filter.transcode-excluded)"
+f_filter "CBS This Morning Saturday" $(f_get-config filter.transcode-excluded)
 echo "B"
-f_filter "The Odd Couple" "$(f_get-config filter.transcode-excluded)"
+f_filter "The Odd Couple" $(f_get-config filter.transcode-excluded)
 echo "C"
