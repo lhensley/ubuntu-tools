@@ -36,9 +36,11 @@ function f_filter () {
 
     # Ref: https://superuser.com/questions/1066455/how-to-split-a-string-with-quotes-like-command-arguments-in-bash
     eval "array=($FILTER)"
-    for thisfilter in "${array[@]}"; do if [[ $STRING_BEING_EVALUATED == *"$thisfilter"* ]]; then MATCH=true; fi; done  
+    for thisfilter in "${array[@]}"; do if [[ $STRING_BEING_EVALUATED == *"$thisfilter"* ]]; then MATCH=true; fi; done
 
-    if [ $MATCH == true ]; then echo "filter"; else echo "no filter"; fi
+    f_debug_variable "MATCH" "$MATCH"
+
+    if $MATCH; then echo "filter"; else echo "no filter"; fi
 	}
 
 # function f_text_alert () {
