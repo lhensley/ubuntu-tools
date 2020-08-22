@@ -4,13 +4,12 @@
 source $(dirname $0)/script-setup
 
 FILTER=$(f_get-config filter.transcode-excluded)
-STRING_TO_SEARCH="CBS Thix Morning Saturday"
+STRING_TO_SEARCH=$1
 MATCH=false
-
-echo $FILTER
 
 # Ref: https://superuser.com/questions/1066455/how-to-split-a-string-with-quotes-like-command-arguments-in-bash
 eval "for filter in $FILTER; do if [[ "STRING_TO_SEARCH" == *"$filter"* ]]; then MATCH=true; fi; done"
+
 echo "MATCH = $MATCH"
 
 source $(f_get-config script.script-footer.pathname)
