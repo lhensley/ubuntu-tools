@@ -7,6 +7,10 @@ ROOT_DVR_WORK=$(f_get-config pathname.root-dvr-work)
 ROOT_DVR_STORE=$(f_get-config pathname.root-dvr-store)
 PROCESS_TS_FILES=$(f_get-config script.shrink-plex-ts-files.pathname)
 
+f_debug_variable "ROOT_DVR_WORK" "$ROOT_DVR_WORK"
+f_debug_variable "ROOT_DVR_STORE" "$ROOT_DVR_STORE"
+f_debug_variable "PROCESS_TS_FILES" "$PROCESS_TS_FILES"
+
 find "$ROOT_DVR_WORK" -type f -name "*.ts" -print -exec "$PROCESS_TS_FILES" {} "$ROOT_DVR_WORK" "$ROOT_DVR_STORE" \; >> /dev/null 2>&1
 
 source $(dirname $0)/script-footer
