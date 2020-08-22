@@ -15,5 +15,5 @@ while true; do # Endless loop
 	logger "$0: Exit Code $? for $REPEATING_PROGRAM"
 done # Endless loop
 
-$(f_get-config script.script-footer.pathname)
+source $(f_get-config script.script-footer.pathname)
 exit 1

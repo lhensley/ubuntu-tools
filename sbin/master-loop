@@ -7,6 +7,6 @@ f_debug_variable "script.shrink-plex-ts-files.pathname" "$(f_get-config script.s
 $(f_get-config script.shrink-plex-ts-files.pathname)
 
 f_debug_variable "script.script-footer.pathname" "$(f_get-config script.script-footer.pathname)"
-$(f_get-config script.script-footer.pathname)
+source $(f_get-config script.script-footer.pathname)
 
 exit 0

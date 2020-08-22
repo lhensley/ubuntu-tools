@@ -174,7 +174,6 @@ fi
 
 echo "$(date) $0 Point Y"
 
-
 # Include script footer file
 source $(dirname $0)/script-footer
 
