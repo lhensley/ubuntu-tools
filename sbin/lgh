@@ -7,7 +7,7 @@ FILTER=$(f_get-config filter.transcode-excluded)
 
 echo $FILTER
 
-for var in "$FILTER"
+for var in $FILTER
 do
 echo "$var"
 done
