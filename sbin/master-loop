@@ -3,7 +3,7 @@
 
 source $(dirname $0)/script-setup
 
-$(f_get-config script.shrink-plex-ts-files.pathname)
+echo $(date) $0 $(f_get-config script.shrink-plex-ts-files.pathname)
 
 source $(dirname $0)/script-footer
 exit 0
