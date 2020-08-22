@@ -1,16 +1,8 @@
 #!/bin/bash
 # rip
-# Should have owner root:$USER_NAME
-# Should have permissions 770
 
-debug_mode=false
-#debug_mode=true
-if $debug_mode ; then
-  set -x
-  fi
-
-PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/lhlib
+source $(dirname $0)/script-setup
+source $(dirname $0)/lh-lib
 
 # Make sure we are NOT running with sudo
 if [[ $EUID -eq 0 ]]; then
