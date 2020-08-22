@@ -7,9 +7,6 @@ FILTER=$(f_get-config filter.transcode-excluded)
 
 echo $FILTER
 
-for var in $FILTER
-do
-echo "$var"
-done
+eval "for filter in $FILTER; do echo \$filter; done"
 
 source $(f_get-config script.script-footer.pathname)
