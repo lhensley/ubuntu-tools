@@ -4,6 +4,7 @@
 source $(dirname $0)/script-setup
 
 ROOT_DVR_WORK=$(f_get-config pathname.root-dvr-work)
+echo "$(date) $0 ROOT_DVR_WORK = $ROOT_DVR_WORK"
 ROOT_DVR_STORE=$(f_get-config pathname.root-dvr-store)
 PROCESS_TS_FILES=$(f_get-config script.shrink-plex-ts-files.pathname)
 
