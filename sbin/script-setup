@@ -224,4 +224,4 @@ MAILNAME=$HOST_NAME
 #   env
 #  fi
 
-echo "$(date) setup from $0 Point Z"
+f_debug "script-setup ended"
