@@ -23,12 +23,24 @@ function f_debug_variable () {
         logger $0: Debug: $1 = $2
         fi
     }
-
+    
 function f_filter () {
-    # $1: the config-name to be searched; the config-value is a comma-delimited string
-    # $2: the string to be checked against the config-value
-    FILTER_VALUES=$(f_get-config $1)
-    }
+    # $1: string being evaluated
+    # $2: string of filter values separated by spaces allowing double quotes
+    #    example: f_filter "CBS This Morning Saturday" "$(f_get-config filter.transcode-excluded)"
+    # RETURN CODES
+    # 0 = No match / filter
+    # 1 = Match / filter
+
+    STRING_BEING_EVALUATED=$1
+    FILTER=$2
+
+    # Ref: https://superuser.com/questions/1066455/how-to-split-a-string-with-quotes-like-command-arguments-in-bash
+    eval "array=($FILTER)"
+    for thisfilter in "${array[@]}"; do if [[ "$STRING_BEING_EVALUATED" == *"$thisfilter"* ]]; then exit 1; fi; done  
+
+    exit 0
+	}
 
 # function f_text_alert () {
 #     # $1: the string value of the text message
