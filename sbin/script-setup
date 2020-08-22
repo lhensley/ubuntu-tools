@@ -38,7 +38,7 @@ function f_filter () {
     eval "array=($FILTER)"
     for thisfilter in "${array[@]}"; do if [[ $STRING_BEING_EVALUATED == *"$thisfilter"* ]]; then MATCH=true; fi; done  
 
-    if [ $MATCH == true]; then echo "filter"; else echo "no filter"; fi
+    if [ $MATCH == true ]; then echo "filter"; else echo "no filter"; fi
 	}
 
 # function f_text_alert () {
