@@ -8,7 +8,8 @@ STRING_TO_SEARCH=$1
 MATCH=false
 
 # Ref: https://superuser.com/questions/1066455/how-to-split-a-string-with-quotes-like-command-arguments-in-bash
-eval "for thisfilter in $FILTER; do ( if [[ "$STRING_TO_SEARCH" == *"$thisfilter"* ]]; then MATCH=true; fi ); done"
+# eval "for thisfilter in $FILTER; do ( if [[ "$STRING_TO_SEARCH" == *"$thisfilter"* ]]; then MATCH=true; fi ); done"
+eval "for thisfilter in $FILTER; do echo \$thisfilter; done"
 
 echo "MATCH = $MATCH"
 
