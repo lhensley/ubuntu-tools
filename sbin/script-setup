@@ -10,7 +10,7 @@ function f_get-config () {
 
 function f_debug () {
     # $1: message to log
-    if [ "$(f_get-config script.$(basename $0).require-root)" == "true" ]; then
+    if [ "$(f_get-config system.debug-mode)" == "true" ]; then
         logger $0: Debug: $1
         fi
     }
@@ -19,7 +19,7 @@ function f_debug_variable () {
     # $1: variable_name
     # $2: variable_value ("$variable_name")
     # Example: f_debug_variable "var" "$var"
-    if [ "$(f_get-config script.$(basename $0).require-root)" == "true" ]; then
+    if [ "$(f_get-config system.debug-mode)" == "true" ]; then
         logger $0: Debug: $1 = $2
         fi
     }
@@ -57,10 +57,10 @@ if [ "$(f_get-config script.$(basename $0).require-root)" == "true" ] && [[ $EUI
 f_debug "script-setup started"
 
 # If configured, log the start of script processing. Default = "true"
-if [ "$(f_get-config script.$(basename $0).log-start)" != "true" ]; then logger "$0 start"; fi
+if [ "$(f_get-config script.$(basename $0).log-start)" != "true" ]; then logger "$0: start"; fi
 
 # If configured, send a text message to note the start of script processing. Default = "false"
-if [ "$(f_get-config script.$(basename $0).text-start)" == "true" ]; then f_text_alert "$0 start"; fi
+if [ "$(f_get-config script.$(basename $0).text-start)" == "true" ]; then f_text_alert "$0: start"; fi
 
 # /etc/os-release defines a lot of environment variables 
 # Sample:

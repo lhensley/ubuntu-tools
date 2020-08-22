@@ -3,7 +3,10 @@
 
 source $(dirname $0)/script-setup
 
+echo "A"
 f_filter "CBS This Morning Saturday" "$(f_get-config filter.transcode-excluded)"
 echo $?
+echo "B"
 f_filter "The Odd Couple" "$(f_get-config filter.transcode-excluded)"
 echo $?
+echo "C"
