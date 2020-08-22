@@ -10,7 +10,7 @@ MATCH=false
 echo $FILTER
 
 # Ref: https://superuser.com/questions/1066455/how-to-split-a-string-with-quotes-like-command-arguments-in-bash
-eval "for filter in $FILTER; do [[ "STRING_TO_SEARCH" == *"$filter"* ]]; then MATCH=true; fi; done"
+eval "for filter in $FILTER; do if [[ "STRING_TO_SEARCH" == *"$filter"* ]]; then MATCH=true; fi; done"
 echo "MATCH = $MATCH"
 
 source $(f_get-config script.script-footer.pathname)
