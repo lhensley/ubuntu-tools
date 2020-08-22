@@ -11,6 +11,11 @@ f_debug_variable "ROOT_DVR_WORK" "$ROOT_DVR_WORK"
 f_debug_variable "ROOT_DVR_STORE" "$ROOT_DVR_STORE"
 f_debug_variable "PROCESS_TS_FILES" "$PROCESS_TS_FILES"
 
+if [ ! -f $PROCESS_TS_FILES ]; then
+	logger "$0: ERROR: Missing file $PROCESS_TS_FILES"
+	exit 1
+	fi
+
 find "$ROOT_DVR_WORK" -type f -name "*.ts" -print -exec "$PROCESS_TS_FILES" {} "$ROOT_DVR_WORK" "$ROOT_DVR_STORE" \; >> /dev/null 2>&1
 
 source $(dirname $0)/script-footer
