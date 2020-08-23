@@ -38,8 +38,6 @@ function f_filter () {
     eval "array=($FILTER)"
     for thisfilter in "${array[@]}"; do if [[ $STRING_BEING_EVALUATED == *"$thisfilter"* ]]; then MATCH=true; fi; done
 
-    f_debug_variable "MATCH" "$MATCH"
-
     if $MATCH; then echo "filter"; else echo "no filter"; fi
 	}
 

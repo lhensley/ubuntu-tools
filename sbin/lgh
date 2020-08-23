@@ -9,3 +9,5 @@ f_filter "CBS This Morning Saturday" $(f_get-config filter.transcode-excluded)
 echo "B"
 f_filter "The Odd Couple" $(f_get-config filter.transcode-excluded)
 echo "C"
+f_filter "Today (1952)" $(f_get-config filter.transcode-excluded)
+echo "D"
