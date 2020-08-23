@@ -35,11 +35,11 @@ function f_filter () {
     MATCH=false
 
     # Ref: https://superuser.com/questions/1066455/how-to-split-a-string-with-quotes-like-command-arguments-in-bash
-    eval "array=($"FILTER)"
-    echo " "$STRING_BEING_EVALUATED
-    echo " "$MATCH
+    eval "array=($FILTER)"
+    echo $STRING_BEING_EVALUATED
+    echo $MATCH
     for thisfilter in "${array[@]}"; do echo $thisfilter; if [[ $STRING_BEING_EVALUATED == *"$thisfilter"* ]]; then MATCH=true ; fi; done
-    echo " "$MATCH
+    echo $MATCH
 
     if $MATCH; then echo "filter"; else echo "no filter"; fi
 	}
