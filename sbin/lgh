@@ -15,11 +15,11 @@ function f_filter () {
 
     # Ref: https://superuser.com/questions/1066455/how-to-split-a-string-with-quotes-like-command-arguments-in-bash
     eval "array=($FILTER)"
-    echo $STRING_BEING_EVALUATED
-    echo $MATCH
+#    echo $STRING_BEING_EVALUATED
+#    echo $MATCH
 #    for thisfilter in "${array[@]}"; do echo $thisfilter; if [[ $STRING_BEING_EVALUATED == *"$thisfilter"* ]]; then MATCH=true ; fi; done
-    for thisfilter in "${array[@]}"; do echo $thisfilter; done
-    echo $MATCH
+    for thisfilter in "${array[@]}"; do echo Y$thisfilter; done
+#    echo $MATCH
 
     if $MATCH; then echo "filter"; else echo "no filter"; fi
 	}
@@ -30,5 +30,5 @@ f_filter "CBS This Morning Saturday" $(f_get-config filter.transcode-excluded)
 echo "B"
 f_filter "The Odd Couple" $(f_get-config filter.transcode-excluded)
 echo "C"
-f_filter "Today (1952)" $(f_get-config filter.transcode-excluded)
+f_filter "Today (1952)" "$(f_get-config filter.transcode-excluded)"
 echo "D"
