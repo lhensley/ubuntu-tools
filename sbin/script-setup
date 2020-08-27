@@ -121,9 +121,9 @@ if [ -z "$LANE_CONFIG["system.configs-defined"]" ]; then
 	            fi
             done < "$LANE_CONFIG_FILE"
             IFS=$OLDIFS
-            logger($0: SUCCESS reading config file $LANE_CONFIG_FILE)
+            logger "$0: SUCCESS reading config file $LANE_CONFIG_FILE""
         else
-            logger($0: FAILED to read config file: None defined)
+            logger "$0: FAILED to read config file: None defined""
         fi
     $LANE_CONFIG["system.configs-defined"]=true
     fi
