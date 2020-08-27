@@ -15,10 +15,10 @@ function f_filter () {
 
     # Ref: https://superuser.com/questions/1066455/how-to-split-a-string-with-quotes-like-command-arguments-in-bash
     eval "array=($FILTER)"
-    for thisfilter in "${array[@]}"; if [[ $STRING_BEING_EVALUATED == *"$thisfilter"* ]]; then MATCH=true ; fi; done
+    for thisfilter in "${array[@]}"; do if [[ $STRING_BEING_EVALUATED == *"$thisfilter"* ]]; then MATCH=true ; fi; done
 
-    echo $MATCH
-#    if $MATCH; then echo 1; else echo 0; fi
+#    echo $MATCH
+    if $MATCH; then echo 1; else echo 0; fi
 	}
 
     $(f_filter "Today (1952)" "$(f_get-config filter.transcode-excluded)")
