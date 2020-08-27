@@ -22,6 +22,7 @@ else
 fi
 
 
+OLDIFS=$IFS
 IFS=$'[ \t]*=[ \t]*'
 # IFS="="
 declare -A CONFIG
@@ -33,6 +34,7 @@ do
 		# echo "<next>"
 	fi
 done < "$INPUT"
+IFS=$OLDIFS
 
 # Ref https://stackoverflow.com/questions/3601515/how-to-check-if-a-variable-is-set-in-bash
 if [ -z ${CONFIG[$CONFIG_NAME]+x} ]; then # The requested config is undefined
