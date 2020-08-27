@@ -253,7 +253,7 @@ if $install_plexmediaserver ; then
 # at https://www.plex.tv/media-server-downloads/ 
 # and https://support.plex.tv/articles/200288586-installation/.
 # Copy the deb file to /home/lhensley, and run
-#   sudo dpkg -i ./<debfilename>
+#   sudo dpkg -i ./plexmediaserver*deb
 #   sudo ufw allow plexmediaserver
 #   sudo usermod -a -G plex lhensley
 #   sudo mkdir /var/lib/plexmediaserver/Library/work

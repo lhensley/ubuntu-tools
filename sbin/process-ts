@@ -107,6 +107,9 @@ if [ "$exit_status" == "0" ]; then
     echo "$(date) $0 Point T"
 
     # Change permissions for Plex libraries
+    find /var/lib/plexmediaserver/Library -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
+    find /var/lib/plexmediaserver/Library -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
+    chown -R plex:plex /var/lib/plexmediaserver/Library
 	find "$WORK_ROOT_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
 	find "$WORK_ROOT_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
 	find "$STORE_ROOT_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
