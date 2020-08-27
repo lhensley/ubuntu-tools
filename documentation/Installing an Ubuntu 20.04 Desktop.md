@@ -35,6 +35,8 @@ rm -rf /var/local/git /usr/local/sbin
 mkdir -p /var/local/git
 chmod 775 /var/local/git
 cd /var/local/git
+# Select the designated branch
+git checkout $BRANCH
 git clone https://github.com/lhensley/go.git
 chmod -R 400 /var/local/git
 cd

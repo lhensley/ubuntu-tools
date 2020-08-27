@@ -13,7 +13,8 @@ git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@g
 # This section re-pulls all go files from github and updates /usr/local/sbin
 USERNAME=$USER_ME
 REPOSITORY=$GO
-BRANCH="master"
+# BRANCH="master"
+BRANCH="dev"
 # Change to local repository directory
 cd $REPOSITORY
 # Blow away any local changes not uploaded to github
