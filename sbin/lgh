@@ -17,11 +17,14 @@ function f_filter () {
     eval "array=($FILTER)"
     for thisfilter in "${array[@]}"; do echo $thisfilter; if [[ $STRING_BEING_EVALUATED == *"$thisfilter"* ]]; then MATCH=true ; fi; done
 
-    if $MATCH; then echo 1; else echo 0; fi
+    echo $MATCH
+#    if $MATCH; then echo 1; else echo 0; fi
 	}
 
-if [ $(f_filter "Today (1952)" "$(f_get-config filter.transcode-excluded)") ] ; then
-    echo "Filter"
-else
-    echo "No filter"
-fi
+    $(f_filter "Today (1952)" "$(f_get-config filter.transcode-excluded)")
+
+# if [ $(f_filter "Today (1952)" "$(f_get-config filter.transcode-excluded)") -eq 1 ] ; then
+#     echo "Filter"
+# else
+#     echo "No filter"
+# fi
