@@ -20,7 +20,7 @@ function f_filter () {
     if $MATCH; then echo 1; else echo 0; fi
 	}
 
-if $(f_filter "Today (1952)" "$(f_get-config filter.transcode-excluded)") ; then
+if [ $(f_filter "Today (1952)" "$(f_get-config filter.transcode-excluded)") ] ; then
     echo "Filter"
 else
     echo "No filter"
