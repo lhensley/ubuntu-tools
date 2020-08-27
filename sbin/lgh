@@ -17,8 +17,8 @@ function f_filter () {
     eval "array=($FILTER)"
 #    echo $STRING_BEING_EVALUATED
 #    echo $MATCH
-#    for thisfilter in "${array[@]}"; do echo $thisfilter; if [[ $STRING_BEING_EVALUATED == *"$thisfilter"* ]]; then MATCH=true ; fi; done
-    for thisfilter in "${array[@]}"; do echo Y$thisfilter; done
+    for thisfilter in "${array[@]}"; do echo $thisfilter; if [[ $STRING_BEING_EVALUATED == *"$thisfilter"* ]]; then MATCH=true ; fi; done
+#    for thisfilter in "${array[@]}"; do echo Y$thisfilter; done
 #    echo $MATCH
 
     if $MATCH; then echo "filter"; else echo "no filter"; fi
