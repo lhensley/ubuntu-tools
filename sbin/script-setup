@@ -96,7 +96,7 @@ LANE_EMAIL="lane.hensley@alumni.duke.edu"
 LANE_CELL="7608514641@vtext.com"
 
 # Process config file
-if [ -z "$LANE_CONFIG["system.configs-defined"]" ]; then
+if [ -z "$LANE_CONFIG[system.configs-defined]" ]; then
     unset LANE_CONFIG_FILE
     LANE_CONFIG_FILE_1="~/.lane/lane.conf"
     LANE_CONFIG_FILE_2="/etc/lane.conf"
@@ -121,9 +121,9 @@ if [ -z "$LANE_CONFIG["system.configs-defined"]" ]; then
 	            fi
             done < "$LANE_CONFIG_FILE"
             IFS=$OLDIFS
-            logger "$0: SUCCESS reading config file $LANE_CONFIG_FILE""
+            logger "$0: SUCCESS reading config file $LANE_CONFIG_FILE"
         else
-            logger "$0: FAILED to read config file: None defined""
+            logger "$0: FAILED to read config file: None defined"
         fi
     $LANE_CONFIG["system.configs-defined"]=true
     fi
