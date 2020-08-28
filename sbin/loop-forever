@@ -4,18 +4,14 @@
 # Include script setup file
 source $(dirname $0)/script-setup
 
-# f_debug_variable "script.master-loop.pathname" "$(f_get-config script.master-loop.pathname)"
-REPEATING_PROGRAM=${LANE_CONFIG[script.master-loop.pathname]}
-
 while true; do # Endless loop
 	logger "$0: Sleeping for 10 seconds."
 	sleep 10 # Sleep for 10 seconds, just in case
 	logger "$0: Woke up."
-	logger "$0: Starting $REPEATING_PROGRAM"
-	$REPEATING_PROGRAM
-	logger "$0: Exit Code $? for $REPEATING_PROGRAM"
+	${LANE_CONFIG[script.master-loop.pathname]}
 done # Endless loop
 
+f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
 source ${LANE_CONFIG[script.script-footer.pathname]}
-# $(f_get-config script.script-footer.pathname)
+
 exit 1

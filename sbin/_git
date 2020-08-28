@@ -30,11 +30,9 @@ cd
 logger "$0: git branch $BRANCH pulled."
 
 # Set ownership and permissions in /usr/local/sbin
- chown -R root:root ${LANE_CONFIG[system.sbin-dir]}
-# chmod 755 ${LANE_CONFIG[system.sbin-dir]} ${LANE_CONFIG[system.sbin-dir]}/setup ${LANE_CONFIG[system.sbin-dir]}/include
- find ${LANE_CONFIG[system.sbin-dir]} -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
-# chmod -R 755 ${LANE_CONFIG[system.sbin-dir]}/*
- find ${LANE_CONFIG[system.sbin-dir]} -type f -print -exec chmod 755 {} \; >> /dev/null 2>&1
+chown -R root:root ${LANE_CONFIG[system.sbin-dir]}
+find ${LANE_CONFIG[system.sbin-dir]} -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
+find ${LANE_CONFIG[system.sbin-dir]} -type f -print -exec chmod 755 {} \; >> /dev/null 2>&1
 
 # Reset permisions for /usr/local/sbin/*
 # This kind of locks things down, and the apply-configs section below opens things up.

@@ -1,23 +1,21 @@
 #!/bin/bash
 # shrink-plex-ts-files
 
+# Include script setup file
 source $(dirname $0)/script-setup
 
-ROOT_DVR_WORK=$(f_get-config pathname.root-dvr-work)
-ROOT_DVR_STORE=$(f_get-config pathname.root-dvr-store)
-PROCESS_TS_FILES=$(f_get-config script.process-ts.pathname)
-
-f_debug_variable "ROOT_DVR_WORK" "$ROOT_DVR_WORK"
-f_debug_variable "ROOT_DVR_STORE" "$ROOT_DVR_STORE"
-f_debug_variable "PROCESS_TS_FILES" "$PROCESS_TS_FILES"
-
-if [ ! -f $PROCESS_TS_FILES ]; then
-	logger "$0: ERROR: Missing file $PROCESS_TS_FILES"
+if [ ! -f ${LANE_CONFIG[script.process-ts.pathname]} ]; then
+	logger "$0: ERROR: Missing file ${LANE_CONFIG[script.process-ts.pathname]}"
 	exit 1
 	fi
 
-find "$ROOT_DVR_WORK" -type f -name "*.ts" -print -exec "$PROCESS_TS_FILES" {} "$ROOT_DVR_WORK" "$ROOT_DVR_STORE" \; >> /dev/null 2>&1
+f_require_file "${LANE_CONFIG[script.process-ts.pathname]}"
+f_require_directory "${LANE_CONFIG[pathname.root-dvr-work]}"
+f_require_directory "${LANE_CONFIG[pathname.root-dvr-store]}"
 
-source $(dirname $0)/script-footer
+find "${LANE_CONFIG[pathname.root-dvr-work]}" -type f -name "*.ts" -print -exec "${LANE_CONFIG[script.process-ts.pathname]}" {} "${LANE_CONFIG[pathname.root-dvr-work]}" "${LANE_CONFIG[pathname.root-dvr-store]}" \; >> /dev/null 2>&1
+
+f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
+source ${LANE_CONFIG[script.script-footer.pathname]}
 
 exit 0

@@ -8,6 +8,20 @@ function f_get-config () {
     /usr/local/sbin/get-config "$1" "$LANE_CONFIG_FILE_1" "$LANE_CONFIG_FILE_2"
     }
 
+function f_require_file {
+    if [ ! -f $1 ]; then
+	    logger "$0: FATAL: File not found: $1"
+	    exit 1
+	    fi
+    }
+
+function f_require_directory {
+    if [ ! -d $1 ]; then
+	    logger "$0: FATAL: Directory not found: $1"
+	    exit 1
+	    fi
+    }
+
 function f_debug () {
     # $1: message to log
     if [ "$(f_get-config system.debug-mode)" == "true" ]; then

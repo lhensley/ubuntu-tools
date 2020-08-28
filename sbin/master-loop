@@ -1,6 +1,7 @@
 #!/bin/bash
 # master-loop
 
+# Include script setup file
 source $(dirname $0)/script-setup
 
 f_debug_variable "script.shrink-plex-ts-files.pathname" "${LANE_CONFIG[script.shrink-plex-ts-files.pathname]}"
