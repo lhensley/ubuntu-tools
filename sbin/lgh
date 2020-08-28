@@ -24,7 +24,7 @@ if [ ! -z "$LANE_CONFIG[system.configs-defined]" ]; then
             while read -r NAME VALUE
             do	
 	            if [ "$NAME" != "" ] && [[ "$NAME" != "#"* ]]; then # Line is not blank and is not a comment
-	 	            LANE_CONFIG[$NAME]="$VALUE"
+	 	            LANE_CONFIG[NAME]="$VALUE"
                     echo $NAME $VALUE $LANE_CONFIG[$NAME]
 	            fi
             done < "$LANE_CONFIG_FILE"
