@@ -3,6 +3,9 @@
 
 source $(dirname $0)/script-setup
 
+echo "$LANE_CONFIG[system.configs-defined]"
+exit 0
+
 # Process config file
 if [ -z "$LANE_CONFIG[system.configs-defined]" ]; then
     unset LANE_CONFIG_FILE
