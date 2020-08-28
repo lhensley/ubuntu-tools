@@ -58,13 +58,13 @@ if [ "$(f_get-config script.$(basename $0).require-root)" == "true" ] && [[ $EUI
         exit 1
     fi
 
-f_debug "script-setup started"
+# f_debug "script-setup started"
 
 # If configured, log the start of script processing. Default = "true"
-if [ "$(f_get-config script.$(basename $0).log-start)" != "true" ]; then logger "$0: start"; fi
+# if [ "$(f_get-config script.$(basename $0).log-start)" != "true" ]; then logger "$0: start"; fi
 
 # If configured, send a text message to note the start of script processing. Default = "false"
-if [ "$(f_get-config script.$(basename $0).text-start)" == "true" ]; then f_text_alert "$0: start"; fi
+# if [ "$(f_get-config script.$(basename $0).text-start)" == "true" ]; then f_text_alert "$0: start"; fi
 
 # /etc/os-release defines a lot of environment variables 
 # Sample:
@@ -92,6 +92,9 @@ START_WEEKDAYSTAMP=$(/bin/date '+%a')
 # Process config file
 LANE_CONFIG_FILE_1="~/.lane/lane.conf"
 LANE_CONFIG_FILE_2="/etc/lane.conf"
+echo test LANE_CONFIG_FILE_1 $LANE_CONFIG_FILE_1
+echo test LANE_CONFIG_FILE_2 $LANE_CONFIG_FILE_2
+echo test 3 ${LANE_CONFIG["system.configs-defined"]}
 if [ -z ${LANE_CONFIG["system.configs-defined"]} ]; then # (if ${LANE_CONFIG["system.configs-defined"]} is not defined)
     unset LANE_CONFIG_FILE
     # Ref: https://linuxize.com/post/bash-check-if-file-exists/
