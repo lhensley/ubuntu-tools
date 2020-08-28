@@ -33,12 +33,32 @@ echo git update complete.
 
 # Reset permisions for /usr/local/sbin/*
 # This kind of locks things down, and the apply-configs section below opens things up.
+	echo GO_SBIN $GO_SBIN
+	echo SBIN_PARENT $SBIN_PARENT
+	echo SBIN_DIR $SBIN_DIR
+	echo 1 About to chown -R root:root $SBIN_DIR
+	read -p "Press any key to resume ..."
 chown -R root:root $SBIN_DIR
+	echo GO_SBIN $GO_SBIN
+	echo SBIN_PARENT $SBIN_PARENT
+	echo SBIN_DIR $SBIN_DIR
+	echo 2 About to chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
+	read -p "Press any key to resume ..."
 chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
+	echo GO_SBIN $GO_SBIN
+	echo SBIN_PARENT $SBIN_PARENT
+	echo SBIN_DIR $SBIN_DIR
+	echo 3 About to chmod -R 500 $SBIN_DIR/(star)
+	read -p "Press any key to resume ..."
 chmod -R 500 $SBIN_DIR/*
 
 # Invoke /usr/local/sbin/_apply-configs
 # chmod 500 $SBIN_DIR/_apply-configs
+	echo GO_SBIN $GO_SBIN
+	echo SBIN_PARENT $SBIN_PARENT
+	echo SBIN_DIR $SBIN_DIR
+	echo 4 About to $SBIN_DIR/_apply-configs
+	read -p "Press any key to resume ..."
 $SBIN_DIR/_apply-configs
 
 logger "$0 ended without error."
