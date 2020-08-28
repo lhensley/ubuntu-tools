@@ -17,7 +17,7 @@ function f_require_config {
     }
 
 function f_require_file {
-    if [ ! -f $1 ]; then
+    if [ ! -f "$1" ]; then
 	    echo "$0: FATAL: File not found: $1"
 	    logger "$0: FATAL: File not found: $1"
 	    exit 1
@@ -25,7 +25,7 @@ function f_require_file {
     }
 
 function f_require_directory {
-    if [ ! -d $1 ]; then
+    if [ ! -d "$1" ]; then
 	    echo "$0: FATAL: Directory not found: $1"
 	    logger "$0: FATAL: Directory not found: $1"
 	    exit 1
