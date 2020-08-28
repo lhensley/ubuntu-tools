@@ -3,7 +3,12 @@
 
 source $(dirname $0)/script-setup
 
-echo "$LANE_CONFIG[system.configs-defined]"
+if [ -z "$LANE_CONFIG[system.configs-defined]" ]; then
+    echo "Yes"
+else
+    echo "No"
+fi
+
 exit 0
 
 # Process config file
