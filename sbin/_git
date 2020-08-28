@@ -24,6 +24,7 @@ git checkout $BRANCH
 # Pull down a copy of the repository
 git pull
 # Set permissions for git directory
+echo test before chmod -R 400 GIT $GIT
 chmod -R 400 $GIT
 # Copy scripts into /usr/local/sbin
 rm -rf $SBIN_DIR
@@ -33,6 +34,7 @@ cd
 echo git update complete.
 
 # Set ownership and permissions in /usr/local/sbin
+echo test poing f chown -R root:root $SBIN_DIR
  chown -R root:root $SBIN_DIR
 # chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
  find $SBIN_DIR -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1

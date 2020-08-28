@@ -98,13 +98,16 @@ echo test LANE_CONFIG_FILE $LANE_CONFIG_FILE
 if [ -z $LANE_CONFIG_FILE ]; then # (if $LANE_CONFIG_FILE is not defined)
     # Ref: https://linuxize.com/post/bash-check-if-file-exists/
     if [ -f "$LANE_CONFIG_FILE_1" ]; then
+        echo Test point a
 	    LANE_CONFIG_FILE="$LANE_CONFIG_FILE_1"
     else
 	    if [ -f "$LANE_CONFIG_FILE_2" ]; then
+            echo Test point b
 		    LANE_CONFIG_FILE="$LANE_CONFIG_FILE_2"
         fi
     fi
     if [ ! -z "$LANE_CONFIG_FILE" ]; then # (if $LANE_CONFIG_FILE is defined)
+        echo Test point c
         OLDIFS=$IFS
         IFS=$'[ \t]*=[ \t]*'
         declare -A LANE_CONFIG
@@ -112,11 +115,13 @@ if [ -z $LANE_CONFIG_FILE ]; then # (if $LANE_CONFIG_FILE is not defined)
         do	
 	        if [ ! -z "$NAME" ] && [[ "$NAME" != "#"* ]]; then # Line is not blank and is not a comment
 	 	        LANE_CONFIG[$NAME]="$VALUE"
+                echo Test point d
 	        fi
         done < "$LANE_CONFIG_FILE"
         IFS=$OLDIFS
         logger "$0: SUCCESS reading config file $LANE_CONFIG_FILE"
     else
+        echo Test point e
         logger "$0: FAILED to read config file: None defined"
     fi
 fi

@@ -23,6 +23,7 @@ chmod 740 $SBIN_DIR/upd $SBIN_DIR/script-setup $SBIN_DIR/_apply-configs
 
 # Git
 chmod 600 /root/.gitconfig
+echo test point m GIT $GIT
 cp /root/.gitconfig $HOME_DIR/.gitconfig
 chown root:root /root/.gitconfig
 chown $USER_ME:$USER_ME $HOME_DIR/.gitconfig
