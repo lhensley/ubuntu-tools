@@ -7,7 +7,7 @@ LANE_CONFIG_FILE_1="~/.lane/lane.conf"
 LANE_CONFIG_FILE_2="/etc/lane.conf"
 
 # Process config file
-if [ -z "$LANE_CONFIG[system.configs-defined]" ]; then
+if [ ! -z "$LANE_CONFIG[system.configs-defined]" ]; then
     unset LANE_CONFIG_FILE
     # Ref: https://linuxize.com/post/bash-check-if-file-exists/
     if [ -f "$LANE_CONFIG_FILE_1" ]; then
