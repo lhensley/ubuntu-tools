@@ -4,7 +4,8 @@
 source $(dirname $0)/script-setup
 
 f_require_file "/home/lhensley/.my.cnf"
-f_require_file "non-existent"
+f_require_directory "/home/lhensley"
+f_require_config "system.sbin-dir"
 echo After Check
 
 f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
