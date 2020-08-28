@@ -92,7 +92,7 @@ START_WEEKDAYSTAMP=$(/bin/date '+%a')
 # Process config file
 LANE_CONFIG_FILE_1="~/.lane/lane.conf"
 LANE_CONFIG_FILE_2="/etc/lane.conf"
-if [ -z ${LANE_CONFIG[system.configs-defined]} ]; then # (if ${LANE_CONFIG[system.configs-defined]} it not defined)
+if [ -z ${LANE_CONFIG["system.configs-defined"]} ]; then # (if ${LANE_CONFIG["system.configs-defined"]} is not defined)
     unset LANE_CONFIG_FILE
     # Ref: https://linuxize.com/post/bash-check-if-file-exists/
     if [ -f "$LANE_CONFIG_FILE_1" ]; then
@@ -121,13 +121,13 @@ LANE_CONFIG["system.configs-defined"]=true
 fi
 
 # Information about Lane
-LANE_CELL=${LANE_CONFIG[system.lane-cell]}
-LANE_EMAIL=${LANE_CONFIG[system.lane-email]}
-HOME_DIR=${LANE_CONFIG[system.home-me]}
-HOME_ME=${LANE_CONFIG[system.home-me]}
-HOME_RELATIVE=${LANE_CONFIG[system.home-me]}
-USER_ME=${LANE_CONFIG[system.user-me]}
-USER_NAME=${LANE_CONFIG[system.user-me]}
+LANE_CELL=${LANE_CONFIG["system.lane-cell"]}
+LANE_EMAIL=${LANE_CONFIG["system.lane-email"]}
+HOME_DIR=${LANE_CONFIG["system.home-me"]}
+HOME_ME=${LANE_CONFIG["system.home-me"]}
+HOME_RELATIVE=${LANE_CONFIG["system.home-me"]}
+USER_ME=${LANE_CONFIG["system.user-me"]}
+USER_NAME=${LANE_CONFIG["system.user-me"]}
 
 # General local and program variables
 PROGRAM_DIRECTORY=$(dirname $0)
@@ -137,8 +137,8 @@ HOST_NAME=$(/bin/hostname -s)
 LANE_SCRIPTS_PREFIX="lane-scripts"
 UUID=$(uuidgen)
 
-SBIN_DIR=${LANE_CONFIG[system.sbin-dir]}
-SBIN_PARENT=${LANE_CONFIG[system.sbin-parent]}
+SBIN_DIR=${LANE_CONFIG["system.sbin-dir"]}
+SBIN_PARENT=${LANE_CONFIG["system.sbin-parent"]}
 
 TEMP_DATABASES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-databases.tmp"
 TEMP_PASSWORD_INCLUDE="/tmp/passwords"
@@ -226,11 +226,11 @@ TEMP_CRON="/tmp/cron-$UUID.tmp"
 DDCLIENT_INTERVAL=7200
 
 # Git
-GIT=${LANE_CONFIG[system.git]}
-GO=GIT=${LANE_CONFIG[system.git.go]}
-GO_CONFIGS=${LANE_CONFIG[system.git.go.configs]}
-GO_SBIN=${LANE_CONFIG[system.git.go.sbin]}
-GO_SETUP=${LANE_CONFIG[system.git.go.setup]}
+GIT=${LANE_CONFIG["system.git"]}
+GO=GIT=${LANE_CONFIG["system.git.go"]}
+GO_CONFIGS=${LANE_CONFIG["system.git.go.configs"]}
+GO_SBIN=${LANE_CONFIG["system.git.go.sbin"]}
+GO_SETUP=${LANE_CONFIG["system.git.go.setup"]}
 
 # MySQL
 MYSQL_ADMIN_NAME="admin"
