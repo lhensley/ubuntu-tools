@@ -10,13 +10,11 @@ MY_GIT_TOKEN=4b662b7d4431ec1956127aa9d4fdbd8d75ec821a
 git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
 git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
 git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
-# This section re-pulls all go files from github and updates /usr/local/sbin
-USERNAME=$USER_ME
-REPOSITORY=$GO
+# This section re-pulls all go files from github and updates ${LANE_CONFIG[system.sbin-dir]}
 # BRANCH="master"
 BRANCH="dev"
 # Change to local repository directory
-cd $REPOSITORY
+cd ${LANE_CONFIG[system.git.go]}
 # Blow away any local changes not uploaded to github
 git reset --hard
 # Select the designated branch
@@ -24,51 +22,31 @@ git checkout $BRANCH
 # Pull down a copy of the repository
 git pull
 # Set permissions for git directory
-echo test before chmod -R 400 GIT $GIT
-chmod -R 400 $GIT
+chmod -R 400 ${LANE_CONFIG[system.git]}
 # Copy scripts into /usr/local/sbin
-rm -rf $SBIN_DIR
-cp -r $GO_SBIN $SBIN_PARENT
+rm -rf ${LANE_CONFIG[system.sbin-dir]}
+cp -r ${LANE_CONFIG[system.git.go.sbin]} ${LANE_CONFIG[system.sbin-parent]}
 cd
-# Change this to logging. Can't be seen anyway.
-echo git update complete.
+logger "$0: git branch $BRANCH pulled."
 
 # Set ownership and permissions in /usr/local/sbin
-echo test poing f chown -R root:root $SBIN_DIR
- chown -R root:root $SBIN_DIR
-# chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
- find $SBIN_DIR -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
-# chmod -R 755 $SBIN_DIR/*
- find $SBIN_DIR -type f -print -exec chmod 755 {} \; >> /dev/null 2>&1
+ chown -R root:root ${LANE_CONFIG[system.sbin-dir]}
+# chmod 755 ${LANE_CONFIG[system.sbin-dir]} ${LANE_CONFIG[system.sbin-dir]}/setup ${LANE_CONFIG[system.sbin-dir]}/include
+ find ${LANE_CONFIG[system.sbin-dir]} -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
+# chmod -R 755 ${LANE_CONFIG[system.sbin-dir]}/*
+ find ${LANE_CONFIG[system.sbin-dir]} -type f -print -exec chmod 755 {} \; >> /dev/null 2>&1
 
 # Reset permisions for /usr/local/sbin/*
 # This kind of locks things down, and the apply-configs section below opens things up.
-#	echo GO_SBIN $GO_SBIN
-#	echo SBIN_PARENT $SBIN_PARENT
-#	echo SBIN_DIR $SBIN_DIR
-#	echo 1 About to chown -R root:root $SBIN_DIR
-#	read -p "Press any key to resume ..."
-#chown -R root:root $SBIN_DIR
-#	echo GO_SBIN $GO_SBIN
-#	echo SBIN_PARENT $SBIN_PARENT
-#	echo SBIN_DIR $SBIN_DIR
-#	echo 2 About to chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
-#	read -p "Press any key to resume ..."
-#chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
-#	echo GO_SBIN $GO_SBIN
-#	echo SBIN_PARENT $SBIN_PARENT
-#	echo 3 About to chmod -R 500 $SBIN_DIR/(star)
-#	read -p "Press any key to resume ..."
-#chmod -R 500 $SBIN_DIR/*
+#chown -R root:root ${LANE_CONFIG[system.sbin-dir]}
+#chmod 755 ${LANE_CONFIG[system.sbin-dir]} ${LANE_CONFIG[system.sbin-dir]}/setup ${LANE_CONFIG[system.sbin-dir]}/include
+#chmod -R 500 ${LANE_CONFIG[system.sbin-dir]}/*
 
 # Invoke /usr/local/sbin/_apply-configs
-#chmod 500 $SBIN_DIR/_apply-configs
-	echo GO_SBIN $GO_SBIN
-	echo SBIN_PARENT $SBIN_PARENT
-	echo SBIN_DIR $SBIN_DIR
-	echo 4 About to $SBIN_DIR/_apply-configs
-	read -p "Press any key to resume ..."
-$SBIN_DIR/_apply-configs
+#chmod 500 ${LANE_CONFIG[system.sbin-dir]}/_apply-configs
+${LANE_CONFIG[system.sbin-dir]}/_apply-configs
 
-logger "$0 ended without error."
+f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
+source ${LANE_CONFIG[script.script-footer.pathname]}
+
 exit 0

@@ -6,3 +6,11 @@ source $(dirname $0)/script-setup
 echo $LANG
 echo ""
 echo ${LANE_CONFIG["script.db-backup.pathname"]}
+
+f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
+source ${LANE_CONFIG[script.script-footer.pathname]}
+
+# Notes:
+# Check on space around =
+# Add routine to check for valid and defined configs (like SDIR
+# Amend config lookup so it checks the variable and not the file

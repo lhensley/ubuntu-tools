@@ -61,7 +61,7 @@ if [ "$(f_get-config script.$(basename $0).require-root)" == "true" ] && [[ $EUI
 # f_debug "script-setup started"
 
 # If configured, log the start of script processing. Default = "true"
-# if [ "$(f_get-config script.$(basename $0).log-start)" != "true" ]; then logger "$0: start"; fi
+if [ "$(f_get-config script.$(basename $0).log-start)" != "true" ]; then logger "$0: start"; fi
 
 # If configured, send a text message to note the start of script processing. Default = "false"
 # if [ "$(f_get-config script.$(basename $0).text-start)" == "true" ]; then f_text_alert "$0: start"; fi
@@ -92,22 +92,16 @@ START_WEEKDAYSTAMP=$(/bin/date '+%a')
 # Process config file
 LANE_CONFIG_FILE_1="~/.lane/lane.conf"
 LANE_CONFIG_FILE_2="/etc/lane.conf"
-echo test LANE_CONFIG_FILE_1 $LANE_CONFIG_FILE_1
-echo test LANE_CONFIG_FILE_2 $LANE_CONFIG_FILE_2
-echo test LANE_CONFIG_FILE $LANE_CONFIG_FILE
 if [ -z $LANE_CONFIG_FILE ]; then # (if $LANE_CONFIG_FILE is not defined)
     # Ref: https://linuxize.com/post/bash-check-if-file-exists/
     if [ -f "$LANE_CONFIG_FILE_1" ]; then
-        echo Test point a
 	    LANE_CONFIG_FILE="$LANE_CONFIG_FILE_1"
     else
 	    if [ -f "$LANE_CONFIG_FILE_2" ]; then
-            echo Test point b
 		    LANE_CONFIG_FILE="$LANE_CONFIG_FILE_2"
         fi
     fi
     if [ ! -z "$LANE_CONFIG_FILE" ]; then # (if $LANE_CONFIG_FILE is defined)
-        echo Test point c
         OLDIFS=$IFS
         IFS=$'[ \t]*=[ \t]*'
         declare -A LANE_CONFIG
@@ -115,20 +109,14 @@ if [ -z $LANE_CONFIG_FILE ]; then # (if $LANE_CONFIG_FILE is not defined)
         do	
 	        if [ ! -z "$NAME" ] && [[ "$NAME" != "#"* ]]; then # Line is not blank and is not a comment
 	 	        LANE_CONFIG[$NAME]="$VALUE"
-                echo Test point d $NAME $VALUE ${LANE_CONFIG[$NAME]}
 	        fi
-        echo test 0.1 in script-setup ${LANE_CONFIG[system.sbin-dir]} xxx ${LANE_CONFIG["system.sbin-dir"]}
         done < "$LANE_CONFIG_FILE"
         IFS=$OLDIFS
-        echo test 0.2 in script-setup ${LANE_CONFIG[system.sbin-dir]} xxx ${LANE_CONFIG["system.sbin-dir"]}
         logger "$0: SUCCESS reading config file $LANE_CONFIG_FILE"
     else
-        echo Test point e
         logger "$0: FAILED to read config file: None defined"
     fi
-        echo test 0.3 in script-setup ${LANE_CONFIG[system.sbin-dir]} xxx ${LANE_CONFIG["system.sbin-dir"]}
 fi
-        echo test 0.4 in script-setup ${LANE_CONFIG[system.sbin-dir]} xxx ${LANE_CONFIG["system.sbin-dir"]}
 
 # Information about Lane
 LANE_CELL=${LANE_CONFIG["system.lane-cell"]}
@@ -139,24 +127,16 @@ HOME_RELATIVE=${LANE_CONFIG["system.home-me"]}
 USER_ME=${LANE_CONFIG["system.user-me"]}
 USER_NAME=${LANE_CONFIG["system.user-me"]}
 
-        echo test 0.5 in script-setup ${LANE_CONFIG[system.sbin-dir]} xxx ${LANE_CONFIG[s"ystem.sbin-dir"]}
-
-
 # General local and program variables
 PROGRAM_DIRECTORY=$(dirname $0)
 HOST_NAME=$(/bin/hostname -s)
-        echo test 0.6 in script-setup ${LANE_CONFIG[system.sbin-dir]} xxx ${LANE_CONFIG["system.sbin-dir"]}
 
 # Are these still used at all?
 LANE_SCRIPTS_PREFIX="lane-scripts"
 UUID=$(uuidgen)
-        echo test 0.7 in script-setup ${LANE_CONFIG[system.sbin-dir]} xxx ${LANE_CONFIG["system.sbin-dir"]}
 
 SBIN_DIR=${LANE_CONFIG[system.sbin-dir]}
-echo test 1 in script setup SBIN_DIR $SBIN_DIR ${LANE_CONFIG["system.sbin-dir"]}
-echo test 1.5 in script setup SBIN_DIR ${LANE_CONFIG[system.sbin-dir]}
 SBIN_PARENT=${LANE_CONFIG["system.sbin-parent"]}
-        echo test 0.8 in script-setup ${LANE_CONFIG[system.sbin-dir]} xxx ${LANE_CONFIG["system.sbin-dir"]}
 
 TEMP_DATABASES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-databases.tmp"
 TEMP_PASSWORD_INCLUDE="/tmp/passwords"
@@ -293,4 +273,3 @@ MAILNAME=$HOST_NAME
 
 f_debug "script-setup ended"
 
-echo test 2 in script setup SBIN_DIR $SBIN_DIR ${LANE_CONFIG["system.sbin-dir"]}
