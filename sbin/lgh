@@ -33,6 +33,8 @@ if [ -z "$LANE_CONFIG[system.configs-defined]" ]; then
         logger "$0: FAILED to read config file: None defined"
     fi
 $LANE_CONFIG["system.configs-defined"]=true
+echo ""
+echo X1$LANE_CONFIG[script.db-backup.pathname]
 fi
 
 echo $LANG
