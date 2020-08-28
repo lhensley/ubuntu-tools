@@ -18,18 +18,18 @@ if [ ! -z "$LANE_CONFIG[system.configs-defined]" ]; then
         fi
     fi
     if [ ! -z "$LANE_CONFIG_FILE" ]; then
-            OLDIFS=$IFS
-            IFS=$'[ \t]*=[ \t]*'
-            declare -A LANE_CONFIG
-            while read -r NAME VALUE
-            do	
-	            if [ "$NAME" != "" ] && [[ "$NAME" != "#"* ]]; then # Line is not blank and is not a comment
-	 	            LANE_CONFIG[NAME]="$VALUE"
-                    echo $NAME $VALUE $LANE_CONFIG[$NAME]
-	            fi
-            done < "$LANE_CONFIG_FILE"
-            IFS=$OLDIFS
-            logger "$0: SUCCESS reading config file $LANE_CONFIG_FILE"
+        OLDIFS=$IFS
+        IFS=$'[ \t]*=[ \t]*'
+        declare -A LANE_CONFIG
+        while read -r NAME VALUE
+        do	
+	        if [ ! -z "$NAME" ] && [[ "$NAME" != "#"* ]]; then # Line is not blank and is not a comment
+	 	        LANE_CONFIG[$NAME]="$VALUE"
+                echo $NAME $VALUE LANE_CONFIG[$NAME]
+	        fi
+        done < "$LANE_CONFIG_FILE"
+        IFS=$OLDIFS
+        logger "$0: SUCCESS reading config file $LANE_CONFIG_FILE"
     else
         logger "$0: FAILED to read config file: None defined"
     fi
