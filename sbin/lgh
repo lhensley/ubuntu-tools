@@ -5,4 +5,4 @@ source $(dirname $0)/script-setup
 
 echo $LANG
 echo ""
-echo ${LANE_CONFIG[script.db-backup.pathname]}
+echo ${LANE_CONFIG["script.db-backup.pathname"]}
