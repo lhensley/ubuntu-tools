@@ -1,9 +1,7 @@
 #!/bin/bash
-# lgh
+# plex-config-backup
 
-# Include script setup file
-source $(dirname $0)/script-setup
-
+c
 f_require_config "plex.backup.app.support"
 f_require_config "plex.live.app.support"
 f_require_directory "${LANE_CONFIG[plex.live.app.support]}"
@@ -17,8 +15,3 @@ systemctl start plexmediaserver
 # Include script footer file
 f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
 source ${LANE_CONFIG[script.script-footer.pathname]}
-
-# Notes:
-# Check on space around =
-# Add routine to check for valid and defined configs (like SDIR
-# Amend config lookup so it checks the variable and not the file

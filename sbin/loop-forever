@@ -11,6 +11,7 @@ while true; do # Endless loop
 	${LANE_CONFIG[script.master-loop.pathname]}
 done # Endless loop
 
+# Include script footer file
 f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
 source ${LANE_CONFIG[script.script-footer.pathname]}
 

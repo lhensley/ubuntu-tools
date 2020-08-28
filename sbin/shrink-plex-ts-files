@@ -4,17 +4,13 @@
 # Include script setup file
 source $(dirname $0)/script-setup
 
-if [ ! -f ${LANE_CONFIG[script.process-ts.pathname]} ]; then
-	logger "$0: ERROR: Missing file ${LANE_CONFIG[script.process-ts.pathname]}"
-	exit 1
-	fi
-
 f_require_file "${LANE_CONFIG[script.process-ts.pathname]}"
 f_require_directory "${LANE_CONFIG[pathname.root-dvr-work]}"
 f_require_directory "${LANE_CONFIG[pathname.root-dvr-store]}"
 
 find "${LANE_CONFIG[pathname.root-dvr-work]}" -type f -name "*.ts" -print -exec "${LANE_CONFIG[script.process-ts.pathname]}" {} "${LANE_CONFIG[pathname.root-dvr-work]}" "${LANE_CONFIG[pathname.root-dvr-store]}" \; >> /dev/null 2>&1
 
+# Include script footer file
 f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
 source ${LANE_CONFIG[script.script-footer.pathname]}
 

@@ -1,21 +1,15 @@
 #!/bin/bash
 # rip
 
+# Include script setup file
 source $(dirname $0)/script-setup
-source $(dirname $0)/lh-lib
 
-# Make sure we are NOT running with sudo
-if [[ $EUID -eq 0 ]]; then
-  echo "This script must NOT be run with sudo."
-  exit 1
-fi
-
-if [ "$1" == "" ]; then
+if [ -z $1 ]; then
   echo "Usage: rip \"Title (year) [ movie | <minimum_number_of_seconds> ]\" &"
   exit -1
   fi
 
-if [ "$2" == "" ]; then
+if [ -z $2 ]; then
     MINLENGTH=1200
   else if [ "$2" == "movie" ]; then
     MINLENGTH=4500
@@ -23,23 +17,17 @@ if [ "$2" == "" ]; then
     fi
   fi
 
-HANDBRAKE="HandBrakeCLI"
-# MKV_BASE_PATH="/mnt/bertha/mkv"
-MKV_BASE_PATH="/home/lhensley/Videos/MakeMKV-Completed"
-MKV_PATH=$MKV_BASE_PATH/$1
-BASH_SHELL="/bin/bash"
-TRANSCODE_UTILITY="/usr/local/sbin/transcode"
+f_require_config "makemkv.program"
+f_require_config "makemkv.output.directory"
 
-mkdir -p "$MKV_PATH"
+mkdir -p "${LANE_CONFIG[makemkv.output.directory]}/$1"
+f_require_directory "${LANE_CONFIG[makemkv.output.directory]}/$1"
 
-makemkvcon --minlength=$MINLENGTH mkv disc:0 all "$MKV_PATH"
+"${LANE_CONFIG[makemkv.program]}" --minlength=$MINLENGTH mkv disc:0 all "${LANE_CONFIG[makemkv.output.directory]}/$1"
 exit_status=$?
 if [ $exit_status -eq 0 ] ; then
-  echo "$1: Disk ripping completed successfully." | mail lanecell
-  if [ $(lh_is_running "$HANDBRAKE") == "false" ] ; then
-    $BASH_SHELL $TRANSCODE_UTILITY
-    fi
-  else echo "$1: Disk ripping FAILED. Code $exit_status" | mail lanecell
+  echo "$1: Disk ripping completed successfully." | mail "${LANE_CONFIG[system.lane-cell]}"
+  else echo "$1: Disk ripping FAILED. Code $exit_status" | mail "${LANE_CONFIG[system.lane-cell]}"
   fi
 eject
 exit $?

@@ -3,18 +3,17 @@
 # Usage: process_ts <input_file> <work_root_path> <store_root_path>
 # No final / on either path. For system root, use ""
 
+# Include script setup file
 source $(dirname $0)/script-setup
 
 IN_FILE=$1
 WORK_ROOT_PATH=$2
 STORE_ROOT_PATH=$3
 
-f_debug_variable "IN_FILE" "$IN_FILE"
-f_debug_variable "WORK_ROOT_PATH" "$WORK_ROOT_PATH"
-f_debug_variable "STORE_ROOT_PATH" "$STORE_ROOT_PATH"
+f_require_config "filter.transcode-excluded"
+f_require_file "${LANE_CONFIG[script.move-one-file.pathname]}"
 
 OUT_EXT="m4v"
-MOVE_SCRIPT="/usr/local/sbin/move-one-file"
 FILTER_SCRIPT="/usr/local/sbin/tv-show-filter-status"
 
 WORK_ROOT_PATH_LENGTH=${#WORK_ROOT_PATH}
@@ -22,7 +21,6 @@ WORK_ROOT_PATH_LENGTH=${#WORK_ROOT_PATH}
 IN_FILE_LENGTH=${#IN_FILE}
 IN_FILE_EXT="${IN_FILE##*.}"
 IN_FILE_EXT_LENGTH="${#IN_FILE_EXT}"
-
 
 RELATIVE_FILE_LENGTH=$[IN_FILE_LENGTH-WORK_ROOT_PATH_LENGTH-1]
 RELATIVE_FILE=${IN_FILE: -$RELATIVE_FILE_LENGTH} # First remove WORK_ROOT_PATH
@@ -94,11 +92,11 @@ if [ "$exit_status" == "0" ]; then
 
     echo "$(date) $0 Point S"
 
-    $MOVE_SCRIPT "$OUT_FILE" "$WORK_ROOT_PATH" "$STORE_ROOT_PATH"
+    "${LANE_CONFIG[script.move-one-file.pathname]}" "$OUT_FILE" "$WORK_ROOT_PATH" "$STORE_ROOT_PATH"
     exit_status=$?
     if [ $exit_status -ne 0 ]; then # If the move failed ...
-        logger "$MOVE_SCRIPT FAILED with $exit_status for $IN_FILE"
-        echo "$(date) $MOVE_SCRIPT FAILED with $exit_status for $RELATIVE_FILE" | mail -r "process-ts" lanecell
+        logger "${LANE_CONFIG[script.move-one-file.pathname]} FAILED with $exit_status for $IN_FILE"
+        echo "$(date) ${LANE_CONFIG[script.move-one-file.pathname]} FAILED with $exit_status for $RELATIVE_FILE" | mail -r "process-ts" lanecell
         exit $exit_status
       else
         rm "$IN_FILE" >> /dev/null 2>&1 # Delete input file
@@ -138,6 +136,7 @@ fi
 echo "$(date) $0 Point Y"
 
 # Include script footer file
-source $(dirname $0)/script-footer
+f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
+source ${LANE_CONFIG[script.script-footer.pathname]}
 
 echo "$(date) $0 Point Z"

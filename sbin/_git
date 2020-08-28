@@ -44,6 +44,7 @@ find ${LANE_CONFIG[system.sbin-dir]} -type f -print -exec chmod 755 {} \; >> /de
 #chmod 500 ${LANE_CONFIG[system.sbin-dir]}/_apply-configs
 ${LANE_CONFIG[system.sbin-dir]}/_apply-configs
 
+# Include script footer file
 f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
 source ${LANE_CONFIG[script.script-footer.pathname]}
 

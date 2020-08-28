@@ -136,6 +136,18 @@ if [ -z $LANE_CONFIG_FILE ]; then # (if $LANE_CONFIG_FILE is not defined)
 	        fi
         done < "$LANE_CONFIG_FILE"
         IFS=$OLDIFS
+        f_require_config "system.git"
+        f_require_config "system.git.go"
+        f_require_config "system.git.go.configs"
+        f_require_config "system.git.go.sbin"
+        f_require_config "system.git.go.setup"
+        f_require_config "system.git.token"
+        f_require_config "system.home-me"
+        f_require_config "system.lane-cell"
+        f_require_config "system.lane-email"
+        f_require_config "system.member-me"
+        f_require_config "system.sbin-dir"
+        f_require_config "system.sbin-parent"
         logger "$0: SUCCESS reading config file $LANE_CONFIG_FILE"
     else
         logger "$0: FAILED to read config file: None defined"

@@ -118,5 +118,6 @@ if [ -f $GO_CONFIGS/vim/.vimrc ]; then
 	chown root:root /root/.vimrc
 	fi
 
-# Include script footer
-source $(dirname $0)/script-footer
+# Include script footer file
+f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
+source ${LANE_CONFIG[script.script-footer.pathname]}
