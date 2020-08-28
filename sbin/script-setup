@@ -92,7 +92,7 @@ START_WEEKDAYSTAMP=$(/bin/date '+%a')
 # Process config file
 LANE_CONFIG_FILE_1="~/.lane/lane.conf"
 LANE_CONFIG_FILE_2="/etc/lane.conf"
-if [ ! -z "${LANE_CONFIG[system.configs-defined]"} ]; then
+if [ -z ${LANE_CONFIG[system.configs-defined]} ]; then # (if ${LANE_CONFIG[system.configs-defined]} it not defined)
     unset LANE_CONFIG_FILE
     # Ref: https://linuxize.com/post/bash-check-if-file-exists/
     if [ -f "$LANE_CONFIG_FILE_1" ]; then
@@ -102,7 +102,7 @@ if [ ! -z "${LANE_CONFIG[system.configs-defined]"} ]; then
 		    LANE_CONFIG_FILE="$LANE_CONFIG_FILE_2"
         fi
     fi
-    if [ ! -z "$LANE_CONFIG_FILE" ]; then
+    if [ ! -z "$LANE_CONFIG_FILE" ]; then # (if $LANE_CONFIG_FILE is defined)
         OLDIFS=$IFS
         IFS=$'[ \t]*=[ \t]*'
         declare -A LANE_CONFIG
@@ -119,9 +119,6 @@ if [ ! -z "${LANE_CONFIG[system.configs-defined]"} ]; then
     fi
 LANE_CONFIG["system.configs-defined"]=true
 fi
-
-echo Test Point 1
-exit 1
 
 # Information about Lane
 LANE_CELL=${LANE_CONFIG[system.lane-cell]}
