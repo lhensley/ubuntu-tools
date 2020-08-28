@@ -37,4 +37,4 @@ fi
 
 echo $LANG
 echo ""
-echo $LANE_CONFIG["script.db-backup.pathname"]
+echo $LANE_CONFIG[script.db-backup.pathname]
