@@ -9,6 +9,8 @@
 echo test in _apply-configs before script-setup
 source $(dirname $0)/script-setup
 echo test in _apply-configs after script-setup
+echo test green in _apply-configs SBIN_DIR $SBIN_DIR ${LANE_CONFIG["system.sbin-dir"]}
+
 
 # Set ownership and permissions in /usr/local/sbin
 echo test in _apply-configs for SBIN_DIR $SBIN_DIR

@@ -115,7 +115,7 @@ if [ -z $LANE_CONFIG_FILE ]; then # (if $LANE_CONFIG_FILE is not defined)
         do	
 	        if [ ! -z "$NAME" ] && [[ "$NAME" != "#"* ]]; then # Line is not blank and is not a comment
 	 	        LANE_CONFIG[$NAME]="$VALUE"
-                echo Test point d
+                echo Test point d $NAME $VALUE ${LANE_CONFIG[$NAME]}
 	        fi
         done < "$LANE_CONFIG_FILE"
         IFS=$OLDIFS
@@ -144,6 +144,7 @@ LANE_SCRIPTS_PREFIX="lane-scripts"
 UUID=$(uuidgen)
 
 SBIN_DIR=${LANE_CONFIG["system.sbin-dir"]}
+echo test 1 in script setup SBIN_DIR $SBIN_DIR ${LANE_CONFIG["system.sbin-dir"]}
 SBIN_PARENT=${LANE_CONFIG["system.sbin-parent"]}
 
 TEMP_DATABASES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-databases.tmp"
@@ -280,3 +281,5 @@ MAILNAME=$HOST_NAME
 #  fi
 
 f_debug "script-setup ended"
+
+echo test 2 in script setup SBIN_DIR $SBIN_DIR ${LANE_CONFIG["system.sbin-dir"]}
