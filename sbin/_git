@@ -29,28 +29,36 @@ chmod -R 400 $GIT
 rm -rf $SBIN_DIR
 cp -r $GO_SBIN $SBIN_PARENT
 cd
+# Change this to logging. Can't be seen anyway.
 echo git update complete.
+
+# Set ownership and permissions in /usr/local/sbin
+chown -R root:root $SBIN_DIR
+# chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
+find $SBIN_DIR -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
+# chmod -R 755 $SBIN_DIR/*
+find $SBIN_DIR -type f -print -exec chmod 755 {} \; >> /dev/null 2>&1
 
 # Reset permisions for /usr/local/sbin/*
 # This kind of locks things down, and the apply-configs section below opens things up.
-	echo GO_SBIN $GO_SBIN
-	echo SBIN_PARENT $SBIN_PARENT
-	echo SBIN_DIR $SBIN_DIR
-	echo 1 About to chown -R root:root $SBIN_DIR
-	read -p "Press any key to resume ..."
-chown -R root:root $SBIN_DIR
-	echo GO_SBIN $GO_SBIN
-	echo SBIN_PARENT $SBIN_PARENT
-	echo SBIN_DIR $SBIN_DIR
-	echo 2 About to chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
-	read -p "Press any key to resume ..."
-chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
-	echo GO_SBIN $GO_SBIN
-	echo SBIN_PARENT $SBIN_PARENT
-	echo SBIN_DIR $SBIN_DIR
-	echo 3 About to chmod -R 500 $SBIN_DIR/(star)
-	read -p "Press any key to resume ..."
-chmod -R 500 $SBIN_DIR/*
+#	echo GO_SBIN $GO_SBIN
+#	echo SBIN_PARENT $SBIN_PARENT
+#	echo SBIN_DIR $SBIN_DIR
+#	echo 1 About to chown -R root:root $SBIN_DIR
+#	read -p "Press any key to resume ..."
+#chown -R root:root $SBIN_DIR
+#	echo GO_SBIN $GO_SBIN
+#	echo SBIN_PARENT $SBIN_PARENT
+#	echo SBIN_DIR $SBIN_DIR
+#	echo 2 About to chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
+#	read -p "Press any key to resume ..."
+#chmod 755 $SBIN_DIR $SBIN_DIR/setup $SBIN_DIR/include
+#	echo GO_SBIN $GO_SBIN
+#	echo SBIN_PARENT $SBIN_PARENT
+#	echo SBIN_DIR $SBIN_DIR
+#	echo 3 About to chmod -R 500 $SBIN_DIR/(star)
+#	read -p "Press any key to resume ..."
+#chmod -R 500 $SBIN_DIR/*
 
 # Invoke /usr/local/sbin/_apply-configs
 # chmod 500 $SBIN_DIR/_apply-configs
