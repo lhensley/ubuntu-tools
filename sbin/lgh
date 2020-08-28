@@ -25,6 +25,7 @@ if [ ! -z "$LANE_CONFIG[system.configs-defined]" ]; then
             do	
 	            if [ "$NAME" != "" ] && [[ "$NAME" != "#"* ]]; then # Line is not blank and is not a comment
 	 	            LANE_CONFIG[$NAME]="$VALUE"
+                    echo $NAME $VALUE
 	            fi
             done < "$LANE_CONFIG_FILE"
             IFS=$OLDIFS
@@ -34,11 +35,10 @@ if [ ! -z "$LANE_CONFIG[system.configs-defined]" ]; then
     fi
 LANE_CONFIG["system.configs-defined"]=true
 echo ""
-echo X1$LANE_CONFIG["script.db-backup.pathname"]
+echo X1$LANE_CONFIG[script.db-backup.pathname]
 echo ""
 fi
 
 echo $LANG
 echo ""
 # echo $LANE_CONFIG[script.db-backup.pathname]
-env
