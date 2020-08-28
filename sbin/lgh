@@ -3,46 +3,37 @@
 
 source $(dirname $0)/script-setup
 
-if [ -z "$LANE_CONFIG[system.configs-defined]" ]; then
-    echo "Yes"
-else
-    echo "No"
-fi
-
-exit 0
+LANE_CONFIG_FILE_1="~/.lane/lane.conf"
+LANE_CONFIG_FILE_2="/etc/lane.conf"
 
 # Process config file
 if [ -z "$LANE_CONFIG[system.configs-defined]" ]; then
     unset LANE_CONFIG_FILE
-    LANE_CONFIG_FILE_1="~/.lane/lane.conf"
-    LANE_CONFIG_FILE_2="/etc/lane.conf"
     # Ref: https://linuxize.com/post/bash-check-if-file-exists/
     if [ -f "$LANE_CONFIG_FILE_1" ]; then
 	    LANE_CONFIG_FILE="$LANE_CONFIG_FILE_1"
-        else
-	        if [ -f "$LANE_CONFIG_FILE_2" ]; then
-		        LANE_CONFIG_FILE="$LANE_CONFIG_FILE_2"
+    else
+	    if [ -f "$LANE_CONFIG_FILE_2" ]; then
+		    LANE_CONFIG_FILE="$LANE_CONFIG_FILE_2"
         fi
+    fi
     if [ ! -z "$LANE_CONFIG_FILE" ]; then
             OLDIFS=$IFS
             IFS=$'[ \t]*=[ \t]*'
-            # IFS="="
             declare -A LANE_CONFIG
             while read -r NAME VALUE
             do	
 	            if [ "$NAME" != "" ] && [[ "$NAME" != "#"* ]]; then # Line is not blank and is not a comment
 	 	            LANE_CONFIG[$NAME]="$VALUE"
-		            # echo "#$NAME#$VALUE#"
-		            # echo "<next>"
 	            fi
             done < "$LANE_CONFIG_FILE"
             IFS=$OLDIFS
             logger "$0: SUCCESS reading config file $LANE_CONFIG_FILE"
-        else
-            logger "$0: FAILED to read config file: None defined"
-        fi
-    $LANE_CONFIG["system.configs-defined"]=true
+    else
+        logger "$0: FAILED to read config file: None defined"
     fi
+$LANE_CONFIG["system.configs-defined"]=true
+fi
 
 echo $LANG
 echo ""
