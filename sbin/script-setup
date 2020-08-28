@@ -89,24 +89,57 @@ START_MONTHSTAMP=$(/bin/date '+%Y-%m')
 START_TIMESTAMP=$(/bin/date)
 START_WEEKDAYSTAMP=$(/bin/date '+%a')
 
+# Process config file
+LANE_CONFIG_FILE_1="~/.lane/lane.conf"
+LANE_CONFIG_FILE_2="/etc/lane.conf"
+if [ ! -z "$LANE_CONFIG[system.configs-defined]" ]; then
+    unset LANE_CONFIG_FILE
+    # Ref: https://linuxize.com/post/bash-check-if-file-exists/
+    if [ -f "$LANE_CONFIG_FILE_1" ]; then
+	    LANE_CONFIG_FILE="$LANE_CONFIG_FILE_1"
+    else
+	    if [ -f "$LANE_CONFIG_FILE_2" ]; then
+		    LANE_CONFIG_FILE="$LANE_CONFIG_FILE_2"
+        fi
+    fi
+    if [ ! -z "$LANE_CONFIG_FILE" ]; then
+        OLDIFS=$IFS
+        IFS=$'[ \t]*=[ \t]*'
+        declare -A LANE_CONFIG
+        while read -r NAME VALUE
+        do	
+	        if [ ! -z "$NAME" ] && [[ "$NAME" != "#"* ]]; then # Line is not blank and is not a comment
+	 	        LANE_CONFIG[$NAME]="$VALUE"
+	        fi
+        done < "$LANE_CONFIG_FILE"
+        IFS=$OLDIFS
+        logger "$0: SUCCESS reading config file $LANE_CONFIG_FILE"
+    else
+        logger "$0: FAILED to read config file: None defined"
+    fi
+LANE_CONFIG["system.configs-defined"]=true
+fi
+
 # Information about Lane
-USER_ME="lhensley"
-HOME_ME="/home/$USER_ME"
-LANE_EMAIL="lane.hensley@alumni.duke.edu"
-LANE_CELL="7608514641@vtext.com"
+LANE_CELL=${LANE_CONFIG[system.lane-cell]}
+LANE_EMAIL=${LANE_CONFIG[system.lane-email]}
+HOME_DIR=${LANE_CONFIG[system.home-me]}
+HOME_ME=${LANE_CONFIG[system.home-me]}
+HOME_RELATIVE=${LANE_CONFIG[system.home-me]}
+USER_ME=${LANE_CONFIG[system.user-me]}
+USER_NAME=${LANE_CONFIG[system.user-me]}
 
 # General local and program variables
 PROGRAM_DIRECTORY=$(dirname $0)
 HOST_NAME=$(/bin/hostname -s)
-USER_NAME=$USER_ME
-HOME_DIRECTORY=$HOME_ME
+
+# Are these still used at all?
 LANE_SCRIPTS_PREFIX="lane-scripts"
 UUID=$(uuidgen)
-# logger UUID $UUID
-HOME_RELATIVE=home/$USER_NAME
-HOME_DIR=$HOME_DIRECTORY
-SBIN_PARENT="/usr/local"
-SBIN_DIR="$SBIN_PARENT/sbin"
+
+SBIN_DIR=${LANE_CONFIG[system.sbin-dir]}
+SBIN_PARENT=${LANE_CONFIG[system.sbin-parent]}
+
 TEMP_DATABASES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-databases.tmp"
 TEMP_PASSWORD_INCLUDE="/tmp/passwords"
 TEMP_INCLUDES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-includes.tmp"
@@ -193,11 +226,11 @@ TEMP_CRON="/tmp/cron-$UUID.tmp"
 DDCLIENT_INTERVAL=7200
 
 # Git
-GIT=/var/local/git
-GO=$GIT/go
-GO_CONFIGS=$GO/configs
-GO_SBIN=$GO/sbin
-GO_SETUP=$GO_SBIN/setup
+GIT=${LANE_CONFIG[system.git]}
+GO=GIT=${LANE_CONFIG[system.git.go]}
+GO_CONFIGS=${LANE_CONFIG[system.git.go.configs]}
+GO_SBIN=${LANE_CONFIG[system.git.go.sbin]}
+GO_SETUP=${LANE_CONFIG[system.git.go.setup]}
 
 # MySQL
 MYSQL_ADMIN_NAME="admin"

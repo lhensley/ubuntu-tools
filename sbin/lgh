@@ -3,10 +3,9 @@
 
 source $(dirname $0)/script-setup
 
+# Process config file
 LANE_CONFIG_FILE_1="~/.lane/lane.conf"
 LANE_CONFIG_FILE_2="/etc/lane.conf"
-
-# Process config file
 if [ ! -z "$LANE_CONFIG[system.configs-defined]" ]; then
     unset LANE_CONFIG_FILE
     # Ref: https://linuxize.com/post/bash-check-if-file-exists/
@@ -25,7 +24,6 @@ if [ ! -z "$LANE_CONFIG[system.configs-defined]" ]; then
         do	
 	        if [ ! -z "$NAME" ] && [[ "$NAME" != "#"* ]]; then # Line is not blank and is not a comment
 	 	        LANE_CONFIG[$NAME]="$VALUE"
-                echo $NAME $VALUE ${LANE_CONFIG[$NAME]}
 	        fi
         done < "$LANE_CONFIG_FILE"
         IFS=$OLDIFS
@@ -33,10 +31,7 @@ if [ ! -z "$LANE_CONFIG[system.configs-defined]" ]; then
     else
         logger "$0: FAILED to read config file: None defined"
     fi
-# LANE_CONFIG["system.configs-defined"]=true
-echo ""
-echo "X1 ${LANE_CONFIG[script.db-backup.pathname]}"
-echo ""
+LANE_CONFIG["system.configs-defined"]=true
 fi
 
 echo $LANG

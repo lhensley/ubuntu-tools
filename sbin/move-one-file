@@ -3,12 +3,8 @@
 # Usage: move-one-file <input_file> <root_in_path> <root_out_path>
 # No final / on either path. For system root, use ""
 
-production_mode=true
-debug_mode=false
-# debug_mode=true
-if $debug_mode ; then
-  set -x
-  fi
+# Include script setup file
+source $(dirname $0)/script-setup
 
 IN_FILE=$1
 ROOT_IN_PATH=$2
@@ -28,15 +24,6 @@ NEW_DIRECTORY=$(dirname "$OUT_FILE")
 # $ROOT_IN_PATH
 # $ROOT_OUT_PATH
 # $RELATIVE_FILE
-
-logger "$0: started"
-
-# Make sure only root can run our script
-if [[ $EUID -ne 0 ]]; then
-  logger "$0: This script must be run as root."
-  echo "This script must be run as root."
-  exit 1
-fi
 
 # Make sure $IN_FILE exists
 if [ ! -f "$IN_FILE" ]; then

@@ -16,9 +16,9 @@ chmod -R 755 $SBIN_DIR/*
 
 # Exceptions: These can be read or run by anyone
 # These based on functional requirements
-chmod 755 /usr/local/sbin/lhlib /usr/local/sbin/rip /usr/local/sbin/transcode
+chmod 755 $SBIN_DIR/lhlib $SBIN_DIR/rip $SBIN_DIR/transcode
 # These based on desire. CAUTION: Don't expose anything that has a password or code in it.
-chmod 740 /usr/local/sbin/upd /usr/local/sbin/script-setup /usr/local/sbin/_apply-configs
+chmod 740 $SBIN_DIR/upd $SBIN_DIR/script-setup $SBIN_DIR/_apply-configs
 
 # Git
 chmod 600 /root/.gitconfig
@@ -67,14 +67,14 @@ if [ -f $GO_CONFIGS/resolvconf/head ]; then
 	chmod 644 /etc/resolvconf/resolv.conf.d/head
 	fi
 
-# Update /home/$USER_ME/.ssh/authorized_keys
+# Update $HOME_ME/.ssh/authorized_keys
 if [ -f $GO_CONFIGS/ssh/home-.ssh-authorized_keys ]; then
-	mkdir -p /home/$USER_ME/.ssh
+	mkdir -p $HOME_ME/.ssh
 	mkdir -p /root/.ssh
-	cp $GO_CONFIGS/ssh/home-.ssh-authorized_keys /home/$USER_ME/.ssh/authorized_keys
-	chown -R $USER_ME:$USER_ME /home/$USER_ME/.ssh/*
-	chmod 600 /home/$USER_ME/.ssh/authorized_keys
-	cp /home/$USER_ME/.ssh/* /root/.ssh/
+	cp $GO_CONFIGS/ssh/home-.ssh-authorized_keys $HOME_ME/.ssh/authorized_keys
+	chown -R $USER_ME:$USER_ME $HOME_ME/.ssh/*
+	chmod 600 $HOME_ME/.ssh/authorized_keys
+	cp $HOME_ME/.ssh/* /root/.ssh/
 	chown -R root:root /root/.ssh/*
 	fi
 
