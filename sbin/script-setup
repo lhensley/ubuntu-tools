@@ -94,9 +94,8 @@ LANE_CONFIG_FILE_1="~/.lane/lane.conf"
 LANE_CONFIG_FILE_2="/etc/lane.conf"
 echo test LANE_CONFIG_FILE_1 $LANE_CONFIG_FILE_1
 echo test LANE_CONFIG_FILE_2 $LANE_CONFIG_FILE_2
-echo test 3 ${LANE_CONFIG["system.configs-defined"]}
-if [ -z ${LANE_CONFIG["system.configs-defined"]} ]; then # (if ${LANE_CONFIG["system.configs-defined"]} is not defined)
-    unset LANE_CONFIG_FILE
+echo test LANE_CONFIG_FILE $LANE_CONFIG_FILE
+if [ -z $LANE_CONFIG_FILE ]; then # (if $LANE_CONFIG_FILE is not defined)
     # Ref: https://linuxize.com/post/bash-check-if-file-exists/
     if [ -f "$LANE_CONFIG_FILE_1" ]; then
 	    LANE_CONFIG_FILE="$LANE_CONFIG_FILE_1"
@@ -120,7 +119,6 @@ if [ -z ${LANE_CONFIG["system.configs-defined"]} ]; then # (if ${LANE_CONFIG["sy
     else
         logger "$0: FAILED to read config file: None defined"
     fi
-LANE_CONFIG["system.configs-defined"]=true
 fi
 
 # Information about Lane
