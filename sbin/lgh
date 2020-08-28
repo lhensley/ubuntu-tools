@@ -4,15 +4,12 @@
 # Include script setup file
 source $(dirname $0)/script-setup
 
-f_require_config "plex.backup.app.support"
-f_require_config "plex.live.app.support"
-f_require_directory "${LANE_CONFIG[plex.live.app.support]}"
 
-systemctl stop plexmediaserver
-mkdir -p ${LANE_CONFIG[plex.backup.app.support]}
-f_require_directory "plex.backup.app.support"
-cp -R "${LANE_CONFIG[plex.live.app.support]}"/* "${LANE_CONFIG[plex.backup.app.support]}"/
-systemctl start plexmediaserver
+
+echo ${LANE_CONFIG[test.a]}
+echo ${LANE_CONFIG[test.b]}
+
+
 
 # Include script footer file
 f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
