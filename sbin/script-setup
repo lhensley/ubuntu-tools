@@ -117,14 +117,18 @@ if [ -z $LANE_CONFIG_FILE ]; then # (if $LANE_CONFIG_FILE is not defined)
 	 	        LANE_CONFIG[$NAME]="$VALUE"
                 echo Test point d $NAME $VALUE ${LANE_CONFIG[$NAME]}
 	        fi
+        echo test 0.1 in script-setup ${LANE_CONFIG[system.sbin-dir]} xxx ${LANE_CONFIG["system.sbin-dir"]}
         done < "$LANE_CONFIG_FILE"
         IFS=$OLDIFS
+        echo test 0.2 in script-setup ${LANE_CONFIG[system.sbin-dir]} xxx ${LANE_CONFIG["system.sbin-dir"]}
         logger "$0: SUCCESS reading config file $LANE_CONFIG_FILE"
     else
         echo Test point e
         logger "$0: FAILED to read config file: None defined"
     fi
+        echo test 0.3 in script-setup ${LANE_CONFIG[system.sbin-dir]} xxx ${LANE_CONFIG["system.sbin-dir"]}
 fi
+        echo test 0.4 in script-setup ${LANE_CONFIG[system.sbin-dir]} xxx ${LANE_CONFIG["system.sbin-dir"]}
 
 # Information about Lane
 LANE_CELL=${LANE_CONFIG["system.lane-cell"]}
@@ -135,18 +139,24 @@ HOME_RELATIVE=${LANE_CONFIG["system.home-me"]}
 USER_ME=${LANE_CONFIG["system.user-me"]}
 USER_NAME=${LANE_CONFIG["system.user-me"]}
 
+        echo test 0.5 in script-setup ${LANE_CONFIG[system.sbin-dir]} xxx ${LANE_CONFIG[s"ystem.sbin-dir"]}
+
+
 # General local and program variables
 PROGRAM_DIRECTORY=$(dirname $0)
 HOST_NAME=$(/bin/hostname -s)
+        echo test 0.6 in script-setup ${LANE_CONFIG[system.sbin-dir]} xxx ${LANE_CONFIG["system.sbin-dir"]}
 
 # Are these still used at all?
 LANE_SCRIPTS_PREFIX="lane-scripts"
 UUID=$(uuidgen)
+        echo test 0.7 in script-setup ${LANE_CONFIG[system.sbin-dir]} xxx ${LANE_CONFIG["system.sbin-dir"]}
 
 SBIN_DIR=${LANE_CONFIG[system.sbin-dir]}
 echo test 1 in script setup SBIN_DIR $SBIN_DIR ${LANE_CONFIG["system.sbin-dir"]}
 echo test 1.5 in script setup SBIN_DIR ${LANE_CONFIG[system.sbin-dir]}
 SBIN_PARENT=${LANE_CONFIG["system.sbin-parent"]}
+        echo test 0.8 in script-setup ${LANE_CONFIG[system.sbin-dir]} xxx ${LANE_CONFIG["system.sbin-dir"]}
 
 TEMP_DATABASES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-databases.tmp"
 TEMP_PASSWORD_INCLUDE="/tmp/passwords"
