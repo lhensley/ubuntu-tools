@@ -1,7 +1,9 @@
 #!/bin/bash
 # plex-config-backup
 
-c
+# Include script setup file
+source $(dirname $0)/script-setup
+
 f_require_config "plex.backup.app.support"
 f_require_config "plex.live.app.support"
 f_require_directory "${LANE_CONFIG[plex.live.app.support]}"
