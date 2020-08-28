@@ -143,8 +143,9 @@ HOST_NAME=$(/bin/hostname -s)
 LANE_SCRIPTS_PREFIX="lane-scripts"
 UUID=$(uuidgen)
 
-SBIN_DIR=${LANE_CONFIG["system.sbin-dir"]}
+SBIN_DIR=${LANE_CONFIG[system.sbin-dir]}
 echo test 1 in script setup SBIN_DIR $SBIN_DIR ${LANE_CONFIG["system.sbin-dir"]}
+echo test 1.5 in script setup SBIN_DIR ${LANE_CONFIG[system.sbin-dir]}
 SBIN_PARENT=${LANE_CONFIG["system.sbin-parent"]}
 
 TEMP_DATABASES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-databases.tmp"
