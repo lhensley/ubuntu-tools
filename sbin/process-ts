@@ -30,9 +30,6 @@ OUT_FILE="$WORK_ROOT_PATH/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
 STORE_FILE="$STORE_ROOT_PATH/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
 STORE_FILE="$STORE_ROOT_PATH/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
 
-HANDBRAKE="HandBrakeCLI"
-PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
-
 # So here are useful variables defined ...
 # $IN_FILE
 # $OUT_FILE
@@ -41,102 +38,54 @@ PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 # $STORE_ROOT_PATH
 # $RELATIVE_FILE
 
-logger "$0 Transcoding '$2' to '$3'"
+# logger "$0 Transcoding '$2' to '$3'"
 
-$FILTER_SCRIPT "$IN_FILE"
-exit_status=$?
-logger "$0 Test filter status $exit_status"
-if [ "$exit_status" == "0" ]; then
+if $(f_filter "$IN_FILE" "${LANE_CONFIG[filter.transcode-excluded]}" ; then
+    logger "$0: Skipped $IN_FILE"
+else
+    f_require_file "$IN_FILE"
+    f_file_not_in_use "$IN_FILE"
 
-    echo "$(date) $0 Point O"
-
-    # Make sure $IN_FILE exists
-    if [ ! -f "$IN_FILE" ]; then
-        echo "$(date) $0 Point O1 $IN_FILE"
-      logger "$0 no source file $IN_FILE"
-        echo "$(date) $0 Point O2"
-      exit 1
-        echo "$(date) $0 Point O3"
-      fi
-
-    echo "$(date) $0 Point P"
-
-    # Make sure $IN_FILE is not in use
-    if [ -n "$(lsof "$IN_FILE" 2>/dev/null)" ]; then
-        logger "$0: File in use and cannot be processed: $IN_FILE"
-        exit 1
-      fi
-
-    echo "$(date) $0 Point Q"
-
-    logger "$0: started running /usr/local/sbin/transcode."
-    /usr/local/sbin/transcode >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
-    logger "$0: finished running /usr/local/sbin/transcode."
-
-    echo "$(date) $0 Point R"
+#    logger "$0: started running /usr/local/sbin/transcode."
+    ${LANE_CONFIG[script.transcode.pathname]} >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
+#    logger "$0: finished running /usr/local/sbin/transcode."
 
     # Do the transcoding
     TIMESTART=$(currenttimeinseconds)
-    logger "$HANDBRAKE started transcoding of $IN_FILE"
-    $HANDBRAKE --preset-import-file "$PRESET" \
+    logger "$0: Transcoding $IN_FILE"
+    "${LANE_CONFIG[handbrake.program]}" --preset-import-file "${LANE_CONFIG[handbrake.presets]}" \
         -i "$IN_FILE" -o "$OUT_FILE" >> /dev/null 2>&1
     exit_status=$?
     if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-        logger "$HANDBRAKE FAILED with $exit_status for $IN_FILE"
-        echo "$(date) $HANDBRAKE FAILED with $exit_status for $RELATIVE_FILE" | mail -r "process-ts" lanecell
+        logger "${LANE_CONFIG[handbrake.program]}: FAILED with $exit_status for $IN_FILE"
+        echo "$(date) ${LANE_CONFIG[handbrake.program]}: FAILED with $exit_status for $RELATIVE_FILE" | mail -r "process-ts" lanecell
         exit $exit_status
-      else
+        else
         rm "$IN_FILE" >> /dev/null 2>&1 # Delete input file
-        logger "$HANDBRAKE transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART ))) for $OUT_FILE"
-      fi # End of check for transcoding failure
-
-    echo "$(date) $0 Point S"
+        logger "${LANE_CONFIG[handbrake.program]}: transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART ))) for $OUT_FILE"
+        fi # End of check for transcoding failure
 
     "${LANE_CONFIG[script.move-one-file.pathname]}" "$OUT_FILE" "$WORK_ROOT_PATH" "$STORE_ROOT_PATH"
     exit_status=$?
     if [ $exit_status -ne 0 ]; then # If the move failed ...
-        logger "${LANE_CONFIG[script.move-one-file.pathname]} FAILED with $exit_status for $IN_FILE"
-        echo "$(date) ${LANE_CONFIG[script.move-one-file.pathname]} FAILED with $exit_status for $RELATIVE_FILE" | mail -r "process-ts" lanecell
-        exit $exit_status
-      else
-        rm "$IN_FILE" >> /dev/null 2>&1 # Delete input file
-      fi # End of check for transcoding failure
-
-    echo "$(date) $0 Point T"
-
+            logger "${LANE_CONFIG[script.move-one-file.pathname]}: FAILED with $exit_status for $IN_FILE"
+            echo "$(date) ${LANE_CONFIG[script.move-one-file.pathname]}: FAILED with $exit_status for $RELATIVE_FILE" | mail -r "process-ts" lanecell
+            exit $exit_status
+        else
+            rm "$IN_FILE" >> /dev/null 2>&1 # Delete input file
+        fi # End of check for transcoding failure
     # Change permissions for Plex libraries
-    find /var/lib/plexmediaserver/Library -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
-    find /var/lib/plexmediaserver/Library -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
-    chown -R plex:plex /var/lib/plexmediaserver/Library
-	find "$WORK_ROOT_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
-	find "$WORK_ROOT_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
-	find "$STORE_ROOT_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
-	find "$STORE_ROOT_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
-    chown -R plex:plex "$WORK_ROOT_PATH"
-    chown -R plex:plex "$STORE_ROOT_PATH"
-
-    logger "$0 exited without error."
-    echo "$(date) $0 Point U"
-    exit $exit_status
-
-else
-
-    if [ "$(f_get-config system.debug-mode)" == "true" ]; then 
-        echo "$0: \$0: $0"
-        echo "$0: \$1: $1"
-        echo "$(date) $0 Point V"
-        echo "$0: \$FILTER_SCRIPT: $FILTER_SCRIPT"
-        fi
-    echo "$(date) $0 Point W"
-    logger "$0: $1 not processed because it matched in $FILTER_SCRIPT."
-    echo "$(date) $0 Point X"
-
+        find /var/lib/plexmediaserver/Library -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
+        find /var/lib/plexmediaserver/Library -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
+        chown -R plex:plex /var/lib/plexmediaserver/Library
+	    find "$WORK_ROOT_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
+	    find "$WORK_ROOT_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
+	    find "$STORE_ROOT_PATH" -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
+	    find "$STORE_ROOT_PATH" -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
+        chown -R plex:plex "$WORK_ROOT_PATH"
+        chown -R plex:plex "$STORE_ROOT_PATH"
 fi
-
-echo "$(date) $0 Point Y"
 
 # Include script footer file
 f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
 source ${LANE_CONFIG[script.script-footer.pathname]}
-
-echo "$(date) $0 Point Z"

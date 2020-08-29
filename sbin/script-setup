@@ -32,6 +32,14 @@ function f_require_directory {
 	    fi
     }
 
+function f_file_not_in_use {
+    if [ -n "$(lsof "$1" 2>/dev/null)" ]; then
+	    echo "$0: FATAL: File in use: $1"
+	    logger "$0: FATAL: File in use: $1"
+        exit 1
+        fi
+    }
+
 function f_debug () {
     # $1: message to log
     if [ "$(f_get-config system.debug-mode)" == "true" ]; then
@@ -51,10 +59,10 @@ function f_debug_variable () {
 function f_filter () {
     # $1: string being evaluated
     # $2: string of filter values separated by spaces allowing double quotes
-    #    example: f_filter "CBS This Morning Saturday" "$(f_get-config filter.transcode-excluded)"
+    #    example: f_filter "CBS This Morning Saturday" "${LANE_CONFIG[filter.transcode-excluded]}"
     # Result: echoes 1 (filter) or 0 (no filter)
     # SAMPLE USAGE:
-    #   if $(f_filter "Today (1952)" "$(f_get-config filter.transcode-excluded)") ; then
+    #   if $(f_filter "Today (1952)" "${LANE_CONFIG[filter.transcode-excluded]}") ; then
     #       echo "Match found"
     #   else
     #       echo "No match found"
@@ -85,10 +93,10 @@ if [ "$(f_get-config script.$(basename $0).require-root)" == "true" ] && [[ $EUI
 # f_debug "script-setup started"
 
 # If configured, log the start of script processing. Default = "true"
-if [ "$(f_get-config script.$(basename $0).log-start)" != "true" ]; then logger "$0: start"; fi
+if [ "$(f_get-config script.$(basename $0).log-start)" != "true" ]; then logger "$0: Start"; fi
 
 # If configured, send a text message to note the start of script processing. Default = "false"
-# if [ "$(f_get-config script.$(basename $0).text-start)" == "true" ]; then f_text_alert "$0: start"; fi
+# if [ "$(f_get-config script.$(basename $0).text-start)" == "true" ]; then f_text_alert "$0: Start"; fi
 
 # /etc/os-release defines a lot of environment variables 
 # Sample:
@@ -116,7 +124,7 @@ START_WEEKDAYSTAMP=$(/bin/date '+%a')
 # Process config file
 LANE_CONFIG_FILE_1="~/.lane/lane.conf"
 LANE_CONFIG_FILE_2="/etc/lane.conf"
-if [ -z $LANE_CONFIG_FILE ]; then # (if $LANE_CONFIG_FILE is not defined)
+if [ -z "$LANE_CONFIG_FILE" ]; then # (if $LANE_CONFIG_FILE is not defined)
     # Ref: https://linuxize.com/post/bash-check-if-file-exists/
     if [ -f "$LANE_CONFIG_FILE_1" ]; then
 	    LANE_CONFIG_FILE="$LANE_CONFIG_FILE_1"
