@@ -4,12 +4,12 @@
 # Include script setup file
 source $(dirname $0)/script-setup
 
-if [ -z $1 ]; then
+if [ -z "$1" ]; then
   echo "Usage: rip \"Title (year) [ movie | <minimum_number_of_seconds> ]\" &"
   exit -1
   fi
 
-if [ -z $2 ]; then
+if [ -z "$2" ]; then
     MINLENGTH=1200
   else if [ "$2" == "movie" ]; then
     MINLENGTH=4500

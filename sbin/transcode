@@ -40,7 +40,7 @@ while [ $(lh_has_subdirectories "$MKV_BASE_PATH") == "true" ] \
         if [ -f "$i" ]; then # If it really is a file ...
 #          echo "  Recognize valid file: $i"
           if [ -n "$(lsof "$i" 2>/dev/null)" ]; then # If source file IS in use and can't be processed ...
-#            echo "  Source file \"$i\" is in use."
+            echo "  Source file \"$i\" is in use."  >> /dev/null 2>&1
           else # Source file is NOT in use, and ready to be processed.
 #            echo "  Processing source file \"$i\"."
             let "VIDEOSTART = ${#MKV_BASE_PATH} + 2"
