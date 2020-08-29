@@ -11,8 +11,8 @@ git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https
 git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
 git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
 # This section re-pulls all go files from github and updates ${LANE_CONFIG[system.sbin-dir]}
-# BRANCH="master"
-BRANCH="dev"
+BRANCH="master"
+# BRANCH="dev"
 # Change to local repository directory
 cd ${LANE_CONFIG[system.git.go]}
 # Blow away any local changes not uploaded to github
