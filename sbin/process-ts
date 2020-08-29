@@ -40,6 +40,8 @@ STORE_FILE="$STORE_ROOT_PATH/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
 
 logger "$0 Transcoding '$2' to '$3'"
 
+sleep 600
+
 if $(f_filter "$IN_FILE" "${LANE_CONFIG[filter.transcode-excluded]}" ; then
     logger "$0: Skipped $IN_FILE"
 else
