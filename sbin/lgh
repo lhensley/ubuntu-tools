@@ -4,18 +4,18 @@
 # Include script setup file
 source $(dirname $0)/script-setup
 
+logger ($0: Calling script-setup again)
+source $(dirname $0)/script-setup
 
+logger ($0: Calling script-setup again)
+source $(dirname $0)/script-setup
 
-echo ${LANE_CONFIG[test.a]}
-echo ${LANE_CONFIG[test.b]}
-
-
+logger ($0: Calling script-setup again)
+source $(dirname $0)/script-setup
 
 # Include script footer file
 f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
 source ${LANE_CONFIG[script.script-footer.pathname]}
 
 # Notes:
-# Check on space around =
-# Add routine to check for valid and defined configs (like SDIR
 # Amend config lookup so it checks the variable and not the file
