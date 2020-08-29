@@ -38,7 +38,7 @@ STORE_FILE="$STORE_ROOT_PATH/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
 # $STORE_ROOT_PATH
 # $RELATIVE_FILE
 
-# logger "$0 Transcoding '$2' to '$3'"
+logger "$0 Transcoding '$2' to '$3'"
 
 if $(f_filter "$IN_FILE" "${LANE_CONFIG[filter.transcode-excluded]}" ; then
     logger "$0: Skipped $IN_FILE"
@@ -46,9 +46,9 @@ else
     f_require_file "$IN_FILE"
     f_file_not_in_use "$IN_FILE"
 
-#    logger "$0: started running /usr/local/sbin/transcode."
+   logger "$0: started running /usr/local/sbin/transcode."
     ${LANE_CONFIG[script.transcode.pathname]} >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
-#    logger "$0: finished running /usr/local/sbin/transcode."
+   logger "$0: finished running /usr/local/sbin/transcode."
 
     # Do the transcoding
     TIMESTART=$(currenttimeinseconds)

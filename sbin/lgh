@@ -4,7 +4,7 @@
 # Include script setup file
 source $(dirname $0)/script-setup
 
-lgh2
+
 
 # Include script footer file
 f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
