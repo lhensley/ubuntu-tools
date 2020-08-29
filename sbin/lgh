@@ -4,13 +4,13 @@
 # Include script setup file
 source $(dirname $0)/script-setup
 
-logger ($0: Calling script-setup again)
+logger "$0: Calling script-setup again"
 source $(dirname $0)/script-setup
 
-logger ($0: Calling script-setup again)
+logger "$0: Calling script-setup again"
 source $(dirname $0)/script-setup
 
-logger ($0: Calling script-setup again)
+logger "$0: Calling script-setup again"
 source $(dirname $0)/script-setup
 
 # Include script footer file
