@@ -1,14 +1,8 @@
 #!/bin/bash
 # transcode
 
-production_mode=true
-debug_mode=false
-#debug_mode=true
-if $debug_mode ; then
-  set -x
-  fi
-
 PROGRAM_DIRECTORY=$(dirname $0)
+source $PROGRAM_DIRECTORY/script-setup
 source $PROGRAM_DIRECTORY/lhlib
 
 HANDBRAKE="HandBrakeCLI"
@@ -78,13 +72,15 @@ while [ $(lh_has_subdirectories "$MKV_BASE_PATH") == "true" ] \
 
 if $PRODUCTIVE; then
     chown plex:plex $M4V_PATH/*
-    echo "Uploading to nuc01" | mail lanecell
+    echo "$0: Uploading to nuc01" | mail lanecell
     sudo -u lhensley rsync -rvE $M4V_PATH/ $RSYNC_TARGET
-    echo "Upload done."
     exit_status=$?
     if [ $exit_status -eq 0 ] ; then
+      echo "$0: Upload done." | mail lanecell
       rm $M4V_PATH/* >> /dev/null 2>&1
-      fi
+    else
+      echo "$0: Upload FAILED." | mail lanecell
+    fi
 
     # echo "Transcoding is complete." | mail lanecell
     # echo Done.
