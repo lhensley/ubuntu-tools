@@ -46,11 +46,11 @@ f_debug_variable "STORE_ROOT_PATH" "$STORE_ROOT_PATH"
 f_debug_variable "RELATIVE_FILE" "$RELATIVE_FILE"
 f_debug_variable "1" "$1"
 
-logger "$0 Transcoding '$2' to '$3'"
+logger "$0: Transcoding $(basename $2)"
 
 sleep 600
 
-if $(f_filter "$IN_FILE" "${LANE_CONFIG[filter.transcode-excluded]}" ; then
+if $(f_filter "$IN_FILE" "${LANE_CONFIG[filter.transcode-excluded]}") ; then
     logger "$0: Skipped $IN_FILE"
 else
     f_require_file "$IN_FILE"
