@@ -38,6 +38,14 @@ STORE_FILE="$STORE_ROOT_PATH/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
 # $STORE_ROOT_PATH
 # $RELATIVE_FILE
 
+f_debug_variable "IN_FILE" "$IN_FILE"
+f_debug_variable "OUT_FILE" "$OUT_FILE"
+f_debug_variable "STORE_FILE" "$STORE_FILE"
+f_debug_variable "WORK_ROOT_PATH" "$WORK_ROOT_PATH"
+f_debug_variable "STORE_ROOT_PATH" "$STORE_ROOT_PATH"
+f_debug_variable "RELATIVE_FILE" "$RELATIVE_FILE"
+f_debug_variable "1" "$1"
+
 logger "$0 Transcoding '$2' to '$3'"
 
 sleep 600
