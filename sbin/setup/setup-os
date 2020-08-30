@@ -350,6 +350,13 @@ if $install_handbrake ; then
   echo "GUI version is NOT configured: Presets ($HOME_DIR/.HandBrake/*) need to be added."
   fi
 
+# Ref: https://askubuntu.com/questions/1058750/new-alert-keeps-showing-up-server-returned-error-nxdomain-mitigating-potential
+# This corrects a problem in which you'll get constant syslog errors:
+#    Server returned error NXDOMAIN, mitigating potential DNS violation DVE-2018-0001, retrying transaction with reduced feature level UDP.
+# If this causes trouble, you can restore the original link with
+#    sudo ln -sf ../run/resolvconf/resolv.conf /etc/resolv.conf
+ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+
 # Invoke /usr/local/sbin/_apply-configs
 # chmod 777 $SBIN_DIR/_apply-configsHOME
 $SBIN_DIR/_apply-configs
