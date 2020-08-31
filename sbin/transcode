@@ -70,20 +70,20 @@ while [ $(lh_has_subdirectories "$MKV_BASE_PATH") == "true" ] \
     done # Next subdirectory under $MKV_BASE_PATH (iterating through them)
   done # End of check to confirm that this are any subdirectories under $MKS_BASE_PATH
 
-if $PRODUCTIVE; then
-    chown plex:plex $M4V_PATH/*
-    echo "$0: Uploading to nuc01" | mail lanecell
-    sudo -u lhensley rsync -rvE $M4V_PATH/ $RSYNC_TARGET
-    exit_status=$?
-    if [ $exit_status -eq 0 ] ; then
-      echo "$0: Upload done." | mail lanecell
-      rm $M4V_PATH/* >> /dev/null 2>&1
-    else
-      echo "$0: Upload FAILED." | mail lanecell
-    fi
+# if $PRODUCTIVE; then
+#    chown plex:plex $M4V_PATH/*
+#    echo "$0: Uploading to nuc01" | mail lanecell
+#    sudo -u lhensley rsync -rvE $M4V_PATH/ $RSYNC_TARGET
+#    exit_status=$?
+#    if [ $exit_status -eq 0 ] ; then
+#      echo "$0: Upload done." | mail lanecell
+#      rm $M4V_PATH/* >> /dev/null 2>&1
+#    else
+#      echo "$0: Upload FAILED." | mail lanecell
+#    fi
 
     # echo "Transcoding is complete." | mail lanecell
     # echo Done.
-fi
+# fi
 
 exit 0
