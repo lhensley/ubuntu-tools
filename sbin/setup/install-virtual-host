@@ -16,7 +16,7 @@ error_log="/var/log/apache2/error.log"
 custom_log="/var/log/apache2/access.log"
 certificate_conf_dir="/etc/letsencrypt"
 certificate_live_dir="live"
-excluded_password_characters="\";\$\`\!\*\@"
+excluded_password_characters="\"\;\$\`\!\*\@"
 install_wordpress=false
 
 debug_mode=false
