@@ -10,7 +10,7 @@ while inotifywait -e modify,create ~/Scans > ~/.scan_message 2>&1
 	do
 		sleep 1
 		rclone move ~/Scans lane_onedrive:Brother >> ~/.scan_message 2>&1
-		cat ~/.scan_message | mail lanecell
+		cat ~/.scan_message | mail lane
 		rm -f ~/.scan_message
 	done
 
