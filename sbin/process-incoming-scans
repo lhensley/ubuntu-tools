@@ -3,7 +3,8 @@
 #Add this to crontab, running it as user brother
 
 # Include script setup file
-source $(dirname $0)/script-setup
+# LEAVE THIS OUT until it can handle being run by a non-root user
+# source $(dirname $0)/script-setup
 
 while inotifywait -r -e modify,create ~/Scans
 	do
@@ -12,5 +13,7 @@ while inotifywait -r -e modify,create ~/Scans
 	done
 
 # Include script footer file
-f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
-source ${LANE_CONFIG[script.script-footer.pathname]}
+# LEAVE THIS OUT until it can handle being run by a non-root user
+# f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
+# LEAVE THIS OUT until it can handle being run by a non-root user
+# source ${LANE_CONFIG[script.script-footer.pathname]}
