@@ -6,7 +6,7 @@
 # LEAVE THIS OUT until it can handle being run by a non-root user
 # source $(dirname $0)/script-setup
 
-while inotifywait -r -e modify,create ~/Scans
+while inotifywait -e modify,create ~/Scans
 	do
 		sleep 1
 		rclone move ~/Scans lane_onedrive:Brother
