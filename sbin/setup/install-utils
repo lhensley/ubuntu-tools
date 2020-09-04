@@ -27,6 +27,7 @@ install exiftool
 install fail2ban
 install ffmpeg
 install filezilla
+install ghostscript             # Compressing PDF scans
 install gimp
 install git && ufw allow git
 install gpg
