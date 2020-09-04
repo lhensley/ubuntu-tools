@@ -1,14 +1,21 @@
 #!/bin/bash
 # process-incoming-scans
-#Add this to crontab, running it as user brother
+# Add this to crontab, running it as user brother
 
 # Include script setup file
 # LEAVE THIS OUT until it can handle being run by a non-root user
 # source $(dirname $0)/script-setup
 
-while inotifywait -e modify,create ~/Scans > ~/.scan_message 2>&1
+while inotifywait -r -e modify,create ~/Scans > ~/.scan_message 2>&1
 	do
 		sleep 1
+		mkdir -p ~/Scans/compressed >> /dev/null 2>&1
+		mkdir -p ~/Scans/uncompressed >> /dev/null 2>&1
+		for f in ~/Scans/*
+		do
+			gs -sDEVICE=pdfwrite -dPDFSETTINGS=/default -dNOPAUSE -dQUIET -dBATCH -sOutputFile=~/Scans/compressed/$(basename $f) $f >> ~/.scan_message > ~/.scan_message 2>&1
+			mv $f ~/Scans/uncompressed/$(basename $f)
+		done
 		rclone move ~/Scans lane_onedrive:Brother >> ~/.scan_message 2>&1
 		cat ~/.scan_message | mail lane
 		rm -f ~/.scan_message
