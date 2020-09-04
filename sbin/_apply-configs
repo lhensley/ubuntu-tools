@@ -33,6 +33,7 @@ echo G
 chmod 740 ${LANE_CONFIG[script.script-setup.pathname]} 
 echo H
 chmod 740 ${LANE_CONFIG[script._apply-configs.pathname]}
+echo chmod 740 ${LANE_CONFIG[script._apply-configs.pathname]}
 echo I
 
 # Git
