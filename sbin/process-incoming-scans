@@ -1,0 +1,16 @@
+#!/bin/bash
+# process-incoming-scans
+#Add this to crontab, running it as user brother
+
+# Include script setup file
+source $(dirname $0)/script-setup
+
+while inotifywait -r -e modify,create ~/Scans
+	do
+		sleep 1
+		rclone move ~/Scans lane_onedrive:Brother
+	done
+
+# Include script footer file
+f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
+source ${LANE_CONFIG[script.script-footer.pathname]}

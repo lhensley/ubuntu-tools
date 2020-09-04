@@ -28,6 +28,7 @@ install_chrome=true
 install_lsyncd=true
 install_makemkv=true
 install_handbrake=true
+install_rclone=true
 
 echo "#########################################################################"
 echo "#########################################################################"
@@ -174,9 +175,14 @@ if $install_php ; then
   echo "php installed."
   fi
 
+# Install rclone
+    echo "Installing rclone"
+    DEBIAN_FRONTEND=noninteractive apt-get install -yq curl
+    curl https://rclone.org/install.sh | sudo bash
+
 if $enable_certbot ; then
   echo "Installing certbot"
-  apt install -y certbot python3-certbot-apache
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq certbot python3-certbot-apache
   echo "certbot installed."
   fi
 

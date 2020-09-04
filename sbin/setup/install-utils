@@ -7,7 +7,7 @@
 # Include header file
 PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/../script-setup
-
+s
 function install() {
    logger $0 Installing $1
    DEBIAN_FRONTEND=noninteractive apt-get install -yq $1
@@ -31,14 +31,14 @@ install gimp
 install git && ufw allow git
 install gpg
 install gzip
-install inotify-tools
+install inotify-tools           # Do something when a file is created, deleted, or changed
 install net-tools
 install openssl
 install openvpn
 install bridge-utils
 install ifupdown
 install resolvconf
-install ripmime
+install ripmime                 # Process files sent by email
 install ssh && ufw allow ssh
 install sysbench
 install tasksel

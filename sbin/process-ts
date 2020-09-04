@@ -1,6 +1,6 @@
 #!/bin/bash
-# process_ts
-# Usage: process_ts <input_file> <work_root_path> <store_root_path>
+# process-ts
+# Usage: process-ts <input_file> <work_root_path> <store_root_path>
 # No final / on either path. For system root, use ""
 
 # Include script setup file
