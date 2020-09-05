@@ -78,6 +78,31 @@ function f_filter () {
     echo $MATCH
 	}
 
+function f_clear_local_copy() {
+# $1 = container directory of local copy, no trailing slash
+	f_require_config "${LANE_CONFIG[archive.directory.$(hostname -s)]}"
+	f_require_directory "${LANE_CONFIG[archive.directory.$(hostname -s)]}"
+	rm -r "${LANE_CONFIG[archive.directory.$(hostname -s)]}"/*
+	}
+
+function f_local_copy() {
+# $1 = source directory? file(s)?
+# $2 = container directory of local copy, no trailing slash
+	f_require_config "${LANE_CONFIG[archive.directory.$(hostname -s)]}"
+	mkdir -p "${LANE_CONFIG[archive.directory.$(hostname -s)]}"/$1
+	rsync -q -a --delete "$1" "${LANE_CONFIG[archive.directory.$(hostname -s)]}"/$1
+	# -q = quiet
+	# -a = same as -rlptgoD
+		# -r = recursive
+		# -l = copy symlinks as symlinks
+		# -p = preserve permisions
+		# -t = preserve modification times
+		# -g = preserve group
+		# -o = preserve ownership	
+		# -D = preserve device files and special files
+	# --delete = delete extraneous files from dest dirs
+	}
+
 # function f_text_alert () {
 #     # $1: the string value of the text message
 #     TEXT_TARGETS=$(f_get-config text-alert-target-emails)
@@ -225,17 +250,17 @@ esac
 DIRECTORY_FROM=/
 SOCKETS_TEMP_FILE="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-socket-files.tmp"
 ARCHIVE_TAR_FILE="$HOST_NAME-$START_DATESTAMP.gz"
-ARCHIVE_TAR_FULL="$ARCHIVE_DIRECTORY/$ARCHIVE_TAR_FILE"
+ARCHIVE_TAR_FULL="${LANE_CONFIG[archive.directory.$(hostname -s)]}/$ARCHIVE_TAR_FILE"
 ARCHIVE_TAR_WEEKDAY_FILE="$HOST_NAME-weekday-$START_WEEKDAYSTAMP.gz"
-ARCHIVE_TAR_FULL_WEEKDAY="$ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
+ARCHIVE_TAR_FULL_WEEKDAY="${LANE_CONFIG[archive.directory.$(hostname -s)]}/$ARCHIVE_TAR_WEEKDAY_FILE"
 ARCHIVE_TAR_DAY_FILE="$HOST_NAME-day-$START_DAYSTAMP.gz"
-ARCHIVE_TAR_FULL_DAY="$ARCHIVE_DIRECTORY/$ARCHIVE_TAR_DAY_FILE"
+ARCHIVE_TAR_FULL_DAY="${LANE_CONFIG[archive.directory.$(hostname -s)]}/$ARCHIVE_TAR_DAY_FILE"
 ARCHIVE_TAR_MONTH_FILE="$HOST_NAME-month-$START_MONTHSTAMP.gz"
-ARCHIVE_TAR_FULL_MONTH="$ARCHIVE_DIRECTORY/$ARCHIVE_TAR_MONTH_FILE"
+ARCHIVE_TAR_FULL_MONTH="${LANE_CONFIG[archive.directory.$(hostname -s)]}/$ARCHIVE_TAR_MONTH_FILE"
 ARCHIVE_MYSQL_FILE="$HOST_NAME-$START_DATESTAMP.sql"
-ARCHIVE_MYSQL_FULL="$ARCHIVE_DIRECTORY/$ARCHIVE_MYSQL_FILE"
-ARCHIVE_MYSQL_LITURGY="$ARCHIVE_DIRECTORY/$HOST_NAME-liturgy.sql"
-ARCHIVE_MYSQL_DB="$ARCHIVE_DIRECTORY/$HOST_NAME-$START_DATESTAMP-"
+ARCHIVE_MYSQL_FULL="${LANE_CONFIG[archive.directory.$(hostname -s)]}/$ARCHIVE_MYSQL_FILE"
+ARCHIVE_MYSQL_LITURGY="${LANE_CONFIG[archive.directory.$(hostname -s)]}/$HOST_NAME-liturgy.sql"
+ARCHIVE_MYSQL_DB="${LANE_CONFIG[archive.directory.$(hostname -s)]}/$HOST_NAME-$START_DATESTAMP-"
 TAR="/bin/tar"
 EXEC_BACKUP="$TAR --create --gzip --auto-compress --preserve-permissions"
 EXEC_BACKUP="$EXEC_BACKUP --file=$ARCHIVE_TAR_FULL_WEEKDAY"
@@ -248,9 +273,9 @@ EXEC_BACKUP="$EXEC_BACKUP /etc /home /root /usr/local/sbin /var/www"
 # EXEC_BACKUP="$EXEC_BACKUP /var/local/archives/*.sql"
 # NOTE: -t flag removed from next line 3/28/19. Generates error.
 RSYNC_NO_DELETE="rsync -aopqrzE -e 'ssh -p $OFFSITE_PORT'"
-RSYNC_SU="$RSYNC_NO_DELETE '$ARCHIVE_DIRECTORY'"
+RSYNC_SU="$RSYNC_NO_DELETE ${LANE_CONFIG[archive.directory.$(hostname -s)]}"
 RSYNC_SU="$RSYNC_SU $OFFSITE_SERVER:$OFFSITE_PATH"
-BACKUPLOG=$ARCHIVE_DIRECTORY/$HOST_NAME-backup.log
+BACKUPLOG="${LANE_CONFIG[archive.directory.$(hostname -s)]}"/$HOST_NAME-backup.log
 
 # Apache2
 WEB_ROOTS="/var/www"

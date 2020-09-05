@@ -23,10 +23,10 @@ source $(dirname $0)/script-setup
 ################ DELETE THIS SECTION? ##################################################
 # echo "$(/bin/date) Setting backup parameters."
 # The definition below seems not to be used. Delete it?
-LOGFILE=$ARCHIVE_DIRECTORY/backup.log
+LOGFILE="${LANE_CONFIG[archive.directory.$(hostname -s)]}"/backup.log
 
 # Create archive directory, defined in script-setup
-mkdir -p $ARCHIVE_DIRECTORY
+mkdir -p "${LANE_CONFIG[archive.directory.$(hostname -s)]}"
 
 # Delete old backup log and start another one.
 rm -f $BACKUPLOG
@@ -34,7 +34,7 @@ printf "$(date)\n" > $BACKUPLOG
 
 # Dump old SQL backups
 logger Removing MySQL dumps at $ARCHIVE_DIRECTORY and $MYSQL_DUMP_DIR
-/bin/rm -f $ARCHIVE_DIRECTORY/*.sql >> $BACKUPLOG 2>&1
+/bin/rm -f "${LANE_CONFIG[archive.directory.$(hostname -s)]}"/*.sql >> $BACKUPLOG 2>&1
 rm -f -R $MYSQL_DUMP_DIR
 
 # Dump last weekday backup
@@ -56,8 +56,8 @@ for db in $(cat $TEMP_DATABASES); do
   done
 logger Moving $ARCHIVE_DIRECTORY .sql and .txt files to $MYSQL_DUMP_DIR and setting ownership and privileges.
 mkdir -p $MYSQL_DUMP_DIR
-mv $ARCHIVE_DIRECTORY/*.sql $MYSQL_DUMP_DIR/
-mv $ARCHIVE_DIRECTORY/*.txt $MYSQL_DUMP_DIR/
+mv "${LANE_CONFIG[archive.directory.$(hostname -s)]}"/*.sql $MYSQL_DUMP_DIR/
+mv "${LANE_CONFIG[archive.directory.$(hostname -s)]}"/*.txt $MYSQL_DUMP_DIR/
 /bin/chown -R $USER_NAME:$USER_NAME $MYSQL_DUMP_DIR
 /bin/chmod -R 600 $MYSQL_DUMP_DIR
 /bin/chmod 700 $MYSQL_DUMP_DIR
@@ -87,9 +87,9 @@ logger Copying $ARCHIVE_TAR_FULL_WEEKDAY to $ARCHIVE_TAR_FULL_MONTH
 # Set permissions of files in the archive directory
 printf '\n\nSetting permissions on archives files.\n' >>$BACKUPLOG 2>&1
 echo $(date) >>$BACKUPLOG 2>&1
-logger Setting permisssions for $ARCHIVE_DIRECTORY and its contents.
-/bin/chown $USER_NAME:$USER_NAME $ARCHIVE_DIRECTORY/* >>$BACKUPLOG 2>&1
-/bin/chmod 600 $ARCHIVE_DIRECTORY/* >>$BACKUPLOG 2>&1
+logger Setting permisssions for "${LANE_CONFIG[archive.directory.$(hostname -s)]}" and its contents.
+/bin/chown $USER_NAME:$USER_NAME "${LANE_CONFIG[archive.directory.$(hostname -s)]}"/* >>$BACKUPLOG 2>&1
+/bin/chmod 600 "${LANE_CONFIG[archive.directory.$(hostname -s)]}"/* >>$BACKUPLOG 2>&1
 
 # Sync to offsite server
 printf '\n\nSyncing backup to $OFFSITE_SERVER.\n' >> $BACKUPLOG 2>&1
@@ -100,10 +100,10 @@ logger Exit code for attempted sync to $OFFSITE_SERVER as $USER_NAME: $?
 
 # Add footer to backup log
 printf '\n\nCONTENTS OF $ARCHIVE_DIRECTORY\n' >>$BACKUPLOG
-ls -al $ARCHIVE_DIRECTORY >>$BACKUPLOG 2>&1
+ls -al "${LANE_CONFIG[archive.directory.$(hostname -s)]}" >>$BACKUPLOG 2>&1
 
 # Drop orphaned temp files
-rm $ARCHIVE_DIRECTORY/.* >/dev/null 2>&1
+rm "${LANE_CONFIG[archive.directory.$(hostname -s)]}"/.* >/dev/null 2>&1
 
 # Remove all remaining tempfiles. #####################################
 printf '\n\nExiting.\n' >> $BACKUPLOG 2>&1

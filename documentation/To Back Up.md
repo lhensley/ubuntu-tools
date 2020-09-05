@@ -2,6 +2,9 @@
 * cron jobs
 * /etc/fstab
 * Network settings
+  * (systemctl restart networking network-manager)
+  * DIRECTORY: /etc/netplan
+  * FILE: /etc/hosts (CRITICAL)
 * Data
   * Contents of ~ (including root and other users) MAYBE
   * MySQL
