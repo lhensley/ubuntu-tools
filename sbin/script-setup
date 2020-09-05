@@ -81,7 +81,7 @@ function f_filter () {
 function f_clear_local_copy() {
 	f_require_config "archive.directory.$(hostname -s)"
 	f_require_directory "${LANE_CONFIG[archive.directory.$(hostname -s)]}"
-	rm -r "${LANE_CONFIG[archive.directory.$(hostname -s)]}"/*
+	rm -rf "${LANE_CONFIG[archive.directory.$(hostname -s)]}"/*
 	}
 
 function f_local_copy() {

@@ -12,6 +12,8 @@ echo $TESTVAL
 f_clear_local_copy
 f_local_copy "/home/lhensley/source"
 
+chown -r lhensley /home/lhensley/*
+
 # Include script footer file
 f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
 source ${LANE_CONFIG[script.script-footer.pathname]}
