@@ -79,14 +79,14 @@ function f_filter () {
 	}
 
 function f_clear_local_copy() {
-	f_require_config "${LANE_CONFIG[archive.directory.$(hostname -s)]}"
+	f_require_config "archive.directory.$(hostname -s)"
 	f_require_directory "${LANE_CONFIG[archive.directory.$(hostname -s)]}"
 	rm -r "${LANE_CONFIG[archive.directory.$(hostname -s)]}"/*
 	}
 
 function f_local_copy() {
 # $1 = source directory? file(s)?
-	f_require_config "${LANE_CONFIG[archive.directory.$(hostname -s)]}"
+	f_require_config "archive.directory.$(hostname -s)"
 	mkdir -p "${LANE_CONFIG[archive.directory.$(hostname -s)]}"/$1
 	rsync -q -a --delete "$1" "${LANE_CONFIG[archive.directory.$(hostname -s)]}"/$1
 	# -q = quiet
