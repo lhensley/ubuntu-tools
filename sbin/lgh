@@ -4,15 +4,10 @@
 # Include script setup file
 source $(dirname $0)/script-setup
 
-TESTVAL="."
-TESTVAL+="."
-TESTVAL+="."
-echo $TESTVAL
-
 f_clear_local_copy
 f_local_copy "/home/lhensley/source"
 
-chown -r lhensley /home/lhensley/*
+chown -R lhensley /home/lhensley/*
 
 # Include script footer file
 f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
