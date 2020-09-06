@@ -202,7 +202,7 @@ if [ -z "$LANE_CONFIG_FILE" ]; then # (if $LANE_CONFIG_FILE is not defined)
         f_require_config "system.sbin-parent"
         f_require_config "system.user-me"
         for KEY in "${!LANE_CONFIG[@]}"; do
-          CONFIG.$KEY=${LANE_CONFIG[$KEY]}
+          CONFIG.$KEY="${LANE_CONFIG[$KEY]}"
         done
     else
         logger "$0: FAILED to read config file: None defined"
