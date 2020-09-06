@@ -10,8 +10,11 @@ for KEY in "${!LANE_CONFIG[@]}"; do
   echo "Key: $KEY"
   # Print the VALUE attached to that KEY
   echo "Value: ${LANE_CONFIG[$KEY]}"
+  CONFIG.$KEY=${LANE_CONFIG[$KEY]}
 done
 
+echo
+echo CONFIG.system.lane-cell
 
 # Include script footer file
 f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
