@@ -16,7 +16,23 @@ function f_require_config {
 	    fi
     }
 
+function f_require_value {
+# $1 = Name of value, e.g., "input file"
+# $2 = Content of value, e.g., $INPUT_FILE
+    if [ -z "$1" ]; then
+	    echo "$0: FATAL: Value name for f_require_value undefined."
+	    logger "$0: FATAL: Value name for f_require_value undefined."
+	    exit 1
+	    fi
+    if [ -z "$2" ]; then
+	    echo "$0: FATAL: Value of \"$1\" undefined."
+	    logger "$0: FATAL: Value of \"$1\" undefined."
+	    exit 1
+	    fi
+    }
+
 function f_require_file {
+    f_require_value "file name" "$1"
     if [ ! -f "$1" ]; then
 	    echo "$0: FATAL: File not found: $1"
 	    logger "$0: FATAL: File not found: $1"
@@ -25,6 +41,7 @@ function f_require_file {
     }
 
 function f_require_directory {
+    f_require_value "directory name" "$1"
     if [ ! -d "$1" ]; then
 	    echo "$0: FATAL: Directory not found: $1"
 	    logger "$0: FATAL: Directory not found: $1"
@@ -33,6 +50,7 @@ function f_require_directory {
     }
 
 function f_file_not_in_use {
+    f_require_file "$1"
     if [ -n "$(lsof "$1" 2>/dev/null)" ]; then
 	    echo "$0: FATAL: File in use: $1"
 	    logger "$0: FATAL: File in use: $1"

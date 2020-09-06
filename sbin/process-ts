@@ -53,18 +53,17 @@ f_debug_variable "1" "$1"
 if $(f_filter "$IN_FILE" "${LANE_CONFIG[filter.transcode-excluded]}") ; then
     logger "$0: Skipped $IN_FILE"
 else
-    f_require_file "$IN_FILE"
     f_file_not_in_use "$IN_FILE"
 
 #   logger "$0: started running /usr/local/sbin/transcode."
-    ${LANE_CONFIG[script.transcode.pathname]} >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
+    ${LANE_CONFIG[script.transcode-ripped-dvds.pathname]} >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
 #   logger "$0: finished running /usr/local/sbin/transcode."
 
     # Do the transcoding
     TIMESTART=$(currenttimeinseconds)
     IN_FILE_BASE=$(basename $IN_FILE)
-#    logger "$0: DEBUG IN_FILE $IN_FILE"
-    logger "$0: Transcoding $IN_FILE_BASE"
+    logger "$0: DEBUG IN_FILE $IN_FILE"
+    logger $0: Transcoding $IN_FILE_BASE
     "${LANE_CONFIG[handbrake.program]}" --preset-import-file "${LANE_CONFIG[handbrake.presets]}" \
         -i "$IN_FILE" -o "$OUT_FILE" >> /dev/null 2>&1
     exit_status=$?
@@ -74,9 +73,9 @@ else
             exit $exit_status
         else
             rm "$IN_FILE" >> /dev/null 2>&1 # Delete input file
-            logger "$0: DEBUG: currenttimeinseconds $(currenttimeinseconds)"
-            logger "$0: DEBUG: TIMESTART $TIMESTART"
-            logger "$0: transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))"
+            logger $0: DEBUG: currenttimeinseconds $(currenttimeinseconds)
+            logger $0: DEBUG: TIMESTART $TIMESTART
+            logger $0: transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))
         fi # End of check for transcoding failure
 
     "${LANE_CONFIG[script.move-one-file.pathname]}" "$OUT_FILE" "$WORK_ROOT_PATH" "$STORE_ROOT_PATH"

@@ -25,23 +25,7 @@ NEW_DIRECTORY=$(dirname "$OUT_FILE")
 # $ROOT_OUT_PATH
 # $RELATIVE_FILE
 
-# Make sure $IN_FILE exists
-if [ ! -f "$IN_FILE" ]; then
-  logger "$0: No source file $IN_FILE"
-  echo "$(date) $0: no source file" | mail -r move-one-file lanecell
-  sleep 1
-  echo "$IN_FILE" | mail -r move-one-file lanecell
-  exit 1
-fi
-
-# Make sure $IN_FILE is not in use
-if [ -n "$(lsof "$IN_FILE" 2>/dev/null)" ]; then
-  logger "$0: File in use and cannot move $IN_FILE"
-  echo "$(date) $0: File in use and cannot move" | mail -r move-one-file lanecell
-  sleep 1
-  echo "$IN_FILE" | mail -r move-one-file lanecell
-  exit 1
-fi
+f_file_not_in_use "$1"
 
 # Make the directory for out file
 if [ ! -d "$NEW_DIRECTORY" ]; then
