@@ -12,7 +12,7 @@ logger $0: C $CONFIG.script.shrink-plex-ts-files.pathname
 logger $0: D $CONFIG.script.shrink-plex-ts-files.pathname
 
 # Include script footer file
-logger $0: E $CONFIG.script.shrink-plex-ts-files.pathname
+logger $0: E $CONFIG.script.shrink-plex-ts-files.pathname2
 f_debug_variable "script.script-footer.pathname" "$CONFIG.script.script-footer.pathname"
 logger $0: F $CONFIG.script.shrink-plex-ts-files.pathname
 source "$CONFIG.script.script-footer.pathname"
