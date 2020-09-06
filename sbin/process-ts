@@ -62,8 +62,9 @@ else
 
     # Do the transcoding
     TIMESTART=$(currenttimeinseconds)
-    logger "$0: DEBUG IN_FILE $IN_FILE"
-    logger "$0: Transcoding $(basename $IN_FILE)"
+    IN_FILE_BASE=$(basename $IN_FILE)
+#    logger "$0: DEBUG IN_FILE $IN_FILE"
+    logger "$0: Transcoding $IN_FILE_BASE"
     "${LANE_CONFIG[handbrake.program]}" --preset-import-file "${LANE_CONFIG[handbrake.presets]}" \
         -i "$IN_FILE" -o "$OUT_FILE" >> /dev/null 2>&1
     exit_status=$?
