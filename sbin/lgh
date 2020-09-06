@@ -4,15 +4,6 @@
 # Include script setup file
 source $(dirname $0)/script-setup
 
-
-for KEY in "${!LANE_CONFIG[@]}"; do
-  # Print the KEY value
-  echo "Key: $KEY"
-  # Print the VALUE attached to that KEY
-  echo "Value: ${LANE_CONFIG[$KEY]}"
-  CONFIG.$KEY=${LANE_CONFIG[$KEY]}
-done
-
 echo
 echo CONFIG.system.lane-cell
 

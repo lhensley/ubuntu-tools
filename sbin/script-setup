@@ -178,6 +178,7 @@ if [ -z "$LANE_CONFIG_FILE" ]; then # (if $LANE_CONFIG_FILE is not defined)
         fi
     fi
     if [ ! -z "$LANE_CONFIG_FILE" ]; then # (if $LANE_CONFIG_FILE is defined)
+        logger "$0: Using config file $LANE_CONFIG_FILE"
         OLDIFS=$IFS
         IFS=$'[ \t]*=[ \t]*'
         declare -A LANE_CONFIG
@@ -200,7 +201,9 @@ if [ -z "$LANE_CONFIG_FILE" ]; then # (if $LANE_CONFIG_FILE is not defined)
         f_require_config "system.sbin-dir"
         f_require_config "system.sbin-parent"
         f_require_config "system.user-me"
-        logger "$0: Using config file $LANE_CONFIG_FILE"
+        for KEY in "${!LANE_CONFIG[@]}"; do
+          CONFIG.$KEY=${LANE_CONFIG[$KEY]}
+        done
     else
         logger "$0: FAILED to read config file: None defined"
     fi
