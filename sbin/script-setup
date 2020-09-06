@@ -32,17 +32,17 @@ function f_require_value {
     }
 
 function f_require_file {
-logger "f_require_file: V1 $1"
-logger "f_require_file: V2 DEBUG A"
+logger f_require_file: V1 $1
+logger f_require_file: V2 DEBUG A
 #    f_require_value "file name" "$1"
-    logger "f_require_file: DEBUG B"
+    logger f_require_file: DEBUG B
     if [ ! -f "$1" ]; then
-        logger "f_require_file: DEBUG C"
-	    echo "$0: FATAL: File not found: $1"
-	    logger "$0: FATAL: File not found: $1"
+        logger f_require_file: DEBUG C
+	    echo $0: FATAL: File not found: $1
+	    logger $0: FATAL: File not found: $1
 	    exit 1
 	    fi
-logger "f_require_file: DEBUG D"
+logger f_require_file: DEBUG D
     }
 
 function f_require_directory {
