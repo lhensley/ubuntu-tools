@@ -65,7 +65,7 @@ function f_file_not_in_use {
 
 function f_debug () {
     # $1: message to log
-    if [ "$(f_get-config system.debug-mode)" == "true" ]; then
+    if [ "$(f_get-config CONFIG_system_debug_mode)" == "true" ]; then
         logger $0: Debug: $1
         fi
     }
@@ -74,7 +74,7 @@ function f_debug_variable () {
     # $1: variable_name
     # $2: variable_value ("$variable_name")
     # Example: f_debug_variable "var" "$var"
-    if [ "$(f_get-config system.debug-mode)" == "true" ]; then
+    if [ "$(f_get-config CONFIG_system_debug_mode)" == "true" ]; then
         logger $0: Debug: $1 = $2
         fi
     }
@@ -82,10 +82,10 @@ function f_debug_variable () {
 function f_filter () {
     # $1: string being evaluated
     # $2: string of filter values separated by spaces allowing double quotes
-    #    example: f_filter "CBS This Morning Saturday" "${LANE_CONFIG[filter.transcode-excluded]}"
+    #    example: f_filter "CBS This Morning Saturday" "${LANE_CONFIG[CONFIG_filter_transcode_excluded]}"
     # Result: echoes 1 (filter) or 0 (no filter)
     # SAMPLE USAGE:
-    #   if $(f_filter "Today (1952)" "${LANE_CONFIG[filter.transcode-excluded]}") ; then
+    #   if $(f_filter "Today (1952)" "${LANE_CONFIG[CONFIG_filter_transcode_excluded]}") ; then
     #       echo "Match found"
     #   else
     #       echo "No match found"
@@ -103,18 +103,18 @@ function f_filter () {
 
 function f_clear_local_copy() {
 	f_require_config "archive.directory.$(hostname -s)"
-	f_require_directory "${LANE_CONFIG[archive.directory.$(hostname -s)]}"
-	echo rm -rf "${LANE_CONFIG[archive.directory.$(hostname -s)]}"/*
-	rm -rf "${LANE_CONFIG[archive.directory.$(hostname -s)]}"/*
+	f_require_directory "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"
+	echo rm -rf "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"/*
+	rm -rf "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"/*
 	}
 
 function f_local_copy() {
 # $1 = source directory; MUST BE A DIRECTORY and not file(s)
-    f_require_config "archive.directory.$(hostname -s)"
+    f_require_config "CONFIG_archive_directory_$(hostname -s)"
 	f_require_directory "$1"
-	mkdir -p "${LANE_CONFIG[archive.directory.$(hostname -s)]}"
-    echo rsync -q -a --delete "$1" "${LANE_CONFIG[archive.directory.$(hostname -s)]}"
-	rsync -q -a --delete "$1" "${LANE_CONFIG[archive.directory.$(hostname -s)]}"
+	mkdir -p "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"
+    echo rsync -q -a --delete "$1" "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"
+	rsync -q -a --delete "$1" "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"
 	# -q = quiet
 	# -a = same as -rlptgoD
 		# -r = recursive
@@ -129,12 +129,12 @@ function f_local_copy() {
 
 # function f_text_alert () {
 #     # $1: the string value of the text message
-#     TEXT_TARGETS=$(f_get-config text-alert-target-emails)
-#     if [ "$(f_get-config text-alert-emails)" != "" ];
+#     TEXT_TARGETS=$(f_get-config CONFIG_text_alert_target_emails)
+#     if [ "$(f_get-config CONFIG_text_alert_emails)" != "" ];
 #    }
 
 # If configured, make sure only root can run our script. Default = "false"
-if [ "$(f_get-config script.$(basename $0).require-root)" == "true" ] && [[ $EUID -ne 0 ]]; then
+if [ "$(f_get-config CONFIG_script_$(basename $0)_require_root)" == "true" ] && [[ $EUID -ne 0 ]]; then
         echo "Use sudo. $0 must be run as root." 1>&2
         exit 1
     fi
@@ -142,10 +142,10 @@ if [ "$(f_get-config script.$(basename $0).require-root)" == "true" ] && [[ $EUI
 # f_debug "script-setup started"
 
 # If configured, log the start of script processing. Default = "true"
-if [ "$(f_get-config script.$(basename $0).log-start)" != "true" ]; then logger "$0: Start"; fi
+if [ "$(f_get-config LANE_script_$(basename $0)._log_start)" != "true" ]; then logger "$0: Start"; fi
 
 # If configured, send a text message to note the start of script processing. Default = "false"
-# if [ "$(f_get-config script.$(basename $0).text-start)" == "true" ]; then f_text_alert "$0: Start"; fi
+# if [ "$(f_get-config LANE_script_$(basename $0)_text_start)" == "true" ]; then f_text_alert "$0: Start"; fi
 
 # /etc/os-release defines a lot of environment variables 
 # Sample:
@@ -231,7 +231,7 @@ HOST_NAME=$(/bin/hostname -s)
 LANE_SCRIPTS_PREFIX="lane-scripts"
 UUID=$(uuidgen)
 
-SBIN_DIR=${LANE_CONFIG[CONFIG_system_sbin_dir]}
+SBIN_DIR=${LANE_[CONFIG_system_sbin_dir]}
 SBIN_PARENT=${LANE_CONFIG["CONFIG_system_sbin_parent"]}
 
 TEMP_DATABASES="/tmp/$LANE_SCRIPTS_PREFIX_$UUID_databases.tmp"

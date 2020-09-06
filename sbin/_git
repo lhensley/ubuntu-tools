@@ -10,11 +10,11 @@ MY_GIT_TOKEN=4b662b7d4431ec1956127aa9d4fdbd8d75ec821a
 git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
 git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
 git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
-# This section re-pulls all go files from github and updates ${LANE_CONFIG[system.sbin-dir]}
+# This section re-pulls all go files from github and updates ${LANE_CONFIG[CONFIG_system_sbin_dir]}
 BRANCH="master"
 # BRANCH="dev"
 # Change to local repository directory
-cd ${LANE_CONFIG[system.git.go]}
+cd ${LANE_CONFIG[CONFIG_system_git_go]}
 # Blow away any local changes not uploaded to github
 git reset --hard
 # Select the designated branch
@@ -22,30 +22,30 @@ git checkout $BRANCH
 # Pull down a copy of the repository
 git pull
 # Set permissions for git directory
-chmod -R 400 ${LANE_CONFIG[system.git]}
+chmod -R 400 ${LANE_CONFIG[CONFIG_system_git]}
 # Copy scripts into /usr/local/sbin
-rm -rf ${LANE_CONFIG[system.sbin-dir]}
-cp -r ${LANE_CONFIG[system.git.go.sbin]} ${LANE_CONFIG[system.sbin-parent]}
+rm -rf ${LANE_CONFIG[CONFIG_system_sbin_dir]}
+cp -r ${LANE_CONFIG[CONFIG_system_git_go_sbin]} ${LANE_CONFIG[LANE_system_sbin_parent]}
 cd
 logger "$0: git branch $BRANCH pulled."
 
 # Set ownership and permissions in /usr/local/sbin
-chown -R root:root ${LANE_CONFIG[system.sbin-dir]}
-find ${LANE_CONFIG[system.sbin-dir]} -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
-find ${LANE_CONFIG[system.sbin-dir]} -type f -print -exec chmod 755 {} \; >> /dev/null 2>&1
+chown -R root:root ${LANE_CONFIG[CONFIG_system_sbin_dir]}
+find ${LANE_CONFIG[CONFIG_system_sbin_dir]} -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
+find ${LANE_CONFIG[CONFIG_system_sbin_dir]} -type f -print -exec chmod 755 {} \; >> /dev/null 2>&1
 
 # Reset permisions for /usr/local/sbin/*
 # This kind of locks things down, and the apply-configs section below opens things up.
-#chown -R root:root ${LANE_CONFIG[system.sbin-dir]}
-#chmod 755 ${LANE_CONFIG[system.sbin-dir]} ${LANE_CONFIG[system.sbin-dir]}/setup ${LANE_CONFIG[system.sbin-dir]}/include
-#chmod -R 500 ${LANE_CONFIG[system.sbin-dir]}/*
+#chown -R root:root ${LANE_CONFIG[CONFIG_system_sbin_dir]}
+#chmod 755 ${LANE_CONFIG[LANE_system_sbin_dir]} ${LANE_CONFIG[LANE_system_sbin_dir]}/setup ${LANE_CONFIG[LANE_system_sbin_dir]}/include
+#chmod -R 500 ${LANE_CONFIG[LANE_system_sbin_dir]}/*
 
 # Invoke /usr/local/sbin/_apply-configs
-#chmod 500 ${LANE_CONFIG[system.sbin-dir]}/_apply-configs
-${LANE_CONFIG[system.sbin-dir]}/_apply-configs
+#chmod 500 ${LANE_CONFIG[LANE_system_sbin_dir]}/_apply-configs
+${LANE_CONFIG[LANE_system_sbin_dir]}/_apply-configs
 
 # Include script footer file
-f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
-source ${LANE_CONFIG[script.script-footer.pathname]}
+f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script_script_footer_pathname]}"
+source ${LANE_CONFIG[LANE_script_script_footer_pathname]}
 
 exit 0
