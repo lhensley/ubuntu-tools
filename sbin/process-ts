@@ -4,9 +4,9 @@
 # No final / on either path. For system root, use ""
 
 # Include script setup file
-logger $0 DEBUG negative B.7
+logger $0 DEBUG negative E.1
 source $(dirname $0)/script-setup
-logger $0 DEBUG negative B.8
+logger $0 DEBUG negative E.2
 
 IN_FILE="$1"
 WORK_ROOT_PATH="$2"
