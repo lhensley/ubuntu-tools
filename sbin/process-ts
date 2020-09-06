@@ -74,7 +74,7 @@ logger $0 DEBUG C.2
 logger $0 DEBUG C.3
 else
 logger $0 DEBUG C.4
-logger f_file_not_in_use after C.4 "$IN_FILE"
+logger $0 DEBUG C.4.5 $IN_FILE
     f_file_not_in_use "$IN_FILE"
 logger $0 DEBUG C.5
 
