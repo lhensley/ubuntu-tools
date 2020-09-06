@@ -50,6 +50,9 @@ f_debug_variable "1" "$1"
 
 # sleep 30
 
+# DEBUG
+echo "$0 started." | mail lanecell
+
 if $(f_filter "$IN_FILE" "${LANE_CONFIG[filter.transcode-excluded]}") ; then
     logger "$0: Skipped $IN_FILE"
 else
