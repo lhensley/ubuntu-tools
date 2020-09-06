@@ -10,6 +10,8 @@ IN_FILE=$1
 WORK_ROOT_PATH=$2
 STORE_ROOT_PATH=$3
 
+sleep 60
+
 f_require_config "filter.transcode-excluded"
 f_require_file "${LANE_CONFIG[script.move-one-file.pathname]}"
 
