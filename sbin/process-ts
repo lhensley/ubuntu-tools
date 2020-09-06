@@ -83,6 +83,8 @@ else
             logger $0: transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))
         fi # End of check for transcoding failure
 
+logger $0 DEBUG A
+
     "${LANE_CONFIG[script.move-one-file.pathname]}" "$OUT_FILE" "$WORK_ROOT_PATH" "$STORE_ROOT_PATH"
     exit_status=$?
     if [ $exit_status -ne 0 ]; then # If the move failed ...
@@ -103,6 +105,8 @@ else
         chown -R plex:plex "$WORK_ROOT_PATH"
         chown -R plex:plex "$STORE_ROOT_PATH"
 fi
+
+logger $0 DEBUG B
 
 # Include script footer file
 f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
