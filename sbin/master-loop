@@ -2,13 +2,20 @@
 # master-loop
 
 # Include script setup file
+logger $0: A $CONFIG.script.shrink-plex-ts-files.pathname
 source $(dirname $0)/script-setup
+logger $0: B $CONFIG.script.shrink-plex-ts-files.pathname
 
 f_debug_variable "script.shrink-plex-ts-files.pathname" "$CONFIG.script.shrink-plex-ts-files.pathname"
+logger $0: C $CONFIG.script.shrink-plex-ts-files.pathname
 "$CONFIG.script.shrink-plex-ts-files.pathname"
+logger $0: D $CONFIG.script.shrink-plex-ts-files.pathname
 
 # Include script footer file
+logger $0: E $CONFIG.script.shrink-plex-ts-files.pathname
 f_debug_variable "script.script-footer.pathname" "$CONFIG.script.script-footer.pathname"
+logger $0: F $CONFIG.script.shrink-plex-ts-files.pathname
 source "$CONFIG.script.script-footer.pathname"
+logger $0: G $CONFIG.script.shrink-plex-ts-files.pathname
 
 exit 0
