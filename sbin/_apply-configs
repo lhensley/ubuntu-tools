@@ -22,11 +22,12 @@ chmod 755 ${LANE_CONFIG[script.intervalinseconds.pathname]}
 chmod 755 ${LANE_CONFIG[script.lhlib.pathname]}
 chmod 755 ${LANE_CONFIG[script.process-incoming-scans.pathname]}
 chmod 755 ${LANE_CONFIG[script.rip.pathname]}
+chmod 755 ${LANE_CONFIG[script.script-footer.pathname]} 
+chmod 755 ${LANE_CONFIG[script.script-setup.pathname]} 
 chmod 755 ${LANE_CONFIG[script.timeformat.pathname]}
 chmod 755 ${LANE_CONFIG[script.transcode-ripped-dvds.pathname]}
 # These based on desire. CAUTION: Don't expose anything that has a password or code in it.
 chmod 740 ${LANE_CONFIG[script.upd.pathname]} 
-chmod 740 ${LANE_CONFIG[script.script-setup.pathname]} 
 chmod 740 ${LANE_CONFIG[script._apply-configs.pathname]}
 
 # Git

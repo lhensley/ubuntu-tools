@@ -32,8 +32,8 @@ function f_require_value {
     }
 
 function f_require_file {
-logger "f_require_file: $1"
-logger "f_require_file: DEBUG A"
+logger "f_require_file: V1 $1"
+logger "f_require_file: V2 DEBUG A"
 #    f_require_value "file name" "$1"
     logger "f_require_file: DEBUG B"
     if [ ! -f "$1" ]; then
