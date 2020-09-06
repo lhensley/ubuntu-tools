@@ -21,7 +21,6 @@ else
 	fi
 fi
 
-
 OLDIFS=$IFS
 IFS=$'[ \t]*=[ \t]*'
 # IFS="="

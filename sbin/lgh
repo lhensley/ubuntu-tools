@@ -4,10 +4,14 @@
 # Include script setup file
 source $(dirname $0)/script-setup
 
-f_clear_local_copy
-f_local_copy "/home/lhensley/source"
 
-chown -R lhensley /home/lhensley/*
+for KEY in "${!LANE_CONFIG[@]}"; do
+  # Print the KEY value
+  echo "Key: $KEY"
+  # Print the VALUE attached to that KEY
+  echo "Value: ${LANE_CONFIG[$KEY]}"
+done
+
 
 # Include script footer file
 f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
