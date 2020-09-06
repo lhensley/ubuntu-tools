@@ -207,6 +207,7 @@ if [ -z "$LANE_CONFIG_FILE" ]; then # (if $LANE_CONFIG_FILE is not defined)
         f_require_config "system.sbin-parent"
         f_require_config "system.user-me"
         for KEY in "${!LANE_CONFIG[@]}"; do
+          set CONFIG.$KEY="${LANE_CONFIG[$KEY]}"
           export CONFIG.$KEY="${LANE_CONFIG[$KEY]}"
         done
     else
