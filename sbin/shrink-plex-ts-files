@@ -4,11 +4,17 @@
 # Include script setup file
 source $(dirname $0)/script-setup
 
+logger $0: DEBUG A
 f_require_file "${LANE_CONFIG[script.process-ts.pathname]}"
+logger $0: DEBUG B
 f_require_directory "${LANE_CONFIG[pathname.root-dvr-work]}"
+logger $0: DEBUG C
 f_require_directory "${LANE_CONFIG[pathname.root-dvr-store]}"
+logger $0: DEBUG D
 
 find "${LANE_CONFIG[pathname.root-dvr-work]}" -type f -name "*.ts" -print -exec "${LANE_CONFIG[script.process-ts.pathname]}" {} "${LANE_CONFIG[pathname.root-dvr-work]}" "${LANE_CONFIG[pathname.root-dvr-store]}" \; >> /dev/null 2>&1
+
+logger $0: DEBUG E
 
 # Include script footer file
 f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
