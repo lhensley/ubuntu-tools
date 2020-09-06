@@ -67,8 +67,11 @@ if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
     echo "Outfile $OUT_FILE" | mail -r move-one-file lanecell
     exit $exit_status
   else
-    logger "$0: moved $IN_FILE to $NEW_DIRECTORY"
+    logger "$0: moved $(basename $IN_FILE)"
   fi
 
-logger "$0: Exited without error."
+# Include script footer file
+f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
+source ${LANE_CONFIG[script.script-footer.pathname]}
+
 exit 0

@@ -62,6 +62,7 @@ else
 
     # Do the transcoding
     TIMESTART=$(currenttimeinseconds)
+    logger "$0: DEBUG IN_FILE $IN_FILE"
     logger "$0: Transcoding $(basename $IN_FILE)"
     "${LANE_CONFIG[handbrake.program]}" --preset-import-file "${LANE_CONFIG[handbrake.presets]}" \
         -i "$IN_FILE" -o "$OUT_FILE" >> /dev/null 2>&1
@@ -72,6 +73,8 @@ else
             exit $exit_status
         else
             rm "$IN_FILE" >> /dev/null 2>&1 # Delete input file
+            logger "$0: DEBUG: currenttimeinseconds $(currenttimeinseconds)"
+            logger "$0: DEBUG: TIMESTART $TIMESTART"
             logger "$0: transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))"
         fi # End of check for transcoding failure
 

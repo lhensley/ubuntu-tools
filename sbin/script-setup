@@ -86,8 +86,9 @@ function f_clear_local_copy() {
 	}
 
 function f_local_copy() {
-# $1 = source directory? file(s)?
-	f_require_config "archive.directory.$(hostname -s)"
+# $1 = source directory; MUST BE A DIRECTORY and not file(s)
+    f_require_config "archive.directory.$(hostname -s)"
+	f_require_directory "$1"
 	mkdir -p "${LANE_CONFIG[archive.directory.$(hostname -s)]}"
     echo rsync -q -a --delete "$1" "${LANE_CONFIG[archive.directory.$(hostname -s)]}"
 	rsync -q -a --delete "$1" "${LANE_CONFIG[archive.directory.$(hostname -s)]}"
@@ -181,7 +182,7 @@ if [ -z "$LANE_CONFIG_FILE" ]; then # (if $LANE_CONFIG_FILE is not defined)
         f_require_config "system.sbin-dir"
         f_require_config "system.sbin-parent"
         f_require_config "system.user-me"
-        logger "$0: SUCCESS reading config file $LANE_CONFIG_FILE"
+        logger "$0: Using config file $LANE_CONFIG_FILE"
     else
         logger "$0: FAILED to read config file: None defined"
     fi
