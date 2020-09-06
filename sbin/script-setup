@@ -194,18 +194,18 @@ if [ -z "$LANE_CONFIG_FILE" ]; then # (if $LANE_CONFIG_FILE is not defined)
 	        fi
         done < "$LANE_CONFIG_FILE"
         IFS=$OLDIFS
-        f_require_config "system.git"
-        f_require_config "system.git.go"
-        f_require_config "system.git.go.configs"
-        f_require_config "system.git.go.sbin"
-        f_require_config "system.git.go.setup"
-        f_require_config "system.git.token"
-        f_require_config "system.home-me"
-        f_require_config "system.lane-cell"
-        f_require_config "system.lane-email"
-        f_require_config "system.sbin-dir"
-        f_require_config "system.sbin-parent"
-        f_require_config "system.user-me"
+        f_require_config "CONFIG_system_git"
+        f_require_config "CONFIG_system_git_go"
+        f_require_config "CONFIG_system_git_go_configs"
+        f_require_config "CONFIG_system_git_go_sbin"
+        f_require_config "CONFIG_system_git_go_setup"
+        f_require_config "CONFIG_system_git_token"
+        f_require_config "CONFIG_system_home_me"
+        f_require_config "CONFIG_system_lane_cell"
+        f_require_config "CONFIG_system_lane_email"
+        f_require_config "CONFIG_system_sbin_dir"
+        f_require_config "CONFIG_system_sbin_parent"
+        f_require_config "CONFIG_system_user_me"
         for KEY in "${!LANE_CONFIG[@]}"; do
           set CONFIG.$KEY=${LANE_CONFIG[$KEY]}
         done
@@ -215,13 +215,13 @@ if [ -z "$LANE_CONFIG_FILE" ]; then # (if $LANE_CONFIG_FILE is not defined)
 fi
 
 # Information about Lane
-LANE_CELL=${LANE_CONFIG["system.lane-cell"]}
-LANE_EMAIL=${LANE_CONFIG["system.lane-email"]}
-HOME_DIR=${LANE_CONFIG["system.home-me"]}
-HOME_ME=${LANE_CONFIG["system.home-me"]}
-HOME_RELATIVE=${LANE_CONFIG["system.home-me"]}
-USER_ME=${LANE_CONFIG["system.user-me"]}
-USER_NAME=${LANE_CONFIG["system.user-me"]}
+LANE_CELL=${LANE_CONFIG["CONFIG_system_lane_cell"]}
+LANE_EMAIL=${LANE_CONFIG["CONFIG_system_lane_email"]}
+HOME_DIR=${LANE_CONFIG["CONFIG_system_home_me"]}
+HOME_ME=${LANE_CONFIG["CONFIG_system_home_me"]}
+HOME_RELATIVE=${LANE_CONFIG["CONFIG_system_home_me"]}
+USER_ME=${LANE_CONFIG["CONFIG_system_user_me"]}
+USER_NAME=${LANE_CONFIG["CONFIG_system_user_me"]}
 
 # General local and program variables
 PROGRAM_DIRECTORY=$(dirname $0)
@@ -231,13 +231,13 @@ HOST_NAME=$(/bin/hostname -s)
 LANE_SCRIPTS_PREFIX="lane-scripts"
 UUID=$(uuidgen)
 
-SBIN_DIR=${LANE_CONFIG[system.sbin-dir]}
-SBIN_PARENT=${LANE_CONFIG["system.sbin-parent"]}
+SBIN_DIR=${LANE_CONFIG[CONFIG_system_sbin_dir]}
+SBIN_PARENT=${LANE_CONFIG["CONFIG_system_sbin_parent"]}
 
-TEMP_DATABASES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-databases.tmp"
+TEMP_DATABASES="/tmp/$LANE_SCRIPTS_PREFIX_$UUID_databases.tmp"
 TEMP_PASSWORD_INCLUDE="/tmp/passwords"
-TEMP_INCLUDES="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-includes.tmp"
-TEMP_LOG="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-log.tmp"
+TEMP_INCLUDES="/tmp/$LANE_SCRIPTS_PREFIX_$UUID_includes.tmp"
+TEMP_LOG="/tmp/$LANE_SCRIPTS_PREFIX_$UUID_log.tmp"
 SCRIPTS_DIRECTORY=$SBIN_DIR
 # As of 2020-06-05, $SCRIPTS_INCLUDES still us used by backup
 SCRIPTS_INCLUDES=$SCRIPTS_DIRECTORY/include
@@ -277,17 +277,17 @@ esac
 DIRECTORY_FROM=/
 SOCKETS_TEMP_FILE="/tmp/$LANE_SCRIPTS_PREFIX-$UUID-socket-files.tmp"
 ARCHIVE_TAR_FILE="$HOST_NAME-$START_DATESTAMP.gz"
-ARCHIVE_TAR_FULL="${LANE_CONFIG[archive.directory.$(hostname -s)]}/$ARCHIVE_TAR_FILE"
+ARCHIVE_TAR_FULL="${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}/$ARCHIVE_TAR_FILE"
 ARCHIVE_TAR_WEEKDAY_FILE="$HOST_NAME-weekday-$START_WEEKDAYSTAMP.gz"
-ARCHIVE_TAR_FULL_WEEKDAY="${LANE_CONFIG[archive.directory.$(hostname -s)]}/$ARCHIVE_TAR_WEEKDAY_FILE"
+ARCHIVE_TAR_FULL_WEEKDAY="${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}/$ARCHIVE_TAR_WEEKDAY_FILE"
 ARCHIVE_TAR_DAY_FILE="$HOST_NAME-day-$START_DAYSTAMP.gz"
-ARCHIVE_TAR_FULL_DAY="${LANE_CONFIG[archive.directory.$(hostname -s)]}/$ARCHIVE_TAR_DAY_FILE"
+ARCHIVE_TAR_FULL_DAY="${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}/$ARCHIVE_TAR_DAY_FILE"
 ARCHIVE_TAR_MONTH_FILE="$HOST_NAME-month-$START_MONTHSTAMP.gz"
-ARCHIVE_TAR_FULL_MONTH="${LANE_CONFIG[archive.directory.$(hostname -s)]}/$ARCHIVE_TAR_MONTH_FILE"
+ARCHIVE_TAR_FULL_MONTH="${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}/$ARCHIVE_TAR_MONTH_FILE"
 ARCHIVE_MYSQL_FILE="$HOST_NAME-$START_DATESTAMP.sql"
-ARCHIVE_MYSQL_FULL="${LANE_CONFIG[archive.directory.$(hostname -s)]}/$ARCHIVE_MYSQL_FILE"
-ARCHIVE_MYSQL_LITURGY="${LANE_CONFIG[archive.directory.$(hostname -s)]}/$HOST_NAME-liturgy.sql"
-ARCHIVE_MYSQL_DB="${LANE_CONFIG[archive.directory.$(hostname -s)]}/$HOST_NAME-$START_DATESTAMP-"
+ARCHIVE_MYSQL_FULL="${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}/$ARCHIVE_MYSQL_FILE"
+ARCHIVE_MYSQL_LITURGY="${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}/$HOST_NAME-liturgy.sql"
+ARCHIVE_MYSQL_DB="${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}/$HOST_NAME-$START_DATESTAMP-"
 TAR="/bin/tar"
 EXEC_BACKUP="$TAR --create --gzip --auto-compress --preserve-permissions"
 EXEC_BACKUP="$EXEC_BACKUP --file=$ARCHIVE_TAR_FULL_WEEKDAY"
@@ -300,9 +300,9 @@ EXEC_BACKUP="$EXEC_BACKUP /etc /home /root /usr/local/sbin /var/www"
 # EXEC_BACKUP="$EXEC_BACKUP /var/local/archives/*.sql"
 # NOTE: -t flag removed from next line 3/28/19. Generates error.
 RSYNC_NO_DELETE="rsync -aopqrzE -e 'ssh -p $OFFSITE_PORT'"
-RSYNC_SU="$RSYNC_NO_DELETE ${LANE_CONFIG[archive.directory.$(hostname -s)]}"
+RSYNC_SU="$RSYNC_NO_DELETE ${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"
 RSYNC_SU="$RSYNC_SU $OFFSITE_SERVER:$OFFSITE_PATH"
-BACKUPLOG="${LANE_CONFIG[archive.directory.$(hostname -s)]}"/$HOST_NAME-backup.log
+BACKUPLOG="${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"/$HOST_NAME-backup.log
 
 # Apache2
 WEB_ROOTS="/var/www"
@@ -320,11 +320,11 @@ TEMP_CRON="/tmp/cron-$UUID.tmp"
 DDCLIENT_INTERVAL=7200
 
 # Git
-GIT=${LANE_CONFIG["system.git"]}
-GO=GIT=${LANE_CONFIG["system.git.go"]}
-GO_CONFIGS=${LANE_CONFIG["system.git.go.configs"]}
-GO_SBIN=${LANE_CONFIG["system.git.go.sbin"]}
-GO_SETUP=${LANE_CONFIG["system.git.go.setup"]}
+GIT=${LANE_CONFIG["CONFIG_system_git"]}
+GO=GIT=${LANE_CONFIG["CONFIG_system_git_go"]}
+GO_CONFIGS=${LANE_CONFIG["CONFIG_system_git_go_configs"]}
+GO_SBIN=${LANE_CONFIG["CONFIG_system_git_go_sbin"]}
+GO_SETUP=${LANE_CONFIG["CONFIG_system_git_go_setup"]}
 
 # MySQL
 MYSQL_ADMIN_NAME="admin"
