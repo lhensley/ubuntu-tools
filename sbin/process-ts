@@ -60,10 +60,13 @@ if $(f_filter "$IN_FILE" "${LANE_CONFIG[filter.transcode-excluded]}") ; then
 else
     f_file_not_in_use "$IN_FILE"
 
+logger $0 DEBUG negative C
+
 #   logger "$0: started running /usr/local/sbin/transcode."
     ${LANE_CONFIG[script.transcode-ripped-dvds.pathname]} >> /dev/null 2>&1 # Pick up ripped DVDs first, if any
 #   logger "$0: finished running /usr/local/sbin/transcode."
 
+logger $0 DEBUG negative B
     # Do the transcoding
     TIMESTART=$(currenttimeinseconds)
     IN_FILE_BASE=$(basename $IN_FILE)
@@ -72,6 +75,7 @@ else
     "${LANE_CONFIG[handbrake.program]}" --preset-import-file "${LANE_CONFIG[handbrake.presets]}" \
         -i "$IN_FILE" -o "$OUT_FILE" >> /dev/null 2>&1
     exit_status=$?
+logger $0 DEBUG negative A
     if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
             logger "${LANE_CONFIG[handbrake.program]}: FAILED with $exit_status for $IN_FILE"
             echo "$(date) ${LANE_CONFIG[handbrake.program]}: FAILED with $exit_status for $RELATIVE_FILE" | mail -r "process-ts" lanecell
