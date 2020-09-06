@@ -5,11 +5,11 @@
 source $(dirname $0)/script-setup
 
 echo
-echo $CONFIG.system.lane-cell
+echo $CONFIG_system_lane_cell
 
 # Include script footer file
-f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
-source ${LANE_CONFIG[script.script-footer.pathname]}
+f_debug_variable "script_script_footer_pathname" "${LANE_CONFIG[script_script_footer_pathname]}"
+source ${LANE_CONFIG[script_script_footer_pathname]}
 
 # Notes:
 # Amend config lookup so it checks the variable and not the file
