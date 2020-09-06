@@ -2,11 +2,15 @@
 # shrink-plex-ts-files
 
 # Include script setup file
+logger $0: DEBUG 0.1
 source $(dirname $0)/script-setup
+logger $0: DEBUG 0.2
 
 logger $0: DEBUG A
 f_require_file "$CONFIG.script.process-ts.pathname"
 logger $0: DEBUG B
+f_require_file "$CONFIG.script.script-footer.pathname"
+logger $0: DEBUG B.2
 f_require_directory "$CONFIG.pathname.root-dvr-work"
 logger $0: DEBUG C
 f_require_directory "$CONFIG.pathname.root-dvr-store"
