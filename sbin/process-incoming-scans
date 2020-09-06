@@ -4,25 +4,29 @@
 
 # Include script setup file
 # LEAVE THIS OUT until it can handle being run by a non-root user
-# source $(dirname $0)/script-setup
+source $(dirname $0)/script-setup
 
-while inotifywait -r -e modify,create ~/Scans > ~/.scan_message 2>&1
+SCAN_MESSAGE="/tmp/scan_message_$(uuid)"
+
+f_require_config "incoming.scans.directory"
+f_require_directory "${LANE_CONFIGS[incoming.scans.directory]}"
+while inotifywait -r -e modify,create "${LANE_CONFIGS[incoming.scans.directory]}" > $SCAN_MESSAGE 2>&1
 	do
 		sleep 1
-		mkdir -p ~/Scans/compressed >> /dev/null 2>&1
-		mkdir -p ~/Scans/uncompressed >> /dev/null 2>&1
-		for f in ~/Scans/*
+		mkdir -p "${LANE_CONFIGS[incoming.scans.directory]}"/compressed >> /dev/null 2>&1
+		mkdir -p "${LANE_CONFIGS[incoming.scans.directory]}"/uncompressed >> /dev/null 2>&1
+		for f in "${LANE_CONFIGS[incoming.scans.directory]}"/*
 		do
-			gs -sDEVICE=pdfwrite -dPDFSETTINGS=/default -dNOPAUSE -dQUIET -dBATCH -sOutputFile=~/Scans/compressed/$(basename $f) $f >> ~/.scan_message > ~/.scan_message 2>&1
-			mv $f ~/Scans/uncompressed/$(basename $f)
+			gs -sDEVICE=pdfwrite -dPDFSETTINGS=/default -dNOPAUSE -dQUIET -dBATCH -sOutputFile="${LANE_CONFIGS[incoming.scans.directory]}"/compressed/$(basename $f) $f >> $SCAN_MESSAGE 2>&1
+			mv $f "${LANE_CONFIGS[incoming.scans.directory]}"/uncompressed/$(basename $f)
 		done
-		rclone move ~/Scans lane_onedrive:Brother >> ~/.scan_message 2>&1
-		cat ~/.scan_message | mail lane
-		rm -f ~/.scan_message
+		rclone move "${LANE_CONFIGS[incoming.scans.directory]}" lane_onedrive:Brother >> $SCAN_MESSAGE 2>&1
+		cat $SCAN_MESSAGE | mail lane
+		rm -f $SCAN_MESSAGE
 	done
 
 # Include script footer file
 # LEAVE THIS OUT until it can handle being run by a non-root user
-# f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
-# LEAVE THIS OUT until it can handle being run by a non-root user
+f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
+LEAVE THIS OUT until it can handle being run by a non-root user
 # source ${LANE_CONFIG[script.script-footer.pathname]}
