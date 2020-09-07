@@ -134,6 +134,16 @@ if $install_makemkv ; then
   apt-get update
   DEBIAN_FRONTEND=noninteractive apt-get install -yq makemkv-bin makemkv-oss ccextractor
   usermod -a -G cdrom $USER_ME
+  # MakeMKV config file
+    if [ -f $GO_CONFIGS/makemkv/settings.conf ]; then
+	    mkdir -p $HOME_DIR/.MakeMKV
+	    mkdir -p /root/.MakeMKV
+	    cp $GO_CONFIGS/makemkv/settings.conf $HOME_DIR/.MakeMKV/
+	    chmod 600 $HOME_DIR/.MakeMKV/settings.conf
+	    chown -R $USER_ME:$USER_ME $HOME_DIR/.MakeMKV
+	    cp $HOME_DIR/.MakeMKV/settings.conf /root/.MakeMKV/
+	    chown -R root:root /root/.MakeMKV
+	    fi
   echo "MakeMKV installed."
   fi
 

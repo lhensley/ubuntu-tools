@@ -1,0 +1,137 @@
+#!/bin/bash
+# _functions
+# Bash functions for Lane applications
+
+
+function f_get-config () {
+    # $1: the config-name to be searched
+    LANE_CONFIG_FILE_1="~/.lane/lane.conf"
+    LANE_CONFIG_FILE_2="/etc/lane.conf"
+    /usr/local/sbin/get-config "$1" "$LANE_CONFIG_FILE_1" "$LANE_CONFIG_FILE_2"
+    }
+
+function f_require_config {
+    if [ -z "${LANE_CONFIG[$1]}" ]; then
+	    echo "$0: FATAL: Configuration not found: $1"
+	    logger "$0: FATAL: Configuration not found: $1"
+	    exit 1
+	    fi
+    }
+
+function f_require_value {
+# $1 = Name of value, e.g., "input file"
+# $2 = Content of value, e.g., $INPUT_FILE
+    if [ -z "$1" ]; then
+	    echo "$0: FATAL: Value name for f_require_value undefined."
+	    logger "$0: FATAL: Value name for f_require_value undefined."
+	    exit 1
+	    fi
+    if [ -z "$2" ]; then
+	    echo "$0: FATAL: Value of \"$1\" undefined."
+	    logger "$0: FATAL: Value of \"$1\" undefined."
+	    exit 1
+	    fi
+    }
+
+function f_require_file {
+logger f_require_file: V1 $1
+logger f_require_file: V2 DEBUG A
+#    f_require_value "file name" "$1"
+    logger f_require_file: DEBUG B
+    if [ ! -f "$1" ]; then
+        logger f_require_file: DEBUG C
+	    echo $0: FATAL: File not found: $1
+	    logger $0: FATAL: File not found: $1
+	    exit 1
+	    fi
+logger f_require_file: DEBUG D
+    }
+
+function f_require_directory {
+    f_require_value "directory name" "$1"
+    if [ ! -d "$1" ]; then
+	    echo "$0: FATAL: Directory not found: $1"
+	    logger "$0: FATAL: Directory not found: $1"
+	    exit 1
+	    fi
+    }
+
+function f_file_not_in_use {
+    f_require_file "$1"
+    if [ -n "$(lsof "$1" 2>/dev/null)" ]; then
+	    echo "$0: FATAL: File in use: $1"
+	    logger "$0: FATAL: File in use: $1"
+        exit 1
+        fi
+    }
+
+function f_debug () {
+    # $1: message to log
+    if [ "$(f_get-config CONFIG_system_debug_mode)" == "true" ]; then
+        logger $0: Debug: $1
+        fi
+    }
+
+function f_debug_variable () {
+    # $1: variable_name
+    # $2: variable_value ("$variable_name")
+    # Example: f_debug_variable "var" "$var"
+    if [ "$(f_get-config CONFIG_system_debug_mode)" == "true" ]; then
+        logger $0: Debug: $1 = $2
+        fi
+    }
+
+function f_filter () {
+    # $1: string being evaluated
+    # $2: string of filter values separated by spaces allowing double quotes
+    #    example: f_filter "CBS This Morning Saturday" "${LANE_CONFIG[CONFIG_filter_transcode_excluded]}"
+    # Result: echoes 1 (filter) or 0 (no filter)
+    # SAMPLE USAGE:
+    #   if $(f_filter "Today (1952)" "${LANE_CONFIG[CONFIG_filter_transcode_excluded]}") ; then
+    #       echo "Match found"
+    #   else
+    #       echo "No match found"
+    #   fi
+
+    STRING_BEING_EVALUATED=$1
+    FILTER=$2
+    MATCH=false
+
+    # Ref: https://superuser.com/questions/1066455/how-to-split-a-string-with-quotes-like-command-arguments-in-bash
+    eval "array=($FILTER)"
+    for thisfilter in "${array[@]}"; do if [[ $STRING_BEING_EVALUATED == *"$thisfilter"* ]]; then MATCH=true ; fi; done
+    echo $MATCH
+	}
+
+function f_clear_local_copy() {
+	f_require_config "archive.directory.$(hostname -s)"
+	f_require_directory "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"
+	echo rm -rf "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"/*
+	rm -rf "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"/*
+	}
+
+function f_local_copy() {
+# $1 = source directory; MUST BE A DIRECTORY and not file(s)
+    f_require_config "CONFIG_archive_directory_$(hostname -s)"
+	f_require_directory "$1"
+	mkdir -p "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"
+    echo rsync -q -a --delete "$1" "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"
+	rsync -q -a --delete "$1" "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"
+	# -q = quiet
+	# -a = same as -rlptgoD
+		# -r = recursive
+		# -l = copy symlinks as symlinks
+		# -p = preserve permisions
+		# -t = preserve modification times
+		# -g = preserve group
+		# -o = preserve ownership	
+		# -D = preserve device files and special files
+	# --delete = delete extraneous files from dest dirs
+	}
+
+# function f_text_alert () {
+#     # $1: the string value of the text message
+#     TEXT_TARGETS=$(f_get-config CONFIG_text_alert_target_emails)
+#     if [ "$(f_get-config CONFIG_text_alert_emails)" != "" ];
+#    }
+

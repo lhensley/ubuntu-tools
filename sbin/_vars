@@ -1,0 +1,296 @@
+#!/bin/bash
+# _vars
+# Variable definitions for Lane applications
+
+
+# Debug Mode
+# Leave near the top so it can be toggled on and off easily.
+	# Default=false
+		DEBUG_MODE=false
+	# Alert levels: 0=none 1=light 2=normal 3=heavy 5=everything
+		#CONFIG_system_log_level
+		LOG_LEVEL=2
+		TEXT_LEVEL=2
+
+# Built-in (at command line, use env to show more)
+	# HOME (Home directory)
+	# HOSTNAME (this host, not FQDN)
+	# SHELL
+	# USER (Current user)
+
+# Global
+	HOME_ROOT=/home
+	SBIN_DIR=/usr/local/sbin
+	SBIN_PARENT=$(dirname $SBIN_DIR)
+
+# /etc/os-release defines a lot of environment variables 
+# Sample:
+#    NAME="Ubuntu"
+#    VERSION="18.04.4 LTS (Bionic Beaver)"
+#    ID=ubuntu
+#    ID_LIKE=debian
+#    PRETTY_NAME="Ubuntu 18.04.4 LTS"
+#    VERSION_ID="18.04"
+#    HOME_URL="https://www.ubuntu.com/"
+#    SUPPORT_URL="https://help.ubuntu.com/"
+#    BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+#    PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+#    VERSION_CODENAME=bionic
+#    UBUNTU_CODENAME=bionic
+source /etc/os-release
+
+# Start timestamps
+	START_DATESTAMP=$(/bin/date '+%Y-%m-%d')               # Used in backup variables below
+	START_DAYSTAMP=$(/bin/date '+%d')
+	START_MONTHSTAMP=$(/bin/date '+%Y-%m')
+	START_TIMESTAMP=$(/bin/date)
+	START_WEEKDAYSTAMP=$(/bin/date '+%a')                  # Used in backup variables below
+
+# About This Script (or at least the one sourcing it)
+	PROGRAM_DIRECTORY=$(dirname $0)
+	UUID=$(uuidgen)
+
+# Current user info
+	CURRENT_USER=$USER
+	CURRENT_HOME_DIR=$HOME
+
+# Admin user info
+# Dependent on section Global
+	ADMIN_USER=lhensley
+	ADMIN_HOME_DIR=$HOME_ROOT/$ADMIN_USER
+	ADMIN_CELL_EMAIL=7608514641@vtext.com
+	ADMIN_EMAIL=lane.hensley@alumni.duke.edu
+
+# Root user info
+	ROOT_USER=root
+	ROOT_HOME_DIR=/root
+
+# Temp file definitions
+# DEPENDENT ON ABOUT THIS SCRIPT ABOVE
+	TEMP_CRON="/tmp/cron-$UUID.tmp"
+	TEMP_SOCKETS_BACKUP="/tmp/sockets-$UUID.tmp"         # Formerly $SOCKETS_TEMP_FILE
+	TEMP_DATABASES="/tmp/databases-$UUID.tmp"
+	TEMP_PASSWORD_INCLUDE="/tmp/passwords"
+	TEMP_INCLUDES="/tmp/includes-$UUID.tmp"
+	TEMP_LOG="/tmp/log-$UUID.tmp"
+
+# Logging:  system.log-level: 0=none 1=light 2=normal 3=heavy 5=everything
+	#CONFIG_system_log_level
+	LOG_LEVEL=2
+	TEXT_LEVEL=2
+
+# Text Alerts
+# DEPENDENT on user definitions above
+# Set as many as desired. Must be email addresses that forward to SMS
+# Example: TEXT_ALERT[becky]=7608515830@vtext.com
+	declare -A TEXT_ALERT
+	TEXT_ALERT[admin]=$ADMIN_CELL_EMAIL
+
+# Email Alerts
+# DEPENDENT on user definitions above
+# Set as many as desired.
+# Example: EMAIL_ALERT[becky]=rkh@georgetown.edu
+	declare -A TEXT_ALERT
+	EMAIL_ALERT[admin]=$ADMIN_EMAIL
+
+# Apache2
+	WEB_ROOTS="/var/www"
+	THIS_WEB_ROOT="$WEB_ROOTS/html"
+
+# Archive Directories, Files, and Paths
+# DEPENDENT on definition of $HOSTNAME, but thats built-in
+	declare -A ARCHIVE_FILE_SYSTEM
+		ARCHIVE_FILE_SYSTEM[default]="/"
+		ARCHIVE_FILE_SYSTEM[nuc01]="/mnt/cloteal"
+		ARCHIVE_FILE_SYSTEM[oz]="/var/lib/plexmediaserver/Library/work"
+	declare -A ARCHIVE_DIRECTORY
+		ARCHIVE_DIRECTORY[default]="/var/lib/archives/$HOSTNAME"
+		ARCHIVE_DIRECTORY[nuc01]=${ARCHIVE_FILE_SYSTEM[nuc01]}/archives/nuc01
+		ARCHIVE_DIRECTORY[oz]=${ARCHIVE_FILE_SYSTEM[nuc01]}/archives/oz
+	THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[default]}"
+		if [ $HOSTNAME=="nuc01" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[nuc01]}"; fi
+		if [ $HOSTNAME=="oz" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[oz]}"; fi
+	THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[default]}"
+		if [ $HOSTNAME=="nuc01" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[nuc01]}"; fi
+		if [ $HOSTNAME=="oz" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[oz]}"; fi
+	ARCHIVE_TAR_FILE="$HOSTNAME-$START_DATESTAMP.gz"
+		ARCHIVE_TAR_FULL="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_FILE"
+	ARCHIVE_TAR_WEEKDAY_FILE="$HOSTNAME-weekday-$START_WEEKDAYSTAMP.gz"
+		ARCHIVE_TAR_FULL_WEEKDAY="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
+	ARCHIVE_TAR_DAY_FILE="$HOSTNAME-day-$START_DAYSTAMP.gz"
+		ARCHIVE_TAR_FULL_DAY="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_DAY_FILE"
+	ARCHIVE_TAR_MONTH_FILE="$HOSTNAME-month-$START_MONTHSTAMP.gz"
+		ARCHIVE_TAR_FULL_MONTH="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_MONTH_FILE"
+
+# ddclient
+	DDCLIENT_INTERVAL=7200
+
+# File System Backups
+# DEPENDENT on Archive Directories AND Start Timestamps above
+	BACKUP_ROOT="/"										 # Formerly "DIRECTORY_FROM"
+
+# Git
+	GIT_ROOT=/var/local/git                              # Formerly system.git
+	GIT_GO=$GIT_ROOT/go                                  # Formerly system.git.go
+	GIT_GO_CONFIGS=$GIT_GO/configs                       # Formerly system.git.go.configs
+	GIT_GO_SBIN=$GIT_GO/sbin                             # Formerly #system.git.go.sbin
+	GIT_GO_SETUP=$GIT_GO/setup                           # Formerly system.git.go.setup
+	GIT_TOKEN=4b662b7d4431ec1956127aa9d4fdbd8d75ec821a   # Formerly system.git.token
+
+# HandBrake
+# DEPENDENT ON $ADMIN_HOME DEFINITION ABOVE
+	HANDBRAKE_CLI="/usr/bin/HandBrakeCLI"
+	HANDBRAKE_PRESETS="$ADMIN_HOME/.HandBrake/Lane 1080p (BluRay).json"
+
+# Incoming Scans
+INCOMING_SCANS="$ADMIN_HOME/Scans"
+
+# MakeMKV
+MAKEMKV_OUTPUT_DIRECTORY="/home/lhensley/Videos/MakeMKV-Completed"
+
+# MySQL Backups
+# DEPENDENT on Archive Directories AND Start Timestamps above
+	ARCHIVE_MYSQL_FILE="$HOSTNAME-$START_DATESTAMP.sql"
+	ARCHIVE_MYSQL_FULL="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_MYSQL_FILE"
+	ARCHIVE_MYSQL_LITURGY="$THIS_ARCHIVE_DIRECTORY/$HOST_NAME-liturgy.sql"
+	ARCHIVE_MYSQL_DB="$THIS_ARCHIVE_DIRECTORY/$HOST_NAME-$START_DATESTAMP-"
+
+# Passwords
+	LENGTH_OF_PASSWORDS=63
+	MAX_MYSQL_PASSWORD_LENGTH=32
+	EXCLUDED_PASSWORD_CHARACTERS=" \$\'\"\\\#\|\<\>\;\*\&\~\!\I\l\1\O\0\`\/\?"
+
+# Plex Media Server
+# DEPENDENT on Archives Directories definitions above
+	VIDEO_WORK_FILE_SYSTEM="/"
+	VIDEO_STORE_FILE_SYSTEM="/"
+	VIDEO_WORK_DIRECTORY="/var/lib/plexmediaserver/Library/work"
+	VIDEO_STORE_DIRECTORY="/var/lib/plexmediaserver/Library/store"
+	PLEX_LIVE_APPLICATION_SUPPORT="/var/lib/plexmediaserver/Library/Application Support"
+	PLEX_BACKUP_FILE_SYSTEM="$THIS_ARCHIVE_FILE_SYSTEM"
+	PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
+	if [ $HOSTNAME=="oz" ]; then 
+		VIDEO_WORK_FILE_SYSTEM="/var/lib/plexmediaserver/Library/work"
+		VIDEO_STORE_FILE_SYSTEM="/var/lib/plexmediaserver/Library/store"
+		VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex"
+		VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex"
+		PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
+		fi
+
+# Filter TV shows that should be skipped by process_ts
+# Set them all as true
+# Example: IGNORE_TV_SHOW[CBS This Morning]=true
+# It doesn't matter what the value is set to, as long as the key is defined
+# A match is found if any part of the test string matches. 
+#      For example, "IGNORE_TV_SHOW[CBS This Morning]=true" is defined, 
+#      "CBS This Morning Saturday" matches
+	declare -A IGNORE_TV_SHOW
+	IGNORE_TV_SHOW[.grab]=true
+	IGNORE_TV_SHOW[ABC World News Tonight]=true
+	IGNORE_TV_SHOW[BBC World News]=true
+	IGNORE_TV_SHOW[CBS Evening News]=true
+	IGNORE_TV_SHOW[CBS Morning News]=true
+	IGNORE_TV_SHOW[CBS This Morning]=true
+	IGNORE_TV_SHOW[CBS Weekend News]=true
+	IGNORE_TV_SHOW[Face the Nation]=true
+	IGNORE_TV_SHOW[Jimmy Kimmel Live]=true
+	IGNORE_TV_SHOW[KXAN News]=true
+	IGNORE_TV_SHOW[Meet the Press]=true
+	IGNORE_TV_SHOW[NBC Nightly News]=true
+	IGNORE_TV_SHOW[Sunday Today]=true
+	IGNORE_TV_SHOW[The Late Show]=true
+	IGNORE_TV_SHOW[The Tonight Show]=true
+	IGNORE_TV_SHOW[Today (1952)]=true
+
+# Paths to Scripts
+	declare -A PATHNAME
+	PATHNAME[_apply_configs]="$SBIN_DIR/_apply-configs"
+	PATHNAME[_git]="$SBIN_DIR/_git"
+	PATHNAME[_run_apt_update]="$SBIN_DIR/_run_apt_update"
+	PATHNAME[_upd]="$SBIN_DIR/_upd"
+	PATHNAME[_vars]="$SBIN_DIR/_vars"
+	PATHNAME[apt_remove_duplicate_source_entries]="$SBIN_DIR/apt-remove-duplicate_source-entries.py"
+	PATHNAME[backup]="$SBIN_DIR/backup"
+	PATHNAME[backup_file]="$SBIN_DIR/backup-file"
+	PATHNAME[cleanup_and_exit]="$SBIN_DIR/cleanup-and-exit"
+	PATHNAME[currenttimeinseconds]="$SBIN_DIR/currenttimeinseconds"
+	PATHNAME[db_backup]="$SBIN_DIR/db-backup"
+	PATHNAME[ddnscheck]="$SBIN_DIR/ddnscheck"
+	PATHNAME[get_config]="$SBIN_DIR/get-config"
+	PATHNAME[intervalinseconds]="$SBIN_DIR/intervalinseconds"
+	PATHNAME[lanelog]="$SBIN_DIR/lanelog"
+	PATHNAME[lgh]="$SBIN_DIR/lgh"
+	PATHNAME[lhlib]="$SBIN_DIR/lhlib"
+	PATHNAME[loop_forever]="$SBIN_DIR/loop-forever"
+	PATHNAME[make_letsencrypt_p12_files]="$SBIN_DIR/make-letsencrypt-p12-files"
+	PATHNAME[make_passwords]="$SBIN_DIR/make-passwords"
+	PATHNAME[make_ssh_keys]="$SBIN_DIR/make-ssh-keys"
+	PATHNAME[makemkvcon]="/usr/bin/makemkvcon"
+	PATHNAME[master_loop]="$SBIN_DIR/master-loop"
+	PATHNAME[move_m4v_to_storage]="$SBIN_DIR/move-m4v-to-storage"
+	PATHNAME[move_one_file]="$SBIN_DIR/move-one-file"
+	PATHNAME[move_scans_to_onedrive]="$SBIN_DIR/move-scans-to-onedrive"
+	PATHNAME[plexstatus]="$SBIN_DIR/plexstatus"
+	PATHNAME[plex_status]="$SBIN_DIR/plex-status"
+	PATHNAME[process_ts]="$SBIN_DIR/process-ts"
+	PATHNAME[process_incoming_scans]="$SBIN_DIR/process-incoming-scans"
+	PATHNAME[replace_in_file]="$SBIN_DIR/replace-in-file"
+	PATHNAME[rip]="$SBIN_DIR/rip"
+	PATHNAME[script_footer]="$SBIN_DIR/script-footer"
+	PATHNAME[script_setup]="$SBIN_DIR/script-setup"
+	PATHNAME[secureserver]="$SBIN_DIR/secureserver"
+	PATHNAME[show_plex_ts_files]="$SBIN_DIR/show-plex-ts-files"
+	PATHNAME[shrink_plex_ts_files]="$SBIN_DIR/shrink-plex-ts-files"
+	PATHNAME[stopwatch]="$SBIN_DIR/stopwatch"
+	PATHNAME[syncplex]="$SBIN_DIR/syncplex"
+	PATHNAME[tar]="/bin/tar"
+	PATHNAME[timeformat]="$SBIN_DIR/timeformat"
+	PATHNAME[transcode_ripped_dvds]="$SBIN_DIR/transcode-ripped-dvds"
+	PATHNAME[tv_show_filter_status]="$SBIN_DIR/tv-show-filter-status"
+	PATHNAME[unlockserver]="$SBIN_DIR/unlockserver"
+	PATHNAME[upd]="$SBIN_DIR/upd"
+	PATHNAME[vaultclose]="$SBIN_DIR/vaultclose"
+	PATHNAME[vaultopen]="$SBIN_DIR/vaultopen"
+	PATHNAME[vaultsync]="$SBIN_DIR/vaultsync"
+	PATHNAME[xfers]="$SBIN_DIR/xfers"
+
+# Require root to run these scripts (default is false or undefined)
+# DEPENDENT ON PATHNAME ARRAY DEFINITION ABOVE
+# Example: ROOT_REQUIRED[${PATHNAME[lgh]}]=true
+# It doesn't matter what the value is set to, as long as the key is defined
+	declare -A ROOT_REQUIRED
+	ROOT_REQUIRED[${PATHNAME[_apply_configs]}]=true
+	ROOT_REQUIRED[${PATHNAME[_git]}]=true
+	ROOT_REQUIRED[${PATHNAME[_upd]}]=true
+	ROOT_REQUIRED[${PATHNAME[lgh]}]=true
+	ROOT_REQUIRED[${PATHNAME[shrink_plex_ts_files]}]=true
+	ROOT_REQUIRED[${PATHNAME[upd]}]=true
+
+# Disable start message for these scripts
+# DEPENDENT ON PATHNAME ARRAY DEFINITION ABOVE
+# Example: DISABLE_START_MESSAGE[${PATHNAME[lgh]}]=true
+# It doesn't matter what the value is set to, as long as the key is defined
+	declare -A DISABLE_START_MESSAGE
+	DISABLE_START_MESSAGE[${PATHNAME[timeformat]}]=true
+
+# Disable end message for these scripts
+# DEPENDENT ON PATHNAME ARRAY DEFINITION ABOVE
+# Example: DISABLE_END_MESSAGE[${PATHNAME[lgh]}]=true
+# It doesn't matter what the value is set to, as long as the key is defined
+	declare -A DISABLE_END_MESSAGE
+	DISABLE_END_MESSAGE[${PATHNAME[timeformat]}]=true
+
+# Restrict some scripts to particular hosts.
+# If a script pathname is referenced even once, 
+#	the script will run only if the hostname is associated with the script pathname.
+# Example: RESTRICT_SCRIPT_TO_HOST[${PATHNAME[lgh]}]=oz
+	declare -A RESTRICT_SCRIPT_TO_HOST
+	RESTRICT_SCRIPT_TO_HOST[${PATHNAME[show_plex_ts_files]}]=oz
+	RESTRICT_SCRIPT_TO_HOST[${PATHNAME[shrink_plex_ts_files]}]=oz
+	RESTRICT_SCRIPT_TO_HOST[${PATHNAME[process_incoming_scans]}]=oz
+	RESTRICT_SCRIPT_TO_HOST[${PATHNAME[process_ts]}]=oz
+	RESTRICT_SCRIPT_TO_HOST[${PATHNAME[rip]}]=oz
+
+
+# Set a flag that this file isn't processed unnecessarily
+VARIABLES_LOADED=true

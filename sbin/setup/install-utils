@@ -44,7 +44,7 @@ install ssh && ufw allow ssh
 install sysbench
 install tasksel
 install unzip
-install uuid
+# install uuid                  # Use uuidgen instead. It's built-in.
 install vim
 install wget
 install xrdp

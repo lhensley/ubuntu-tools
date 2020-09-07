@@ -96,17 +96,6 @@ if [ -f $GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
 	systemctl restart ssh
 	fi
 
-# MakeMKV config file
-if [ -f $GO_CONFIGS/makemkv/settings.conf ]; then
-	mkdir -p $HOME_DIR/.MakeMKV
-	mkdir -p /root/.MakeMKV
-	cp $GO_CONFIGS/makemkv/settings.conf $HOME_DIR/.MakeMKV/
-	chmod 600 $HOME_DIR/.MakeMKV/settings.conf
-	chown -R $USER_ME:$USER_ME $HOME_DIR/.MakeMKV
-	cp $HOME_DIR/.MakeMKV/settings.conf /root/.MakeMKV/
-	chown -R root:root /root/.MakeMKV
-	fi
-
 # HandBrake config file
 if [ -f $GO_CONFIGS/etc-lane.conf ]; then
 	mkdir -p $HOME_DIR/.HandBrake
