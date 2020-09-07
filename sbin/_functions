@@ -103,3 +103,11 @@ function f_local_copy() {
 # Log the completion
 	logger $0: Functions loaded from _functions
 
+function f_install() {
+	if ! [ -x "$(command -v $1)" ]; then   
+		logger $0 Installing $1
+		DEBIAN_FRONTEND=noninteractive apt-get install -yq $1
+		logger $0 Installation of $1 done exit code $?
+	fi
+}
+

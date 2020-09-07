@@ -84,7 +84,7 @@ ufw allow ssh
 
 # Set up $ADMIN_USER
 usermod -aG sudo $ADMIN_USER
-sudo $ADMIN_USER ssh-keygen -C "$SSH_KEY_NAME" -P "" -q -f "$ADMIN_HOME_DIR/.ssh/id_rsa"
+sudo -u $ADMIN_USER ssh-keygen -C "$SSH_KEY_NAME" -P "" -q -f "$ADMIN_HOME_DIR/.ssh/id_rsa"
 
 echo Configure sudo $ADMIN_USER as a sudo user
 echo "$ADMIN_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/lane-NOPASSWD-users
@@ -367,7 +367,7 @@ echo "#" >> $KEYS_FILE
 chmod 400 $KEYS_FILE
 chown $ADMIN_USER:$ADMIN_USER $KEYS_FILE
 echo ""
-echo "# IMPORTANT: Move the contents of $KEYS_FILE 
+echo "# IMPORTANT: Move the contents of $KEYS_FILE"
 echo "#    into 1Password NOW, delete it, and reboot."
 echo "# Once you continue, these passwords cannot be recovered."
 echo ""

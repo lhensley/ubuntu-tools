@@ -1,53 +1,54 @@
 #!/bin/bash
 # install-utils
-# Revised 2020-06-04
 # PURPOSE: Install uncomplicated, no-down-side utilities.
 # NOTE: This install script can run safely even if the software already is installed.
 
-# Include header file
-PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/../script-setup
-s
-function install() {
-   logger $0 Installing $1
-   DEBIAN_FRONTEND=noninteractive apt-get install -yq $1
-   logger $0 Installation of $1 done exit code $?
-}
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; fi
 
 # Get to work
-install ufw
+f_install ufw
 # UFW first; others depend on it
-install at
-install apg                     # Password generator 
-install cryfs                   # Encrypted file system
-install comskip                 # Commercial skipper for videos
-install curl
-install ddclient
-install exiftool
-install fail2ban
-install ffmpeg
-install filezilla
-install ghostscript             # Compressing PDF scans
-install gimp
-install git && ufw allow git
-install gpg
-install gzip
-install inotify-tools           # Do something when a file is created, deleted, or changed
-install net-tools
-install openssl
-install openvpn
-install bridge-utils
-install ifupdown
-install resolvconf
-install ripmime                 # Process files sent by email
-install ssh && ufw allow ssh
-install sysbench
-install tasksel
-install unzip
-# install uuid                  # Use uuidgen instead. It's built-in.
-install vim
-install wget
-install xrdp
+f_install at
+f_install apg                     # Password generator 
+f_install cryfs                   # Encrypted file system
+f_install comskip                 # Commercial skipper for videos
+f_install curl
+f_install ddclient
+f_install exiftool
+f_install fail2ban
+f_install ffmpeg
+f_install filezilla
+f_install ghostscript             # Compressing PDF scans
+f_install gimp
+f_install git && ufw allow git
+f_install gpg
+f_install gzip
+f_install inotify-tools           # Do something when a file is created, deleted, or changed
+f_install net-tools
+f_install openssl
+f_install openvpn
+f_install bridge-utils
+f_install ifupdown
+f_install resolvconf
+f_install ripmime                 # Process files sent by email
+f_install ssh && ufw allow ssh
+f_install sysbench
+f_install tasksel
+f_install unzip
+# f_install uuid                  # Use uuidgen instead. It's built-in.
+f_install vim
+f_install wget
+f_install xrdp
 
 ufw allow http
 ufw allow https
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+

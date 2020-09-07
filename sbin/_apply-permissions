@@ -29,8 +29,8 @@
 		chmod 740 ${PATHNAME[_apply_configs]}
 
 # ddclient
-	chmod 600 /etc/ddclient.conf /etc/default/declient
-	chown $ROOT_USER:$ROOT_USER /etc/ddclient.conf /etc/default/declient
+	chmod 600 /etc/ddclient.conf /etc/default/ddclient
+	chown $ROOT_USER:$ROOT_USER /etc/ddclient.conf /etc/default/ddclient
 
 # Git
 	chmod 600 $ROOT_HOME_DIR/.gitconfig
