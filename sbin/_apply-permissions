@@ -29,8 +29,16 @@
 		chmod 740 ${PATHNAME[_apply_configs]}
 
 # ddclient
-	chmod 600 /etc/ddclient.conf /etc/default/ddclient
-	chown $ROOT_USER:$ROOT_USER /etc/ddclient.conf /etc/default/ddclient
+	if [ -f $GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
+		chmod 600 /etc/ddclient.conf /etc/default/ddclient
+		chown $ROOT_USER:$ROOT_USER /etc/ddclient.conf /etc/default/ddclient
+		fi
+
+# fstab
+	if [ -f $GO_CONFIGS/fstab/$HOSTNAME/fstab ]; then
+		chown $ROOT_USER:$ROOT_USER /etc/fstab*
+		chmod 664 /etc/fstab*
+		fi
 
 # Git
 	chmod 600 $ROOT_HOME_DIR/.gitconfig
@@ -39,36 +47,44 @@
 	chown $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.gitconfig
 	chmod -R 400 $GIT_ROOT
 
-# fstab
-	chown $ROOT_USER:$ROOT_USER /etc/fstab*
-	chmod 664 /etc/fstab*
-
 # lsyncd
-	chown $ROOT_USER:$ROOT_USER /etc/lsyncd/lsyncd.conf.lua
-	chmod 600 /etc/lsyncd/lsyncd.conf.lua
+	if [ -f $GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
+		chown $ROOT_USER:$ROOT_USER /etc/lsyncd/lsyncd.conf.lua
+		chmod 600 /etc/lsyncd/lsyncd.conf.lua
+		fi
 
 # resolvconf
-	chown $ROOT_USER:$ROOT_USER /etc/resolvconf/resolv.conf.d/head
-	chmod 644 /etc/resolvconf/resolv.conf.d/head
+	if [ -f $GO_CONFIGS/resolvconf/head ]; then
+		chown $ROOT_USER:$ROOT_USER /etc/resolvconf/resolv.conf.d/head
+		chmod 644 /etc/resolvconf/resolv.conf.d/head
+		fi
 
 # .ssh/authorized_keys
-	chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh
-	chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh
-	chmod -R 600 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh
+	if [ -f $GO_CONFIGS/ssh/home-.ssh-authorized_keys ]; then
+		chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh
+		chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh
+		chmod -R 600 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh
+		fi
 
 # SSHD config file
-	chmod 644 "$SSHD_CONFIG"
-	chown $ROOT_USER:$ROOT_USER "$SSHD_CONFIG"
+	if [ -f $GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
+		chmod 644 "$SSHD_CONFIG"
+		chown $ROOT_USER:$ROOT_USER "$SSHD_CONFIG"
+		fi
 
 # HandBrake config file
-	chmod -R 600 $ADMIN_HOME_DIR/.HandBrake/*
-	chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.HandBrake $ADMIN_HOME_DIR/Videos
-	chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.HandBrake
+	if [ -f $GO_CONFIGS/etc-lane.conf ]; then
+		chmod -R 600 $ADMIN_HOME_DIR/.HandBrake/*
+		chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.HandBrake $ADMIN_HOME_DIR/Videos
+		chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.HandBrake
+		fi
 
 # Vim and vi config files
-	chmod 600 $ADMIN_HOME_DIR/.vim*
-	chown $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.vim*
-	chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.vim*
+	if [ -f $GO_CONFIGS/vim/.vimrc ]; then
+		chmod 600 $ADMIN_HOME_DIR/.vim*
+		chown $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.vim*
+		chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.vim*
+		fi
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
