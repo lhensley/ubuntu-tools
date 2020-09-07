@@ -3,8 +3,8 @@
 
 # Include script setup file
 	source script-setup
-	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0 Functions not defined. Aborting; logger $0 Functions not defined. Aborting; fi
-	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0 Variables not defined. Aborting; logger $0 Variables not defined. Aborting; fi
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; fi
 
 # Install git token
 # To get a new token, go to https://github.com/settings/tokens.
@@ -23,15 +23,22 @@
 	# Pull down a copy of the repository
 		git pull
 	# Set permissions for git directory
-		chmod -fR 400 $GIT_ROOT
+		chmod -R 400 $GIT_ROOT
 	# Copy scripts into $SBIN_DIR
 		rm -rf $SBIN_DIR
 		cp -r $GIT_SBIN $SBIN_PARENT/
 		cd $CURRENT_DIRECTORY
 		logger $0: git branch $GIT_BRANCH pulled.
 
+# DEBUG: Stopping here
+echo
+echo $0: Interrupted for manual execution
+echo SBIN_DIR = $SBIN_DIR
+echo Use sudo cat $0
+exit 1
+
 # Set ownership and permissions in $SBIN_DIR (to be overwritten by _apply-configs)
-	chown -fR root:root $SBIN_DIR
+	chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
 	find $SBIN_DIR -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
 	find $SBIN_DIR -type f -print -exec chmod 755 {} \; >> /dev/null 2>&1
 

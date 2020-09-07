@@ -4,7 +4,7 @@
 
 
 # Check to ensure that variables are defined
-	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0 Variables not defined. Aborting; logger $0 Variables not defined. Aborting; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; fi
 
 # Set a flag to confirm that the functions are not yet defined
 FUNCTIONS_ARE_DEFINED=false
