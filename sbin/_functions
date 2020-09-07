@@ -3,52 +3,33 @@
 # Bash functions for Lane applications
 
 
-function f_get-config () {
-    # $1: the config-name to be searched
-    LANE_CONFIG_FILE_1="~/.lane/lane.conf"
-    LANE_CONFIG_FILE_2="/etc/lane.conf"
-    /usr/local/sbin/get-config "$1" "$LANE_CONFIG_FILE_1" "$LANE_CONFIG_FILE_2"
-    }
+# Check to ensure that variables are defined
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0 Variables not defined. Aborting; logger $0 Variables not defined. Aborting; fi
 
-function f_require_config {
-    if [ -z "${LANE_CONFIG[$1]}" ]; then
-	    echo "$0: FATAL: Configuration not found: $1"
-	    logger "$0: FATAL: Configuration not found: $1"
-	    exit 1
-	    fi
-    }
+# Set a flag to confirm that the functions are not yet defined
+FUNCTIONS_ARE_DEFINED=false
 
 function f_require_value {
-# $1 = Name of value, e.g., "input file"
-# $2 = Content of value, e.g., $INPUT_FILE
-    if [ -z "$1" ]; then
-	    echo "$0: FATAL: Value name for f_require_value undefined."
-	    logger "$0: FATAL: Value name for f_require_value undefined."
-	    exit 1
-	    fi
+# $1 = Variable name  e.g., "INPUT_FILE"
+# $2 = Content of variable, e.g., "$INPUT_FILE"
     if [ -z "$2" ]; then
-	    echo "$0: FATAL: Value of \"$1\" undefined."
-	    logger "$0: FATAL: Value of \"$1\" undefined."
+	    echo "$0: FATAL: Value of $1 undefined."
+	    logger "$0: FATAL: Value of $1 undefined."
 	    exit 1
 	    fi
     }
 
 function f_require_file {
-logger f_require_file: V1 $1
-logger f_require_file: V2 DEBUG A
-#    f_require_value "file name" "$1"
-    logger f_require_file: DEBUG B
+    f_require_value "(file name)" "$1"
     if [ ! -f "$1" ]; then
-        logger f_require_file: DEBUG C
 	    echo $0: FATAL: File not found: $1
 	    logger $0: FATAL: File not found: $1
 	    exit 1
 	    fi
-logger f_require_file: DEBUG D
     }
 
 function f_require_directory {
-    f_require_value "directory name" "$1"
+    f_require_value "(directory name)" "$1"
     if [ ! -d "$1" ]; then
 	    echo "$0: FATAL: Directory not found: $1"
 	    logger "$0: FATAL: Directory not found: $1"
@@ -66,9 +47,9 @@ function f_file_not_in_use {
     }
 
 function f_debug () {
-    # $1: message to log
-    if [ "$(f_get-config CONFIG_system_debug_mode)" == "true" ]; then
-        logger $0: Debug: $1
+    # $1: message to log, only used when $DEBUG_MODE == true
+    if [ $DEBUG_MODE ]; then
+        logger $0: DEBUG: $1
         fi
     }
 
@@ -76,23 +57,12 @@ function f_debug_variable () {
     # $1: variable_name
     # $2: variable_value ("$variable_name")
     # Example: f_debug_variable "var" "$var"
-    if [ "$(f_get-config CONFIG_system_debug_mode)" == "true" ]; then
-        logger $0: Debug: $1 = $2
+    if [ $DEBUG_MODE ]; then
+        logger $0: DEBUG: $1 = $2
         fi
     }
 
 function f_filter () {
-    # $1: string being evaluated
-    # $2: string of filter values separated by spaces allowing double quotes
-    #    example: f_filter "CBS This Morning Saturday" "${LANE_CONFIG[CONFIG_filter_transcode_excluded]}"
-    # Result: echoes 1 (filter) or 0 (no filter)
-    # SAMPLE USAGE:
-    #   if $(f_filter "Today (1952)" "${LANE_CONFIG[CONFIG_filter_transcode_excluded]}") ; then
-    #       echo "Match found"
-    #   else
-    #       echo "No match found"
-    #   fi
-
     STRING_BEING_EVALUATED=$1
     FILTER=$2
     MATCH=false
@@ -103,20 +73,18 @@ function f_filter () {
     echo $MATCH
 	}
 
-function f_clear_local_copy() {
-	f_require_config "archive.directory.$(hostname -s)"
-	f_require_directory "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"
-	echo rm -rf "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"/*
-	rm -rf "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"/*
+function f_clear_directory_contents() {
+	f_require_directory "$1"
+	rm -rf "$1"/*
 	}
 
 function f_local_copy() {
-# $1 = source directory; MUST BE A DIRECTORY and not file(s)
-    f_require_config "CONFIG_archive_directory_$(hostname -s)"
+# $1 = source directory; MUST BE A DIRECTORY and not file(s); no trailing slash!
+# $2 = target directory; MUST BE A DIRECTORY and not file(s); no trailing slash!
 	f_require_directory "$1"
-	mkdir -p "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"
-    echo rsync -q -a --delete "$1" "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"
-	rsync -q -a --delete "$1" "${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"
+	f_require_directory "$2"
+	mkdir -p "$2"
+	rsync -q -a --delete "$1" "$2"
 	# -q = quiet
 	# -a = same as -rlptgoD
 		# -r = recursive
@@ -124,14 +92,14 @@ function f_local_copy() {
 		# -p = preserve permisions
 		# -t = preserve modification times
 		# -g = preserve group
-		# -o = preserve ownership	
+		# -o = preserve ownership
 		# -D = preserve device files and special files
 	# --delete = delete extraneous files from dest dirs
 	}
 
-# function f_text_alert () {
-#     # $1: the string value of the text message
-#     TEXT_TARGETS=$(f_get-config CONFIG_text_alert_target_emails)
-#     if [ "$(f_get-config CONFIG_text_alert_emails)" != "" ];
-#    }
+# Set a flag to confirm that the functions are defined
+	FUNCTIONS_ARE_DEFINED=true
+
+# Log the completion
+	logger $0: Functions loaded from _functions
 

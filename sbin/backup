@@ -1,6 +1,11 @@
 #!/bin/bash
 # backup
 
+
+# TEMPORARILY_DISABLED
+exit 1
+
+
 # For mysqldump to work in unattended move, we need, in /root/ and in $HOME_DIR:
 #   File .my.cnf, containing this text:
 #     [client]

@@ -1,71 +1,35 @@
 #!/bin/bash
-# apply-configs
+# _apply-configs
 
-# Invoked by ${LANE_CONFIG[system.sbin-dir]}/_git and ${LANE_CONFIG[system.sbin-dir]}/setup/setup-os
+# Invoked by _git and setup/setup-os
 # Changed apt-get to apt 1/31/19.
 # See https://itsfoss.com/apt-vs-apt-difference/ for rationale.
 
 # Include script setup file
-source $(dirname $0)/script-setup
-
-# Set ownership and permissions in /usr/local/sbin
-chown -R root:root ${LANE_CONFIG[system.sbin-dir]}
-# chmod 755 ${LANE_CONFIG[system.sbin-dir]} ${LANE_CONFIG[system.sbin-dir]}/setup ${LANE_CONFIG[system.sbin-dir]}/include
-find ${LANE_CONFIG[system.sbin-dir]} -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
-# chmod -R 755 ${LANE_CONFIG[system.sbin-dir]}/*
-find ${LANE_CONFIG[system.sbin-dir]} -type f -print -exec chmod 755 {} \; >> /dev/null 2>&1
-
-# Exceptions: These can be read or run by anyone
-# These based on functional requirements
-chmod 755 ${LANE_CONFIG[script.currenttimeinseconds.pathname]}
-chmod 755 ${LANE_CONFIG[script.intervalinseconds.pathname]}
-chmod 755 ${LANE_CONFIG[script.lhlib.pathname]}
-chmod 755 ${LANE_CONFIG[script.process-incoming-scans.pathname]}
-chmod 755 ${LANE_CONFIG[script.rip.pathname]}
-chmod 755 ${LANE_CONFIG[script.script-footer.pathname]} 
-chmod 755 ${LANE_CONFIG[script.script-setup.pathname]} 
-chmod 755 ${LANE_CONFIG[script.timeformat.pathname]}
-chmod 755 ${LANE_CONFIG[script.transcode-ripped-dvds.pathname]}
-# These based on desire. CAUTION: Don't expose anything that has a password or code in it.
-chmod 740 ${LANE_CONFIG[script.upd.pathname]} 
-chmod 740 ${LANE_CONFIG[script._apply-configs.pathname]}
-
-# Git
-chmod 600 /root/.gitconfig
-cp /root/.gitconfig $HOME_DIR/.gitconfig
-chown root:root /root/.gitconfig
-chown $USER_ME:$USER_ME $HOME_DIR/.gitconfig
-chmod -R 400 $GIT
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0 Functions not defined. Aborting; logger $0 Functions not defined. Aborting; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0 Variables not defined. Aborting; logger $0 Variables not defined. Aborting; fi
 
 # ddclient
-if [ -f $GO_CONFIGS/ddclient/$HOST_NAME/ddclient.conf ]; then
-	cp $GO_CONFIGS/ddclient/$HOST_NAME/ddclient.conf /etc/
-	chmod 600 /etc/ddclient.conf
-	chown root:root /etc/ddclient.conf
-	cp $GO_CONFIGS/ddclient/etc-default-ddclient /etc/default/ddclient
-	chmod 600 /etc/default/ddclient
-	chown root:root /etc/default/ddclient
-	fi
+	if [ -f $GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
+		cp $GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf /etc/
+		cp $GO_CONFIGS/ddclient/etc-default-ddclient /etc/default/ddclient
+		fi
 
 # fstab
-if [ -f $GO_CONFIGS/fstab/$HOST_NAME/fstab ]; then
-	cp $GO_CONFIGS/fstab/$HOST_NAME/fstab /etc/fstab.from.git
-	chown root:root /etc/fstab.from.git
-	chmod 600 /etc/fstab.from.git
-	fi
+	if [ -f $GO_CONFIGS/fstab/$HOSTNAME/fstab ]; then
+		cp $GO_CONFIGS/fstab/$HOSTNAME/fstab /etc/fstab.from.git
+		fi
 
-# lane.conf
-if [ -f $GO_CONFIGS/etc-lane.conf ]; then
-	cp $GO_CONFIGS/etc-lane.conf /etc/lane.conf
-	chown root:root /etc/lane.conf
-	chmod 644 /etc/lane.conf
-	fi
+# Git
+# Note that the original .gitconfig is made during setup/setup-os (original installation)
+# using sudo, so the file is written to user root's home directory.
+# That's why the copying goes from root to admin home directories.
+	cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
 
 # lsyncd
-if [ -f $GO_CONFIGS/lsyncd/$HOST_NAME/lsyncd.conf.lua ]; then
-	cp $GO_CONFIGS/lsyncd/$HOST_NAME/lsyncd.conf.lua /etc/lsyncd
-	chown root:root /etc/lsyncd/lsyncd.conf.lua
-	chmod 600 /etc/lsyncd/lsyncd.conf.lua
+if [ -f $GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
+	cp $GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua /etc/lsyncd
 	systemctl restart lsyncd
 	fi
 
@@ -73,49 +37,51 @@ if [ -f $GO_CONFIGS/lsyncd/$HOST_NAME/lsyncd.conf.lua ]; then
 if [ -f $GO_CONFIGS/resolvconf/head ]; then
 	mkdir -p /etc/resolvconf/resolv.conf.f
 	cp $GO_CONFIGS/resolvconf/head /etc/resolvconf/resolv.conf.d/
-	chown root:root /etc/resolvconf/resolv.conf.d/head
-	chmod 644 /etc/resolvconf/resolv.conf.d/head
 	fi
 
-# Update $HOME_ME/.ssh/authorized_keys
+# .ssh/authorized_keys
 if [ -f $GO_CONFIGS/ssh/home-.ssh-authorized_keys ]; then
-	mkdir -p $HOME_ME/.ssh
-	mkdir -p /root/.ssh
-	cp $GO_CONFIGS/ssh/home-.ssh-authorized_keys $HOME_ME/.ssh/authorized_keys
-	chown -R $USER_ME:$USER_ME $HOME_ME/.ssh/*
-	chmod 600 $HOME_ME/.ssh/authorized_keys
-	cp $HOME_ME/.ssh/* /root/.ssh/
-	chown -R root:root /root/.ssh/*
+	mkdir -p $ADMIN_USER_HOME/.ssh
+	mkdir -p $ROOT_USER_HOME/.ssh
+	cp $GO_CONFIGS/ssh/home-.ssh-authorized_keys $ADMIN_USER_HOME/.ssh/authorized_keys
+	cp $ADMIN_USER_HOME/.ssh/* $ROOT_USER_HOME/.ssh/
 	fi
 
 # SSHD config file
 if [ -f $GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
-	cp $GO_CONFIGS/ssh/etc-ssh-sshd_config /etc/ssh/sshd_config
-	chmod 644 /etc/ssh/sshd_config
-	chown root:root /etc/ssh/sshd_config
-	systemctl restart ssh
+	cp $GO_CONFIGS/ssh/etc-ssh-sshd_config $SSHD_CONFIG
 	fi
 
 # HandBrake config file
 if [ -f $GO_CONFIGS/etc-lane.conf ]; then
-	mkdir -p $HOME_DIR/.HandBrake
-	mkdir -p /root/.HandBrake
-	cp $GO_CONFIGS/handbrake/* $HOME_DIR/.HandBrake/
-	chmod 600 $HOME_DIR/.HandBrake/*
-	chown -R $USER_ME:$USER_ME $HOME_DIR/.HandBrake $HOME_DIR/Videos
-	cp $HOME_DIR/.HandBrake/* /root/.HandBrake/
-	chown -R root:root /root/.HandBrake
+	mkdir -p $ADMIN_HOME_DIR/.HandBrake
+	mkdir -p $ROOT_HOME_DIR/.HandBrake
+	cp $GO_CONFIGS/handbrake/* $ADMIN_HOME_DIR/.HandBrake/
+	cp $GO_CONFIGS/handbrake/* $ROOT_HOME_DIR/.HandBrake/
 	fi
 
 # Vim and vi config file
 if [ -f $GO_CONFIGS/vim/.vimrc ]; then
-	cp $GO_CONFIGS/vim/.vimrc $HOME_DIR/
-	chmod 600 $HOME_DIR/.vimrc
-	chown $USER_ME:$USER_ME $HOME_DIR/.vimrc
-	cp $HOME_DIR/.vimrc /root/
-	chown root:root /root/.vimrc
+	cp $GO_CONFIGS/vim/.vim* $ADMIN_HOME_DIR/
+	cp $GO_CONFIGS/vim/.vim* $ROOT_HOME_DIR/
+	fi
+
+# Apply permissions
+	_apply-permissions
+
+# lsyncd
+if [ -f $GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
+	systemctl restart lsyncd
+	fi
+
+# SSHD config file
+if [ -f $GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
+	systemctl restart ssh
 	fi
 
 # Include script footer file
-f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
-source ${LANE_CONFIG[script.script-footer.pathname]}
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+

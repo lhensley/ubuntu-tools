@@ -12,6 +12,9 @@
 		LOG_LEVEL=2
 		TEXT_LEVEL=2
 
+# Set a flag to confirm that the variables are not yet defined
+VARIABLES_ARE_DEFINED=false
+
 # Built-in (at command line, use env to show more)
 	# HOME (Home directory)
 	# HOSTNAME (this host, not FQDN)
@@ -128,8 +131,32 @@ source /etc/os-release
 # File System Backups
 # DEPENDENT on Archive Directories AND Start Timestamps above
 	BACKUP_ROOT="/"										 # Formerly "DIRECTORY_FROM"
+	declare -A BACKUP_OPTION
+	BACKUP_OPTION[--create]=true
+	BACKUP_OPTION[--gzip]=true
+	BACKUP_OPTION[--auto-compress]=true
+	BACKUP_OPTION[--preserve-permissions]=true
+	BACKUP_OPTION[--file=$ARCHIVE_TAR_FULL_WEEKDAY]=true
+	BACKUP_OPTION[--exclude-vcs]=true
+	BACKUP_OPTION[--exclude-caches]=true
+	BACKUP_OPTION[--totals]=true
+	# BACKUP_OPTION[--verbose]=true
+	BACKUP_OPTIONS=""; BACKUP_OPTION[--exclude-from=$SOCKETS_TEMP_FILE]=true
+	# Ref: https://bytefreaks.net/gnulinux/bash/bash-how-to-iterate-over-associative-array-and-print-all-keyvalue-pairs
+	for KEY in "${!BACKUP_OPTION[@]}"; do BACKUP_OPTIONS+=$KEY" "; done
+	declare -A BACKUP_SOURCE
+	BACKUP_SOURCE[/etc]=true
+	BACKUP_SOURCE[/home]=true
+	BACKUP_SOURCE[/root]=true
+	BACKUP_SOURCE[/usr/local/sbin]=true
+	BACKUP_SOURCE[/var/www]=true
+	# BACKUP_SOURCE[/var/local/archives/*.sql]=true
+	# Ref: https://bytefreaks.net/gnulinux/bash/bash-how-to-iterate-over-associative-array-and-print-all-keyvalue-pairs
+	BACKUP_SOURCES=""; for KEY in "${!BACKUP_SOURCE[@]}"; do BACKUP_SOURCES+=$KEY" "; done
 
 # Git
+	GIT_BRANCH="master"
+	# GIT_BRANCH="dev"
 	GIT_ROOT=/var/local/git                              # Formerly system.git
 	GIT_GO=$GIT_ROOT/go                                  # Formerly system.git.go
 	GIT_GO_CONFIGS=$GIT_GO/configs                       # Formerly system.git.go.configs
@@ -143,22 +170,32 @@ source /etc/os-release
 	HANDBRAKE_PRESETS="$ADMIN_HOME/.HandBrake/Lane 1080p (BluRay).json"
 
 # Incoming Scans
-INCOMING_SCANS="$ADMIN_HOME/Scans"
+	INCOMING_SCANS="$ADMIN_HOME/Scans"
 
 # MakeMKV
-MAKEMKV_OUTPUT_DIRECTORY="/home/lhensley/Videos/MakeMKV-Completed"
+	MAKEMKV_OUTPUT_DIRECTORY="/home/lhensley/Videos/MakeMKV-Completed"
+
+# MySQL
+	MYSQL_ADMIN_NAME="admin"
+	MYSQL_CLIENT_CERTS_DIR="$HOME_DIRECTORY/certs"
+	MYSQL_CONFIGS="/etc/mysql/conf.d"
+	MYSQL_DUMP_DIR=$HOME_DIR/mysql-dumps
+	MYSQL_SERVER_BIN_DIR="/var/lib/mysql"
 
 # MySQL Backups
 # DEPENDENT on Archive Directories AND Start Timestamps above
 	ARCHIVE_MYSQL_FILE="$HOSTNAME-$START_DATESTAMP.sql"
 	ARCHIVE_MYSQL_FULL="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_MYSQL_FILE"
-	ARCHIVE_MYSQL_LITURGY="$THIS_ARCHIVE_DIRECTORY/$HOST_NAME-liturgy.sql"
-	ARCHIVE_MYSQL_DB="$THIS_ARCHIVE_DIRECTORY/$HOST_NAME-$START_DATESTAMP-"
+	ARCHIVE_MYSQL_LITURGY="$THIS_ARCHIVE_DIRECTORY/$HOSTNAME-liturgy.sql"
+	ARCHIVE_MYSQL_DB="$THIS_ARCHIVE_DIRECTORY/$HOSTNAME-$START_DATESTAMP-"
 
 # Passwords
 	LENGTH_OF_PASSWORDS=63
 	MAX_MYSQL_PASSWORD_LENGTH=32
 	EXCLUDED_PASSWORD_CHARACTERS=" \$\'\"\\\#\|\<\>\;\*\&\~\!\I\l\1\O\0\`\/\?"
+
+# phpMyAdmin
+	PHPMYADMIN_DIR="/usr/share/phpmyadmin"
 
 # Plex Media Server
 # DEPENDENT on Archives Directories definitions above
@@ -176,6 +213,9 @@ MAKEMKV_OUTPUT_DIRECTORY="/home/lhensley/Videos/MakeMKV-Completed"
 		VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex"
 		PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
 		fi
+
+# ssh
+	SSHD_CONFIG="/etc/ssh/sshd_config"
 
 # Filter TV shows that should be skipped by process_ts
 # Set them all as true
@@ -201,6 +241,8 @@ MAKEMKV_OUTPUT_DIRECTORY="/home/lhensley/Videos/MakeMKV-Completed"
 	IGNORE_TV_SHOW[The Late Show]=true
 	IGNORE_TV_SHOW[The Tonight Show]=true
 	IGNORE_TV_SHOW[Today (1952)]=true
+	# Ref: https://bytefreaks.net/gnulinux/bash/bash-how-to-iterate-over-associative-array-and-print-all-keyvalue-pairs
+	IGNORE_TV_SHOWS=""; for KEY in "${!IGNORE_TV_SHOW[@]}"; do IGNORE_TV_SHOWS+="\"$KEY\" "; done
 
 # Paths to Scripts
 	declare -A PATHNAME
@@ -291,6 +333,9 @@ MAKEMKV_OUTPUT_DIRECTORY="/home/lhensley/Videos/MakeMKV-Completed"
 	RESTRICT_SCRIPT_TO_HOST[${PATHNAME[process_ts]}]=oz
 	RESTRICT_SCRIPT_TO_HOST[${PATHNAME[rip]}]=oz
 
+# Set a flag to confirm that the variables are defined
+	VARIABLES_ARE_DEFINED=true
 
-# Set a flag that this file isn't processed unnecessarily
-VARIABLES_LOADED=true
+# Log the completion
+	logger $0: Variables loaded from _vars
+

@@ -5,83 +5,43 @@
 source "_vars"
 
 # Load global functions
-source "_functions"
+source "_functions"		# NOTE: _vars must be sourced first, or this will fail.
 
 # If configured, make sure only root can run our script. Default = "false"
-if [ "$(f_get-config CONFIG_script_$(basename $0)_require_root)" == "true" ] && [[ $EUID -ne 0 ]]; then
-        echo "Use sudo. $0 must be run as root." 1>&2
-        exit 1
-    fi
+# if [ "$(f_get-config CONFIG_script_$(basename $0)_require_root)" == "true" ] && [[ $EUID -ne 0 ]]; then
+#         echo "Use sudo. $0 must be run as root." 1>&2
+#         exit 1
+#     fi
 
 # f_debug "script-setup started"
 
 # If configured, log the start of script processing. Default = "true"
-if [ "$(f_get-config LANE_script_$(basename $0)._log_start)" != "true" ]; then logger "$0: Start"; fi
+# if [ "$(f_get-config LANE_script_$(basename $0)._log_start)" != "true" ]; then logger "$0: Start"; fi
 
 # If configured, send a text message to note the start of script processing. Default = "false"
 # if [ "$(f_get-config LANE_script_$(basename $0)_text_start)" == "true" ]; then f_text_alert "$0: Start"; fi
 
-SCRIPTS_DIRECTORY=$SBIN_DIR
-# As of 2020-06-05, $SCRIPTS_INCLUDES still us used by backup
-SCRIPTS_INCLUDES=$SCRIPTS_DIRECTORY/include
-IPV4_PUBLIC_ADDRESS=$(dig +short myip.opendns.com @resolver1.opendns.com)
-
 # Backup definitions
-EXEC_BACKUP="$TAR --create --gzip --auto-compress --preserve-permissions"
-EXEC_BACKUP.=" --file=$ARCHIVE_TAR_FULL_WEEKDAY"
-EXEC_BACKUP.=" --exclude-backups"
-EXEC_BACKUP.=" --exclude-vcs --exclude-caches"
-EXEC_BACKUP.=" --totals"
-# EXEC_BACKUP.=" --verbose"
-EXEC_BACKUP.=" --exclude-from=$SOCKETS_TEMP_FILE"
-EXEC_BACKUP.=" /etc /home /root /usr/local/sbin /var/www"
-# EXEC_BACKUP.=" /var/local/archives/*.sql"
 # NOTE: -t flag removed from next line 3/28/19. Generates error.
 RSYNC_NO_DELETE="rsync -aopqrzE -e 'ssh -p $OFFSITE_PORT'"
 RSYNC_SU="$RSYNC_NO_DELETE ${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"
 RSYNC_SU="$RSYNC_SU $OFFSITE_SERVER:$OFFSITE_PATH"
-BACKUPLOG="${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"/$HOST_NAME-backup.log
-
-# MySQL
-MYSQL_ADMIN_NAME="admin"
-MYSQL_CLIENT_CERTS_DIR="$HOME_DIRECTORY/certs"
-MYSQL_CONFIGS="/etc/mysql/conf.d"
-MYSQL_DUMP_DIR=$HOME_DIR/mysql-dumps
-MYSQL_SERVER_BIN_DIR="/var/lib/mysql"
-
-# phpMyAdmin
-PHPMYADMIN_DIR="/usr/share/phpmyadmin"
-
-# ssh
-SSHD_CONFIG="/etc/ssh/sshd_config"
-
-# System User (Amazon AWS servers only)
-USER_UBUNTU="ubuntu"
+BACKUPLOG="${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"/$HOSTNAME-backup.log
 
 # Mail
-MAILNAME=$HOST_NAME
-
-# Basically, this section means look for *.sh in the "includes" directory and invoke them.
-# find $SCRIPTS_INCLUDES -name "*.sh" -type f | while read INFILE
-#   do
-#     source "$INFILE"
-#   done
+# What is this for?
+MAILNAME=$HOSTNAME
 
 # Set key file ownerships #############################################
+# This should be moved to the backup script to happen immediately after the files are created.
 /bin/chown root:root $MYSQL_CONFIGS/mysqldump.cnf >> /dev/null 2>&1
 /bin/chown -R root:$USER_NAME $SCRIPTS_DIRECTORY >> /dev/null 2>&1
 /bin/chown -R www-data:www-data $THIS_WEB_ROOT/ >> /dev/null 2>&1
 
 # Set key file permissions ############################################
+# This should be moved to the backup script to happen immediately after the files are created.
 /bin/chmod 600 $MYSQL_CONFIGS/mysqldump.cnf >> /dev/null 2>&1
 /bin/chmod -R 770 $SCRIPTS_DIRECTORY >> /dev/null 2>&1
-
-# Echo variable values in debug mode
-#
-# if $debug_mode ; then
-#   echo $(date)
-#   env
-#  fi
 
 f_debug "script-setup ended"
 
