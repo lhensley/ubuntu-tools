@@ -26,7 +26,7 @@
 		chmod -fR 400 $GIT_ROOT
 	# Copy scripts into $SBIN_DIR
 		rm -rf $SBIN_DIR
-		cp -r $GIT_SBIN $SBIN_PARENT
+		cp -r $GIT_SBIN $SBIN_PARENT/
 		cd $CURRENT_DIRECTORY
 		logger $0: git branch $GIT_BRANCH pulled.
 
