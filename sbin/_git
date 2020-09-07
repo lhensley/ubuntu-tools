@@ -30,13 +30,6 @@
 		cd $CURRENT_DIRECTORY
 		logger $0: git branch $GIT_BRANCH pulled.
 
-# DEBUG: Stopping here
-echo
-echo $0: Interrupted for manual execution
-echo SBIN_DIR = $SBIN_DIR
-echo Use sudo cat $0
-exit 1
-
 # Set ownership and permissions in $SBIN_DIR (to be overwritten by _apply-configs)
 	chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
 	find $SBIN_DIR -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
