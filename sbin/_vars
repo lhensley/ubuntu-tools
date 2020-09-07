@@ -43,11 +43,12 @@ VARIABLES_ARE_DEFINED=false
 source /etc/os-release
 
 # Start timestamps
-	START_DATESTAMP=$(/bin/date '+%Y-%m-%d')               # Used in backup variables below
-	START_DAYSTAMP=$(/bin/date '+%d')
-	START_MONTHSTAMP=$(/bin/date '+%Y-%m')
-	START_TIMESTAMP=$(/bin/date)
-	START_WEEKDAYSTAMP=$(/bin/date '+%a')                  # Used in backup variables below
+	START_DATESTAMP=$(/bin/date '+%Y-%m-%d')                    # Like 2020-09-07. Used in backup variables below
+	START_DAYSTAMP=$(/bin/date '+%d')                           # Like 07
+	START_MONTHSTAMP=$(/bin/date '+%Y-%m')                      # Like 2020-09
+	START_TIMESTAMP=$(/bin/date)                                # Like Mon 07 Sep 2020 04:01:23 PM CDT
+	START_WEEKDAYSTAMP=$(/bin/date '+%a')                       # Like Mon. Used in backup variables below
+	START_DATEANDTIMESTAMP=$(/bin/date '+%Y-%m-%d %H:%M:%S')    # Like 2020-09-07 16:05:23. Used in naming SSH keys
 
 # About This Script (or at least the one sourcing it)
 	PROGRAM_DIRECTORY=$(dirname $0)
@@ -214,8 +215,17 @@ source /etc/os-release
 		PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
 		fi
 
+# Postfix Setup
+	MAILNAME=$HOSTNAME
+	MAIN_MAILER_TYPE="'Internet with smarthost'"
+	RELAYHOST="mail.twc.com"                                          # Spectrum Internet (DEFAULT for Austin)
+	if [ $HOSTNAME="nuc01" ]; then RELAYHOST="mail.mchsi.com"; fi     # Mediacom Cable Internet
+	if [ $HOSTNAME="red" ]; then RELAYHOST="mail.mchsi.com"; fi       # Mediacom Cable Internet
+
 # ssh
+# DEPENENT on timestamps above
 	SSHD_CONFIG="/etc/ssh/sshd_config"
+	SSH_KEY_NAME="$HOSTNAME-$START_DATEANDTIMESTAMP"
 
 # Filter TV shows that should be skipped by process_ts
 # Set them all as true

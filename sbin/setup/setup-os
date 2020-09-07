@@ -3,17 +3,6 @@
 # PURPOSE: Installs basic software.
 # IMPORTANT: Check variables at the top of the script before running it!
 
-######################################################
-######### IMPORTANT! #################################
-######### Fill in this section carefully, ############
-######### copy-and-paste it into Roboform ############
-######### BEFORE running install script ##############
-MAIN_MAILER_TYPE="'Internet with smarthost'"
-RELAYHOST="mail.twc.com" # Spectrum Internet
-# RELAYHOST="mail.mchsi.com" # Mediacom Cable Internet
-######### END password information ###################
-######################################################
-
 install_apache2=true
 install_openssl=true
 install_php=true
@@ -37,7 +26,10 @@ echo "Starting setup ...  #####################################################"
 echo "#########################################################################"
 echo "#########################################################################"
 
-source $(dirname $0)/../script-setup
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; fi
 
 if [[ $NAME = "Ubuntu" ]]; then
     if [[ $(echo $VERSION_ID | cut -c1-3) = "20." ]]; then
@@ -62,11 +54,11 @@ fi
 # Install uncomplicated, no-down-side utilities.
 $SBIN_DIR/setup/install-utils
 
-# NUMBER_OF_DESIGNATED_PASSWORDS=7
+NUMBER_OF_DESIGNATED_PASSWORDS=7
 TEMP_PASSWORD_INCLUDE="/tmp/passwords"
 echo "" > $TEMP_PASSWORD_INCLUDE
 echo "PASSWORD_ME=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-echo "PASSWORD_UBUNTU=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
+# echo "PASSWORD_UBUNTU=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
 echo "MYSQL_ROOT_PASSWORD=\"$(apg -c cl_seed -a 1 -m $MAX_MYSQL_PASSWORD_LENGTH -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
 echo "MYSQL_ADMIN_PASSWORD=\"$(apg -c cl_seed -a 1 -m $MAX_MYSQL_PASSWORD_LENGTH -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
 echo "PHPMYADMIN_APP_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
@@ -74,7 +66,7 @@ echo "PHPMYADMIN_ROOT_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 
 echo "PHPMYADMIN_APP_DB_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
 echo "" >> $TEMP_PASSWORD_INCLUDE
 
-chown root:root $TEMP_PASSWORD_INCLUDE
+chown $ROOT_USER:$ROOT_USER $TEMP_PASSWORD_INCLUDE
 chmod 500 $TEMP_PASSWORD_INCLUDE
 source $TEMP_PASSWORD_INCLUDE
 
@@ -83,45 +75,27 @@ echo "Updating hostname"
 hostnamectl set-hostname $HOSTNAME
 echo $HOSTNAME > /etc/hostname
 chmod 644 /etc/hostname
-chown root:root /etc/hostname
+chown $ROOT_USER:$ROOT_USER /etc/hostname
 
 # Install ssh
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install -yq ufw ssh
 ufw allow ssh
 
-# Make $USER_ME and $USER_UBUNTU users and give them sudo access and ssh access
-echo "Making $USER_ME and $USER_UBUNTU users and give them sudo access and ssh access"
-# useradd $USER_ME
-# useradd $USER_UBUNTU
-# TWO PROBLEMS WITH THE COMMANDS BELOW: The --stdin flag doesn't work in this version of Linux, and my password is going to be dropped anyway.
-# echo $PASSWORD_ME | passwd --stdin $USER_ME
-# echo $PASSWORD_UBUNTU | passwd --stdin $USER_UBUNTU
-usermod -aG sudo $USER_ME
-# usermod -aG sudo $USER_UBUNTU
-sudo $USER_ME ssh-keygen -C "$SSH_KEY_NAME" -P "" -q -f "$HOME_ME/.ssh/id_rsa"
-#   echo "# $SSH_KEY_NAME" >> $GO_CONFIGS/ssh/home-.ssh-authorized_keys
-#   # This section is a good idea, but the flaw is that writing to the local $GO_CONFIGS file doesn't sync it back up to the master.
-#   cat $HOME_ME/.ssh/id_rsa.pub >> $GO_CONFIGS/ssh/home-.ssh-authorized_keys
-#   echo "" >> $GO_CONFIGS/ssh/home-.ssh-authorized_keys
-#   echo "#" >> $GO_CONFIGS/ssh/home-.ssh-authorized_keys
+# Set up $ADMIN_USER
+usermod -aG sudo $ADMIN_USER
+sudo $ADMIN_USER ssh-keygen -C "$SSH_KEY_NAME" -P "" -q -f "$ADMIN_HOME_DIR/.ssh/id_rsa"
 
-echo Configure sudo $USER_ME and $USER_UBUNTU as sudo users
-echo "$USER_ME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/lane-NOPASSWD-users
-echo "$USER_UBUNTU ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/lane-NOPASSWD-users
-echo Removing passwords for $USER_ME and $USER_UBUNTU
+echo Configure sudo $ADMIN_USER as a sudo user
+echo "$ADMIN_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/lane-NOPASSWD-users
+# echo "$USER_UBUNTU ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/lane-NOPASSWD-users
+echo Removing passwords for $ADMIN_USER and $USER_UBUNTU
 chmod 440 /etc/sudoers.d/lane-NOPASSWD-users
-# Not sure I want to drop my password. Still don't need it for ssh. 6/1/2020
-# passwd -d $USER_ME
-# This probably will fail, and that's fine.'
-# passwd -d $USER_UBUNTU
-echo "Passwords removed for $USER_ME and $USER_UBUNTU"
-echo "Or not"
 
 # Add custom application definitions for ufw
 echo "Adding custom application definitions for ufw"
 cp $GO_CONFIGS/lane-applications /etc/ufw/applications.d/
-chown root:root /etc/ufw/applications.d/lane-applications
+chown $ROOT_USER:$ROOT_USER /etc/ufw/applications.d/lane-applications
 chmod 644 /etc/ufw/applications.d/lane-applications
 ufw app update lane-applications
 echo "Special LANE applications installed to ufw."
@@ -133,16 +107,16 @@ if $install_makemkv ; then
   add-apt-repository ppa:heyarje/makemkv-beta
   apt-get update
   DEBIAN_FRONTEND=noninteractive apt-get install -yq makemkv-bin makemkv-oss ccextractor
-  usermod -a -G cdrom $USER_ME
+  usermod -a -G cdrom $ADMIN_USER
   # MakeMKV config file
     if [ -f $GO_CONFIGS/makemkv/settings.conf ]; then
-	    mkdir -p $HOME_DIR/.MakeMKV
-	    mkdir -p /root/.MakeMKV
-	    cp $GO_CONFIGS/makemkv/settings.conf $HOME_DIR/.MakeMKV/
-	    chmod 600 $HOME_DIR/.MakeMKV/settings.conf
-	    chown -R $USER_ME:$USER_ME $HOME_DIR/.MakeMKV
-	    cp $HOME_DIR/.MakeMKV/settings.conf /root/.MakeMKV/
-	    chown -R root:root /root/.MakeMKV
+	    mkdir -p $ADMIN_HOME_DIR/.MakeMKV
+	    mkdir -p $ROOT_HOME_DIR/.MakeMKV
+	    cp $GO_CONFIGS/makemkv/settings.conf $ADMIN_HOME_DIR/.MakeMKV/
+	    chmod 600 $ADMIN_HOME_DIR/.MakeMKV/settings.conf
+	    chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.MakeMKV
+	    cp $ADMIN_HOME_DIR/.MakeMKV/settings.conf $ROOT_HOME_DIR/.MakeMKV/
+	    chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.MakeMKV
 	    fi
   echo "MakeMKV installed."
   fi
@@ -168,8 +142,8 @@ rm ./google-chrome-stable_current_amd64.deb
 if $install_openssl ; then
   echo "Installing openssl"
   OPENSSL_PACKAGES="openssl libcurl4-openssl-dev libssl-dev libcurl4-doc"
-  OPENSSL_PACKAGES="$OPENSSL_PACKAGES libidn11-dev libkrb5-dev libldap2-dev "
-  OPENSSL_PACKAGES="$OPENSSL_PACKAGES librtmp-dev libssh2-1-dev zlib1g-dev libssl-doc"
+  OPENSSL_PACKAGES+=" libidn11-dev libkrb5-dev libldap2-dev "
+  OPENSSL_PACKAGES+=" librtmp-dev libssh2-1-dev zlib1g-dev libssl-doc"
   DEBIAN_FRONTEND=noninteractive apt-get install -yq $OPENSSL_PACKAGES 
   echo "openssl installed."
   fi
@@ -177,8 +151,8 @@ if $install_openssl ; then
 if $install_php ; then
   echo "Installing php"
   PHP_PACKAGES="php libapache2-mod-php php-mysql php-gd php-curl php-imap php-ldap"
-  PHP_PACKAGES="$PHP_PACKAGES libmcrypt-dev php-mbstring php-dev php-pear"
-  PHP_PACKAGES="$PHP_PACKAGES libc-client2007e mlock php-curl php-imap uw-mailutils"
+  PHP_PACKAGES+=" libmcrypt-dev php-mbstring php-dev php-pear"
+  PHP_PACKAGES+=" libc-client2007e mlock php-curl php-imap uw-mailutils"
   DEBIAN_FRONTEND=noninteractive apt-get install -yq $PHP_PACKAGES
   phpenmod gd curl imap ldap mbstring
   systemctl restart apache2
@@ -223,21 +197,21 @@ if $install_mysql_server ; then
   cp "$MYSQL_SERVER_BIN_DIR/ca.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOSTNAME-MySQL-ca.pem"
   cp "$MYSQL_SERVER_BIN_DIR/client-cert.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOSTNAME-MySQL-client-cert.pem"
   cp "$MYSQL_SERVER_BIN_DIR/client-key.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOSTNAME-MySQL-client-key.pem"
-  chown -R $USER_ME:$USER_ME "$MYSQL_CLIENT_CERTS_DIR"
+  chown -R $ADMIN_USER:$ADMIN_USER "$MYSQL_CLIENT_CERTS_DIR"
   # Install .my.cnf in home directory
-    backup-file $HOME_ME/.my.cnf
-    cp $GO_CONFIGS/mysql/home_directory_.my.cnf $HOME_ME/.my.cnf
-    replace-in-file "$HOME_ME/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
-    replace-in-file "$HOME_ME/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
-    chown $USER_ME:$USER_ME "$HOME_ME/.my.cnf*"
-    chmod 600 "$HOME_ME/.my.cnf*"
+    backup-file $ADMIN_HOME_DIR/.my.cnf
+    cp $GO_CONFIGS/mysql/home_directory_.my.cnf $ADMIN_HOME_DIR/.my.cnf
+    replace-in-file "$ADMIN_HOME_DIR/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
+    replace-in-file "$ADMIN_HOME_DIR/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
+    chown $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.my.cnf*"
+    chmod 600 "$ADMIN_HOME_DIR/.my.cnf*"
   # Install .my.cnf for root user
-    backup-file /root/.my.cnf
-    cp $GO_CONFIGS/mysql/home_directory_.my.cnf /root/.my.cnf
-    replace-in-file "root/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
-    replace-in-file "root/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
-    chown root:root "/root/.my.cnf*"
-    chmod 600 "root/.my.cnf*"
+    backup-file $ROOT_HOME_DIR/.my.cnf
+    cp $GO_CONFIGS/mysql/home_directory_.my.cnf $ROOT_HOME_DIR/.my.cnf
+    replace-in-file "$ROOT_HOME_DIR/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
+    replace-in-file "$ROOT_HOME_DIR/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
+    chown $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.my.cnf*"
+    chmod 600 "$ROOT_HOME_DIR/.my.cnf*"
   echo "MySQL server installed."
   fi
 
@@ -363,7 +337,7 @@ if $install_handbrake ; then
   apt-get update
   DEBIAN_FRONTEND=noninteractive apt-get install -yq handbrake-gtk handbrake-cli
   echo "HandBrake installed."
-  echo "GUI version is NOT configured: Presets ($HOME_DIR/.HandBrake/*) need to be added."
+  echo "GUI version is NOT configured: Presets ($ADMIN_HOME_DIR/.HandBrake/*) need to be added."
   fi
 
 # Ref: https://askubuntu.com/questions/1058750/new-alert-keeps-showing-up-server-returned-error-nxdomain-mitigating-potential
@@ -377,7 +351,7 @@ ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
 # chmod 777 $SBIN_DIR/_apply-configsHOME
 $SBIN_DIR/_apply-configs
 
-KEYS_FILE=$HOME_DIR/os-security-info.txt
+KEYS_FILE=$ADMIN_HOME_DIR/os-security-info.txt
 echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD" > $KEYS_FILE
 echo "MYSQL_ADMIN_NAME: $MYSQL_ADMIN_NAME" >> $KEYS_FILE
 echo "MYSQL_ADMIN_PASSWORD: $MYSQL_ADMIN_PASSWORD" >> $KEYS_FILE
@@ -388,16 +362,20 @@ echo "" >> $KEYS_FILE
 echo "# Add to $GO_CONFIGS/ssh/home-.ssh-authorized_keys:" >> $KEYS_FILE
 echo "" >> $KEYS_FILE
 echo "# $SSH_KEY_NAME" >> $KEYS_FILE
-cat "$HOME_ME/.ssh/id_rsa.pub" >> $KEYS_FILE
+cat "$ADMIN_HOME_DIR/.ssh/id_rsa.pub" >> $KEYS_FILE
 echo "#" >> $KEYS_FILE
 chmod 400 $KEYS_FILE
-chown $USER_ME:$USER_ME $KEYS_FILE
+chown $ADMIN_USER:$ADMIN_USER $KEYS_FILE
 echo ""
-echo "# IMPORTANT: Move the contents of $KEYS_FILE into 1Password NOW, delete it, and reboot."
+echo "# IMPORTANT: Move the contents of $KEYS_FILE 
+echo "#    into 1Password NOW, delete it, and reboot."
 echo "# Once you continue, these passwords cannot be recovered."
 echo ""
 rm $TEMP_PASSWORD_INCLUDE
 
-source $(dirname $0)/../script-footer
-echo "Done."
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
 exit 0
+
