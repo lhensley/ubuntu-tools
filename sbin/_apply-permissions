@@ -60,11 +60,11 @@
 		fi
 
 # .ssh/authorized_keys
-	if [ -f $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys ]; then
+#	if [ -f $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys ]; then
 		chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh
 		chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh
 		chmod -R 600 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh
-		fi
+#		fi
 
 # SSHD config file
 	if [ -f $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then

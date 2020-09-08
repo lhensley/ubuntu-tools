@@ -40,11 +40,11 @@ if [ -f $GIT_GO_CONFIGS/resolvconf/head ]; then
 	fi
 
 # .ssh/authorized_keys
-if [ -f $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys ]; then
+if [ -f "$GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys" ]; then
 	mkdir -p $ADMIN_HOME_DIR/.ssh
 	mkdir -p $ROOT_HOME_DIR/.ssh
 	cp $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys $ADMIN_HOME_DIR/.ssh/authorized_keys
-	cp $ADMIN_HOME_DIR/.ssh/* $ROOT_HOME_DIR/.ssh/
+	cp $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys $ROOT_HOME_DIR/.ssh/authorized_keys
 	fi
 
 # SSHD config file
