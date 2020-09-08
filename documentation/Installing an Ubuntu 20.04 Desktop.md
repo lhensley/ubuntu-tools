@@ -1,4 +1,4 @@
-﻿# Installing (Not Cloning) a New Ubuntu Host.md
+﻿# Installing a New Ubuntu Host.md
 
 1. Install from a USB stick with an ISO file.
 2. Invoke this document Github in Firefox and copy the text below to the clipboard.

@@ -10,7 +10,7 @@ install_certbot=true
 install_mailutils=true
 install_mysql_server=true
 install_phpmyadmin=true
-install_plexmediaserver=false # CAUTION: NOT TESTED FOR UBUNTU 20
+install_plexmediaserver=true
 install_webmin=true
 install_zoom=true
 install_chrome=true
@@ -94,11 +94,16 @@ chmod 440 /etc/sudoers.d/lane-NOPASSWD-users
 
 # Add custom application definitions for ufw
 echo "Adding custom application definitions for ufw"
-cp $GO_CONFIGS/lane-applications /etc/ufw/applications.d/
+cp $GO_CONFIGS/lane-applications /etc/ufw/applications.d
 chown $ROOT_USER:$ROOT_USER /etc/ufw/applications.d/lane-applications
 chmod 644 /etc/ufw/applications.d/lane-applications
 ufw app update lane-applications
 echo "Special LANE applications installed to ufw."
+
+# Add peripherals to /etc/fstab
+if [ -f $GIT_GO_SETUP/fstab/$HOSTNAME/fstab-peripherals ]; then
+    echo $GIT_GO_SETUP/fstab/$HOSTNAME/fstab-peripherals >> /etc/fstab
+    fi
 
 # Install MakeMKV
 # DON'T USE THE SNAP INSTALLER
@@ -158,6 +163,11 @@ if $install_php ; then
   systemctl restart apache2
   echo "php installed."
   fi
+
+# Install local fstab options
+    #echo "Installing rclone"
+    #DEBIAN_FRONTEND=noninteractive apt-get install -yq curl
+    #curl https://rclone.org/install.sh | sudo bash
 
 # Install rclone
     echo "Installing rclone"
@@ -237,41 +247,32 @@ if $install_phpmyadmin ; then
   fi
 
 if $install_plexmediaserver ; then
-# CAUTION: NOT TESTED FOR UBUNTU 20
-# NOTE: As of 8/20/2020, it is difficult to impossible to automate this because the name 
-# of the latest/current release cannot be anticipated. See instructions 
-# at https://www.plex.tv/media-server-downloads/ 
-# and https://support.plex.tv/articles/200288586-installation/.
-# Copy the deb file to /home/lhensley, and run
-#   sudo dpkg -i ./plexmediaserver*deb
-#   sudo ufw allow plexmediaserver
-#   sudo usermod -a -G plex lhensley
-#   sudo mkdir /var/lib/plexmediaserver/Library/work
-#   sudo mkdir /var/lib/plexmediaserver/Library/store
-#   sudo chown plex:plex /var/lib/plexmediaserver/Library/*
-# Mount the drives and add the libraries.
-# Browse to http://<server>:32400/web
-# Ubuntu 18 instructions below:
-  echo "Installing Plex Media Server"
-  rm /etc/apt/sources.list.d/plexmediaserver.list
-  deb https://downloads.plex.tv/repo/deb public main | tee /etc/apt/sources.list.d/plexmediaserver.list
-  curl https://downloads.plex.tv/plex-keys/PlexSign.key | apt-key add -
-  apt update
-  apt install plexmediaserver
-  ufw allow plexmediaserver
-  echo "Plex Media Server installed."
-  # Install Tautulli for https://this-server:8181
-  See https://tautulli.com/
-  DEBIAN_FRONTEND=noninteractive apt-get install -yq python python-setuptools tzdata
-  cd /opt
-  git clone https://github.com/Tautulli/Tautulli.git
-  addgroup tautulli && sudo adduser --system --no-create-home tautulli --ingroup tautulli
-  chown tautulli:tautulli -R /opt/Tautulli
-  systemctl daemon-reload
-  systemctl enable tautulli.service
-  systemctl start tautulli.service
-  ufw allow 8181
-  cd
+    # Tested through Ubuntu 20.04.1
+    # Install Plex Media Server
+      echo "Installing Plex Media Server"
+      rm -rf /etc/apt/sources.list.d/plexmediaserver.list
+      echo "# When enabling this repo please remember to add the PlexPublic.Key into the apt setup." > /etc/apt/sources.list.d/plexmediaserver.list
+      echo "# wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
+      echo "#" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
+      echo "deb https://downloads.plex.tv/repo/deb/ public main" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
+      wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -
+      apt-get -y update
+      apt-get install -y plexmediaserver
+      ufw allow 32400/tcp # if not already specified
+      echo "Plex Media Server installed."
+    # Install Tautulli for https://this-server:8181
+    # Ref: https://tautulli.com/
+        DEBIAN_FRONTEND=noninteractive apt-get install -yq python python-setuptools tzdata
+        cd /opt
+        git clone https://github.com/Tautulli/Tautulli.git
+        addgroup tautulli && sudo adduser --system --no-create-home tautulli --ingroup tautulli
+        cp /opt/Tautulli/init-scripts/init.systemd /lib/systemd/system/tautulli.service
+        chown tautulli:tautulli -R /opt/Tautulli
+        systemctl daemon-reload
+        systemctl enable tautulli.service
+        systemctl start tautulli.service
+        ufw allow 8181
+        cd
   fi
 
 if $install_webmin ; then
