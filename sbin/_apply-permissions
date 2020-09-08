@@ -29,13 +29,13 @@
 		chmod 740 ${PATHNAME[_apply_configs]}
 
 # ddclient
-	if [ -f $GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
+	if [ -f $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
 		chmod 600 /etc/ddclient.conf /etc/default/ddclient
 		chown $ROOT_USER:$ROOT_USER /etc/ddclient.conf /etc/default/ddclient
 		fi
 
 # fstab
-	if [ -f $GO_CONFIGS/fstab/$HOSTNAME/fstab ]; then
+	if [ -f $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab ]; then
 		chown $ROOT_USER:$ROOT_USER /etc/fstab*
 		chmod 664 /etc/fstab*
 		fi
@@ -48,39 +48,39 @@
 	chmod -R 400 $GIT_ROOT
 
 # lsyncd
-	if [ -f $GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
+	if [ -f $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
 		chown $ROOT_USER:$ROOT_USER /etc/lsyncd/lsyncd.conf.lua
 		chmod 600 /etc/lsyncd/lsyncd.conf.lua
 		fi
 
 # resolvconf
-	if [ -f $GO_CONFIGS/resolvconf/head ]; then
+	if [ -f $GIT_GO_CONFIGS/resolvconf/head ]; then
 		chown $ROOT_USER:$ROOT_USER /etc/resolvconf/resolv.conf.d/head
 		chmod 644 /etc/resolvconf/resolv.conf.d/head
 		fi
 
 # .ssh/authorized_keys
-	if [ -f $GO_CONFIGS/ssh/home-.ssh-authorized_keys ]; then
+	if [ -f $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys ]; then
 		chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh
 		chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh
 		chmod -R 600 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh
 		fi
 
 # SSHD config file
-	if [ -f $GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
+	if [ -f $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
 		chmod 644 "$SSHD_CONFIG"
 		chown $ROOT_USER:$ROOT_USER "$SSHD_CONFIG"
 		fi
 
 # HandBrake config file
-	if [ -f $GO_CONFIGS/etc-lane.conf ]; then
+	if [ -f $GIT_GO_CONFIGS/etc-lane.conf ]; then
 		chmod -R 600 $ADMIN_HOME_DIR/.HandBrake/*
 		chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.HandBrake $ADMIN_HOME_DIR/Videos
 		chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.HandBrake
 		fi
 
 # Vim and vi config files
-	if [ -f $GO_CONFIGS/vim/.vimrc ]; then
+	if [ -f $GIT_GO_CONFIGS/vim/.vimrc ]; then
 		chmod 600 $ADMIN_HOME_DIR/.vim*
 		chown $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.vim*
 		chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.vim*

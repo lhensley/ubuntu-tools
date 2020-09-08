@@ -94,7 +94,7 @@ chmod 440 /etc/sudoers.d/lane-NOPASSWD-users
 
 # Add custom application definitions for ufw
 echo "Adding custom application definitions for ufw"
-cp $GO_CONFIGS/lane-applications /etc/ufw/applications.d
+cp $GIT_GO_CONFIGS/lane-applications /etc/ufw/applications.d
 chown $ROOT_USER:$ROOT_USER /etc/ufw/applications.d/lane-applications
 chmod 644 /etc/ufw/applications.d/lane-applications
 ufw app update lane-applications
@@ -111,13 +111,13 @@ if $install_makemkv ; then
   echo "Installing MakeMKV"
   add-apt-repository ppa:heyarje/makemkv-beta
   apt-get update
-  DEBIAN_FRONTEND=noninteractive apt-get install -yq makemkv-bin makemkv-oss ccextractor
+  printf '\n' | DEBIAN_FRONTEND=noninteractive apt-get install -yq makemkv-bin makemkv-oss ccextractor
   usermod -a -G cdrom $ADMIN_USER
   # MakeMKV config file
-    if [ -f $GO_CONFIGS/makemkv/settings.conf ]; then
+    if [ -f $GIT_GO_CONFIGS/makemkv/settings.conf ]; then
 	    mkdir -p $ADMIN_HOME_DIR/.MakeMKV
 	    mkdir -p $ROOT_HOME_DIR/.MakeMKV
-	    cp $GO_CONFIGS/makemkv/settings.conf $ADMIN_HOME_DIR/.MakeMKV/
+	    cp $GIT_GO_CONFIGS/makemkv/settings.conf $ADMIN_HOME_DIR/.MakeMKV/
 	    chmod 600 $ADMIN_HOME_DIR/.MakeMKV/settings.conf
 	    chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.MakeMKV
 	    cp $ADMIN_HOME_DIR/.MakeMKV/settings.conf $ROOT_HOME_DIR/.MakeMKV/
@@ -210,18 +210,18 @@ if $install_mysql_server ; then
   chown -R $ADMIN_USER:$ADMIN_USER "$MYSQL_CLIENT_CERTS_DIR"
   # Install .my.cnf in home directory
     backup-file $ADMIN_HOME_DIR/.my.cnf
-    cp $GO_CONFIGS/mysql/home_directory_.my.cnf $ADMIN_HOME_DIR/.my.cnf
+    cp $GIT_GO_CONFIGS/mysql/home_directory_.my.cnf $ADMIN_HOME_DIR/.my.cnf
     replace-in-file "$ADMIN_HOME_DIR/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
     replace-in-file "$ADMIN_HOME_DIR/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
-    chown $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.my.cnf*"
-    chmod 600 "$ADMIN_HOME_DIR/.my.cnf*"
+    chown $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.my.cnf"*
+    chmod 600 "$ADMIN_HOME_DIR/.my.cnf"*
   # Install .my.cnf for root user
     backup-file $ROOT_HOME_DIR/.my.cnf
-    cp $GO_CONFIGS/mysql/home_directory_.my.cnf $ROOT_HOME_DIR/.my.cnf
+    cp $GIT_GO_CONFIGS/mysql/home_directory_.my.cnf $ROOT_HOME_DIR/.my.cnf
     replace-in-file "$ROOT_HOME_DIR/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
     replace-in-file "$ROOT_HOME_DIR/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
-    chown $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.my.cnf*"
-    chmod 600 "$ROOT_HOME_DIR/.my.cnf*"
+    chown $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.my.cnf"*
+    chmod 600 "$ROOT_HOME_DIR/.my.cnf"*
   echo "MySQL server installed."
   fi
 
@@ -236,10 +236,10 @@ if $install_phpmyadmin ; then
   debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_APP_DB_PASS"
   apt install -y phpmyadmin php-mbstring php-zip php-gd php-json php-curl
   phpenmod mbstring
-  cp $GO_CONFIGS/phpmyadmin.config.inc.php $PHPMYADMIN_DIR/config.inc.php
+  cp $GIT_GO_CONFIGS/phpmyadmin.config.inc.php $PHPMYADMIN_DIR/config.inc.php
   chown -R www-data:www-data $PHPMYADMIN_DIR
   chmod 644 $PHPMYADMIN_DIR/config.inc.php
-#  cp $GO_CONFIGS/html/.htaccess.html.www.var $THIS_WEB_ROOT/.htaccess
+#  cp $GIT_GO_CONFIGS/html/.htaccess.html.www.var $THIS_WEB_ROOT/.htaccess
 #  chown -R www-data:www-data $THIS_WEB_ROOT/.htaccess
 #  chmod 644 $THIS_WEB_ROOT/.htaccess
   systemctl restart apache2
@@ -257,7 +257,7 @@ if $install_plexmediaserver ; then
       echo "deb https://downloads.plex.tv/repo/deb/ public main" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
       wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -
       apt-get -y update
-      apt-get install -y plexmediaserver
+      f_install plexmediaserver
       ufw allow 32400/tcp # if not already specified
       echo "Plex Media Server installed."
     # Install Tautulli for https://this-server:8181
@@ -360,7 +360,7 @@ echo "PHPMYADMIN_APP_PASS: $PHPMYADMIN_APP_PASS" >> $KEYS_FILE
 echo "PHPMYADMIN_ROOT_PASS: $PHPMYADMIN_ROOT_PASS" >> $KEYS_FILE
 echo "PHPMYADMIN_APP_DB_PASS: $PHPMYADMIN_APP_DB_PASS" >> $KEYS_FILE
 echo "" >> $KEYS_FILE
-echo "# Add to $GO_CONFIGS/ssh/home-.ssh-authorized_keys:" >> $KEYS_FILE
+echo "# Add to $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys:" >> $KEYS_FILE
 echo "" >> $KEYS_FILE
 echo "# $SSH_KEY_NAME" >> $KEYS_FILE
 cat "$ADMIN_HOME_DIR/.ssh/id_rsa.pub" >> $KEYS_FILE
