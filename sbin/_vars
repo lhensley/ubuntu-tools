@@ -102,7 +102,7 @@ source /etc/os-release
 	THIS_WEB_ROOT="$WEB_ROOTS/html"
 
 # Archive Directories, Files, and Paths
-# DEPENDENT on definition of $HOSTNAME, but thats built-in
+# DEPENDENT on definition of $HOSTNAME, but that's built-in
 	declare -A ARCHIVE_FILE_SYSTEM
 		ARCHIVE_FILE_SYSTEM[default]="/"
 		ARCHIVE_FILE_SYSTEM[nuc01]="/mnt/cloteal"

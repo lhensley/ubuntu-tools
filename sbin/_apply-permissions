@@ -30,14 +30,14 @@
 
 # ddclient
 	if [ -f $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
-		chmod 600 /etc/ddclient.conf /etc/default/ddclient
+		chmod 600 /etc/ddclient.conf /etc/default/ddclient # confirmed value
 		chown $ROOT_USER:$ROOT_USER /etc/ddclient.conf /etc/default/ddclient
 		fi
 
 # fstab
 	if [ -f $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab ]; then
 		chown $ROOT_USER:$ROOT_USER /etc/fstab*
-		chmod 664 /etc/fstab*
+		chmod 664 /etc/fstab* # confirmed value
 		fi
 
 # Git
@@ -45,39 +45,40 @@
 	chmod 600 $ADMIN_HOME_DIR/.gitconfig
 	chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.gitconfig
 	chown $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.gitconfig
-	chmod -R 400 $GIT_ROOT
+	chmod -R 400 $GIT_ROOT/*
 
 # lsyncd
 	if [ -f $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
-		chown $ROOT_USER:$ROOT_USER /etc/lsyncd/lsyncd.conf.lua
-		chmod 600 /etc/lsyncd/lsyncd.conf.lua
+		chown $ROOT_USER:$ROOT_USER /etc/lsyncd/lsyncd.conf.lua # NOT confirmed; relevant to system viability?
+		chmod 600 /etc/lsyncd/lsyncd.conf.lua # NOT confirmed; relevant to system viability?
 		fi
 
 # resolvconf
 	if [ -f $GIT_GO_CONFIGS/resolvconf/head ]; then
-		chown $ROOT_USER:$ROOT_USER /etc/resolvconf/resolv.conf.d/head
-		chmod 644 /etc/resolvconf/resolv.conf.d/head
+		chown $ROOT_USER:$ROOT_USER /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
+		chmod 644 /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
 		fi
 
 # .ssh/authorized_keys
 #	if [ -f $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys ]; then
-		chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh
-		chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh
-		chmod -R 600 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh
+		chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh # Confirmed
+		chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh # Confirmed
+		chmod -f 700 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh # Confirmed
+		chmod -f 644 $ADMIN_HOME_DIR/.ssh/id_rsa.pub $ROOT_HOME_DIR/.ssh/id_rsa.pub # Confirmed
+		chmod -f 600 $ADMIN_HOME_DIR/.ssh/id_rsa $ROOT_HOME_DIR/.ssh/id_rsa $ADMIN_HOME_DIR/.ssh/authorized_keys $ROOT_HOME_DIR/.ssh/authorized_keys # Confirmed
+		f_debug
 #		fi
 
 # SSHD config file
 	if [ -f $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
-		chmod 644 "$SSHD_CONFIG"
-		chown $ROOT_USER:$ROOT_USER "$SSHD_CONFIG"
+		chown $ROOT_USER:$ROOT_USER "$SSHD_CONFIG" # Confirmed
+		chmod 644 "$SSHD_CONFIG" # Confirmed
 		fi
 
 # HandBrake config file
-	if [ -f $GIT_GO_CONFIGS/etc-lane.conf ]; then
-		chmod -R 600 $ADMIN_HOME_DIR/.HandBrake/*
-		chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.HandBrake $ADMIN_HOME_DIR/Videos
-		chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.HandBrake
-		fi
+	chmod -fR 600 $ADMIN_HOME_DIR/.HandBrake
+	chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.HandBrake $ADMIN_HOME_DIR/Videos/*
+	chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.HandBrake/*
 
 # Vim and vi config files
 	if [ -f $GIT_GO_CONFIGS/vim/.vimrc ]; then

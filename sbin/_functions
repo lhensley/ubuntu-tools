@@ -9,6 +9,22 @@
 # Set a flag to confirm that the functions are not yet defined
 FUNCTIONS_ARE_DEFINED=false
 
+function f_debug () {
+    # $1: message to log, only used when $DEBUG_MODE == true
+    if [ $DEBUG_MODE ]; then
+        logger $0: DEBUG: $1
+        fi
+    }
+
+function f_debug_variable () {
+    # $1: variable_name
+    # $2: variable_value ("$variable_name")
+    # Example: f_debug_variable "var" "$var"
+    if [ $DEBUG_MODE ]; then
+        logger $0: DEBUG: $1 = $2
+        fi
+    }
+
 function f_require_value {
 # $1 = Variable name  e.g., "INPUT_FILE"
 # $2 = Content of variable, e.g., "$INPUT_FILE"
@@ -43,22 +59,6 @@ function f_file_not_in_use {
 	    echo "$0: FATAL: File in use: $1"
 	    logger "$0: FATAL: File in use: $1"
         exit 1
-        fi
-    }
-
-function f_debug () {
-    # $1: message to log, only used when $DEBUG_MODE == true
-    if [ $DEBUG_MODE ]; then
-        logger $0: DEBUG: $1
-        fi
-    }
-
-function f_debug_variable () {
-    # $1: variable_name
-    # $2: variable_value ("$variable_name")
-    # Example: f_debug_variable "var" "$var"
-    if [ $DEBUG_MODE ]; then
-        logger $0: DEBUG: $1 = $2
         fi
     }
 
@@ -109,5 +109,12 @@ function f_install() {
 		DEBIAN_FRONTEND=noninteractive apt-get install -yq $1
 		logger $0 Installation of $1 done exit code $?
 	fi
-}
+	}
+
+function f_chmod() {
+# Only one file or directory at a time. No flags, wildcards, or multiple files or directories
+	if [ -f "$2" ] || [ -d "$2" ]; then
+		chmod $1 $2
+	fi
+	}
 
