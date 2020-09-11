@@ -25,38 +25,29 @@ MY_GIT_TOKEN=8224e3fbc597bf523d30906d038158977763b2e1
 git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
 git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
 git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
-    echo Test B
 cp /root/.gitconfig $HOME_DIR/.gitconfig
 chown root:root /root/.gitconfig
 chown $USER_ME:$USER_ME $HOME_DIR/.gitconfig
 chmod 600 $HOME_DIR/.gitconfig
 chmod 600 /root/.gitconfig
-    echo Test C
+
 # Wipe out existing git and /usr/local/sbin
 rm -rf /var/local/git /usr/local/sbin
+
 # Clone go.git and set restrictive permissions
-    echo Test D
 mkdir -p /var/local/git
 chmod 775 /var/local/git
 cd /var/local/git
-# Select the designated branch
-    echo Test E
-git checkout $BRANCH
-    echo Test F
 git clone https://github.com/lhensley/go.git
-    echo Test G
 chown -R root:root /var/local/git
 chmod -R 400 /var/local/git
 cd
+
 # Copy scripts into /usr/local/sbin
 cp -r /var/local/git/go/sbin /usr/local
 chown -R root:root /usr/local/sbin
 find /usr/local/sbin -type d -print0 | sudo xargs -0 chmod 750
 find /usr/local/sbin -type f -print0 | sudo xargs -0 chmod 540
+
 # Run initialization script
-# THIS REQUIRES REBOOT AFTER RUNNING
-
-# NOT YET
-exit 1
-
 /usr/local/sbin/setup/setup-os

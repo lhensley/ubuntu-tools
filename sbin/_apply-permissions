@@ -11,7 +11,7 @@
 # Set ownership and permissions in $SBIN_DIR
 	chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
 	find $SBIN_DIR -type d -print -exec chmod 700 {} \; >> /dev/null 2>&1
-	find $SBIN_DIR -type f -print -exec chmod 770 {} \; >> /dev/null 2>&1
+	find $SBIN_DIR -type f -print -exec chmod 750 {} \; >> /dev/null 2>&1
 
 # Exceptions: These can be read or run by anyone
 	# These based on functional requirements
