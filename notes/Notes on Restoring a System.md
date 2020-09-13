@@ -17,8 +17,6 @@ The script below attempts to deal with these. This is a work in progress. For no
 # Mount peripherals again
     mount --all
 
-
-
 # INSTALL PLEX FIRST!
 
 ln -s /mnt/ssd1tb /var/lib/plexmediaserver/Library/work

@@ -189,14 +189,14 @@ for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do
         echo "" >> /etc/fstab
     fi
     if [ -z MOUNT_POINT_DESCRIPTION[$KEY] ]; then
-        echo "# $MOUNT_POINT_DESCRIPTION[$KEY]" >> /etc/fstab"
+        echo "# $MOUNT_POINT_DESCRIPTION[$KEY]" >> /etc/fstab
     fi
     if [ -z MOUNT_POINT_DEFINITION[$KEY] ]; then
         echo "$MOUNT_POINT_DEFINITION[$KEY]" >> /etc/fstab
     fi
 
 # Unmount peripherals currently mounted under /media/$LOGNAME/*
-umount /media/$LOGNAME/*
+umount "/media/$LOGNAME/"*
 
 # Remount all using /etc/fstab, as amended above
 mount --all
@@ -342,10 +342,14 @@ if $install_phpmyadmin ; then
   echo "phpMyAdmin installed."
   fi
 
+# IMPORTANT: Make sure this comes AFTER fstab installation and adaptation. The plex links and file systems need to exist.
 if $install_plexmediaserver ; then
     # Tested through Ubuntu 20.04.1
     # Install Plex Media Server
       echo "Installing Plex Media Server"
+      xxx
+      ln -s /mnt/ssd1tb /var/lib/plexmediaserver/Library/work
+      ln -s /mnt/ext10tb01 /var/lib/plexmediaserver/Library/store
       rm -rf /etc/apt/sources.list.d/plexmediaserver.list
       echo "# When enabling this repo please remember to add the PlexPublic.Key into the apt setup." > /etc/apt/sources.list.d/plexmediaserver.list
       echo "# wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
