@@ -34,7 +34,6 @@ git config --global user.email "lane.hensley@alumni.duke.edu"
 git config --global credential.helper store
 git config --global credential.helper cache
 git config --global credential.helper 'cache --timeout=600'
-    echo Test A
 # Install git token
 # To get a new token, go to https://github.com/settings/tokens.
 # NOTE: this token allows deployment only.
@@ -162,8 +161,11 @@ DEBIAN_FRONTEND=noninteractive apt-get install -yq ufw ssh
 ufw allow ssh
 
 # Set up $ADMIN_USER
-usermod -aG sudo $ADMIN_USER
-sudo -u $ADMIN_USER ssh-keygen -C "$SSH_KEY_NAME" -P "" -q -f "$ADMIN_HOME_DIR/.ssh/id_rsa"
+    # Make $ADMIN_USER a member of group sudo
+        usermod -aG sudo $ADMIN_USER
+    # Generate SSH keys for $ADMIN_USER
+    # Should this occur somewhere else? SSH setup?
+        sudo -u $ADMIN_USER ssh-keygen -C "$SSH_KEY_NAME" -P "" -q -f "$ADMIN_HOME_DIR/.ssh/id_rsa"
 
 echo Configure sudo $ADMIN_USER as a sudo user
 echo "$ADMIN_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/lane-NOPASSWD-users
@@ -180,7 +182,7 @@ ufw app update lane-applications
 echo "Special LANE applications installed to ufw."
 
 # Make a copy of /etc/fstab as installed
-cp /etc/fstab /etc/fstab-installed-$START_DATEANDTIMESTAMP
+cp "/etc/fstab" "/etc/fstab-installed-$START_DATEANDTIMESTAMP"
 
 # Add peripherals to /etc/fstab
 for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do 
@@ -195,11 +197,17 @@ for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do
         echo "$MOUNT_POINT_DEFINITION[$KEY]" >> /etc/fstab
     fi
 
+echo "Test A"
+
 # Unmount peripherals currently mounted under /media/$LOGNAME/*
 umount "/media/$LOGNAME/"*
 
+echo "Test B"
+
 # Remount all using /etc/fstab, as amended above
 mount --all
+
+echo "Test C"
 
 # Install MakeMKV
 # DON'T USE THE SNAP INSTALLER
@@ -222,6 +230,8 @@ if $install_makemkv ; then
   echo "MakeMKV installed."
   fi
 
+echo "Test D"
+
 if $install_apache2 ; then
   echo "Installing apache2"
   DEBIAN_FRONTEND=noninteractive apt-get install -yq apache2 apache2-doc apache2-suexec-pristine
@@ -234,11 +244,15 @@ if $install_apache2 ; then
   echo "apache2 installed."
   fi
 
+echo "Test E"
+
 # Install Google Chrome
 DEBIAN_FRONTEND=noninteractive apt-get install -yq wget gdebi-core
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 gdebi --n google-chrome-stable_current_amd64.deb
 rm ./google-chrome-stable_current_amd64.deb
+
+echo "Test F"
 
 if $install_openssl ; then
   echo "Installing openssl"
@@ -248,6 +262,8 @@ if $install_openssl ; then
   DEBIAN_FRONTEND=noninteractive apt-get install -yq $OPENSSL_PACKAGES 
   echo "openssl installed."
   fi
+
+echo "Test G"
 
 if $install_php ; then
   echo "Installing php"
@@ -260,21 +276,29 @@ if $install_php ; then
   echo "php installed."
   fi
 
+echo "Test H"
+
 # Install local fstab options
     #echo "Installing rclone"
     #DEBIAN_FRONTEND=noninteractive apt-get install -yq curl
     #curl https://rclone.org/install.sh | sudo bash
+
+echo "Test I"
 
 # Install rclone
     echo "Installing rclone"
     DEBIAN_FRONTEND=noninteractive apt-get install -yq curl
     curl https://rclone.org/install.sh | sudo bash
 
+echo "Test J"
+
 if $enable_certbot ; then
   echo "Installing certbot"
   DEBIAN_FRONTEND=noninteractive apt-get install -yq certbot python3-certbot-apache
   echo "certbot installed."
   fi
+
+echo "Test K"
 
 if $install_mailutils ; then
   echo "installing mailutils"
@@ -286,6 +310,8 @@ if $install_mailutils ; then
   echo "mailutils installed."
   fi
   
+echo "Test L"
+
 if $install_mysql_server ; then
   echo "Installing mysql server"
 ###### EXTREMELY IMPORTANT: Edit /etc/mysql/mysql.conf.d/mysqld.cnf and open up bind-address * ###########
