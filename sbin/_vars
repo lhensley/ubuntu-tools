@@ -43,12 +43,13 @@
 source /etc/os-release
 
 # Start timestamps
-	START_DATESTAMP=$(/bin/date '+%Y-%m-%d')                    # Like 2020-09-07. Used in backup variables below
-	START_DAYSTAMP=$(/bin/date '+%d')                           # Like 07
-	START_MONTHSTAMP=$(/bin/date '+%Y-%m')                      # Like 2020-09
-	START_TIMESTAMP=$(/bin/date)                                # Like Mon 07 Sep 2020 04:01:23 PM CDT
-	START_WEEKDAYSTAMP=$(/bin/date '+%a')                       # Like Mon. Used in backup variables below
-	START_DATEANDTIMESTAMP=$(/bin/date '+%Y-%m-%d %H:%M:%S')    # Like 2020-09-07 16:05:23. Used in naming SSH keys
+# Ref https://www.cyberciti.biz/faq/linux-unix-formatting-dates-for-display/ for date format %codes
+	START_DATESTAMP=$(/bin/date '+%Y-%m-%d   ')                    # Like 2020-09-07. Used in backup variables below
+	START_DAYSTAMP=$(/bin/date '+%d')                              # Like 07
+	START_MONTHSTAMP=$(/bin/date '+%Y-%m')                         # Like 2020-09
+	START_TIMESTAMP=$(/bin/date)                                   # Like Mon 07 Sep 2020 04:01:23 PM CDT
+	START_WEEKDAYSTAMP=$(/bin/date '+%a')                          # Like Mon. Used in backup variables below
+	START_DATEANDTIMESTAMP=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')    # Like 2020-09-07-16-05-23-CDT. Used in naming SSH keys and backing up installed files like fstab
 
 # About This Script (or at least the one sourcing it)
 	PROGRAM_DIRECTORY=$(dirname $0)
@@ -155,6 +156,38 @@ source /etc/os-release
 	# Ref: https://bytefreaks.net/gnulinux/bash/bash-how-to-iterate-over-associative-array-and-print-all-keyvalue-pairs
 	BACKUP_SOURCES=""; for KEY in "${!BACKUP_SOURCE[@]}"; do BACKUP_SOURCES+=$KEY" "; done
 
+# Peripheral File System Mount Points
+# This info is appended to /etc/fstab, and the mount points (key values) are created, at system installation
+# IMPORTANT: Note single quotes on values, required to interpret escaped values like \n correctly.
+# Example: ROOT_REQUIRED[${PATHNAME[lgh]}]=true
+# It doesn't matter what the value is set to, as long as the key is defined
+	declare -A MOUNT_POINT_DESCRIPTION
+	declare -A MOUNT_POINT_DEFINITION
+	if [ $HOSTNAME=="nuc01" ]; then
+		MOUNT_POINT_DESCRIPTION[/mnt/Black4T01]="Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE"
+			MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs noauto 0 0"
+		MOUNT_POINT_DESCRIPTION[/mnt/bertha]="bertha (3TB) UUID=d28256f9-c258-451e-b299-d4849cf19e0b"
+			MOUNT_POINT_DEFINITION[/mnt/bertha]="UUID=d28256f9-c258-451e-b299-d4849cf19e0b /mnt/bertha ext4 defaults 0 0"
+		MOUNT_POINT_DESCRIPTION[/mnt/cloteal]="cloteal (10TB) UUID=4e356144-2e69-4812-8958-d035a9ebc28e"
+			MOUNT_POINT_DEFINITION[/mnt/cloteal]="UUID=4e356144-2e69-4812-8958-d035a9ebc28e /mnt/cloteal ext4 defaults 0 0"
+		MOUNT_POINT_DESCRIPTION[/mnt/MyBook3T01]="MyBook3T01 (3TB) UUID=C6B89CABB89C9B8D"
+			MOUNT_POINT_DEFINITION[/mnt/MyBook3T01]="UUID=C6B89CABB89C9B8D /mnt/MyBook3T01 ntfs noauto 0 0"
+		MOUNT_POINT_DESCRIPTION[/mnt/Silver5TB-A]="Silver5TB-A (5TB) UUID=0A538B3244DE3676"
+			MOUNT_POINT_DEFINITION[/mnt/Silver5TB-A]="UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs defaults 0 0"
+		MOUNT_POINT_DESCRIPTION[/mnt/Silver5TB-B]="Silver5TB-B (5TB) UUID 634B5E207BE18E54"
+			MOUNT_POINT_DEFINITION[/mnt/Silver5TB-B]="UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0"
+		MOUNT_POINT_DESCRIPTION[/home/plex-swap/uploads]="Bind mount"
+			MOUNT_POINT_DEFINITION[/home/plex-swap/uploads]="#/mnt/cloteal/PlexUploads /home/plex-swap/uploads none bind 0 0"
+		MOUNT_POINT_DESCRIPTION[/home/plex-swap/downloads]="Bind mount"
+			MOUNT_POINT_DEFINITION[/home/plex-swap/downloads]="#/mnt/cloteal/Plex /home/plex-swap/downloads none bind 0 0"
+	fi
+	if [ $HOSTNAME=="oz" ]; then
+		MOUNT_POINT_DESCRIPTION[/mnt/ssd1tb]="Internal SSD drive, 1T"
+			MOUNT_POINT_DEFINITION[/mnt/ssd1tb]="UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb ext4 defaults 0 0"
+		MOUNT_POINT_DESCRIPTION[/mnt/ext10tb01]="External Hard Drive for Plex, 10TB (rerun)"
+			MOUNT_POINT_DEFINITION[/mnt/ext10tb01]="UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 ro,defaults 0 0"
+	fi
+
 # Git
 	GIT_BRANCH="master"
 	# GIT_BRANCH="dev"
@@ -191,8 +224,8 @@ source /etc/os-release
 	ARCHIVE_MYSQL_DB="$THIS_ARCHIVE_DIRECTORY/$HOSTNAME-$START_DATESTAMP-"
 
 # Passwords
-	LENGTH_OF_PASSWORDS=63
-	MAX_MYSQL_PASSWORD_LENGTH=32
+	LENGTH_OF_PASSWORDS=60
+	MAX_MYSQL_PASSWORD_LENGTH=30
 	EXCLUDED_PASSWORD_CHARACTERS=" \$\'\"\\\#\|\<\>\;\*\&\~\!\I\l\1\O\0\`\/\?"
 
 # phpMyAdmin
@@ -219,8 +252,8 @@ source /etc/os-release
 	MAILNAME=$HOSTNAME
 	MAIN_MAILER_TYPE="'Internet with smarthost'"
 	RELAYHOST="mail.twc.com"                                          # Spectrum Internet (DEFAULT for Austin)
-	if [ $HOSTNAME="nuc01" ]; then RELAYHOST="mail.mchsi.com"; fi     # Mediacom Cable Internet
-	if [ $HOSTNAME="red" ]; then RELAYHOST="mail.mchsi.com"; fi       # Mediacom Cable Internet
+	if [ $HOSTNAME=="nuc01" ]; then RELAYHOST="mail.mchsi.com"; fi     # Mediacom Cable Internet
+	if [ $HOSTNAME=="red" ]; then RELAYHOST="mail.mchsi.com"; fi       # Mediacom Cable Internet
 
 # ssh
 # DEPENENT on timestamps above

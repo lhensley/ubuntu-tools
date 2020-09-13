@@ -53,7 +53,7 @@ if [ -f $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
 	fi
 
 # HandBrake config file
-if [ -f $GIT_GO_CONFIGS/etc-lane.conf ]; then
+if [ -f "$GIT_GO_CONFIGS/handbrake/Lane 1080p (BluRay).json" ]; then
 	mkdir -p $ADMIN_HOME_DIR/.HandBrake
 	mkdir -p $ROOT_HOME_DIR/.HandBrake
 	cp $GIT_GO_CONFIGS/handbrake/* $ADMIN_HOME_DIR/.HandBrake/

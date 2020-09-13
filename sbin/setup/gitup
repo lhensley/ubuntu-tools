@@ -118,6 +118,7 @@ fi
     f_install openvpn
     f_install bridge-utils
     f_install ifupdown
+    f_install proftpd                 # For scanning to brother@oz
     f_install resolvconf
     f_install ripmime                 # Process files sent by email
     f_install ssh && ufw allow ssh
@@ -178,10 +179,27 @@ chmod 644 /etc/ufw/applications.d/lane-applications
 ufw app update lane-applications
 echo "Special LANE applications installed to ufw."
 
+# Make a copy of /etc/fstab as installed
+cp /etc/fstab /etc/fstab-installed-$START_DATEANDTIMESTAMP
+
 # Add peripherals to /etc/fstab
-if [ -f $GIT_GO_SETUP/fstab/$HOSTNAME/fstab-peripherals ]; then
-    echo $GIT_GO_SETUP/fstab/$HOSTNAME/fstab-peripherals >> /etc/fstab
+for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do 
+    mkdir -p "/mnt/$KEY"
+    if [ ! -z $MOUNT_POINT_DEFINITIONSCRIPTION[$KEY] || ! -z $MOUNT_POINT_DEFINITION[$KEY] ]; then
+        echo "" >> /etc/fstab
     fi
+    if [ -z MOUNT_POINT_DESCRIPTION[$KEY] ]; then
+        echo "# $MOUNT_POINT_DESCRIPTION[$KEY]" >> /etc/fstab"
+    fi
+    if [ -z MOUNT_POINT_DEFINITION[$KEY] ]; then
+        echo "$MOUNT_POINT_DEFINITION[$KEY]" >> /etc/fstab
+    fi
+
+# Unmount peripherals currently mounted under /media/$LOGNAME/*
+umount /media/$LOGNAME/*
+
+# Remount all using /etc/fstab, as amended above
+mount --all
 
 # Install MakeMKV
 # DON'T USE THE SNAP INSTALLER
@@ -416,7 +434,8 @@ if $install_handbrake ; then
   apt-get update
   DEBIAN_FRONTEND=noninteractive apt-get install -yq handbrake-gtk handbrake-cli
   echo "HandBrake installed."
-  echo "GUI version is NOT configured: Presets ($ADMIN_HOME_DIR/.HandBrake/*) need to be added."
+  echo "GUI version is NOT configured: "
+  echo "  Presets ($ADMIN_HOME_DIR/.HandBrake/*) need to be added."
   fi
 
 # Ref: https://askubuntu.com/questions/1058750/new-alert-keeps-showing-up-server-returned-error-nxdomain-mitigating-potential
@@ -447,10 +466,10 @@ echo "#" >> $OS_INSTALL_INFO
 chmod 400 $OS_INSTALL_INFO
 chown $ROOT_USER:$ROOT_USER $OS_INSTALL_INFO
 echo ""
-echo "# IMPORTANT: Move the contents of $OS_INSTALL_INFO"
-echo "#    into 1Password NOW, delete it, and reboot."
-echo "# Once you continue, these passwords cannot be recovered."
-echo ""
+# echo "# IMPORTANT: Move the contents of $OS_INSTALL_INFO"
+# echo "#    into 1Password NOW, delete it, and reboot."
+# echo "# Once you continue, these passwords cannot be recovered."
+# echo ""
 rm $TEMP_PASSWORD_INCLUDE
 
 # Include script footer file

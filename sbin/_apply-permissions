@@ -77,8 +77,8 @@
 
 # HandBrake config file
 	chmod -fR 600 $ADMIN_HOME_DIR/.HandBrake
-	chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.HandBrake $ADMIN_HOME_DIR/Videos/*
-	chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.HandBrake/*
+	chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.HandBrake $ADMIN_HOME_DIR/Videos/*
+	chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.HandBrake/*
 
 # Vim and vi config files
 	if [ -f $GIT_GO_CONFIGS/vim/.vimrc ]; then
@@ -86,6 +86,8 @@
 		chown $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.vim*
 		chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.vim*
 		fi
+
+echo "Installation complete."
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
