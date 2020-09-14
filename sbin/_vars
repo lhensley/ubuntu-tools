@@ -179,9 +179,8 @@ source /etc/os-release
 
 # Peripheral File System Mount Points
 # This info is appended to /etc/fstab, and the mount points (key values) are created, at system installation
-# IMPORTANT: Note single quotes on values, required to interpret escaped values like \n correctly.
-# Example: ROOT_REQUIRED[${PATHNAME[lgh]}]=true
-# It doesn't matter what the value is set to, as long as the key is defined
+# Example: MOUNT_POINT_DESCRIPTION[/mnt/Black4T01]="Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE"
+# Example: MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs noauto 0 0"
 	declare -A MOUNT_POINT_DESCRIPTION
 	declare -A MOUNT_POINT_DEFINITION
 	if [ $HOSTNAME=="nuc01" ]; then
