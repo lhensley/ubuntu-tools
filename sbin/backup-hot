@@ -29,17 +29,17 @@ source $(dirname $0)/script-setup
 	systemctl stop plexmediaserver
 
 # If file system is mounted and read-only, unmount
-if [ ! (findmnt $HOT_BACKUP_FILE_SYSTEM -n -o options | grep "ro,") ]; then
+if [ ! $(findmnt $HOT_BACKUP_FILE_SYSTEM -n -o options | grep "ro,") ]; then
 	umount $HOT_BACKUP_FILE_SYSTEM
 fi
 
 # If file system is not mounted, mount it read-write
-if [ findmnt $HOT_BACKUP_FILE_SYSTEM ]
+if [ "findmnt $HOT_BACKUP_FILE_SYSTEM" ]
 	mount -o rw $HOT_BACKUP_FILE_SYSTEM
 fi
 
 # If file system is not mounted read-write, fail
-if [ ! (findmnt $HOT_BACKUP_FILE_SYSTEM -n -o options | grep "rw,") ]; then
+if [ ! $(findmnt $HOT_BACKUP_FILE_SYSTEM -n -o options | grep "rw,") ]; then
 	logger $0: FATAL: $HOT_BACKUP_FILE_SYSTEM is not mounted with rw option
 	echo $0: FATAL: $HOT_BACKUP_FILE_SYSTEM is not mounted with rw option
 	exit 1
