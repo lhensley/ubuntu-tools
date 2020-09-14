@@ -200,6 +200,7 @@ source /etc/os-release
 			MOUNT_POINT_DEFINITION[/home/plex-swap/uploads]="#/mnt/cloteal/PlexUploads /home/plex-swap/uploads none bind 0 0"
 		MOUNT_POINT_DESCRIPTION[/home/plex-swap/downloads]="Bind mount"
 			MOUNT_POINT_DEFINITION[/home/plex-swap/downloads]="#/mnt/cloteal/Plex /home/plex-swap/downloads none bind 0 0"
+		echo "I'm in here; why?"; exit 1
 	fi
 	if [ $HOSTNAME=="oz" ]; then
 		MOUNT_POINT_DESCRIPTION[/mnt/ssd1tb]="Internal SSD drive, 1T"
