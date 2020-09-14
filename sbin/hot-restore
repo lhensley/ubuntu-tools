@@ -12,7 +12,7 @@
 	echo "CAUTION CAUTION CAUTION"
 	echo
 	echo "This will overwrite your current system configuration and data."
-	read "To continue type the word Restore (case sensitive) and press <ENTER>." $ANSWER
+	read -p "To continue type the word Restore (case sensitive) and press <ENTER>." $ANSWER
 	if [ $ANSWER != "Restore" ]; then
 		echo $0: ABORT from user.
 		logger $0: ABORT from user.
