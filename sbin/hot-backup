@@ -9,6 +9,10 @@
 # Stop services as needed
 	systemctl stop plexmediaserver
 
+# Store current directory and switch to root
+CURRENT_DIRECTORY="$(pwd)"
+cd /
+
 # If file system is mounted and read-only, unmount
 if [ $(findmnt "$HOT_BACKUP_FILE_SYSTEM" -n -o options | grep "ro,") ]; then
 	umount "$HOT_BACKUP_FILE_SYSTEM"
@@ -28,10 +32,6 @@ fi
 
 # Make container directory
 mkdir -p $HOT_BACKUP_DIRECTORY
-
-# Store current directory and switch to root
-CURRENT_DIRECTORY="$(pwd)"
-cd /
 
 # Do backup with rsync
 # rsync options used
