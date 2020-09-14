@@ -19,6 +19,7 @@
 #    -q = quiet
 #    -r = recursive (includes subdirectories)
 #    -t = preserve modification times
+#    -v = verbose
 #    -D = preserve device files and special files
 #    -E = preserve executability
 #    -R = use relative paths (see https://linux.die.net/man/1/rsync for more info)
