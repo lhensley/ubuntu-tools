@@ -36,7 +36,6 @@ Backup 2: Application Data
  * (don't follow symbolic links)
  * ~/.config
  * ~/.gitconfig
- * ~/.ssh
  * ~/.vimrc
  * /etc
  * /opt
@@ -45,5 +44,5 @@ Backup 2: Application Data
  * /var/spool/mail/
  * /var/www
 
-Backup 3: Home Directories
+Backup 3: Home Directories (/home and /root)
  * (don't follow symbolic links)

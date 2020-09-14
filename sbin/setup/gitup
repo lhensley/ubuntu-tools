@@ -167,10 +167,10 @@ ufw allow ssh
     # Should this occur somewhere else? SSH setup?
         sudo -u $ADMIN_USER ssh-keygen -C "$SSH_KEY_NAME" -P "" -q -f "$ADMIN_HOME_DIR/.ssh/id_rsa"
 
+# Configure sudo user(s)
 echo Configure sudo $ADMIN_USER as a sudo user
 echo "$ADMIN_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/lane-NOPASSWD-users
 # echo "$USER_UBUNTU ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/lane-NOPASSWD-users
-echo Removing passwords for $ADMIN_USER and $USER_UBUNTU
 chmod 440 /etc/sudoers.d/lane-NOPASSWD-users
 
 # Add custom application definitions for ufw
@@ -181,21 +181,26 @@ chmod 644 /etc/ufw/applications.d/lane-applications
 ufw app update lane-applications
 echo "Special LANE applications installed to ufw."
 
+echo test 2A
+
 # Make a copy of /etc/fstab as installed
 cp "/etc/fstab" "/etc/fstab-installed-$START_DATEANDTIMESTAMP"
 
+echo test 2B
+
 # Add peripherals to /etc/fstab
-for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do 
-    mkdir -p "/mnt/$KEY"
-    if [ ! -z $MOUNT_POINT_DEFINITIONSCRIPTION[$KEY] || ! -z $MOUNT_POINT_DEFINITION[$KEY] ]; then
-        echo "" >> /etc/fstab
-    fi
-    if [ -z MOUNT_POINT_DESCRIPTION[$KEY] ]; then
-        echo "# $MOUNT_POINT_DESCRIPTION[$KEY]" >> /etc/fstab
-    fi
-    if [ -z MOUNT_POINT_DEFINITION[$KEY] ]; then
-        echo "$MOUNT_POINT_DEFINITION[$KEY]" >> /etc/fstab
-    fi
+    for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do 
+        mkdir -p "/mnt/$KEY"
+        if [ ! -z $MOUNT_POINT_DEFINITIONSCRIPTION[$KEY] || ! -z $MOUNT_POINT_DEFINITION[$KEY] ]; then
+            echo "" >> /etc/fstab
+        fi
+        if [ -z MOUNT_POINT_DESCRIPTION[$KEY] ]; then
+            echo "# $MOUNT_POINT_DESCRIPTION[$KEY]" >> /etc/fstab
+        fi
+        if [ -z MOUNT_POINT_DEFINITION[$KEY] ]; then
+            echo "$MOUNT_POINT_DEFINITION[$KEY]" >> /etc/fstab
+        fi
+    done
 
 echo "Test A"
 

@@ -1,0 +1,79 @@
+#!/bin/bash
+# backup_hot
+
+# For mysqldump to work in unattended move, we need, in /root/ and in $HOME_DIR:
+#   File .my.cnf, containing this text:
+#     [client]
+#     user=root
+#     password=[pwd]
+#
+#     [mysqldump]
+#     user=root
+#     password=[pwd]
+#   sudo chmod 600 /root/.my.cnf
+#   sudo chown root:root /root/.my.cnf
+#   sudo chmod 600 $HOME_DIR/.my.cnf
+#   sudo chown $USER_NAME:$USER_NAME $HOME_DIR/.my.cnf
+#
+#   mysql --batch --skip-column-names --execute "show databases"
+#
+# Include header file
+source $(dirname $0)/script-setup
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; fi
+
+# Stop services as needed
+	systemctl stop plexmediaserver
+
+# If file system is mounted and read-only, unmount
+if [ ! (findmnt $HOT_BACKUP_FILE_SYSTEM -n -o options | grep "ro,") ]; then
+	umount $HOT_BACKUP_FILE_SYSTEM
+fi
+
+# If file system is not mounted, mount it read-write
+if [ findmnt $HOT_BACKUP_FILE_SYSTEM ]
+	mount -o rw $HOT_BACKUP_FILE_SYSTEM
+fi
+
+# If file system is not mounted read-write, fail
+if [ ! (findmnt $HOT_BACKUP_FILE_SYSTEM -n -o options | grep "rw,") ]; then
+	logger $0: FATAL: $HOT_BACKUP_FILE_SYSTEM is not mounted with rw option
+	echo $0: FATAL: $HOT_BACKUP_FILE_SYSTEM is not mounted with rw option
+	exit 1
+fi
+
+# Make container directory
+mkdir -p $HOT_BACKUP_DIRECTORY
+
+# Do backup with rsync
+# rsync options used
+#    -a = archive mode, equivalent to -rlptgoD
+#    -g = preserve group ownership
+#    -l = recreate symlinks on destination
+#    -o = preserve owner
+#    -p = preserve permissions
+#    -q = quiet
+#    -r = recursive (includes subdirectories)
+#    -t = preserve modification times
+#    -D = preserve device files and special files
+#    -E = preserve executability
+#    --delete = delete extraneous files from dest dirs
+rsync -aopqrtE --delete $HOT_BACKUP_SOURCES $HOT_BACKUP_DIRECTORY
+
+# If hot backup file system is flagged as ro, unmount & remount ro
+if [ $HOT_BACKUP_FS_READ_ONLY ]; then
+	umount $HOT_BACKUP_FILE_SYSTEM
+	mount -o ro $HOT_BACKUP_FILE_SYSTEM
+	fi
+
+# Start services as needed
+	systemctl start plexmediaserver
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0

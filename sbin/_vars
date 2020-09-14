@@ -127,6 +127,27 @@ source /etc/os-release
 	ARCHIVE_TAR_MONTH_FILE="$HOSTNAME-month-$START_MONTHSTAMP.gz"
 		ARCHIVE_TAR_FULL_MONTH="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_MONTH_FILE"
 
+# Backup HOT # hot backup
+# DEPENDENT on definition of $HOSTNAME, but that's built-in
+	HOT_BACKUP_FILE_SYSTEM="/"                                # Default
+	HOT_BACKUP_FS_READ_ONLY=false                             # Default
+	HOT_BACKUP_PARENT_DIRECTORY="/var/local"                  # Default
+	HOT_BACKUP_SUBDIRECTORY="/hot-backup"                     # Default
+	if [ $HOSTNAME == "nuc01" ]; then
+		HOT_BACKUP_FILE_SYSTEM="/mnt/cloteal"
+		HOT_BACKUP_FS_READ_ONLY=true
+		HOT_BACKUP_PARENT_DIRECTORY=$HOT_BACKUP_FILE_SYSTEM
+		fi
+	if [ $HOSTNAME == "oz" ]; then
+		HOT_BACKUP_FILE_SYSTEM="/mnt/ext10tb01"
+		HOT_BACKUP_FS_READ_ONLY=true
+		HOT_BACKUP_PARENT_DIRECTORY=$HOT_BACKUP_FILE_SYSTEM
+		fi
+	HOT_BACKUP_DIRECTORY="$HOT_BACKUP_PARENT_DIRECTORY/$HOT_BACKUP_SUBDIRECTORY"
+	HOT_BACKUP_SOURCES="/etc /opt /home /var/www"
+	HOT_BACKUP_SOURCES+=" \'/var/lib/plexmediaserver/Library/Application Support\'"
+	HOT_BACKUP_SOURCES+=" /var/spool/cron/crontabs/ /var/spool/mail/"
+
 # ddclient
 	DDCLIENT_INTERVAL=7200
 
