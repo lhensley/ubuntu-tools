@@ -34,7 +34,7 @@ if [ ! $(findmnt $HOT_BACKUP_FILE_SYSTEM -n -o options | grep "ro,") ]; then
 fi
 
 # If file system is not mounted, mount it read-write
-if [ "findmnt $HOT_BACKUP_FILE_SYSTEM" ]
+if [ "findmnt $HOT_BACKUP_FILE_SYSTEM" ]; then
 	mount -o rw $HOT_BACKUP_FILE_SYSTEM
 fi
 
