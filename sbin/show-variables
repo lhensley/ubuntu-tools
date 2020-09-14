@@ -1,5 +1,5 @@
 #!/bin/bash
-# lgh
+# show-variables
 
 # Include script setup file
 source $(dirname $0)/script-setup
@@ -9,3 +9,4 @@ source $(dirname $0)/script-setup
 # Include script footer file
 f_debug_variable "script_script_footer_pathname" "${LANE_CONFIG[script_script_footer_pathname]}"
 source ${PATHNAME[script_footer]}
+
