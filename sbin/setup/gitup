@@ -188,15 +188,19 @@ cp "/etc/fstab" "/etc/fstab-installed-$START_DATEANDTIMESTAMP"
     for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do 
         mkdir -p "/mnt/$KEY"
         if [ ! -z ${MOUNT_POINT_DEFINITIONSCRIPTION[$KEY]} || ! -z ${MOUNT_POINT_DEFINITION[$KEY]} ]; then
+            echo ""
             echo "" >> /etc/fstab
         fi
         if [ -z ${MOUNT_POINT_DESCRIPTION[$KEY]} ]; then
+            echo "# ${MOUNT_POINT_DESCRIPTION[$KEY]}"
             echo "# ${MOUNT_POINT_DESCRIPTION[$KEY]}" >> /etc/fstab
         fi
         if [ -z ${MOUNT_POINT_DEFINITION[$KEY]} ]; then
+            echo "${MOUNT_POINT_DEFINITION[$KEY]}"
             echo "${MOUNT_POINT_DEFINITION[$KEY]}" >> /etc/fstab
         fi
     done
+    exit 1
 
 # Unmount peripherals currently mounted under /media/$LOGNAME/*
 umount "/media/$LOGNAME/"*
