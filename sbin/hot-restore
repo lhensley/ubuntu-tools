@@ -23,6 +23,10 @@
 #    -E = preserve executability
 #    -R = use relative paths (see https://linux.die.net/man/1/rsync for more info)
 #    --delete = delete extraneous files from dest dirs
+for f in "$HOT_BACKUP_DIRECTORY"/*; do
+	echo $f
+done
+exit 1
 rsync -aoprtvER --delete --exclude=/etc/fstab $HOT_BACKUP_DIRECTORY/* /
 
 # Start services as needed
