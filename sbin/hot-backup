@@ -1,24 +1,5 @@
 #!/bin/bash
-# backup-hot
-
-# For mysqldump to work in unattended move, we need, in /root/ and in $HOME_DIR:
-#   File .my.cnf, containing this text:
-#     [client]
-#     user=root
-#     password=[pwd]
-#
-#     [mysqldump]
-#     user=root
-#     password=[pwd]
-#   sudo chmod 600 /root/.my.cnf
-#   sudo chown root:root /root/.my.cnf
-#   sudo chmod 600 $HOME_DIR/.my.cnf
-#   sudo chown $USER_NAME:$USER_NAME $HOME_DIR/.my.cnf
-#
-#   mysql --batch --skip-column-names --execute "show databases"
-#
-# Include header file
-source $(dirname $0)/script-setup
+# hot-backup
 
 # Include script setup file
 	source script-setup

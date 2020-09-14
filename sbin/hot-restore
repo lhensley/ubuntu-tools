@@ -1,0 +1,35 @@
+#!/bin/bash
+# hot-restore
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; fi
+
+# Stop services as needed
+	systemctl stop plexmediaserver
+
+# Do restore with rsync
+# rsync options used
+#    -a = archive mode, equivalent to -rlptgoD
+#    -g = preserve group ownership
+#    -l = recreate symlinks on destination
+#    -o = preserve owner
+#    -p = preserve permissions
+#    -q = quiet
+#    -r = recursive (includes subdirectories)
+#    -t = preserve modification times
+#    -D = preserve device files and special files
+#    -E = preserve executability
+#    -R = use relative paths (see https://linux.die.net/man/1/rsync for more info)
+#    --delete = delete extraneous files from dest dirs
+rsync -aopqrtER "$HOT_BACKUP_DIRECTORY" /
+
+# Start services as needed
+	systemctl start plexmediaserver
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
