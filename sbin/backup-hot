@@ -60,8 +60,9 @@ mkdir -p $HOT_BACKUP_DIRECTORY
 #    -t = preserve modification times
 #    -D = preserve device files and special files
 #    -E = preserve executability
+#    -R = use relative paths (see https://linux.die.net/man/1/rsync for more info)
 #    --delete = delete extraneous files from dest dirs
-rsync -aopqrtE --delete $HOT_BACKUP_SOURCES $HOT_BACKUP_DIRECTORY
+rsync -aopqrtER --delete $HOT_BACKUP_SOURCES $HOT_BACKUP_DIRECTORY
 
 # If hot backup file system is flagged as ro, unmount & remount ro
 if [ $HOT_BACKUP_FS_READ_ONLY ]; then
