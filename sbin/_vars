@@ -145,7 +145,7 @@ source /etc/os-release
 		fi
 	HOT_BACKUP_DIRECTORY="$HOT_BACKUP_PARENT_DIRECTORY/$HOT_BACKUP_SUBDIRECTORY"
 	HOT_BACKUP_SOURCES="/etc /opt /home /var/www"
-	HOT_BACKUP_SOURCES+=" \'/var/lib/plexmediaserver/Library/Application Support\'"
+	HOT_BACKUP_SOURCES+=" \"/var/lib/plexmediaserver/Library/Application Support\""
 	HOT_BACKUP_SOURCES+=" /var/spool/cron/crontabs/ /var/spool/mail/"
 
 # ddclient
