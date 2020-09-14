@@ -6,7 +6,7 @@ source $(dirname $0)/script-setup
 
 ( set -o posix ; set )
 
-	if [ $HOSTNAME=="nuc01" ]; then
+	if [ $HOSTNAME == "nuc01" ]; then
 		echo Match
 		echo $HOSTNAME
 		echo "nuc01"
