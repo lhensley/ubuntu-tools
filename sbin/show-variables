@@ -8,6 +8,8 @@ source $(dirname $0)/script-setup
 
 	if [ $HOSTNAME=="nuc01" ]; then
 		echo Match
+		echo $HOSTNAME
+		echo "nuc01"
 	fi
 
 # Include script footer file
