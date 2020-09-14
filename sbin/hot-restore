@@ -28,7 +28,7 @@ cd $HOT_BACKUP_DIRECTORY
 #    -E = preserve executability
 #    -R = use relative paths (see https://linux.die.net/man/1/rsync for more info)
 #    --delete = delete extraneous files from dest dirs
-rsync -aonprtvER --delete --exclude=etc/fstab $HOT_BACKUP_SOURCES /
+rsync -aoprtvER --delete --exclude=etc/fstab $HOT_BACKUP_SOURCES /
 
 # Restore working directory
 cd "$CURRENT_DIRECTORY"
