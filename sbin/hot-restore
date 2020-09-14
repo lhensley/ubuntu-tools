@@ -14,6 +14,7 @@
 #    -a = archive mode, equivalent to -rlptgoD
 #    -g = preserve group ownership
 #    -l = recreate symlinks on destination
+#    -n = dry run
 #    -o = preserve owner
 #    -p = preserve permissions
 #    -q = quiet
@@ -28,7 +29,7 @@ for f in "$HOT_BACKUP_DIRECTORY"/*; do
 	echo $f
 done
 exit 1
-rsync -aoprtvER --delete --exclude=/etc/fstab $HOT_BACKUP_DIRECTORY/* /
+rsync -aoprtvE --delete --exclude=/etc/fstab $HOT_BACKUP_DIRECTORY/* /
 
 # Start services as needed
 	systemctl start plexmediaserver
