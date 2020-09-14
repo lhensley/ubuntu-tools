@@ -16,6 +16,7 @@
 	if [ "$ANSWER" != "Restore" ]; then
 		echo $0: ABORT from user.
 		logger $0: ABORT from user.
+		exit 1
 		fi
 
 # Stop services as needed
