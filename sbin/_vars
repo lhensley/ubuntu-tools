@@ -146,7 +146,7 @@ source /etc/os-release
 	HOT_BACKUP_DIRECTORY="$HOT_BACKUP_PARENT_DIRECTORY/$HOT_BACKUP_SUBDIRECTORY"
 	HOT_BACKUP_SOURCES="/etc /opt /home /root /var/www"
 	HOT_BACKUP_SOURCES+=" /var/lib/plexmediaserver/Library/Application*"
-	HOT_BACKUP_SOURCES+=" /var/spool/cron/crontabs/ /var/spool/mail/"
+	HOT_BACKUP_SOURCES+=" /var/spool/cron/crontabs /var/spool/mail"
 
 # ddclient
 	DDCLIENT_INTERVAL=7200
