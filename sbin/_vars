@@ -113,11 +113,11 @@ source /etc/os-release
 		ARCHIVE_DIRECTORY[nuc01]=${ARCHIVE_FILE_SYSTEM[nuc01]}/archives/nuc01
 		ARCHIVE_DIRECTORY[oz]=${ARCHIVE_FILE_SYSTEM[nuc01]}/archives/oz
 	THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[default]}"
-		if [ $HOSTNAME=="nuc01" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[nuc01]}"; fi
-		if [ $HOSTNAME=="oz" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[oz]}"; fi
+		if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[nuc01]}"; fi
+		if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[oz]}"; fi
 	THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[default]}"
-		if [ $HOSTNAME=="nuc01" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[nuc01]}"; fi
-		if [ $HOSTNAME=="oz" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[oz]}"; fi
+		if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[nuc01]}"; fi
+		if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[oz]}"; fi
 	ARCHIVE_TAR_FILE="$HOSTNAME-$START_DATESTAMP.gz"
 		ARCHIVE_TAR_FULL="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_FILE"
 	ARCHIVE_TAR_WEEKDAY_FILE="$HOSTNAME-weekday-$START_WEEKDAYSTAMP.gz"
@@ -183,7 +183,7 @@ source /etc/os-release
 # Example: MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs noauto 0 0"
 	declare -A MOUNT_POINT_DESCRIPTION
 	declare -A MOUNT_POINT_DEFINITION
-	if [ $HOSTNAME=="nuc01" ]; then
+	if [ $HOSTNAME == "nuc01" ]; then
 		MOUNT_POINT_DESCRIPTION[/mnt/Black4T01]="Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE"
 			MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs noauto 0 0"
 		MOUNT_POINT_DESCRIPTION[/mnt/bertha]="bertha (3TB) UUID=d28256f9-c258-451e-b299-d4849cf19e0b"
@@ -201,7 +201,7 @@ source /etc/os-release
 		MOUNT_POINT_DESCRIPTION[/home/plex-swap/downloads]="Bind mount"
 			MOUNT_POINT_DEFINITION[/home/plex-swap/downloads]="#/mnt/cloteal/Plex /home/plex-swap/downloads none bind 0 0"
 	fi
-	if [ $HOSTNAME=="oz" ]; then
+	if [ $HOSTNAME == "oz" ]; then
 		MOUNT_POINT_DESCRIPTION[/mnt/ssd1tb]="Internal SSD drive, 1T"
 			MOUNT_POINT_DEFINITION[/mnt/ssd1tb]="UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb ext4 defaults 0 0"
 		MOUNT_POINT_DESCRIPTION[/mnt/ext10tb01]="External Hard Drive for Plex, 10TB (rerun)"
@@ -260,7 +260,7 @@ source /etc/os-release
 	PLEX_LIVE_APPLICATION_SUPPORT="/var/lib/plexmediaserver/Library/Application Support"
 	PLEX_BACKUP_FILE_SYSTEM="$THIS_ARCHIVE_FILE_SYSTEM"
 	PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
-	if [ $HOSTNAME=="oz" ]; then 
+	if [ $HOSTNAME == "oz" ]; then 
 		VIDEO_WORK_FILE_SYSTEM="/var/lib/plexmediaserver/Library/work"
 		VIDEO_STORE_FILE_SYSTEM="/var/lib/plexmediaserver/Library/store"
 		VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex"
@@ -272,8 +272,8 @@ source /etc/os-release
 	MAILNAME=$HOSTNAME
 	MAIN_MAILER_TYPE="'Internet with smarthost'"
 	RELAYHOST="mail.twc.com"                                          # Spectrum Internet (DEFAULT for Austin)
-	if [ $HOSTNAME=="nuc01" ]; then RELAYHOST="mail.mchsi.com"; fi     # Mediacom Cable Internet
-	if [ $HOSTNAME=="red" ]; then RELAYHOST="mail.mchsi.com"; fi       # Mediacom Cable Internet
+	if [ $HOSTNAME == "nuc01" ]; then RELAYHOST="mail.mchsi.com"; fi     # Mediacom Cable Internet
+	if [ $HOSTNAME == "red" ]; then RELAYHOST="mail.mchsi.com"; fi       # Mediacom Cable Internet
 
 # ssh
 # DEPENENT on timestamps above
