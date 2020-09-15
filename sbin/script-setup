@@ -7,6 +7,12 @@ source "_vars"
 # Load global functions
 source "_functions"		# NOTE: _vars must be sourced first, or this will fail.
 
+# Set user privileges to use for running tasks
+# By default, $RUN_AS is the user who runs the program. If run with sudo, that has to be updated from root.
+if [ ! -z $SUDO_USER ]
+	RUN_AS=$SUDO_USER
+	fi
+
 # If configured, make sure only root can run our script. Default = "false"
 # if [ "$(f_get-config CONFIG_script_$(basename $0)_require_root)" == "true" ] && [[ $EUID -ne 0 ]]; then
 #         echo "Use sudo. $0 must be run as root." 1>&2

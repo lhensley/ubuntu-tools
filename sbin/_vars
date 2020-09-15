@@ -20,6 +20,7 @@
 	# HOSTNAME (this host, not FQDN)
 	# SHELL
 	# USER (Current user)
+		RUN_AS=$USER
 
 # Global
 	HOME_ROOT="/home"
@@ -229,7 +230,7 @@ source /etc/os-release
 	INCOMING_SCANS="$ADMIN_HOME/Scans"
 
 # MakeMKV
-	MAKEMKV_OUTPUT_DIRECTORY="/home/lhensley/Videos/MakeMKV-Completed"
+	MAKEMKV_OUTPUT_DIRECTORY="$ADMIN_HOME/Videos/MakeMKV-Completed"
 
 # MySQL
 	MYSQL_ADMIN_NAME="admin"
