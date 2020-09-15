@@ -90,6 +90,8 @@ source /etc/os-release
 # Example: TEXT_ALERT[becky]=7608515830@vtext.com
 	declare -A TEXT_ALERT
 	TEXT_ALERT[admin]=$ADMIN_CELL_EMAIL
+	TEXT_ALERTS=""
+	for KEY in "${!TEXT_ALERT[@]}"; do TEXT_ALERTS+="${TEXT_ALERT[KEY]} "; done
 
 # Email Alerts
 # DEPENDENT on user definitions above
@@ -261,8 +263,8 @@ source /etc/os-release
 	PLEX_BACKUP_FILE_SYSTEM="$THIS_ARCHIVE_FILE_SYSTEM"
 	PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
 	if [ $HOSTNAME == "oz" ]; then 
-		VIDEO_WORK_FILE_SYSTEM="/var/lib/plexmediaserver/Library/work"
-		VIDEO_STORE_FILE_SYSTEM="/var/lib/plexmediaserver/Library/store"
+		VIDEO_WORK_FILE_SYSTEM="/mnt/ssd1tb"
+		VIDEO_STORE_FILE_SYSTEM="/mnt/ext10tb01"
 		VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex"
 		VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex"
 		PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"

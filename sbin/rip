@@ -2,7 +2,9 @@
 # rip
 
 # Include script setup file
-source $(dirname $0)/script-setup
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; fi
 
 if [ -z "$1" ]; then
   echo "Usage: rip \"Title (year) [ movie | <minimum_number_of_seconds> ]\" &"
@@ -17,17 +19,22 @@ if [ -z "$2" ]; then
     fi
   fi
 
-f_require_config "makemkv.program"
-f_require_config "makemkv.output.directory"
+f_require_value "MakeMKV Program Path" "${PATHNAME[makemkvcon]}"
+f_require_value "MakeMKV Output Directory" "$MAKEMKV_OUTPUT_DIRECTORY"
 
-mkdir -p "${LANE_CONFIG[makemkv.output.directory]}/$1"
-f_require_directory "${LANE_CONFIG[makemkv.output.directory]}/$1"
+mkdir -p "$MAKEMKV_OUTPUT_DIRECTORY/$1"
+f_require_directory "$MAKEMKV_OUTPUT_DIRECTORY/$1"
 
-"${LANE_CONFIG[makemkv.program]}" --minlength=$MINLENGTH mkv disc:0 all "${LANE_CONFIG[makemkv.output.directory]}/$1"
+"${PATHNAME[makemkvcon]}" --minlength=$MINLENGTH mkv disc:0 all "$MAKEMKV_OUTPUT_DIRECTORY/$1"
 exit_status=$?
 if [ $exit_status -eq 0 ] ; then
-  echo "$1: Disk ripping completed successfully." | mail "${LANE_CONFIG[system.lane-cell]}"
-  else echo "$1: Disk ripping FAILED. Code $exit_status" | mail "${LANE_CONFIG[system.lane-cell]}"
+  echo "$1: Disk ripping completed successfully." | mail "$TEXT_ALERTS"
+  else echo "$1: Disk ripping FAILED. Code $exit_status" | mail "$TEXT_ALERTS"
   fi
 eject
-exit $?
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit $exit_status
