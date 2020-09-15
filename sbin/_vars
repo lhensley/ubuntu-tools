@@ -26,6 +26,7 @@
 	HOME_ROOT="/home"
 	SBIN_DIR="/usr/local/sbin"
 	SBIN_PARENT="$(dirname $SBIN_DIR)"
+	DOMAIN_NAME=lanehensley.org
 
 # /etc/os-release defines a lot of environment variables 
 # Sample:
@@ -66,10 +67,13 @@ source /etc/os-release
 	ADMIN_HOME_DIR=$HOME_ROOT/$ADMIN_USER
 	ADMIN_CELL_EMAIL=7608514641@vtext.com
 	ADMIN_EMAIL=lane.hensley@alumni.duke.edu
+	ADMIN_NAME="Lane Hensley"
 
 # Root user info
 	ROOT_USER=root
 	ROOT_HOME_DIR=/root
+	ROOT_EMAIL=root@$HOSTNAME@$DOMAIN_NAME
+	ROOT_NAME="Root at $HOSTNAME@$DOMAIN_NAME"
 
 # Temp file definitions
 # DEPENDENT ON ABOUT THIS SCRIPT ABOVE

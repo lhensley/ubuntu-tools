@@ -3,8 +3,8 @@
 
 # DEFINE THESE VARIABLES BEFORE RUNNING THE SCRIPT!
 # fqdn='domain.tld'
-web_admin_user='Lane Hensley'
-web_admin_email='lane.hensley@alumni.duke.edu'
+web_admin_user=$ADMIN_NAME
+web_admin_email=$ADMIN_EMAIL
 remove=false
 mysql_root_user=''
 mysql_root_password=''
