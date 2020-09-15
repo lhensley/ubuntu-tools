@@ -22,10 +22,12 @@ if [ -z "$2" ]; then
 f_require_value "MakeMKV Program Path" "${PATHNAME[makemkvcon]}"
 f_require_value "MakeMKV Output Directory" "$MAKEMKV_OUTPUT_DIRECTORY"
 
-sudo -u $RUN_AS mkdir -p "$MAKEMKV_OUTPUT_DIRECTORY/$1"
+echo Running as $RUN_AS
+
+sudo -u lhensley mkdir -p "$MAKEMKV_OUTPUT_DIRECTORY/$1"
 f_require_directory "$MAKEMKV_OUTPUT_DIRECTORY/$1"
 
-sudo -u $RUN_AS "${PATHNAME[makemkvcon]}" --minlength=$MINLENGTH mkv disc:0 all "$MAKEMKV_OUTPUT_DIRECTORY/$1"
+sudo -u lhensley "${PATHNAME[makemkvcon]}" --minlength=$MINLENGTH mkv disc:0 all "$MAKEMKV_OUTPUT_DIRECTORY/$1"
 exit_status=$?
 if [ $exit_status -eq 0 ] ; then
   echo "$1: Disk ripping completed successfully." | mail "$TEXT_ALERTS"
