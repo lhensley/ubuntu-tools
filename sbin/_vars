@@ -257,7 +257,7 @@ source /etc/os-release
 	VIDEO_STORE_FILE_SYSTEM="/"
 	VIDEO_WORK_DIRECTORY="/var/lib/plexmediaserver/Library/work"
 	VIDEO_STORE_DIRECTORY="/var/lib/plexmediaserver/Library/store"
-	PLEX_LIVE_APPLICATION_SUPPORT="/var/lib/plexmediaserver/Library/Application Support"
+	PLEX_LIVE_APPLICATION_SUPPORT="/var/lib/plexmediaserver/Library"
 	PLEX_BACKUP_FILE_SYSTEM="$THIS_ARCHIVE_FILE_SYSTEM"
 	PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
 	if [ $HOSTNAME == "oz" ]; then 
