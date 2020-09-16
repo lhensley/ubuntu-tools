@@ -2,20 +2,18 @@
 # master-loop
 
 # Include script setup file
-logger $0: A $CONFIG.script.shrink-plex-ts-files.pathname
-source $(dirname $0)/script-setup
-logger $0: B $CONFIG.script.shrink-plex-ts-files.pathname
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; fi
 
-f_debug_variable "script.shrink-plex-ts-files.pathname" "$CONFIG.script.shrink-plex-ts-files.pathname"
-logger $0: C $CONFIG.script.shrink-plex-ts-files.pathname
-"$CONFIG.script.shrink-plex-ts-files.pathname"
-logger $0: D $CONFIG.script.shrink-plex-ts-files.pathname
+f_debug_variable "shrink_plex_ts_files" "$PATHNAME[shrink_plex_ts_files]"
+f_require_file "$PATHNAME[shrink_plex_ts_files]" ]
+
+"$PATHNAME[shrink_plex_ts_files]"
+sleep 60
 
 # Include script footer file
-logger $0: E $CONFIG.script.shrink-plex-ts-files.pathname2
-f_debug_variable "script.script-footer.pathname" "$CONFIG.script.script-footer.pathname"
-logger $0: F $CONFIG.script.shrink-plex-ts-files.pathname
-source "$CONFIG.script.script-footer.pathname"
-logger $0: G $CONFIG.script.shrink-plex-ts-files.pathname
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
 
 exit 0

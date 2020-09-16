@@ -3,6 +3,14 @@
 # Usage: move-one-file <input_file> <root_in_path> <root_out_path>
 # No final / on either path. For system root, use ""
 
+
+
+
+# In addition to other updates, add logging
+
+
+
+
 # Include script setup file
 source $(dirname $0)/script-setup
 
@@ -29,7 +37,7 @@ f_file_not_in_use "$1"
 
 # Make the directory for out file
 if [ ! -d "$NEW_DIRECTORY" ]; then
-  mkdir -p "$NEW_DIRECTORY" >> /dev/null 2>&1 # Create the directory for the out file
+  mkdir -p "$NEW_DIRECTORY" # Create the directory for the out file
   exit_status=$?
   if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
       logger "$0: FAILED to make $NEW_DIRECTORY"
@@ -41,7 +49,7 @@ if [ ! -d "$NEW_DIRECTORY" ]; then
 fi
 
 # Move $IN_FILE to $OUT_FILE
-mv "$IN_FILE" "$OUT_FILE" >> /dev/null 2>&1
+mv "$IN_FILE" "$OUT_FILE"
 exit_status=$?
 if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
     logger "$0: FAILED to move $IN_FILE to $NEW_DIRECTORY"
