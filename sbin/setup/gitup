@@ -161,19 +161,21 @@ if $install_plexmediaserver ; then
       f_install plexmediaserver
       ufw allow 32400/tcp # if not already specified
       echo "Plex Media Server installed."
-    # Install Tautulli for https://this-server:8181
-    # Ref: https://tautulli.com/
-        DEBIAN_FRONTEND=noninteractive apt-get install -yq python python-setuptools tzdata
-        cd /opt
-        git clone https://github.com/Tautulli/Tautulli.git
-        addgroup tautulli && sudo adduser --system --no-create-home tautulli --ingroup tautulli
-        cp /opt/Tautulli/init-scripts/init.systemd /lib/systemd/system/tautulli.service
-        chown tautulli:tautulli -R /opt/Tautulli
-        systemctl daemon-reload
-        systemctl enable tautulli.service
-        systemctl start tautulli.service
-        ufw allow 8181
-        cd
+    if $install_tautulli ; then
+        # Install Tautulli for https://this-server:8181
+        # Ref: https://tautulli.com/
+            DEBIAN_FRONTEND=noninteractive apt-get install -yq python python-setuptools tzdata
+            cd /opt
+            git clone https://github.com/Tautulli/Tautulli.git
+            addgroup tautulli && sudo adduser --system --no-create-home tautulli --ingroup tautulli
+            cp /opt/Tautulli/init-scripts/init.systemd /lib/systemd/system/tautulli.service
+            chown tautulli:tautulli -R /opt/Tautulli
+            systemctl daemon-reload
+            systemctl enable tautulli.service
+            systemctl start tautulli.service
+            ufw allow 8181
+            cd
+        fi
   fi
 
 # Install uncomplicated, no-down-side utilities (formerly install-utils)
