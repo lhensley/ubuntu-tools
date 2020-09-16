@@ -229,7 +229,7 @@ source /etc/os-release
 
 # HandBrake
 # DEPENDENT ON $ADMIN_HOME_DIR DEFINITION ABOVE
-	HANDBRAKE_CLI="$/usr/bin/HandBrakeCLI"
+	HANDBRAKE_CLI="/usr/bin/HandBrakeCLI"
 	HANDBRAKE_PRESETS="$ADMIN_HOME_DIR/.HandBrake/Lane 1080p (BluRay).json"
 
 # Incoming Scans
