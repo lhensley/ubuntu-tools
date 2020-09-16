@@ -388,7 +388,7 @@ source /etc/os-release
 # It doesn't matter what the value is set to, as long as the key is defined
 	declare -A DISABLE_START_MESSAGE
 	DISABLE_START_MESSAGE[${PATHNAME[timeformat]}]=true
-	DISABLE_START_MESSAGE[${PATHNAME[_git]}]=true
+	DISABLE_START_MESSAGE[${PATHNAME[_git]}]=false
 
 # Disable end message for these scripts
 # DEPENDENT ON PATHNAME ARRAY DEFINITION ABOVE
