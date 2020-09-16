@@ -11,6 +11,7 @@
 IN_FILE="$1"
 WORK_ROOT_PATH="$2"
 STORE_ROOT_PATH="$3"
+OUT_EXT="m4v"
 
 f_require_file "$IN_FILE"
 f_require_directory "$WORK_ROOT_PATH"
@@ -18,24 +19,11 @@ f_require_directory "$STORE_ROOT_PATH"
 f_require_value "IGNORE_TV_SHOWS" $IGNORE_TV_SHOWS
 f_require_file "${PATHNAME[move_one_file]}"
 
-echo IN_FILE $IN_FILE
-echo WORK_ROOT_PATH $WORK_ROOT_PATH
-echo STORE_ROOT_PATH $STORE_ROOT_PATH
-echo IGNORE_TV_SHOWS $IGNORE_TV_SHOWS
-echo move_one_file "${PATHNAME[move_one_file]}"
-
-OUT_EXT="m4v"
-
 WORK_ROOT_PATH_LENGTH=${#WORK_ROOT_PATH}
-echo WORK_ROOT_PATH_LENGTH $WORK_ROOT_PATH_LENGTH
 
 IN_FILE_LENGTH=${#IN_FILE}
 IN_FILE_EXT="${IN_FILE##*.}"
 IN_FILE_EXT_LENGTH="${#IN_FILE_EXT}"
-
-echo IN_FILE_LENGTH $IN_FILE_LENGTH
-echo IN_FILE_EXT $IN_FILE_EXT
-echo IN_FILE_EXT_LENGTH $IN_FILE_EXT_LENGTH
 
 RELATIVE_FILE_LENGTH=$[IN_FILE_LENGTH-WORK_ROOT_PATH_LENGTH-1]
 RELATIVE_FILE=${IN_FILE: -$RELATIVE_FILE_LENGTH} # First remove WORK_ROOT_PATH
@@ -44,13 +32,6 @@ RELATIVE_FILE_NO_EXT=${RELATIVE_FILE:0:RELATIVE_FILE_NO_EXT_LENGTH} # Then remov
 OUT_FILE="$WORK_ROOT_PATH/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
 STORE_FILE="$STORE_ROOT_PATH/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
 STORE_FILE="$STORE_ROOT_PATH/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
-
-echo RELATIVE_FILE $RELATIVE_FILE
-echo OUT_FILE $OUT_FILE
-echo STORE_FILE $STORE_FILE
-
-sleep 120
-exit 1
 
 # So here are useful variables defined ...
 # $IN_FILE
@@ -73,16 +54,7 @@ f_debug_variable "STORE_ROOT_PATH" "$STORE_ROOT_PATH"
 f_debug_variable "RELATIVE_FILE" "$RELATIVE_FILE"
 f_debug_variable "1" "$1"
 
-# logger "$0: Transcoding $(basename $1)"
-
-# sleep 30
-
-logger $0 DEBUG negative B.6
-
-# DEBUG
-# echo "$0 started." | mail lanecell
-
-if $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS) ; then
+if $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS") ; then
     logger $0: Skipped $IN_FILE
 else
     f_file_not_in_use "$IN_FILE"
