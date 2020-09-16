@@ -93,6 +93,88 @@ else
   exit 1
 fi
 
+# Make a copy of /etc/fstab as installed
+cp "/etc/fstab" "/etc/fstab-installed-$START_DATEANDTIMESTAMP"
+
+# Add peripherals to /etc/fstab
+    for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do 
+        mkdir -p "/mnt/$KEY"
+        if [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ] || [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ]; then
+            echo "" >> /etc/fstab
+        fi
+        if [ ! -z "${MOUNT_POINT_DESCRIPTION["$KEY"]}" ]; then
+            echo "# ${MOUNT_POINT_DESCRIPTION["$KEY"]}" >> /etc/fstab
+        fi
+        if [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ]; then
+            echo "${MOUNT_POINT_DEFINITION["$KEY"]}" >> /etc/fstab
+        fi
+        if [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ] || [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ]; then
+            echo "" >> /etc/fstab
+        fi
+    done
+
+# Unmount peripherals currently mounted under /media/$LOGNAME/*
+umount "/media/$LOGNAME/"*
+
+# Remount all using /etc/fstab, as amended above
+mount --all
+
+# Add ufw
+f_install ufw
+
+# Install MakeMKV
+# DON'T USE THE SNAP INSTALLER
+if $install_makemkv ; then
+  echo "Installing MakeMKV"
+  add-apt-repository ppa:heyarje/makemkv-beta
+  apt-get update
+  printf '\n\n' | DEBIAN_FRONTEND=noninteractive apt-get install -yq makemkv-bin makemkv-oss ccextractor
+  usermod -a -G cdrom $ADMIN_USER
+  # MakeMKV config file
+    if [ -f $GIT_GO_CONFIGS/makemkv/settings.conf ]; then
+	    mkdir -p $ADMIN_HOME_DIR/.MakeMKV
+	    mkdir -p $ROOT_HOME_DIR/.MakeMKV
+	    cp $GIT_GO_CONFIGS/makemkv/settings.conf $ADMIN_HOME_DIR/.MakeMKV/
+	    chmod 600 $ADMIN_HOME_DIR/.MakeMKV/settings.conf
+	    chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.MakeMKV
+	    cp $ADMIN_HOME_DIR/.MakeMKV/settings.conf $ROOT_HOME_DIR/.MakeMKV/
+	    chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.MakeMKV
+	    fi
+  echo "MakeMKV installed."
+  fi
+
+# IMPORTANT: Make sure this comes AFTER fstab installation and adaptation. The plex links and file systems need to exist.
+if $install_plexmediaserver ; then
+    # Tested through Ubuntu 20.04.1
+    # Install Plex Media Server
+      echo "Installing Plex Media Server"
+      ln -s /mnt/ssd1tb /var/lib/plexmediaserver/Library/work
+      ln -s /mnt/ext10tb01 /var/lib/plexmediaserver/Library/store
+      rm -rf /etc/apt/sources.list.d/plexmediaserver.list
+      echo "# When enabling this repo please remember to add the PlexPublic.Key into the apt setup." > /etc/apt/sources.list.d/plexmediaserver.list
+      echo "# wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
+      echo "#" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
+      echo "deb https://downloads.plex.tv/repo/deb/ public main" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
+      wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -
+      apt-get -y update
+      f_install plexmediaserver
+      ufw allow 32400/tcp # if not already specified
+      echo "Plex Media Server installed."
+    # Install Tautulli for https://this-server:8181
+    # Ref: https://tautulli.com/
+        DEBIAN_FRONTEND=noninteractive apt-get install -yq python python-setuptools tzdata
+        cd /opt
+        git clone https://github.com/Tautulli/Tautulli.git
+        addgroup tautulli && sudo adduser --system --no-create-home tautulli --ingroup tautulli
+        cp /opt/Tautulli/init-scripts/init.systemd /lib/systemd/system/tautulli.service
+        chown tautulli:tautulli -R /opt/Tautulli
+        systemctl daemon-reload
+        systemctl enable tautulli.service
+        systemctl start tautulli.service
+        ufw allow 8181
+        cd
+  fi
+
 # Install uncomplicated, no-down-side utilities (formerly install-utils)
     f_install ufw
     # UFW first; others depend on it
@@ -180,53 +262,6 @@ chown $ROOT_USER:$ROOT_USER /etc/ufw/applications.d/lane-applications
 chmod 644 /etc/ufw/applications.d/lane-applications
 ufw app update lane-applications
 echo "Special LANE applications installed to ufw."
-
-# Make a copy of /etc/fstab as installed
-cp "/etc/fstab" "/etc/fstab-installed-$START_DATEANDTIMESTAMP"
-
-# Add peripherals to /etc/fstab
-    for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do 
-        mkdir -p "/mnt/$KEY"
-        if [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ] || [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ]; then
-            echo "" >> /etc/fstab
-        fi
-        if [ ! -z "${MOUNT_POINT_DESCRIPTION["$KEY"]}" ]; then
-            echo "# ${MOUNT_POINT_DESCRIPTION["$KEY"]}" >> /etc/fstab
-        fi
-        if [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ]; then
-            echo "${MOUNT_POINT_DEFINITION["$KEY"]}" >> /etc/fstab
-        fi
-        if [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ] || [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ]; then
-            echo "" >> /etc/fstab
-        fi
-    done
-
-# Unmount peripherals currently mounted under /media/$LOGNAME/*
-umount "/media/$LOGNAME/"*
-
-# Remount all using /etc/fstab, as amended above
-mount --all
-
-# Install MakeMKV
-# DON'T USE THE SNAP INSTALLER
-if $install_makemkv ; then
-  echo "Installing MakeMKV"
-  add-apt-repository ppa:heyarje/makemkv-beta
-  apt-get update
-  printf '\n' | DEBIAN_FRONTEND=noninteractive apt-get install -yq makemkv-bin makemkv-oss ccextractor
-  usermod -a -G cdrom $ADMIN_USER
-  # MakeMKV config file
-    if [ -f $GIT_GO_CONFIGS/makemkv/settings.conf ]; then
-	    mkdir -p $ADMIN_HOME_DIR/.MakeMKV
-	    mkdir -p $ROOT_HOME_DIR/.MakeMKV
-	    cp $GIT_GO_CONFIGS/makemkv/settings.conf $ADMIN_HOME_DIR/.MakeMKV/
-	    chmod 600 $ADMIN_HOME_DIR/.MakeMKV/settings.conf
-	    chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.MakeMKV
-	    cp $ADMIN_HOME_DIR/.MakeMKV/settings.conf $ROOT_HOME_DIR/.MakeMKV/
-	    chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.MakeMKV
-	    fi
-  echo "MakeMKV installed."
-  fi
 
 if $install_apache2 ; then
   echo "Installing apache2"
@@ -346,39 +381,6 @@ if $install_phpmyadmin ; then
 #  chmod 644 $THIS_WEB_ROOT/.htaccess
   systemctl restart apache2
   echo "phpMyAdmin installed."
-  fi
-
-# IMPORTANT: Make sure this comes AFTER fstab installation and adaptation. The plex links and file systems need to exist.
-if $install_plexmediaserver ; then
-    # Tested through Ubuntu 20.04.1
-    # Install Plex Media Server
-      echo "Installing Plex Media Server"
-      xxx
-      ln -s /mnt/ssd1tb /var/lib/plexmediaserver/Library/work
-      ln -s /mnt/ext10tb01 /var/lib/plexmediaserver/Library/store
-      rm -rf /etc/apt/sources.list.d/plexmediaserver.list
-      echo "# When enabling this repo please remember to add the PlexPublic.Key into the apt setup." > /etc/apt/sources.list.d/plexmediaserver.list
-      echo "# wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
-      echo "#" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
-      echo "deb https://downloads.plex.tv/repo/deb/ public main" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
-      wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -
-      apt-get -y update
-      f_install plexmediaserver
-      ufw allow 32400/tcp # if not already specified
-      echo "Plex Media Server installed."
-    # Install Tautulli for https://this-server:8181
-    # Ref: https://tautulli.com/
-        DEBIAN_FRONTEND=noninteractive apt-get install -yq python python-setuptools tzdata
-        cd /opt
-        git clone https://github.com/Tautulli/Tautulli.git
-        addgroup tautulli && sudo adduser --system --no-create-home tautulli --ingroup tautulli
-        cp /opt/Tautulli/init-scripts/init.systemd /lib/systemd/system/tautulli.service
-        chown tautulli:tautulli -R /opt/Tautulli
-        systemctl daemon-reload
-        systemctl enable tautulli.service
-        systemctl start tautulli.service
-        ufw allow 8181
-        cd
   fi
 
 if $install_webmin ; then
