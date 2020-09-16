@@ -1,5 +1,5 @@
 #!/bin/bash
-# hot-backup
+# cold-backup
 
 # Include script setup file
 	source script-setup
@@ -14,24 +14,24 @@ CURRENT_DIRECTORY="$(pwd)"
 cd /
 
 # If file system is mounted and read-only, unmount
-if [ $(findmnt "$HOT_BACKUP_FILE_SYSTEM" -n -o options | grep "ro,") ]; then
-	umount "$HOT_BACKUP_FILE_SYSTEM"
+if [ $(findmnt "$COLD_BACKUP_FILE_SYSTEM" -n -o options | grep "ro,") ]; then
+	umount "$COLD_BACKUP_FILE_SYSTEM"
 fi
 
 # If file system is not mounted, mount it read-write
-if [ "findmnt $HOT_BACKUP_FILE_SYSTEM" ]; then
-	mount -o rw "$HOT_BACKUP_FILE_SYSTEM"
+if [ "findmnt $COLD_BACKUP_FILE_SYSTEM" ]; then
+	mount -o rw "$COLD_BACKUP_FILE_SYSTEM"
 fi
 
 # If file system is not mounted read-write, fail
-if [ ! $(findmnt "$HOT_BACKUP_FILE_SYSTEM" -n -o options | grep "rw,") ]; then
-	logger $0: FATAL: $HOT_BACKUP_FILE_SYSTEM is not mounted with rw option
-	echo $0: FATAL: $HOT_BACKUP_FILE_SYSTEM is not mounted with rw option
+if [ ! $(findmnt "$COLD_BACKUP_FILE_SYSTEM" -n -o options | grep "rw,") ]; then
+	logger $0: FATAL: $COLD_BACKUP_FILE_SYSTEM is not mounted with rw option
+	echo $0: FATAL: $COLD_BACKUP_FILE_SYSTEM is not mounted with rw option
 	exit 1
 fi
 
 # Make container directory
-mkdir -p $HOT_BACKUP_DIRECTORY
+mkdir -p $COLD_BACKUP_DIRECTORY
 
 # Do backup with rsync
 # rsync options used
@@ -49,15 +49,15 @@ mkdir -p $HOT_BACKUP_DIRECTORY
 #    -E = preserve executability
 #    -R = use relative paths (see https://linux.die.net/man/1/rsync for more info)
 #    --delete = delete extraneous files from dest dirs
-rsync -aloprtvER --delete $HOT_BACKUP_SOURCES $HOT_BACKUP_DIRECTORY
+rsync -aloprtvER --delete $COLD_BACKUP_SOURCES $COLD_BACKUP_DIRECTORY
 
 # Restore working directory
 cd "$CURRENT_DIRECTORY"
 
-# If hot backup file system is flagged as ro, unmount & remount ro
-if [ $HOT_BACKUP_FS_READ_ONLY ]; then
-	umount $HOT_BACKUP_FILE_SYSTEM
-	mount -o ro $HOT_BACKUP_FILE_SYSTEM
+# If cold backup file system is flagged as ro, unmount & remount ro
+if [ $COLD_BACKUP_FS_READ_ONLY ]; then
+	umount $COLD_BACKUP_FILE_SYSTEM
+	mount -o ro $COLD_BACKUP_FILE_SYSTEM
 	fi
 
 # Start services as needed
