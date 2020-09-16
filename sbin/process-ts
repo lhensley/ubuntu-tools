@@ -64,7 +64,7 @@ else
 
     # Do the transcoding
     TIMESTART=$(currenttimeinseconds)
-    IN_FILE_BASE=$(basename $IN_FILE)
+    IN_FILE_BASE=$(basename "$IN_FILE")
     logger $0: Transcoding $IN_FILE_BASE
     "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$IN_FILE" -o "$OUT_FILE"
     exit_status=$?
