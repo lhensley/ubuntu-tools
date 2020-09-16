@@ -21,9 +21,12 @@ if [ ! -z $SUDO_USER ]; then
 
 # f_debug "script-setup started"
 
-# If configured, log the start of script processing. Default = "true"
-# NEED TO ADD THE LOGIC TO PROCESS THE _vars DISABLE_START_MESSAGE array
-logger "$0: Start"
+# If not disabled, log the start of script processing. Default = "true"
+if [ ! -Z ${DISABLE_START_MESSAGE[$0]} ]
+	if [ ${DISABLE_START_MESSAGE[$0]} ]
+		logger "$0: Start"
+		fi
+	fi
 
 # If configured, send a text message to note the start of script processing. Default = "false"
 # if [ "$(f_get-config LANE_script_$(basename $0)_text_start)" == "true" ]; then f_text_alert "$0: Start"; fi
