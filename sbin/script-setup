@@ -30,7 +30,7 @@ if [ ! -z ${DISABLE_START_MESSAGE["$0"]} ]; then
 #			echo > /dev/null
 		fi
 	else
-		echo "YES Z (no it does not exist)"
+		echo "YES Z (so it does not exist)"
 	fi
 
 # If configured, send a text message to note the start of script processing. Default = "false"
