@@ -385,15 +385,14 @@ source /etc/os-release
 # Disable start message for these scripts
 # DEPENDENT ON PATHNAME ARRAY DEFINITION ABOVE
 # Example: DISABLE_START_MESSAGE[${PATHNAME[lgh]}]=true
-# It doesn't matter what the value is set to, as long as the key is defined
+# If the variable is defined at all, it resolves to true, even if the assigned falue is false
 	declare -A DISABLE_START_MESSAGE
 	DISABLE_START_MESSAGE[${PATHNAME[timeformat]}]=true
-	DISABLE_START_MESSAGE[${PATHNAME[_git]}]=false
 
 # Disable end message for these scripts
 # DEPENDENT ON PATHNAME ARRAY DEFINITION ABOVE
 # Example: DISABLE_END_MESSAGE[${PATHNAME[lgh]}]=true
-# It doesn't matter what the value is set to, as long as the key is defined
+# If the variable is defined at all, it resolves to true, even if the assigned falue is false
 	declare -A DISABLE_END_MESSAGE
 	DISABLE_END_MESSAGE[${PATHNAME[timeformat]}]=true
 
