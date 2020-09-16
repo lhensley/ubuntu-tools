@@ -27,6 +27,7 @@ if [ ! -z "${DISABLE_START_MESSAGE["$0"]}" ]; then
 			echo > /dev/null
 		else
 			echo $0: Start
+		fi
 	fi
 
 # If configured, send a text message to note the start of script processing. Default = "false"
