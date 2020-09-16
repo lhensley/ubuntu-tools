@@ -332,6 +332,7 @@ if $install_mysql_server ; then
 ###### EXTREMELY IMPORTANT: Edit /etc/mysql/mysql.conf.d/mysqld.cnf and open up bind-address * ###########
   MYSQL_PACKAGES="mysql-server openssl libcurl4-openssl-dev libssl-dev php-gmp php-symfony-service-implementation php-imagick php-twig-doc php-symfony-translation"
   DEBIAN_FRONTEND=noninteractive apt-get install -yq $MYSQL_PACKAGES
+  chown -R mysql:adm /var/log/mysql # Unclear why this would be necessary but otherwise ends up owned by user tautulli 9/16/2020
   ufw allow mysql
   mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"

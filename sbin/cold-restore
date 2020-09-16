@@ -21,7 +21,7 @@
 		fi
 
 # Stop services as needed
-	systemctl stop plexmediaserver mysql
+	systemctl stop $COLD_PROTECTED_SERVICES
 
 # Restore working directory
 cd $COLD_BACKUP_DIRECTORY
@@ -51,7 +51,7 @@ cd "$CURRENT_DIRECTORY"
 	echo
 	echo -en "\007" # Beep
 	echo "Restore done. "
-	echo "Plex Media Server and MySQL are stopped."
+	echo "$COLD_PROTECTED_SERVICES stopped."
 	echo "IMMEDIATE reboot VERY STRONGLY recommended."
 	echo "To reboot, type: sudo init 6"
 	echo
