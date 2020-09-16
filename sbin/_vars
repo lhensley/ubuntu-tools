@@ -152,7 +152,8 @@ source /etc/os-release
 		fi
 	HOT_BACKUP_DIRECTORY="$HOT_BACKUP_PARENT_DIRECTORY/$HOT_BACKUP_SUBDIRECTORY"
 	HOT_BACKUP_SOURCES="etc opt home root var/www"
-	HOT_BACKUP_SOURCES+=" var/lib/plexmediaserver/Library/Application*"
+	HOT_BACKUP_SOURCES+=" var/lib/plexmediaserver/Library"
+	HOT_BACKUP_SOURCES+=" var/lib/mysql"
 	HOT_BACKUP_SOURCES+=" var/spool/cron/crontabs var/spool/mail"
 
 # ddclient
@@ -233,6 +234,10 @@ source /etc/os-release
 # Incoming Scans
 	INCOMING_SCANS="$ADMIN_HOME_DIR/Scans"
 
+# Installation
+	OS_INSTALL_INFO_FILE=.config/os-install-info.txt
+	OS_INSTALL_INFO_PATH=$ROOT_HOME_DIR/$OS_INSTALL_INFO_FILE
+	
 # MakeMKV
 	MAKEMKV_OUTPUT_DIRECTORY="$ADMIN_HOME_DIR/Videos/MakeMKV-Completed"
 

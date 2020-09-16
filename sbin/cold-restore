@@ -21,7 +21,7 @@
 		fi
 
 # Stop services as needed
-	systemctl stop plexmediaserver
+	systemctl stop plexmediaserver mysql
 
 # Restore working directory
 cd $HOT_BACKUP_DIRECTORY
@@ -42,18 +42,17 @@ cd $HOT_BACKUP_DIRECTORY
 #    -E = preserve executability
 #    -R = use relative paths (see https://linux.die.net/man/1/rsync for more info)
 #    --delete = delete extraneous files from dest dirs
-rsync -aloprtvER --delete --exclude=etc/fstab $HOT_BACKUP_SOURCES /
+rsync -aloprtvER --delete --exclude=etc/fstab --exclude=.config/os-install-info.txt $HOT_BACKUP_SOURCES /
 
 # Restore working directory
 cd "$CURRENT_DIRECTORY"
 
-# Start services as needed
-	systemctl start plexmediaserver
-
 # Recommend reboot
 	echo
 	echo -en "\007" # Beep
-	echo "Restore done. Immediate reboot VERY STRONGLY recommended."
+	echo "Restore done. "
+	echo "Plex Media Server and MySQL are stopped.
+	echo "IMMEDIATE reboot VERY STRONGLY recommended."
 	echo "To reboot, type: sudo init 6"
 	echo
 

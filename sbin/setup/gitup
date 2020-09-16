@@ -459,28 +459,35 @@ ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
 # chmod 777 $SBIN_DIR/_apply-configsHOME
 $SBIN_DIR/_apply-configs
 
-OS_INSTALL_INFO=$ROOT_HOME_DIR/.config/os-install-info.txt
-mkdir -p $(dirname $OS_INSTALL_INFO)
-echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD" > $OS_INSTALL_INFO
-echo "MYSQL_ADMIN_NAME: $MYSQL_ADMIN_NAME" >> $OS_INSTALL_INFO
-echo "MYSQL_ADMIN_PASSWORD: $MYSQL_ADMIN_PASSWORD" >> $OS_INSTALL_INFO
-echo "PHPMYADMIN_APP_PASS: $PHPMYADMIN_APP_PASS" >> $OS_INSTALL_INFO
-echo "PHPMYADMIN_ROOT_PASS: $PHPMYADMIN_ROOT_PASS" >> $OS_INSTALL_INFO
-echo "PHPMYADMIN_APP_DB_PASS: $PHPMYADMIN_APP_DB_PASS" >> $OS_INSTALL_INFO
-echo "" >> $OS_INSTALL_INFO
-echo "# Add to $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys:" >> $OS_INSTALL_INFO
-echo "" >> $OS_INSTALL_INFO
-echo "# $SSH_KEY_NAME" >> $OS_INSTALL_INFO
-cat "$ADMIN_HOME_DIR/.ssh/id_rsa.pub" >> $OS_INSTALL_INFO
-echo "#" >> $OS_INSTALL_INFO
-chmod 400 $OS_INSTALL_INFO
-chown $ROOT_USER:$ROOT_USER $OS_INSTALL_INFO
+mkdir -p $(dirname $OS_INSTALL_INFO_PATH)
+echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD" > $OS_INSTALL_INFO_PATH
+echo "MYSQL_ADMIN_NAME: $MYSQL_ADMIN_NAME" >> $OS_INSTALL_INFO_PATH
+echo "MYSQL_ADMIN_PASSWORD: $MYSQL_ADMIN_PASSWORD" >> $OS_INSTALL_INFO_PATH
+echo "PHPMYADMIN_APP_PASS: $PHPMYADMIN_APP_PASS" >> $OS_INSTALL_INFO_PATH
+echo "PHPMYADMIN_ROOT_PASS: $PHPMYADMIN_ROOT_PASS" >> $OS_INSTALL_INFO_PATH
+echo "PHPMYADMIN_APP_DB_PASS: $PHPMYADMIN_APP_DB_PASS" >> $OS_INSTALL_INFO_PATH
+echo "" >> $OS_INSTALL_INFO_PATH
+echo "# Add to $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys:" >> $OS_INSTALL_INFO_PATH
+echo "" >> $OS_INSTALL_INFO_PATH
+echo "# $SSH_KEY_NAME" >> $OS_INSTALL_INFO_PATH
+cat "$ADMIN_HOME_DIR/.ssh/id_rsa.pub" >> $OS_INSTALL_INFO_PATH
+echo "#" >> $OS_INSTALL_INFO_PATH
+chmod 400 $OS_INSTALL_INFO_PATH
+chown $ROOT_USER:$ROOT_USER $OS_INSTALL_INFO_PATH
 echo ""
-# echo "# IMPORTANT: Move the contents of $OS_INSTALL_INFO"
+# echo "# IMPORTANT: Move the contents of $OS_INSTALL_INFO_PATH"
 # echo "#    into 1Password NOW, delete it, and reboot."
 # echo "# Once you continue, these passwords cannot be recovered."
 # echo ""
 rm $TEMP_PASSWORD_INCLUDE
+
+# Last instructions
+	echo
+	echo -en "\007" # Beep
+    echo "Reboot using   sudo init 6"
+    echo "THEN run       sudo cold-restore"
+    echo "THEN Reboot again."
+    echo
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
