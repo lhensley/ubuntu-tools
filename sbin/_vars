@@ -380,7 +380,6 @@ source /etc/os-release
 	ROOT_REQUIRED[${PATHNAME[_git]}]=true
 	ROOT_REQUIRED[${PATHNAME[_upd]}]=true
 	ROOT_REQUIRED[${PATHNAME[lgh]}]=true
-	ROOT_REQUIRED[${PATHNAME[shrink_plex_ts_files]}]=true
 	ROOT_REQUIRED[${PATHNAME[upd]}]=true
 
 # Disable start message for these scripts
@@ -403,7 +402,6 @@ source /etc/os-release
 # Example: RESTRICT_SCRIPT_TO_HOST[${PATHNAME[lgh]}]=oz
 	declare -A RESTRICT_SCRIPT_TO_HOST
 	RESTRICT_SCRIPT_TO_HOST[${PATHNAME[show_plex_ts_files]}]=oz
-	RESTRICT_SCRIPT_TO_HOST[${PATHNAME[shrink_plex_ts_files]}]=oz
 	RESTRICT_SCRIPT_TO_HOST[${PATHNAME[process_incoming_scans]}]=oz
 	RESTRICT_SCRIPT_TO_HOST[${PATHNAME[process_ts]}]=oz
 	RESTRICT_SCRIPT_TO_HOST[${PATHNAME[rip]}]=oz
