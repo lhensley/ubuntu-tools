@@ -24,14 +24,11 @@ if [ ! -z $SUDO_USER ]; then
 echo $0
 # If not disabled, log the start of script processing. Default = "false" (i.e., not disabled, so do log start)
 if [ ! -z ${DISABLE_START_MESSAGE[$0]} ]; then
-	echo "NO Z (so it exists)"
 	if [ ${DISABLE_START_MESSAGE[$0]} ]; then
+			echo > /dev/null
+		else
 			echo $0: Start
-#		else
-#			echo > /dev/null
 		fi
-	else
-		echo "YES Z (so it does not exist)"
 	fi
 
 # If configured, send a text message to note the start of script processing. Default = "false"
