@@ -41,7 +41,7 @@ STORE_FILE="$STORE_ROOT_PATH/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
 # $STORE_ROOT_PATH
 # $RELATIVE_FILE
 
-f_require_file "$OUT_FILE"
+f_require_value "OUT_FILE" "$OUT_FILE"
 f_require_value "RELATIVE_FILE" $RELATIVE_FILE
 f_require_value "STORE_FILE" $STORE_FILE
 f_require_value "plex_main_library_directory" "$PLEX_LIVE_APPLICATION_SUPPORT"
