@@ -115,6 +115,29 @@ function f_chmod() {
 	fi
 	}
 
+function f_mount_ro_fs_as_rw () {
+	# If file system is mounted and read-only, unmount
+		if [ $(findmnt "$COLD_BACKUP_FILE_SYSTEM" -n -o options | grep "ro,") ]; then
+			umount "$COLD_BACKUP_FILE_SYSTEM"
+		fi
+	# If file system is not mounted, mount it read-write
+		if [ "findmnt $COLD_BACKUP_FILE_SYSTEM" ]; then
+			mount -o rw "$COLD_BACKUP_FILE_SYSTEM"
+		fi
+	# If file system is not mounted read-write, fail
+		if [ ! $(findmnt "$COLD_BACKUP_FILE_SYSTEM" -n -o options | grep "rw,") ]; then
+			logger $0: FATAL: $COLD_BACKUP_FILE_SYSTEM is not mounted with rw option
+			echo $0: FATAL: $COLD_BACKUP_FILE_SYSTEM is not mounted with rw option
+			exit 1
+		fi
+	}
+
+function f_lane_test () {
+	echo "Test A"
+	echo Plex Dir: $PLEX_LIVE_APPLICATION_SUPPORT
+	}
+
+
 
 
 

@@ -74,7 +74,7 @@ else
             exit $exit_status
         else
             rm "$IN_FILE" # Delete input file
-            logger $0: transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))
+            logger $0: Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))
         fi # End of check for transcoding failure
 
     # Move all available .m4v files from WORK to STORE.
