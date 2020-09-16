@@ -22,7 +22,7 @@ if [ ! -z $SUDO_USER ]; then
 # f_debug "script-setup started"
 
 # If not disabled, log the start of script processing. Default = "true"
-if [ -Z DISABLE_START_MESSAGE["$0"] ]; then
+if [ ! -z "${DISABLE_START_MESSAGE["$0"]}" ]; then
 	logger A - $0
 	logger B - "${DISABLE_START_MESSAGE["$0"]}"
 	if [ ! ${DISABLE_START_MESSAGE["$0"]} ]; then
