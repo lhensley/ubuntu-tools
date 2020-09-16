@@ -6,5 +6,6 @@
 
 # If configured, send a text message to note the end of script processing. Default = "false"
 # if [ "$(f_get-config script.$(basename $0).text-end)" == "true" ]; then f_text_alert "$0: end"; fi
+logger "$0: End"
 
 exit 0

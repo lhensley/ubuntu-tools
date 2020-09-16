@@ -100,9 +100,6 @@ function f_local_copy() {
 # Set a flag to confirm that the functions are defined
 	FUNCTIONS_ARE_DEFINED=true
 
-# Log the completion
-	logger $0: Functions loaded from _functions
-
 function f_install() {
 	if ! [ -x "$(command -v $1)" ]; then   
 		logger $0 Installing $1
@@ -117,4 +114,14 @@ function f_chmod() {
 		chmod $1 $2
 	fi
 	}
+
+
+
+
+#########################################################################################################
+
+# Log the completion
+if [ ! $DEBUG ]; then
+	logger $0: Functions loaded from _functions
+	fi
 

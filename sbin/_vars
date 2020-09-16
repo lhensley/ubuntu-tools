@@ -410,4 +410,6 @@ source /etc/os-release
 	VARIABLES_ARE_DEFINED=true
 
 # Log the completion
-	logger $0: Variables loaded from _vars
+	if [ ! $DEBUG ]; then
+		logger $0: Variables loaded from _vars
+		fi
