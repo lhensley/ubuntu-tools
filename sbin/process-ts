@@ -74,8 +74,6 @@ else
             exit $exit_status
         else
             rm "$IN_FILE" # Delete input file
-            logger $0: DEBUG: currenttimeinseconds $(currenttimeinseconds)
-            logger $0: DEBUG: TIMESTART $TIMESTART
             logger $0: transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))
         fi # End of check for transcoding failure
 
