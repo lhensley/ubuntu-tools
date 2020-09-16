@@ -6,11 +6,14 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; fi
 
-f_debug_variable "shrink_plex_ts_files" "$PATHNAME[shrink_plex_ts_files]"
-f_require_file "$PATHNAME[shrink_plex_ts_files]" ]
+# Verify files and directories
+	f_require_file "${PATHNAME[process_ts]}"
+	f_require_directory "$VIDEO_WORK_DIRECTORY"
+	f_require_directory "$VIDEO_STORE_DIRECTORY"
 
-"$PATHNAME[shrink_plex_ts_files]"
-sleep 60
+# Run the loop
+# IMPORTANT: Move the ; sleep 30 part soon.
+	find "$VIDEO_WORK_DIRECTORY" -type f -name "*.ts" -print -exec PATHNAME["process_ts"] {} "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY"; sleep 30 \;
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

@@ -358,7 +358,6 @@ source /etc/os-release
 	PATHNAME[script_setup]="$SBIN_DIR/script-setup"
 	PATHNAME[secureserver]="$SBIN_DIR/secureserver"
 	PATHNAME[show_plex_ts_files]="$SBIN_DIR/show-plex-ts-files"
-	PATHNAME[shrink_plex_ts_files]="$SBIN_DIR/shrink-plex-ts-files"
 	PATHNAME[stopwatch]="$SBIN_DIR/stopwatch"
 	PATHNAME[syncplex]="$SBIN_DIR/syncplex"
 	PATHNAME[tar]="/bin/tar"
