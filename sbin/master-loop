@@ -10,10 +10,14 @@
 	f_require_file "${PATHNAME[process_ts]}"
 	f_require_directory "$VIDEO_WORK_DIRECTORY"
 	f_require_directory "$VIDEO_STORE_DIRECTORY"
+	echo 1: ${PATHNAME[process_ts]}
+	echo 2: $VIDEO_WORK_DIRECTORY
+	echo 3: $VIDEO_STORE_DIRECTORY
+	exit 1
 
 # Run the loop
 # IMPORTANT: Move the ; sleep 30 part soon.
-	find "$VIDEO_WORK_DIRECTORY" -type f -name "*.ts" -print -exec ${PATHNAME[process_ts]} {} "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY"; sleep 30 \;
+	find "$VIDEO_WORK_DIRECTORY" -type f -name "*.ts" -print -exec "${PATHNAME[process_ts]}" {} "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY"; sleep 30 \;
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
