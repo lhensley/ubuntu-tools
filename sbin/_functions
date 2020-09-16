@@ -11,7 +11,7 @@ FUNCTIONS_ARE_DEFINED=false
 
 function f_debug () {
     # $1: message to log, only used when $DEBUG_MODE == true
-    if [ $DEBUG_MODE ]; then
+    if [ ! $DEBUG_MODE ]; then
         logger $0: DEBUG: $1
         fi
     }
@@ -20,7 +20,7 @@ function f_debug_variable () {
     # $1: variable_name
     # $2: variable_value ("$variable_name")
     # Example: f_debug_variable "var" "$var"
-    if [ $DEBUG_MODE ]; then
+    if [ ! $DEBUG_MODE ]; then
         logger $0: DEBUG: $1 = $2
         fi
     }
