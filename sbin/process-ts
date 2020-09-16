@@ -12,14 +12,13 @@ IN_FILE="$1"
 WORK_ROOT_PATH="$2"
 STORE_ROOT_PATH="$3"
 
-f_require_file "IN_FILE"
+f_require_file "$IN_FILE"
 f_require_directory "$WORK_ROOT_PATH"
 f_require_directory "$STORE_ROOT_PATH"
 f_require_value "IGNORE_TV_SHOWS" $IGNORE_TV_SHOWS
 f_require_file "${PATHNAME[move_one_file]}"
 
 OUT_EXT="m4v"
-
 
 WORK_ROOT_PATH_LENGTH=${#WORK_ROOT_PATH}
 

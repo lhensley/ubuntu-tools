@@ -13,7 +13,7 @@
 
 # Run the loop
 # IMPORTANT: Move the ; sleep 30 part soon.
-	find "$VIDEO_WORK_DIRECTORY" -type f -name "*.ts" -print -exec "${PATHNAME[process_ts]}" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" {} \;
+	find "$VIDEO_WORK_DIRECTORY" -type f -name "*.ts" -print -exec "${PATHNAME[process_ts]}" {} "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" \;
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
