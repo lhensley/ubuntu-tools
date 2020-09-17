@@ -2,7 +2,7 @@
 # loop-forever
 
 # Include script setup file
-	source script-setup
+	source /usr/local/sbin/script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; fi
 
