@@ -63,7 +63,7 @@ if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
   else
     # chown plex:plex $OUT_FILE
     # chmod 664 $OUT_FILE
-    logger "$0: moved $(basename $IN_FILE)"
+    logger $0: moved $(basename "$IN_FILE")
   fi
 
 # Include script footer file
