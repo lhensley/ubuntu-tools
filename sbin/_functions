@@ -138,11 +138,11 @@ function f_mount_ro_fs_as_ro () {
 	FS_READ_ONLY=$2
 	# If file system is mounted and read-write, unmount
 		if [ $(findmnt "$FILE_SYSTEM" -n -o options | grep "rw,") ]; then
-			umount "$FILE_SYSTEM"	s
+			umount "$FILE_SYSTEM"
 		fi
 	# If cold backup file system is flagged as ro, unmount & remount ro
 	if [ $FS_READ_ONLY ]; then
-		mount -o ro "$FILE_SYSTEM""
+		mount -o ro "$FILE_SYSTEM"
 		fi
 	# If file system is not mounted read-only, fail
 		if [ ! $(findmnt "$FILE_SYSTEM" -n -o options | grep "ro,") ]; then
