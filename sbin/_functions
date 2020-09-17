@@ -152,11 +152,13 @@ function f_mount_ro_fs_as_ro () {
 		fi
 	}
 
-function f_plex_media_recursive_permissions () {
-	CONTAINER_PATH="$1"
-	f_require_directory "$CONTAINER_PATH"
-    find "$CONTAINER_PATH" -type d -print -exec chmod 775 {} \;
-    find "$CONTAINER_PATH" -type f -print -exec chmod 664 {} \;
+function f_set_plex_media_recursive_permissions () {
+	f_require_directory "$VIDEO_WORK_DIRECTORY"
+    find "$VIDEO_WORK_DIRECTORY" -type d -print -exec chmod 775 {} \;
+    find "$VIDEO_WORK_DIRECTORY" -type f -print -exec chmod 664 {} \;
+	f_require_directory "$VIDEO_STORE_DIRECTORY"
+    find "$VIDEO_STORE_DIRECTORY" -type d -print -exec chmod 775 {} \;
+    find "$VIDEO_STORE_DIRECTORY" -type f -print -exec chmod 664 {} \;
 	}
 
 function f_lane_test () {
