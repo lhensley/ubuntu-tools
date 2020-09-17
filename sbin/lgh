@@ -5,7 +5,7 @@
 source $(dirname $0)/script-setup
 
 
-find "/mnt/ssd1tb/plex" -type d -print -exec touch {} \;
+find "/mnt/ssd1tb/plex" -type d -print # -exec touch {} \;
 
 
 # # Set permissions for all Plex media and directories
