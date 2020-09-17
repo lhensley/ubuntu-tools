@@ -147,7 +147,7 @@ source /etc/os-release
 		COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
 		fi
 	if [ $HOSTNAME == "oz" ]; then
-		COLD_BACKUP_FILE_SYSTEM="/mnt/ext10tb01"
+		COLD_BACKUP_FILE_SYSTEM="/mnt/Black1TB"
 		COLD_BACKUP_FS_READ_ONLY=true
 		COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
 		fi
@@ -214,7 +214,9 @@ source /etc/os-release
 		MOUNT_POINT_DESCRIPTION[/mnt/ssd1tb]="Internal SSD drive, 1T"
 			MOUNT_POINT_DEFINITION[/mnt/ssd1tb]="UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb ext4 defaults 0 0"
 		MOUNT_POINT_DESCRIPTION[/mnt/ext10tb01]="External Hard Drive for Plex, 10TB (rerun)"
-			MOUNT_POINT_DEFINITION[/mnt/ext10tb01]="UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 ro,defaults 0 0"
+			MOUNT_POINT_DEFINITION[/mnt/ext10tb01]="UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 rw,defaults 0 0"
+		MOUNT_POINT_DESCRIPTION[/mnt/Black1TB]="# Black 1TB"
+			MOUNT_POINT_DEFINITION[/mnt/Black1TB]="UUID=c359e0c7-c6a1-4a49-b7eb-82fe3e5f0f25 /mnt/Black1TB ext4 ro,defaults 0 0"
 	fi
 
 # Git

@@ -29,7 +29,8 @@ NEW_DIRECTORY="$(dirname "$OUT_FILE")"
 
 f_file_not_in_use "$IN_FILE"
 
-f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"
+# Only if the STORE file system is read-only
+# f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"
 
 # Make the directory for out file
 if [ ! -d "$NEW_DIRECTORY" ]; then
@@ -62,7 +63,8 @@ if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
     logger $0: moved $(basename "$IN_FILE")
   fi
 
-f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY
+# Only if the STORE file system is read-only
+# f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
