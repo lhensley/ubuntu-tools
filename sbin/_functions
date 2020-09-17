@@ -155,9 +155,8 @@ function f_mount_ro_fs_as_ro () {
 function f_plex_media_recursive_permissions () {
 	CONTAINER_PATH="$1"
 	f_require_directory "$CONTAINER_PATH"
-	echo $CONTAINER_PATH
-    # find "$CONTAINER_PATH" -type d -print -exec chmod 775 {} \;
-    # find "$CONTAINER_PATH" -type f -print -exec chmod 664 {} \;
+    find "$CONTAINER_PATH" -type d -print -exec chmod 775 {} \;
+    find "$CONTAINER_PATH" -type f -print -exec chmod 664 {} \;
 	}
 
 function f_lane_test () {
