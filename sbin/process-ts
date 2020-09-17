@@ -68,6 +68,8 @@ else
     logger $0: Transcoding $IN_FILE_BASE
     "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$IN_FILE" -o "$OUT_FILE"
     exit_status=$?
+    chown plex:plex "$OUT_FILE"
+    chmod 664 "$OUT_FILE"
     if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
             logger "$HANDBRAKE_CLI: FAILED with $exit_status for $IN_FILE"
             echo "$(date) $HANDBRAKE_CLI: FAILED with $exit_status for $IN_FILE" | mail $TEXT_ALERTS

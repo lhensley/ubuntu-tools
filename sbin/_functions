@@ -116,20 +116,48 @@ function f_chmod() {
 	}
 
 function f_mount_ro_fs_as_rw () {
+	FILE_SYSTEM=$1
 	# If file system is mounted and read-only, unmount
-		if [ $(findmnt "$COLD_BACKUP_FILE_SYSTEM" -n -o options | grep "ro,") ]; then
-			umount "$COLD_BACKUP_FILE_SYSTEM"
+		if [ $(findmnt "$FILE_SYSTEM" -n -o options | grep "ro,") ]; then
+			umount "$FILE_SYSTEM"
 		fi
 	# If file system is not mounted, mount it read-write
-		if [ "findmnt $COLD_BACKUP_FILE_SYSTEM" ]; then
-			mount -o rw "$COLD_BACKUP_FILE_SYSTEM"
+		if [ "findmnt $FILE_SYSTEM" ]; then
+			mount -o rw "$FILE_SYSTEM"
 		fi
 	# If file system is not mounted read-write, fail
-		if [ ! $(findmnt "$COLD_BACKUP_FILE_SYSTEM" -n -o options | grep "rw,") ]; then
-			logger $0: FATAL: $COLD_BACKUP_FILE_SYSTEM is not mounted with rw option
-			echo $0: FATAL: $COLD_BACKUP_FILE_SYSTEM is not mounted with rw option
+		if [ ! $(findmnt "$FILE_SYSTEM" -n -o options | grep "rw,") ]; then
+			logger $0: FATAL: $FILE_SYSTEM is not mounted with rw option
+			echo $0: FATAL: $FILE_SYSTEM is not mounted with rw option
 			exit 1
 		fi
+	}
+
+function f_mount_ro_fs_as_ro () {
+	FILE_SYSTEM=$1
+	FS_READ_ONLY=$2
+	# If file system is mounted and read-write, unmount
+		if [ $(findmnt "$FILE_SYSTEM" -n -o options | grep "rw,") ]; then
+			umount "$FILE_SYSTEM"	s
+		fi
+	# If cold backup file system is flagged as ro, unmount & remount ro
+	if [ $FS_READ_ONLY ]; then
+		mount -o ro "$FILE_SYSTEM""
+		fi
+	# If file system is not mounted read-only, fail
+		if [ ! $(findmnt "$FILE_SYSTEM" -n -o options | grep "ro,") ]; then
+			logger $0: FATAL: $FILE_SYSTEM is not mounted with ro option
+			echo $0: FATAL: $FILE_SYSTEM is not mounted with ro option
+			exit 1
+		fi
+	}
+
+function f_plex_media_recursive_permissions () {
+	CONTAINER_PATH="$1"
+	f_require_directory "$CONTAINER_PATH"
+	echo $CONTAINER_PATH
+    # find "$CONTAINER_PATH" -type d -print -exec chmod 775 {} \;
+    # find "$CONTAINER_PATH" -type f -print -exec chmod 664 {} \;
 	}
 
 function f_lane_test () {
