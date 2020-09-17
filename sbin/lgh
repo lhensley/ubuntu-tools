@@ -4,10 +4,14 @@
 # Include script setup file
 source $(dirname $0)/script-setup
 
-# Set permissions for all Plex media and directories
-	f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"
-	f_set_plex_media_recursive_permissions
-	f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY
+
+find "/mnt/ssd1tb/plex" -type d -print -exec touch {} \;
+
+
+# # Set permissions for all Plex media and directories
+# 	f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"
+# 	f_set_plex_media_recursive_permissions
+# 	f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY
 
 # Include script footer file
 f_debug_variable "script_script_footer_pathname" "${LANE_CONFIG[script_script_footer_pathname]}"
