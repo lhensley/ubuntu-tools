@@ -8,22 +8,17 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; fi
 
-
-
-
-
-
-IN_FILE=$1
-ROOT_IN_PATH=$2
-ROOT_OUT_PATH=$3
+IN_FILE="$1"
+ROOT_IN_PATH="$2"
+ROOT_OUT_PATH="$3"
 
 ROOT_IN_PATH_LENGTH=${#ROOT_IN_PATH}
 
 RELATIVE_FILE_LENGTH=$[IN_FILE_LENGTH-ROOT_IN_PATH_LENGTH-1]
-RELATIVE_FILE=${IN_FILE: -$RELATIVE_FILE_LENGTH} # Remove ROOT_IN_PATH
+RELATIVE_FILE="${IN_FILE: -$RELATIVE_FILE_LENGTH}" # Remove ROOT_IN_PATH
 
 OUT_FILE="$ROOT_OUT_PATH/$RELATIVE_FILE"
-NEW_DIRECTORY=$(dirname "$OUT_FILE")
+NEW_DIRECTORY="$(dirname "$OUT_FILE")"
 
 # So here are useful variables defined ...
 # $IN_FILE
@@ -38,6 +33,8 @@ f_file_not_in_use "$IN_FILE"
 if [ ! -d "$NEW_DIRECTORY" ]; then
   mkdir -p "$NEW_DIRECTORY" # Create the directory for the out file
   exit_status=$?
+  chown plex:plex "$NEW_DIRECTORY"
+  chmod 664 "$NEW_DIRECTORY"
   if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
       logger "$0: FAILED to make $NEW_DIRECTORY"
       echo "$(date) $0: Failed to make new directory" | mail -r move-one-file lanecell
