@@ -6,7 +6,7 @@ source $(dirname $0)/script-setup
 
 # Show m4v files accumulated in work directory
 f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"
-find "/mnt/ssd1tb/plex" -type f -name "*.m4v" -print -exec move-one-file {} "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" \;
+find "/mnt/ssd1tb/plex" -type f -name "*.m4v" -print -exec move-one-file "{}" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" \;
 f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY
 
 
