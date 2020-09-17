@@ -79,15 +79,15 @@ else
             logger $0: Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))
         fi # End of check for transcoding failure
 
-    # Move all available .m4v files from WORK to STORE.
+    # Move the .m4v file from WORK to STORE.
     # DISABLE THIS FOR NOW.
-        # "${PATHNAME[move_one_file]}" "$OUT_FILE" "$WORK_ROOT_PATH" "$STORE_ROOT_PATH"
-        # exit_status=$?
-        # if [ $exit_status -ne 0 ]; then # If the move failed ...
-        #         exit $exit_status
-        #     else
-        #         rm "$IN_FILE" # Delete input file
-        #     fi # End of check for transcoding failure
+        "${PATHNAME[move_one_file]}" "$OUT_FILE" "$WORK_ROOT_PATH" "$STORE_ROOT_PATH"
+        exit_status=$?
+        if [ $exit_status -ne 0 ]; then # If the move failed ...
+                exit $exit_status
+            else
+                rm "$IN_FILE" # Delete input file
+            fi # End of check for transcoding failure
 
     # Change permissions for Plex libraries
         # Let's see if we have a problem before restoring this from comment. These are dangerous calls.
