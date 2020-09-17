@@ -48,10 +48,7 @@ if [ ! -d "$NEW_DIRECTORY" ]; then
 fi
 
 # Move $IN_FILE to $OUT_FILE
-echo $IN_FILE
-echo $OUT_FILE
-echo
-# mv "$IN_FILE" "$OUT_FILE"
+mv "$IN_FILE" "$OUT_FILE"
 exit_status=$?
 if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
     logger "$0: FAILED to move $IN_FILE to $NEW_DIRECTORY"
@@ -61,8 +58,8 @@ if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
     echo "Outfile $OUT_FILE" | mail -r move-one-file lanecell
     exit $exit_status
   else
-    # chown plex:plex $OUT_FILE
-    # chmod 664 $OUT_FILE
+    chown plex:plex $OUT_FILE
+    chmod 664 $OUT_FILE
     logger $0: moved $(basename "$IN_FILE")
   fi
 
