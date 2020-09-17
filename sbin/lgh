@@ -5,7 +5,7 @@
 source $(dirname $0)/script-setup
 
 
-find "/mnt/ssd1tb/plex" -type f -name *.m4v" -print 
+find "/mnt/ssd1tb/plex" -type f -name "*.m4v" -print 
 	# -exec touch {} \;
 
 
