@@ -174,8 +174,9 @@ source /etc/os-release
 	BACKUP_OPTION[--exclude-caches]=true
 	BACKUP_OPTION[--totals]=true
 	BACKUP_OPTION[--verbose]=true
-	BACKUP_OPTIONS=""; BACKUP_OPTION[--exclude-from=$TEMP_SOCKETS_BACKUP]=true
+	# BACKUP_OPTION[--exclude-from=$TEMP_SOCKETS_BACKUP]=true
 	# Ref: https://bytefreaks.net/gnulinux/bash/bash-how-to-iterate-over-associative-array-and-print-all-keyvalue-pairs
+	BACKUP_OPTIONS=""; 
 	for KEY in "${!BACKUP_OPTION[@]}"; do BACKUP_OPTIONS+=$KEY" "; done
 	declare -A BACKUP_SOURCE
 	BACKUP_SOURCE[/etc]=true
