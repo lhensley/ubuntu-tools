@@ -54,9 +54,11 @@ f_debug_variable "STORE_ROOT_PATH" "$STORE_ROOT_PATH"
 f_debug_variable "RELATIVE_FILE" "$RELATIVE_FILE"
 f_debug_variable "1" "$1"
 
-if [ $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS") ] ; then
+if [ $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS") ]; then
+    echo "Test A"
     logger $0: Skipped $IN_FILE
 else
+    echo "Test B"
     f_file_not_in_use "$IN_FILE"
 
     # Hold this part out for now. Not sure this is the place for it.
@@ -83,6 +85,7 @@ else
 
     # Move the .m4v file from WORK to STORE.
         find "$VIDEO_WORK_DIRECTORY" -type f -name "*.m4v" -print -exec "${PATHNAME[move_one_file]}" "{}" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" \;
+    fi
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
