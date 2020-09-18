@@ -119,7 +119,7 @@ source /etc/os-release
 	declare -A ARCHIVE_DIRECTORY
 		ARCHIVE_DIRECTORY[default]="/var/lib/archives/$HOSTNAME"
 		ARCHIVE_DIRECTORY[nuc01]=${ARCHIVE_FILE_SYSTEM[nuc01]}/archives/nuc01
-		ARCHIVE_DIRECTORY[oz]=${ARCHIVE_FILE_SYSTEM[nuc01]}/archives/oz
+		ARCHIVE_DIRECTORY[oz]=${ARCHIVE_FILE_SYSTEM[oz]}/archives/oz
 	THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[default]}"
 		if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[nuc01]}"; fi
 		if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[oz]}"; fi
