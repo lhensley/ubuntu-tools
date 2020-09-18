@@ -115,7 +115,7 @@ source /etc/os-release
 	declare -A ARCHIVE_FILE_SYSTEM
 		ARCHIVE_FILE_SYSTEM[default]="/"
 		ARCHIVE_FILE_SYSTEM[nuc01]="/mnt/cloteal"
-		ARCHIVE_FILE_SYSTEM[oz]="/mnt/ext10tb01"
+		ARCHIVE_FILE_SYSTEM[oz]="/mnt/Black1TB"
 	declare -A ARCHIVE_DIRECTORY
 		ARCHIVE_DIRECTORY[default]="/var/lib/archives/$HOSTNAME"
 		ARCHIVE_DIRECTORY[nuc01]=${ARCHIVE_FILE_SYSTEM[nuc01]}/archives/nuc01
