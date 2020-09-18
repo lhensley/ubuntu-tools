@@ -7,7 +7,7 @@
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 if [ $COLD_BACKUP_FS_READ_ONLY ]; then f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"; fi
-mkdir "$THIS_ARCHIVE_DIRECTORY"
+mkdir -p "$THIS_ARCHIVE_DIRECTORY"
 echo tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
 tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
 if [ $COLD_BACKUP_FS_READ_ONLY ]; then f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY; fi
