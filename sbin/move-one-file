@@ -52,10 +52,10 @@ mv "$IN_FILE" "$OUT_FILE"
 exit_status=$?
 if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
     logger "$0: FAILED to move $IN_FILE to $NEW_DIRECTORY"
-    echo "$(date) $0: Failed to move file" | mail -r move-one-file lanecell
+    echo "$(date) $0: Failed to move file" | mail -r move-one-file text_alerts
     sleep 1
-    echo "Infile $IN_FILE" | mail -r move-one-file lanecell
-    echo "Outfile $OUT_FILE" | mail -r move-one-file lanecell
+    echo "Infile $IN_FILE" | mail -r move-one-file text_alerts
+    echo "Outfile $OUT_FILE" | mail -r move-one-file text_alerts
     exit $exit_status
   else
     chown plex:plex "$OUT_FILE"

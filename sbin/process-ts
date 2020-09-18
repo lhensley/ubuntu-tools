@@ -80,27 +80,7 @@ else
         fi # End of check for transcoding failure
 
     # Move the .m4v file from WORK to STORE.
-    # DISABLE THIS FOR NOW.
-        "${PATHNAME[move_one_file]}" "$OUT_FILE" "$WORK_ROOT_PATH" "$STORE_ROOT_PATH"
-        exit_status=$?
-        if [ $exit_status -ne 0 ]; then # If the move failed ...
-                exit $exit_status
-            else
-                rm "$IN_FILE" # Delete input file
-            fi # End of check for transcoding failure
-
-    # Change permissions for Plex libraries
-        # Let's see if we have a problem before restoring this from comment. These are dangerous calls.
-        #    find "$PLEX_LIVE_APPLICATION_SUPPORT" -type d -print -exec chmod 775 {} \;
-        #    find "$PLEX_LIVE_APPLICATION_SUPPORT" -type f -print -exec chmod 664 {} \;
-        #    chown -R plex:plex /var/lib/plexmediaserver/Library
-	    #    find "$WORK_ROOT_PATH" -type d -print -exec chmod 775 {} \;
-	    #    find "$WORK_ROOT_PATH" -type f -print -exec chmod 664 {} \;
-	    #    find "$STORE_ROOT_PATH" -type d -print -exec chmod 775 {} \;
-	    #    find "$STORE_ROOT_PATH" -type f -print -exec chmod 664 {} \;
-        #    chown -R plex:plex "$WORK_ROOT_PATH"
-        #    chown -R plex:plex "$STORE_ROOT_PATH"
-fi
+        find "$VIDEO_WORK_DIRECTORY" -type f -name "*.m4v" -print -exec "${PATHNAME[move_one_file]}" "{}" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" \;
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
