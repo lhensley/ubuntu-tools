@@ -54,7 +54,7 @@ f_debug_variable "STORE_ROOT_PATH" "$STORE_ROOT_PATH"
 f_debug_variable "RELATIVE_FILE" "$RELATIVE_FILE"
 f_debug_variable "1" "$1"
 
-if [ $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS") ]; then
+if $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS"); then
     echo "Test A"
     logger $0: Skipped $IN_FILE
 else
