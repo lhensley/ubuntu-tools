@@ -2,18 +2,22 @@
 # lgh
 
 # Include script setup file
-source $(dirname $0)/script-setup
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-# # Show m4v files accumulated in work directory
-# f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"
-# find "/mnt/ssd1tb/plex" -type f -name "*.m4v" -print -exec move-one-file "{}" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" \;
-# f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY
+# Show m4v files accumulated in work directory
+f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"
+find "/mnt/ssd1tb/plex" -type f -name "*.m4v" -print -exec move-one-file "{}" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" \;
+f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY
 
-# Set permissions for all Plex media and directories
-	f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"
-	f_set_plex_media_recursive_permissions
-	f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY
+# # Set permissions for all Plex media and directories
+# 	f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"
+# 	f_set_plex_media_recursive_permissions
+#	f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY
 
 # Include script footer file
-f_debug_variable "script_script_footer_pathname" "${LANE_CONFIG[script_script_footer_pathname]}"
-source ${PATHNAME[script_footer]}
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0

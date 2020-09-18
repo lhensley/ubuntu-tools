@@ -5,8 +5,8 @@
 
 # Include script setup file
 	source script-setup
-	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; fi
-	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; fi
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 IN_FILE="$1"
 ROOT_IN_PATH="$2"
@@ -40,9 +40,9 @@ if [ ! -d "$NEW_DIRECTORY" ]; then
   chmod 664 "$NEW_DIRECTORY"
   if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
       logger "$0: FAILED to make $NEW_DIRECTORY"
-      echo "$(date) $0: Failed to make new directory" | mail -r move-one-file lanecell
+      echo "$(date) $0: FAILED to make $NEW_DIRECTORY" | mail -r move-one-file text_alerts
       sleep 1
-      echo "$NEW_DIRECTORY" | mail -r move-one-file lanecell
+      echo "$NEW_DIRECTORY" | mail -r move-one-file text_alerts
       exit $exit_status
     fi
 fi
