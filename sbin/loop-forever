@@ -7,7 +7,7 @@
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 while true; do # Endless loop
-	echo ${PATHNAME[master_loop]}
+	${PATHNAME[master_loop]}
 	sleep 600
 done # Endless loop
 
