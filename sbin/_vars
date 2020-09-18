@@ -97,14 +97,16 @@ source /etc/os-release
 	declare -A TEXT_ALERT
 	TEXT_ALERT[admin]=$ADMIN_CELL_EMAIL
 	TEXT_ALERTS=""
-	for KEY in "${!TEXT_ALERT[@]}"; do TEXT_ALERTS+="${TEXT_ALERT[KEY]} "; done
+	for KEY in "${!TEXT_ALERT[@]}"; do TEXT_ALERTS+="${TEXT_ALERT[$KEY]} "; done
 
 # Email Alerts
 # DEPENDENT on user definitions above
 # Set as many as desired.
 # Example: EMAIL_ALERT[becky]=rkh@georgetown.edu
-	declare -A TEXT_ALERT
+	declare -A EMAIL_ALERT
 	EMAIL_ALERT[admin]=$ADMIN_EMAIL
+	EMAIL_ALERTS=""
+	for KEY in "${!EMAIL_ALERT[@]}"; do EMAIL_ALERTS+="${EMAIL_ALERT[$KEY]} "; done
 
 # Apache2
 	WEB_ROOTS="/var/www"
