@@ -6,7 +6,7 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-echo mail $text_alerts
+echo mail $TEXT_ALERTS
 exit 1
 
 if [ $COLD_BACKUP_FS_READ_ONLY ]; then f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"; fi
