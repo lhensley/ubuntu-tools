@@ -55,10 +55,8 @@ f_debug_variable "RELATIVE_FILE" "$RELATIVE_FILE"
 f_debug_variable "1" "$1"
 
 if $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS"); then
-    echo "Test A"
     logger $0: Skipped $IN_FILE
 else
-    echo "Test B"
     f_file_not_in_use "$IN_FILE"
 
     # Hold this part out for now. Not sure this is the place for it.
@@ -68,8 +66,6 @@ else
     TIMESTART=$(currenttimeinseconds)
     IN_FILE_BASE=$(basename "$IN_FILE")
     logger $0: Transcoding $IN_FILE_BASE
-        echo "End A"
-        exit 1
     "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$IN_FILE" -o "$OUT_FILE"
     exit_status=$?
     chown plex:plex "$OUT_FILE"
