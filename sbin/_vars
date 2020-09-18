@@ -46,12 +46,13 @@ source /etc/os-release
 
 # Start timestamps
 # Ref https://www.cyberciti.biz/faq/linux-unix-formatting-dates-for-display/ for date format %codes
-	START_DATESTAMP=$(/bin/date '+%Y-%m-%d   ')                    # Like 2020-09-07. Used in backup variables below
-	START_DAYSTAMP=$(/bin/date '+%d')                              # Like 07
-	START_MONTHSTAMP=$(/bin/date '+%Y-%m')                         # Like 2020-09
-	START_TIMESTAMP=$(/bin/date)                                   # Like Mon 07 Sep 2020 04:01:23 PM CDT
-	START_WEEKDAYSTAMP=$(/bin/date '+%a')                          # Like Mon. Used in backup variables below
-	START_DATEANDTIMESTAMP=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')    # Like 2020-09-07-16-05-23-CDT. Used in naming SSH keys and backing up installed files like fstab
+	START_DATEANDTIMESTAMP=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')     # Like 2020-09-07-16-05-23-CDT. Used in naming SSH keys and backing up installed files like fstab
+	START_DATESTAMP=$(/bin/date '+%Y-%m-%d   ')                     # Like 2020-09-07. Used in backup variables below
+	START_DAYSTAMP=$(/bin/date '+%d')                               # Like 07
+	START_MONTHSTAMP=$(/bin/date '+%Y-%m')                          # Like 2020-09
+	START_TIMESTAMP=$(/bin/date)                                    # Like Mon 07 Sep 2020 04:01:23 PM CDT
+	START_WEEKDAYSTAMP=$START_DATEANDTIMESTAMP-$(/bin/date '+%a')   # Like 2020-09-07-16-05-23-CDT-Mon. Used in backup variables below
+	START_WEEKDAYSTAMP2=$(/bin/date '+%a')                          # Like Mon. Used in backup variables below
 
 # About This Script (or at least the one sourcing it)
 	PROGRAM_DIRECTORY=$(dirname $0)
