@@ -2,7 +2,7 @@
 # master-loop
 
 # Include script setup file
-	source $SBIN_DIR/script-setup
+	source /usr/local/sbin/script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
