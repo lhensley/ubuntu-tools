@@ -117,7 +117,7 @@ source /etc/os-release
 	declare -A ARCHIVE_FILE_SYSTEM
 		ARCHIVE_FILE_SYSTEM[default]="/"
 		ARCHIVE_FILE_SYSTEM[nuc01]="/mnt/cloteal"
-		ARCHIVE_FILE_SYSTEM[oz]="/mnt/Black1TB"
+		ARCHIVE_FILE_SYSTEM[oz]="/mnt/5TBC"
 	declare -A ARCHIVE_DIRECTORY
 		ARCHIVE_DIRECTORY[default]="/var/lib/archives/$HOSTNAME"
 		ARCHIVE_DIRECTORY[nuc01]=${ARCHIVE_FILE_SYSTEM[nuc01]}/archives/nuc01
@@ -150,7 +150,7 @@ source /etc/os-release
 		COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
 		fi
 	if [ $HOSTNAME == "oz" ]; then
-		COLD_BACKUP_FILE_SYSTEM="/mnt/Black1TB"
+		COLD_BACKUP_FILE_SYSTEM="/mnt/5TBC"
 		COLD_BACKUP_FS_READ_ONLY=true
 		COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
 		fi
@@ -220,7 +220,9 @@ source /etc/os-release
 		MOUNT_POINT_DESCRIPTION[/mnt/ext10tb01]="External Hard Drive for Plex, 10TB (rerun)"
 			MOUNT_POINT_DEFINITION[/mnt/ext10tb01]="UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 rw,defaults 0 0"
 		MOUNT_POINT_DESCRIPTION[/mnt/Black1TB]="# Black 1TB"
-			MOUNT_POINT_DEFINITION[/mnt/Black1TB]="UUID=c359e0c7-c6a1-4a49-b7eb-82fe3e5f0f25 /mnt/Black1TB ext4 ro,defaults 0 0"
+			MOUNT_POINT_DEFINITION[/mnt/Black1TB]="# UUID=c359e0c7-c6a1-4a49-b7eb-82fe3e5f0f25 /mnt/Black1TB ext4 ro,defaults 0 0"
+		MOUNT_POINT_DESCRIPTION[/mnt/5TBC]="# 5TB External Seagate"
+			MOUNT_POINT_DEFINITION[/mnt/5TBC]="UUID=fa9f5c57-94fd-4706-979e-4c30189592a5 /mnt/5TBC ext4 ro,defaults 0 0"
 	fi
 
 # Git
