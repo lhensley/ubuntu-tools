@@ -331,6 +331,7 @@ source /etc/os-release
 # Paths to Scripts
 	declare -A PATHNAME
 	PATHNAME[_apply_configs]="$SBIN_DIR/_apply-configs"
+	PATHNAME[_functions]="$SBIN_DIR/_functions"
 	PATHNAME[_git]="$SBIN_DIR/_git"
 	PATHNAME[_run_apt_update]="$SBIN_DIR/_run_apt_update"
 	PATHNAME[_upd]="$SBIN_DIR/_upd"
