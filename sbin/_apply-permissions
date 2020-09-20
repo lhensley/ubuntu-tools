@@ -15,20 +15,20 @@
 
 # Exceptions: These can be read or run by anyone
 	# Confirm that referenced files below exist.
-		f_required_file "${PATHNAME[_functions]}" 
-		f_required_file "${PATHNAME[_vars]}"
-		f_required_file "${PATHNAME[currenttimeinseconds]}"
-		f_required_file "${PATHNAME[intervalinseconds]}"
-		f_required_file "${PATHNAME[lhlib]}"
-		f_required_file "${PATHNAME[makemkvcon]}"
-		f_required_file "${PATHNAME[process_incoming_scans]}"
-		f_required_file "${PATHNAME[rip]}"
-		f_required_file "${PATHNAME[script_footer]}"
-		f_required_file "${PATHNAME[script_setup]}"
-		f_required_file "${PATHNAME[timeformat]}"
-		f_required_file "${PATHNAME[transcode_ripped_dvds]}"
-		# f_required_file "${PATHNAME[upd]}"
-		# f_required_file "${PATHNAME[_apply_configs]}"
+		f_require_file "${PATHNAME[_functions]}" 
+		f_require_file "${PATHNAME[_vars]}"
+		f_require_file "${PATHNAME[currenttimeinseconds]}"
+		f_require_file "${PATHNAME[intervalinseconds]}"
+		f_require_file "${PATHNAME[lhlib]}"
+		f_require_file "${PATHNAME[makemkvcon]}"
+		f_require_file "${PATHNAME[process_incoming_scans]}"
+		f_require_file "${PATHNAME[rip]}"
+		f_require_file "${PATHNAME[script_footer]}"
+		f_require_file "${PATHNAME[script_setup]}"
+		f_require_file "${PATHNAME[timeformat]}"
+		f_require_file "${PATHNAME[transcode_ripped_dvds]}"
+		# f_require_file "${PATHNAME[upd]}"
+		# f_require_file "${PATHNAME[_apply_configs]}"
 	# These based on functional requirements
 		chmod 755 "${PATHNAME[_functions]}"
 		chmod 755 "${PATHNAME[_vars]}"
@@ -48,8 +48,8 @@
 
 # ddclient
 	if [ -f $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
-		f_required_file "/etc/ddclient.conf"
-		f_required_file "/etc/default/ddclient"
+		f_require_file "/etc/ddclient.conf"
+		f_require_file "/etc/default/ddclient"
 		chmod 600 /etc/ddclient.conf /etc/default/ddclient # confirmed value
 		chown $ROOT_USER:$ROOT_USER /etc/ddclient.conf /etc/default/ddclient
 		fi
