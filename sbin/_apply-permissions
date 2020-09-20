@@ -61,7 +61,7 @@
 		fi
 
 # Git
-	f_required_file "$ROOT_HOME_DIR/.gitconfig"
+	f_require_file "$ROOT_HOME_DIR/.gitconfig"
 	chmod 600 $ROOT_HOME_DIR/.gitconfig
 	chmod 600 $ADMIN_HOME_DIR/.gitconfig
 	chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.gitconfig
