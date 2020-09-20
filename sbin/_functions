@@ -209,16 +209,16 @@ function f_move_one_file () {
 
 	RELATIVE_FILE_LENGTH=$[IN_FILE_LENGTH-ROOT_IN_PATH_LENGTH-1]
 	RELATIVE_FILE="${IN_FILE: -$RELATIVE_FILE_LENGTH}" # Remove ROOT_IN_PATH
+	}
 
+function f_fff () {
 	OUT_FILE="$ROOT_OUT_PATH/$RELATIVE_FILE"
 	NEW_DIRECTORY=$(dirname "$OUT_FILE")
 
 	if ! $(f_in_use "$IN_FILE"); then f_balk "$0: Skipped moving $IN_FILE because it's in use." false
 	if ! $(f_is_file "$IN_FILE"); then f_balk "$0: Cannot move non-existent file $IN_FILE." false
 	if ! $(f_is_directory "$ROOT_IN_PATH"); then f_balk "$0: Non-existent root in directory $ROOT_IN_PATH." false
-	}
 
-function f_fff () {
 	# Make the directory for out file
 	mkdir -p "$NEW_DIRECTORY"
 	if [ $? -ne 0 ]; then # If mkdir failed failed ...
