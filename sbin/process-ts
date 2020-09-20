@@ -46,14 +46,6 @@ f_require_value "RELATIVE_FILE" "$RELATIVE_FILE"
 f_require_value "STORE_FILE" "$STORE_FILE"
 f_require_value "plex_main_library_directory" "$PLEX_LIVE_APPLICATION_SUPPORT"
 
-f_debug_variable "IN_FILE" "$IN_FILE"
-f_debug_variable "OUT_FILE" "$OUT_FILE"
-f_debug_variable "STORE_FILE" "$STORE_FILE"
-f_debug_variable "WORK_ROOT_PATH" "$WORK_ROOT_PATH"
-f_debug_variable "STORE_ROOT_PATH" "$STORE_ROOT_PATH"
-f_debug_variable "RELATIVE_FILE" "$RELATIVE_FILE"
-f_debug_variable "1" "$1"
-
 if $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS"); then
     logger $0: Skipped $IN_FILE
 else
@@ -71,18 +63,21 @@ else
     chown plex:plex "$OUT_FILE"
     chmod 664 "$OUT_FILE"
     if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-            logger "$HANDBRAKE_CLI: FAILED with $exit_status for $IN_FILE"
-            echo "$(date) $HANDBRAKE_CLI: FAILED with $exit_status for $IN_FILE" | mail $TEXT_ALERTS
+            logger $HANDBRAKE_CLI: FAILED with $exit_status for $IN_FILE
+            echo $HANDBRAKE_CLI: FAILED with $exit_status for $IN_FILE | mail $TEXT_ALERTS
             exit $exit_status
         else
             rm "$IN_FILE" # Delete input file
             logger $0: Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))
         fi # End of check for transcoding failure
 
-    # Move the .m4v file from WORK to STORE.
+    # Move all .m4v files from $VIDEO_WORK_DIRECTORY to $VIDEO_STORE_DIRECTORY.
         find "$VIDEO_WORK_DIRECTORY" -type f -name "*.m4v" -print -exec "${PATHNAME[move_one_file]}" "{}" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" \;
     fi
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
+
+exit 0
+
