@@ -3,16 +3,12 @@
 
 # Include script setup file
 	source script-setup
-	if [ ! $FUNCTIONS_ARE_DEFINED ]; then f_fie "$0: ABORTED. Functions not defined."; fi
-	if [ ! $VARIABLES_ARE_DEFINED ]; then f_fie "$0: ABORTED. Variables not defined."; fi
+	f_require_true "$FUNCTIONS_ARE_DEFINED" "true" "$0: ABORTED. Functions not defined."
+	f_require_true "$VARIABLES_ARE_DEFINED" "true" "$0: ABORTED. Variables not defined."
 
 # Verify essential files and directories
-	if ! $(f_is_directory "$VIDEO_WORK_DIRECTORY"); then
-		f_die $0: ABORTED because \$VIDEO_WORK_DIRECTORY is not defined.
-		fi
-	if ! $(f_is_directory "$VIDEO_STORE_DIRECTORY"); then
-		f_die $0: ABORTED because \$VIDEO_STORE_DIRECTORY is not defined.
-		fi
+	f_require_directory "$VIDEO_WORK_DIRECTORY" "true"
+	f_require_directory "$VIDEO_STORE_DIRECTORY" "true"
 
 exit 1
 

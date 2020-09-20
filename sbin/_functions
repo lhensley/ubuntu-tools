@@ -2,22 +2,32 @@
 # _functions
 # Bash functions for Lane applications
 
-
 # Check to ensure that variables are defined
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 # Set a flag to confirm that the functions are not yet defined
 FUNCTIONS_ARE_DEFINED=false
 
+function f_log_and_echo () {
+# Usage f_log_and_echo "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
+	if $2; then echo $1 | mail $TEXT_ALERTS; fi
+	logger $1
+	>&2 echo $1
+	}
+
 function f_beep () {
 	echo -en "\007" # Beep
 	}
 
-function f_die () {
-	# Usage: f_die $MESSAGE_TO_STDERR_AND_LOG
-		logger $@
-		>&2 echo $@
+function f_balk () {
+	# Usage: f_balk "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
+		f_log_and_echo "$1" "$2"
 		f_beep
+	}
+
+function f_die () {
+	# Usage: f_die "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
+		f_balk "$1" "$2"
 		exit 1
 	}
 
@@ -37,58 +47,47 @@ function f_debug_variable () {
         fi
     }
 
-function f_require_value {
-###### DEPRECATED. See f_variable_has_content instead. Note new syntax. #########
-# $1 = Variable name  e.g., "INPUT_FILE"
-# $2 = Content of variable, e.g., "$INPUT_FILE"
-    if [ -z "$2" ]; then
-	    echo "$0: FATAL: Value of $1 undefined."
-	    logger "$0: FATAL: Value of $1 undefined."
-	    exit 1
-	    fi
-    }
-
 function f_variable_has_content {
 	# Usage: if $(f_variable_has_content "$SAMPLE"); then commands_if_true; else commands_if_false; fi
 	# $1 = Content of variable, e.g., "$INPUT_FILE"
     if [ -z "$1" ]; then echo false; else echo true; fi
     }
 
-function f_require_file {
-###### DEPRECATED. See f_is_file instead. Note new syntax. #########
-    f_require_value "(file name)" "$1"
-    if [ ! -f "$1" ]; then
-	    echo $0: FATAL: File not found: $1
-	    logger $0: FATAL: File not found: $1
-	    exit 1
-	    fi
+function f_require_value {
+# $1 = Variable name  e.g., "INPUT_FILE" "send_text_alert_true_or_false"
+# $2 = Content of variable, e.g., "$INPUT_FILE"
+    if ! f_variable_has_content "$2"; then f_die "$0: FATAL: Value of $1 undefined. Line ${LINENO}" "$2"; fi
     }
 
 function f_is_file {
-	# Usage: if $(f_is_file "$SAMPLE"); then commands_if_true; else commands_if_false; fi
+	# Usage: if $(f_is_file "file_or_path_name"); then commands_if_true; else commands_if_false; fi
 	# $1 = "$string_to_check"
     if [ -f "$1" ]; then echo true; else echo false; fi
 	}
 
-function f_require_directory {
-###### DEPRECATED. See f_is_directory instead. Note new syntax. #########
-    f_require_value "(directory name)" "$1"
-    if [ ! -d "$1" ]; then
-	    echo "$0: FATAL: Directory not found: $1"
-	    logger "$0: FATAL: Directory not found: $1"
-	    exit 1
-	    fi
+function f_require_file {
+    # Usage: f_require_file "file_or_path_name" "send_text_alert_true_or_false"
+	if ! $(f_is_file "$1"); then f_die "$0: FATAL: File not found: $1" "$2"; fi
     }
 
 function f_is_directory {
-	# Usage: if $(f_is_directory "$SAMPLE"); then commands_if_true; else commands_if_false; fi
+	# Usage: if $(f_is_directory "directory_name"); then commands_if_true; else commands_if_false; fi
 	# $1 = "$string_to_check"
     if [ -d "$1" ]; then echo true; else echo false; fi
 	}
 
+function f_require_directory {
+    # Usage: f_require_directory "directory_name" "send_text_alert_true_or_false"
+	if ! $(f_is_directory "$1"); then f_die "$0: FATAL: Directory not found: $1" "$2"; fi
+    }
+
+function f_require_true {
+    # Usage: f_require_true "true_or_false_proposition" "send_text_alert_true_or_false" "failure_message" ;
+	if ! $1; then f_die "$2" $3; fi
+    }
+
 function f_file_not_in_use {
-###### DEPRECATED. See f_in_use instead. Note new syntax. #########
-    f_require_file "$1"
+    f_require_file "$1" false
     if [ -n "$(lsof "$1" 2>/dev/null)" ]; then
 	    echo "$0: FATAL: File in use: $1"
 	    logger "$0: FATAL: File in use: $1"
@@ -114,15 +113,15 @@ function f_filter () {
 	}
 
 function f_clear_directory_contents() {
-	f_require_directory "$1"
+	f_require_directory "$1" false
 	rm -rf "$1"/*
 	}
 
 function f_local_copy() {
 # $1 = source directory; MUST BE A DIRECTORY and not file(s); no trailing slash!
 # $2 = target directory; MUST BE A DIRECTORY and not file(s); no trailing slash!
-	f_require_directory "$1"
-	f_require_directory "$2"
+	f_require_directory "$1" false
+	f_require_directory "$2" false
 	mkdir -p "$2"
 	rsync -q -a --delete "$1" "$2"
 	# -q = quiet
@@ -193,10 +192,10 @@ function f_mount_ro_fs_as_ro () {
 	}
 
 function f_set_plex_media_recursive_permissions () {
-	f_require_directory "$VIDEO_WORK_DIRECTORY"
+	f_require_directory "$VIDEO_WORK_DIRECTORY" false
     find "$VIDEO_WORK_DIRECTORY" -type d -print -exec chmod 775 {} \;
     find "$VIDEO_WORK_DIRECTORY" -type f -print -exec chmod 664 {} \;
-	f_require_directory "$VIDEO_STORE_DIRECTORY"
+	f_require_directory "$VIDEO_STORE_DIRECTORY" false
     find "$VIDEO_STORE_DIRECTORY" -type d -print -exec chmod 775 {} \;
     find "$VIDEO_STORE_DIRECTORY" -type f -print -exec chmod 664 {} \;
 	}
@@ -214,44 +213,29 @@ function f_move_one_file () {
 	OUT_FILE="$ROOT_OUT_PATH/$RELATIVE_FILE"
 	NEW_DIRECTORY="$(dirname "$OUT_FILE")"
 
-	f_file_not_in_use "$IN_FILE"
-	f_require_file "$IN_FILE"
-	f_require_directory "$ROOT_IN_PATH"
-
-	# Only if the STORE file system is read-only
-	# f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"
+	if ! $(f_in_use "$IN_FILE"); then f_balk "$0: Skipped moving $IN_FILE because it's in use." false
+	if ! $(f_is_file "$IN_FILE"); then f_balk "$0: Cannot move non-existent file $IN_FILE." false
+	if ! $(f_is_directory "$ROOT_IN_PATH"); then f_balk "$0: Non-existent root in directory $ROOT_IN_PATH." false
 
 	# Make the directory for out file
 	mkdir -p "$NEW_DIRECTORY"
 	if [ $? -ne 0 ]; then # If mkdir failed failed ...
-	  logger "$0: FAILED making $NEW_DIRECTORY"
-	  >&2 echo "$0: FAILED making $NEW_DIRECTORY"
-	  # echo "$0: FAILED making $NEW_DIRECTORY" | mail -r move-one-file text_alerts
-	  sleep 10 # Add some time here in case we're racing through a failure loop.
-	  # echo "$NEW_DIRECTORY" | mail -r move-one-file text_alerts
-	  return
+		f_die "$0: FAILED making $NEW_DIRECTORY" true
+		sleep 10 # Add some time here in case we're racing through a failure loop.
+		return
 	fi
 	chown plex:plex "$NEW_DIRECTORY"
 	chmod 664 "$NEW_DIRECTORY"
 
 	# Move $IN_FILE to $OUT_FILE
-	logger $0: Moving $(basename "$IN_FILE")
-	echo $0: Moving $(basename "$IN_FILE")
-	mv "$IN_FILE" "$OUT_FILE"
+	f_log_and_echo '$0: Moving $(basename "$IN_FILE")'
 	if [ $? -ne 0 ]; then # If the move failed ...
-		logger "$0: FAILED to move $IN_FILE to $NEW_DIRECTORY"
-		>&2 echo "$0: FAILED to move $IN_FILE to $NEW_DIRECTORY"
-		echo "$0: Failed to move file" | mail -r move-one-file text_alerts
-		echo "Infile $IN_FILE" | mail -r move-one-file text_alerts
-		echo "Outfile $OUT_FILE" | mail -r move-one-file text_alerts
+		f_balk "$0: FAILED to move $IN_FILE to $NEW_DIRECTORY" false
 	    sleep 10 # Add some time here in case we're racing through a failure loop.
 		return
-	  fi
-  	  chown plex:plex "$OUT_FILE"
-	  chmod 664 "$OUT_FILE"
-
-	# Only if the STORE file system is read-only
-	# f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY
+	fi
+  	chown plex:plex "$OUT_FILE"
+	chmod 664 "$OUT_FILE"
 	}
 
 function f_process_ts_file () {
@@ -260,11 +244,10 @@ function f_process_ts_file () {
 	STORE_ROOT_PATH="$3"
 	OUT_EXT="m4v"
 
-	f_require_file "$IN_FILE"
-	f_require_directory "$WORK_ROOT_PATH"
-	f_require_directory "$STORE_ROOT_PATH"
-	f_require_value "IGNORE_TV_SHOWS" $IGNORE_TV_SHOWS
-	f_require_file "${PATHNAME[move_one_file]}"
+	if ! $(f_is_file "$IN_FILE"); then f_balk "$0: Cannot find $IN_FILE" to process it" false; return; fi
+	if ! $(f_is_directory "$WORK_ROOT_PATH"); then f_balk "$0: Cannot process $IN_FILE: Directory not defined: $WORK_ROOT_PATH" false; return; fi
+	if ! $(f_is_directory "$STORE_ROOT_PATH"); then f_balk "$0: Cannot process $IN_FILE: Directory not defined: $STORE_ROOT_PATH" false; return; fi
+	if ! $(f_variable_has_content "$IGNORE_TV_SHOWS"); then f_balk "$0: Cannot process $IN_FILE: \$IGNORE_TV_SHOWS not defined" false; return; fi
 
 	WORK_ROOT_PATH_LENGTH=${#WORK_ROOT_PATH}
 
@@ -280,55 +263,49 @@ function f_process_ts_file () {
 	STORE_FILE="$STORE_ROOT_PATH/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
 	STORE_FILE="$STORE_ROOT_PATH/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
 
-	# So here are useful variables defined ...
-	# $IN_FILE
-	# $OUT_FILE
-	# $STORE_FILE
-	# $WORK_ROOT_PATH
-	# $STORE_ROOT_PATH
-	# $RELATIVE_FILE
-
-	f_require_value "OUT_FILE" "$OUT_FILE"
-	f_require_value "RELATIVE_FILE" "$RELATIVE_FILE"
-	f_require_value "STORE_FILE" "$STORE_FILE"
-	f_require_value "plex_main_library_directory" "$PLEX_LIVE_APPLICATION_SUPPORT"
+	if ! $(f_variable_has_content "$OUT_FILE"); 
+		then f_balk "$0: Cannot process $IN_FILE: \$OUT_FILE not defined" false; return; fi
+	if ! $(f_variable_has_content "$RELATIVE_FILE"); 
+		then f_balk "$0: Cannot process $IN_FILE: \$RELATIVE_FILE not defined" false; return; fi
+	if ! $(f_variable_has_content "$STORE_FILE"); 
+		then f_balk "$0: Cannot process $IN_FILE: \$STORE_FILE not defined" false; return; fi
+	if ! $(f_variable_has_content "$PLEX_LIVE_APPLICATION_SUPPORT"); 
+		then f_balk "$0: Cannot process $IN_FILE: \$PLEX_LIVE_APPLICATION_SUPPORT" false; return; fi
 
 	if $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS"); then
-		logger $0: Skipped $IN_FILE
+		f_balk "$0: Skipped $IN_FILE because it's filtered out." false
 	else
-		f_file_not_in_use "$IN_FILE"
+		if ! $(f_in_use "$IN_FILE"); then
+			f_balk "$0: Skipped $IN_FILE because it's in use." false
 
-		# Hold this part out for now. Not sure this is the place for it.
-		# "${PATHNAME[transcode_ripped_dvds]}" # Pick up ripped DVDs first, if any
+	# Hold this part out for now. Not sure this is the place for it.
+	# "${PATHNAME[transcode_ripped_dvds]}" # Pick up ripped DVDs first, if any
 
-		# Do the transcoding
-		TIMESTART=$(currenttimeinseconds)
-		IN_FILE_BASE=$(basename "$IN_FILE")
-		logger $0: Transcoding $IN_FILE_BASE
-		nice "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$IN_FILE" -o "$OUT_FILE"
-		exit_status=$?
-		chown plex:plex "$OUT_FILE"
-		chmod 664 "$OUT_FILE"
-		if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-				logger $HANDBRAKE_CLI: FAILED with $exit_status for $IN_FILE
-				echo $HANDBRAKE_CLI: FAILED with $exit_status for $IN_FILE | mail $TEXT_ALERTS
-				exit $exit_status
-			else
-				rm "$IN_FILE" # Delete input file
-				logger $0: Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))
-			fi # End of check for transcoding failure
-
-		# Move all .m4v files from $VIDEO_WORK_DIRECTORY to $VIDEO_STORE_DIRECTORY.
-			find "$VIDEO_WORK_DIRECTORY" -type f -name "*.m4v" | while read M4V_FILE; 
-				do f_move_one_file "$M4V_FILE" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY"; done
-		fi
+	# Do the transcoding
+	TIMESTART=$(currenttimeinseconds)
+	IN_FILE_BASE=$(basename "$IN_FILE")
+	f_log_and_echo "$0: Transcoding $IN_FILE" false
+	nice "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$IN_FILE" -o "$OUT_FILE"
+	exit_status=$?
+	chown plex:plex "$OUT_FILE"
+	chmod 664 "$OUT_FILE"
+	if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
+			f_balk "$HANDBRAKE_CLI: FAILED with $exit_status for $IN_FILE" false
+		else
+			rm "$IN_FILE" # Delete input file
+			logger $0: Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))
+		fi # End of check for transcoding failure
+	# Move all .m4v files from $VIDEO_WORK_DIRECTORY to $VIDEO_STORE_DIRECTORY.
+		find "$VIDEO_WORK_DIRECTORY" -type f -name "*.m4v" | while read M4V_FILE; 
+			do f_move_one_file "$M4V_FILE" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY"; done
+	fi
 	}
+
 
 function f_lane_test () {
 	echo "Test A"
 	echo Plex Dir: $PLEX_LIVE_APPLICATION_SUPPORT
 	}
-
 
 
 
