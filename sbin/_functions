@@ -228,7 +228,7 @@ function f_move_one_file () {
 	chmod 664 "$NEW_DIRECTORY"
 
 	# Move $IN_FILE to $OUT_FILE
-	f_log_and_echo '$0: Moving $(basename "$IN_FILE")'
+	f_log_and_echo "$0: Moving $(basename \"$IN_FILE\")"
 	if [ $? -ne 0 ]; then # If the move failed ...
 		f_balk "$0: FAILED to move $IN_FILE to $NEW_DIRECTORY" false
 	    sleep 10 # Add some time here in case we're racing through a failure loop.
