@@ -14,6 +14,8 @@ function echo_false () {
 	echo false
 	}
 
+echo_true
+echo_false
 if $(echo_true); then echo "This is true"; fi
 if $(echo_false); then echo "This is false"; fi
 echo "This is the end."
