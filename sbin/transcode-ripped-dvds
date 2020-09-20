@@ -14,11 +14,6 @@ PRESET="/home/lhensley/.HandBrake/Lane 1080p (BluRay).json"
 MAKEMKV_PROCESS=makemkvcon
 RSYNC_TARGET="lhensley@nuc01.lanehensley.org:/mnt/cloteal/Plex/uploads"
     
-# if [ $(lh_is_running "$HANDBRAKE") == "true" ] ; then
-#  echo "Transcode operation already running. Exiting." 
-#  exit 1
-# fi
-
 mkdir -p "$M4V_PATH"
 
 # While $MKV_BASE_PATH is not empty
@@ -46,7 +41,7 @@ while [ $(lh_has_subdirectories "$MKV_BASE_PATH") == "true" ] \
             VIDEONAME="$M4V_PATH/$VIDEONAME - $n.m4v"
 #            echo "  Target pathname: $VIDEONAME"
             if [ -f "$VIDEONAME" ]; then rm -Rf "$VIDEONAME"; fi
-            $HANDBRAKE --preset-import-file "$PRESET" \
+            nice $HANDBRAKE --preset-import-file "$PRESET" \
               -i "$i" -o "$VIDEONAME"  >> /dev/null 2>&1
             exit_status=$?
             if [ $exit_status -ne 0 ]; then # If the transcoding failed ...

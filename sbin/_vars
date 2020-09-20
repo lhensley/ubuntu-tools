@@ -146,7 +146,7 @@ source /etc/os-release
 	COLD_BACKUP_SUBDIRECTORY="cold-backup"                     # Default
 	if [ $HOSTNAME == "nuc01" ]; then
 		COLD_BACKUP_FILE_SYSTEM="/mnt/cloteal"
-		COLD_BACKUP_FS_READ_ONLY=true
+		COLD_BACKUP_FS_READ_ONLY=false
 		COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
 		fi
 	if [ $HOSTNAME == "oz" ]; then
