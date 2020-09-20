@@ -14,6 +14,8 @@ function f_test2 () {
 
 f_test2
 echo C
+return
+echo D
 
 # # tar
 # 	if [ $COLD_BACKUP_FS_READ_ONLY ]; then f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"; fi
