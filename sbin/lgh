@@ -6,6 +6,18 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
+function echo_true () {
+	echo true
+	}
+
+function echo_false () {
+	echo false
+	}
+
+if $(echo_true); then echo "This is true"; fi
+if $(echo_false); then echo "This is false"; fi
+echo "This is the end."
+
 # # tar
 # 	if [ $COLD_BACKUP_FS_READ_ONLY ]; then f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"; fi
 # 	mkdir -p "$THIS_ARCHIVE_DIRECTORY"
