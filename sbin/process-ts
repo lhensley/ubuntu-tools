@@ -16,7 +16,7 @@ OUT_EXT="m4v"
 f_require_file "$IN_FILE"
 f_require_directory "$WORK_ROOT_PATH"
 f_require_directory "$STORE_ROOT_PATH"
-f_require_value "IGNORE_TV_SHOWS" $IGNORE_TV_SHOWS
+f_require_value "IGNORE_TV_SHOWS" "$IGNORE_TV_SHOWS"
 f_require_file "${PATHNAME[move_one_file]}"
 
 WORK_ROOT_PATH_LENGTH=${#WORK_ROOT_PATH}
@@ -73,7 +73,7 @@ else
 
     # Move all .m4v files from $VIDEO_WORK_DIRECTORY to $VIDEO_STORE_DIRECTORY.
         find "$VIDEO_WORK_DIRECTORY" -type f -name "*.m4v" | while read FILE; 
-            do f_move_one_file $FILE "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY"; done
+            do f_move_one_file "$FILE" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY"; done
     fi
 
 # Include script footer file
