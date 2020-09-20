@@ -6,17 +6,6 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-function f_test2 () {
-	echo A
-	return
-	echo B
-	}
-
-f_test2
-echo C
-return
-echo D
-
 # # tar
 # 	if [ $COLD_BACKUP_FS_READ_ONLY ]; then f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"; fi
 # 	mkdir -p "$THIS_ARCHIVE_DIRECTORY"
