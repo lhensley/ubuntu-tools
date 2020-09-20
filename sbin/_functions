@@ -9,6 +9,18 @@
 # Set a flag to confirm that the functions are not yet defined
 FUNCTIONS_ARE_DEFINED=false
 
+function f_beep () {
+	echo -en "\007" # Beep
+	}
+
+function f_die () {
+	# Usage: f_die $MESSAGE_TO_STDERR_AND_LOG
+		logger $@
+		>&2 echo $@
+		f_beep
+		exit 1
+	}
+
 function f_debug () {
     # $1: message to log, only used when $DEBUG_MODE == true
     if [ ! $DEBUG_MODE ]; then
@@ -37,12 +49,13 @@ function f_require_value {
     }
 
 function f_variable_has_content {
-	# Usage: if $(f_variable_has_content "$SAMPLE"); then commands_if_true; else commands_if_false
+	# Usage: if $(f_variable_has_content "$SAMPLE"); then commands_if_true; else commands_if_false; fi
 	# $1 = Content of variable, e.g., "$INPUT_FILE"
     if [ -z "$1" ]; then echo false; else echo true; fi
     }
 
 function f_require_file {
+###### DEPRECATED. See f_is_file instead. Note new syntax. #########
     f_require_value "(file name)" "$1"
     if [ ! -f "$1" ]; then
 	    echo $0: FATAL: File not found: $1
@@ -51,7 +64,14 @@ function f_require_file {
 	    fi
     }
 
+function f_is_file {
+	# Usage: if $(f_is_file "$SAMPLE"); then commands_if_true; else commands_if_false; fi
+	# $1 = "$string_to_check"
+    if [ -f "$1" ]; then echo true; else echo false; fi
+	}
+
 function f_require_directory {
+###### DEPRECATED. See f_is_directory instead. Note new syntax. #########
     f_require_value "(directory name)" "$1"
     if [ ! -d "$1" ]; then
 	    echo "$0: FATAL: Directory not found: $1"
@@ -60,7 +80,14 @@ function f_require_directory {
 	    fi
     }
 
+function f_is_directory {
+	# Usage: if $(f_is_directory "$SAMPLE"); then commands_if_true; else commands_if_false; fi
+	# $1 = "$string_to_check"
+    if [ -d "$1" ]; then echo true; else echo false; fi
+	}
+
 function f_file_not_in_use {
+###### DEPRECATED. See f_in_use instead. Note new syntax. #########
     f_require_file "$1"
     if [ -n "$(lsof "$1" 2>/dev/null)" ]; then
 	    echo "$0: FATAL: File in use: $1"
@@ -68,6 +95,12 @@ function f_file_not_in_use {
         exit 1
         fi
     }
+
+function f_in_use {
+	# Usage: if $(f_in_use "$SAMPLE"); then commands_if_true; else commands_if_false; fi
+	# $1 = "$string_to_check"
+    if [ -d -n "$(lsof "$1" 2>/dev/null)" ]; then echo true; else echo false; fi
+	}
 
 function f_filter () {
     STRING_BEING_EVALUATED=$1
@@ -286,8 +319,8 @@ function f_process_ts_file () {
 			fi # End of check for transcoding failure
 
 		# Move all .m4v files from $VIDEO_WORK_DIRECTORY to $VIDEO_STORE_DIRECTORY.
-			find "$VIDEO_WORK_DIRECTORY" -type f -name "*.m4v" | while read FILE; 
-				do f_move_one_file $FILE "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY"; done
+			find "$VIDEO_WORK_DIRECTORY" -type f -name "*.m4v" | while read M4V_FILE; 
+				do f_move_one_file "$M4V_FILE" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY"; done
 		fi
 	}
 

@@ -1,0 +1,29 @@
+#!/bin/bash
+# dvr-processing
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then f_fie "$0: ABORTED. Functions not defined."; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then f_fie "$0: ABORTED. Variables not defined."; fi
+
+# Verify essential files and directories
+	if ! $(f_is_directory "$VIDEO_WORK_DIRECTORY"); then
+		f_die $0: ABORTED because \$VIDEO_WORK_DIRECTORY is not defined.
+		fi
+	if ! $(f_is_directory "$VIDEO_STORE_DIRECTORY"); then
+		f_die $0: ABORTED because \$VIDEO_STORE_DIRECTORY is not defined.
+		fi
+
+exit 1
+
+while true; do # Endless loop
+	find "$VIDEO_WORK_DIRECTORY" -type f -name "*.ts" | while read TS_FILE;
+		do f_process_ts_file "$TS_FILE" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY"; done
+	sleep 60
+done # Endless loop
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 1
