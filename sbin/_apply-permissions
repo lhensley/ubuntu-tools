@@ -10,14 +10,17 @@
 
 # Set ownership and permissions in $SBIN_DIR
 	chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
-	find $SBIN_DIR -type d -print -exec chmod 700 {} \; >> /dev/null 2>&1
-	find $SBIN_DIR -type f -print -exec chmod 750 {} \; >> /dev/null 2>&1
+	find $SBIN_DIR -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1 # Consistent with /usr/sbin, usr/bin/, and other comparable directories
+	find $SBIN_DIR -type f -print -exec chmod 750 {} \; >> /dev/null 2>&1 # By default, block access for non-root.
 
 # Exceptions: These can be read or run by anyone
 	# These based on functional requirements
+		chmod 755 ${PATHNAME[_functions]}
+		chmod 755 ${PATHNAME[_vars]}
 		chmod 755 ${PATHNAME[currenttimeinseconds]}
 		chmod 755 ${PATHNAME[intervalinseconds]}
 		chmod 755 ${PATHNAME[lhlib]}
+		chmod 755 ${PATHNAME[makemkvcon]}
 		chmod 755 ${PATHNAME[process_incoming_scans]}
 		chmod 755 ${PATHNAME[rip]}
 		chmod 755 ${PATHNAME[script_footer]} 
@@ -25,8 +28,8 @@
 		chmod 755 ${PATHNAME[timeformat]}
 		chmod 755 ${PATHNAME[transcode_ripped_dvds]}
 	# These based on desire. CAUTION: Don't expose anything that has a password or code in it.
-		chmod 740 ${PATHNAME[upd]} 
-		chmod 740 ${PATHNAME[_apply_configs]}
+		# chmod 740 ${PATHNAME[upd]}
+		# chmod 740 ${PATHNAME[_apply_configs]}
 
 # ddclient
 	if [ -f $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
