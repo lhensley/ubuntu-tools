@@ -12,7 +12,7 @@ function f_test2 () {
 	echo B
 	}
 
-t_test2
+f_test2
 echo C
 
 # # tar
