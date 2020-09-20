@@ -244,6 +244,8 @@ function f_process_ts_file () {
 	STORE_ROOT_PATH="$3"
 	OUT_EXT="m4v"
 
+	f_log_and_echo "$0: TEST $IN_FILE" false
+
 	if ! $(f_is_file "$IN_FILE"); then f_balk "$0: Cannot find $IN_FILE" to process it" false; return; fi
 	if ! $(f_is_directory "$WORK_ROOT_PATH"); then f_balk "$0: Cannot process $IN_FILE: Directory not defined: $WORK_ROOT_PATH" false; return; fi
 	if ! $(f_is_directory "$STORE_ROOT_PATH"); then f_balk "$0: Cannot process $IN_FILE: Directory not defined: $STORE_ROOT_PATH" false; return; fi
