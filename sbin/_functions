@@ -247,23 +247,6 @@ echo Line ${LINENO}
 	if ! $(f_is_file "$IN_FILE"); then f_balk "$0: Cannot move non-existent file $IN_FILE." false
 	if ! $(f_is_directory "$ROOT_IN_PATH"); then f_balk "$0: Non-existent root in directory $ROOT_IN_PATH." false
 
-echo Line ${LINENO}
-	# Make the directory for out file
-	mkdir -p "$NEW_DIRECTORY"
-	if [ $? -ne 0 ]; then # If mkdir failed failed ...
-		f_die "$0: FAILED making $NEW_DIRECTORY" true
-		sleep 10 # Add some time here in case we're racing through a failure loop.
-		return
-	fi
-	chown plex:plex "$NEW_DIRECTORY"
-	chmod 664 "$NEW_DIRECTORY"
-
-echo Line ${LINENO}
-	# Move $IN_FILE to $OUT_FILE
-#	f_log_and_echo "$0: Moving $(basename \"$IN_FILE\")"
-
-
-echo Line ${LINENO}
 
 
 
