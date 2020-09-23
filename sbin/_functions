@@ -229,11 +229,12 @@ function f_process_ts_file () {
 	chown plex:plex "$NEW_DIRECTORY"
 	chmod 664 "$NEW_DIRECTORY"
 
+	# Move $IN_FILE to $OUT_FILE
+	f_log_and_echo "$0: Moving $(basename \"$IN_FILE\")"
 
 	}
 
 
-echo Line ${LINENO}
 function f_lane_test () {
 	echo "Test A"
 	echo Plex Dir: $PLEX_LIVE_APPLICATION_SUPPORT
