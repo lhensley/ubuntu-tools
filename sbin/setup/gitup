@@ -124,7 +124,8 @@ mount --all
 f_install ufw
 
 # Run restore
-/usr/local/sbin/cold-restore
+########### BELAY THIS. Failed in testing. #################
+# /usr/local/sbin/cold-restore
 
 # Install MakeMKV
 # DON'T USE THE SNAP INSTALLER
