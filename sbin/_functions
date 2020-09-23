@@ -242,6 +242,11 @@ echo Line ${LINENO}
 	OUT_FILE="$ROOT_OUT_PATH/$RELATIVE_FILE"
 	NEW_DIRECTORY=$(dirname "$OUT_FILE")
 
+echo Line ${LINENO}
+	if $(f_in_use "$IN_FILE"); then f_balk "$0: Skipped moving $IN_FILE because it's in use." false
+	if ! $(f_is_file "$IN_FILE"); then f_balk "$0: Cannot move non-existent file $IN_FILE." false
+	if ! $(f_is_directory "$ROOT_IN_PATH"); then f_balk "$0: Non-existent root in directory $ROOT_IN_PATH." false
+
 	}
 
 
