@@ -296,17 +296,6 @@ function f_process_ts_file () {
 	fi
 
 
-
-
-	if [ $? -ne 0 ]; then # If the move failed ...
-		f_balk "$0: FAILED to move $IN_FILE to $NEW_DIRECTORY" false
-	    sleep 10 # Add some time here in case we're racing through a failure loop.
-		return
-	fi
-
-  	chown plex:plex "$OUT_FILE"
-	chmod 664 "$OUT_FILE"
-
 	}
 
 
