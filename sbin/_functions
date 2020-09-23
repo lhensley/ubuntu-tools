@@ -8,7 +8,6 @@
 # Set a flag to confirm that the functions are not yet defined
 FUNCTIONS_ARE_DEFINED=false
 
-echo Line ${LINENO}
 function f_log_and_echo () {
 # Usage f_log_and_echo "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
 	if $2; then echo $1 | mail $TEXT_ALERTS; fi
@@ -16,26 +15,22 @@ function f_log_and_echo () {
 	>&2 echo $1
 	}
 
-echo Line ${LINENO}
 function f_beep () {
 	echo -en "\007" # Beep
 	}
 
-echo Line ${LINENO}
 function f_balk () {
 	# Usage: f_balk "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
 		f_log_and_echo "$1" "$2"
 		f_beep
 	}
 
-echo Line ${LINENO}
 function f_die () {
 	# Usage: f_die "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
 		f_balk "$1" "$2"
 		exit 1
 	}
 
-echo Line ${LINENO}
 function f_debug () {
     # $1: message to log, only used when $DEBUG_MODE == true
     if [ ! $DEBUG_MODE ]; then
@@ -43,7 +38,6 @@ function f_debug () {
         fi
     }
 
-echo Line ${LINENO}
 function f_debug_variable () {
     # $1: variable_name
     # $2: variable_value ("$variable_name")
@@ -53,53 +47,45 @@ function f_debug_variable () {
         fi
     }
 
-echo Line ${LINENO}
 function f_variable_has_content {
 	# Usage: if $(f_variable_has_content "$SAMPLE"); then commands_if_true; else commands_if_false; fi
 	# $1 = Content of variable, e.g., "$INPUT_FILE"
     if [ -z "$1" ]; then echo false; else echo true; fi
     }
 
-echo Line ${LINENO}
 function f_require_value {
 # $1 = Variable name  e.g., "INPUT_FILE" "send_text_alert_true_or_false"
 # $2 = Content of variable, e.g., "$INPUT_FILE"
     if ! f_variable_has_content "$2"; then f_die "$0: FATAL: Value of $1 undefined. Line ${LINENO}" "$2"; fi
     }
 
-echo Line ${LINENO}
 function f_is_file {
 	# Usage: if $(f_is_file "file_or_path_name"); then commands_if_true; else commands_if_false; fi
 	# $1 = "$string_to_check"
     if [ -f "$1" ]; then echo true; else echo false; fi
 	}
 
-echo Line ${LINENO}
 function f_require_file {
     # Usage: f_require_file "file_or_path_name" "send_text_alert_true_or_false"
 	if ! $(f_is_file "$1"); then f_die "$0: FATAL: File not found: $1" "$2"; fi
     }
 
-echo Line ${LINENO}
 function f_is_directory {
 	# Usage: if $(f_is_directory "directory_name"); then commands_if_true; else commands_if_false; fi
 	# $1 = "$string_to_check"
     if [ -d "$1" ]; then echo true; else echo false; fi
 	}
 
-echo Line ${LINENO}
 function f_require_directory {
     # Usage: f_require_directory "directory_name" "send_text_alert_true_or_false"
 	if ! $(f_is_directory "$1"); then f_die "$0: FATAL: Directory not found: $1" "$2"; fi
     }
 
-echo Line ${LINENO}
 function f_require_true {
     # Usage: f_require_true "true_or_false_proposition" "send_text_alert_true_or_false" "failure_message" ;
 	if ! $1; then f_die "$2" $3; fi
     }
 
-echo Line ${LINENO}
 function f_file_not_in_use {
     f_require_file "$1" false
     if [ -n "$(lsof "$1" 2>/dev/null)" ]; then
@@ -109,14 +95,12 @@ function f_file_not_in_use {
         fi
     }
 
-echo Line ${LINENO}
 function f_in_use {
 	# Usage: if $(f_in_use "$SAMPLE"); then commands_if_true; else commands_if_false; fi
 	# $1 = "$string_to_check"
     if [ -d -n "$(lsof "$1" 2>/dev/null)" ]; then echo true; else echo false; fi
 	}
 
-echo Line ${LINENO}
 function f_filter () {
     STRING_BEING_EVALUATED=$1
     FILTER=$2
@@ -128,13 +112,11 @@ function f_filter () {
     echo $MATCH
 	}
 
-echo Line ${LINENO}
 function f_clear_directory_contents() {
 	f_require_directory "$1" false
 	rm -rf "$1"/*
 	}
 
-echo Line ${LINENO}
 function f_local_copy() {
 # $1 = source directory; MUST BE A DIRECTORY and not file(s); no trailing slash!
 # $2 = target directory; MUST BE A DIRECTORY and not file(s); no trailing slash!
@@ -157,7 +139,6 @@ function f_local_copy() {
 # Set a flag to confirm that the functions are defined
 	FUNCTIONS_ARE_DEFINED=true
 
-echo Line ${LINENO}
 function f_install() {
 	if ! [ -x "$(command -v $1)" ]; then   
 		logger $0 Installing $1
@@ -166,7 +147,6 @@ function f_install() {
 	fi
 	}
 
-echo Line ${LINENO}
 function f_chmod() {
 # Only one file or directory at a time. No flags, wildcards, or multiple files or directories
 	if [ -f "$2" ] || [ -d "$2" ]; then
@@ -174,7 +154,6 @@ function f_chmod() {
 	fi
 	}
 
-echo Line ${LINENO}
 function f_mount_ro_fs_as_rw () {
 	FILE_SYSTEM=$1
 	# If file system is mounted and read-only, unmount
@@ -193,9 +172,7 @@ function f_mount_ro_fs_as_rw () {
 		fi
 	}
 
-echo Line ${LINENO}
 function f_mount_ro_fs_as_ro () {
-echo Line ${LINENO}
 	FILE_SYSTEM=$1
 	FS_READ_ONLY=$2
 	# If file system is mounted and read-write, unmount
