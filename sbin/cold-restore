@@ -55,6 +55,11 @@ Fix some permisson problems
 		chown -R mysql:adm /var/log/mysql
 		chown -R mysql:mysql /var/lib/mysql*
 
+# Update log
+	echo
+	echo Restore completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
+	echo Restore completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') >> $COLD_STORAGE_LOG
+
 # Recommend reboot
 	echo
 	echo -en "\007" # Beep

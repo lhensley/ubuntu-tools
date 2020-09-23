@@ -48,6 +48,11 @@ if [ $COLD_BACKUP_FS_READ_ONLY ]; then
 # Start services as needed
 	systemctl start $COLD_PROTECTED_SERVICES
 
+# Update log
+	echo
+	echo Backup completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
+	echo Backup completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') >> $COLD_STORAGE_LOG
+
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
