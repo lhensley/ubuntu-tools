@@ -21,6 +21,7 @@
 		fi
 
 # Stop services as needed
+# FYI ONLY fro _vars: 	COLD_PROTECTED_SERVICES="apache2 cron ddclient fail2ban gdm3 lsyncd mysql plexmediaserver postfix proftpd tautulli webmin"
 	systemctl stop $COLD_PROTECTED_SERVICES
 
 # Restore working directory

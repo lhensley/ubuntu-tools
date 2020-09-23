@@ -308,7 +308,7 @@ if $install_php ; then
   echo "php installed."
   fi
 
-# Install local fstab options
+# Install rclone
     #echo "Installing rclone"
     #DEBIAN_FRONTEND=noninteractive apt-get install -yq curl
     #curl https://rclone.org/install.sh | sudo bash
