@@ -244,12 +244,6 @@ function f_process_ts_file () {
 	if ! $(f_is_directory "$STORE_ROOT_PATH"); then f_balk "$0: Cannot process $IN_FILE: Directory not defined: $STORE_ROOT_PATH" false; return; fi
 	if ! $(f_variable_has_content "$IGNORE_TV_SHOWS"); then f_balk "$0: Cannot process $IN_FILE: \$IGNORE_TV_SHOWS not defined" false; return; fi
 
-	WORK_ROOT_PATH_LENGTH=${#WORK_ROOT_PATH}
-
-	IN_FILE_LENGTH=${#IN_FILE}
-	IN_FILE_EXT="${IN_FILE##*.}"
-	IN_FILE_EXT_LENGTH="${#IN_FILE_EXT}"
-
 
 
 	}
