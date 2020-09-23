@@ -246,9 +246,9 @@ function f_process_ts_file () {
 
 	WORK_ROOT_PATH_LENGTH=${#WORK_ROOT_PATH}
 
-	IN_FILE_LENGTH=${#IN_FILE}
-	IN_FILE_EXT="${IN_FILE##*.}"
-	IN_FILE_EXT_LENGTH="${#IN_FILE_EXT}"
+#	IN_FILE_LENGTH=${#IN_FILE}
+#	IN_FILE_EXT="${IN_FILE##*.}"
+#	IN_FILE_EXT_LENGTH="${#IN_FILE_EXT}"
 
 #	RELATIVE_FILE_LENGTH=$[IN_FILE_LENGTH-WORK_ROOT_PATH_LENGTH-1]
 #	RELATIVE_FILE=${IN_FILE: -$RELATIVE_FILE_LENGTH} # First remove WORK_ROOT_PATH
@@ -267,11 +267,11 @@ function f_process_ts_file () {
 #	if ! $(f_variable_has_content "$PLEX_LIVE_APPLICATION_SUPPORT"); 
 #		then f_balk "$0: Cannot process $IN_FILE: \$PLEX_LIVE_APPLICATION_SUPPORT" false; return; fi
 
-	if $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS"); then
-		f_balk "$0: Skipped $IN_FILE because it's filtered out." false
-	else
-		if ! $(f_in_use "$IN_FILE"); then
-			f_balk "$0: Skipped $IN_FILE because it's in use." false
+#	if $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS"); then
+#		f_balk "$0: Skipped $IN_FILE because it's filtered out." false
+#	else
+#		if ! $(f_in_use "$IN_FILE"); then
+#			f_balk "$0: Skipped $IN_FILE because it's in use." false
 
 	# Hold this part out for now. Not sure this is the place for it.
 	# "${PATHNAME[transcode_ripped_dvds]}" # Pick up ripped DVDs first, if any
