@@ -238,6 +238,7 @@ function f_move_one_file () {
 
 echo Line ${LINENO}
 function f_process_ts_file () {
+echo Line ${LINENO}
 	OUT_FILE="$ROOT_OUT_PATH/$RELATIVE_FILE"
 	NEW_DIRECTORY=$(dirname "$OUT_FILE")
 
