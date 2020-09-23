@@ -195,6 +195,7 @@ function f_mount_ro_fs_as_rw () {
 
 echo Line ${LINENO}
 function f_mount_ro_fs_as_ro () {
+echo Line ${LINENO}
 	FILE_SYSTEM=$1
 	FS_READ_ONLY=$2
 	# If file system is mounted and read-write, unmount
@@ -240,10 +241,12 @@ function f_process_ts_file () {
 	OUT_FILE="$ROOT_OUT_PATH/$RELATIVE_FILE"
 	NEW_DIRECTORY=$(dirname "$OUT_FILE")
 
+echo Line ${LINENO}
 	if $(f_in_use "$IN_FILE"); then f_balk "$0: Skipped moving $IN_FILE because it's in use." false
 	if ! $(f_is_file "$IN_FILE"); then f_balk "$0: Cannot move non-existent file $IN_FILE." false
 	if ! $(f_is_directory "$ROOT_IN_PATH"); then f_balk "$0: Non-existent root in directory $ROOT_IN_PATH." false
 
+echo Line ${LINENO}
 	# Make the directory for out file
 	mkdir -p "$NEW_DIRECTORY"
 	if [ $? -ne 0 ]; then # If mkdir failed failed ...
@@ -254,6 +257,7 @@ function f_process_ts_file () {
 	chown plex:plex "$NEW_DIRECTORY"
 	chmod 664 "$NEW_DIRECTORY"
 
+echo Line ${LINENO}
 	# Move $IN_FILE to $OUT_FILE
 	f_log_and_echo "$0: Moving $(basename \"$IN_FILE\")"
 
