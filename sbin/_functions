@@ -191,7 +191,6 @@ function f_mount_ro_fs_as_ro () {
 		fi
 	}
 
-echo Line ${LINENO}
 function f_set_plex_media_recursive_permissions () {
 	f_require_directory "$VIDEO_WORK_DIRECTORY" false
     find "$VIDEO_WORK_DIRECTORY" -type d -print -exec chmod 775 {} \;
@@ -201,7 +200,6 @@ function f_set_plex_media_recursive_permissions () {
     find "$VIDEO_STORE_DIRECTORY" -type f -print -exec chmod 664 {} \;
 	}
 
-echo Line ${LINENO}
 function f_move_one_file () {
 	IN_FILE="$1"
 	ROOT_IN_PATH="$2"
@@ -213,16 +211,23 @@ function f_move_one_file () {
 	RELATIVE_FILE="${IN_FILE: -$RELATIVE_FILE_LENGTH}" # Remove ROOT_IN_PATH
 	}
 
-echo Line ${LINENO}
 function f_process_ts_file () {
-echo Line ${LINENO}
 	OUT_FILE="$ROOT_OUT_PATH/$RELATIVE_FILE"
 	NEW_DIRECTORY=$(dirname "$OUT_FILE")
 
-echo Line ${LINENO}
 	if $(f_in_use "$IN_FILE"); then f_balk "$0: Skipped moving $IN_FILE because it's in use." false; fi
 	if ! $(f_is_file "$IN_FILE"); then f_balk "$0: Cannot move non-existent file $IN_FILE." false; fi
 	if ! $(f_is_directory "$ROOT_IN_PATH"); then f_balk "$0: Non-existent root in directory $ROOT_IN_PATH." false; fi
+
+	# Make the directory for out file
+	mkdir -p "$NEW_DIRECTORY"
+	if [ $? -ne 0 ]; then # If mkdir failed failed ...
+		f_die "$0: FAILED making $NEW_DIRECTORY" true
+		sleep 10 # Add some time here in case we're racing through a failure loop.
+		return
+	fi
+	chown plex:plex "$NEW_DIRECTORY"
+	chmod 664 "$NEW_DIRECTORY"
 
 
 	}
