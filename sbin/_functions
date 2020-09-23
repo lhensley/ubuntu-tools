@@ -236,6 +236,13 @@ function f_move_one_file () {
 	RELATIVE_FILE="${IN_FILE: -$RELATIVE_FILE_LENGTH}" # Remove ROOT_IN_PATH
 	}
 
+echo Line ${LINENO}
+function f_process_ts_file () {
+echo Line ${LINENO}
+	OUT_FILE="$ROOT_OUT_PATH/$RELATIVE_FILE"
+	NEW_DIRECTORY=$(dirname "$OUT_FILE")
+
+	}
 
 
 echo Line ${LINENO}
