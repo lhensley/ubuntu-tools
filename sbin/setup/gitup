@@ -95,7 +95,7 @@ else
 fi
 
 # Make a copy of /etc/fstab as installed
-cp "/etc/fstab" "/etc/fstab-installed-$START_DATEANDTIMESTAMP"
+# cp "/etc/fstab" "/etc/fstab-installed-$START_DATEANDTIMESTAMP"
 
 # Add peripherals to /etc/fstab
     for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do 

@@ -43,7 +43,7 @@ cd $COLD_BACKUP_DIRECTORY
 #    -E = preserve executability
 #    -R = use relative paths (see https://linux.die.net/man/1/rsync for more info)
 #    --delete = delete extraneous files from dest dirs
-if [ -d $COLD_BACKUP_RESTORE_POINT ]; then mkdir -p $COLD_BACKUP_RESTORE_POINT; fi
+if [ ! -d $COLD_BACKUP_RESTORE_POINT ]; then mkdir -p $COLD_BACKUP_RESTORE_POINT; fi
 rsync -aloprtvER --delete --exclude=etc/fstab --exclude=.config/os-install-info.txt $COLD_BACKUP_SOURCES $COLD_BACKUP_RESTORE_POINT
 
 # Restore working directory
