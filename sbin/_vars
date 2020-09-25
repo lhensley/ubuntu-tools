@@ -2,9 +2,6 @@
 # _vars
 # Variable definitions for Lane applications
 
-# Disable this in production.
-exit 1
-
 # Debug Mode
 # Leave near the top so it can be toggled on and off easily.
 	# Default=false

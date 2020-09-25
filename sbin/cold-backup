@@ -1,6 +1,9 @@
 #!/bin/bash
 # cold-backup
 
+# Disable this in production.
+exit 1
+
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
