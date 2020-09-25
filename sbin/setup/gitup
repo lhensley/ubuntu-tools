@@ -3,8 +3,6 @@
 # PURPOSE: Installs basic software, including calling setup-os
 # IMPORTANT: Check variables at the top of the script before running it!
 
-set -x
-
 install_apache2=true
 install_openssl=true
 install_php=true
