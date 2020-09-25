@@ -59,7 +59,7 @@ Fix some permisson problems
 # Update log
 	echo
 	echo Restore completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
-	echo Restore completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') >> $COLD_STORAGE_LOG
+	echo Restore completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') >> $COLD_BACKUP_LOG
 
 # Recommend reboot
 	echo
