@@ -2,6 +2,8 @@
 # _vars
 # Variable definitions for Lane applications
 
+# Disable this in production.
+exit 1
 
 # Debug Mode
 # Leave near the top so it can be toggled on and off easily.
@@ -145,9 +147,9 @@ source /etc/os-release
 	COLD_BACKUP_FS_READ_ONLY=false                             # Default
 	COLD_BACKUP_PARENT_DIRECTORY="/var/local"                  # Default
 	COLD_BACKUP_SUBDIRECTORY="cold-backup"                     # Default
-	# Default COLD_BACKUP_RESTORE_POINT = "/", but "/opt/restore-point/START_DATEANDTIMESTAMP" recommended for trouble-shooting
+	# Default COLD_BACKUP_RESTORE_POINT = "/", but "/var/restore-points/START_DATEANDTIMESTAMP" recommended for trouble-shooting
 		# COLD_BACKUP_RESTORE_POINT="/"
-		COLD_BACKUP_RESTORE_POINT="/opt/restore-point-$START_DATEANDTIMESTAMP"
+		COLD_BACKUP_RESTORE_POINT="/var/restore-points/START_DATEANDTIMESTAMP"
 	COLD_BACKUP_LOG="$ADMIN_HOME_DIR/.coldstorage.log"
 	if [ $HOSTNAME == "nuc01" ]; then
 		COLD_BACKUP_FILE_SYSTEM="/mnt/cloteal"
