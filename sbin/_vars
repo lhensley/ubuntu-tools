@@ -164,7 +164,7 @@ source /etc/os-release
 	#COLD_BACKUP_SOURCES+=" var/lib/plexmediaserver/Library"
 	#COLD_BACKUP_SOURCES+=" var/lib/mysql"
 	#COLD_BACKUP_SOURCES+=" var/spool/cron/crontabs var/spool/mail"
-		# COLD_BACKUP_SOURCES="etc"
+		COLD_BACKUP_SOURCES="etc"
 	COLD_RESTORE_EXCLUDES="--exclude=.config/os-install-info.txt"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/[m-z]*"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/acpi"
