@@ -26,7 +26,7 @@ if [ ! -d "$COLD_BACKUP_DIRECTORY" ]; then
 	f_log_and_echo "$0: FATAL: Can't cd to $COLD_BACKUP_DIRECTORY"
 	exit 1
 	fi
-cd "$COLD_BACKUP_DIRECTORY""
+cd "$COLD_BACKUP_DIRECTORY"
 if [ $? ]; then
 	f_log_and_echo "$0: FATAL: Can't cd to $COLD_BACKUP_DIRECTORY"
 	exit 1
