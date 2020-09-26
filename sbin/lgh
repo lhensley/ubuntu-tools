@@ -8,10 +8,10 @@
 
 # Export cron jobs for $CRONTAB_BACKUP_USERS
 for THIS_USER in $CRONTAB_BACKUP_USERS; do 
-	# crontab -l -u $THIS_USER > $HOME_ROOT/$THIS_USER/.crontab-archive
-	# chown $THIS_USER $HOME_ROOT/$THIS_USER/.crontab-archive
-	# chmod 600 $HOME_ROOT/$THIS_USER/.crontab-archive
-	echo $HOME_ROOT/$THIS_USER/.crontab-archive
+	# crontab -l -u $THIS_USER > ~$THIS_USER/.crontab-archive
+	# chown $THIS_USER ~$THIS_USER/.crontab-archive
+	# chmod 600 ~$THIS_USER/.crontab-archive
+	echo ~$THIS_USER/.crontab-archive
 	done
 
 # # tar
