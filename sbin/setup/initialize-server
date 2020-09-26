@@ -37,7 +37,7 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
     fi
 
 # Do updates
-    _upd
+    upd
 
 # Add peripherals to /etc/fstab
     for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do 
