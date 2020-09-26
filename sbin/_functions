@@ -56,7 +56,7 @@ function f_variable_has_content {
 function f_require_value {
 # $1 = Variable name  e.g., "INPUT_FILE" "send_text_alert_true_or_false"
 # $2 = Content of variable, e.g., "$INPUT_FILE"
-    if ! f_variable_has_content "$2"; then f_die "$0: FATAL: Value of $1 undefined. Line ${LINENO}" "$2"; fi
+    if [ ! f_variable_has_content "$2" ]; then f_die "$0: FATAL: Value of $1 undefined. Line ${LINENO}" "$2"; fi
     }
 
 function f_is_file {
