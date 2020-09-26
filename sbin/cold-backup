@@ -19,14 +19,14 @@ for SELECTED_USER in $CRONTAB_BACKUP_USERS; do
 # Stop services as needed
 	systemctl stop $COLD_PROTECTED_SERVICES
 
-# Store current directory and switch to root
-CURRENT_DIRECTORY="$(pwd)"
-cd /
-
 # Make the cold backup file system writable
 if [ $COLD_BACKUP_FS_READ_ONLY ]; then
 	f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"
 	fi
+
+# Store current directory and switch to root
+CURRENT_DIRECTORY="$(pwd)"
+cd /
 
 # Make container directory
 mkdir -p "$COLD_BACKUP_DIRECTORY"
@@ -49,15 +49,20 @@ mkdir -p "$COLD_BACKUP_DIRECTORY"
 #    --delete = delete extraneous files from dest dirs
 rsync -aloprtvER --delete $COLD_BACKUP_SOURCES "$COLD_BACKUP_DIRECTORY"
 
+# Start services as needed
+	systemctl start $COLD_PROTECTED_SERVICES
+
+# Archive the cold backup
+ 	mkdir -p "$THIS_ARCHIVE_DIRECTORY"
+ 	nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
+	nice cp "$ARCHIVE_TAR_FULL_WEEKDAY" "$ARCHIVE_TAR_FULL_MONTH"
+
 # Restore working directory
 cd "$CURRENT_DIRECTORY"
 
 if [ $COLD_BACKUP_FS_READ_ONLY ]; then
 	f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY
 	fi
-
-# Start services as needed
-	systemctl start $COLD_PROTECTED_SERVICES
 
 # Update log
 	echo
