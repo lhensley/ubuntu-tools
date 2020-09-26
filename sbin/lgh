@@ -10,7 +10,7 @@
  	if [ $COLD_BACKUP_FS_READ_ONLY ]; then f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"; fi
  	mkdir -p "$THIS_ARCHIVE_DIRECTORY"
  	nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
-	nice cp "$ARCHIVE_TAR_FULL_WEEKDAY" "$ARCHIVE_TAR_FULL_MONTH"
+	nice cp "$ARCHIVE_TAR_FULL_WEEKDAY3" "$ARCHIVE_TAR_FULL_MONTH"
  	if [ $COLD_BACKUP_FS_READ_ONLY ]; then f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY; fi
 
 # Include script footer file

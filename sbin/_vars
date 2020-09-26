@@ -50,8 +50,9 @@ source /etc/os-release
 	START_DAYSTAMP=$(/bin/date '+%d')                               # Like 07
 	START_MONTHSTAMP=$(/bin/date '+%Y-%m')                          # Like 2020-09
 	START_TIMESTAMP=$(/bin/date)                                    # Like Mon 07 Sep 2020 04:01:23 PM CDT
-	START_WEEKDAYSTAMP=$(/bin/date '+%a')                           # Like Mon
+	START_WEEKDAYSTAMP=$(/bin/date '+%a')                           # Like Mon. Used in backup variables below
 	START_WEEKDAYSTAMP2=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z-%a')     # Like 2020-09-07-16-05-23-CDT-Mon. Used in backup variables below
+	START_WEEKDAYSTAMP3=$(/bin/date '+%w-%a')                       # Like 0-Sun, 1-Mon, 2-Tue, etc. Used in backup variables below
 
 # About This Script (or at least the one sourcing it)
 	PROGRAM_DIRECTORY=$(dirname $0)
@@ -182,11 +183,11 @@ source /etc/os-release
 	BACKUP_ROOT="/"										 # Formerly "DIRECTORY_FROM"
 	declare -A BACKUP_OPTION
 	BACKUP_OPTION[--create]=true
-	BACKUP_OPTION[--gzip]=true
+	# BACKUP_OPTION[--gzip]=true # -I option below takes care of this
 	BACKUP_OPTION[-I \"gzip --best\"]=true
 	BACKUP_OPTION[--auto-compress]=true
 	BACKUP_OPTION[--preserve-permissions]=true
-	BACKUP_OPTION[--file=$ARCHIVE_TAR_FULL_WEEKDAY]=true
+	BACKUP_OPTION[--file=$ARCHIVE_TAR_FULL_WEEKDAY3]=true
 	BACKUP_OPTION[--exclude-vcs]=true
 	BACKUP_OPTION[--exclude-caches]=true
 	BACKUP_OPTION[--totals]=true
