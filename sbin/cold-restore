@@ -47,10 +47,12 @@ cd $COLD_BACKUP_DIRECTORY
 if [ ! -d $COLD_RESTORE_POINT ]; then mkdir -p $COLD_RESTORE_POINT; fi
 rsync -aloprtvER --delete $COLD_RESTORE_EXCLUDES $COLD_BACKUP_SOURCES $COLD_RESTORE_POINT
 
-# Restore working directory
+set +x
+
+# Return to previous directory
 cd "$CURRENT_DIRECTORY"
 
-Fix some permisson problems
+# Fix some permisson problems
   # Unclear why this would be necessary but otherwise ends up owned by user mysql 9/16/2020
 		chown -R postfix:postfix /var/lib/postfix
   # Unclear why this would be necessary but otherwise ends up owned by user tautulli 9/16/2020
