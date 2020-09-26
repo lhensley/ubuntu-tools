@@ -8,10 +8,9 @@
 
 # Export cron jobs for $CRONTAB_BACKUP_USERS
 for SELECTED_USER in $CRONTAB_BACKUP_USERS; do 
-	# crontab -l -u $SELECTED_USER > ~$SELECTED_USER/.crontab-archive
-	# chown $SELECTED_USER ~$SELECTED_USER/.crontab-archive
-	# chmod 600 ~$SELECTED_USER/.crontab-archive
-	echo $(eval echo "~$SELECTED_USER")/.crontab-archive
+	crontab -l -u $SELECTED_USER > $(eval echo "~$SELECTED_USER")/.crontab-archive
+	chmod 600 $(eval echo "~$SELECTED_USER")/.crontab-archive
+	chown $SELECTED_USER $(eval echo "~$SELECTED_USER")/.crontab-archive
 	done
 
 # # tar
