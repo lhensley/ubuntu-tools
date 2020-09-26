@@ -23,11 +23,11 @@
 # Change working directory
 # Heavy error checking because this HAS to be right, or results could be catastrophic.
 if [ ! -d "$COLD_BACKUP_DIRECTORY" ]; then
-	f_log_and_echo "$0: FATAL: Can't cd to $COLD_BACKUP_DIRECTORY"
+	f_log_and_echo "$0: FATAL: $COLD_BACKUP_DIRECTORY is not adirectory"
 	exit 1
 	fi
 cd "$COLD_BACKUP_DIRECTORY"
-if [ $? ]; then
+if [ $? -gt 0 ]; then
 	f_log_and_echo "$0: FATAL: Can't cd to $COLD_BACKUP_DIRECTORY"
 	exit 1
 	fi
