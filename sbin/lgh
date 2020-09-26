@@ -12,7 +12,7 @@ for THIS_USER in $CRONTAB_BACKUP_USERS; do
 	# chown $THIS_USER ~$THIS_USER/.crontab-archive
 	# chmod 600 ~$THIS_USER/.crontab-archive
 	echo ~$THIS_USER/.crontab-archive
-	echo (~$THIS_USER)/.crontab-archive
+	echo {"/bin/sh", "-c", "echo ~$THIS_USER"}/.crontab-archive
 	echo $(echo ~$THIS_USER)/.crontab-archive
 	done
 
