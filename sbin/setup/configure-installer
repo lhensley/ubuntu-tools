@@ -96,6 +96,10 @@ if $install_cubic ; then
     apt install -y cubic
     fi
 
+# The machine will brick without these drivers.
+# Next time a new ISO is generated, this section should be removed from initialize-server because its also in the configure-installer script.
+apt-get -y install nvidia-driver-390
+
 # Install MakeMKV
 # DON'T USE THE SNAP INSTALLER
 if $install_makemkv ; then
