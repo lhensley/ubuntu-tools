@@ -144,9 +144,9 @@ source /etc/os-release
 	COLD_BACKUP_FS_READ_ONLY=false                             # Default
 	COLD_BACKUP_PARENT_DIRECTORY="/var/local"                  # Default
 	COLD_BACKUP_SUBDIRECTORY="cold-backup"                     # Default
-	# Default COLD_BACKUP_RESTORE_POINT = "/", but "/var/restore-points/START_DATEANDTIMESTAMP" recommended for trouble-shooting
-		COLD_BACKUP_RESTORE_POINT="/"
-		# COLD_BACKUP_RESTORE_POINT="/var/restore-points/START_DATEANDTIMESTAMP"
+	# Default COLD_RESTORE_POINT = "/", but "/var/restore-points/START_DATEANDTIMESTAMP/" recommended for trouble-shooting
+		COLD_RESTORE_POINT="/"
+		# COLD_RESTORE_POINT="/var/restore-points/START_DATEANDTIMESTAMP/"
 	COLD_BACKUP_LOG="$ADMIN_HOME_DIR/.coldstorage.log"
 	if [ $HOSTNAME == "nuc01" ]; then
 		COLD_BACKUP_FILE_SYSTEM="/mnt/cloteal"
@@ -165,7 +165,7 @@ source /etc/os-release
 	COLD_BACKUP_SOURCES+=" var/lib/mysql"
 	COLD_BACKUP_SOURCES+=" var/spool/cron/crontabs var/spool/mail"
 	COLD_RESTORE_EXCLUDES="--exclude=.config/os-install-info.txt"
-	COLD_RESTORE_EXCLUDES+=" --exclude=etc/[m-z]*"
+	# COLD_RESTORE_EXCLUDES+=" --exclude=etc/[m-z]*"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/acpi"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/alsa"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/alernatives"
