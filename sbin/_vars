@@ -183,7 +183,7 @@ source /etc/os-release
 	declare -A BACKUP_OPTION
 	BACKUP_OPTION[--create]=true
 	BACKUP_OPTION[--gzip]=true
-	BACKUP_OPTION[-I "gzip --best"]=true
+	BACKUP_OPTION[-I \"gzip --best\"]=true
 	BACKUP_OPTION[--auto-compress]=true
 	BACKUP_OPTION[--preserve-permissions]=true
 	BACKUP_OPTION[--file=$ARCHIVE_TAR_FULL_WEEKDAY]=true
