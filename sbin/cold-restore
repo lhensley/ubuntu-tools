@@ -20,12 +20,8 @@
 		exit 1
 		fi
 
-set -x
-
-# Stop services as needed
-	systemctl stop $COLD_PROTECTED_SERVICES
-
 # Change working directory
+# Heavy error checking because this HAS to be right, or results could be catastrophic.
 if [ ! -d "$COLD_BACKUP_DIRECTORY" ]; then
 	f_log_and_echo "$0: FATAL: Can't cd to $COLD_BACKUP_DIRECTORY"
 	exit 1
@@ -35,6 +31,9 @@ if [ $? ]; then
 	f_log_and_echo "$0: FATAL: Can't cd to $COLD_BACKUP_DIRECTORY"
 	exit 1
 	fi
+
+# Stop services as needed
+	systemctl stop $COLD_PROTECTED_SERVICES
 
 # Do restore with rsync
 # rsync options used
