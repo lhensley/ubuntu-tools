@@ -56,8 +56,7 @@ function f_variable_has_content {
 function f_require_value {
 # $1 = Variable name  e.g., "INPUT_FILE" "send_text_alert_true_or_false"
 # $2 = Content of variable, e.g., "$INPUT_FILE"
-	echo Called from ${BASH_SOURCE[$i+1]}, line ${BASH_LINENO[$i]}
-    if ! $(f_variable_has_content "$2"); then f_die "$0: FATAL: Value of $1 undefined. Line ${BASH_LINENO[$i]}" "$2"; fi
+    if ! $(f_variable_has_content "$2"); then f_die "$0: FATAL: Value of $1 undefined at line ${BASH_LINENO[$i]}" false; fi
     }
 
 function f_is_file {
@@ -68,7 +67,7 @@ function f_is_file {
 
 function f_require_file {
     # Usage: f_require_file "file_or_path_name" "send_text_alert_true_or_false"
-	if ! $(f_is_file "$1"); then f_die "$0: FATAL: File not found: $1" "$2"; fi
+	if ! $(f_is_file "$1"); then f_die "$0: FATAL: File not found: $1 at line ${BASH_LINENO[$i]}" false; fi
     }
 
 function f_is_directory {
@@ -79,7 +78,7 @@ function f_is_directory {
 
 function f_require_directory {
     # Usage: f_require_directory "directory_name" "send_text_alert_true_or_false"
-	if ! $(f_is_directory "$1"); then f_die "$0: FATAL: Directory not found: $1" "$2"; fi
+	if ! $(f_is_directory "$1"); then f_die "$0: FATAL: Directory not found: $1 at line ${BASH_LINENO[$i]}" false; fi
     }
 
 function f_require_true {
@@ -223,7 +222,7 @@ function f_process_ts_file () {
 	# Make the directory for out file
 	mkdir -p "$NEW_DIRECTORY"
 	if [ $? -ne 0 ]; then # If mkdir failed failed ...
-		f_die "$0: FAILED making $NEW_DIRECTORY" true
+		f_die "$0: FAILED making $NEW_DIRECTORY at line ${BASH_LINENO[$i]}" true
 		sleep 10 # Add some time here in case we're racing through a failure loop.
 		return
 	fi

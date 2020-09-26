@@ -2,19 +2,14 @@
 # rip
 
 # Include script setup file
-	echo ${LINENO}
 	source script-setup
-	echo ${LINENO}
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
-	echo ${LINENO}
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
-	echo ${LINENO}
 
 if [ -z "$1" ]; then
   echo "Usage: rip \"Title (year) [ movie | <minimum_number_of_seconds> ]\" &"
   exit -1
   fi
-echo ${LINENO}
 
 if [ -z "$2" ]; then
     MINLENGTH=1200
@@ -23,17 +18,12 @@ if [ -z "$2" ]; then
     else MINLENGTH=$2
     fi
   fi
-echo ${LINENO}
 
 f_require_value "MakeMKV Program Path" "${PATHNAME[makemkvcon]}"
-echo ${LINENO}
 f_require_value "MakeMKV Output Directory" "$MAKEMKV_OUTPUT_DIRECTORY"
-echo ${LINENO}
 
 sudo -u $RUN_AS mkdir -p "$MAKEMKV_OUTPUT_DIRECTORY/$1"
-echo ${LINENO}
 f_require_directory "$MAKEMKV_OUTPUT_DIRECTORY/$1"
-echo ${LINENO}
 
 sudo -u $RUN_AS nice "${PATHNAME[makemkvcon]}" --minlength=$MINLENGTH mkv disc:0 all "$MAKEMKV_OUTPUT_DIRECTORY/$1"
 exit_status=$?
