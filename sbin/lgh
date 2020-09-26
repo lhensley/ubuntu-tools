@@ -7,13 +7,13 @@
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 # Export cron jobs for $CRONTAB_BACKUP_USERS
-for THIS_USER in $CRONTAB_BACKUP_USERS; do 
-	# crontab -l -u $THIS_USER > ~$THIS_USER/.crontab-archive
-	# chown $THIS_USER ~$THIS_USER/.crontab-archive
-	# chmod 600 ~$THIS_USER/.crontab-archive
-	echo ~$THIS_USER/.crontab-archive
-	echo {"/bin/sh", "-c", "echo ~$THIS_USER"}/.crontab-archive
-	echo $(echo ~$THIS_USER)/.crontab-archive
+for SOME_USER in $CRONTAB_BACKUP_USERS; do 
+	# crontab -l -u $SOME_USER > ~$SOME_USER/.crontab-archive
+	# chown $SOME_USER ~$SOME_USER/.crontab-archive
+	# chmod 600 ~$SOME_USER/.crontab-archive
+	echo ~$SOME_USER/.crontab-archive
+	echo $(eval echo "~$SOME_USER")/.crontab-archive
+	echo $(echo ~$SOME_USER)/.crontab-archive
 	done
 
 # # tar
