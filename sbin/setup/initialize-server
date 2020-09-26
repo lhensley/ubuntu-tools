@@ -29,6 +29,8 @@ else
   exit 1
 fi
 
+set -x
+
 # Copy git configs to $ADMIN_USER
 if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
     cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
