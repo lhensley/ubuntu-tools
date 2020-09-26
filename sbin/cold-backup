@@ -9,6 +9,13 @@ exit 1
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
+# Export cron jobs for $CRONTAB_BACKUP_USERS
+for SELECTED_USER in $CRONTAB_BACKUP_USERS; do 
+	crontab -l -u $SELECTED_USER > $(eval echo "~$SELECTED_USER")/.crontab-archive
+	chmod 600 $(eval echo "~$SELECTED_USER")/.crontab-archive
+	chown $SELECTED_USER $(eval echo "~$SELECTED_USER")/.crontab-archive
+	done
+
 # Stop services as needed
 	systemctl stop $COLD_PROTECTED_SERVICES
 
@@ -16,6 +23,7 @@ exit 1
 CURRENT_DIRECTORY="$(pwd)"
 cd /
 
+# Make the cold backup file system writable
 if [ $COLD_BACKUP_FS_READ_ONLY ]; then
 	f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"
 	fi
@@ -55,6 +63,7 @@ if [ $COLD_BACKUP_FS_READ_ONLY ]; then
 	echo
 	echo Backup completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
 	echo Backup completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') >> $COLD_BACKUP_LOG
+	chown $ADMIN_USER $COLD_BACKUP_LOG
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

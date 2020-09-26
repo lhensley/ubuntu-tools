@@ -66,10 +66,16 @@ cd "$CURRENT_DIRECTORY"
 		chown -R mysql:adm /var/log/mysql
 		chown -R mysql:mysql /var/lib/mysql*
 
+# Import cron jobs for $CRONTAB_BACKUP_USERS
+for SELECTED_USER in $CRONTAB_BACKUP_USERS; do 
+	crontab -u $SELECTED_USER $(eval echo "~$SELECTED_USER")/.crontab-archive
+	done
+
 # Update log
 	echo
 	echo Restore completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
 	echo Restore completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') >> $COLD_BACKUP_LOG
+	chown $ADMIN_USER $COLD_BACKUP_LOG
 
 # Recommend reboot
 	echo

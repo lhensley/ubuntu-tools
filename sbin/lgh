@@ -6,15 +6,10 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-# Export cron jobs for $CRONTAB_BACKUP_USERS
-for SELECTED_USER in $CRONTAB_BACKUP_USERS; do 
-	crontab -l -u $SELECTED_USER > $(eval echo "~$SELECTED_USER")/.crontab-archive
-	chmod 600 $(eval echo "~$SELECTED_USER")/.crontab-archive
-	chown $SELECTED_USER $(eval echo "~$SELECTED_USER")/.crontab-archive
-	done
-
 # # tar
 # 	if [ $COLD_BACKUP_FS_READ_ONLY ]; then f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"; fi
+echo $COLD_BACKUP_DIRECTORY
+echo $THIS_ARCHIVE_DIRECTORY
 # 	mkdir -p "$THIS_ARCHIVE_DIRECTORY"
 # 	echo nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
 # 	nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
