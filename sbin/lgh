@@ -6,21 +6,12 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-# # tar
-# 	if [ $COLD_BACKUP_FS_READ_ONLY ]; then f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"; fi
-# 	mkdir -p "$THIS_ARCHIVE_DIRECTORY"
-# 	echo nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
-# 	nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
-
-echo $COLD_BACKUP_DIRECTORY
-echo $THIS_ARCHIVE_DIRECTORY
-echo $BACKUP_OPTIONS
-echo $ARCHIVE_TAR_FULL_WEEKDAY
-echo $ARCHIVE_TAR_FULL_MONTH
-
-
-
-# 	if [ $COLD_BACKUP_FS_READ_ONLY ]; then f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY; fi
+# Archive the cold backup
+ 	if [ $COLD_BACKUP_FS_READ_ONLY ]; then f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"; fi
+ 	mkdir -p "$THIS_ARCHIVE_DIRECTORY"
+ 	nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
+	nice cp "$ARCHIVE_TAR_FULL_WEEKDAY" "$ARCHIVE_TAR_FULL_MONTH"
+ 	if [ $COLD_BACKUP_FS_READ_ONLY ]; then f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY; fi
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
