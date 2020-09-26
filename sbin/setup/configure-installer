@@ -2,6 +2,7 @@
 # configure-installer
 # PURPOSE: Installs basic software
 # IMPORTANT: Check variables at the top of the script before running it!
+# Instructions for creating a custom ISO installation are at https://linuxhint.com/customize_ubuntu_iso_create_spin/
 
 install_apache2=true
 install_certbot=true
@@ -42,7 +43,7 @@ if [[ $NAME = "Ubuntu" ]]; then
 	echo
 	echo "CAUTION CAUTION CAUTION"
 	echo
-	echo "This will install basic software packages and open IP pors as needed."
+	echo "This will install basic software packages and open IP ports as needed."
 	read -p "To continue, type the word Install (case sensitive) and press <ENTER>.  " ANSWER
 	echo
 	if [ "$ANSWER" != "Install" ]; then
@@ -299,10 +300,6 @@ if $install_handbrake ; then
 # If this causes trouble, you can restore the original link with
 #    sudo ln -sf ../run/resolvconf/resolv.conf /etc/resolv.conf
 ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
-
-# Invoke /usr/local/sbin/_apply-configs
-# chmod 777 $SBIN_DIR/_apply-configsHOME
-    $SBIN_DIR/_apply-configs
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
