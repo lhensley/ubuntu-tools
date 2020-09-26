@@ -6,19 +6,13 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-function echo_true () {
-	echo true
-	}
-
-function echo_false () {
-	echo false
-	}
-
-echo_true
-echo_false
-if $(echo_true); then echo "This is true"; fi
-if $(echo_false); then echo "This is false"; fi
-echo "This is the end."
+# Export cron jobs for $CRONTAB_BACKUP_USERS
+for THIS_USER in $CRONTAB_BACKUP_USERS; do 
+	# crontab -l -u $THIS_USER > $HOME_ROOT/$THIS_USER/.crontab-archive
+	# chown $THIS_USER $HOME_ROOT/$THIS_USER/.crontab-archive
+	# chmod 600 $HOME_ROOT/$THIS_USER/.crontab-archive
+	echo $HOME_ROOT/$THIS_USER/.crontab-archive
+	done
 
 # # tar
 # 	if [ $COLD_BACKUP_FS_READ_ONLY ]; then f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"; fi

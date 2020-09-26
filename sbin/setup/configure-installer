@@ -14,9 +14,7 @@ install_mailutils=true
 install_makemkv=true
 install_openssl=true
 install_php=true
-install_plexmediaserver=true
 install_rclone=true
-install_tautulli=true
 install_webmin=true
 install_zoom=true
 
@@ -108,37 +106,6 @@ if $install_makemkv ; then
   apt-get update
   DEBIAN_FRONTEND=noninteractive apt-get install -yq makemkv-bin makemkv-oss ccextractor
   echo "MakeMKV installed."
-  fi
-
-if $install_plexmediaserver ; then
-    # Tested through Ubuntu 20.04.1
-    # Install Plex Media Server
-      echo "Installing Plex Media Server"
-      rm -rf /etc/apt/sources.list.d/plexmediaserver.list
-      echo "# When enabling this repo please remember to add the PlexPublic.Key into the apt setup." > /etc/apt/sources.list.d/plexmediaserver.list
-      echo "# wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
-      echo "#" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
-      echo "deb https://downloads.plex.tv/repo/deb/ public main" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
-      wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -
-      apt-get -y update
-      f_install plexmediaserver
-      ufw allow 32400/tcp # if not already specified
-      echo "Plex Media Server installed."
-    if $install_tautulli ; then
-        # Install Tautulli for https://this-server:8181
-        # Ref: https://tautulli.com/
-            DEBIAN_FRONTEND=noninteractive apt-get install -yq python python-setuptools tzdata
-            cd /opt
-            git clone https://github.com/Tautulli/Tautulli.git
-            addgroup tautulli && sudo adduser --system --no-create-home tautulli --ingroup tautulli
-            cp /opt/Tautulli/init-scripts/init.systemd /lib/systemd/system/tautulli.service
-            chown tautulli:tautulli -R /opt/Tautulli
-            systemctl daemon-reload
-            systemctl enable tautulli.service
-            systemctl start tautulli.service
-            ufw allow 8181
-            cd
-        fi
   fi
 
 # Install uncomplicated, no-down-side utilities (formerly install-utils)

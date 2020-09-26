@@ -159,22 +159,20 @@ source /etc/os-release
 		COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
 		fi
 	COLD_BACKUP_DIRECTORY="$COLD_BACKUP_PARENT_DIRECTORY/$COLD_BACKUP_SUBDIRECTORY"
-	COLD_BACKUP_SOURCES="etc home opt root var/www"
-	#COLD_BACKUP_SOURCES="home opt root var/www"
+	COLD_BACKUP_SOURCES="etc home opt root"
+	COLD_BACKUP_SOURCES+=" var/www"
 	COLD_BACKUP_SOURCES+=" var/lib/plexmediaserver/Library"
 	COLD_BACKUP_SOURCES+=" var/lib/mysql"
-	#COLD_BACKUP_SOURCES+=" var/spool/cron/crontabs var/spool/mail"
 	COLD_RESTORE_EXCLUDES="--exclude=.config/os-install-info.txt"
-	#COLD_RESTORE_EXCLUDES+=" --exclude=etc/[m-z]*"
-	#COLD_RESTORE_EXCLUDES+=" --exclude=etc/acpi"
-	#COLD_RESTORE_EXCLUDES+=" --exclude=etc/alsa"
-	#COLD_RESTORE_EXCLUDES+=" --exclude=etc/alernatives"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/fstab*"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/mtab"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/os-release"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/rc*"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/udisks2"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/whoopsie"
+
+# crontab backups & restores
+	CRONTAB_BACKUP_USERS="$ROOT_USER $ADMIN_USER"
 
 # ddclient
 	DDCLIENT_INTERVAL=7200
@@ -268,9 +266,9 @@ source /etc/os-release
 
 # MySQL
 	MYSQL_ADMIN_NAME="admin"
-	MYSQL_CLIENT_CERTS_DIR="$HOME_DIRECTORY/certs"
+	MYSQL_CLIENT_CERTS_DIR="$ADMIN_HOME_DIR/certs"
 	MYSQL_CONFIGS="/etc/mysql/conf.d"
-	MYSQL_DUMP_DIR=$HOME_DIR/mysql-dumps
+	MYSQL_DUMP_DIR=$ADMIN_HOME_DIR/mysql-dumps
 	MYSQL_SERVER_BIN_DIR="/var/lib/mysql"
 
 # MySQL Backups
