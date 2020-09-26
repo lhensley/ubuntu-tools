@@ -1,0 +1,312 @@
+#!/bin/bash
+# configure-installer
+# PURPOSE: Installs basic software
+# IMPORTANT: Check variables at the top of the script before running it!
+
+install_apache2=true
+install_certbot=true
+install_chrome=true
+install_cubic=true
+install_handbrake=true
+install_lsyncd=true
+install_mailutils=true
+install_makemkv=true
+install_openssl=true
+install_php=true
+install_plexmediaserver=true
+install_rclone=true
+install_tautulli=true
+install_webmin=true
+install_zoom=true
+
+# Make sure we're root.
+if [[ $EUID -ne 0 ]]; then
+        echo "Use sudo. $0 must be run as root." 1>&2
+        exit 1
+    fi
+
+if [[ $NAME = "Ubuntu" ]]; then
+    if [[ $(echo $VERSION_ID | cut -c1-3) = "20." ]]; then
+          echo "Ubuntu version 20 confirmed."
+        else
+          echo "This script does not support version $VERSION_ID of Ubuntu."
+          exit 1
+        fi
+    else
+      echo "This script works only on Ubuntu."
+      exit 1
+    fi
+
+# Confirm that this is what the user wants
+	echo -en "\007" # Beep
+	echo
+	echo "CAUTION CAUTION CAUTION"
+	echo
+	echo "This will install basic software packages and open IP pors as needed."
+	read -p "To continue, type the word Install (case sensitive) and press <ENTER>.  " ANSWER
+	echo
+	if [ "$ANSWER" != "Install" ]; then
+		echo $0: ABORT from user.
+		exit 1
+		fi
+
+# Add universe repository
+    add-apt-repository universe
+    apt update
+
+# Install git and ufw and open the git port
+    DEBIAN_FRONTEND=noninteractive apt-get install -yq git
+    ufw allow git
+
+# Configure git
+    cd
+    git config --global user.name "Lane Hensley"
+    git config --global user.email "lane.hensley@alumni.duke.edu"
+    git config --global credential.helper store
+    git config --global credential.helper cache
+    git config --global credential.helper 'cache --timeout=600'
+    # Install git token
+    # To get a new token, go to https://github.com/settings/tokens.
+    # NOTE: this token allows deployment only.
+    MY_GIT_TOKEN=8224e3fbc597bf523d30906d038158977763b2e1
+    git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
+    git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
+    git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
+    chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.gitconfig
+    chmod 600 $ROOT_HOME_DIR/.gitconfig
+
+# Wipe out existing git and /usr/local/sbin
+    rm -rf /var/local/git /usr/local/sbin
+
+# Clone go.git and set restrictive permissions
+    mkdir -p /var/local/git
+    chmod 775 /var/local/git
+    cd /var/local/git
+    git clone https://github.com/lhensley/go.git
+    chown -R root:root /var/local/git
+    chmod -R 400 /var/local/git
+    cd
+
+# Copy scripts into /usr/local/sbin
+    cp -r /var/local/git/go/sbin /usr/local
+    chown -R root:root /usr/local/sbin
+    find /usr/local/sbin -type d -print0 | sudo xargs -0 chmod 750
+    find /usr/local/sbin -type f -print0 | sudo xargs -0 chmod 540
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Install cubic
+if $install_cubic ; then
+    apt-add-repository ppa:cubic-wizard/release
+    apt update
+    apt install -y cubic
+    fi
+
+# Install MakeMKV
+# DON'T USE THE SNAP INSTALLER
+if $install_makemkv ; then
+  echo "Installing MakeMKV"
+  printf '\n\n' | add-apt-repository ppa:heyarje/makemkv-beta
+  apt-get update
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq makemkv-bin makemkv-oss ccextractor
+  echo "MakeMKV installed."
+  fi
+
+if $install_plexmediaserver ; then
+    # Tested through Ubuntu 20.04.1
+    # Install Plex Media Server
+      echo "Installing Plex Media Server"
+      rm -rf /etc/apt/sources.list.d/plexmediaserver.list
+      echo "# When enabling this repo please remember to add the PlexPublic.Key into the apt setup." > /etc/apt/sources.list.d/plexmediaserver.list
+      echo "# wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
+      echo "#" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
+      echo "deb https://downloads.plex.tv/repo/deb/ public main" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
+      wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -
+      apt-get -y update
+      f_install plexmediaserver
+      ufw allow 32400/tcp # if not already specified
+      echo "Plex Media Server installed."
+    if $install_tautulli ; then
+        # Install Tautulli for https://this-server:8181
+        # Ref: https://tautulli.com/
+            DEBIAN_FRONTEND=noninteractive apt-get install -yq python python-setuptools tzdata
+            cd /opt
+            git clone https://github.com/Tautulli/Tautulli.git
+            addgroup tautulli && sudo adduser --system --no-create-home tautulli --ingroup tautulli
+            cp /opt/Tautulli/init-scripts/init.systemd /lib/systemd/system/tautulli.service
+            chown tautulli:tautulli -R /opt/Tautulli
+            systemctl daemon-reload
+            systemctl enable tautulli.service
+            systemctl start tautulli.service
+            ufw allow 8181
+            cd
+        fi
+  fi
+
+# Install uncomplicated, no-down-side utilities (formerly install-utils)
+    f_install at
+    f_install apg                     # Password generator 
+    f_install cryfs                   # Encrypted file system
+    f_install comskip                 # Commercial skipper for videos
+    f_install curl
+    f_install ddclient
+    f_install exiftool
+    f_install fail2ban
+    f_install ffmpeg
+    f_install filezilla
+    f_install ghostscript             # Compressing PDF scans
+    f_install gimp
+    f_install git && ufw allow git
+    f_install gpg
+    f_install gzip
+    f_install inotify-tools           # Do something when a file is created, deleted, or changed
+    f_install net-tools
+    f_install openssl
+    f_install openvpn
+    f_install bridge-utils
+    f_install ifupdown
+    f_install proftpd                 # For scanning to brother@oz
+    f_install resolvconf
+    f_install rsync
+    f_install ripmime                 # Process files sent by email
+    f_install ssh && ufw allow ssh
+    f_install sysbench
+    f_install tasksel
+    f_install unzip
+    # f_install uuid                  # Use uuidgen instead. It's built-in.
+    f_install vim
+    f_install wget
+    f_install xrdp
+
+if $install_apache2 ; then
+  echo "Installing apache2"
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq apache2 apache2-doc apache2-suexec-pristine
+  ufw allow 'Apache'
+  ufw allow 'Apache Full'
+  ufw allow http
+  ufw allow https
+  a2enmod ssl rewrite
+  systemctl restart apache2
+  echo "apache2 installed."
+  fi
+
+# Install Google Chrome
+    DEBIAN_FRONTEND=noninteractive apt-get install -yq wget gdebi-core
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    gdebi --n google-chrome-stable_current_amd64.deb
+    rm ./google-chrome-stable_current_amd64.deb
+
+if $install_openssl ; then
+  echo "Installing openssl"
+  OPENSSL_PACKAGES="openssl libcurl4-openssl-dev libssl-dev libcurl4-doc"
+  OPENSSL_PACKAGES+=" libidn11-dev libkrb5-dev libldap2-dev "
+  OPENSSL_PACKAGES+=" librtmp-dev libssh2-1-dev zlib1g-dev libssl-doc"
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq $OPENSSL_PACKAGES 
+  echo "openssl installed."
+  fi
+
+if $install_php ; then
+  echo "Installing php"
+  PHP_PACKAGES="php libapache2-mod-php php-mysql php-gd php-curl php-imap php-ldap"
+  PHP_PACKAGES+=" libmcrypt-dev php-mbstring php-dev php-pear"
+  PHP_PACKAGES+=" libc-client2007e mlock php-curl php-imap uw-mailutils"
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq $PHP_PACKAGES
+  phpenmod gd curl imap ldap mbstring
+  systemctl restart apache2
+  echo "php installed."
+  fi
+
+# Install rclone
+    echo "Installing rclone"
+    DEBIAN_FRONTEND=noninteractive apt-get install -yq curl
+    curl https://rclone.org/install.sh | sudo bash
+
+if $install_certbot ; then
+  echo "Installing certbot"
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq certbot python3-certbot-apache
+  echo "certbot installed."
+  fi
+
+if $install_mailutils ; then
+  echo "installing mailutils"
+  debconf-set-selections <<< "postfix postfix/relayhost $RELAYHOST"
+  debconf-set-selections <<< "postfix postfix/mailname string $MAILNAME@$DOMAIN_NAME"
+  debconf-set-selections <<< "postfix postfix/main_mailer_type string $MAIN_MAILER_TYPE"
+  apt-get install -y mailutils
+  ufw allow mail
+  echo "mailutils installed."
+  fi
+  
+if $install_webmin ; then
+  echo "Installing Webmin"
+  wget http://www.webmin.com/download/deb/webmin-current.deb
+  WEBMIN_PACKAGES="openssl libcurl4-openssl-dev libssl-dev perl libnet-ssleay-perl libauthen-pam-perl"
+  WEBMIN_PACKAGES+=" libnet-ssleay-perl libauthen-pam-perl libpam-runtime"
+  WEBMIN_PACKAGES+=" libio-pty-perl apt-show-versions python libsocket6-perl"
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq $WEBMIN_PACKAGES
+  dpkg --install webmin-current.deb
+  rm webmin-current.deb
+  ufw allow webmin
+  echo "Webmin installed."
+  fi
+
+# Install Zoom Client
+if $install_zoom ; then
+  echo "Installing Zoom Client"
+  wget https://zoom.us/client/latest/zoom_amd64.deb
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq ./zoom_amd64.deb
+  rm ./zoom_amd64.deb
+  echo "Zoom Client installed."
+  fi
+
+# Install Google Chrome
+if $install_chrome ; then
+  echo "Installing Google Chrome"
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq gdebi-core
+  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  gdebi --n google-chrome-stable_current_amd64.deb
+  rm ./google-chrome-stable_current_amd64.deb
+  echo "Google Chrome installed."
+  fi
+
+# Install lsyncd
+if $install_lsyncd ; then
+  echo "Installing lsyncd"
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq lsyncd
+  mkdir -p /etc/lsyncd
+  mkdir -p /var/log/lsyncd
+  systemctl start lsyncd
+  systemctl enable lsyncd
+  echo "lsyncd installed."
+  fi
+
+if $install_handbrake ; then
+  echo "Installing HandBrake"
+  add-apt-repository -y ppa:stebbins/handbrake-releases
+  apt-get update
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq handbrake-gtk handbrake-cli
+  echo "HandBrake installed."
+  echo "GUI version is NOT configured: "
+  echo "  Presets ($ADMIN_HOME_DIR/.HandBrake/*) need to be added."
+  fi
+
+# Ref: https://askubuntu.com/questions/1058750/new-alert-keeps-showing-up-server-returned-error-nxdomain-mitigating-potential
+# This corrects a problem in which you'll get constant syslog errors:
+#    Server returned error NXDOMAIN, mitigating potential DNS violation DVE-2018-0001, retrying transaction with reduced feature level UDP.
+# If this causes trouble, you can restore the original link with
+#    sudo ln -sf ../run/resolvconf/resolv.conf /etc/resolv.conf
+ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+
+# Invoke /usr/local/sbin/_apply-configs
+# chmod 777 $SBIN_DIR/_apply-configsHOME
+    $SBIN_DIR/_apply-configs
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+
