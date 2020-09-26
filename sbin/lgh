@@ -6,7 +6,7 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-f_require_value "MakeMKV Program Path" "${PATHNAME[makemkvcon]}"
+f_require_value "MakeMKV Program Path" "${PATHNAME[makemkvcones]}"
 f_require_value "MakeMKV Output Directory" "$MAKEMKV_OUTPUT_DIRECTORY"
 exit 0
 
