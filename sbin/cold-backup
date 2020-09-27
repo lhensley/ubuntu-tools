@@ -54,12 +54,13 @@ rsync -aloprtvER --delete $COLD_BACKUP_SOURCES "$COLD_BACKUP_DIRECTORY"
  	nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
 	nice cp "$ARCHIVE_TAR_FULL_WEEKDAY" "$ARCHIVE_TAR_FULL_MONTH"
 
-# Restore working directory
-cd "$CURRENT_DIRECTORY"
-
 if [ $COLD_BACKUP_FS_READ_ONLY ]; then
+	cd /
 	f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY
 	fi
+
+# Restore working directory
+cd "$CURRENT_DIRECTORY"
 
 # Update log
 	echo
