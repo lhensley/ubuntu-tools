@@ -251,13 +251,14 @@ function f_process_ts_file () {
 #	echo "  RELATIVE_FILE: $RELATIVE_FILE"
 
 
-#	if $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS"); then
-#		logger $0: Skipped $IN_FILE
-#	else
-#		f_file_not_in_use "$IN_FILE"
-#
- #   # Hold this part out for now. Not sure this is the place for it.
-  #  # "${PATHNAME[transcode_ripped_dvds]}" # Pick up ripped DVDs first, if any
+	if $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS"); then
+		logger $0: Skipped $IN_FILE
+	else
+		f_file_not_in_use "$IN_FILE"
+	fi
+
+    # Hold this part out for now. Not sure this is the place for it.
+    # "${PATHNAME[transcode_ripped_dvds]}" # Pick up ripped DVDs first, if any
 
 
 
