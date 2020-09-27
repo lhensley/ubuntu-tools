@@ -20,6 +20,7 @@ function f_beep () {
 	}
 
 function f_balk () {
+	# Report and log the objection
 	# Usage: f_balk "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
 		f_log_and_echo "$1" "$2"
 		f_beep
@@ -27,7 +28,7 @@ function f_balk () {
 
 function f_die () {
 	# Usage: f_die "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
-		f_balk "$1" "$2"
+		f_balk "$1" "$2" # report and log the objection
 		exit 1
 	}
 
@@ -83,7 +84,8 @@ function f_require_directory {
 
 function f_require_true {
     # Usage: f_require_true "true_or_false_proposition" "send_text_alert_true_or_false" "failure_message" ;
-	if ! $1; then f_die "$2" $3; fi
+	# Example: f_require_true false true "$0: Proposition fails. Sending text alerts."
+	if [ ! "$1" ]; then f_die "$2" $3; fi
     }
 
 function f_file_not_in_use {

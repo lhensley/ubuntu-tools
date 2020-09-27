@@ -6,6 +6,8 @@
 	f_require_true "$FUNCTIONS_ARE_DEFINED" "true" "$0: ABORTED. Functions not defined."
 	f_require_true "$VARIABLES_ARE_DEFINED" "true" "$0: ABORTED. Variables not defined."
 
+exit 1
+
 # Verify essential files and directories
 	f_require_directory "$VIDEO_WORK_DIRECTORY" "true"
 	f_require_directory "$VIDEO_STORE_DIRECTORY" "true"

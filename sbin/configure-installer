@@ -197,7 +197,7 @@ if $install_mailutils ; then
   debconf-set-selections <<< "postfix postfix/relayhost $RELAYHOST"
   debconf-set-selections <<< "postfix postfix/mailname string $MAILNAME@$DOMAIN_NAME"
   debconf-set-selections <<< "postfix postfix/main_mailer_type string $MAIN_MAILER_TYPE"
-  apt-get install -y mailutils
+  apt-get install -y mailutils postfix
   ufw allow mail
   echo "mailutils installed."
   fi

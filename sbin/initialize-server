@@ -224,6 +224,9 @@ if $install_phpmyadmin ; then
 # chmod 777 $SBIN_DIR/_apply-configsHOME
     $SBIN_DIR/_apply-configs
 
+# Update
+    upd
+
 # Report password information
     mkdir -p $(dirname $OS_INSTALL_INFO_PATH)
     echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD" > $OS_INSTALL_INFO_PATH
@@ -247,11 +250,14 @@ if $install_phpmyadmin ; then
     # echo ""
     rm $TEMP_PASSWORD_INCLUDE
 
+# Cold Restore
+    cold-restore
+
 # Last instructions
 	echo
 	echo -en "\007" # Beep
     echo "Reboot using   sudo init 6"
-    echo "THEN run       sudo cold-restore"
+    # echo "THEN run       sudo cold-restore"
     echo "THEN Reboot again."
     echo
 
