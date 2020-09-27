@@ -10,16 +10,10 @@
 	f_require_directory "$VIDEO_WORK_DIRECTORY" "true"
 	f_require_directory "$VIDEO_STORE_DIRECTORY" "true"
 
-	find "$VIDEO_WORK_DIRECTORY" -type f -name "*.ts" -exec echo Found {} \;
-	exit 1
-
-while true; do # Endless loop
-	find "$VIDEO_WORK_DIRECTORY" -type f -name "*.ts" | while read TS_FILE;
-		echo do f_process_ts_file "$TS_FILE" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY"; done
-		exit 1
-		# do f_process_ts_file "$TS_FILE" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY"; done
-	sleep 60
-done # Endless loop
+	while true; do
+		find "$VIDEO_WORK_DIRECTORY" -type f -name "*.ts" -exec f_process_ts_file "{}" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" \
+		sleep
+	done
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
