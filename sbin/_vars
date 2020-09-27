@@ -226,6 +226,8 @@ source /etc/os-release
 			MOUNT_POINT_DEFINITION[/mnt/Silver5TB-B]="UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0"
 		MOUNT_POINT_DESCRIPTION[/mnt/5TBD]="# Black 5TB (D) External Seagate"
 			MOUNT_POINT_DEFINITION[/mnt/5TBD]="UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/5TBD ext4 ro,defaults 0 0"
+		MOUNT_POINT_DESCRIPTION[/mnt/5TBE]="# Black 5TB (D) External Seagate"
+			MOUNT_POINT_DEFINITION[/mnt/5TBE]="UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 ro,defaults 0 0"
 		MOUNT_POINT_DESCRIPTION[/home/plex-swap/uploads]="Bind mount"
 			MOUNT_POINT_DEFINITION[/home/plex-swap/uploads]="#/mnt/cloteal/PlexUploads /home/plex-swap/uploads none bind 0 0"
 		MOUNT_POINT_DESCRIPTION[/home/plex-swap/downloads]="Bind mount"
