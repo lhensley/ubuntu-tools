@@ -3,8 +3,8 @@
 # PURPOSE: Installs basic software, initializes, and configures
 # IMPORTANT: Check variables at the top of the script before running it!
 
-install_mysql_server=true
-install_phpmyadmin=true
+install_mysql_server=false
+install_phpmyadmin=false
 install_plexmediaserver=true
 install_tautulli=true
 
@@ -223,6 +223,8 @@ if $install_phpmyadmin ; then
 # Invoke /usr/local/sbin/_apply-configs
 # chmod 777 $SBIN_DIR/_apply-configsHOME
     $SBIN_DIR/_apply-configs
+
+exit 1
 
 # Report password information
     mkdir -p $(dirname $OS_INSTALL_INFO_PATH)
