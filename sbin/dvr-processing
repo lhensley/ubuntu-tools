@@ -10,7 +10,8 @@
 	f_require_directory "$VIDEO_WORK_DIRECTORY" "true"
 	f_require_directory "$VIDEO_STORE_DIRECTORY" "true"
 
-exit 1
+	find "$VIDEO_WORK_DIRECTORY" -type f -name "*.ts"
+	exit 1
 
 while true; do # Endless loop
 	find "$VIDEO_WORK_DIRECTORY" -type f -name "*.ts" | while read TS_FILE;
