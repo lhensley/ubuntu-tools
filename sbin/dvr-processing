@@ -11,7 +11,8 @@
 	f_require_directory "$VIDEO_STORE_DIRECTORY" "true"
 
 	while true; do
-		find "$VIDEO_WORK_DIRECTORY" -type f -name "*.ts" -exec echo Lane {} \
+		find "$VIDEO_WORK_DIRECTORY" -type f -name "*.ts"
+		# find "$VIDEO_WORK_DIRECTORY" -type f -name "*.ts" -exec echo Lane {} \
 		# find "$VIDEO_WORK_DIRECTORY" -type f -name "*.ts" | while read TS_FILE; do f_process_ts_file "$TS_FILE" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY"; done
 		sleep 60
 	done
