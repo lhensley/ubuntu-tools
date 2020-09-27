@@ -6,6 +6,13 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
+# Archive the cold backup
+ 	mkdir -p "$THIS_ARCHIVE_DIRECTORY"
+ 	nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
+	nice cp "$ARCHIVE_TAR_FULL_WEEKDAY" "$ARCHIVE_TAR_FULL_MONTH"
+
+exit 0
+
 f_require_value "MakeMKV Program Path" "${PATHNAME[makemkvcones]}"
 f_require_value "MakeMKV Output Directory" "$MAKEMKV_OUTPUT_DIRECTORY"
 exit 0
