@@ -6,10 +6,14 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
+set -x
+
 # Archive the cold backup
  	mkdir -p "$THIS_ARCHIVE_DIRECTORY"
  	nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
 	nice cp "$ARCHIVE_TAR_FULL_WEEKDAY" "$ARCHIVE_TAR_FULL_MONTH"
+
+set +x
 
 exit 0
 
