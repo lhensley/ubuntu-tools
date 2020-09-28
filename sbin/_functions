@@ -204,12 +204,12 @@ function f_move_one_plex_file () {
 	SOURCE_FILE="$1"
 	TARGET_FILE="$2"
 
-	SHORT_SOURCE=$(basename "SOURCE_FILE")
+	SHORT_SOURCE=$(basename "$SOURCE_FILE")
+	TARGET_DIR=$(dirname "$TARGET_FILE")
 	f_log_and_echo "$0: Moving $SHORT_SOURCE" false
 	if ! $(f_is_file "$SOURCE_FILE");                   then f_balk "$0: Source file not found: $1" false;               return; fi 
-	mkdir -p $(dirname "$TARGET_FILE")
-	if ! $(f_is_directory "$(dirname '$TARGET_FILE')"); then f_balk "$0: Target directory not found: $1" false;               return; fi 
-	TARGET_DIR=$(dirname "$TARGET_FILE")
+	mkdir -p $TARGET_DIR
+	if ! $(f_is_directory "$TARGET_DIR"); then f_balk "$0: Target directory not found: $1" false;               return; fi 
 	chown plex:plex $TARGET_DIR
 	chmod 775 $TARGET_DIR
 	mv "$SOURCE_FILE" "$TARGET_DIR/"
