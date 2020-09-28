@@ -207,7 +207,7 @@ function f_move_one_plex_file () {
 	f_log_and_echo "$0: Moving '$SOURCE_FILE' to '$TARGET_FILE'" false
 	f_require_file "$SOURCE_FILE" true
 	mkdir -p $(dirname "$TARGET_FILE")
-	f_require_directory -p $(dirname "$TARGET_FILE") true
+	f_require_directory -p "$(dirname '$TARGET_FILE')" true
 	chown plex:plex $(dirname "$TARGET_FILE")
 	chmod 775 $(dirname "$TARGET_FILE")
 	mv "$SOURCE_FILE" "$TARGET_FILE"
