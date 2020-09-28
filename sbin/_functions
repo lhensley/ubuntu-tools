@@ -200,15 +200,23 @@ function f_set_plex_media_recursive_permissions () {
     find "$VIDEO_STORE_DIRECTORY" -type f -print -exec chmod 664 {} \;
 	}
 
-function f_move_one_file () {
-	IN_FILE="$1"
-	ROOT_IN_PATH="$2"
-	ROOT_OUT_PATH="$3"
+function f_move_one_plex_file () {
+	SOURCE_FILE="$1"
+	TARGET_FILE="$2"
 
-	ROOT_IN_PATH_LENGTH=${#ROOT_IN_PATH}
-
-	RELATIVE_FILE_LENGTH=$[IN_FILE_LENGTH-ROOT_IN_PATH_LENGTH-1]
-	RELATIVE_FILE="${IN_FILE: -$RELATIVE_FILE_LENGTH}" # Remove ROOT_IN_PATH
+	f_log_and_echo "$0: Moving '$SOURCE_FILE' to '$TARGET_FILE'" false
+	f_require_file "$SOURCE_FILE"
+	f_require_file "$TARGET_FILE"
+	mkdir -p $(dirname "$TARGET_FILE")
+	f_require_directory -p $(dirname "$TARGET_FILE")
+	chown plex:plex $(dirname "$TARGET_FILE")
+	chmod 775 $(dirname "$TARGET_FILE")
+	mv "$SOURCE_FILE" "$TARGET_FILE"
+	if [ $? -gt 0 ]; then
+		die "$0: FATAL: Can't move '$SOURCE_FILE' to '$TARGET_FILE'"
+		fi
+	chown plex:plex "$TARGET_FILE"
+	chmod 664 "$TARGET_FILE"
 	}
 
 function f_process_ts_file () {
@@ -242,13 +250,6 @@ function f_process_ts_file () {
 	f_require_value "STORE_FILE" "$STORE_FILE" false
 	f_require_value "plex_main_library_directory" "$PLEX_LIVE_APPLICATION_SUPPORT" false
 
-	#echo IN_FILE: $IN_FILE
-	#echo "  OUT_FILE: $OUT_FILE"
-	#echo "  STORE_FILE: $STORE_FILE"
-	#echo "  WORK_ROOT_FILE: $WORK_ROOT_PATH"
-	#echo "  STORE_ROOT_FILE: $STORE_ROOT_PATH"
-	#echo "  RELATIVE_FILE: $RELATIVE_FILE"
-
 	if ! $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS"); then
 		
 		# Hold this part out for now. Not sure this is the place for it.
@@ -269,8 +270,7 @@ function f_process_ts_file () {
 				logger $0: Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))
 			fi # End of check for transcoding failure
 		# Move all .m4v files from $VIDEO_WORK_DIRECTORY to $VIDEO_STORE_DIRECTORY.
-#			find "$VIDEO_WORK_DIRECTORY" -type f -name "*.m4v" | while read M4V_FILE; do f_move_one_file "$M4V_FILE" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY"; done
-			find "$VIDEO_WORK_DIRECTORY" -type f -name "*.m4v" | while read M4V_FILE; do echo Move "$M4V_FILE"; echo "  from $VIDEO_WORK_DIRECTORY"; echo "  to $VIDEO_STORE_DIRECTORY"; done
+			find "$VIDEO_WORK_DIRECTORY" -type f -name "*.m4v" | while read M4V_FILE; do f_move_one_plex_file "$OUT_FILE" "$STORE_FILE"; done
 		echo "Sleeping 60"
 		sleep 60
 		fi
