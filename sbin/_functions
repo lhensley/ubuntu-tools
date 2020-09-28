@@ -242,127 +242,38 @@ function f_process_ts_file () {
 	f_require_value "STORE_FILE" "$STORE_FILE" false
 	f_require_value "plex_main_library_directory" "$PLEX_LIVE_APPLICATION_SUPPORT" false
 
-	echo IN_FILE: $IN_FILE
-	echo "  OUT_FILE: $OUT_FILE"
-	echo "  STORE_FILE: $STORE_FILE"
-	echo "  WORK_ROOT_FILE: $WORK_ROOT_PATH"
-	echo "  STORE_ROOT_FILE: $STORE_ROOT_PATH"
-	echo "  RELATIVE_FILE: $RELATIVE_FILE"
+	#echo IN_FILE: $IN_FILE
+	#echo "  OUT_FILE: $OUT_FILE"
+	#echo "  STORE_FILE: $STORE_FILE"
+	#echo "  WORK_ROOT_FILE: $WORK_ROOT_PATH"
+	#echo "  STORE_ROOT_FILE: $STORE_ROOT_PATH"
+	#echo "  RELATIVE_FILE: $RELATIVE_FILE"
 
-	return
+	if ! $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS"); then
+		
+		# Hold this part out for now. Not sure this is the place for it.
+		# "${PATHNAME[transcode_ripped_dvds]}" # Pick up ripped DVDs first, if any
 
-	if $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS"); then
-		logger $0: Skipped $IN_FILE
-	else
-		f_file_not_in_use "$IN_FILE"
-	fi
-
-    # Hold this part out for now. Not sure this is the place for it.
-    # "${PATHNAME[transcode_ripped_dvds]}" # Pick up ripped DVDs first, if any
-
-
-
-
-
-
-
-
-
-
-
-	#NEW_DIRECTORY=$(dirname "$OUT_FILE")
-	f_require_file "$IN_FILE" false
-	#if ! $(f_is_directory "$ROOT_IN_PATH"); then f_balk "$0: Non-existent root in directory $ROOT_IN_PATH." false; fi
-
-	# Make the directory for out file
-	mkdir -p "$NEW_DIRECTORY"
-	if [ $? -ne 0 ]; then # If mkdir failed failed ...
-		f_die "$0: FAILED making $NEW_DIRECTORY at line ${BASH_LINENO[$i]}" true
-		sleep 10 # Add some time here in case we're racing through a failure loop.
-		return
-	fi
-	chown plex:plex "$NEW_DIRECTORY"
-	chmod 664 "$NEW_DIRECTORY"
-
-	# Move $IN_FILE to $OUT_FILE
-	f_log_and_echo "$0: Moving $(basename \"$IN_FILE\")" false
-
-	IN_FILE="$1"
-	WORK_ROOT_PATH="$2"
-	STORE_ROOT_PATH="$3"
-	OUT_EXT="m4v"
-
-	f_log_and_echo "$0: TEST $IN_FILE" false
-
-	if ! $(f_is_file "$IN_FILE"); then f_balk "$0: Cannot find $IN_FILE to process it" false; return; fi
-	if ! $(f_is_directory "$WORK_ROOT_PATH"); then f_balk "$0: Cannot process $IN_FILE: Directory not defined: $WORK_ROOT_PATH" false; return; fi
-	if ! $(f_is_directory "$STORE_ROOT_PATH"); then f_balk "$0: Cannot process $IN_FILE: Directory not defined: $STORE_ROOT_PATH" false; return; fi
-	if ! $(f_variable_has_content "$IGNORE_TV_SHOWS"); then f_balk "$0: Cannot process $IN_FILE: \$IGNORE_TV_SHOWS not defined" false; return; fi
-
-	WORK_ROOT_PATH_LENGTH=${#WORK_ROOT_PATH}
-
-	IN_FILE_LENGTH=${#IN_FILE}
-	IN_FILE_EXT="${IN_FILE##*.}"
-	IN_FILE_EXT_LENGTH="${#IN_FILE_EXT}"
-
-	RELATIVE_FILE_LENGTH=$[IN_FILE_LENGTH-WORK_ROOT_PATH_LENGTH-1]
-	RELATIVE_FILE=${IN_FILE: -$RELATIVE_FILE_LENGTH} # First remove WORK_ROOT_PATH
-	RELATIVE_FILE_NO_EXT_LENGTH=$[RELATIVE_FILE_LENGTH-IN_FILE_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
-	RELATIVE_FILE_NO_EXT=${RELATIVE_FILE:0:RELATIVE_FILE_NO_EXT_LENGTH} # Then remove IN_FILE_EXT
-	OUT_FILE="$WORK_ROOT_PATH/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
-	STORE_FILE="$STORE_ROOT_PATH/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
-	STORE_FILE="$STORE_ROOT_PATH/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
-
-	if ! $(f_variable_has_content "$OUT_FILE"); 
-		then f_balk "$0: Cannot process $IN_FILE: \$OUT_FILE not defined" false; return; fi
-	if ! $(f_variable_has_content "$STORE_FILE"); 
-		then f_balk "$0: Cannot process $IN_FILE: \$STORE_FILE not defined" false; return; fi
-	if ! $(f_variable_has_content "$PLEX_LIVE_APPLICATION_SUPPORT"); 
-		then f_balk "$0: Cannot process $IN_FILE: \$PLEX_LIVE_APPLICATION_SUPPORT" false; return; fi
-
-	if $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS"); then
-		f_balk "$0: Skipped $IN_FILE because it's filtered out." false
-	else
-		if ! $(f_in_use "$IN_FILE"); then
-			f_balk "$0: Skipped $IN_FILE because it's in use." false
+		# Do the transcoding
+		TIMESTART=$(currenttimeinseconds)
+		IN_FILE_BASE=$(basename "$IN_FILE")
+		f_log_and_echo "$0: Transcoding $IN_FILE" false
+		nice "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$IN_FILE" -o "$OUT_FILE"
+		exit_status=$?
+		chown plex:plex "$OUT_FILE"
+		chmod 664 "$OUT_FILE"
+		if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
+				f_balk "$HANDBRAKE_CLI: FAILED with $exit_status for $IN_FILE" false
+			else
+				rm "$IN_FILE" # Delete input file
+				logger $0: Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))
+			fi # End of check for transcoding failure
+		# Move all .m4v files from $VIDEO_WORK_DIRECTORY to $VIDEO_STORE_DIRECTORY.
+#			find "$VIDEO_WORK_DIRECTORY" -type f -name "*.m4v" | while read M4V_FILE; do f_move_one_file "$M4V_FILE" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY"; done
+			find "$VIDEO_WORK_DIRECTORY" -type f -name "*.m4v" | while read M4V_FILE; do echo Move "$M4V_FILE"; echo "  from $VIDEO_WORK_DIRECTORY"; echo "  to $VIDEO_STORE_DIRECTORY"; done
+		echo "Sleeping 60"
+		sleep 60
 		fi
-	fi
-
-	# Hold this part out for now. Not sure this is the place for it.
-	# "${PATHNAME[transcode_ripped_dvds]}" # Pick up ripped DVDs first, if any
-
-	# Do the transcoding
-	TIMESTART=$(currenttimeinseconds)
-	IN_FILE_BASE=$(basename "$IN_FILE")
-	f_log_and_echo "$0: Transcoding $IN_FILE" false
-	nice "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$IN_FILE" -o "$OUT_FILE"
-	exit_status=$?
-	chown plex:plex "$OUT_FILE"
-	chmod 664 "$OUT_FILE"
-	if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-			f_balk "$HANDBRAKE_CLI: FAILED with $exit_status for $IN_FILE" false
-		else
-			rm "$IN_FILE" # Delete input file
-			logger $0: Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))
-		fi # End of check for transcoding failure
-	# Move all .m4v files from $VIDEO_WORK_DIRECTORY to $VIDEO_STORE_DIRECTORY.
-		find "$VIDEO_WORK_DIRECTORY" -type f -name "*.m4v" | while read M4V_FILE; 
-			do f_move_one_file "$M4V_FILE" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY"; done
-
-	if [ $? -ne 0 ]; then # If the move failed ...
-		f_balk "$0: FAILED to move $IN_FILE to $NEW_DIRECTORY" false
-	    sleep 10 # Add some time here in case we're racing through a failure loop.
-		return
-	fi
-
-  	chown plex:plex "$OUT_FILE"
-	chmod 664 "$OUT_FILE"
-	}
-
-
-function f_lane_test () {
-	echo "Test A"
-	echo Plex Dir: $PLEX_LIVE_APPLICATION_SUPPORT
 	}
 
 
