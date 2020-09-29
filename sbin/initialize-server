@@ -43,10 +43,6 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
 # Do updates
     upd
 
-# The machine will brick without these drivers.
-# Next time a new ISO is generated, this section should be removed because its also in the configure-installer script.
-apt-get -y install nvidia-driver-390
-
 # Add peripherals to /etc/fstab
     for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do 
         mkdir -p "/mnt/$KEY"
@@ -82,7 +78,7 @@ if $install_plexmediaserver ; then
       wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -
       apt-get -y update
       apt-get install --reinstall -o Dpkg::Options::="--force-confold" plexmediaserver
-      # f_install plexmediaserver
+      f_install plexmediaserver
       ufw allow 32400/tcp # if not already specified
       echo "Plex Media Server installed."
     if $install_tautulli ; then
