@@ -2,10 +2,10 @@
 # /usr/local/sbin/script-setup
 
 # Load global variables
-source "/usr/local/sbin/_vars"
+source "_vars"
 
 # Load global functions
-source "/usr/local/sbin/_functions"		# NOTE: _vars must be sourced first, or this will fail.
+source "_functions"		# NOTE: _vars must be sourced first, or this will fail.
 
 # Set user privileges to use for running tasks
 # By default, $RUN_AS is the user who runs the program. If run with sudo, that has to be updated from root.
