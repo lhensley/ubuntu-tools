@@ -53,8 +53,8 @@ function f_process_handbrake_source_video_file () {
 	USE_TV_FILTERS=$6        # Default is false
 
 	if ! $(f_is_file "$IN_FILE");                       then f_balk "$0: Source file not found: $1" false;  return; fi 
-	if ! $(f_is_directory "$SOURCE_ROOT");              then f_balk "$0: Source directory not found: $1"    false; return; fi 
-	if ! $(f_is_directory "$TARGET_ROOT");              then f_balk "$0: Target directory not found: $1"    false; return; fi 
+	if ! $(f_is_directory "$SOURCE_ROOT");              then f_balk "$0: Source directory not found: $SOURCE_ROOT"    false; return; fi 
+	if ! $(f_is_directory "$TARGET_ROOT");              then f_balk "$0: Target directory not found: $TARGET_ROOT"    false; return; fi 
 	if ! $(f_variable_has_content "$IGNORE_TV_SHOWS");  then f_balk "$0: TV filter undefined" false;        return; fi
 
 	SOURCE_ROOT_LENGTH=${#SOURCE_ROOT}
