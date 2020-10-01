@@ -8,8 +8,6 @@
 	if [ ! $STAGING_FUNCTIONS_ARE_DEFINED ]; then echo $0: Staging functions not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-    set -x
-
     # Testing a Plex DVR single iteration
     f_iterate_handbrake_source_video_files "*.ts" "m4v" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" true true
 
