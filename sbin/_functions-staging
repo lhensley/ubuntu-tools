@@ -118,7 +118,8 @@ f_iterate_handbrake_source_video_files() {
 	USE_TV_FILTERS=$6              # Should only be true when converting Plex DVR files. Default is false
 
 	# ONE pass through all matching source files
-	find "$VIDEO_WORK_DIRECTORY" -type f -name "$SOURCE_FILE_NAME_PATTERN" | while read THIS_FILE; do f_process_handbrake_source_video_file "$THIS_FILE" "$OUT_EXT" "$SOURCE_ROOT" "$TARGET_ROOT" $SET_PLEX_PERMISSIONS $USE_TV_FILTERS; done
+	find "$VIDEO_WORK_DIRECTORY" -type f -name "$SOURCE_FILE_NAME_PATTERN" | while read THIS_FILE; \
+		do f_process_handbrake_source_video_file "$THIS_FILE" "$OUT_EXT" "$SOURCE_ROOT" "$TARGET_ROOT" $SET_PLEX_PERMISSIONS $USE_TV_FILTERS; done
 	}
 
 #########################################################################################################
