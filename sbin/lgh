@@ -8,8 +8,22 @@
 	if [ ! $STAGING_FUNCTIONS_ARE_DEFINED ]; then echo $0: Staging functions not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
+
+    function f_testme() {
+        echo TESTVAL: $TESTVAL
+        }
+
+    TESTVAL="This is a test."
+    f_testme
+
+
     # Testing a Plex DVR single iteration
     f_iterate_handbrake_source_video_files "*.ts" "m4v" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" true true
+
+    # Looks good to here.
+    # NEXT PRIORITY: What about Zoom files where the output file name needs to change to that of parent directory?
+    #   zoom_0.mp4; zoom_1? others?
+    # Is this an issue for MKV rips also?
 
     exit 1
 
