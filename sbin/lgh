@@ -15,6 +15,7 @@
 
     TESTVAL="This is a test."
     f_testme
+    exit 1
 
 
     # Testing a Plex DVR single iteration
