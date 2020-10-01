@@ -295,6 +295,9 @@ source /etc/os-release
 
 # Plex Media Server
 # DEPENDENT on Archives Directories definitions above
+	PLEX_USER="plex"
+	PLEX_VIDEO_FILE_PERMISSIONS=664
+	PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS=775
 	VIDEO_WORK_FILE_SYSTEM="/"
 	VIDEO_STORE_FILE_SYSTEM="/"
 	VIDEO_WORK_DIRECTORY="/var/lib/plexmediaserver/Library/work"

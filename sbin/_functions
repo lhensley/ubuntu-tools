@@ -136,9 +136,6 @@ function f_local_copy() {
 	# --delete = delete extraneous files from dest dirs
 	}
 
-# Set a flag to confirm that the functions are defined
-	FUNCTIONS_ARE_DEFINED=true
-
 function f_install() {
 	if ! [ -x "$(command -v $1)" ]; then   
 		logger $0 Installing $1
@@ -193,11 +190,11 @@ function f_mount_ro_fs_as_ro () {
 
 function f_set_plex_media_recursive_permissions () {
 	f_require_directory "$VIDEO_WORK_DIRECTORY" false
-    find "$VIDEO_WORK_DIRECTORY" -type d -print -exec chmod 775 {} \;
-    find "$VIDEO_WORK_DIRECTORY" -type f -print -exec chmod 664 {} \;
+    find "$VIDEO_WORK_DIRECTORY" -type d -print -exec chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS {} \;
+    find "$VIDEO_WORK_DIRECTORY" -type f -print -exec chmod $PLEX_VIDEO_FILE_PERMISSIONS {} \;
 	f_require_directory "$VIDEO_STORE_DIRECTORY" false
-    find "$VIDEO_STORE_DIRECTORY" -type d -print -exec chmod 775 {} \;
-    find "$VIDEO_STORE_DIRECTORY" -type f -print -exec chmod 664 {} \;
+    find "$VIDEO_STORE_DIRECTORY" -type d -print -exec chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS {} \;
+    find "$VIDEO_STORE_DIRECTORY" -type f -print -exec chmod $PLEX_VIDEO_FILE_PERMISSIONS {} \;
 	}
 
 function f_move_one_plex_file () {
@@ -210,13 +207,21 @@ function f_move_one_plex_file () {
 	if ! $(f_is_file "$SOURCE_FILE");                   then f_balk "$0: Source file not found: $1" false;               return; fi 
 	mkdir -p "$TARGET_DIR"
 	if ! $(f_is_directory "$TARGET_DIR"); then f_balk "$0: Target directory not found: $TARGET_DIR" false;               return; fi 
-	chown plex:plex "$TARGET_DIR"
-	chmod 775 "$TARGET_DIR"
+	chown $PLEX_USER:$PLEX_USER "$TARGET_DIR"
+	chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS "$TARGET_DIR"
 	mv "$SOURCE_FILE" "$TARGET_DIR/"
 	exit_code=$?
 	if [ $exit_code -ne 0 ];										then f_balk "$0: Can't move '$SOURCE_FILE' to '$TARGET_FILE'"; return; fi
-	chown plex:plex "$TARGET_FILE"
-	chmod 664 "$TARGET_FILE"
+	chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
+	chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
+	}
+
+function f_relocate_files () {
+	THIS_SOURCE_ROOT_DIRECTORY="$1"
+	THIS_TARGET_ROOT_DIRECTORY="$2"
+	# CRITICAL: How to define the file name mast (with imbedded wildcard)
+	# Move all .m4v files from $VIDEO_WORK_DIRECTORY to $VIDEO_STORE_DIRECTORY.
+		find "$THIS_SOURCE_ROOT_DIRECTORY" -type f -name "*.m4v" | while read THIS_FILE; do f_move_one_plex_file "$THIS_FILE" "$THIS_TARGET_ROOT_DIRECTORY/$THIS_FILE"; done
 	}
 
 function f_process_ts_file () {
@@ -261,8 +266,8 @@ function f_process_ts_file () {
 		f_log_and_echo "$0: Transcoding $IN_FILE" false
 		nice "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$IN_FILE" -o "$OUT_FILE"
 		exit_status=$?
-		chown plex:plex "$OUT_FILE"
-		chmod 664 "$OUT_FILE"
+		chown $PLEX_USER:$PLEX_USER "$OUT_FILE"
+		chmod $PLEX_VIDEO_FILE_PERMISSIONS "$OUT_FILE"
 		if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
 				f_balk "$HANDBRAKE_CLI: FAILED with $exit_status for $IN_FILE" true
 			else
@@ -297,6 +302,9 @@ function f_run_apt_updates() {
 
 
 #########################################################################################################
+
+# Set a flag to confirm that the functions are defined
+	FUNCTIONS_ARE_DEFINED=true
 
 # Log the completion
 if [ ! $DEBUG_MODE ]; then

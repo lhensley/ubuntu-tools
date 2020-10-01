@@ -1,0 +1,129 @@
+#!/bin/bash
+# _functions
+# Bash functions for Lane applications
+
+# Check to ensure that variables are defined
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Set a flag to confirm that the functions are not yet defined
+	STAGING_FUNCTIONS_ARE_DEFINED=false
+
+###################################################################################################################################3
+
+function f_move_one_file () {
+	# This creates the directory structure for the target if it doesn't aleady exist
+	# and applies Plex Library directory and file permissions if requested.
+	SOURCE_FILE="$1"         # Full path name of source file
+	TARGET_FILE="$2"         # Full target path name of target file
+	SET_PLEX_PERMISSIONS=$3  # If the output file is part of a Plex Library, this is true; otherwise (default) false
+	SHORT_SOURCE=$(basename "$SOURCE_FILE")
+	TARGET_DIR=$(dirname "$TARGET_FILE")
+	f_log_and_echo "$0: Moving $SHORT_SOURCE" false
+	if ! $(f_is_file "$SOURCE_FILE");	  then f_balk "$0: Source file not found: $1" false;                return; fi 
+	mkdir -p "$TARGET_DIR"
+	if ! $(f_is_directory "$TARGET_DIR"); then f_balk "$0: Target directory not found: $TARGET_DIR" false;  return; fi 
+	if $SET_PLEX_PERMISSIONS; then
+		chown $PLEX_USER:$PLEX_USER "$TARGET_DIR"
+		chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS "$TARGET_DIR"
+		fi
+	mv "$SOURCE_FILE" "$TARGET_DIR/"
+	exit_code=$?
+	if [ $exit_code -ne 0 ];				  then f_balk "$0: Can't move '$SOURCE_FILE' to '$TARGET_FILE'";    return; fi
+	if $SET_PLEX_PERMISSIONS; then
+		chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
+		chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
+		fi
+	}
+
+function f_move_completed_handbrake_files () {
+	SOURCE_ROOT="$1"        # For Plex DVR, this is $VIDEO_WORK_DIRECTORY
+	TARGET_ROOT="$2"        # For Plex DVR, this is $VIDEO_STORE_DIRECTORY
+	FILE_NAME_PATTERN="$3"  # For most HandBrake output, this is "*.m4v"
+	# Move all "$FILE_NAME_PATTERN" files from "$SOURCE_ROOT" to "$TARGET_ROOT".
+		find "$SOURCE_ROOT" -type f -name "$FILE_NAME_PATTERN" | while read THIS_FILE; do f_move_one_plex_file "$THIS_FILE" "$TARGET_ROOT/$THIS_FILE"; done
+	}
+
+function f_process_handbrake_source_video_file () {
+# function f_process_ts_file () {
+	IN_FILE="$1"
+	OUT_EXT="$2"             # Normally this is "m4v"
+	SOURCE_ROOT="$3"
+	TARGET_ROOT="$4"
+	SET_PLEX_PERMISSIONS=$5  # If the output file is part of a Plex Library, this is true; otherwise (default) false
+	USE_TV_FILTERS=$6        # Default is false
+
+	if ! $(f_is_file "$IN_FILE");                       then f_balk "$0: Source file not found: $1" false;  return; fi 
+	if ! $(f_is_directory "$SOURCE_ROOT");              then f_balk "$0: Source directory not found: $1"    false; return; fi 
+	if ! $(f_is_directory "$TARGET_ROOT");              then f_balk "$0: Target directory not found: $1"    false; return; fi 
+	if ! $(f_variable_has_content "$IGNORE_TV_SHOWS");  then f_balk "$0: TV filter undefined" false;        return; fi
+
+	SOURCE_ROOT_LENGTH=${#SOURCE_ROOT}
+
+	IN_FILE_LENGTH=${#IN_FILE}
+	IN_FILE_EXT="${IN_FILE##*.}"
+	IN_FILE_EXT_LENGTH="${#IN_FILE_EXT}"
+
+	RELATIVE_FILE_LENGTH=$[IN_FILE_LENGTH-SOURCE_ROOT_LENGTH-1]
+	RELATIVE_FILE=${IN_FILE: -$RELATIVE_FILE_LENGTH} # First remove SOURCE_ROOT
+	RELATIVE_FILE_NO_EXT_LENGTH=$[RELATIVE_FILE_LENGTH-IN_FILE_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
+	RELATIVE_FILE_NO_EXT=${RELATIVE_FILE:0:RELATIVE_FILE_NO_EXT_LENGTH} # Then remove IN_FILE_EXT
+	OUT_FILE="$SOURCE_ROOT/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
+	TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
+	TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT.$OUT_EXT"
+
+	if ! $(f_variable_has_content "$OUT_FILE");      then f_balk "$0: Output file undefined" false; return;   fi
+	if ! $(f_variable_has_content "$RELATIVE_FILE"); then f_balk "$0: Relative file undefined" false; return; fi
+	if ! $(f_variable_has_content "$TARGET_FILE");   then f_balk "$0: Store file undefined" false; return;    fi
+
+	######################################################333#######################
+	echo IN_FILE:  $IN_FILE
+	echo OUT_FILE: $OUT_FILE
+	echo
+	return
+
+	if ! $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS") || ! $USE_TV_FILTERS; then
+		
+		# Do the transcoding
+		TIMESTART=$(currenttimeinseconds)
+		IN_FILE_BASE=$(basename "$IN_FILE")
+		f_log_and_echo "$0: Transcoding $IN_FILE" false
+		nice "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$IN_FILE" -o "$OUT_FILE"
+		exit_status=$?
+		if $SET_PLEX_PERMISSIONS; then
+			chown $PLEX_USER:$PLEX_USER "$OUT_FILE"
+			chmod $PLEX_VIDEO_FILE_PERMISSIONS "$OUT_FILE"
+			fi
+		if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
+				f_balk "$HANDBRAKE_CLI: FAILED with $exit_status for $IN_FILE" true
+			else
+				rm "$IN_FILE" # Delete input file
+				f_log_and_echo "$0: Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" false
+				echo
+			fi # End of check for transcoding failure
+		fi
+	}
+
+f_iterate_handbrake_source_video_files() {
+	SOURCE_FILE_NAME_PATTERN="$1"  # For Plex DVR, this is "*.ts"
+	                               # For DVDs ripped with MakeMKV, this is "*.mkv"
+	OUT_EXT="$2"			           # Normally this is "m4v"
+	SOURCE_ROOT="$3"               # For Plex DVR, this is $VIDEO_WORK_DIRECTORY
+								   # For DVDs ripped with MakeMKV, this is $MAKEMKV_OUTPUT_DIRECTORY
+	TARGET_ROOT="$4"               # For Plex DVR, this is $VIDEO_STORE_DIRECTORY
+	SET_PLEX_PERMISSIONS=$5        # If the output file is part of a Plex Library, this is true; otherwise (default) false
+	USE_TV_FILTERS=$6              # Should only be true when converting Plex DVR files. Default is false
+
+	# ONE pass through all matching source files
+	find "$VIDEO_WORK_DIRECTORY" -type f -name "$SOURCE_FILE_NAME_PATTERN" | while read THIS_FILE; do f_process_handbrake_source_video_file "$THIS_FILE" "$SOURCE_ROOT" "$TARGET_ROOT" "$OUT_EXT" $SET_PLEX_PERMISSIONS $USE_TV_FILTERS; done
+	}
+
+#########################################################################################################
+
+# Set a flag to confirm that the functions are defined
+	STAGING_FUNCTIONS_ARE_DEFINED=true
+
+# Log the completion
+if [ ! $DEBUG_MODE ]; then
+	logger $0: Functions loaded from _functions
+	fi
+

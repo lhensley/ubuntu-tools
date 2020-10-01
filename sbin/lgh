@@ -3,10 +3,20 @@
 
 # Include script setup file
 	source script-setup
+    source _functions-staging
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $STAGING_VARIABLES_ARE_DEFINED ]; then echo $0: Staging variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
     set -x
+
+    # Testing a Plex DVR single iteration
+    f_iterate_handbrake_source_video_files "*.ts" "m4v" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" true true
+
+    exit 1
+
+
+
 
     # Tested through Ubuntu 20.04.1
     # Install Plex Media Server
