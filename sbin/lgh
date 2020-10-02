@@ -9,12 +9,6 @@
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 
-    function f_testme() {
-        echo TESTVAL: $TESTVAL
-        }
-
-    TESTVAL="This is a test."
-    f_testme
     exit 1
 
 

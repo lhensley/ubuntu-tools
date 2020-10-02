@@ -317,8 +317,26 @@ source /etc/os-release
 	MAILNAME=$HOSTNAME
 	MAIN_MAILER_TYPE="'Internet with smarthost'"
 	RELAYHOST="mail.twc.com"                                          # Spectrum Internet (DEFAULT for Austin)
-	if [ $HOSTNAME == "nuc01" ]; then RELAYHOST="mail.mchsi.com"; fi     # Mediacom Cable Internet
-	if [ $HOSTNAME == "red" ]; then RELAYHOST="mail.mchsi.com"; fi       # Mediacom Cable Internet
+	if [ $HOSTNAME == "nuc01" ]; then RELAYHOST="mail.mchsi.com"; fi  # Mediacom Cable Internet
+	if [ $HOSTNAME == "red" ]; then RELAYHOST="mail.mchsi.com"; fi    # Mediacom Cable Internet
+
+# Video Processing Defaults
+	SOURCE_ROOT="/dev/null"               # For Plex DVR, this is $VIDEO_WORK_DIRECTORY
+								          # For DVDs ripped with MakeMKV, this is $MAKEMKV_OUTPUT_DIRECTORY
+	unset SOURCE_FILE_NAME_PATTERN        # For Plex DVR, this is "*.ts"
+	                                      # For DVDs ripped with MakeMKV, this is "*.mkv"
+	TARGET_ROOT="/dev/null"               # For Plex DVR, this is $VIDEO_STORE_DIRECTORY
+	unset TARGET_FILE_EXTENSION           # Normally this is ".m4v"
+	SET_PLEX_PERMISSIONS=false            # If the output file is part of a Plex Library, this is true; otherwise (default) false
+	USE_TV_FILTERS=false                  # Should only be true when converting Plex DVR files. Default is false
+	FLATTEN_TARGET_DIRECTORY=false        # Helpful for processing Zoom files or DVD rips. Default is false
+	USE_PARENT_DIR_AS_BASENAME=false      # Can be helpful when $FLATTEN_TARGET_DIRECTORY is true
+	PREPEND_PARENT_DIR_TO_BASENAME=false  # If true, $USE_PARENT_DIR_AS_BASENAME is ignored
+	APPEND_UUID_TO_TARGET_FILE=false	      # Helps create uniqueness so you can have multiple versions of a single DVR episode
+	unset TARGET_DIR_OWNER                # Will be used only if defined
+	unset TARGET_DIR_PERMISSIONS          # Will be used only if defined
+	unset TARGET_FILE_OWNER               # Will be used only if defined
+	unset TARGET_FILE_PERMISSIONS         # Will be used only if defined
 
 # ssh
 # DEPENENT on timestamps above
