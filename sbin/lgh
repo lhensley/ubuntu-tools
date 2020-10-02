@@ -26,6 +26,7 @@
     FLATTEN_TARGET_DIRECTORY=false
     USE_PARENT_DIR_AS_BASENAME=false
     PREPEND_PARENT_DIR_TO_BASENAME=true
+    $APPEND_UUID_TO_TARGET_FILE=true
 
     # Testing a Plex DVR single iteration
     f_iterate_handbrake_source_video_files "*.ts" "m4v" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" true true
