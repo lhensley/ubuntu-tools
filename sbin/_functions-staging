@@ -55,9 +55,9 @@ function f_transcode_handbrake_source_video_file () {
 	#   $SET_PLEX_PERMISSIONS      # If the output file is part of a Plex Library, this is true; otherwise (default) false
 	#   $USE_TV_FILTERS            # Should only be true when converting Plex DVR files. Default is false
 
-	if ! $(f_is_file "$SOURCE_FILE");                   then f_balk "$0: Source file not found: $SOURCE_FILE" false;                     return; fi 
-	if ! $(f_is_directory "$SOURCE_ROOT");              then f_balk "$0: Source root directory not found: $SOURCE_ROOT" false; return; fi 
-	if ! $(f_is_directory "$TARGET_ROOT");              then f_balk "$0: Target root directory not found: $TARGET_ROOT" false; return; fi 
+	if ! $(f_is_file "$SOURCE_FILE");       then f_balk "$0: Source file not found: $SOURCE_FILE" false;           return; fi 
+	if ! $(f_is_directory "$SOURCE_ROOT");  then f_balk "$0: Source root directory not found: $SOURCE_ROOT" false; return; fi 
+	if ! $(f_is_directory "$TARGET_ROOT");  then f_balk "$0: Target root directory not found: $TARGET_ROOT" false; return; fi 
 
 	# Calculate definition of $TARGET_FILE
 		SOURCE_ROOT_LENGTH=${#SOURCE_ROOT}
@@ -75,7 +75,6 @@ function f_transcode_handbrake_source_video_file () {
 	echo "SOURCE_FILE: $SOURCE_FILE"
 	echo "  SOURCE_FILE_EXT: $SOURCE_FILE_EXT"
 	echo "  RELATIVE_FILE: $RELATIVE_FILE"
-	echo "  "RF2: $(echo "$RELATIVE_FILE" | cut -f 1 -d '.')
 	echo "  RELATIVE_FILE_NO_EXT: $RELATIVE_FILE_NO_EXT"
 	echo "  IGNORE_TV_SHOWS: $IGNORE_TV_SHOWS"
 	echo "  USE_TV_FILTERS: $USE_TV_FILTERS"
@@ -93,7 +92,8 @@ function f_transcode_handbrake_source_video_file () {
 		f_log_and_echo "$0: Transcoding $SOURCE_FILE" false
 		nice "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE"
 		exit_status=$?
-		chown $
+		chown $RUN_AS:$RUN_AS "$TARGET_FILE"
+		chmod $DEFAULT_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
 		if $SET_PLEX_PERMISSIONS; then
 			chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
 			chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"

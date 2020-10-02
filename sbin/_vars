@@ -321,6 +321,8 @@ source /etc/os-release
 	if [ $HOSTNAME == "red" ]; then RELAYHOST="mail.mchsi.com"; fi    # Mediacom Cable Internet
 
 # Video Processing Defaults
+	DEFAULT_VIDEO_FILE_PERMISSIONS=664
+	DEFAULT_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS=775
 	SOURCE_ROOT="/dev/null"               # For Plex DVR, this is $VIDEO_WORK_DIRECTORY
 								          # For DVDs ripped with MakeMKV, this is $MAKEMKV_OUTPUT_DIRECTORY
 	unset SOURCE_FILE_NAME_PATTERN        # For Plex DVR, this is "*.ts"
