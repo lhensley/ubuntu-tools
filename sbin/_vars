@@ -333,7 +333,7 @@ source /etc/os-release
 	USE_TV_FILTERS=false                  # Should only be true when converting Plex DVR files. Default is false
 	FLATTEN_TARGET_DIRECTORY=false        # Helpful for processing Zoom files or DVD rips. Default is false
 	USE_PARENT_DIR_AS_BASENAME=false      # Can be helpful when $FLATTEN_TARGET_DIRECTORY is true
-	PREPEND_PARENT_DIR_TO_BASENAME=false  # If true, $USE_PARENT_DIR_AS_BASENAME is ignored
+	PREPEND_PARENT_DIR_TO_BASENAME=false  # Can be helpful for processing Zoom files or DVD rips. Default is false
 	APPEND_UUID_TO_TARGET_FILE=false	      # Helps create uniqueness so you can have multiple versions of a single DVR episode
 	unset TARGET_DIR_OWNER                # Will be used only if defined
 	unset TARGET_DIR_PERMISSIONS          # Will be used only if defined
