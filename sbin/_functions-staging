@@ -77,7 +77,7 @@ function f_transcode_handbrake_source_video_file () {
 	if ! $(f_variable_has_content "$TARGET_FILE");   then f_balk "$0: Store file undefined" false; return;    fi
 
 	########################################################################################################
-	echo "SOURCE_FILE: $SOURCE_FILE
+	echo "SOURCE_FILE: $SOURCE_FILE"
 	echo "  IGNORE_TV_SHOWS: $IGNORE_TV_SHOWS"
 	echo "  USE_TV_FILTERS: $USE_TV_FILTERS"
 	echo "  TARGET_FILE: $TARGET_FILE"
