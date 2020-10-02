@@ -66,6 +66,7 @@ function f_transcode_handbrake_source_video_file () {
 		SOURCE_FILE_EXT_LENGTH="${#SOURCE_FILE_EXT}"
 		if $FLATTEN_TARGET_DIRECTORY; then 
 			RELATIVE_FILE=$(basename "$SOURCE_FILE")
+			if $USE_PARENT_DIR_AS_BASENAME; then RELATIVE_FILE=$(basename $(dirname "$SOURCE_FILE")); fi
 			RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}
 		else
 			RELATIVE_FILE_LENGTH=$[SOURCE_FILE_LENGTH-SOURCE_ROOT_LENGTH-1]
