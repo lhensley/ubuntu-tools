@@ -29,7 +29,11 @@
     APPEND_UUID_TO_TARGET_FILE=false
 
     # Testing a Plex DVR single iteration
-    f_iterate_handbrake_source_video_files "*.ts" "m4v" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" true true
+    while true; do
+        f_iterate_handbrake_source_video_files "*.ts" "m4v" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" true true
+        echo "Sleeping 60 seconds."
+        sleep 60
+        done
 
     # Looks good to here.
     # NEXT PRIORITY: What about Zoom files where the output file name needs to change to that of parent directory?
