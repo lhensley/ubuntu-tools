@@ -9,8 +9,21 @@
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 
-    exit 1
+	#   $SOURCE_FILE_NAME_PATTERN  # For Plex DVR, this is "*.ts"
+	#                              # For DVDs ripped with MakeMKV, this is "*.mkv"
+	#   $TARGET_FILE_EXTENSION     # Normally this is ".m4v"
+	#   $SOURCE_ROOT               # For Plex DVR, this is $VIDEO_WORK_DIRECTORY
+	#  	     					   # For DVDs ripped with MakeMKV, this is $MAKEMKV_OUTPUT_DIRECTORY
+	#   $TARGET_ROOT               # For Plex DVR, this is $VIDEO_STORE_DIRECTORY
+	#   $SET_PLEX_PERMISSIONS      # If the output file is part of a Plex Library, this is true; otherwise (default) false
+	#   $USE_TV_FILTERS            # Should only be true when converting Plex DVR files. Default is false
 
+    SOURCE_FILE_NAME_PATTERN="*.ts"
+    TARGET_FILE_EXTENSION=".m4v"
+    SOURCE_ROOT=$VIDEO_WORK_DIRECTORY
+    TARGET_ROOT=$VIDEO_STORE_DIRECTORY
+    SET_PLEX_PERMISSIONS=true
+    USE_TV_FILTER=true
 
     # Testing a Plex DVR single iteration
     f_iterate_handbrake_source_video_files "*.ts" "m4v" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" true true
