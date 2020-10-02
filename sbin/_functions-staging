@@ -90,6 +90,9 @@ function f_transcode_handbrake_source_video_file () {
 	echo "  TARGET_FILE: $TARGET_FILE"
 	echo "  SET_PLEX_PERMISSIONS: $SET_PLEX_PERMISSIONS"
 	echo "  RUN_AS: $RUN_AS"
+	echo "  T: $T"
+	echo "  F: $F"
+	echo "  D: $D"
 	echo
 	return
 
