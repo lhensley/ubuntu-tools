@@ -78,6 +78,9 @@ function f_transcode_handbrake_source_video_file () {
 
 	########################################################################################################
 	echo "SOURCE_FILE: $SOURCE_FILE"
+	echo "  SOURCE_FILE_EXT: $SOURCE_FILE_EXT"
+	echo "  RELATIVE_FILE: $RELATIVE_FILE"
+	echo "  RELATIVE_FILE_NO_EXT: $RELATIVE_FILE_NO_EXT"
 	echo "  IGNORE_TV_SHOWS: $IGNORE_TV_SHOWS"
 	echo "  USE_TV_FILTERS: $USE_TV_FILTERS"
 	echo "  TARGET_FILE: $TARGET_FILE"
