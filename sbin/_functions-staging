@@ -74,6 +74,7 @@ function f_transcode_handbrake_source_video_file () {
 			if $USE_PARENT_DIR_AS_BASENAME; then T=$(dirname "$SOURCE_FILE"); 
 				F=$(basename "$T"); D=$(dirname "$RELATIVE_FILE"); RELATIVE_FILE="$D/$F";
 				if [ $SOURCE_FILE_EXT_LENGTH -ne 0 ]; then RELATIVE_FILE+=".$SOURCE_FILE_EXT"; fi
+				RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}
 				fi 
 		fi
 		RELATIVE_FILE_NO_EXT_LENGTH=$[RELATIVE_FILE_LENGTH-SOURCE_FILE_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
