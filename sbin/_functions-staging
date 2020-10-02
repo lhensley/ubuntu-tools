@@ -79,8 +79,12 @@ function f_transcode_handbrake_source_video_file () {
 		fi
 		RELATIVE_FILE_NO_EXT_LENGTH=$[RELATIVE_FILE_LENGTH-SOURCE_FILE_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
 		RELATIVE_FILE_NO_EXT=${RELATIVE_FILE:0:RELATIVE_FILE_NO_EXT_LENGTH} # Then remove SOURCE_FILE_EXT
-		DD=$(dirname "$RELATIVE_FILE_NO_EXT")
-		FF=$(basename "$RELATIVE_FILE_NO_EXT")
+		if $PREPEND_PARENT_DIR_TO_BASENAME || $APPEND_UUID_TO_TARGET_FILE ; then
+			DD=$(dirname "$RELATIVE_FILE_NO_EXT")
+			FF=$(basename "$RELATIVE_FILE_NO_EXT")
+			if $PREPEND_PARENT_DIR_TO_BASENAME ; then T=$(dirname "$SOURCE_FILE"); X=$(basename "T"); FF="$X-$FF"; fi
+			if $APPEND_UUID_TO_TARGET_FILE ; then FF+=" - $(uuidgen)"; fi
+			fi
 		TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT$TARGET_FILE_EXTENSION"
 
 	if ! $(f_variable_has_content "$TARGET_FILE");   then f_balk "$0: Store file undefined" false; return;    fi
