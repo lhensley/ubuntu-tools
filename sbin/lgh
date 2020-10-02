@@ -24,7 +24,7 @@
     SET_PLEX_PERMISSIONS=false
     USE_TV_FILTERS=false
     FLATTEN_TARGET_DIRECTORY=false
-    USE_PARENT_DIR_AS_BASENAME=true
+    USE_PARENT_DIR_AS_BASENAME=false
 
     # Testing a Plex DVR single iteration
     f_iterate_handbrake_source_video_files "*.ts" "m4v" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" true true
