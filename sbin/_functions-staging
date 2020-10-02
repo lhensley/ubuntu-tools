@@ -82,8 +82,9 @@ function f_transcode_handbrake_source_video_file () {
 		if $PREPEND_PARENT_DIR_TO_BASENAME || $APPEND_UUID_TO_TARGET_FILE ; then
 			DD=$(dirname "$RELATIVE_FILE_NO_EXT")
 			FF=$(basename "$RELATIVE_FILE_NO_EXT")
-			if $PREPEND_PARENT_DIR_TO_BASENAME ; then T=$(dirname "$SOURCE_FILE"); X=$(basename "T"); FF="$X-$FF"; fi
+			if $PREPEND_PARENT_DIR_TO_BASENAME ; then T=$(dirname "$SOURCE_FILE"); X=$(basename "$T"); FF="$X-$FF"; fi
 			if $APPEND_UUID_TO_TARGET_FILE ; then FF+=" - $(uuidgen)"; fi
+			RELATIVE_FILE_NO_EXT="$DD/$FF"
 			fi
 		TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT$TARGET_FILE_EXTENSION"
 
