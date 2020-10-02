@@ -25,7 +25,7 @@
     USE_TV_FILTERS=false
     FLATTEN_TARGET_DIRECTORY=true
     USE_PARENT_DIR_AS_BASENAME=false
-    PREPEND_PARENT_DIR_TO_BASENAME=false
+    PREPEND_PARENT_DIR_TO_BASENAME=true
     APPEND_UUID_TO_TARGET_FILE=false
 
     # Testing a Plex DVR single iteration
