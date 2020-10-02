@@ -23,7 +23,7 @@
     TARGET_ROOT="/mnt/ext10tb01/ZoomTranscoded"
     SET_PLEX_PERMISSIONS=false
     USE_TV_FILTERS=false
-    # FLATTEN_TARGET_DIRECTORY=true
+    FLATTEN_TARGET_DIRECTORY=false
     USE_PARENT_DIR_AS_BASENAME=true
 
     # Testing a Plex DVR single iteration
