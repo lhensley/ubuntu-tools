@@ -93,6 +93,7 @@ function f_transcode_handbrake_source_video_file () {
 		f_log_and_echo "$0: Transcoding $SOURCE_FILE" false
 		nice "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE"
 		exit_status=$?
+		chown $
 		if $SET_PLEX_PERMISSIONS; then
 			chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
 			chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"

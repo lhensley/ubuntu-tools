@@ -27,6 +27,7 @@
 
     # Testing a Plex DVR single iteration
     f_iterate_handbrake_source_video_files "*.ts" "m4v" "$VIDEO_WORK_DIRECTORY" "$VIDEO_STORE_DIRECTORY" true true
+    env
 
     # Looks good to here.
     # NEXT PRIORITY: What about Zoom files where the output file name needs to change to that of parent directory?
