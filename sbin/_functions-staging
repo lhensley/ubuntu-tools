@@ -61,23 +61,19 @@ function f_transcode_handbrake_source_video_file () {
 
 	# Calculate definition of $TARGET_FILE
 		SOURCE_ROOT_LENGTH=${#SOURCE_ROOT}
-		T1=$SOURCE_ROOT_LENGTH
 		SOURCE_FILE_LENGTH=${#SOURCE_FILE}
-		T2=$SOURCE_FILE_LENGTH
 		SOURCE_FILE_EXT="${SOURCE_FILE##*.}"
-		T3=$SOURCE_FILE_EXT
 		SOURCE_FILE_EXT_LENGTH="${#SOURCE_FILE_EXT}"
-		T4=$SOURCE_FILE_EXT_LENGTH
-		RELATIVE_FILE_LENGTH=$[SOURCE_FILE_LENGTH-SOURCE_ROOT_LENGTH-1]
-		T5=$RELATIVE_FILE_LENGTH
-		RELATIVE_FILE=${SOURCE_FILE: -$RELATIVE_FILE_LENGTH} # First remove SOURCE_ROOT
-		T6=$RELATIVE_FILE
+		if $FLATTEN_TARGET_DIRECTORY; then 
+			RELATIVE_FILE=$(basename $SOURCE_FILE)
+			RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}
+		else
+			RELATIVE_FILE_LENGTH=$[SOURCE_FILE_LENGTH-SOURCE_ROOT_LENGTH-1]
+			RELATIVE_FILE=${SOURCE_FILE: -$RELATIVE_FILE_LENGTH} # Remove SOURCE_ROOT
+		fi
 		RELATIVE_FILE_NO_EXT_LENGTH=$[RELATIVE_FILE_LENGTH-SOURCE_FILE_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
-		T7=$RELATIVE_FILE_NO_EXT_LENGTH
 		RELATIVE_FILE_NO_EXT=${RELATIVE_FILE:0:RELATIVE_FILE_NO_EXT_LENGTH} # Then remove SOURCE_FILE_EXT
-		T8=$RELATIVE_FILE_NO_EXT
 		TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT$TARGET_FILE_EXTENSION"
-		T9=$TARGET_FILE
 
 	if ! $(f_variable_has_content "$TARGET_FILE");   then f_balk "$0: Store file undefined" false; return;    fi
 
@@ -91,15 +87,6 @@ function f_transcode_handbrake_source_video_file () {
 	echo "  TARGET_FILE: $TARGET_FILE"
 	echo "  SET_PLEX_PERMISSIONS: $SET_PLEX_PERMISSIONS"
 	echo "  RUN_AS: $RUN_AS"
-	echo "  T1: $T1"
-	echo "  T2: $T2"
-	echo "  T3: $T3"
-	echo "  T4: $T4"
-	echo "  T5: $T5"
-	echo "  T6: $T6"
-	echo "  T7: $T7"
-	echo "  T8: $T8"
-	echo "  T9: $T9"
 	echo
 	return
 
