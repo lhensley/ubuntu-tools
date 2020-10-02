@@ -59,18 +59,16 @@ function f_transcode_handbrake_source_video_file () {
 	if ! $(f_is_directory "$SOURCE_ROOT");              then f_balk "$0: Source root directory not found: $SOURCE_ROOT" false; return; fi 
 	if ! $(f_is_directory "$TARGET_ROOT");              then f_balk "$0: Target root directory not found: $TARGET_ROOT" false; return; fi 
 
-	SOURCE_ROOT_LENGTH=${#SOURCE_ROOT}
+	# Calculate definition of $TARGET_FILE
+		SOURCE_ROOT_LENGTH=${#SOURCE_ROOT}
+		SOURCE_FILE_LENGTH=${#SOURCE_FILE}
+		SOURCE_FILE_EXT="${SOURCE_FILE##*.}"
+		SOURCE_FILE_EXT_LENGTH="${#SOURCE_FILE_EXTENSION}"
+		RELATIVE_FILE_LENGTH=$[SOURCE_FILE_LENGTH-SOURCE_ROOT_LENGTH-1]
+		RELATIVE_FILE=${SOURCE_FILE: -$RELATIVE_FILE_LENGTH} # First remove SOURCE_ROOT
+		RELATIVE_FILE_NO_EXT=$(echo "$RELATIVE_FILE" | cut -f 1 -d '.') # Then remove SOURCE_FILE_EXT
+		TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT$TARGET_FILE_EXTENSION"
 
-	SOURCE_FILE_LENGTH=${#SOURCE_FILE}
-	SOURCE_FILE_EXT="${SOURCE_FILE##*.}"
-	SOURCE_FILE_EXT_LENGTH="${#SOURCE_FILE_EXTENSION}"
-
-	RELATIVE_FILE_LENGTH=$[SOURCE_FILE_LENGTH-SOURCE_ROOT_LENGTH-1]
-	RELATIVE_FILE=${SOURCE_FILE: -$RELATIVE_FILE_LENGTH} # First remove SOURCE_ROOT
-	RELATIVE_FILE_NO_EXT=$(echo "$RELATIVE_FILE" | cut -f 1 -d '.') # Then remove SOURCE_FILE_EXT
-	TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT$TARGET_FILE_EXTENSION"
-
-	if ! $(f_variable_has_content "$RELATIVE_FILE"); then f_balk "$0: Relative file undefined" false; return; fi
 	if ! $(f_variable_has_content "$TARGET_FILE");   then f_balk "$0: Store file undefined" false; return;    fi
 
 	########################################################################################################
