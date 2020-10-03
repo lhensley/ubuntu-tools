@@ -127,8 +127,9 @@ f_iterate_handbrake_source_video_files() {
 	#   $SET_PLEX_PERMISSIONS      # If the output file is part of a Plex Library, this is true; otherwise (default) false
 	#   $USE_TV_FILTERS            # Should only be true when converting Plex DVR files. Default is false
 
-	find "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" | while read SOURCE_FILE; \
-		do f_transcode_handbrake_source_video_file; done
+	find "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" | while read SOURCE_FILE; do \
+		f_transcode_handbrake_source_video_file; \
+		done
 	}
 	
 #########################################################################################################
