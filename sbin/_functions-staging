@@ -132,6 +132,17 @@ f_iterate_handbrake_source_video_files() {
 		done
 	}
 	
+f_show_eligible_transcoding () {
+	# ONE pass through all matching source files, displaying but not processing them
+	# CRITICAL: Define these variables BEFORE calling this function:
+	#   $SOURCE_FILE_NAME_PATTERN  # For Plex DVR, this is "*.ts"
+	#                              # For DVDs ripped with MakeMKV, this is "*.mkv"
+	#   $SOURCE_ROOT               # For Plex DVR, this is $VIDEO_WORK_DIRECTORY
+	#  	     					   # For DVDs ripped with MakeMKV, this is $MAKEMKV_OUTPUT_DIRECTORY
+
+	find "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -print
+	}
+	
 #########################################################################################################
 
 # Set a flag to confirm that the functions are defined

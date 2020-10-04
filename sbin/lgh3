@@ -1,0 +1,37 @@
+#!/bin/bash
+# lgh3
+
+# Include script setup file
+	source script-setup
+    source _functions-staging
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $STAGING_FUNCTIONS_ARE_DEFINED ]; then echo $0: Staging functions not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+	#   $SOURCE_FILE_NAME_PATTERN  # For Plex DVR, this is "*.ts"
+	#                              # For DVDs ripped with MakeMKV, this is "*.mkv"
+	#   $TARGET_FILE_EXTENSION     # Normally this is ".m4v"
+	#   $SOURCE_ROOT               # For Plex DVR, this is $VIDEO_WORK_DIRECTORY
+	#  	     					   # For DVDs ripped with MakeMKV, this is $MAKEMKV_OUTPUT_DIRECTORY
+	#   $TARGET_ROOT               # For Plex DVR, this is $VIDEO_STORE_DIRECTORY
+	#   $SET_PLEX_PERMISSIONS      # If the output file is part of a Plex Library, this is true; otherwise (default) false
+	#   $USE_TV_FILTERS            # Should only be true when converting Plex DVR files. Default is false
+
+    SOURCE_FILE_NAME_PATTERN="*.mp4"
+    TARGET_FILE_EXTENSION=".m4v"
+    SOURCE_ROOT="/mnt/ext10tb01/Zoom"
+    TARGET_ROOT="/mnt/ext10tb01/ZoomTranscoded"
+    SET_PLEX_PERMISSIONS=false
+    USE_TV_FILTERS=false
+    FLATTEN_TARGET_DIRECTORY=true
+    USE_PARENT_DIR_AS_BASENAME=false
+    PREPEND_PARENT_DIR_TO_BASENAME=true
+    APPEND_UUID_TO_TARGET_FILE=false
+
+    f_show_eligible_transcoding
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
