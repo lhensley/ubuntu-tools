@@ -9,7 +9,7 @@
 
 # Define UUID stuff
 	THIS_TEMP_FILE="/tmp$0 - $(uuidgen)"
-	mkdir -p $(dirnaame $THIS_TEMP_FILE)
+	mkdir -p $(dirname "$THIS_TEMP_FILE")
 	touch $THIS_TEMP_FILE
 
 # Compose the message
