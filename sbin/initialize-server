@@ -3,6 +3,7 @@
 # PURPOSE: Installs basic software, initializes, and configures
 # IMPORTANT: Check variables at the top of the script before running it!
 
+install_dos2unix=true
 install_mysql_server=true
 install_phpmyadmin=true
 install_plexmediaserver=true
@@ -65,6 +66,10 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
 
 # Remount all using /etc/fstab, as amended above
     mount --all
+
+if $install_dos2unix ; then
+    finstall dos2unix
+    fi
 
 if $install_plexmediaserver ; then
     # Tested through Ubuntu 20.04.1
