@@ -23,7 +23,7 @@
 
 # Send the message
     cat "$THIS_TEMP_FILE"
-	echo $(cat "$THIS_TEMP_FILE") | unix2dos | mail $ADMIN_EMAIL
+	# echo $(cat "$THIS_TEMP_FILE") | unix2dos | mail $ADMIN_EMAIL
 	unlink "$THIS_TEMP_FILE"
 	f_beep
 
