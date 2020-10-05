@@ -13,11 +13,16 @@
 	touch "$THIS_TEMP_FILE"
 
 # Compose the message
-    cat /var/log/syslog | grep dvr > "$THIS_TEMP_FILE" 2>&1
+    cat /var/log/syslog | grep dvr             | grep bash >  "$THIS_TEMP_FILE" 2>&1
+    cat /var/log/syslog | grep lgh             | grep bash >> "$THIS_TEMP_FILE" 2>&1
+    cat /var/log/syslog | grep plexmediaserver | grep bash >> "$THIS_TEMP_FILE" 2>&1
+    cat /var/log/syslog | grep mysql           | grep bash >> "$THIS_TEMP_FILE" 2>&1
+    cat /var/log/syslog | grep postfix         | grep bash >> "$THIS_TEMP_FILE" 2>&1
 	df -Ht ext4 >> "$THIS_TEMP_FILE" 2>&1
 
 # Send the message
-	f_echo_and_log "$0: $THIS_TEMP_FILE" | mail text_alerts $EMAIL_ALERTS
+    cat "$THIS_TEMP_FILE"
+	echo $(cat "$THIS_TEMP_FILE") | mail text_alerts $EMAIL_ALERTS
 	unlink "$THIS_TEMP_FILE"
 	f_beep
 
