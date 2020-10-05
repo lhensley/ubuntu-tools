@@ -272,6 +272,7 @@ function f_process_ts_file () {
 		chmod $PLEX_VIDEO_FILE_PERMISSIONS "$OUT_FILE"
 		if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
 				f_balk "$HANDBRAKE_CLI: FAILED with $exit_status for $IN_FILE" true
+				return
 			else
 				rm "$IN_FILE" # Delete input file
 				f_log_and_echo "$0: Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" false
