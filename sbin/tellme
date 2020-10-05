@@ -22,7 +22,7 @@
 
 # Send the message
     cat "$THIS_TEMP_FILE"
-	echo $(cat "$THIS_TEMP_FILE") | mail text_alerts $EMAIL_ALERTS
+	echo $(cat "$THIS_TEMP_FILE") | mail lhensley
 	unlink "$THIS_TEMP_FILE"
 	f_beep
 
