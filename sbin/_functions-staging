@@ -61,7 +61,7 @@ function f_transcode_handbrake_source_video_file () {
 	# Test existence of files and directories
 		if ! $(f_is_file "$SOURCE_FILE");       then f_balk "$0: Source file not found: $SOURCE_FILE" false;           return; fi 
 		if ! $(f_is_directory "$SOURCE_ROOT");  then f_balk "$0: Source root directory not found: $SOURCE_ROOT" false; return; fi 
-		if ! $(f_is_directory "$TARGET_ROOT");  then f_balk "$0: Target root directory not found: $TARGET_ROOT" true;  return; fi 
+		if ! $(f_is_directory "$TARGET_ROOT");  then f_balk "$0: Target root directory not found: $TARGET_ROOT" true;  return; fi
 
 	# Calculate definition of $TARGET_FILE
 		SOURCE_ROOT_LENGTH=${#SOURCE_ROOT}
