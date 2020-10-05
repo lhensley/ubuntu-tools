@@ -28,8 +28,9 @@ function f_balk () {
 
 function f_die () {
 	# Usage: f_die "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
-		f_balk "$1" "$2" # report and log the objection
-		exit 1
+	# Note: No need to include $0
+		f_balk "$1" "$2"   # report and log the objection
+		exit 1             # die
 	}
 
 function f_debug () {
