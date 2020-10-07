@@ -63,8 +63,6 @@ function f_transcode_handbrake_source_video_file () {
 		if ! $(f_is_directory "$SOURCE_ROOT");  then f_balk "$0: Source root directory not found: $SOURCE_ROOT" false; return; fi 
 		if ! $(f_is_directory "$TARGET_ROOT");  then f_balk "$0: Target root directory not found: $TARGET_ROOT" true;  return; fi
 
-	echo A
-
 	# Calculate definition of $TARGET_FILE
 		SOURCE_ROOT_LENGTH=${#SOURCE_ROOT}
 		SOURCE_FILE_LENGTH=${#SOURCE_FILE}
@@ -74,19 +72,15 @@ function f_transcode_handbrake_source_video_file () {
 			RELATIVE_FILE=$(basename "$SOURCE_FILE")
 			if $USE_PARENT_DIR_AS_BASENAME; then T=$(dirname "$SOURCE_FILE"); RELATIVE_FILE=$(basename "$T"); fi
 			RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}
-		echo A2
 		else
 			RELATIVE_FILE_LENGTH=$[SOURCE_FILE_LENGTH-SOURCE_ROOT_LENGTH-1]
 			RELATIVE_FILE=${SOURCE_FILE: -$RELATIVE_FILE_LENGTH} # Remove SOURCE_ROOT
-		echo A3
 			if $USE_PARENT_DIR_AS_BASENAME; then T=$(dirname "$SOURCE_FILE"); 
 				F=$(basename "$T"); D=$(dirname "$RELATIVE_FILE"); RELATIVE_FILE="$D/$F";
 				if [ $SOURCE_FILE_EXT_LENGTH -ne 0 ]; then RELATIVE_FILE+=".$SOURCE_FILE_EXT"; fi
 				RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}
-		echo A4
 				fi 
 		fi
-	echo B
 		RELATIVE_FILE_NO_EXT_LENGTH=$[RELATIVE_FILE_LENGTH-SOURCE_FILE_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
 		RELATIVE_FILE_NO_EXT=${RELATIVE_FILE:0:RELATIVE_FILE_NO_EXT_LENGTH} # Then remove SOURCE_FILE_EXT
 		if $PREPEND_PARENT_DIR_TO_BASENAME || $APPEND_UUID_TO_TARGET_FILE ; then
@@ -99,16 +93,10 @@ function f_transcode_handbrake_source_video_file () {
 			fi
 		TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT$TARGET_FILE_EXTENSION"
 
-	echo C
 	if ! $(f_variable_has_content "$TARGET_FILE");   then f_balk "$0: Store file undefined" false; return;    fi
 
-	echo SOURCE_FILE: $SOURCE_FILE
-	echo IGNORE_TV_SHOWS: $IGNORE_TV_SHOWS
-	echo C1: $(f_filter "$SOURCE_FILE" "$IGNORE_TV_SHOWS")
-	echo C2: $USE_TV_FILTERS
 	if ! $(f_filter "$SOURCE_FILE" "$IGNORE_TV_SHOWS") || ! $USE_TV_FILTERS; then
 		
-	echo D
 	echo TARGET_FILE: $TARGET_FILE
 		# Do the transcoding
 		TIMESTART=$(currenttimeinseconds)
@@ -124,10 +112,8 @@ function f_transcode_handbrake_source_video_file () {
 			chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
 			fi
 		if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-	echo E
 				f_balk "$HANDBRAKE_CLI: FAILED with $exit_status for $SOURCE_FILE" true
 			else
-	echo F
 				rm "$SOURCE_FILE" # Delete input file
 				f_log_and_echo "$0: Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" false
 				echo
