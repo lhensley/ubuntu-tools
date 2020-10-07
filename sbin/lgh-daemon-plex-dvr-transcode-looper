@@ -9,7 +9,7 @@
 	if [ ! $STAGING_FUNCTIONS_ARE_DEFINED ]; then echo $0: Staging functions not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ];         then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting;         exit 1; fi
 
-    set -x
+    # set -x
 
     # Set the variables
     WAIT_AFTER_SOURCE_SCAN="1h"                         # How long to wait after looping through all source files
