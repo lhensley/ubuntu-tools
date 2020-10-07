@@ -35,7 +35,7 @@
         # SOURCE_FILE is the newest file found, based on the sort shown below.
         #   The soft can be fooled by a "newer" directory structure name, because the sort is on the full pathname. 
         #   Oh well. Fix this if that becomes an issue.
-	    find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -print | sort -r | while read SOURCE_ROOT; do \
+	    find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -print | sort -r | while read SOURCE_FILE; do \
             if [ -z "$SOURCE_FILE" ]; then \
                     f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." true ; # The TRUE part at the end means this sends pager notices. \
                                                                               # Drop this when stable, and consider bumping up the interval. \
