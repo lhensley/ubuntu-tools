@@ -37,8 +37,8 @@
         #   The soft can be fooled by a "newer" directory structure name, because the sort is on the full pathname. 
         #   Oh well. Fix this if that becomes an issue.
 	    # SOURCE_FILE="$(find -L $SOURCE_ROOT -type f -name $SOURCE_FILE_NAME_PATTERN -print | sort | tail -n 1)" # The soft and tail actually are not necessary here.
-	    tv2=$(find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -print | tail -n 1)
-        echo $tv2
+	    SOURCE_FILE=$(find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -print | tail -n 1)
+        echo $SOURCE_FILE
         exit 1
 	    SOURCE_FILE="$(find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -print | tail -n 1)" # No sort. Just checking.
             # THEORY: Some files fail. Need a "next" option here, or the loop will get stuck on first-up failures.
