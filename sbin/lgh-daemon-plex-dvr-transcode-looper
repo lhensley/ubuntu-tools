@@ -44,6 +44,7 @@
 	                f_transcode_handbrake_source_video_file ; \
                 fi \
             done
+        done
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
