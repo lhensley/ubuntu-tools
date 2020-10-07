@@ -4,14 +4,10 @@
 
 # Include script setup file
 	source script-setup
-    source _functions-staging
 	if [ ! $FUNCTIONS_ARE_DEFINED ];         then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting;         exit 1; fi
-	if [ ! $STAGING_FUNCTIONS_ARE_DEFINED ]; then echo $0: Staging functions not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ];         then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting;         exit 1; fi
 
-    # set -x
-
-    # Set the variables
+# Set the variables
     WAIT_AFTER_SOURCE_SCAN="1h"                         # How long to wait after looping through all source files
     SOURCE_FILE_NAME_PATTERN="$PLEX_FILE_NAME_PATTERN"  # For Plex DVR,                 this is "$PLEX_FILE_NAME_PATTERN"              (defined in _vars)
                                                         # For DVDs ripped with MakeMKV, this is "$MAKEMKV_FILE_NAME_PATTERN"           (defined in _vars)
@@ -31,15 +27,7 @@
     USE_PARENT_DIR_AS_BASENAME=false                    # May be useful for ripped DVDs. TBD. Think about this first                   (default defined in _vars)
 
 # Do the looping work
-    while true; do
-        # SOURCE_FILE is the newest file found, based on the sort shown below.
-        #   The soft can be fooled by a "newer" directory structure name, because the sort is on the full pathname. 
-        #   Oh well. Fix this if that becomes an issue.
-	    find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -print | sort -r | while read SOURCE_FILE; do f_transcode_handbrake_source_video_file ; done
-        f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." true  # The TRUE part at the end means this sends pager notices.
-                                                                 # Drop this when stable, and consider bumping up the interval.
-        sleep "$WAIT_AFTER_SOURCE_SCAN"
-        done
+    f_iterate_handbrake_source_video_files
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
