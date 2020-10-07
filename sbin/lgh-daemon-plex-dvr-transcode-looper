@@ -30,8 +30,7 @@
     APPEND_UUID_TO_TARGET_FILE=true                     # Normally used for Plex files so that multiple media files can be retained.   (default defined in _vars)
     USE_PARENT_DIR_AS_BASENAME=false                    # May be useful for ripped DVDs. TBD. Think about this first                   (default defined in _vars)
 
- 
-    # Diagnostic. 10/6/2020. OK to delete this section.
+     # Diagnostic. 10/6/2020. OK to delete this section.
         echo WAIT_AFTER_SOURCE_SCAN: $WAIT_AFTER_SOURCE_SCAN
         echo SOURCE_FILE_NAME_PATTERN: $SOURCE_FILE_NAME_PATTERN
         echo SOURCE_ROOT: $SOURCE_ROOT
@@ -44,7 +43,7 @@
         #   The soft can be fooled by a "newer" directory structure name, because the sort is on the full pathname. 
         #   Oh well. Fix this if that becomes an issue.
 	    # SOURCE_FILE="$(find -L $SOURCE_ROOT -type f -name $SOURCE_FILE_NAME_PATTERN -print | sort | tail -n 1)" # The soft and tail actually are not necessary here.
-	    SOURCE_FILE="$(find -L $SOURCE_ROOT -type f -name $SOURCE_FILE_NAME_PATTERN -print" # No sort. Just checking.
+	    SOURCE_FILE="$(find -L $SOURCE_ROOT -type f -name $SOURCE_FILE_NAME_PATTERN -print)" # No sort. Just checking.
             # THEORY: Some files fail. Need a "next" option here, or the loop will get stuck on first-up failures.
         if [ -z "$SOURCE_FILE" ]; then
                 f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." true  # The TRUE part at the end means this sends pager notices.
