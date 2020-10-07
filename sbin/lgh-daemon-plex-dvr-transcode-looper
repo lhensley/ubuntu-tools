@@ -38,9 +38,6 @@
         #   Oh well. Fix this if that becomes an issue.
 	    # SOURCE_FILE="$(find -L $SOURCE_ROOT -type f -name $SOURCE_FILE_NAME_PATTERN -print | sort | tail -n 1)" # The soft and tail actually are not necessary here.
 	    SOURCE_FILE=$(find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -print | tail -n 1)
-        echo $SOURCE_FILE
-        exit 1
-	    SOURCE_FILE="$(find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -print | tail -n 1)" # No sort. Just checking.
             # THEORY: Some files fail. Need a "next" option here, or the loop will get stuck on first-up failures.
         if [ -z "$SOURCE_FILE" ]; then
                 f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." true  # The TRUE part at the end means this sends pager notices.
