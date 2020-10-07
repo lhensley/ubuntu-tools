@@ -102,6 +102,10 @@ function f_transcode_handbrake_source_video_file () {
 	echo C
 	if ! $(f_variable_has_content "$TARGET_FILE");   then f_balk "$0: Store file undefined" false; return;    fi
 
+	echo SOURCE_FILE: $SOURCE_FILE
+	echo IGNORE_TV_SHOWS: $IGNORE_TV_SHOWS
+	echo C1: $(f_filter "$SOURCE_FILE" "$IGNORE_TV_SHOWS")
+	echo C2: $USE_TV_FILTERS
 	if ! $(f_filter "$SOURCE_FILE" "$IGNORE_TV_SHOWS") || ! $USE_TV_FILTERS; then
 		
 	echo D
