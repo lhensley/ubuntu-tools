@@ -44,6 +44,7 @@
                                                                          # Drop this when stable, and consider bumping up the interval.
                 sleep "$WAIT_AFTER_SOURCE_SCAN"
             else
+                echo SOURCE_FILE: $SOURCE_FILE
 	            f_transcode_handbrake_source_video_file
                 exit 1
             fi
