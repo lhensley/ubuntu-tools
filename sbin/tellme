@@ -15,7 +15,7 @@
 # Compose the message
 	echo $(date)                                                                                         >  "$THIS_TEMP_FILE" 2>&1
 	echo $THIS_TEMP_FILE                                                                                 >> "$THIS_TEMP_FILE" 2>&1
-	echo $(top -b -n 1)																					     >> "$THIS_TEMP_FILE" 2>&1
+	# echo $(top -b -n 1)																					     >> "$THIS_TEMP_FILE" 2>&1
     cat /var/log/syslog | grep -E 'dvr|lgh'                                                              >> "$THIS_TEMP_FILE" 2>&1
 	ls -alh /mnt/5TBC/archives/oz/*                                                                      >> "$THIS_TEMP_FILE" 2>&1
 	tail $ADMIN_HOME_DIR/.coldstorage.log                                                                >> "$THIS_TEMP_FILE" 2>&1
