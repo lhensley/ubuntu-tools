@@ -30,12 +30,6 @@
     APPEND_UUID_TO_TARGET_FILE=false                       # Normally used for Plex files so that multiple media files can be retained.   (default defined in _vars)
     USE_PARENT_DIR_AS_BASENAME=false                       # May be useful for ripped DVDs. TBD. Think about this first                   (default defined in _vars)
 
-    echo WAIT_AFTER_SOURCE_SCAN: $WAIT_AFTER_SOURCE_SCAN
-    echo SOURCE_FILE_NAME_PATTERN: $SOURCE_FILE_NAME_PATTERN
-    echo SOURCE_ROOT: $SOURCE_ROOT
-    echo TARGET_FILE_EXTENSION: $TARGET_FILE_EXTENSION
-    exit 1
-    
 # Do the looping work
     while true; do
         # SOURCE_FILE is the newest file found, based on the sort shown below.
