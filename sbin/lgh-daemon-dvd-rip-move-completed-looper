@@ -8,17 +8,17 @@
 	if [ ! $VARIABLES_ARE_DEFINED ];         then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting;         exit 1; fi
 
 # CASE DEFINITION:
-# Move completed TV files from oz to nuc01
-# URGENT NEED: Define variables in "# Plex Media Server" so we can reference these by variable for ANY server.
+# Move ripped DVD files that still need manual processing from oz to nuc01
+# URGENT NEED: Define variables in "# HandBrake" (and elsewhere?) so we can reference these by variable for ANY server.
 # SOURCE_ROOT_DIR="oz.lane.hensley.org:/mnt/ext10tb01/plex"
-SOURCE_ROOT_DIR="/mnt/ext10tb01/plex"
-TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Shows-DVR"
+# SOURCE_ROOT_DIR="oz.lanehensley.org:/home/lhensley/Videos/HandBrake-Completed"
+SOURCE_ROOT_DIR="/home/lhensley/Videos/HandBrake-Completed"
+TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/cloteal/Plex/uploads"
 
 # MOVE (not copy) files to new directory or server/directory
 # Useful for MOVING (not copying) completed video files
 # Does NOT remove extraneous files from target directories
 # rsync options considered
-# Until string constants and variable definitions are moved to _vars, this should ONLY be run on oz.
 #    -a = archive mode, equivalent to -rlptgoD
 #    -g = preserve group ownership
 #    -l = recreate symlinks on destination
