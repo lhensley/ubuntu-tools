@@ -1,4 +1,7 @@
 # To Do
+* Scripts to Write
+  * Delete old newscasts & late night talk shows
+  * Update syncplex to accommodate Pool06, etc.
 * Faster way to back up Plex configs
 * Need to preserve MySQL credentials by backing them up and being able to restore them.
   * Probably best to specify credentials before creating a new instance so they can be re-created.
