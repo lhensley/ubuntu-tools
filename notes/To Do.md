@@ -2,6 +2,8 @@
 * Scripts to Write
   * Delete old newscasts & late night talk shows
   * Update syncplex to accommodate Pool06, etc.
+* Check code in all lgh daemons for string constants that should be in _vars
+* Turn pretend daemons into real ones
 * Faster way to back up Plex configs
 * Need to preserve MySQL credentials by backing them up and being able to restore them.
   * Probably best to specify credentials before creating a new instance so they can be re-created.

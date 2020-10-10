@@ -390,6 +390,7 @@ function f_transcode_handbrake_source_video_file () {
 			DD=$(dirname "$RELATIVE_FILE_NO_EXT")
 			FF=$(basename "$RELATIVE_FILE_NO_EXT")
 			if $PREPEND_PARENT_DIR_TO_BASENAME ; then T=$(dirname "$SOURCE_FILE"); X=$(basename "$T"); FF="$X-$FF"; fi
+			if $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE ; then FF+=" - $(hostname -f) $(stat -c '%x' $SOURCE_FILE)"; fi
 			if $APPEND_UUID_TO_TARGET_FILE ; then FF+=" - $(uuidgen)"; fi
 			RELATIVE_FILE_NO_EXT="$DD/$FF"
 			if [ "$DD"=="." ]; then RELATIVE_FILE_NO_EXT=$FF; fi
