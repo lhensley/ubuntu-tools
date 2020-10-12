@@ -11,7 +11,7 @@ FUNCTIONS_ARE_DEFINED=false
 function f_log_and_echo () {
 # Usage f_log_and_echo "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
 	if $2; then echo $0: $1 | mail $TEXT_ALERTS; fi
-	logger $0: $1
+	logger -t "$0" $1
 	>&2 echo $0: $1
 	}
 
@@ -36,7 +36,7 @@ function f_die () {
 function f_debug () {
     # $1: message to log, only used when $DEBUG_MODE == true
     if [ ! $DEBUG_MODE ]; then
-        logger $0: DEBUG: $1
+        logger -t "$0" DEBUG: $1
         fi
     }
 
@@ -45,7 +45,7 @@ function f_debug_variable () {
     # $2: variable_value ("$variable_name")
     # Example: f_debug_variable "var" "$var"
     if [ ! $DEBUG_MODE ]; then
-        logger $0: DEBUG: $1 = $2
+        logger -t "$0" DEBUG: $1 = $2
         fi
     }
 
@@ -139,9 +139,9 @@ function f_local_copy() {
 
 function f_install() {
 	if ! [ -x "$(command -v $1)" ]; then   
-		logger $0 Installing $1
+		logger -t "$0" Installing $1
 		DEBIAN_FRONTEND=noninteractive apt-get install -yq $1
-		logger $0 Installation of $1 done exit code $?
+		logger -t "$0" Installation of $1 done exit code $?
 	fi
 	}
 
@@ -164,7 +164,7 @@ function f_mount_ro_fs_as_rw () {
 		fi
 	# If file system is not mounted read-write, fail
 		if [ ! $(findmnt "$FILE_SYSTEM" -n -o options | grep "rw,") ]; then
-			logger $0: FATAL: $FILE_SYSTEM is not mounted with rw option
+			logger -t "$0" FATAL: $FILE_SYSTEM is not mounted with rw option
 			echo $0: FATAL: $FILE_SYSTEM is not mounted with rw option
 			exit 1
 		fi
@@ -183,7 +183,7 @@ function f_mount_ro_fs_as_ro () {
 		fi
 	# If file system is not mounted read-only, fail
 		if [ ! $(findmnt "$FILE_SYSTEM" -n -o options | grep "ro,") ]; then
-			logger $0: FATAL: $FILE_SYSTEM is not mounted with ro option
+			logger -t "$0" FATAL: $FILE_SYSTEM is not mounted with ro option
 			echo $0: FATAL: $FILE_SYSTEM is not mounted with ro option
 			exit 1
 		fi
@@ -477,6 +477,6 @@ f_show_eligible_transcoding () {
 
 # Log the completion
 if [ ! $DEBUG_MODE ]; then
-	logger $0: Functions loaded from _functions
+	logger -t "$0" Functions loaded from _functions
 	fi
 
