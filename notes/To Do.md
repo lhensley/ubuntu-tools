@@ -1,4 +1,6 @@
 # To Do
+* Run fsck on nuc01
+* Fix domain name; not defined, can't refer by short name
 * Scripts to Write
   * Delete old newscasts & late night talk shows
   * Update syncplex to accommodate Pool06, etc.

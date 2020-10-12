@@ -151,6 +151,7 @@ if $install_makemkv ; then
     f_install rsync
     f_install ripmime                 # Process files sent by email
     f_install ssh && ufw allow ssh
+    f_install sshfs
     f_install sysbench
     f_install tasksel
     f_install unzip
