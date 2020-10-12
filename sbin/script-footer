@@ -6,7 +6,7 @@
 
 # If not disabled, log the start of script processing. Default = "false" (i.e., not disabled, so do log start)
 if [[ ! ${DISABLE_START_MESSAGE[$0]} ]]; then
-	logger $0: End
+	f_log_and_echo End
 	fi
 
 exit 0

@@ -15,7 +15,7 @@ if [ ! -z $SUDO_USER ]; then
 
 # If configured, make sure only root can run our script. Default = "false"
 # if [ "$(f_get-config CONFIG_script_$(basename $0)_require_root)" == "true" ] && [[ $EUID -ne 0 ]]; then
-#         echo "Use sudo. $0 must be run as root." 1>&2
+#         f_balk "Use sudo. $(basename $0) must be run as root." 1>&2
 #         exit 1
 #     fi
 
@@ -23,7 +23,7 @@ if [ ! -z $SUDO_USER ]; then
 
 # If not disabled, log the start of script processing. Default = "false" (i.e., not disabled, so do log start)
 if [[ ! ${DISABLE_START_MESSAGE[$0]} ]]; then
-	logger $0: Start
+	f_log_and_echo Start
 	fi
 
 # If configured, send a text message to note the start of script processing. Default = "false"
