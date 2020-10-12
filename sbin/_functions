@@ -3,16 +3,16 @@
 # Bash functions for Lane applications
 
 # Check to ensure that variables are defined
-	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $($basename $0): Variables not defined. Aborting; logger -t "$($basename $0)": Variables not defined. Aborting; exit 1; fi
 
 # Set a flag to confirm that the functions are not yet defined
 FUNCTIONS_ARE_DEFINED=false
 
 function f_log_and_echo () {
 # Usage f_log_and_echo "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
-	if $2; then echo $0: $1 | mail $TEXT_ALERTS; fi
-	logger -t "$0" $1
-	>&2 echo $0: $1
+	if $2; then echo $($basename $0): $1 | mail $TEXT_ALERTS; fi
+	logger -t "$($basename $0)" $1
+	>&2 echo $($basename $0): $1
 	}
 
 function f_beep () {
@@ -36,7 +36,7 @@ function f_die () {
 function f_debug () {
     # $1: message to log, only used when $DEBUG_MODE == true
     if [ ! $DEBUG_MODE ]; then
-        logger -t "$0" DEBUG: $1
+        logger -t "$($basename $0)" DEBUG: $1
         fi
     }
 
@@ -45,7 +45,7 @@ function f_debug_variable () {
     # $2: variable_value ("$variable_name")
     # Example: f_debug_variable "var" "$var"
     if [ ! $DEBUG_MODE ]; then
-        logger -t "$0" DEBUG: $1 = $2
+        logger -t "$($basename $0)" DEBUG: $1 = $2
         fi
     }
 
@@ -59,7 +59,7 @@ function f_require_value {
 	# $1 = Variable name  e.g., "INPUT_FILE"
 	# $2 = Content of variable, e.g., "$INPUT_FILE"
 	# $3 = Send text alert (true or false)
-    if ! $(f_variable_has_content "$2"); then f_die "$0: FATAL: Value of $1 undefined at line ${BASH_LINENO[$i]}" false; fi
+    if ! $(f_variable_has_content "$2"); then f_die "FATAL: Value of $1 undefined at line ${BASH_LINENO[$i]}" false; fi
     }
 
 function f_is_file {
@@ -70,7 +70,7 @@ function f_is_file {
 
 function f_require_file {
     # Usage: f_require_file "file_or_path_name" "send_text_alert_true_or_false"
-	if ! $(f_is_file "$1"); then f_die "$0: FATAL: File not found: $1 at line ${BASH_LINENO[$i]}" false; fi
+	if ! $(f_is_file "$1"); then f_die "FATAL: File not found: $1 at line ${BASH_LINENO[$i]}" false; fi
     }
 
 function f_is_directory {
@@ -81,12 +81,12 @@ function f_is_directory {
 
 function f_require_directory {
     # Usage: f_require_directory "directory_name" "send_text_alert_true_or_false"
-	if ! $(f_is_directory "$1"); then f_die "$0: FATAL: Directory not found: $1 at line ${BASH_LINENO[$i]}" false; fi
+	if ! $(f_is_directory "$1"); then f_die "FATAL: Directory not found: $1 at line ${BASH_LINENO[$i]}" false; fi
     }
 
 function f_require_true {
     # Usage: f_require_true "true_or_false_proposition" "send_text_alert_true_or_false" "failure_message"
-	# Example: f_require_true false true "$0: Proposition fails. Sending text alerts."
+	# Example: f_require_true false true "Proposition fails. Sending text alerts."
 	if [ ! "$1" ]; then f_die "$2" $3; fi
     }
 
@@ -139,9 +139,9 @@ function f_local_copy() {
 
 function f_install() {
 	if ! [ -x "$(command -v $1)" ]; then   
-		logger -t "$0" Installing $1
+		logger -t "$($basename $0)" Installing $1
 		DEBIAN_FRONTEND=noninteractive apt-get install -yq $1
-		logger -t "$0" Installation of $1 done exit code $?
+		logger -t "$($basename $0)" Installation of $1 done exit code $?
 	fi
 	}
 
@@ -164,8 +164,8 @@ function f_mount_ro_fs_as_rw () {
 		fi
 	# If file system is not mounted read-write, fail
 		if [ ! $(findmnt "$FILE_SYSTEM" -n -o options | grep "rw,") ]; then
-			logger -t "$0" FATAL: $FILE_SYSTEM is not mounted with rw option
-			echo $0: FATAL: $FILE_SYSTEM is not mounted with rw option
+			logger -t "$($basename $0)" FATAL: $FILE_SYSTEM is not mounted with rw option
+			echo $($basename $0): FATAL: $FILE_SYSTEM is not mounted with rw option
 			exit 1
 		fi
 	}
@@ -183,8 +183,8 @@ function f_mount_ro_fs_as_ro () {
 		fi
 	# If file system is not mounted read-only, fail
 		if [ ! $(findmnt "$FILE_SYSTEM" -n -o options | grep "ro,") ]; then
-			logger -t "$0" FATAL: $FILE_SYSTEM is not mounted with ro option
-			echo $0: FATAL: $FILE_SYSTEM is not mounted with ro option
+			logger -t "$($basename $0)" FATAL: $FILE_SYSTEM is not mounted with ro option
+			echo $($basename $0): FATAL: $FILE_SYSTEM is not mounted with ro option
 			exit 1
 		fi
 	}
@@ -204,15 +204,15 @@ function f_move_one_plex_file () {
 
 	SHORT_SOURCE=$(basename "$SOURCE_FILE")
 	TARGET_DIR=$(dirname "$TARGET_FILE")
-	f_log_and_echo "$0: Moving $SHORT_SOURCE" false
-	if ! $(f_is_file "$SOURCE_FILE");                   then f_balk "$0: Source file not found: $1" false;               return; fi 
+	f_log_and_echo "Moving $SHORT_SOURCE" false
+	if ! $(f_is_file "$SOURCE_FILE");                   then f_balk "Source file not found: $1" false;               return; fi 
 	mkdir -p "$TARGET_DIR"
-	if ! $(f_is_directory "$TARGET_DIR"); then f_balk "$0: Target directory not found: $TARGET_DIR" false;               return; fi 
+	if ! $(f_is_directory "$TARGET_DIR"); then f_balk "Target directory not found: $TARGET_DIR" false;               return; fi 
 	chown $PLEX_USER:$PLEX_USER "$TARGET_DIR"
 	chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS "$TARGET_DIR"
 	mv "$SOURCE_FILE" "$TARGET_DIR/"
 	exit_code=$?
-	if [ $exit_code -ne 0 ];										then f_balk "$0: Can't move '$SOURCE_FILE' to '$TARGET_FILE'"; return; fi
+	if [ $exit_code -ne 0 ];										then f_balk "Can't move '$SOURCE_FILE' to '$TARGET_FILE'"; return; fi
 	chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
 	chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
 	}
@@ -231,10 +231,10 @@ function f_process_ts_file () {
 	STORE_ROOT_PATH="$3"
 	OUT_EXT="m4v"
 
-	if ! $(f_is_file "$IN_FILE");                      then f_balk "$0: TS file not found: $1" false;      return; fi 
-	if ! $(f_is_directory "$WORK_ROOT_PATH");          then f_balk "$0: Work directory not found: $1" false; return; fi 
-	if ! $(f_is_directory "$STORE_ROOT_PATH");         then f_balk "$0: Store directory not found: $1" false; return; fi 
-	if ! $(f_variable_has_content "$IGNORE_TV_SHOWS"); then f_balk "$0: TV filter undefined" false;     return; fi
+	if ! $(f_is_file "$IN_FILE");                      then f_balk "TS file not found: $1" false;      return; fi 
+	if ! $(f_is_directory "$WORK_ROOT_PATH");          then f_balk "Work directory not found: $1" false; return; fi 
+	if ! $(f_is_directory "$STORE_ROOT_PATH");         then f_balk "Store directory not found: $1" false; return; fi 
+	if ! $(f_variable_has_content "$IGNORE_TV_SHOWS"); then f_balk "TV filter undefined" false;     return; fi
 
 	WORK_ROOT_PATH_LENGTH=${#WORK_ROOT_PATH}
 
@@ -251,11 +251,11 @@ function f_process_ts_file () {
 	# STORE_FILE="$STORE_ROOT_PATH/$RELATIVE_FILE_NO_EXT - $UU.$OUT_EXT"
 	STORE_FILE="$STORE_ROOT_PATH/$RELATIVE_FILE_NO_EXT - $UU.$OUT_EXT"
 
-	if ! $(f_variable_has_content "$OUT_FILE");      then f_balk "$0: Output file undefined" false; return;   fi
-	if ! $(f_variable_has_content "$RELATIVE_FILE"); then f_balk "$0: Relative file undefined" false; return; fi
-	if ! $(f_variable_has_content "$STORE_FILE");    then f_balk "$0: Store file undefined" false; return;    fi
+	if ! $(f_variable_has_content "$OUT_FILE");      then f_balk "Output file undefined" false; return;   fi
+	if ! $(f_variable_has_content "$RELATIVE_FILE"); then f_balk "Relative file undefined" false; return; fi
+	if ! $(f_variable_has_content "$STORE_FILE");    then f_balk "Store file undefined" false; return;    fi
 	if ! $(f_variable_has_content "$PLEX_LIVE_APPLICATION_SUPPORT"); then 
-		f_balk "$0: Plex live application support directory undefined" false; return; fi
+		f_balk "Plex live application support directory undefined" false; return; fi
 
 	if ! $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS"); then
 		
@@ -265,7 +265,7 @@ function f_process_ts_file () {
 		# Do the transcoding
 		TIMESTART=$(currenttimeinseconds)
 		IN_FILE_BASE=$(basename "$IN_FILE")
-		f_log_and_echo "$0: Transcoding $IN_FILE" false
+		f_log_and_echo "Transcoding $IN_FILE" false
 		nice "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$IN_FILE" -o "$OUT_FILE"
 		exit_status=$?
 		chown $PLEX_USER:$PLEX_USER "$OUT_FILE"
@@ -275,7 +275,7 @@ function f_process_ts_file () {
 				return
 			else
 				rm "$IN_FILE" # Delete input file
-				f_log_and_echo "$0: Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" false
+				f_log_and_echo "Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" false
 				echo
 			fi # End of check for transcoding failure
 		# Move all .m4v files from $VIDEO_WORK_DIRECTORY to $VIDEO_STORE_DIRECTORY.
@@ -311,17 +311,17 @@ function f_move_one_file () {
 	SET_PLEX_PERMISSIONS=$3  # If the output file is part of a Plex Library, this is true; otherwise (default) false
 	SHORT_SOURCE=$(basename "$SOURCE_FILE")
 	TARGET_DIR=$(dirname "$TARGET_FILE")
-	f_log_and_echo "$0: Moving $SHORT_SOURCE" false
-	if ! $(f_is_file "$SOURCE_FILE");	  then f_balk "$0: Source file not found: $1" false;                return; fi 
+	f_log_and_echo "Moving $SHORT_SOURCE" false
+	if ! $(f_is_file "$SOURCE_FILE");	  then f_balk "Source file not found: $1" false;                return; fi 
 	mkdir -p "$TARGET_DIR"
-	if ! $(f_is_directory "$TARGET_DIR"); then f_balk "$0: Target directory not found: $TARGET_DIR" false;  return; fi 
+	if ! $(f_is_directory "$TARGET_DIR"); then f_balk "Target directory not found: $TARGET_DIR" false;  return; fi 
 	if $SET_PLEX_PERMISSIONS; then
 		chown $PLEX_USER:$PLEX_USER "$TARGET_DIR"
 		chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS "$TARGET_DIR"
 		fi
 	mv "$SOURCE_FILE" "$TARGET_DIR/"
 	exit_code=$?
-	if [ $exit_code -ne 0 ];				  then f_balk "$0: Can't move '$SOURCE_FILE' to '$TARGET_FILE'";    return; fi
+	if [ $exit_code -ne 0 ];				  then f_balk "Can't move '$SOURCE_FILE' to '$TARGET_FILE'";    return; fi
 	if $SET_PLEX_PERMISSIONS; then
 		chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
 		chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
@@ -362,9 +362,9 @@ function f_transcode_handbrake_source_video_file () {
 		mkdir -p "$TARGET_ROOT"
 
 	# Test existence of files and directories
-		if ! $(f_is_file "$SOURCE_FILE");       then f_balk "$0: Source file not found: $SOURCE_FILE" false;           return; fi 
-		if ! $(f_is_directory "$SOURCE_ROOT");  then f_balk "$0: Source root directory not found: $SOURCE_ROOT" false; return; fi 
-		if ! $(f_is_directory "$TARGET_ROOT");  then f_balk "$0: Target root directory not found: $TARGET_ROOT" true;  return; fi
+		if ! $(f_is_file "$SOURCE_FILE");       then f_balk "Source file not found: $SOURCE_FILE" false;           return; fi 
+		if ! $(f_is_directory "$SOURCE_ROOT");  then f_balk "Source root directory not found: $SOURCE_ROOT" false; return; fi 
+		if ! $(f_is_directory "$TARGET_ROOT");  then f_balk "Target root directory not found: $TARGET_ROOT" true;  return; fi
 
 	# Calculate definition of $TARGET_FILE
 		SOURCE_ROOT_LENGTH=${#SOURCE_ROOT}
@@ -397,7 +397,7 @@ function f_transcode_handbrake_source_video_file () {
 			fi
 		TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT$TARGET_FILE_EXTENSION"
 
-	if ! $(f_variable_has_content "$TARGET_FILE"); then f_balk "$0: Store file undefined" false; return;    fi
+	if ! $(f_variable_has_content "$TARGET_FILE"); then f_balk "Store file undefined" false; return;    fi
 
 	if ! $(f_filter "$SOURCE_FILE" "$IGNORE_TV_SHOWS") || ! $USE_TV_FILTERS; then
 		
@@ -405,7 +405,7 @@ function f_transcode_handbrake_source_video_file () {
 		# Do the transcoding
 		TIMESTART=$(currenttimeinseconds)
 		SOURCE_FILE_BASE=$(basename "$SOURCE_FILE")
-		f_log_and_echo "$0: Transcoding $SOURCE_FILE" false
+		f_log_and_echo "Transcoding $SOURCE_FILE" false
 		nice "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE"
 		exit_status=$?
 		chown $RUN_AS:$RUN_AS "$TARGET_FILE"
@@ -419,7 +419,7 @@ function f_transcode_handbrake_source_video_file () {
 				f_balk "$HANDBRAKE_CLI: FAILED with $exit_status for $SOURCE_FILE" true
 			else
 				rm "$SOURCE_FILE" # Delete input file
-				f_log_and_echo "$0: Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" false
+				f_log_and_echo "Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" false
 				echo
 			fi # End of check for transcoding failure
 		fi
@@ -477,6 +477,6 @@ f_show_eligible_transcoding () {
 
 # Log the completion
 if [ ! $DEBUG_MODE ]; then
-	logger -t "$0" Functions loaded from _functions
+	logger -t "$($basename $0)" Functions loaded from _functions
 	fi
 
