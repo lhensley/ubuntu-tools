@@ -458,6 +458,7 @@ f_iterate_handbrake_source_video_files() {
 			find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort -r | cut -f 2 > "$TEMP_FILE"
 				echo "$TEMP_FILE"
 				cat "$TEMP_FILE"
+				exit 1
 			while read SOURCE_FILE; do f_transcode_handbrake_source_video_file; logger -t test $SOURCE_FILE; done < "$TEMP_FILE"
 			rm "$TEMP_FILE"
 			f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false  # The TRUE part at the end means this sends pager notices.
