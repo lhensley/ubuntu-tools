@@ -413,7 +413,6 @@ function f_transcode_handbrake_source_video_file () {
 		chown $RUN_AS:$RUN_AS "$TARGET_FILE"
 		chmod $DEFAULT_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
 		if $SET_PLEX_PERMISSIONS; then
-	echo #
 			chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
 			chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
 			fi
