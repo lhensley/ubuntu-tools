@@ -459,8 +459,8 @@ f_iterate_handbrake_source_video_files() {
 		logger -t "Test SOURCE_ROOT" $SOURCE_ROOT
 		logger -t "Test SOURCE_FILE_NAME_PATTERN" $SOURCE_FILE_NAME_PATTERN
 		logger -t "Test WAIT_AFTER_SOURCE_SCAN" $WAIT_AFTER_SOURCE_SCAN
-			find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort -r | cut -f 2 > "$TEMP_FILE"
-			while read SOURCE_FILE; do f_transcode_handbrake_source_video_file; logger -t test $SOURCE_FILE; done < "$TEMP_FILE"
+			find -L /mnt/ssd1tb -type f -name "*.ts" -printf "%T+\t%p\n" | sort -r | cut -f 2 > "$TEMP_FILE"
+			while read SOURCE_FILE; do echo "$SOURCE_FILE"; done < "$TEMP_FILE"
 			rm "$TEMP_FILE"
 			f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false  # The TRUE part at the end means this sends pager notices.
 																	  # Drop this when stable, and consider bumping up the interval.
