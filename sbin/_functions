@@ -407,7 +407,7 @@ function f_transcode_handbrake_source_video_file () {
 		# Do the transcoding
 		TIMESTART=$(currenttimeinseconds)
 		SOURCE_FILE_BASE=$(basename "$SOURCE_FILE")
-		f_log_and_echo "Transcoding $(basename $SOURCE_FILE_BASE)" false
+		f_log_and_echo "Transcoding $SOURCE_FILE_BASE" false
 		nice "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE"
 		exit_status=$?
 		chown $RUN_AS:$RUN_AS "$TARGET_FILE"
