@@ -66,7 +66,7 @@ function print_usage {
   echo "  -X    Remove/uninstall the virtual host"
   echo "Example installation with WordPress:     sudo $script_name -W -u MYSQL_USER -p MYSQL_PASSWORD FQDN"
   echo "Example installation without WordPress:  sudo $script_name FQDN"
-  echo "Example removal including WordPress:     sudo $script_name -X -W -u MYSQL_USER -p MYSQL_PASSWORD FQDN"
+  echo "Example removal including WordPress:     sudo $script_name -X -W FQDN"
   echo "Example removal without WordPress:       sudo $script_name -X FQDN"
 }
 
