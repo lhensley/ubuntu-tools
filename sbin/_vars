@@ -213,6 +213,10 @@ source /etc/os-release
 # Example: MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs noauto 0 0"
 	declare -A MOUNT_POINT_DESCRIPTION
 	declare -A MOUNT_POINT_DEFINITION
+	if [ $HOSTNAME == "eve" ]; then
+		MOUNT_POINT_DESCRIPTION[/mnt/5TBD]="# Black 5TB External Seagate"
+			MOUNT_POINT_DEFINITION[/mnt/5TBD]="UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/5TBD ext4 defaults 0 0"
+	fi
 	if [ $HOSTNAME == "nuc01" ]; then
 		MOUNT_POINT_DESCRIPTION[/mnt/Black4T01]="Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE"
 			MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs noauto 0 0"
@@ -226,8 +230,6 @@ source /etc/os-release
 			MOUNT_POINT_DEFINITION[/mnt/Silver5TB-A]="UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs defaults 0 0"
 		MOUNT_POINT_DESCRIPTION[/mnt/Silver5TB-B]="Silver5TB-B (5TB) UUID 634B5E207BE18E54"
 			MOUNT_POINT_DEFINITION[/mnt/Silver5TB-B]="UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0"
-		MOUNT_POINT_DESCRIPTION[/mnt/5TBD]="# Black 5TB External Seagate"
-			MOUNT_POINT_DEFINITION[/mnt/5TBD]="UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/5TBD ext4 defaults 0 0"
 		MOUNT_POINT_DESCRIPTION[/mnt/5TBE]="# Black 5TB External Seagate"
 			MOUNT_POINT_DEFINITION[/mnt/5TBE]="UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 ro,defaults 0 0"
 		MOUNT_POINT_DESCRIPTION[/home/plex-swap/uploads]="Bind mount"

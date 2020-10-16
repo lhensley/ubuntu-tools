@@ -266,7 +266,7 @@ function f_process_ts_file () {
 		# Do the transcoding
 		TIMESTART=$(currenttimeinseconds)
 		IN_FILE_BASE=$(basename "$IN_FILE")
-		f_log_and_echo "Transcoding $IN_FILE" false
+		f_log_and_echo "$IN_FILE_BASE" false
 		nice -19 "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$IN_FILE" -o "$OUT_FILE"
 		exit_status=$?
 		chown $PLEX_USER:$PLEX_USER "$OUT_FILE"

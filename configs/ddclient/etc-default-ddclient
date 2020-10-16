@@ -18,4 +18,3 @@ run_daemon="true"
 # Set the time interval between the updates of the dynamic DNS name in seconds.
 # This option only takes effect if the ddclient runs in daemon mode.
 daemon_interval="7200"
-

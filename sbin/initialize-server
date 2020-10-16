@@ -49,7 +49,7 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
 
 # Add peripherals to /etc/fstab
     for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do 
-        mkdir -p "/mnt/$KEY"
+        mkdir -p "$KEY"
         if [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ] || [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ]; then
             echo "" >> /etc/fstab
         fi
