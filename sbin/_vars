@@ -116,16 +116,20 @@ source /etc/os-release
 # DEPENDENT on definition of $HOSTNAME, but that's built-in
 	declare -A ARCHIVE_FILE_SYSTEM
 		ARCHIVE_FILE_SYSTEM[default]="/"
+		ARCHIVE_FILE_SYSTEM[eve]="/mnt/3TBB"
 		ARCHIVE_FILE_SYSTEM[nuc01]="/mnt/5TBE"
 		ARCHIVE_FILE_SYSTEM[oz]="/mnt/5TBC"
 	declare -A ARCHIVE_DIRECTORY
 		ARCHIVE_DIRECTORY[default]="/var/lib/archives/$HOSTNAME"
+		ARCHIVE_DIRECTORY[eve]=${ARCHIVE_FILE_SYSTEM[eve]}/archives/eve
 		ARCHIVE_DIRECTORY[nuc01]=${ARCHIVE_FILE_SYSTEM[nuc01]}/archives/nuc01
 		ARCHIVE_DIRECTORY[oz]=${ARCHIVE_FILE_SYSTEM[oz]}/archives/oz
 	THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[default]}"
+		if [ $HOSTNAME == "eve" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[eve]}"; fi
 		if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[nuc01]}"; fi
 		if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[oz]}"; fi
 	THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[default]}"
+		if [ $HOSTNAME == "eve" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[eve]}"; fi
 		if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[nuc01]}"; fi
 		if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[oz]}"; fi
 	ARCHIVE_TAR_FILE="$HOSTNAME-$START_DATESTAMP.gz"
@@ -149,6 +153,11 @@ source /etc/os-release
 		COLD_RESTORE_POINT="/"
 		# COLD_RESTORE_POINT="/var/restore-points/START_DATEANDTIMESTAMP/"
 	COLD_BACKUP_LOG="$ADMIN_HOME_DIR/.coldstorage.log"
+	if [ $HOSTNAME == "eve" ]; then
+		COLD_BACKUP_FILE_SYSTEM="/mnt/3TBB"
+		COLD_BACKUP_FS_READ_ONLY=true
+		COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
+		fi
 	if [ $HOSTNAME == "nuc01" ]; then
 		COLD_BACKUP_FILE_SYSTEM="/mnt/5TBE"
 		COLD_BACKUP_FS_READ_ONLY=true
@@ -167,6 +176,7 @@ source /etc/os-release
 	COLD_BACKUP_SOURCES+=" var/lib/postfix"
 	COLD_RESTORE_EXCLUDES="--exclude=.config/os-install-info.txt"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/fstab*"
+	COLD_RESTORE_EXCLUDES+=" --exclude=.cache"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/mtab"
 	COLD_RESTORE_EXCLUDES+=" --exclude=\"/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Cache\""
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/os-release"
@@ -216,6 +226,8 @@ source /etc/os-release
 	if [ $HOSTNAME == "eve" ]; then
 		MOUNT_POINT_DESCRIPTION[/mnt/5TBD]="# Black 5TB External Seagate"
 			MOUNT_POINT_DEFINITION[/mnt/5TBD]="UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/5TBD ext4 defaults 0 0"
+		MOUNT_POINT_DESCRIPTION[/mnt/3TBB]="# Black 3TB External Drive (formerly attached to pearl)"
+			MOUNT_POINT_DEFINITION[/mnt/3TBB]="UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/3TBB ext4 ro,defaults 0 0"
 	fi
 	if [ $HOSTNAME == "nuc01" ]; then
 		MOUNT_POINT_DESCRIPTION[/mnt/Black4T01]="Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE"
