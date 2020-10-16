@@ -145,7 +145,7 @@ if $install_makemkv ; then
     f_install openssl
     f_install openvpn
     f_install bridge-utils
-    f_install ifupdown
+    # f_install ifupdown              # Used for /etc/network/interfaces manual configuration; interferes with Network Manager
     f_install proftpd                 # For scanning to brother@oz
     f_install resolvconf
     f_install rsync
