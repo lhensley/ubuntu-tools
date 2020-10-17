@@ -176,6 +176,7 @@ source /etc/os-release
 	COLD_BACKUP_SOURCES+=" var/lib/postfix"
 	COLD_RESTORE_EXCLUDES="--exclude=.config/os-install-info.txt"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/fstab*"
+	COLD_RESTORE_EXCLUDES+=" --exclude=etc/systemd/system"
 	COLD_RESTORE_EXCLUDES+=" --exclude=.cache"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/mtab"
 	COLD_RESTORE_EXCLUDES+=" --exclude=\"/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Cache\""
