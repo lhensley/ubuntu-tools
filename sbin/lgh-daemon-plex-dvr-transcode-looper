@@ -15,9 +15,9 @@
     SOURCE_ROOT="$VIDEO_WORK_DIRECTORY"                 # For Plex DVR, this is "$VIDEO_WORK_DIRECTORY"                                (defined in _vars)
 	  	     					                        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_OUTPUT_DIRECTORY"            (defined in _vars)
 	  	     					                        # For Zoom meeting recordings,  this is "$ZOOM_RAW_FILES"                      (defined in _vars)
-    SOURCE_ROOT="$VIDEO_STORE_DIRECTORY"                # For Plex DVR, this is "$VIDEO_STORE_DIRECTORY"                               (defined in _vars)
+    TARGET_ROOT="$VIDEO_STORE_DIRECTORY"                # For Plex DVR, this is "$VIDEO_STORE_DIRECTORY"                               (defined in _vars)
 	  	     					                        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_TRANSCODED_FILES_DIRECTORY"  (defined in _vars)
-	  	     					                        # For Zoom meeting recordings,  this is "$ZOOM_TRANSCODED_FILES"               (defined in _vars)
+	  	     					                        # For Zoom meeting recordings, this is "$ZOOM_TRANSCODED_FILES"                (defined in _vars)
     TARGET_FILE_EXTENSION=".m4v"                        # Normally this is ".m4v"                                                      (default defined in _vars)
     SET_PLEX_PERMISSIONS=true                           # Normally true only for Plex content files                                    (default defined in _vars)
     USE_TV_FILTERS=true                                 # Normally true only for Plex DVR files                                        (default defined in _vars)
@@ -34,4 +34,3 @@
 	source "${PATHNAME[script_footer]}"
 
 exit 0
-

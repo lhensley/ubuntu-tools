@@ -346,10 +346,10 @@ function f_transcode_handbrake_source_video_file () {
                                         # For DVDs ripped with MakeMKV, this is "$MAKEMKV_FILE_NAME_PATTERN"             (defined in _vars)
                                         # For Zoom meeting recordings,  this is "$ZOOM_FILE_NAME_PATTERN"                (defined in _vars)
     # $SOURCE_ROOT                      # For Plex DVR, this is "$VIDEO_WORK_DIRECTORY"                                  (defined in _vars)
-	    	     					    # For DVDs ripped with MakeMKV, this is "$MAKEMKV_OUTPUT_DIRECTORY"              (defined in _vars)
-	    	     					    # For Zoom meeting recordings,  this is "$ZOOM_RAW_FILES"                        (defined in _vars)
+	    	     					        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_OUTPUT_DIRECTORY"              (defined in _vars)
+	    	     					        # For Zoom meeting recordings,  this is "$ZOOM_RAW_FILES"                        (defined in _vars)
     # $TARGET_ROOT                      # For Plex DVR, this is "$VIDEO_STORE_DIRECTORY"                                 (defined in _vars)
-	    	     					    # For DVDs ripped with MakeMKV, this is "$MAKEMKV_TRANSCODED_FILES_DIRECTORY"    (defined in _vars)
+	    	     					        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_TRANSCODED_FILES_DIRECTORY"    (defined in _vars)
 	  	       					        # For Zoom meeting recordings,  this is "$ZOOM_TRANSCODED_FILES"                 (defined in _vars)
     # $TARGET_FILE_EXTENSION            # Normally this is ".m4v"                                                        (default defined in _vars)
     # $SET_PLEX_PERMISSIONS             # Normally true only for Plex content files                                      (default defined in _vars)
@@ -363,9 +363,9 @@ function f_transcode_handbrake_source_video_file () {
 		mkdir -p "$TARGET_ROOT"
 
 	# Test existence of files and directories
-		if ! $(f_is_file "$SOURCE_FILE");       then f_balk "Source file not found: $SOURCE_FILE" false;           return; fi 
-		if ! $(f_is_directory "$SOURCE_ROOT");  then f_balk "Source root directory not found: $SOURCE_ROOT" false; return; fi 
-		if ! $(f_is_directory "$TARGET_ROOT");  then f_balk "Target root directory not found: $TARGET_ROOT" true;  return; fi
+		if ! $(f_is_file "$SOURCE_FILE");       then f_die "Source file not found: $SOURCE_FILE" true;           return; fi 
+		if ! $(f_is_directory "$SOURCE_ROOT");  then f_die "Source root directory not found: $SOURCE_ROOT" true; return; fi 
+		if ! $(f_is_directory "$TARGET_ROOT");  then f_die "Target root directory not found: $TARGET_ROOT" true;  return; fi
 
 	# Calculate definition of $TARGET_FILE
 		SOURCE_ROOT_LENGTH=${#SOURCE_ROOT}
