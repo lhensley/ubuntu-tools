@@ -292,7 +292,7 @@ function f_process_ts_file () {
 			fi # End of check for transcoding failure
 		# Move all .m4v files from $VIDEO_WORK_DIRECTORY to $VIDEO_STORE_DIRECTORY.
 			find "$VIDEO_WORK_DIRECTORY" -type f -name "*.m4v" | while read M4V_FILE; do f_move_one_plex_file "$M4V_FILE" "$VIDEO_STORE_DIRECTORY/$M4V_FILE"; done
-		if $TEMP_ERRORS; then cat "$TEMP_ERROR_LOG" | mail lane; fi
+		if $TEMP_ERRORS; then cat "$TEMP_ERROR_LOG" | mail -s "Error Log for $HOSTNAME $TEMP_THIS_SCRIPT" admin; fi
 		rm "$TEMP_ERROR_LOG"
 		echo "Sleeping 10 for diagnostics (so you can read any error messages that may appear above)."
 		echo
@@ -484,7 +484,7 @@ f_iterate_handbrake_source_video_files() {
 				echo "PREPEND_PARENT_DIR_TO_BASENAME: $PREPEND_PARENT_DIR_TO_BASENAME" >> "$TEMP_FILE_DIAGNOSTICS"
 				echo "APPEND_UUID_TO_TARGET_FILE: $APPEND_UUID_TO_TARGET_FILE" >> "$TEMP_FILE_DIAGNOSTICS"
 				echo "USE_PARENT_DIR_AS_BASENAME: $USE_PARENT_DIR_AS_BASENAME" >> "$TEMP_FILE_DIAGNOSTICS"
-				cat "$TEMP_FILE_DIAGNOSTICS" | mail -s "Transcode Diagnostic Data for $HOSTNAME $0" lane
+				cat "$TEMP_FILE_DIAGNOSTICS" | mail -s "Transcode Diagnostic Data for $HOSTNAME $0" admin
 				rm "$TEMP_FILE_DIAGNOSTICS"
 			while read SOURCE_FILE; do f_transcode_handbrake_source_video_file; done < "$TEMP_FILE"
 			rm "$TEMP_FILE"
