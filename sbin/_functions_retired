@@ -1,0 +1,73 @@
+#!/bin/bash
+# Bash functions for Lane applications
+
+function f_process_ts_file () {
+	IN_FILE="$1"
+	WORK_ROOT_PATH="$2"
+	STORE_ROOT_PATH="$3"
+	OUT_EXT="m4v"
+
+	if ! $(f_is_file "$IN_FILE");                      then f_balk "TS file not found: $1" false;      return; fi 
+	if ! $(f_is_directory "$WORK_ROOT_PATH");          then f_balk "Work directory not found: $1" false; return; fi 
+	if ! $(f_is_directory "$STORE_ROOT_PATH");         then f_balk "Store directory not found: $1" false; return; fi 
+	if ! $(f_variable_has_content "$IGNORE_TV_SHOWS"); then f_balk "TV filter undefined" false;     return; fi
+
+	WORK_ROOT_PATH_LENGTH=${#WORK_ROOT_PATH}
+
+	IN_FILE_LENGTH=${#IN_FILE}
+	IN_FILE_EXT="${IN_FILE##*.}"
+	IN_FILE_EXT_LENGTH="${#IN_FILE_EXT}"
+
+	RELATIVE_FILE_LENGTH=$[IN_FILE_LENGTH-WORK_ROOT_PATH_LENGTH-1]
+	RELATIVE_FILE=${IN_FILE: -$RELATIVE_FILE_LENGTH} # First remove WORK_ROOT_PATH
+	RELATIVE_FILE_NO_EXT_LENGTH=$[RELATIVE_FILE_LENGTH-IN_FILE_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
+	RELATIVE_FILE_NO_EXT=${RELATIVE_FILE:0:RELATIVE_FILE_NO_EXT_LENGTH} # Then remove IN_FILE_EXT
+	UU=$(uuidgen)
+	OUT_FILE="$WORK_ROOT_PATH/$RELATIVE_FILE_NO_EXT - $UU.$OUT_EXT"
+	# STORE_FILE="$STORE_ROOT_PATH/$RELATIVE_FILE_NO_EXT - $UU.$OUT_EXT"
+	STORE_FILE="$STORE_ROOT_PATH/$RELATIVE_FILE_NO_EXT - $UU.$OUT_EXT"
+
+	if ! $(f_variable_has_content "$OUT_FILE");      then f_balk "Output file undefined" false; return;   fi
+	if ! $(f_variable_has_content "$RELATIVE_FILE"); then f_balk "Relative file undefined" false; return; fi
+	if ! $(f_variable_has_content "$STORE_FILE");    then f_balk "Store file undefined" false; return;    fi
+	if ! $(f_variable_has_content "$PLEX_LIVE_APPLICATION_SUPPORT"); then 
+		f_balk "Plex live application support directory undefined" false; return; fi
+
+	if ! $(f_filter "$IN_FILE" "$IGNORE_TV_SHOWS"); then
+		
+		# Hold this part out for now. Not sure this is the place for it.
+		# "${PATHNAME[transcode_ripped_dvds]}" # Pick up ripped DVDs first, if any
+
+		# Do the transcoding
+		# yyy
+		TIMESTART=$(currenttimeinseconds)
+		IN_FILE_BASE=$(basename "$IN_FILE")
+		TEMP_ERRORS=false
+		TEMP_THIS_SCRIPT=$(basename "$0")
+		TEMP_ERROR_LOG="/tmp/Error Log for $HOSTNAME $TEMP_THIS_SCRIPT $(date) $(uuidgen)"
+		echo "$TEMP_ERROR_LOG" > "$TEMP_ERROR_LOG"
+		f_log_and_echo "$IN_FILE_BASE" false
+		nice -19 "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$IN_FILE" -o "$OUT_FILE"
+		exit_status=$?
+		chown $PLEX_USER:$PLEX_USER "$OUT_FILE"
+		chmod $PLEX_VIDEO_FILE_PERMISSIONS "$OUT_FILE"
+		if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
+				TEMP_ERRORS=true
+				echo "$HANDBRAKE_CLI: FAILED with error #$exit_status for $IN_FILE" >> "$TEMP_ERROR_LOG"				
+				f_balk "$HANDBRAKE_CLI: FAILED with error #$exit_status for $IN_FILE" false
+				return
+			else
+				rm "$IN_FILE" # Delete input file
+				f_log_and_echo "Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" false
+				echo
+			fi # End of check for transcoding failure
+		# Move all .m4v files from $VIDEO_WORK_DIRECTORY to $VIDEO_STORE_DIRECTORY.
+			find "$VIDEO_WORK_DIRECTORY" -type f -name "*.m4v" | while read M4V_FILE; do f_move_one_plex_file "$M4V_FILE" "$VIDEO_STORE_DIRECTORY/$M4V_FILE"; done
+		if $TEMP_ERRORS; then cat "$TEMP_ERROR_LOG" | mail -s "Error Log for $HOSTNAME $TEMP_THIS_SCRIPT" admin; fi
+		rm "$TEMP_ERROR_LOG"
+		echo "Sleeping 10 for diagnostics (so you can read any error messages that may appear above)."
+		echo
+		sleep 10
+		fi
+	}
+
