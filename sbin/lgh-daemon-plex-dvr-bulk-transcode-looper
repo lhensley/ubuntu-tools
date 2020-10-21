@@ -1,0 +1,37 @@
+#!/bin/bash
+# Looks for for files DVR recordings on a Plex server installation, and transcodes them. Pauses, then repeats forever.
+# This script should be run as root from cron, executed at boot time.
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ];         then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting;         exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ];         then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting;         exit 1; fi
+
+# Set the variables
+    WAIT_AFTER_SOURCE_SCAN="1h"                         # How long to wait after looping through all source files
+    SOURCE_FILE_NAME_PATTERN="$PLEX_FILE_NAME_PATTERN"  # For Plex DVR,                 this is "$PLEX_FILE_NAME_PATTERN"              (defined in _vars)
+                                                        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_FILE_NAME_PATTERN"           (defined in _vars)
+                                                        # For Zoom meeting recordings,  this is "$ZOOM_FILE_NAME_PATTERN"              (defined in _vars)
+    SOURCE_ROOT="/mnt/ext10tb01/TV-Austin-2020-09-20-Uncompressed-TS-Files"
+                                                        # For Plex DVR, this is "$VIDEO_WORK_DIRECTORY"                                (defined in _vars)
+	  	     					                        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_OUTPUT_DIRECTORY"            (defined in _vars)
+	  	     					                        # For Zoom meeting recordings,  this is "$ZOOM_RAW_FILES"                      (defined in _vars)
+    TARGET_ROOT="$VIDEO_STORE_DIRECTORY"                # For Plex DVR, this is "$VIDEO_STORE_DIRECTORY"                               (defined in _vars)
+	  	     					                        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_TRANSCODED_FILES_DIRECTORY"  (defined in _vars)
+	  	     					                        # For Zoom meeting recordings, this is "$ZOOM_TRANSCODED_FILES"                (defined in _vars)
+    TARGET_FILE_EXTENSION=".m4v"                        # Normally this is ".m4v"                                                      (default defined in _vars)
+    SET_PLEX_PERMISSIONS=true                           # Normally true only for Plex content files                                    (default defined in _vars)
+    USE_TV_FILTERS=true                                 # Normally true only for Plex DVR files                                        (default defined in _vars)
+    FLATTEN_TARGET_DIRECTORY=false                      # Normally used for Zoom meeting recordings and MAYBE Ripped DVDs (maybe; TBD) (default defined in _vars)
+    PREPEND_PARENT_DIR_TO_BASENAME=false                # Normally used for Zoom meeting recordings                                    (default defined in _vars)
+    APPEND_UUID_TO_TARGET_FILE=true                     # Normally used for Plex files so that multiple media files can be retained.   (default defined in _vars)
+    USE_PARENT_DIR_AS_BASENAME=false                    # May be useful for ripped DVDs. TBD. Think about this first                   (default defined in _vars)
+
+# Do the looping work
+    f_iterate_handbrake_source_video_files
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
