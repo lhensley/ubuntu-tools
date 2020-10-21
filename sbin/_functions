@@ -199,6 +199,11 @@ function f_set_plex_media_recursive_permissions () {
     find "$VIDEO_STORE_DIRECTORY" -type f -print -exec chmod $PLEX_VIDEO_FILE_PERMISSIONS {} \;
 	}
 
+function f_only_on_server () {
+	# $1 = allowed-short-host-name
+	if [ $HOSTNAME != "$1" ]; then die "This script runs only on $1." true; fi
+	}
+
 function f_move_one_plex_file () {
 	SOURCE_FILE="$1"
 	TARGET_FILE="$2"
