@@ -462,7 +462,24 @@ f_iterate_handbrake_source_video_files() {
 
 			TEMP_FILE="/tmp/source file list $(date)"
 			find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort -r | cut -f 2 > "$TEMP_FILE"
-			while read SOURCE_FILE; do cat "$TEMP_FILE" | mail lane; f_transcode_handbrake_source_video_file; done < "$TEMP_FILE"
+				# Diagnostic section
+				sleep 2
+				TEMP_FILE_DIAGNOSTICS="/tmp/diagnostics file list $(date)"
+				cat "$TEMP_FILE" > $TEMP_FILE_DIAGNOSTICS
+				echo "WAIT_AFTER_SOURCE_SCAN: $WAIT_AFTER_SOURCE_SCAN" >> $TEMP_FILE_DIAGNOSTICS
+				echo "SOURCE_FILE_NAME_PATTERN: $SOURCE_FILE_NAME_PATTERN" >> $TEMP_FILE_DIAGNOSTICS
+				echo "SOURCE_ROOT: $SOURCE_ROOT" >> $TEMP_FILE_DIAGNOSTICS
+				echo "TARGET_ROOT: $TARGET_ROOT" >> $TEMP_FILE_DIAGNOSTICS
+				echo "TARGET_FILE_EXTENSION: $TARGET_FILE_EXTENSION" >> $TEMP_FILE_DIAGNOSTICS
+				echo "SET_PLEX_PERMISSIONS: $SET_PLEX_PERMISSIONS" >> $TEMP_FILE_DIAGNOSTICS
+				echo "USE_TV_FILTERS: $USE_TV_FILTERS" >> $TEMP_FILE_DIAGNOSTICS
+				echo "FLATTEN_TARGET_DIRECTORY: $FLATTEN_TARGET_DIRECTORY" >> $TEMP_FILE_DIAGNOSTICS
+				echo "PREPEND_PARENT_DIR_TO_BASENAME: $PREPEND_PARENT_DIR_TO_BASENAME" >> $TEMP_FILE_DIAGNOSTICS
+				echo "APPEND_UUID_TO_TARGET_FILE: $APPEND_UUID_TO_TARGET_FILE" >> $TEMP_FILE_DIAGNOSTICS
+				echo "USE_PARENT_DIR_AS_BASENAME: $USE_PARENT_DIR_AS_BASENAME" >> $TEMP_FILE_DIAGNOSTICS
+				cat "$TEMP_FILE_DIAGNOSTICS" | mail lane.hensley@alumni.duke.edu
+				rm "$TEMP_FILE_DIAGNOSTICS"
+			while read SOURCE_FILE; f_transcode_handbrake_source_video_file; done < "$TEMP_FILE"
 			rm "$TEMP_FILE"
 			f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false  # The TRUE part at the end means this sends pager notices.
 																	  # Drop this when stable, and consider bumping up the interval.
