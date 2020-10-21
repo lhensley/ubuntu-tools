@@ -391,8 +391,11 @@ source /etc/os-release
 #	IGNORE_TV_SHOW[CBS Morning News]=true
 #	IGNORE_TV_SHOW[CBS This Morning]=true
 #	IGNORE_TV_SHOW[CBS Weekend News]=true
+#	IGNORE_TV_SHOW[Channel 13 News]=true
 #	IGNORE_TV_SHOW[Face the Nation]=true
+#	IGNORE_TV_SHOW[Good Morning Iowa]=true
 #	IGNORE_TV_SHOW[Jimmy Kimmel Live]=true
+#	IGNORE_TV_SHOW[KCCI 8 News]=true
 #	IGNORE_TV_SHOW[KXAN News]=true
 #	IGNORE_TV_SHOW[Meet the Press]=true
 #	IGNORE_TV_SHOW[NBC Nightly News]=true
@@ -400,6 +403,7 @@ source /etc/os-release
 #	IGNORE_TV_SHOW[The Late Show]=true
 #	IGNORE_TV_SHOW[The Tonight Show]=true
 #	IGNORE_TV_SHOW[Today (1952)]=true
+#	IGNORE_TV_SHOW[Today in Iowa]=true
 	# Ref: https://bytefreaks.net/gnulinux/bash/bash-how-to-iterate-over-associative-array-and-print-all-keyvalue-pairs
 	IGNORE_TV_SHOWS=""; for KEY in "${!IGNORE_TV_SHOW[@]}"; do IGNORE_TV_SHOWS+="\"$KEY\" "; done
 
