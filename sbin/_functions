@@ -463,8 +463,7 @@ f_iterate_handbrake_source_video_files() {
 			TEMP_FILE="/tmp/source file list $(date) $(uuidgen)"
 			find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort -r | cut -f 2 > "$TEMP_FILE"
 				# Diagnostic section
-				sleep 2
-				TEMP_FILE_DIAGNOSTICS="/tmp/diagnostics file list $(date)"
+				TEMP_FILE_DIAGNOSTICS="/tmp/diagnostics file list $(date) $(uuidgen)"
 				cat "$TEMP_FILE" > $TEMP_FILE_DIAGNOSTICS
 				echo "WAIT_AFTER_SOURCE_SCAN: $WAIT_AFTER_SOURCE_SCAN" >> $TEMP_FILE_DIAGNOSTICS
 				echo "SOURCE_FILE_NAME_PATTERN: $SOURCE_FILE_NAME_PATTERN" >> $TEMP_FILE_DIAGNOSTICS
