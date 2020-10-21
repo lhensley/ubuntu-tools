@@ -460,7 +460,7 @@ f_iterate_handbrake_source_video_files() {
 			#   The sort can be fooled by a "newer" directory structure name, because the sort is on the full pathname. 
 			#   Oh well. Fix this if that becomes an issue.
 
-			TEMP_FILE="/tmp/source file list $(date)"
+			TEMP_FILE="/tmp/source file list $(date) $(uuidgen)"
 			find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort -r | cut -f 2 > "$TEMP_FILE"
 				# Diagnostic section
 				sleep 2
