@@ -87,6 +87,8 @@ f_mv "Sanford and Son (1972)"
 f_mv "Saturday Night Live (1975)"
 f_mv "Schitt's Creek (2015)"
 
+chown -R plex:plex *
+
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
