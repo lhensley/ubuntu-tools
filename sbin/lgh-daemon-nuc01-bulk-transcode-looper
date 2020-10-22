@@ -12,11 +12,11 @@
     SOURCE_FILE_NAME_PATTERN="$PLEX_FILE_NAME_PATTERN"  # For Plex DVR,                 this is "$PLEX_FILE_NAME_PATTERN"              (defined in _vars)
                                                         # For DVDs ripped with MakeMKV, this is "$MAKEMKV_FILE_NAME_PATTERN"           (defined in _vars)
                                                         # For Zoom meeting recordings,  this is "$ZOOM_FILE_NAME_PATTERN"              (defined in _vars)
-    SOURCE_ROOT="/mnt/cloteal/Plex/Pool01-1TB"
+    SOURCE_ROOT="/mnt/cloteal/Plex/Pool06-1TB"
                                                         # For Plex DVR, this is "$VIDEO_WORK_DIRECTORY"                                (defined in _vars)
 	  	     					                        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_OUTPUT_DIRECTORY"            (defined in _vars)
 	  	     					                        # For Zoom meeting recordings,  this is "$ZOOM_RAW_FILES"                      (defined in _vars)
-    TARGET_ROOT="/mnt/cloteal/Plex/Pool01-1TB"
+    TARGET_ROOT="/mnt/cloteal/Plex/Pool06-1TB"
                                                         # For Plex DVR, this is "$VIDEO_STORE_DIRECTORY"                               (defined in _vars)
 	  	     					                        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_TRANSCODED_FILES_DIRECTORY"  (defined in _vars)
 	  	     					                        # For Zoom meeting recordings, this is "$ZOOM_TRANSCODED_FILES"                (defined in _vars)
