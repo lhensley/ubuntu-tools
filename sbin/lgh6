@@ -10,7 +10,7 @@ function f_mv() {
 	mv "$1"* "$2"/
 	}
 
-mv "Handmaids Tale - " "Handmaids Tale (2017)"
+f_mv "Handmaids Tale - " "Handmaids Tale (2017)"
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
