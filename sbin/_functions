@@ -347,7 +347,7 @@ function f_target_relative_path_and_filename () {
 			RELATIVE_FILE_NO_EXT="$DD/$FF"
 			if [ "$DD"=="." ]; then RELATIVE_FILE_NO_EXT=$FF; fi
 			fi
-		TEMP_TIME=$(stat -c %z "$SOURCE_FILE")
+		TEMP_TIME=$(stat -c "%y" "$SOURCE_FILE")
 		TEMP_TIME=$(date -d"$TEMP_TIME")
 		if [ $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE ] ; then 
 			RELATIVE_FILE_NO_EXT += " $HOSTNAME $TEMP_TIME"; 
