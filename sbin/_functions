@@ -374,10 +374,10 @@ function f_target_relative_path_and_filename () {
 		echo FF: $FF
 		echo DD: $DD
 		echo TEMP_TIME: $TEMP_TIME
-		echo RELATIVE_FILE_LENGTH: $RELATIVE_FILE_LENGTH
-		echo RELATIVE_FILE: $RELATIVE_FILE
-		echo RELATIVE_FILE_NO_EXT: $RELATIVE_FILE_NO_EXT
-		echo TARGET_FILE: $TARGET_FILE
+		echo RELATIVE_FILE_LENGTH:  $RELATIVE_FILE_LENGTH
+		echo RELATIVE_FILE:         $RELATIVE_FILE
+		echo RELATIVE_FILE_NO_EXT:  $RELATIVE_FILE_NO_EXT
+		echo TARGET_FILE:           $TARGET_FILE
 		exit 1
 
 	if ! $(f_variable_has_content "$TARGET_FILE"); then f_balk "Store file undefined" false; return;    fi
