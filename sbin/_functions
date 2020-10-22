@@ -339,6 +339,7 @@ function f_target_relative_path_and_filename () {
 				RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}							
 				fi 
 		fi
+		RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}							
 		RELATIVE_FILE_NO_EXT_LENGTH=$[RELATIVE_FILE_LENGTH-SOURCE_FILE_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
 		RELATIVE_FILE_NO_EXT=${RELATIVE_FILE:0:RELATIVE_FILE_NO_EXT_LENGTH} # Then remove SOURCE_FILE_EXT
 		if $PREPEND_PARENT_DIR_TO_BASENAME || $APPEND_UUID_TO_TARGET_FILE ; then
