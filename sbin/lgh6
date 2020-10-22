@@ -7,10 +7,31 @@
 
 function f_mv() {
 	mkdir "$2"
-	mv "$1"* "$2"/
+	mv "$1 - "* "$2"/
 	}
 
-f_mv "Handmaids Tale - " "Handmaids Tale (2017)"
+f_mv "American Horror Story" "American Horror Story (2011)"
+f_mv "Americans" "American Horror Story (2013)"
+f_mv "Angel" "Angel (1999)"
+f_mv "Angels in America" "Angels in America (2003)"
+f_mv "Babylon 5" "Babylon 5 (1994)"
+f_mv "Band of Brothers" "Band of Brothers (2001)"
+f_mv "Better Call Saul" "Better Call Saul (2015)"
+f_mv "Big Bang Theory" "Big Bang Theory (2007)"
+f_mv "Bionic Woman (1976)" "Bionic Woman (1976)"
+f_mv "Boardwalk Empire" "Boardwalk Empire (2010)"
+f_mv "Body Language (1995)" "Body Language (1995)"
+f_mv "Boston Legal" "Boston Legal (2004)"
+f_mv "Breaking Bad" "Breaking Bad (2008)"
+f_mv "Buffy the Vampire Slayer" "Buffy the Vampire Slayer (1997)"
+f_mv "Burn Notice" "Burn Notice (2007)"
+f_mv "Chernobyl" "Chernobyl (2019)"
+f_mv "CSI" "CSI (2000)"
+f_mv "Dexter" "Dexter (2006)"
+f_mv "Doctor Who" "Doctor Who (2005)"
+f_mv "Fargo" "Fargo (2014)"
+f_mv "Game of Thrones" "Game of Thrones (2011)"
+f_mv "Gilmore Girls" "Gilmore Girls (2000)"
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
