@@ -26,7 +26,7 @@
     APPEND_UUID_TO_TARGET_FILE=true                     # Normally used for Plex files so that multiple media files can be retained.   (default defined in _vars)
     USE_PARENT_DIR_AS_BASENAME=false                    # May be useful for ripped DVDs. TBD. Think about this first                   (default defined in _vars)
 
-    find "$SOURCE_ROOT" -name "$PLEX_FILE_NAME_PATTERN" -print
+    find "$SOURCE_ROOT" -name "$PLEX_FILE_NAME_PATTERN" -print | basename
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
