@@ -310,6 +310,7 @@ function f_transcode_handbrake_source_video_file () {
 		if ! $(f_is_file "$SOURCE_FILE");       then f_die "Source file not found: $SOURCE_FILE" true;           return; fi 
 		if ! $(f_is_directory "$SOURCE_ROOT");  then f_die "Source root directory not found: $SOURCE_ROOT" true; return; fi 
 		if ! $(f_is_directory "$TARGET_ROOT");  then f_die "Target root directory not found: $TARGET_ROOT" true;  return; fi
+		DIAG_SOURCE_FILE="$SOURCE_FILE"
 
 	# Calculate definition of $TARGET_FILE
 		SOURCE_ROOT_LENGTH=${#SOURCE_ROOT}
@@ -355,6 +356,8 @@ function f_transcode_handbrake_source_video_file () {
 	TEMP_ERRORS=false
 	TEMP_THIS_SCRIPT=$(basename "$0")
 	TEMP_ERROR_LOG="/tmp/Error Log for $HOSTNAME $TEMP_THIS_SCRIPT $(date) $(uuidgen)"
+	if [ "$SOURCE_FILE" != "$DIAG_SOURCE_FILE" ] ; then f_die "$SOURCE_FILE != $DIAG_SOURCE_FILE" true ; fi
+	if ! $(f_is_file "$SOURCE_FILE"); then f_die "Source file (pt. 2) not found: $SOURCE_FILE" true; return; fi 
 	echo "$TEMP_ERROR_LOG" > "$TEMP_ERROR_LOG"
 	f_log_and_echo "Transcoding $SOURCE_FILE_BASE to $TARGET_FILE" false
 	nice -19 "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE"
@@ -421,7 +424,7 @@ f_iterate_handbrake_source_video_files() {
 				echo "PREPEND_PARENT_DIR_TO_BASENAME: $PREPEND_PARENT_DIR_TO_BASENAME" >> "$TEMP_FILE_DIAGNOSTICS"
 				echo "APPEND_UUID_TO_TARGET_FILE: $APPEND_UUID_TO_TARGET_FILE" >> "$TEMP_FILE_DIAGNOSTICS"
 				echo "USE_PARENT_DIR_AS_BASENAME: $USE_PARENT_DIR_AS_BASENAME" >> "$TEMP_FILE_DIAGNOSTICS"
-				cat "$TEMP_FILE_DIAGNOSTICS" | mail -s "Transcode Diagnostic Data for $HOSTNAME $0" admin
+				cat "$TEMP_FILE_DIAGNOSTICS" | mail -s "Pre-Run Transcode Diagnostic Data for $HOSTNAME $0" admin
 				rm "$TEMP_FILE_DIAGNOSTICS"
 			while read SOURCE_FILE; do f_transcode_handbrake_source_video_file; done < "$TEMP_FILE"
 			rm "$TEMP_FILE"
