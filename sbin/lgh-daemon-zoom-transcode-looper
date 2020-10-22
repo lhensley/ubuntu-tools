@@ -26,6 +26,9 @@
     APPEND_UUID_TO_TARGET_FILE=false                    # Normally used for Plex files so that multiple media files can be retained.   (default defined in _vars)
     USE_PARENT_DIR_AS_BASENAME=false                    # May be useful for ripped DVDs. TBD. Think about this first                   (default defined in _vars)
 
+# Allow this script to run only on server oz
+    f_only_on_server "oz"
+
 # Do the looping work
     f_iterate_handbrake_source_video_files
 

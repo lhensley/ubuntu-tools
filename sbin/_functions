@@ -1,5 +1,4 @@
 #!/bin/bash
-# _functions
 # Bash functions for Lane applications
 
 # Check to ensure that variables are defined
@@ -201,7 +200,7 @@ function f_set_plex_media_recursive_permissions () {
 
 function f_only_on_server () {
 	# $1 = allowed-short-host-name
-	if [ $HOSTNAME != "$1" ]; then die "This script runs only on $1." true; fi
+	if [ $HOSTNAME != "$1" ]; then f_die "This script runs only on $1." true; fi
 	}
 
 function f_move_one_plex_file () {
@@ -408,7 +407,7 @@ f_iterate_handbrake_source_video_files() {
 			#   The sort can be fooled by a "newer" directory structure name, because the sort is on the full pathname. 
 			#   Oh well. Fix this if that becomes an issue.
 
-			TEMP_FILE="/tmp/source file list $(date) $(uuidgen)"
+			TEMP_FILE="/tmp/f_iterate_handbrake_source_video_files $(date) $(uuidgen)"
 			find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort -r | cut -f 2 > "$TEMP_FILE"
 				# Diagnostic section
 				TEMP_FILE_DIAGNOSTICS="/tmp/diagnostics file list $(date) $(uuidgen)"
