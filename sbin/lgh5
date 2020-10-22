@@ -27,7 +27,10 @@
     USE_PARENT_DIR_AS_BASENAME=false                    # May be useful for ripped DVDs. TBD. Think about this first                   (default defined in _vars)
 
     find "$SOURCE_ROOT" -name "$PLEX_FILE_NAME_PATTERN" -print > "/tmp/lgh5"
-    while read SOURCE_FILE; do echo $SOURCE_FILE; echo "oorah"; done < "/tmp/lgh5"
+    while read SOURCE_FILE; do \
+        		SOURCE_ROOT_LENGTH=${#SOURCE_ROOT} \
+		    SOURCE_FILE_LENGTH=${#SOURCE_FILE} \
+        echo $SOURCE_FILE; echo "oorah"; done < "/tmp/lgh5"
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
