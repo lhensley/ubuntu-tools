@@ -303,8 +303,8 @@ function f_target_file_path_and_filename () {
 #*    # $USE_PARENT_DIR_AS_BASENAME       # May be useful for ripped DVDs. TBD. Think about this first                     (default defined in _vars)
 
 	# Test existence of some values of required variables
-		if ! $(f_is_directory "$SOURCE_ROOT"); then f_balk "Source root directory not found: $SOURCE_ROOT" true; return; fi
-		if ! $(f_is_file "$SOURCE_FILE");      then f_balk "Source file not found: $SOURCE_FILE"           true; return; fi
+#		if ! $(f_is_directory "$SOURCE_ROOT"); then f_balk "Source root directory not found: $SOURCE_ROOT" true; return; fi
+#		if ! $(f_is_file "$SOURCE_FILE");      then f_balk "Source file not found: $SOURCE_FILE"           true; return; fi
 
 	# Calculate definition of $TARGET_FILE
 		# For examples below, assume 
