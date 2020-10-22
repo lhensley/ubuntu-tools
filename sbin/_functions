@@ -283,24 +283,24 @@ function f_move_completed_handbrake_files () {
 
 function f_target_file_path_and_filename () {
 	# CRITICAL: Define these variables BEFORE calling this function:
-xxx    # $WAIT_AFTER_SOURCE_SCAN           # How long to wait after looping through all source files
-xxx    # $SOURCE_FILE_NAME_PATTERN         # For Plex DVR,                 this is "$PLEX_FILE_NAME_PATTERN"                (defined in _vars)
+#xxx    # $WAIT_AFTER_SOURCE_SCAN           # How long to wait after looping through all source files
+#xxx    # $SOURCE_FILE_NAME_PATTERN         # For Plex DVR,                 this is "$PLEX_FILE_NAME_PATTERN"                (defined in _vars)
                                         # For DVDs ripped with MakeMKV, this is "$MAKEMKV_FILE_NAME_PATTERN"             (defined in _vars)
                                         # For Zoom meeting recordings,  this is "$ZOOM_FILE_NAME_PATTERN"                (defined in _vars)
-*    # $SOURCE_ROOT                      # For Plex DVR, this is "$VIDEO_WORK_DIRECTORY"                                  (defined in _vars)
+#*    # $SOURCE_ROOT                      # For Plex DVR, this is "$VIDEO_WORK_DIRECTORY"                                  (defined in _vars)
 	    	     					        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_OUTPUT_DIRECTORY"              (defined in _vars)
 	    	     					        # For Zoom meeting recordings,  this is "$ZOOM_RAW_FILES"                        (defined in _vars)
-*	 # $SOURCE_FILE						# Normally derived shortly before calling this function
-*    # $TARGET_ROOT                      # For Plex DVR, this is "$VIDEO_STORE_DIRECTORY"                                 (defined in _vars)
+#*	 # $SOURCE_FILE						# Normally derived shortly before calling this function
+#*    # $TARGET_ROOT                      # For Plex DVR, this is "$VIDEO_STORE_DIRECTORY"                                 (defined in _vars)
 	    	     					        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_TRANSCODED_FILES_DIRECTORY"    (defined in _vars)
 	  	       					        # For Zoom meeting recordings,  this is "$ZOOM_TRANSCODED_FILES"                 (defined in _vars)
-xxx    # $TARGET_FILE_EXTENSION            # Normally this is ".m4v"                                                        (default defined in _vars)
-xxx    # $SET_PLEX_PERMISSIONS             # Normally true only for Plex content files                                      (default defined in _vars)
-xxx    # $USE_TV_FILTERS                   # Normally true only for Plex DVR files                                          (default defined in _vars)
-*    # $FLATTEN_TARGET_DIRECTORY         # Normally used for Zoom meeting recordings and MAYBE Ripped DVDs (maybe; TBD)   (default defined in _vars)
-*    # $PREPEND_PARENT_DIR_TO_BASENAME   # Normally used for Zoom meeting recordings                                      (default defined in _vars)
-*    # $APPEND_UUID_TO_TARGET_FILE       # Normally used for Plex files so that multiple media files can be retained.     (default defined in _vars)
-*    # $USE_PARENT_DIR_AS_BASENAME       # May be useful for ripped DVDs. TBD. Think about this first                     (default defined in _vars)
+#xxx    # $TARGET_FILE_EXTENSION            # Normally this is ".m4v"                                                        (default defined in _vars)
+#xxx    # $SET_PLEX_PERMISSIONS             # Normally true only for Plex content files                                      (default defined in _vars)
+#xxx    # $USE_TV_FILTERS                   # Normally true only for Plex DVR files                                          (default defined in _vars)
+#*    # $FLATTEN_TARGET_DIRECTORY         # Normally used for Zoom meeting recordings and MAYBE Ripped DVDs (maybe; TBD)   (default defined in _vars)
+#*    # $PREPEND_PARENT_DIR_TO_BASENAME   # Normally used for Zoom meeting recordings                                      (default defined in _vars)
+#*    # $APPEND_UUID_TO_TARGET_FILE       # Normally used for Plex files so that multiple media files can be retained.     (default defined in _vars)
+#*    # $USE_PARENT_DIR_AS_BASENAME       # May be useful for ripped DVDs. TBD. Think about this first                     (default defined in _vars)
 
 	# Test existence of some values of required variables
 		if ! $(f_is_directory "$SOURCE_ROOT"); then f_balk "Source root directory not found: $SOURCE_ROOT" true; return; fi
