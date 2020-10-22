@@ -322,7 +322,7 @@ function f_target_relative_path_and_filename () {
 			RELATIVE_FILE=$(basename "$SOURCE_FILE")								# ca-certificates.crt (if $FLATTERN_TARGET_DIRECTORY were true)
 			if $USE_PARENT_DIR_AS_BASENAME; then 
 				T=$(dirname "$SOURCE_FILE");										# /etc/ssl/certs      (if $FLATTERN_TARGET_DIRECTORY were true)
-				RELATIVE_FILE=$(basename "$T");									# certs               (if $FLATTERN_TARGET_DIRECTORY were true)
+				RELATIVE_FILE=$(basename "$T");									# certs.crt           (if $FLATTERN_TARGET_DIRECTORY were true)
 				fi
 			RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}								
 		else
@@ -332,9 +332,9 @@ function f_target_relative_path_and_filename () {
 				T=$(dirname "$SOURCE_FILE");										# /etc/ssl/certs
 				F=$(basename "$T");												# certs
 				D=$(dirname "$RELATIVE_FILE");									# /certs
-				RELATIVE_FILE="$D/$F";											# /certs/certs
+				RELATIVE_FILE="$T/$F";											# /etc/ssl/certs/certs
 				if [ $SOURCE_FILE_EXT_LENGTH -ne 0 ]; then 
-					RELATIVE_FILE+=".$SOURCE_FILE_EXT";							# /certs/certs.crt
+					RELATIVE_FILE+=".$SOURCE_FILE_EXT";							# /etc/ssl/certs/certs.crt
 					fi
 				RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}							
 				fi 
