@@ -10,7 +10,7 @@ function f_mv() {
 	mv "$1 - "* "$1"/
 	}
 
-f_mv "Alice (976)"
+f_mv "Alice (1976)"
 f_mv "All in the Family (1971)"
 f_mv "American Ninja Warrior (2009)"
 f_mv "Barnaby Jones (1973)"
@@ -20,7 +20,7 @@ f_mv "Battlestar Galactica (2003)"
 f_mv "Benson (1979)"
 f_mv "Bewitched (1964)"
 f_mv "Bob's Burgers (2011)"
-f_mv "Buck Rogers in teh 25th Century (1979)"
+f_mv "Buck Rogers in the 25th Century (1979)"
 f_mv "Cannon (1971)"
 f_mv "Carol Burnett and Friends (1967)"
 f_mv "CBS Evening News With Norah O'Donnell (2019)"
