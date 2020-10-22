@@ -10,6 +10,16 @@ function f_mv() {
 	mv "$1 - "* "$1"/
 	}
 
+rmdir 'Alice (976)'
+rmdir 'Buck Rogers in teh 25th Century (1979)'
+rmdir 'Doctos Who (1963)'
+rmdir 'KXAN News at 4 50 PM (2018)'
+rmdir 'Late Night with Seth Meyers (2014)'
+rmdir mnt
+rmdir 'My Favorie Martian (1963)'
+rmdir 'Rowan & Martins Laugh-In (1967)'
+rmdir 'That 70s Show (1998)'
+
 f_mv "Alice (1976)"
 f_mv "All in the Family (1971)"
 f_mv "American Ninja Warrior (2009)"
