@@ -310,20 +310,20 @@ function f_target_file_path_and_filename () {
 		# For examples below, assume 
 		SOURCE_FILE="/etc/ssl/certs/ca-certificates.crt"
 		SOURCE_ROOT="/etc/ssl"
-		FLATTEN_TARGET_DIRECTORY=false
+		FLATTEN_TARGET_DIRECTORY=true
 		SOURCE_ROOT_LENGTH=${#SOURCE_ROOT}										# 8
 		SOURCE_FILE_LENGTH=${#SOURCE_FILE}										# 34
-		SOURCE_FILE_EXT="${SOURCE_FILE##*.}"										# .crt
-		SOURCE_FILE_EXT_LENGTH="${#SOURCE_FILE_EXT}"								# 4  (length of ".crt")
+		SOURCE_FILE_EXT="${SOURCE_FILE##*.}"										# crt
+		SOURCE_FILE_EXT_LENGTH="${#SOURCE_FILE_EXT}"								# 3  (length of "crt")
 		if $FLATTEN_TARGET_DIRECTORY; then 
 			RELATIVE_FILE=$(basename "$SOURCE_FILE")								# ca-certificates.crt (if $FLATTERN_TARGET_DIRECTORY were true)
 			if $USE_PARENT_DIR_AS_BASENAME; then 
 				T=$(dirname "$SOURCE_FILE");										# /etc/ssl/certs      (if $FLATTERN_TARGET_DIRECTORY were true)
 				RELATIVE_FILE=$(basename "$T");									# certs               (if $FLATTERN_TARGET_DIRECTORY were true)
 				fi
-			RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}								# 5  (length of "certs")
+			RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}								
 		else
-			RELATIVE_FILE_LENGTH=$[SOURCE_FILE_LENGTH-SOURCE_ROOT_LENGTH-1]		# 26 (34-8)
+			RELATIVE_FILE_LENGTH=$[SOURCE_FILE_LENGTH-SOURCE_ROOT_LENGTH-1]		# 25 (34-8)
 			RELATIVE_FILE=${SOURCE_FILE: -$RELATIVE_FILE_LENGTH}					# /certs/ca-certificates.crt (Remove SOURCE_ROOT)
 			if $USE_PARENT_DIR_AS_BASENAME; then 
 				T=$(dirname "$SOURCE_FILE");										# /etc/ssl/certs
@@ -333,7 +333,7 @@ function f_target_file_path_and_filename () {
 				if [ $SOURCE_FILE_EXT_LENGTH -ne 0 ]; then 
 					RELATIVE_FILE+=".$SOURCE_FILE_EXT";							# /certs/certs.crt
 					fi
-				RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}							# 12 (length of "/certs/certs")
+				RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}							
 				fi 
 		fi
 		echo SOURCE_FILE: $SOURCE_FILE
