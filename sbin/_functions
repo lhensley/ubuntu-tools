@@ -9,7 +9,7 @@ FUNCTIONS_ARE_DEFINED=false
 
 function f_log_and_echo () {
 # Usage f_log_and_echo "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
-	if [ $2 ]; then echo $(basename $0): $1 | mail $TEXT_ALERTS; fi
+	if $2; then echo $(basename $0): $1 | mail $TEXT_ALERTS; fi
 	logger -t "$(basename $0)" $1
 	# >&2 echo $(basename $0): $1
 	echo $(basename $0): $1
@@ -178,7 +178,7 @@ function f_mount_ro_fs_as_ro () {
 			umount "$FILE_SYSTEM"
 		fi
 	# If cold backup file system is flagged as ro, unmount & remount ro
-	if [ $FS_READ_ONLY ]; then
+	if $FS_READ_ONLY; then
 		mount -o ro "$FILE_SYSTEM"
 		fi
 	# If file system is not mounted read-only, fail
@@ -259,7 +259,7 @@ function f_move_one_file () {
 	if ! $(f_is_file "$SOURCE_FILE");	  then f_balk "Source file not found: $1" false;                return; fi 
 	mkdir -p "$TARGET_DIR"
 	if ! $(f_is_directory "$TARGET_DIR"); then f_balk "Target directory not found: $TARGET_DIR" false;  return; fi 
-	if [ $SET_PLEX_PERMISSIONS ]; then
+	if $SET_PLEX_PERMISSIONS; then
 		chown $PLEX_USER:$PLEX_USER "$TARGET_DIR"
 		chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS "$TARGET_DIR"
 		fi
@@ -318,9 +318,9 @@ function f_target_relative_path_and_filename () {
 		SOURCE_FILE_LENGTH=${#SOURCE_FILE}										# 34
 		SOURCE_FILE_EXT="${SOURCE_FILE##*.}"										# crt
 		SOURCE_FILE_EXT_LENGTH="${#SOURCE_FILE_EXT}"								# 3  (length of "crt")
-		if [ $FLATTEN_TARGET_DIRECTORY ]; then 
+		if $FLATTEN_TARGET_DIRECTORY; then 
 			RELATIVE_FILE=$(basename "$SOURCE_FILE")								# ca-certificates.crt (if $FLATTERN_TARGET_DIRECTORY were true)
-			if [ $USE_PARENT_DIR_AS_BASENAME ]; then 
+			if $USE_PARENT_DIR_AS_BASENAME; then 
 				T=$(dirname "$SOURCE_FILE");										# /etc/ssl/certs      (if $FLATTERN_TARGET_DIRECTORY were true)
 				RELATIVE_FILE=$(basename "$T");									# certs               (if $FLATTERN_TARGET_DIRECTORY were true)
 				fi
@@ -328,7 +328,7 @@ function f_target_relative_path_and_filename () {
 		else
 			RELATIVE_FILE_LENGTH=$[SOURCE_FILE_LENGTH-SOURCE_ROOT_LENGTH-1]		# 25 (34-8)
 			RELATIVE_FILE=${SOURCE_FILE: -$RELATIVE_FILE_LENGTH}					# /certs/ca-certificates.crt (Remove SOURCE_ROOT)
-			if [ $USE_PARENT_DIR_AS_BASENAME ]; then 
+			if $USE_PARENT_DIR_AS_BASENAME; then 
 				T=$(dirname "$SOURCE_FILE");										# /etc/ssl/certs
 				F=$(basename "$T");												# certs
 				D=$(dirname "$RELATIVE_FILE");									# /certs
@@ -341,17 +341,17 @@ function f_target_relative_path_and_filename () {
 		fi
 		RELATIVE_FILE_NO_EXT_LENGTH=$[RELATIVE_FILE_LENGTH-SOURCE_FILE_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
 		RELATIVE_FILE_NO_EXT=${RELATIVE_FILE:0:RELATIVE_FILE_NO_EXT_LENGTH} # Then remove SOURCE_FILE_EXT
-		if [ $PREPEND_PARENT_DIR_TO_BASENAME ] || [ $APPEND_UUID_TO_TARGET_FILE ] ; then
+		if $PREPEND_PARENT_DIR_TO_BASENAME || $APPEND_UUID_TO_TARGET_FILE ; then
 			DD=$(dirname "$RELATIVE_FILE_NO_EXT")
 			FF=$(basename "$RELATIVE_FILE_NO_EXT")
-			if [ $PREPEND_PARENT_DIR_TO_BASENAME ] ; then T=$(dirname "$SOURCE_FILE"); X=$(basename "$T"); FF="$X-$FF"; fi
-			if [ $APPEND_UUID_TO_TARGET_FILE ] ; then FF+=" - $(uuidgen)"; fi
+			if $PREPEND_PARENT_DIR_TO_BASENAME; then T=$(dirname "$SOURCE_FILE"); X=$(basename "$T"); FF="$X-$FF"; fi
+			if $APPEND_UUID_TO_TARGET_FILE; then FF+=" - $(uuidgen)"; fi
 			RELATIVE_FILE_NO_EXT="$DD/$FF"
 			if [ "$DD"=="." ]; then RELATIVE_FILE_NO_EXT=$FF; fi
 			fi
 		TEMP_TIME=$(stat -c "%y" "$SOURCE_FILE")
 		TEMP_TIME=$(date -d"$TEMP_TIME")
-		if [ $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE ] ; then 
+		if $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE; then 
 			RELATIVE_FILE_NO_EXT+=" $HOSTNAME $TEMP_TIME"; 
 			fi
 		TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT$TARGET_FILE_EXTENSION"
@@ -398,7 +398,7 @@ function f_target_relative_path_and_filename () {
 	exit_status=$?
 	chown $RUN_AS:$RUN_AS "$TARGET_FILE"
 	chmod $DEFAULT_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
-	if [ $SET_PLEX_PERMISSIONS ]; then
+	if $SET_PLEX_PERMISSIONS; then
 		chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
 		chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
 		fi
@@ -450,14 +450,14 @@ function f_transcode_handbrake_source_video_file () {
 		SOURCE_FILE_LENGTH=${#SOURCE_FILE}
 		SOURCE_FILE_EXT="${SOURCE_FILE##*.}"
 		SOURCE_FILE_EXT_LENGTH="${#SOURCE_FILE_EXT}"
-		if [ $FLATTEN_TARGET_DIRECTORY ]; then 
+		if $FLATTEN_TARGET_DIRECTORY; then 
 			RELATIVE_FILE=$(basename "$SOURCE_FILE")
-			if [ $USE_PARENT_DIR_AS_BASENAME ]; then T=$(dirname "$SOURCE_FILE"); RELATIVE_FILE=$(basename "$T"); fi
+			if $USE_PARENT_DIR_AS_BASENAME; then T=$(dirname "$SOURCE_FILE"); RELATIVE_FILE=$(basename "$T"); fi
 			RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}
 		else
 			RELATIVE_FILE_LENGTH=$[SOURCE_FILE_LENGTH-SOURCE_ROOT_LENGTH-1]
 			RELATIVE_FILE=${SOURCE_FILE: -$RELATIVE_FILE_LENGTH} # Remove SOURCE_ROOT
-			if [ $USE_PARENT_DIR_AS_BASENAME ]; then T=$(dirname "$SOURCE_FILE"); 
+			if $USE_PARENT_DIR_AS_BASENAME; then T=$(dirname "$SOURCE_FILE"); 
 				F=$(basename "$T"); D=$(dirname "$RELATIVE_FILE"); RELATIVE_FILE="$D/$F";
 				if [ $SOURCE_FILE_EXT_LENGTH -ne 0 ]; then RELATIVE_FILE+=".$SOURCE_FILE_EXT"; fi
 				RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}
@@ -465,15 +465,15 @@ function f_transcode_handbrake_source_video_file () {
 		fi
 		RELATIVE_FILE_NO_EXT_LENGTH=$[RELATIVE_FILE_LENGTH-SOURCE_FILE_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
 		RELATIVE_FILE_NO_EXT=${RELATIVE_FILE:0:RELATIVE_FILE_NO_EXT_LENGTH} # Then remove SOURCE_FILE_EXT
-		if [ $PREPEND_PARENT_DIR_TO_BASENAME ] || $APPEND_UUID_TO_TARGET_FILE ; then
+		if $PREPEND_PARENT_DIR_TO_BASENAME || $APPEND_UUID_TO_TARGET_FILE ; then
 			DD=$(dirname "$RELATIVE_FILE_NO_EXT")
 			FF=$(basename "$RELATIVE_FILE_NO_EXT")
 			TEMP_TIME=$(stat -c %z "$SOURCE_FILE")
 			TEMP_TIME=$(date -d"$TEMP_TIME")
-			if [ $PREPEND_PARENT_DIR_TO_BASENAME ] ; then T=$(dirname "$SOURCE_FILE"); X=$(basename "$T"); FF="$X-$FF"; fi
-			if [ $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE ] ; 
+			if $PREPEND_PARENT_DIR_TO_BASENAME; then T=$(dirname "$SOURCE_FILE"); X=$(basename "$T"); FF="$X-$FF"; fi
+			if $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE; 
 				then FF+=" - $HOSTNAME $TEMP_TIME"; fi
-			if [ $APPEND_UUID_TO_TARGET_FILE ] ; then FF+=" - $(uuidgen)"; fi
+			if $APPEND_UUID_TO_TARGET_FILE; then FF+=" - $(uuidgen)"; fi
 			RELATIVE_FILE_NO_EXT="$DD/$FF"
 			if [ "$DD"=="." ]; then RELATIVE_FILE_NO_EXT=$FF; fi
 			fi
@@ -497,7 +497,7 @@ function f_transcode_handbrake_source_video_file () {
 	exit_status=$?
 	chown $RUN_AS:$RUN_AS "$TARGET_FILE"
 	chmod $DEFAULT_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
-	if [ $SET_PLEX_PERMISSIONS ]; then
+	if $SET_PLEX_PERMISSIONS; then
 		chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
 		chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
 		fi
