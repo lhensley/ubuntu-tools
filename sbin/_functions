@@ -301,6 +301,7 @@ function f_target_relative_path_and_filename () {
 #*    # $PREPEND_PARENT_DIR_TO_BASENAME   # Normally used for Zoom meeting recordings                                      (default defined in _vars)
 #*    # $APPEND_UUID_TO_TARGET_FILE       # Normally used for Plex files so that multiple media files can be retained.     (default defined in _vars)
 #*    # $USE_PARENT_DIR_AS_BASENAME       # May be useful for ripped DVDs. TBD. Think about this first                     (default defined in _vars)
+#*	  # $USE_SOURCE_EXT_FOR_TARGET		# If true, overrides $TARGET_FILE_EXTENSION variable	; default is false
 
 	# Test existence of some values of required variables
 #		if ! $(f_is_directory "$SOURCE_ROOT"); then f_balk "Source root directory not found: $SOURCE_ROOT" true; return; fi
@@ -309,7 +310,7 @@ function f_target_relative_path_and_filename () {
 	# Calculate definition of $TARGET_FILE
 		# For examples below, assume 
 		SOURCE_FILE="/etc/ssl/certs/ca-certificates.crt"
-		SOURCE_ROOT="/etc"
+		SOURCE_ROOT="/etc/ssl"
 		TARGET_ROOT="/made/up/root"
 
 		SOURCE_ROOT_LENGTH=${#SOURCE_ROOT}										# 8
@@ -350,7 +351,7 @@ function f_target_relative_path_and_filename () {
 		TEMP_TIME=$(stat -c "%y" "$SOURCE_FILE")
 		TEMP_TIME=$(date -d"$TEMP_TIME")
 		if [ $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE ] ; then 
-			RELATIVE_FILE_NO_EXT += " $HOSTNAME $TEMP_TIME"; 
+			RELATIVE_FILE_NO_EXT+=" $HOSTNAME $TEMP_TIME"; 
 			fi
 		TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT$TARGET_FILE_EXTENSION"
 
