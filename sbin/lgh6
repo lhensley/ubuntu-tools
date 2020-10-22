@@ -10,10 +10,9 @@ function f_mv() {
 	mv "$1 - "* "$2"/
 	}
 
-f_mv "Angels in America" "Angels in America (2003)"
-f_mv "Chernobyl" "Chernobyl (2019)"
-f_mv "Crown" "Crown (2016)"
-f_mv "Doctor Who" "Doctor Who (2005)"
+f_mv "Angels In America" "Angels in America (2003)"
+f_mv "Chernobyl (2019)" "Chernobyl (2019)"
+# f_mv "Doctor Who" "Doctor Who (2005)"
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
