@@ -10,17 +10,7 @@ function f_mv() {
 	mv "$1 - "* "$1"/
 	}
 
-f_mv "World's Most Evil Killers (2019)"
-f_mv "Wings (1990)"
-f_mv "Will & Grace (1998)"
-f_mv "Today in Iowa at 6 (2004)"
-f_mv "The Simpsons (1989)"
-f_mv "The Partridge Family (1970)"
-f_mv "The Rifleman (1958)"
-f_mv "Abbott and Costello (1951)"
-
-
-
+f_mv "$1"
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
