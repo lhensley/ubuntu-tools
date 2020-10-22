@@ -401,10 +401,8 @@ f_iterate_handbrake_source_video_files() {
     # $APPEND_UUID_TO_TARGET_FILE       # Normally used for Plex files so that multiple media files can be retained.     (default defined in _vars)
     # $USE_PARENT_DIR_AS_BASENAME       # May be useful for ripped DVDs. TBD. Think about this first                     (default defined in _vars)
 
-logger "$0: f_iterate_handbrake_source_video_files: Point B"
 	# Do the looping work
 		while true; do
-logger "$0: f_iterate_handbrake_source_video_files: Point C"
 			# SOURCE_FILE is the newest file found, based on the sort shown below.
 			#   The sort can be fooled by a "newer" directory structure name, because the sort is on the full pathname. 
 			#   Oh well. Fix this if that becomes an issue.
@@ -412,13 +410,9 @@ logger "$0: f_iterate_handbrake_source_video_files: Point C"
 			TEMP_FILE="/tmp/f_iterate_handbrake_source_video_files $(date) $(uuidgen)"
 			find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort -r | cut -f 2 > "$TEMP_FILE"
 				# Diagnostic section
-logger "$0: f_iterate_handbrake_source_video_files: Point C"
 				TEMP_FILE_DIAGNOSTICS="/tmp/diagnostics file list $(date) $(uuidgen)"
-logger "$0: f_iterate_handbrake_source_video_files: Point D"
 				cat "$TEMP_FILE" > "$TEMP_FILE_DIAGNOSTICS"
-logger "$0: f_iterate_handbrake_source_video_files: Point E"
 				echo "WAIT_AFTER_SOURCE_SCAN: $WAIT_AFTER_SOURCE_SCAN" >> "$TEMP_FILE_DIAGNOSTICS"
-logger "$0: f_iterate_handbrake_source_video_files: Point F"
 				echo "SOURCE_FILE_NAME_PATTERN: $SOURCE_FILE_NAME_PATTERN" >> "$TEMP_FILE_DIAGNOSTICS"
 				echo "SOURCE_ROOT: $SOURCE_ROOT" >> "$TEMP_FILE_DIAGNOSTICS"
 				echo "TARGET_ROOT: $TARGET_ROOT" >> "$TEMP_FILE_DIAGNOSTICS"
@@ -427,15 +421,10 @@ logger "$0: f_iterate_handbrake_source_video_files: Point F"
 				echo "USE_TV_FILTERS: $USE_TV_FILTERS" >> "$TEMP_FILE_DIAGNOSTICS"
 				echo "FLATTEN_TARGET_DIRECTORY: $FLATTEN_TARGET_DIRECTORY" >> "$TEMP_FILE_DIAGNOSTICS"
 				echo "PREPEND_PARENT_DIR_TO_BASENAME: $PREPEND_PARENT_DIR_TO_BASENAME" >> "$TEMP_FILE_DIAGNOSTICS"
-logger "$0: f_iterate_handbrake_source_video_files: Point G"
 				echo "APPEND_UUID_TO_TARGET_FILE: $APPEND_UUID_TO_TARGET_FILE" >> "$TEMP_FILE_DIAGNOSTICS"
-logger "$0: f_iterate_handbrake_source_video_files: Point H"
 				echo "USE_PARENT_DIR_AS_BASENAME: $USE_PARENT_DIR_AS_BASENAME" >> "$TEMP_FILE_DIAGNOSTICS"
-logger "$0: f_iterate_handbrake_source_video_files: Point I"
 				cat "$TEMP_FILE_DIAGNOSTICS" | mail -s "Pre-Run Transcode Diagnostic Data for $HOSTNAME $0" admin
-logger "$0: f_iterate_handbrake_source_video_files: Point J"
 				rm "$TEMP_FILE_DIAGNOSTICS"
-logger "$0: f_iterate_handbrake_source_video_files: Point K"
 			while read SOURCE_FILE; do f_transcode_handbrake_source_video_file; done < "$TEMP_FILE"
 			rm "$TEMP_FILE"
 			f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false  # The TRUE part at the end means this sends pager notices.

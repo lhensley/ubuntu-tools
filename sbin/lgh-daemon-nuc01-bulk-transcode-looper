@@ -31,8 +31,6 @@
 # Allow this script to run only on server nuc01
     f_only_on_server "nuc01"
 
-logger "$0: Test point A in main script file."
-
 # Do the looping work
     f_iterate_handbrake_source_video_files
 
