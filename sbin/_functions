@@ -342,14 +342,15 @@ function f_target_relative_path_and_filename () {
 		if [ $PREPEND_PARENT_DIR_TO_BASENAME ] || [ $APPEND_UUID_TO_TARGET_FILE ] ; then
 			DD=$(dirname "$RELATIVE_FILE_NO_EXT")
 			FF=$(basename "$RELATIVE_FILE_NO_EXT")
-			TEMP_TIME=$(stat -c %z "$SOURCE_FILE")
-			TEMP_TIME=$(date -d"$TEMP_TIME")
 			if [ $PREPEND_PARENT_DIR_TO_BASENAME ] ; then T=$(dirname "$SOURCE_FILE"); X=$(basename "$T"); FF="$X-$FF"; fi
-			if [ $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE ] ; 
-				then FF+=" - $HOSTNAME $TEMP_TIME"; fi
 			if [ $APPEND_UUID_TO_TARGET_FILE ] ; then FF+=" - $(uuidgen)"; fi
 			RELATIVE_FILE_NO_EXT="$DD/$FF"
 			if [ "$DD"=="." ]; then RELATIVE_FILE_NO_EXT=$FF; fi
+			fi
+		TEMP_TIME=$(stat -c %z "$SOURCE_FILE")
+		TEMP_TIME=$(date -d"$TEMP_TIME")
+		if [ $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE ] ; then 
+			RELATIVE_FILE_NO_EXT += " $HOSTNAME $TEMP_TIME"; 
 			fi
 		TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT$TARGET_FILE_EXTENSION"
 
