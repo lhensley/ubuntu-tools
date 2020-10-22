@@ -1,0 +1,80 @@
+#!/bin/bash
+# This script should be run as root from cron, executed at boot time.
+# For now, this should ONLY run on oz, because server-specific values are defined.
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ];         then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting;         exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ];         then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting;         exit 1; fi
+
+# CASE DEFINITION:
+# Move completed TV files from oz to nuc01
+# URGENT NEED: Define variables in "# Plex Media Server" so we can reference these by variable for ANY server.
+# SOURCE_ROOT_DIR="oz.lane.hensley.org:/mnt/ext10tb01/plex"
+SOURCE_ROOT_DIR="/mnt/ext10tb01/plex"
+TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Shows-DVR"
+
+# MOVE (not copy) files to new directory or server/directory
+# Useful for MOVING (not copying) completed video files
+# Does NOT remove extraneous files from target directories
+# rsync options considered
+# Until string constants and variable definitions are moved to _vars, this should ONLY be run on oz.
+#    -a = archive mode, equivalent to -rlptgoD
+#    -g = preserve group ownership
+#    -l = recreate symlinks on destination
+#    -n = dry run
+#    -o = preserve owner
+#    -p = preserve permissions
+#    -q = quiet
+#    -r = recursive (includes subdirectories)
+#    -t = preserve modification times
+#    -v = verbose
+#    -D = preserve device files and special files
+#    -E = preserve executability
+#    -R = use relative paths (see https://linux.die.net/man/1/rsync for more info)
+#    --delete = delete extraneous files from dest dirs
+
+# Do the looping work
+# CRITICAL: Note string literals and variables set here. All should be moved to _vars
+    SHOULD_BE_IN_VARS_SLEEP_TIME="6h"
+	DEV_SOURCE_ROOT_DIR="/mnt/ssd1tb/plex/TV-Austin"
+	DEV_TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Shows-DVR"
+	TEMP_FILE="/tmp/files-being-moved $(date) $(uuidgen)"
+
+	f_target_file_path_and_filename
+	exit 1
+
+	find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | \
+		sort | cut -f 2 > "$TEMP_FILE"
+	while read SOURCE_FILE; do \
+		echo $SOURCE_FILE; \
+		echo; \
+		done < "$TEMP_FILE"
+
+
+
+
+
+
+	rm "$TEMP_FILE"
+	f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false  # The TRUE part at the end means this sends pager notices.
+															  # Drop this when stable, and consider bumping up the interval.
+	sleep "$WAIT_AFTER_SOURCE_SCAN"
+
+
+
+
+
+	#while true; do
+    #   sudo -u $ADMIN_USER rsync --remove-source-files -aloprtv "$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR"/ | logger -t "$0"
+	#	f_log_and_echo "Sleeping $SHOULD_BE_IN_VARS_SLEEP_TIME." false  # The TRUE part at the end means this sends pager notices.
+	#															        # Drop this when stable, and consider bumping up the interval.
+	#	sleep "$SHOULD_BE_IN_VARS_SLEEP_TIME"
+    #   done
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+

@@ -281,6 +281,127 @@ function f_move_completed_handbrake_files () {
 			do f_move_one_plex_file "$THIS_FILE" "$TARGET_ROOT/$THIS_FILE"; done
 	}
 
+function f_target_file_path_and_filename () {
+	# CRITICAL: Define these variables BEFORE calling this function:
+xxx    # $WAIT_AFTER_SOURCE_SCAN           # How long to wait after looping through all source files
+xxx    # $SOURCE_FILE_NAME_PATTERN         # For Plex DVR,                 this is "$PLEX_FILE_NAME_PATTERN"                (defined in _vars)
+                                        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_FILE_NAME_PATTERN"             (defined in _vars)
+                                        # For Zoom meeting recordings,  this is "$ZOOM_FILE_NAME_PATTERN"                (defined in _vars)
+*    # $SOURCE_ROOT                      # For Plex DVR, this is "$VIDEO_WORK_DIRECTORY"                                  (defined in _vars)
+	    	     					        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_OUTPUT_DIRECTORY"              (defined in _vars)
+	    	     					        # For Zoom meeting recordings,  this is "$ZOOM_RAW_FILES"                        (defined in _vars)
+*	 # $SOURCE_FILE						# Normally derived shortly before calling this function
+*    # $TARGET_ROOT                      # For Plex DVR, this is "$VIDEO_STORE_DIRECTORY"                                 (defined in _vars)
+	    	     					        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_TRANSCODED_FILES_DIRECTORY"    (defined in _vars)
+	  	       					        # For Zoom meeting recordings,  this is "$ZOOM_TRANSCODED_FILES"                 (defined in _vars)
+xxx    # $TARGET_FILE_EXTENSION            # Normally this is ".m4v"                                                        (default defined in _vars)
+xxx    # $SET_PLEX_PERMISSIONS             # Normally true only for Plex content files                                      (default defined in _vars)
+xxx    # $USE_TV_FILTERS                   # Normally true only for Plex DVR files                                          (default defined in _vars)
+*    # $FLATTEN_TARGET_DIRECTORY         # Normally used for Zoom meeting recordings and MAYBE Ripped DVDs (maybe; TBD)   (default defined in _vars)
+*    # $PREPEND_PARENT_DIR_TO_BASENAME   # Normally used for Zoom meeting recordings                                      (default defined in _vars)
+*    # $APPEND_UUID_TO_TARGET_FILE       # Normally used for Plex files so that multiple media files can be retained.     (default defined in _vars)
+*    # $USE_PARENT_DIR_AS_BASENAME       # May be useful for ripped DVDs. TBD. Think about this first                     (default defined in _vars)
+
+	# Test existence of some values of required variables
+		if ! $(f_is_directory "$SOURCE_ROOT"); then f_balk "Source root directory not found: $SOURCE_ROOT" true; return; fi
+		if ! $(f_is_file "$SOURCE_FILE");      then f_balk "Source file not found: $SOURCE_FILE"           true; return; fi
+
+	# Calculate definition of $TARGET_FILE
+		# For examples below, assume 
+		SOURCE_FILE="/etc/ssl/certs/ca-certificates.crt"
+		SOURCE_ROOT="/etc/ssl"
+		FLATTEN_TARGET_DIRECTORY=false
+		SOURCE_ROOT_LENGTH=${#SOURCE_ROOT}										# 8
+		SOURCE_FILE_LENGTH=${#SOURCE_FILE}										# 34
+		SOURCE_FILE_EXT="${SOURCE_FILE##*.}"										# .crt
+		SOURCE_FILE_EXT_LENGTH="${#SOURCE_FILE_EXT}"								# 4  (length of ".crt")
+		if $FLATTEN_TARGET_DIRECTORY; then 
+			RELATIVE_FILE=$(basename "$SOURCE_FILE")								# ca-certificates.crt (if $FLATTERN_TARGET_DIRECTORY were true)
+			if $USE_PARENT_DIR_AS_BASENAME; then 
+				T=$(dirname "$SOURCE_FILE");										# /etc/ssl/certs      (if $FLATTERN_TARGET_DIRECTORY were true)
+				RELATIVE_FILE=$(basename "$T");									# certs               (if $FLATTERN_TARGET_DIRECTORY were true)
+				fi
+			RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}								# 5  (length of "certs")
+		else
+			RELATIVE_FILE_LENGTH=$[SOURCE_FILE_LENGTH-SOURCE_ROOT_LENGTH-1]		# 26 (34-8)
+			RELATIVE_FILE=${SOURCE_FILE: -$RELATIVE_FILE_LENGTH}					# /certs/ca-certificates.crt (Remove SOURCE_ROOT)
+			if $USE_PARENT_DIR_AS_BASENAME; then 
+				T=$(dirname "$SOURCE_FILE");										# /etc/ssl/certs
+				F=$(basename "$T");												# certs
+				D=$(dirname "$RELATIVE_FILE");									# /certs
+				RELATIVE_FILE="$D/$F";											# /certs/certs
+				if [ $SOURCE_FILE_EXT_LENGTH -ne 0 ]; then 
+					RELATIVE_FILE+=".$SOURCE_FILE_EXT";							# /certs/certs.crt
+					fi
+				RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}							# 12 (length of "/certs/certs")
+				fi 
+		fi
+		echo SOURCE_FILE: $SOURCE_FILE
+		echo SOURCE_ROOT: $SOURCE_ROOT
+		echo FLATTEN_TARGET_DIRECTORY: $FLATTEN_TARGET_DIRECTORY
+		echo SOURCE_ROOT_LENGTH: $SOURCE_ROOT_LENGTH
+		echo SOURCE_FILE_LENGTH: $SOURCE_FILE_LENGTH
+		echo SOURCE_FILE_EXT: $SOURCE_FILE_EXT
+		echo SOURCE_FILE_EXT_LENGTH: $SOURCE_FILE_EXT_LENGTH
+		echo USE_PARENT_DIR_AS_BASENAME: $USE_PARENT_DIR_AS_BASENAME
+		echo T: $T
+		echo F: $F
+		echo D: $D
+		echo RELATIVE_FILE: $RELATIVE_FILE
+		echo RELATIVE_FILE_LENGTH: $RELATIVE_FILE_LENGTH
+		exit 1
+
+		RELATIVE_FILE_NO_EXT_LENGTH=$[RELATIVE_FILE_LENGTH-SOURCE_FILE_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
+		RELATIVE_FILE_NO_EXT=${RELATIVE_FILE:0:RELATIVE_FILE_NO_EXT_LENGTH} # Then remove SOURCE_FILE_EXT
+		if $PREPEND_PARENT_DIR_TO_BASENAME || $APPEND_UUID_TO_TARGET_FILE ; then
+			DD=$(dirname "$RELATIVE_FILE_NO_EXT")
+			FF=$(basename "$RELATIVE_FILE_NO_EXT")
+			TEMP_TIME=$(stat -c %z "$SOURCE_FILE")
+			TEMP_TIME=$(date -d"$TEMP_TIME")
+			if $PREPEND_PARENT_DIR_TO_BASENAME ; then T=$(dirname "$SOURCE_FILE"); X=$(basename "$T"); FF="$X-$FF"; fi
+			if $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE ; 
+				then FF+=" - $HOSTNAME $TEMP_TIME"; fi
+			if $APPEND_UUID_TO_TARGET_FILE ; then FF+=" - $(uuidgen)"; fi
+			RELATIVE_FILE_NO_EXT="$DD/$FF"
+			if [ "$DD"=="." ]; then RELATIVE_FILE_NO_EXT=$FF; fi
+			fi
+		TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT$TARGET_FILE_EXTENSION"
+
+	if ! $(f_variable_has_content "$TARGET_FILE"); then f_balk "Store file undefined" false; return;    fi
+
+	if ! $(f_filter "$SOURCE_FILE" "$IGNORE_TV_SHOWS") || ! $USE_TV_FILTERS; then
+		
+	# Do the transcoding
+	TIMESTART=$(currenttimeinseconds)
+	SOURCE_FILE_BASE=$(basename "$SOURCE_FILE")
+	TEMP_ERRORS=false
+	TEMP_THIS_SCRIPT=$(basename "$0")
+	TEMP_ERROR_LOG="/tmp/Error Log for $HOSTNAME $TEMP_THIS_SCRIPT $(date) $(uuidgen)"
+	if [ "$SOURCE_FILE" != "$DIAG_SOURCE_FILE" ] ; then f_die "$SOURCE_FILE != $DIAG_SOURCE_FILE" true ; fi
+	if ! $(f_is_file "$SOURCE_FILE"); then f_die "Source file (pt. 2) not found: $SOURCE_FILE" true; return; fi 
+	echo "$TEMP_ERROR_LOG" > "$TEMP_ERROR_LOG"
+	f_log_and_echo "Transcoding $SOURCE_FILE_BASE to $TARGET_FILE" false
+	nice -19 "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE"
+	exit_status=$?
+	chown $RUN_AS:$RUN_AS "$TARGET_FILE"
+	chmod $DEFAULT_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
+	if $SET_PLEX_PERMISSIONS; then
+		chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
+		chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
+		fi
+	if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
+			TEMP_ERRORS=true
+			echo "$HANDBRAKE_CLI: FAILED with error #$exit_status for $IN_FILE" >> "$TEMP_ERROR_LOG"				
+			f_balk "$HANDBRAKE_CLI: FAILED with error #$exit_status for $SOURCE_FILE" false
+			cat "$TEMP_ERROR_LOG" | mail -s "Error Log for $HOSTNAME $TEMP_THIS_SCRIPT" admin
+		else
+			rm "$SOURCE_FILE" # Delete input file
+			f_log_and_echo "Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" false
+			echo
+		fi # End of check for transcoding failure
+	fi
+}
+
 function f_transcode_handbrake_source_video_file () {
 	# Replaces f_process_ts_file
 	# CRITICAL: Define these variables BEFORE calling this function:
