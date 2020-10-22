@@ -6,11 +6,21 @@
 	if [ ! $VARIABLES_ARE_DEFINED ];         then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting;         exit 1; fi
 
 function f_mv() {
-	mkdir "$2"
-	mv "$1 - "* "$2"/
+	mkdir "$1"
+	mv "$1 - "* "$1"/
 	}
 
-f_mv "Doctor Who" "Doctor Who (2005)"
+f_mv "World's Most Evil Killers (2019)"
+f_mv "Wings (1990)"
+f_mv "Will & Grace (1998)"
+f_mv "Today in Iowa at 6 (2004)"
+f_mv "The Simpsons (1989)"
+f_mv "The Partridge Family (1970)"
+f_mv "The Rifleman (1958)"
+f_mv "Abbott and Costello (1951)"
+
+
+
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
