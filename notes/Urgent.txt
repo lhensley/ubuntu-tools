@@ -2,7 +2,7 @@
 Regular transcodes
 	1: lgh-daemon-dvd-rip-transcode-looper (oz)
 	Rename: lgh-loop-xcode-dvd
-	DISABLE
+	Status: DISABLED
 	PRIORITY 6
 		oz
 			VIDEO_WORK_FILE_SYSTEM="/mnt/ssd1tb"
@@ -11,7 +11,8 @@ Regular transcodes
 			VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex"
 	2: lgh-daemon-plex-dvr-transcode-looper (nuc01, oz)
 	Rename: lgh-loop-xcode-plex
-	PRIORITY 1
+	PRIORITY 1: Status: Running fine; need to monitor
+	Still to fix: loop keeps breaking.
 		nuc01
 			VIDEO_WORK_FILE_SYSTEM="/"
 			VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
@@ -19,7 +20,7 @@ Regular transcodes
 			VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/Plex/Pool06-1TB/TV-Shows/TV-Shows-DVR"
 	3: lgh-daemon-zoom-transcode-looper (oz)
 	Rename: lgh-loop-xcode-zoom
-	DISABLE
+	Status: DISABLED
 	PRIORITY 7
 			ZOOM_RAW_FILES="$ADMIN_HOME_DIR/zoom/raw"
 			ZOOM_TRANSCODED_FILES="$ADMIN_HOME_DIR/zoom/transcoded"
@@ -28,13 +29,13 @@ Regular transcodes
 Other transcodes
 	4: lgh-daemon-nuc01-bulk-transcode-looper (nuc01)
 	Rename: lgh-loop-xcode-nuc01-[misplaced]
-	DISABLE
+	Status: DISABLED
 	PRIORITY 3
 			SOURCE_ROOT="/mnt/cloteal/Plex/Pool06-1TB"
 			TARGET_ROOT="/mnt/cloteal/Plex/Pool06-1TB"
 	5: lgh-daemon-oz-bulk-transcode-looper (oz)
-	Rename: lgh-loop-xcode-oz-[misplaced]
-	DISABLE
+	Rename: lgh-loop-xcode-oz-temp
+	Status: Testing
 	PRIORITY 2
 			SOURCE_ROOT="/mnt/ext10tb01/TV-Austin-2020-09-20-Uncompressed-TS-Files"
 		 	TARGET_ROOT="$VIDEO_STORE_DIRECTORY"
@@ -42,13 +43,13 @@ Other transcodes
 Moves
 	6: lgh-daemon-dvd-rip-move-completed-looper (oz)
 	Rename: lgh-loop-move-dvd
-	DISABLE
+	Status: DISABLED
 	PRIORITY 5
 			SOURCE_ROOT_DIR="/home/lhensley/Videos/HandBrake-Completed"
 			TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/cloteal/Plex/uploads"
 l	7: lgh-daemon-plex-dvr-move-completed-looper (oz)
 	Rename: lgh-loop-move-plex
-	DISABLE
+	Status: DISABLED
 	PRIORITY 4
 			SOURCE_ROOT_DIR="/mnt/ext10tb01/plex"
 			TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Shows-DVR"
