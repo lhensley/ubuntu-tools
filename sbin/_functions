@@ -367,7 +367,7 @@ function f_transcode_handbrake_source_video_file () {
     # $USE_PARENT_DIR_AS_BASENAME       # May be useful for ripped DVDs. TBD. Think about this first                     (default defined in _vars)
 	# $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE
 										# "original rip info" means source file stat mtime
-	
+
 	# Try to create $TARGET_ROOT, in case it doesn't yet exist
 		sudo -u plex mkdir -p "$TARGET_ROOT"
 
@@ -381,8 +381,12 @@ function f_transcode_handbrake_source_video_file () {
 		TARGET_FILE=$TARGET_ROOT/$(f_target_relative_path_and_filename_no_ext)$TARGET_FILE_EXTENSION
 		TARGET_DIR=$(basedir "TARGET_FILE")
 
+	f_log_and_echo "DIAG: SOURCE_FILE: $SOURCE_FILE"
+	f_log_and_echo "DIAG: TARGET_FILE: $TARGET_FILE"
+	f_log_and_echo "DIAG: TARGET_DIR: $TARGET_DIR"
+
 	sudo -u plex mkdir -p "$TARGET_DIR"
-	if ! $(f_is_directory "$TARGET_DIR");  then f_die "Target transcode directory not found: $TARGET_DIR" true;  return; fi
+	if ! $(f_is_directory "$TARGET_DIR"); then f_die "FATAL: Target transcode directory not found: $TARGET_DIR" true;  return; fi
 
 	if ! $(f_variable_has_content "$TARGET_FILE"); then f_die "Store file undefined" true; return; fi
 
