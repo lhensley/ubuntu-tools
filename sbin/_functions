@@ -384,6 +384,9 @@ function f_transcode_handbrake_source_video_file () {
 
 	echo "SOURCE_FILE: $SOURCE_FILE"
 	echo "TARGET_FILE: $TARGET_FILE"
+	echo "  TARGET_ROOT:            $TARGET_ROOT"
+	echo "  TARGET_MIDDLE:          $(f_target_relative_path_and_filename_no_ext)"
+	echo "  TARGET_FILE_EXTENSION:  $TARGET_FILE_EXTENSION"
 	echo "Sleeping 10s before the next file."
 	sleep 10s
 	echo "Aborting the move attempt."
