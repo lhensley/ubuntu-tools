@@ -281,40 +281,24 @@ function f_move_completed_handbrake_files () {
 			do f_move_one_plex_file "$THIS_FILE" "$TARGET_ROOT/$THIS_FILE"; done
 	}
 
-function f_target_relative_path_and_filename () {
+function f_target_relative_path_and_filename_no_ext () {
 	# CRITICAL: Define these variables BEFORE calling this function:
-#xxx    # $WAIT_AFTER_SOURCE_SCAN           # How long to wait after looping through all source files
-#xxx    # $SOURCE_FILE_NAME_PATTERN         # For Plex DVR,                 this is "$PLEX_FILE_NAME_PATTERN"                (defined in _vars)
-                                        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_FILE_NAME_PATTERN"             (defined in _vars)
-                                        # For Zoom meeting recordings,  this is "$ZOOM_FILE_NAME_PATTERN"                (defined in _vars)
-#*    # $SOURCE_ROOT                      # For Plex DVR, this is "$VIDEO_WORK_DIRECTORY"                                  (defined in _vars)
+    # $SOURCE_ROOT                      # For Plex DVR, this is "$VIDEO_WORK_DIRECTORY"                                  (defined in _vars)
 	    	     					        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_OUTPUT_DIRECTORY"              (defined in _vars)
 	    	     					        # For Zoom meeting recordings,  this is "$ZOOM_RAW_FILES"                        (defined in _vars)
-#*	 # $SOURCE_FILE						# Normally derived shortly before calling this function
-#*    # $TARGET_ROOT                      # For Plex DVR, this is "$VIDEO_STORE_DIRECTORY"                                 (defined in _vars)
-	    	     					        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_TRANSCODED_FILES_DIRECTORY"    (defined in _vars)
-	  	       					        # For Zoom meeting recordings,  this is "$ZOOM_TRANSCODED_FILES"                 (defined in _vars)
-#xxx    # $TARGET_FILE_EXTENSION            # Normally this is ".m4v"                                                        (default defined in _vars)
-#xxx    # $SET_PLEX_PERMISSIONS             # Normally true only for Plex content files                                      (default defined in _vars)
-#xxx    # $USE_TV_FILTERS                   # Normally true only for Plex DVR files                                          (default defined in _vars)
-#*    # $FLATTEN_TARGET_DIRECTORY         # Normally used for Zoom meeting recordings and MAYBE Ripped DVDs (maybe; TBD)   (default defined in _vars)
-#*    # $PREPEND_PARENT_DIR_TO_BASENAME   # Normally used for Zoom meeting recordings                                      (default defined in _vars)
-#*    # $APPEND_UUID_TO_TARGET_FILE       # Normally used for Plex files so that multiple media files can be retained.     (default defined in _vars)
-#*    # $USE_PARENT_DIR_AS_BASENAME       # May be useful for ripped DVDs. TBD. Think about this first                     (default defined in _vars)
-#*	  # $USE_SOURCE_EXT_FOR_TARGET		# If true, overrides $TARGET_FILE_EXTENSION variable	; default is false
+	# $SOURCE_FILE						# Normally derived shortly before calling this function
+    # $FLATTEN_TARGET_DIRECTORY         # Normally used for Zoom meeting recordings and MAYBE Ripped DVDs (maybe; TBD)   (default defined in _vars)
+    # $PREPEND_PARENT_DIR_TO_BASENAME   # Normally used for Zoom meeting recordings                                      (default defined in _vars)
+    # $APPEND_UUID_TO_TARGET_FILE       # Normally used for Plex files so that multiple media files can be retained.     (default defined in _vars)
+    # $USE_PARENT_DIR_AS_BASENAME       # May be useful for ripped DVDs. TBD. Think about this first                     (default defined in _vars)
+	# $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE
+										# "original rip info" means source file stat mtime
 
 	# Test existence of some values of required variables
-#		if ! $(f_is_directory "$SOURCE_ROOT"); then f_balk "Source root directory not found: $SOURCE_ROOT" true; return; fi
-#		if ! $(f_is_file "$SOURCE_FILE");      then f_balk "Source file not found: $SOURCE_FILE"           true; return; fi
+	if ! $(f_is_directory "$SOURCE_ROOT"); then f_balk "Source root directory not found: $SOURCE_ROOT" true; return; fi
+	if ! $(f_is_file "$SOURCE_FILE");      then f_balk "Source file not found: $SOURCE_FILE"           true; return; fi
 
 	# Calculate definition of $TARGET_FILE
-		# For examples below, assume 
-		SOURCE_FILE="/etc/ssl/certs/ca-certificates.crt"
-		SOURCE_ROOT="/etc/ssl"
-		TARGET_ROOT="/made/up/root"
-		TARGET_FILE_EXTENSION=".made-up-ext"
-
-echo "Test -6: RELATIVE_FILE: $RELATIVE_FILE"
 		SOURCE_ROOT_LENGTH=${#SOURCE_ROOT}										# 8
 		SOURCE_FILE_LENGTH=${#SOURCE_FILE}										# 34
 		SOURCE_FILE_EXT="${SOURCE_FILE##*.}"										# crt
@@ -323,33 +307,24 @@ echo "Test -6: RELATIVE_FILE: $RELATIVE_FILE"
 			T=$(dirname "$SOURCE_FILE")
 			D=$(basename "$T")
 			RELATIVE_FILE=$(basename "$SOURCE_FILE")								# ca-certificates.crt (if $FLATTERN_TARGET_DIRECTORY were true)
-echo "Test -5: RELATIVE_FILE: $RELATIVE_FILE"
 			if $USE_PARENT_DIR_AS_BASENAME; then 
 				RELATIVE_FILE="$D-$RELATIVE_FILE"								# certs.crt           (if $FLATTERN_TARGET_DIRECTORY were true)
-echo "Test -4: RELATIVE_FILE: $RELATIVE_FILE"
 				fi
 			RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}								
 		else
 			RELATIVE_FILE_LENGTH=$[SOURCE_FILE_LENGTH-SOURCE_ROOT_LENGTH-1]		# 25 (34-8)
 			RELATIVE_FILE=${SOURCE_FILE: -$RELATIVE_FILE_LENGTH}					# /certs/ca-certificates.crt (Remove SOURCE_ROOT)
-echo "Test -3: RELATIVE_FILE: $RELATIVE_FILE"
 			if $USE_PARENT_DIR_AS_BASENAME; then 
 				T=$(dirname "$SOURCE_FILE");										# /etc/ssl/certs
 				F=$(basename "$T");												# certs
 				D=$(dirname "$RELATIVE_FILE");									# /certs
 				RELATIVE_FILE="$T/$F";											# /etc/ssl/certs/certs
-echo "Test -2: RELATIVE_FILE: $RELATIVE_FILE"
 				if [ $SOURCE_FILE_EXT_LENGTH -ne 0 ]; then 
 					RELATIVE_FILE+=".$SOURCE_FILE_EXT";							# /etc/ssl/certs/certs.crt
-echo "Test -1: RELATIVE_FILE: $RELATIVE_FILE"
 					fi
 				RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}							
 				fi 
 		fi
-#		RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}
-		echo "Test  0: RELATIVE_FILE: $RELATIVE_FILE"
-		echo "Test  1: RELATIVE_FILE_LENGTH: $RELATIVE_FILE_LENGTH"
-		echo "Test  2: SOURCE_FILE_EXT_LENGTH: $SOURCE_FILE_EXT_LENGTH"
 		RELATIVE_FILE_NO_EXT_LENGTH=$[RELATIVE_FILE_LENGTH-SOURCE_FILE_EXT_LENGTH-1] # Recalculate relative path length by removing extension length
 		RELATIVE_FILE_NO_EXT=${RELATIVE_FILE:0:RELATIVE_FILE_NO_EXT_LENGTH} # Then remove SOURCE_FILE_EXT
 		if $PREPEND_PARENT_DIR_TO_BASENAME || $APPEND_UUID_TO_TARGET_FILE ; then
@@ -367,28 +342,7 @@ echo "Test -1: RELATIVE_FILE: $RELATIVE_FILE"
 			fi
 		TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT$TARGET_FILE_EXTENSION"
 
-		echo FLATTEN_TARGET_DIRECTORY: $FLATTEN_TARGET_DIRECTORY
-		echo USE_PARENT_DIR_AS_BASENAME: $USE_PARENT_DIR_AS_BASENAME
-		echo PREPEND_PARENT_DIR_TO_BASENAME: $PREPEND_PARENT_DIR_TO_BASENAME
-		echo APPEND_UUID_TO_TARGET_FILE: $APPEND_UUID_TO_TARGET_FILE
-		echo APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE: $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE
-		echo SOURCE_FILE: $SOURCE_FILE
-		echo SOURCE_ROOT: $SOURCE_ROOT
-		echo SOURCE_ROOT_LENGTH: $SOURCE_ROOT_LENGTH
-		echo SOURCE_FILE_LENGTH: $SOURCE_FILE_LENGTH
-		echo SOURCE_FILE_EXT: $SOURCE_FILE_EXT
-		echo SOURCE_FILE_EXT_LENGTH: $SOURCE_FILE_EXT_LENGTH
-		echo T: $T
-		echo F: $F
-		echo D: $D
-		echo FF: $FF
-		echo DD: $DD
-		echo TEMP_TIME: $TEMP_TIME
-		echo "RELATIVE_FILE_LENGTH:  $RELATIVE_FILE_LENGTH"
-		echo "RELATIVE_FILE:         $RELATIVE_FILE"
-		echo "TARGET_FILE:           $TARGET_FILE"
-		echo "RELATIVE_FILE_NO_EXT:  $RELATIVE_FILE_NO_EXT"
-		echo
+		echo "$RELATIVE_FILE_NO_EXT"
 		return
 
 	if ! $(f_variable_has_content "$TARGET_FILE"); then f_balk "Store file undefined" false; return;    fi
