@@ -346,8 +346,8 @@ function f_target_relative_path_and_filename_no_ext () {
 		TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT$TARGET_FILE_EXTENSION"
 
 		echo
-		echo "RELATIVE_FILE: RELATIVE_FILE"
-		echo "TARGET_FILE: TARGET_FILE"
+		echo "RELATIVE_FILE: $RELATIVE_FILE"
+		echo "TARGET_FILE: $TARGET_FILE"
 		echo "$RELATIVE_FILE_NO_EXT"
 }
 
@@ -393,14 +393,16 @@ APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE=false
 	echo "  TARGET_ROOT:            $TARGET_ROOT"
 	echo "  TARGET_MIDDLE:          $(f_target_relative_path_and_filename_no_ext)"
 	echo "  TARGET_FILE_EXTENSION:  $TARGET_FILE_EXTENSION"
-	echo "Sleeping 10s before the next file."
-	sleep 10s
-	echo "Aborting the move attempt."
-	echo
+	echo "About to apply TV filter."
 
 	if ! $(f_variable_has_content "$TARGET_FILE"); then f_balk "Store file undefined" false; return; fi
 
 	if ! $(f_filter "$SOURCE_FILE" "$IGNORE_TV_SHOWS") || ! $USE_TV_FILTERS; then
+	echo "Cleared the TV filter."
+	echo "Sleeping 10s before the next file."
+	sleep 10s
+	echo "Aborting the move attempt."
+	echo
 		# Do the transcoding
 		TIMESTART=$(currenttimeinseconds)
 		SOURCE_FILE_BASE=$(basename "$SOURCE_FILE")
