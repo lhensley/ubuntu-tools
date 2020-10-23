@@ -382,6 +382,7 @@ function f_transcode_handbrake_source_video_file () {
 		TARGET_DIR=$(basedir "TARGET_FILE")
 
 	sudo -u plex mkdir -p "$TARGET_DIR"
+	if ! $(f_is_directory "$TARGET_DIR");  then f_die "Target transcode directory not found: $TARGET_DIR" true;  return; fi
 
 	if ! $(f_variable_has_content "$TARGET_FILE"); then f_die "Store file undefined" true; return; fi
 
