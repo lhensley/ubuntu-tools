@@ -223,8 +223,9 @@ function f_relocate_files () {
 	THIS_TARGET_ROOT_DIRECTORY="$2"
 	# CRITICAL: How to define the file name mast (with imbedded wildcard)
 	# Move all .m4v files from $VIDEO_WORK_DIRECTORY to $VIDEO_STORE_DIRECTORY.
+	# Re 'echo ""' below, see https://mark.biek.org/blog/2018/10/bash-whileread-loop-breaking-early. Added 10/23/2020. Seems to work!
 		find "$THIS_SOURCE_ROOT_DIRECTORY" -type f -name "*.m4v" | while read THIS_FILE; \
-			do f_move_one_plex_file "$THIS_FILE" "$THIS_TARGET_ROOT_DIRECTORY/$THIS_FILE"; done
+			do echo "" | f_move_one_plex_file "$THIS_FILE" "$THIS_TARGET_ROOT_DIRECTORY/$THIS_FILE"; done
 	}
 
 function f_run_apt_updates() {
@@ -274,8 +275,9 @@ function f_move_completed_handbrake_files () {
 	TARGET_ROOT="$2"        # For Plex DVR, this is $VIDEO_STORE_DIRECTORY
 	FILE_NAME_PATTERN="$3"  # For most HandBrake output, this is "*.m4v"
 	# Move all "$FILE_NAME_PATTERN" files from "$SOURCE_ROOT" to "$TARGET_ROOT".
+	# Re 'echo ""' below, see https://mark.biek.org/blog/2018/10/bash-whileread-loop-breaking-early. Added 10/23/2020. Seems to work!
 		find "$SOURCE_ROOT" -type f -name "$FILE_NAME_PATTERN" | while read THIS_FILE; \
-			do f_move_one_plex_file "$THIS_FILE" "$TARGET_ROOT/$THIS_FILE"; done
+			do echo "" | f_move_one_plex_file "$THIS_FILE" "$TARGET_ROOT/$THIS_FILE"; done
 	}
 
 function f_target_relative_path_and_filename_no_ext () {
@@ -462,7 +464,7 @@ f_iterate_handbrake_source_video_files() {
 			TEMP_FILE="/tmp/f_iterate_handbrake_source_video_files $(date) $(uuidgen)"
 			find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort | cut -f 2 > "$TEMP_FILE"
 			# f_diags_iterate_handbrake_source_video_files
-			# Re 'echo ""' below, see https://mark.biek.org/blog/2018/10/bash-whileread-loop-breaking-early/
+			# Re 'echo ""' below, see https://mark.biek.org/blog/2018/10/bash-whileread-loop-breaking-early. Added 10/23/2020. Seems to work!
 			while read SOURCE_FILE; do echo "" | f_transcode_handbrake_source_video_file; done < "$TEMP_FILE"
 			f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false  # The TRUE part at the end means this sends pager notices.
 																	  # Drop this when stable, and consider bumping up the interval.

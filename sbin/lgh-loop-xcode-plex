@@ -8,7 +8,7 @@
 	if [ ! $VARIABLES_ARE_DEFINED ];         then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting;         exit 1; fi
 
 # Set the variables
-    WAIT_AFTER_SOURCE_SCAN="1m"                         # How long to wait after looping through all source files
+    WAIT_AFTER_SOURCE_SCAN="1h"                         # How long to wait after looping through all source files
     SOURCE_FILE_NAME_PATTERN="$PLEX_FILE_NAME_PATTERN"  # For Plex DVR,                 this is "$PLEX_FILE_NAME_PATTERN"              (defined in _vars)
                                                         # For DVDs ripped with MakeMKV, this is "$MAKEMKV_FILE_NAME_PATTERN"           (defined in _vars)
                                                         # For Zoom meeting recordings,  this is "$ZOOM_FILE_NAME_PATTERN"              (defined in _vars)
