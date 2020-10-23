@@ -345,7 +345,7 @@ function f_target_relative_path_and_filename_no_ext () {
 			fi
 		TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT$TARGET_FILE_EXTENSION"
 
-		echo "$RELATIVE_FILE_NO_EXT/$TARGET_FILE_EXTENSION"
+		echo "$RELATIVE_FILE_NO_EXT"
 }
 
 function f_transcode_handbrake_source_video_file () {
