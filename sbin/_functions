@@ -369,7 +369,7 @@ function f_transcode_handbrake_source_video_file () {
 										# "original rip info" means source file stat mtime
 	
 	# Try to create $TARGET_ROOT, in case it doesn't yet exist
-		mkdir -p "$TARGET_ROOT"
+		sudo -u plex mkdir -p "$TARGET_ROOT"
 
 	# Test existence of files and directories
 		if ! $(f_is_file "$SOURCE_FILE");       then f_die "Source file not found: $SOURCE_FILE" true;            return; fi 
@@ -379,6 +379,9 @@ function f_transcode_handbrake_source_video_file () {
 
 	# Calculate definition of $TARGET_FILE
 		TARGET_FILE=$TARGET_ROOT/$(f_target_relative_path_and_filename_no_ext)$TARGET_FILE_EXTENSION
+		TARGET_DIR=$(basedir "TARGET_FILE")
+
+	sudo -u plex mkdir -p "$TARGET_DIR"
 
 	if ! $(f_variable_has_content "$TARGET_FILE"); then f_die "Store file undefined" true; return; fi
 
