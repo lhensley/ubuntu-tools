@@ -35,7 +35,8 @@ Other transcodes
 			TARGET_ROOT="/mnt/cloteal/Plex/Pool06-1TB"
 	5: lgh-daemon-oz-bulk-transcode-looper (oz)
 	Rename: lgh-loop-xcode-oz-temp
-	Status: Testing
+	Status: Testing. The code that's specific to this script is file. All the rest is shared with lgh-loop-xcode-plex (priority 1),
+		so once that testing and upgrading is accomplished, this will inherit those changes.
 	PRIORITY 2
 			SOURCE_ROOT="/mnt/ext10tb01/TV-Austin-2020-09-20-Uncompressed-TS-Files"
 		 	TARGET_ROOT="$VIDEO_STORE_DIRECTORY"

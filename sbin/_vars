@@ -327,7 +327,7 @@ source /etc/os-release
 	if [ $HOSTNAME == "nuc01" ]; then 
 		VIDEO_WORK_FILE_SYSTEM="/"
 		VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
-		VIDEO_WORK_DIRECTORY="/var/lib/plexmediaserver/Library/work"
+		VIDEO_WORK_DIRECTORY="/var/lib/plexmediaserver/Library/work/TV-DSM"
 		VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/Plex/Pool06-1TB/TV-Shows/TV-Shows-DVR"
 		PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
 		fi
