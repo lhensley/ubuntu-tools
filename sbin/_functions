@@ -320,13 +320,11 @@ echo "Test -6: RELATIVE_FILE: $RELATIVE_FILE"
 		SOURCE_FILE_EXT="${SOURCE_FILE##*.}"										# crt
 		SOURCE_FILE_EXT_LENGTH="${#SOURCE_FILE_EXT}"								# 3  (length of "crt")
 		if $FLATTEN_TARGET_DIRECTORY; then 
-			T=$(dirname "$SOURCE_NAME")
+			T=$(dirname "$SOURCE_FILE")
 			D=$(basename "$T")
 			RELATIVE_FILE=$(basename "$SOURCE_FILE")								# ca-certificates.crt (if $FLATTERN_TARGET_DIRECTORY were true)
 echo "Test -5: RELATIVE_FILE: $RELATIVE_FILE"
 			if $USE_PARENT_DIR_AS_BASENAME; then 
-#				T=$(dirname "$RELATIVE_FILE")									# /etc/ssl/certs      (if $FLATTERN_TARGET_DIRECTORY were true)
-#				T=$(dirname "$SOURCE_FILE")										# /etc/ssl/certs      (if $FLATTERN_TARGET_DIRECTORY were true)
 				RELATIVE_FILE="$D-$RELATIVE_FILE"								# certs.crt           (if $FLATTERN_TARGET_DIRECTORY were true)
 echo "Test -4: RELATIVE_FILE: $RELATIVE_FILE"
 				fi
