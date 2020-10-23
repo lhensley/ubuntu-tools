@@ -305,7 +305,6 @@ function f_target_relative_path_and_filename_no_ext () {
 		SOURCE_FILE_EXT="${SOURCE_FILE##*.}"	
 		SOURCE_FILE_EXT_LENGTH="${#SOURCE_FILE_EXT}"
 		if $FLATTEN_TARGET_DIRECTORY; then 
-echo "DIAG: Flatten"
 			T=$(dirname "$SOURCE_FILE")
 			D=$(basename "$T")
 			RELATIVE_FILE=$(basename "$SOURCE_FILE")
@@ -314,7 +313,6 @@ echo "DIAG: Flatten"
 				fi
 			RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}								
 		else
-echo "DIAG: No Flatten"
 			RELATIVE_FILE_LENGTH=$[SOURCE_FILE_LENGTH-SOURCE_ROOT_LENGTH-1]
 			RELATIVE_FILE=${SOURCE_FILE: -$RELATIVE_FILE_LENGTH}
 			if $USE_PARENT_DIR_AS_BASENAME; then 
@@ -347,6 +345,9 @@ echo "DIAG: No Flatten"
 			fi
 		TARGET_FILE="$TARGET_ROOT/$RELATIVE_FILE_NO_EXT$TARGET_FILE_EXTENSION"
 
+		echo
+		echo "RELATIVE_FILE: RELATIVE_FILE"
+		echo "TARGET_FILE: TARGET_FILE"
 		echo "$RELATIVE_FILE_NO_EXT"
 }
 
@@ -383,7 +384,8 @@ function f_transcode_handbrake_source_video_file () {
 		DIAG_SOURCE_FILE="$SOURCE_FILE"
 
 	# Calculate definition of $TARGET_FILE
-		APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE=false
+FLATTEN_TARGET_DIRECTORY=false
+APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE=false
 		TARGET_FILE=$TARGET_ROOT/$(f_target_relative_path_and_filename_no_ext)$TARGET_FILE_EXTENSION
 
 	echo "SOURCE_FILE: $SOURCE_FILE"
@@ -399,37 +401,36 @@ function f_transcode_handbrake_source_video_file () {
 	if ! $(f_variable_has_content "$TARGET_FILE"); then f_balk "Store file undefined" false; return; fi
 
 	if ! $(f_filter "$SOURCE_FILE" "$IGNORE_TV_SHOWS") || ! $USE_TV_FILTERS; then
-		
-	# Do the transcoding
-	TIMESTART=$(currenttimeinseconds)
-	SOURCE_FILE_BASE=$(basename "$SOURCE_FILE")
-	TEMP_ERRORS=false
-	TEMP_THIS_SCRIPT=$(basename "$0")
-	TEMP_ERROR_LOG="/tmp/Error Log for $HOSTNAME $TEMP_THIS_SCRIPT $(date) $(uuidgen)"
-	if [ "$SOURCE_FILE" != "$DIAG_SOURCE_FILE" ] ; then f_die "$SOURCE_FILE != $DIAG_SOURCE_FILE" true ; fi
-	if ! $(f_is_file "$SOURCE_FILE"); then f_die "Source file (pt. 2) not found: $SOURCE_FILE" true; return; fi 
-	echo "$TEMP_ERROR_LOG" > "$TEMP_ERROR_LOG"
-	f_log_and_echo "Transcoding $SOURCE_FILE_BASE to $TARGET_FILE" false
-	nice -19 "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE"
-	exit_status=$?
-	chown $RUN_AS:$RUN_AS "$TARGET_FILE"
-	chmod $DEFAULT_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
-	if $SET_PLEX_PERMISSIONS; then
-		chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
-		chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
+		# Do the transcoding
+		TIMESTART=$(currenttimeinseconds)
+		SOURCE_FILE_BASE=$(basename "$SOURCE_FILE")
+		TEMP_ERRORS=false
+		TEMP_THIS_SCRIPT=$(basename "$0")
+		TEMP_ERROR_LOG="/tmp/Error Log for $HOSTNAME $TEMP_THIS_SCRIPT $(date) $(uuidgen)"
+		if [ "$SOURCE_FILE" != "$DIAG_SOURCE_FILE" ] ; then f_die "$SOURCE_FILE != $DIAG_SOURCE_FILE" true ; fi
+		if ! $(f_is_file "$SOURCE_FILE"); then f_die "Source file (pt. 2) not found: $SOURCE_FILE" true; return; fi 
+		echo "$TEMP_ERROR_LOG" > "$TEMP_ERROR_LOG"
+		f_log_and_echo "Transcoding $SOURCE_FILE_BASE to $TARGET_FILE" false
+		nice -19 "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE"
+		exit_status=$?
+		chown $RUN_AS:$RUN_AS "$TARGET_FILE"
+		chmod $DEFAULT_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
+		if $SET_PLEX_PERMISSIONS; then
+			chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
+			chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
+			fi
+		if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
+				TEMP_ERRORS=true
+				echo "$HANDBRAKE_CLI: FAILED with error #$exit_status for $IN_FILE" >> "$TEMP_ERROR_LOG"				
+				f_balk "$HANDBRAKE_CLI: FAILED with error #$exit_status for $SOURCE_FILE" false
+				cat "$TEMP_ERROR_LOG" | mail -s "Error Log for $HOSTNAME $TEMP_THIS_SCRIPT" admin
+			else
+				rm "$SOURCE_FILE" # Delete input file
+				f_log_and_echo "Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" false
+				echo
+			fi # End of check for transcoding failure
 		fi
-	if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-			TEMP_ERRORS=true
-			echo "$HANDBRAKE_CLI: FAILED with error #$exit_status for $IN_FILE" >> "$TEMP_ERROR_LOG"				
-			f_balk "$HANDBRAKE_CLI: FAILED with error #$exit_status for $SOURCE_FILE" false
-			cat "$TEMP_ERROR_LOG" | mail -s "Error Log for $HOSTNAME $TEMP_THIS_SCRIPT" admin
-		else
-			rm "$SOURCE_FILE" # Delete input file
-			f_log_and_echo "Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" false
-			echo
-		fi # End of check for transcoding failure
-	fi
-}
+	}
 
 f_iterate_handbrake_source_video_files() {
 	# ONE pass through all matching source files, invoking f_transcode_handbrake_source_video_file for each
