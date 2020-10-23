@@ -323,7 +323,8 @@ echo "Test -6: RELATIVE_FILE: $RELATIVE_FILE"
 			RELATIVE_FILE=$(basename "$SOURCE_FILE")								# ca-certificates.crt (if $FLATTERN_TARGET_DIRECTORY were true)
 echo "Test -5: RELATIVE_FILE: $RELATIVE_FILE"
 			if $USE_PARENT_DIR_AS_BASENAME; then 
-				T=$(dirname "$RELATIVE_FILE");									# /etc/ssl/certs      (if $FLATTERN_TARGET_DIRECTORY were true)
+#				T=$(dirname "$RELATIVE_FILE");									# /etc/ssl/certs      (if $FLATTERN_TARGET_DIRECTORY were true)
+				T=$(dirname "$SOURCE_FILE");									# /etc/ssl/certs      (if $FLATTERN_TARGET_DIRECTORY were true)
 				RELATIVE_FILE=$(basename "$T");									# certs.crt           (if $FLATTERN_TARGET_DIRECTORY were true)
 echo "Test -4: RELATIVE_FILE: $RELATIVE_FILE"
 				fi
