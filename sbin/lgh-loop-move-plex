@@ -24,7 +24,7 @@
 	sshfs nuc01.lanehensley.org:$TARGET_ROOT_DIR "$WORMHOLE"
 # If file system is not mounted read-write, die
 	if [ ! $(findmnt "$WORMHOLE" -n -o options | grep "rw,") ]; then
-		f_fie "WORMHOLE is not mounted with rw option" true
+		f_die "WORMHOLE is not mounted with rw option" true
 	fi
 
 # MOVE (not copy) files to new directory or server/directory
@@ -51,7 +51,7 @@
 # CRITICAL: Note string literals and variables set here. All should be moved to _vars
     SHOULD_BE_IN_VARS_SLEEP_TIME="6h"
 	while true; do
-        sudo -u $ADMIN_USER rsync --dry-run --remove-source-files --include "*.m4v" -aloprtv "$THIS_SOURCE "$THIS_TARGET"/ | logger -t "$0"
+        sudo -u $ADMIN_USER rsync --dry-run --remove-source-files --include "*.m4v" -aloprtv "$THIS_SOURCE" "$THIS_TARGET"/ | logger -t "$0"
 		f_log_and_echo "Sleeping $SHOULD_BE_IN_VARS_SLEEP_TIME." false  # The TRUE part at the end means this sends pager notices.
 																        # Drop this when stable, and consider bumping up the interval.
 		sleep "$SHOULD_BE_IN_VARS_SLEEP_TIME"
