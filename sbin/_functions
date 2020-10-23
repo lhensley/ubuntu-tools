@@ -305,6 +305,7 @@ function f_target_relative_path_and_filename_no_ext () {
 		SOURCE_FILE_EXT="${SOURCE_FILE##*.}"	
 		SOURCE_FILE_EXT_LENGTH="${#SOURCE_FILE_EXT}"
 		if $FLATTEN_TARGET_DIRECTORY; then 
+echo "DIAG: Flatten"
 			T=$(dirname "$SOURCE_FILE")
 			D=$(basename "$T")
 			RELATIVE_FILE=$(basename "$SOURCE_FILE")
@@ -313,6 +314,7 @@ function f_target_relative_path_and_filename_no_ext () {
 				fi
 			RELATIVE_FILE_LENGTH=${#RELATIVE_FILE}								
 		else
+echo "DIAG: No Flatten"
 			RELATIVE_FILE_LENGTH=$[SOURCE_FILE_LENGTH-SOURCE_ROOT_LENGTH-1]
 			RELATIVE_FILE=${SOURCE_FILE: -$RELATIVE_FILE_LENGTH}
 			if $USE_PARENT_DIR_AS_BASENAME; then 
