@@ -49,7 +49,7 @@ Moves
 			TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/cloteal/Plex/uploads"
 	7: lgh-daemon-plex-dvr-move-completed-looper (oz)
 	Rename: lgh-loop-move-plex
-	Status: DISABLED
+	Status: Running. One issue: When container directories are created on target, they have overly-restrictive permissions
 	PRIORITY 4
 			SOURCE_ROOT_DIR="/mnt/ext10tb01/plex"
 			TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Shows-DVR"

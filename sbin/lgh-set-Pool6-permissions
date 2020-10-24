@@ -1,0 +1,25 @@
+#!/bin/bash
+# This script should be run as root from cron, executed at boot time.
+# For now, this should ONLY run on oz, because server-specific values are defined.
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Only allow this to run on server nuc01.
+	f_only_on_server "nuc01"
+
+# Define TARGET_ROOT
+	TARGET_ROOT="/mnt/cloteal/Plex/Pool06-1TB"
+
+find $TARGET_ROOT -print -exec chown plex:plex {} \;
+find $TARGET_ROOT -type d -print -exec chmod $DEFAULT_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS {} \;
+find $TARGET_ROOT -type f -print -exec chmod $DEFAULT_VIDEO_FILE_PERMISSIONS {} \;
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+
