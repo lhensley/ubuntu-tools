@@ -18,12 +18,14 @@
 	THIS_TARGET="$WORMHOLE"
 # Create the wormhole mointpoint
 	mkdir -p "$WORMHOLE"
+# Debug
+	f_log_and_echo "WORMHOLE: $WORMHOLE"
 # Require that wormhole mountpoint directory exists
 	f_require_directory "$WORMHOLE" true
 # Open the wormhole
 	sshfs nuc01.lanehensley.org:$TARGET_ROOT_DIR "$WORMHOLE"
 # If file system is not mounted read-write, die
-	if [ ! $(findmnt "$WORMHOLE" -n -o options | grep "rw") ]; then
+	if [ ! $(findmnt "$WORMHOLE" -n -o options | grep "rw,") ]; then
 		f_die "WORMHOLE is not mounted with rw option" true
 	fi
 
