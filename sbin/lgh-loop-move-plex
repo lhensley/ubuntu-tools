@@ -13,8 +13,8 @@
 # Define file locations
 	SOURCE_ROOT_DIR="/mnt/ext10tb01/plex/TV-Austin"
 	TARGET_ROOT_DIR="/mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Austin"
-#	WORMHOLE="/tmp/wormholes/$(uuidgen)"
-	WORMHOLE=/media/lhensley/$(basename "$0")
+	WORMHOLE="/tmp/wormholes/$(uuidgen)"
+#	WORMHOLE=/media/lhensley/$(basename "$0")
 	THIS_SOURCE="$SOURCE_ROOT_DIR"
 	THIS_TARGET="$WORMHOLE"
 # Create the wormhole mointpoint
@@ -24,9 +24,6 @@
 	f_require_directory "$WORMHOLE" true
 # Open the wormhole
 	sudo -u lhensley sshfs nuc01.lanehensley.org:$TARGET_ROOT_DIR "$WORMHOLE"
-	EXIT_CODE=$?
-	f_log_and_echo "Exit Code: $EXIT_CODE"
-	f_log_and_echo "WORMHOLE: After"
 # If file system is not mounted read-write, die
 	if [ ! $(findmnt "$WORMHOLE" -n -o options | grep "rw,") ]; then
 		f_die "WORMHOLE is not mounted with rw option" true
