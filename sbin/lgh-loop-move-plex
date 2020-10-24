@@ -12,9 +12,9 @@
 
 # Define file locations
 	SOURCE_ROOT_DIR="/mnt/ext10tb01/plex/TV-Austin"
-	TARGET_ROOT_DIR="/mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Austin"
+	TARGET_ROOT_DIR="/mnt/cloteal/Plex/Pool06-1TB/TV-Shows"
 	TARGET_SERVER="nuc01.lanehensley.org"
-	SHOULD_BE_IN_VARS_SLEEP_TIME="30s"
+	SHOULD_BE_IN_VARS_SLEEP_TIME="6h"
 
 # MOVE (not copy) files to new directory or server/directory
 # Useful for MOVING (not copying) completed video files
