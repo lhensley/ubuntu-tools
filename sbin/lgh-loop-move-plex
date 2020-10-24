@@ -23,7 +23,7 @@
 # Open the wormhole
 	sshfs nuc01.lanehensley.org:$TARGET_ROOT_DIR "$WORMHOLE"
 # If file system is not mounted read-write, die
-	if [ ! $(findmnt "$WORMHOLE" -n -o options | grep "rw,") ]; then
+	if [ ! $(findmnt "$WORMHOLE" -n -o options | grep "rw") ]; then
 		f_die "WORMHOLE is not mounted with rw option" true
 	fi
 
