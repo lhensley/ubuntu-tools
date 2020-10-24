@@ -40,8 +40,9 @@
 # CRITICAL: Note string literals and variables set here. All should be moved to _vars
 	while true; do
         sudo -u $ADMIN_USER \
-			echo rsync --remove-source-files --include "*.m4v" -aloprtvn "$SOURCE_ROOT_DIR" "TARGET_SERVER:$TARGET_ROOT_DIR"/ \
-			| logger -t "$0"
+			echo rsync --remove-source-files --include "*.m4v" -aloprtvn "$SOURCE_ROOT_DIR" "TARGET_SERVER:$TARGET_ROOT_DIR"/
+#			echo rsync --remove-source-files --include "*.m4v" -aloprtvn "$SOURCE_ROOT_DIR" "TARGET_SERVER:$TARGET_ROOT_DIR"/ \
+#			| logger -t "$0"
 		f_log_and_echo "Sleeping $SHOULD_BE_IN_VARS_SLEEP_TIME." false  # The TRUE part at the end means this sends pager notices.
 																        # Drop this when stable, and consider bumping up the interval.
 		sleep "$SHOULD_BE_IN_VARS_SLEEP_TIME"
