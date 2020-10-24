@@ -27,7 +27,7 @@
 	f_log_and_echo "WORMHOLE: Before"
 	sshfs nuc01.lanehensley.org:$TARGET_ROOT_DIR "$WORMHOLE"
 	EXIT_CODE=$?
-	f_log_and_ecbo "Exit Code: $EXIT_CODE"
+	f_log_and_echo "Exit Code: $EXIT_CODE"
 	f_log_and_echo "WORMHOLE: After"
 # If file system is not mounted read-write, die
 	if [ ! $(findmnt "$WORMHOLE" -n -o options | grep "rw,") ]; then
