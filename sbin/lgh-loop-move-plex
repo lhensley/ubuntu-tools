@@ -13,21 +13,8 @@
 # Define file locations
 	SOURCE_ROOT_DIR="/mnt/ext10tb01/plex/TV-Austin"
 	TARGET_ROOT_DIR="/mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Austin"
-	WORMHOLE="/tmp/wormholes/$(uuidgen)"
-#	WORMHOLE=/media/lhensley/$(basename "$0")
-	THIS_SOURCE="$SOURCE_ROOT_DIR"
-	THIS_TARGET="$WORMHOLE"
-# Create the wormhole mointpoint
-	mkdir -p "$WORMHOLE"
-	chmod 777 "$WORMHOLE"
-# Require that wormhole mountpoint directory exists
-	f_require_directory "$WORMHOLE" true
-# Open the wormhole
-	sudo -u lhensley sshfs nuc01.lanehensley.org:$TARGET_ROOT_DIR "$WORMHOLE"
-# If file system is not mounted read-write, die
-	if [ ! $(findmnt "$WORMHOLE" -n -o options | grep "rw,") ]; then
-		f_die "WORMHOLE is not mounted with rw option" true
-	fi
+	TARGET_SERVER="nuc01.lanehensley.org"
+	SHOULD_BE_IN_VARS_SLEEP_TIME="30s"
 
 # MOVE (not copy) files to new directory or server/directory
 # Useful for MOVING (not copying) completed video files
@@ -51,9 +38,10 @@
 
 # Do the looping work
 # CRITICAL: Note string literals and variables set here. All should be moved to _vars
-    SHOULD_BE_IN_VARS_SLEEP_TIME="6h"
 	while true; do
-        sudo -u $ADMIN_USER rsync --dry-run --remove-source-files --include "*.m4v" -aloprtv "$THIS_SOURCE" "$THIS_TARGET"/ | logger -t "$0"
+        sudo -u $ADMIN_USER \
+			rsync --dry-run --remove-source-files --include "*.m4v" -aloprtv "$SOURCE_ROOT_DIR" "TARGET_SERVER:$TARGET_ROOT_DIR"/ \
+			| logger -t "$0"
 		f_log_and_echo "Sleeping $SHOULD_BE_IN_VARS_SLEEP_TIME." false  # The TRUE part at the end means this sends pager notices.
 																        # Drop this when stable, and consider bumping up the interval.
 		sleep "$SHOULD_BE_IN_VARS_SLEEP_TIME"
