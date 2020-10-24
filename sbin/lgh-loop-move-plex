@@ -13,8 +13,8 @@
 # Define file locations
 	SOURCE_ROOT_DIR="/mnt/ext10tb01/plex/TV-Austin"
 	TARGET_ROOT_DIR="/mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Austin"
-	WORMHOLE="/tmp/wormholes/$(uuidgen)"
-#	WORMHOLE=/media/lhensley/$(basename "$0")
+#	WORMHOLE="/tmp/wormholes/$(uuidgen)"
+	WORMHOLE=/media/lhensley/$(basename "$0")
 	THIS_SOURCE="$SOURCE_ROOT_DIR"
 	THIS_TARGET="$WORMHOLE"
 # Create the wormhole mointpoint
