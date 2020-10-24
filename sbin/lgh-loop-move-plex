@@ -19,12 +19,10 @@
 	THIS_TARGET="$WORMHOLE"
 # Create the wormhole mointpoint
 	mkdir -p "$WORMHOLE"
-# Debug
-	f_log_and_echo "WORMHOLE: $WORMHOLE"
+	chmod 777 "$WORMHOLE"
 # Require that wormhole mountpoint directory exists
 	f_require_directory "$WORMHOLE" true
 # Open the wormhole
-	f_log_and_echo "WORMHOLE: Before"
 	sudo -u lhensley sshfs nuc01.lanehensley.org:$TARGET_ROOT_DIR "$WORMHOLE"
 	EXIT_CODE=$?
 	f_log_and_echo "Exit Code: $EXIT_CODE"
