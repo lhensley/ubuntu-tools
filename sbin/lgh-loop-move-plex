@@ -14,7 +14,8 @@
 	SOURCE_ROOT_DIR="/mnt/ext10tb01/plex/TV-Austin"
 	TARGET_ROOT_DIR="/mnt/cloteal/Plex/Pool06-1TB/TV-Shows"
 	TARGET_SERVER="nuc01.lanehensley.org"
-	SHOULD_BE_IN_VARS_SLEEP_TIME="6h"
+	WAIT_AFTER_SOURCE_SCAN="6h"
+	MOVE_MASK="*.m4v"
 
 # MOVE (not copy) files to new directory or server/directory
 # Useful for MOVING (not copying) completed video files
@@ -40,11 +41,11 @@
 # CRITICAL: Note string literals and variables set here. All should be moved to _vars
 	while true; do
         sudo -u $ADMIN_USER \
-			rsync --remove-source-files --include "*.m4v" -aloprtv \
+			rsync --remove-source-files --include $MOVE_MASK -aloprtv \
 			"$SOURCE_ROOT_DIR" "$TARGET_SERVER:$TARGET_ROOT_DIR" \
 			| logger -t "$0"
-		f_log_and_echo "Sleeping $SHOULD_BE_IN_VARS_SLEEP_TIME." false
-		sleep "$SHOULD_BE_IN_VARS_SLEEP_TIME"
+		f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false
+		sleep "$WAIT_AFTER_SOURCE_SCAN"
         done
 
 # Include script footer file
