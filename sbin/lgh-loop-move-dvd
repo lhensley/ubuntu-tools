@@ -1,19 +1,17 @@
 #!/bin/bash
 # This script should be run as root from cron, executed at boot time.
-# For now, this should ONLY run on oz, because server-specific values are defined.
 
 # Include script setup file
 	source script-setup
-	if [ ! $FUNCTIONS_ARE_DEFINED ];         then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting;         exit 1; fi
-	if [ ! $VARIABLES_ARE_DEFINED ];         then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting;         exit 1; fi
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-# CASE DEFINITION:
-# Move ripped DVD files that still need manual processing from oz to nuc01
-# URGENT NEED: Define variables in "# HandBrake" (and elsewhere?) so we can reference these by variable for ANY server.
-# SOURCE_ROOT_DIR="oz.lane.hensley.org:/mnt/ext10tb01/plex"
-# SOURCE_ROOT_DIR="oz.lanehensley.org:/home/lhensley/Videos/HandBrake-Completed"
-SOURCE_ROOT_DIR="/home/lhensley/Videos/HandBrake-Completed"
-TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/cloteal/Plex/uploads"
+# Define file locations
+	SOURCE_ROOT_DIR="/home/lhensley/Videos/HandBrake-Completed"
+	TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/cloteal/Plex/uploads"
+	TARGET_SERVER="nuc01.lanehensley.org"
+	WAIT_AFTER_SOURCE_SCAN="6h"
+	MOVE_MASK="*.m4v"
 
 # MOVE (not copy) files to new directory or server/directory
 # Useful for MOVING (not copying) completed video files
@@ -35,13 +33,14 @@ TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/cloteal/Plex/uploads"
 #    --delete = delete extraneous files from dest dirs
 
 # Do the looping work
-# CRITICAL: Note string literals and variables set here. All should be moved to _vars
-    SHOULD_BE_IN_VARS_SLEEP_TIME="6h"
+	THIS_SCRIPT=$(basename "$0")
 	while true; do
-        sudo -u $ADMIN_USER rsync --remove-source-files -aloprtv "$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR"/ | logger -t "$0"
-		f_log_and_echo "Sleeping $SHOULD_BE_IN_VARS_SLEEP_TIME." false  # The TRUE part at the end means this sends pager notices.
-																        # Drop this when stable, and consider bumping up the interval.
-		sleep "$SHOULD_BE_IN_VARS_SLEEP_TIME"
+        sudo -u $ADMIN_USER \
+			rsync --remove-source-files --include $MOVE_MASK -aloprtv \
+			"$SOURCE_ROOT_DIR" "$TARGET_SERVER:$TARGET_ROOT_DIR" \
+			| logger -t "$THIS_SCRIPT"
+		f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false
+		sleep "$WAIT_AFTER_SOURCE_SCAN"
         done
 
 # Include script footer file
