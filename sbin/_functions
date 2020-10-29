@@ -492,7 +492,7 @@ f_show_eligible_transcoding () {
 f_watch_wait_upload () {
 	# Takes no arguments, but variables need to be defined.
 	# Verify required variables
-		f_require_value "USER_ADMIN" "$USER_ADMIN" true
+		f_require_value "ADMIN_USER" "$ADMIN_USER" true
 		f_require_directory "$WATCH_DIRECTORY" true
 		f_require_value "REMOTE_NAME" "$REMOTE_NAME" true
 		f_require_directory "$REMOTE_DIRECTORY" true
