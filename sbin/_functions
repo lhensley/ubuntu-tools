@@ -495,7 +495,8 @@ f_watch_wait_upload () {
 		f_require_value "ADMIN_USER" "$ADMIN_USER" true
 		f_require_directory "$WATCH_DIRECTORY" true
 		f_require_value "REMOTE_NAME" "$REMOTE_NAME" true
-		f_require_directory "$REMOTE_DIRECTORY" true
+		# Commented out because I'm not sure I can or need to verify remote directory.
+		# f_require_directory "$REMOTE_DIRECTORY" true
 	# Watch $WATCH_DIRECTORY for incoming files, and upload them to $REMOTE_NAME:$REMOTE_DIRECTORY
 		sudo -u $ADMIN_USER rclone copyto $WATCH_DIRECTORY "$REMOTE_NAME":"$REMOTE_DIRECTORY"
 		rm -f "$WATCH_DIRECTORY"/*
