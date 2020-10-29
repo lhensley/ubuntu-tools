@@ -18,17 +18,18 @@
 	TARGET_SERVER="oz.lanehensley.org"
 	WAIT_AFTER_SOURCE_SCAN="6h"
 	MOVE_MASK="*.ts"
+	BLOCK_MASK="*.m4v"
 
 # Do the looping work
 # CRITICAL: Note string literals and variables set here. All should be moved to _vars
 	THIS_SCRIPT=$(basename "$0")
 	while true; do
         sudo -u $ADMIN_USER \
-			rsync --remove-source-files --include $MOVE_MASK -aloprtv \
+			rsync --remove-source-files --include $MOVE_MASK --exclude $BLOCK_MASK -aloprtv \
 			"$SOURCE_ROOT_DIR_1" "$TARGET_SERVER:$TARGET_ROOT_DIR_1" \
 			| logger -t "$THIS_SCRIPT"
         sudo -u $ADMIN_USER \
-			rsync --remove-source-files --include $MOVE_MASK -aloprtv \
+			rsync --remove-source-files --include $MOVE_MASK --exclude $BLOCK_MASK -aloprtv \
 			"$SOURCE_ROOT_DIR_2" "$TARGET_SERVER:$TARGET_ROOT_DIR_2" \
 			| logger -t "$THIS_SCRIPT"
 		f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false
