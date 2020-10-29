@@ -394,7 +394,7 @@ function f_transcode_handbrake_source_video_file () {
 		if ! $(f_is_file "$SOURCE_FILE"); then f_die "Source file (pt. 2) not found: $SOURCE_FILE" true; return; fi 
 		echo "$TEMP_ERROR_LOG" > "$TEMP_ERROR_LOG"
 		f_log_and_echo "Transcoding $SOURCE_FILE_BASE to $TARGET_FILE" false
-		if ! $DRY_RUN; then {
+		if ! $DRY_RUN; then
 			nice -19 "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE"
 			exit_status=$?
 			chown $RUN_AS:$RUN_AS "$TARGET_FILE"
