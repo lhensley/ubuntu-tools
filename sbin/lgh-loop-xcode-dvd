@@ -27,6 +27,7 @@
     USE_PARENT_DIR_AS_BASENAME=false                       # May be useful for ripped DVDs. TBD. Think about this first                   (default defined in _vars)
 
 # Do the looping work
+    DRY_RUN=true
     f_iterate_handbrake_source_video_files
 
 # Include script footer file

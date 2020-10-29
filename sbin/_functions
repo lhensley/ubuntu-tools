@@ -394,24 +394,28 @@ function f_transcode_handbrake_source_video_file () {
 		if ! $(f_is_file "$SOURCE_FILE"); then f_die "Source file (pt. 2) not found: $SOURCE_FILE" true; return; fi 
 		echo "$TEMP_ERROR_LOG" > "$TEMP_ERROR_LOG"
 		f_log_and_echo "Transcoding $SOURCE_FILE_BASE to $TARGET_FILE" false
-		nice -19 "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE"
-		exit_status=$?
-		chown $RUN_AS:$RUN_AS "$TARGET_FILE"
-		chmod $DEFAULT_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
-		if $SET_PLEX_PERMISSIONS; then
-			chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
-			chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
-			fi
-		if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-				TEMP_ERRORS=true
-				echo "$HANDBRAKE_CLI: FAILED with error #$exit_status for $IN_FILE" >> "$TEMP_ERROR_LOG"				
-				f_balk "$HANDBRAKE_CLI: FAILED with error #$exit_status for $SOURCE_FILE" false
-				cat "$TEMP_ERROR_LOG" | mail -s "Error Log for $HOSTNAME $TEMP_THIS_SCRIPT" admin
+		if ! $DRY_RUN; then {
+			nice -19 "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE"
+			exit_status=$?
+			chown $RUN_AS:$RUN_AS "$TARGET_FILE"
+			chmod $DEFAULT_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
+			if $SET_PLEX_PERMISSIONS; then
+				chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
+				chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
+				fi
+			if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
+					TEMP_ERRORS=true
+					echo "$HANDBRAKE_CLI: FAILED with error #$exit_status for $IN_FILE" >> "$TEMP_ERROR_LOG"				
+					f_balk "$HANDBRAKE_CLI: FAILED with error #$exit_status for $SOURCE_FILE" false
+					cat "$TEMP_ERROR_LOG" | mail -s "Error Log for $HOSTNAME $TEMP_THIS_SCRIPT" admin
+				else
+					rm "$SOURCE_FILE" # Delete input file
+					f_log_and_echo "Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" false
+					echo
+				fi # End of check for transcoding failure
 			else
-				rm "$SOURCE_FILE" # Delete input file
-				f_log_and_echo "Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" false
-				echo
-			fi # End of check for transcoding failure
+				f_log_and_echo "DRY RUN ONLY - Not transcoded."
+			fi
 		fi
 	}
 
