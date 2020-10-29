@@ -331,8 +331,8 @@ function f_target_relative_path_and_filename_no_ext () {
 	FILENAME_ONLY_NO_EXT=$(basename "$RELATIVE_FILE_NO_EXT")
 	PARENT_DIR=$(basename "$RELATIVE_PATH")
 	if $PREPEND_PARENT_DIR_TO_BASENAME; then
-# f_log_and_echo "RELATIVE_FILE 0: $RELATIVE_FILE"
-# f_log_and_echo "PARENT_DIR: $PARENT_DIR"
+f_log_and_echo "RELATIVE_FILE 0: $RELATIVE_FILE"
+f_log_and_echo "PARENT_DIR: $PARENT_DIR"
 		FILENAME_ONLY_NO_EXT="$PARENT_DIR - $FILENAME_ONLY_NO_EXT"
 # f_log_and_echo "FILENAME_ONLY_NO_EXT: $FILENAME_ONLY_NO_EXT"
 # f_log_and_echo "RELATIVE_FILE 1: $RELATIVE_FILE"
