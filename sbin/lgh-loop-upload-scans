@@ -21,8 +21,8 @@
 	inotifywait -m "$WATCH_DIRECTORY" -e create -e moved_to | 
 		while read TEMP_PATH TEMP_ACTION TEMP_FILE; do 
 			# f_log_and_echo "Moving $TEMP_FILE to $REMOTE_NAME:$REMOTE_DIRECTORY/"
-			echo sudo -u $ADMIN_USER rclone copy "$TEMP_FILE" "$REMOTE_NAME":"$REMOTE_DIRECTORY/"
-			sudo -u $ADMIN_USER rclone copy "$TEMP_FILE" "$REMOTE_NAME":"$REMOTE_DIRECTORY/"
+			echo sudo -u $ADMIN_USER rclone copy "$TEMP_FILE" "$REMOTE_NAME":"$REMOTE_DIRECTORY"
+			sudo -u $ADMIN_USER rclone copy "$TEMP_FILE" "$REMOTE_NAME":"$REMOTE_DIRECTORY"
 			rm -f "$TEMP_FILE"
 		done
 
