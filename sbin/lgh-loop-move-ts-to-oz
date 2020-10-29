@@ -25,11 +25,11 @@
 	THIS_SCRIPT=$(basename "$0")
 	while true; do
         sudo -u $ADMIN_USER \
-			rsync --remove-source-files --include "$MOVE_MASK" --exclude "$BLOCK_MASK" -aloprtv \
+			rsync --remove-source-files --include "$MOVE_MASK" --exclude "$BLOCK_MASK" --exclude ".*" -aloprtv \
 			"$SOURCE_ROOT_DIR_1" "$TARGET_SERVER:$TARGET_ROOT_DIR_1" \
 			| logger -t "$THIS_SCRIPT"
         sudo -u $ADMIN_USER \
-			rsync --remove-source-files --include "$MOVE_MASK" --exclude "$BLOCK_MASK" -aloprtv \
+			rsync --remove-source-files --include "$MOVE_MASK" --exclude "$BLOCK_MASK" --exclude ".*" -aloprtv \
 			"$SOURCE_ROOT_DIR_2" "$TARGET_SERVER:$TARGET_ROOT_DIR_2" \
 			| logger -t "$THIS_SCRIPT"
 		f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false
