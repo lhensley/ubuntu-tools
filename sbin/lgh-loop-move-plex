@@ -1,6 +1,9 @@
 #!/bin/bash
 # This script should be run as root from cron, executed at boot time.
 # For now, this should ONLY run on oz, because server-specific values are defined.
+# MOVE (not copy) files to new directory or server/directory
+# Useful for MOVING (not copying) completed video files
+# Does NOT remove extraneous files from target directories
 
 # Include script setup file
 	source script-setup
@@ -10,41 +13,26 @@
 # Only allow this to run on server oz.
 	f_only_on_server "oz"
 
-# Define file locations
-	SOURCE_ROOT_DIR="/mnt/ext10tb01/plex/TV-Austin"
-	TARGET_ROOT_DIR="/mnt/cloteal/Plex/Pool06-1TB/TV-Shows"
-	TARGET_SERVER="nuc01.lanehensley.org"
-	WAIT_AFTER_SOURCE_SCAN="6h"
-	MOVE_MASK="*.m4v"
-
-# MOVE (not copy) files to new directory or server/directory
-# Useful for MOVING (not copying) completed video files
-# Does NOT remove extraneous files from target directories
-# rsync options considered
-# Until string constants and variable definitions are moved to _vars, this should ONLY be run on oz.
-#    -a = archive mode, equivalent to -rlptgoD
-#    -g = preserve group ownership
-#    -l = recreate symlinks on destination
-#    -n = dry run
-#    -o = preserve owner
-#    -p = preserve permissions
-#    -q = quiet
-#    -r = recursive (includes subdirectories)
-#    -t = preserve modification times
-#    -v = verbose
-#    -D = preserve device files and special files
-#    -E = preserve executability
-#    -R = use relative paths (see https://linux.die.net/man/1/rsync for more info)
-#    --delete = delete extraneous files from dest dirs
 
 # Do the looping work
 	THIS_SCRIPT=$(basename "$0")
 	while true; do
+		# Define file locations
+			SOURCE_ROOT_DIR="/mnt/ext10tb01/plex/TV-Austin"
+			TARGET_ROOT_DIR="/mnt/cloteal/Plex/Pool06-1TB/TV-Shows"
+			TARGET_SERVER="nuc01.lanehensley.org"
+			WAIT_AFTER_SOURCE_SCAN="6h"
+			MOVE_MASK="*.m4v"
+			EXCLUDE_MASK1="*.ts"
+			EXCLUDE_MASK2=".*"
+			EXCLUDE_MASK3=".grab/"
         sudo -u $ADMIN_USER \
-			rsync --remove-source-files --include $MOVE_MASK -aloprtv \
+			rsync --remove-source-files --include "$MOVE_MASK" \
+			--exclude "$EXCLUDE_MASK1" --exclude "$EXCLUDE_MASK2" \
+			--exclude "$EXCLUDE_MASK3" -aloprtv \
 			"$SOURCE_ROOT_DIR" "$TARGET_SERVER:$TARGET_ROOT_DIR" \
 			| logger -t "$THIS_SCRIPT"
-		f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false
+		f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." true
 		sleep "$WAIT_AFTER_SOURCE_SCAN"
         done
 
