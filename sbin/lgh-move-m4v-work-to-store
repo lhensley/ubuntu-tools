@@ -14,7 +14,7 @@
 
 # Do the work
     sudo -u $ADMIN_USER \
-		rsync --remove-source-files --include $MOVE_MASK \
+		rsync --remove-source-files --include $MOVE_MASK --exclude ".grab/" \
 			--archive --links --owner --perms --times --verbose \
 			"$SOURCE_ROOT_DIR" "$TARGET_ROOT_DIR" \
 			| logger -t "$THIS_SCRIPT"
