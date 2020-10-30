@@ -13,29 +13,11 @@
 	WAIT_AFTER_SOURCE_SCAN="6h"
 	MOVE_MASK="*.m4v"
 
-# MOVE (not copy) files to new directory or server/directory
-# Useful for MOVING (not copying) completed video files
-# Does NOT remove extraneous files from target directories
-# rsync options considered
-#    -a = archive mode, equivalent to -rlptgoD
-#    -g = preserve group ownership
-#    -l = recreate symlinks on destination
-#    -n = dry run
-#    -o = preserve owner
-#    -p = preserve permissions
-#    -q = quiet
-#    -r = recursive (includes subdirectories)
-#    -t = preserve modification times
-#    -v = verbose
-#    -D = preserve device files and special files
-#    -E = preserve executability
-#    -R = use relative paths (see https://linux.die.net/man/1/rsync for more info)
-#    --delete = delete extraneous files from dest dirs
-
 # Do the looping work
 	THIS_SCRIPT=$(basename "$0")
 	while true; do
         sudo -u $ADMIN_USER \
+			See https://github.com/lhensley/go/blob/master/documentation/rsync%20options.md
 			rsync --remove-source-files --include $MOVE_MASK -aloprtv \
 			"$SOURCE_ROOT_DIR" "$TARGET_SERVER:$TARGET_ROOT_DIR" \
 			| logger -t "$THIS_SCRIPT"
