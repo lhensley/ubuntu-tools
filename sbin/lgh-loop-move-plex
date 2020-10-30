@@ -13,13 +13,12 @@
 # Only allow this to run on server oz.
 	f_only_on_server "oz"
 
-
 # Do the looping work
 	THIS_SCRIPT=$(basename "$0")
 	while true; do
 		# Define file locations
-			SOURCE_ROOT_DIR="/mnt/ext10tb01/plex/TV-Austin"
-			TARGET_ROOT_DIR="/mnt/cloteal/Plex/Pool06-1TB/TV-Shows"
+			SOURCE_ROOT_DIR="/mnt/ext10tb01/plex/dvr-oz"
+			TARGET_ROOT_DIR="/mnt/cloteal/Plex/Pool06-1TB/dvr-nuc01"
 			TARGET_SERVER="nuc01.lanehensley.org"
 			WAIT_AFTER_SOURCE_SCAN="6h"
 			MOVE_MASK="*.m4v"

@@ -30,7 +30,12 @@
     f_only_on_server "oz"
 
 # Do the looping work
-    f_iterate_handbrake_source_video_files
+    while true ; do
+        f_iterate_handbrake_source_video_files
+	    f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false  # The TRUE part at the end means this sends pager notices.
+																  # Drop this when stable, and consider bumping up the interval.
+	    sleep "$WAIT_AFTER_SOURCE_SCAN"
+        done
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
