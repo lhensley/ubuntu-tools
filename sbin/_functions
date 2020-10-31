@@ -15,6 +15,32 @@ function f_log_and_echo () {
 	echo $(basename $0): $1
 	}
 
+function f_system_snapshot () {
+	u=$(uuidgen)
+	d=$(date)
+	echo $d
+	echo \"$u\",\"Timestamp\",\"$(date -d"$d" +"%m/%d/%Y %H:%M:%S")\"
+	echo \"$u\",\"Timezone\",\"$(date -d"$d" +"%Z")\"
+	echo \"$u\",\"Host\",\"$(hostname -s)\"
+	echo \"$u\",\"Plex Video Work Directory\",\"$VIDEO_WORK_DIRECTORY\"
+	echo \"$u\",\"Plex Video Store Directory\",\"$VIDEO_STORE_DIRECTORY\"
+	echo \"$u\",\".ts files in Plex Video Work Directory\",\"$(find "$VIDEO_WORK_DIRECTORY" -name "*.ts" -print | wc -l)\"
+	echo \"$u\",\".ts files in Plex Video Store Directory\",\"$(find "$VIDEO_STORE_DIRECTORY" -name "*.ts" -print | wc -l)\"
+	echo \"$u\",\".m4v files in Plex Video Work Directory\",\"$(find "$VIDEO_WORK_DIRECTORY" -name "*.m4v" -print | wc -l)\"
+	echo \"$u\",\".m4v files in Plex Video Store Directory\",\"$(find "$VIDEO_STORE_DIRECTORY" -name "*.m4v" -print | wc -l)\"
+	echo \"$u\",\"1K blocks stored in Plex Video Work Directory\",\"$(du -s "$d")\"
+	echo \"$u\",\"1K blocks stored in Plex Video Store Directory\",\"$(du -s "$d")\"
+	echo \"$u\",\"1K blocks stored in Plex Video Work Directory\",\"$(du -s "$d")\"
+	echo \"$u\",\"1K blocks total in Plex Video Work File System\",\"$(df "$VIDEO_WORK_FILE_SYSTEM" | cut -f2 -d" " | tail -n1)\"
+	echo \"$u\",\"1K blocks total in Plex Video Store File System\",\"$(df "$VIDEO_STORE_FILE_SYSTEM" | cut -f2 -d" " | tail -n1)\"
+	echo \"$u\",\"1K blocks used in Plex Video Work File System\",\"$(df "$VIDEO_WORK_FILE_SYSTEM" | cut -f3 -d" " | tail -n1)\"
+	echo \"$u\",\"1K blocks used in Plex Video Store File System\",\"$(df "$VIDEO_STORE_FILE_SYSTEM" | cut -f3 -d" " | tail -n1)\"
+	echo \"$u\",\"1K blocks available in Plex Video Work File System\",\"$(df "$VIDEO_WORK_FILE_SYSTEM" | cut -f4 -d" " | tail -n1)\"
+	echo \"$u\",\"1K blocks available in Plex Video Store File System\",\"$(df "$VIDEO_STORE_FILE_SYSTEM" | cut -f4 -d" " | tail -n1)\"
+	echo \"$u\",\"Use Percentage in Plex Video Work File System\",\"$(df "$VIDEO_WORK_FILE_SYSTEM" | cut -f5 -d" " | tail -n1)\"
+	echo \"$u\",\"Use Percentage in Plex Video Store File System\",\"$(df "$VIDEO_STORE_FILE_SYSTEM" | cut -f5 -d" " | tail -n1)\"
+	}
+
 function f_beep () {
 	echo -en "\007" # Beep
 	}
