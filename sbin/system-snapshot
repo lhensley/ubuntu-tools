@@ -5,7 +5,9 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-sudo -u $ADMIN_USER f_system_snapshot >> $SYSTEM_SNAPSHOT_FILE
+f_system_snapshot >> "$SYSTEM_SNAPSHOT_FILE"
+chown $ADMIN_USER:$ADMIN_USER "$SYSTEM_SNAPSHOT_FILE"
+chmod $SYSTEM_SNAPSHOT_FILE_PERMISSIONS "$SYSTEM_SNAPSHOT_FILE"
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
