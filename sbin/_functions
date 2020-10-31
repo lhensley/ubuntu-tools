@@ -33,7 +33,7 @@ function f_system_snapshot () {
 	echo \"$u\",\"TEST 1K blocks total in Plex Video Work File System\",\"$(df "$VIDEO_WORK_FILE_SYSTEM" | tail -n1)\"
 	echo \"$u\",\"TEST1 1K blocks total in Plex Video Work File System\",\"$(df "$VIDEO_WORK_FILE_SYSTEM" | tail -n1 | cut -f1 -d" ")\"
 	echo \"$u\",\"TEST2 1K blocks total in Plex Video Work File System\",\"$(df "$VIDEO_WORK_FILE_SYSTEM" | tail -n1 | cut -f2 -d" ")\"
-	echo \"$u\",\"TEST3 1K blocks total in Plex Video Work File System\",\"$(df "$VIDEO_WORK_FILE_SYSTEM" | tr " " | cut -f 3 -d" ") | tail -n1)\"
+	echo \"$u\",\"TEST3 1K blocks total in Plex Video Work File System\",\"$(df "$VIDEO_WORK_FILE_SYSTEM" | tr " " | cut -f 3 -d" " | tail -n1)\"
 	echo \"$u\",\"TEST4 1K blocks total in Plex Video Work File System\",\"$(df "$VIDEO_WORK_FILE_SYSTEM" | tail -n1 | cut -f4 -d" ")\"
 	echo \"$u\",\"TEST5 1K blocks total in Plex Video Work File System\",\"$(df "$VIDEO_WORK_FILE_SYSTEM" | tail -n1 | cut -f5 -d" ")\"
 	echo \"$u\",\"1K blocks total in Plex Video Work File System\",\"$(df "$VIDEO_WORK_FILE_SYSTEM" | cut -f2 | tail -n1)\"
