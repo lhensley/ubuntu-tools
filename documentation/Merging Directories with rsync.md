@@ -9,6 +9,7 @@ Merging video container directories
 
 Does NOT delete source files. 
 ```
+cd
 SOURCE_DIR="/mnt/ext10tb01/plex/TV-Shows/TV-Austin"
 TARGET_DIR="/mnt/ext10tb01/plex/dvr-oz"
 sudo rsync -aloprtv "$SOURCE_DIR/"* "$TARGET_DIR"
