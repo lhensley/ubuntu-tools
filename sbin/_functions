@@ -49,13 +49,13 @@ function f_system_snapshot () {
 
 f_plexmediaserver_is_busy () {
 	TEST_TEXT="plexmediaserver/Plex Transcoder"
-	if [ $(ps -ef | grep "$TEST_TEXT" | wc -l) ]; then echo true; else echo false; fi
+	if [ $(ps -ef | grep "$TEST_TEXT" | wc -l) != "0" ]; then echo true; else echo false; fi
 	}
 
 f_plexmediaserver_is_recording () {
 	TEST_TEXT="plexmediaserver/Plex Transcoder"
 	TEST_TEXT_2="-i http://127.0.0.1:32400/livetv"
-	if [ $(ps -ef | grep "$TEST_TEXT" | grep $TEST_TEXT_2 | wc -l) ]; then echo true; else echo false; fi
+	if [ $(ps -ef | grep "$TEST_TEXT" | grep $TEST_TEXT_2 | wc -l) != "0" ]; then echo true; else echo false; fi
 	}
 
 f_users_logged_in () {
