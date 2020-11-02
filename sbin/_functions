@@ -44,7 +44,7 @@ function f_system_snapshot () {
 	echo \"$u\",\"Instances of postfix\",\"$(f_program_instances "postfix")\"
 	echo \"$u\",\"Instances of plexmediaserver\",\"$(f_program_instances "plexmediaserver")\"
 	echo \"$u\",\"Plex Media Server is Busy\",\"$(f_plexmediaserver_is_busy)\"
-	echo \"$u\",\"Plex Media Server is Recording\",\"$(f_plexmediaserver_is_returning)\"
+	echo \"$u\",\"Plex Media Server is Recording\",\"$(f_plexmediaserver_is_recording)\"
 	}
 
 f_plexmediaserver_is_busy () {
