@@ -21,6 +21,7 @@ function f_system_snapshot () {
 	echo \"$u\",\"Timestamp\",\"$(date -d"$d" +"%m/%d/%Y %H:%M:%S")\"
 	echo \"$u\",\"Timezone\",\"$(date -d"$d" +"%Z")\"
 	echo \"$u\",\"Host\",\"$(hostname -s)\"
+	echo \"$u\",\"Up Time\",\"$(uptime)\"
 	echo \"$u\",\"Plex Video Work Directory\",\"$VIDEO_WORK_DIRECTORY\"
 	echo \"$u\",\"Plex Video Store Directory\",\"$VIDEO_STORE_DIRECTORY\"
 	echo \"$u\",\".ts files in Plex Video Work Directory\",\"$(find "$VIDEO_WORK_DIRECTORY" -name "*.ts" -print | wc -l)\"
@@ -42,6 +43,8 @@ function f_system_snapshot () {
 	for f in "$SBIN_DIR/lgh"*; do echo \"$u\",\"Instances of $f\",\"$(f_program_instances "$f")\"; done
 	echo \"$u\",\"Instances of postfix\",\"$(f_program_instances "postfix")\"
 	echo \"$u\",\"Instances of plexmediaserver\",\"$(f_program_instances "plexmediaserver")\"
+	echo \"$u\",\"Plex Media Server is Busy\",\"$(f_plexmediaserver_is_busy)\"
+	echo \"$u\",\"Plex Media Server is Recording\",\"$(f_plexmediaserver_is_returning)\"
 	}
 
 f_plexmediaserver_is_busy () {
