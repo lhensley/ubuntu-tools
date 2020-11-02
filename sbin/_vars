@@ -347,7 +347,7 @@ source /etc/os-release
 	if [ $HOSTNAME == "red" ]; then RELAYHOST="mail.mchsi.com"; fi    # Mediacom Cable Internet
 
 # System Snapshot File
-	SYSTEM_SNAPSHOT_FILE="$ADMIN_HOME_DIR/.system-snapshot-data.txt"
+	SYSTEM_SNAPSHOT_FILE="$ADMIN_HOME_DIR/.system-snapshot-data.csv"
 	SYSTEM_SNAPSHOT_FILE_PERMISSIONS=640
 
 # Video Processing Defaults

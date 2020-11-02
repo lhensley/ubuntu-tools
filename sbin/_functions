@@ -18,7 +18,6 @@ function f_log_and_echo () {
 function f_system_snapshot () {
 	u=$(uuidgen)
 	d=$(date)
-	echo $d
 	echo \"$u\",\"Timestamp\",\"$(date -d"$d" +"%m/%d/%Y %H:%M:%S")\"
 	echo \"$u\",\"Timezone\",\"$(date -d"$d" +"%Z")\"
 	echo \"$u\",\"Host\",\"$(hostname -s)\"
@@ -28,8 +27,8 @@ function f_system_snapshot () {
 	echo \"$u\",\".ts files in Plex Video Store Directory\",\"$(find "$VIDEO_STORE_DIRECTORY" -name "*.ts" -print | wc -l)\"
 	echo \"$u\",\".m4v files in Plex Video Work Directory\",\"$(find "$VIDEO_WORK_DIRECTORY" -name "*.m4v" -print | wc -l)\"
 	echo \"$u\",\".m4v files in Plex Video Store Directory\",\"$(find "$VIDEO_STORE_DIRECTORY" -name "*.m4v" -print | wc -l)\"
-	echo \"$u\",\"1K blocks stored in Plex Video Work Directory\",\"$(du -s "$VIDEO_WORK_DIRECTORY")\"
-	echo \"$u\",\"1K blocks stored in Plex Video Store Directory\",\"$(du -s "$VIDEO_STORE_DIRECTORY")\"
+	echo \"$u\",\"1K blocks stored in Plex Video Work Directory\",\"$(du -s "$VIDEO_WORK_DIRECTORY" | tr -s ' ' | cut -f 1 -d" " | tail -n1)\"
+	echo \"$u\",\"1K blocks stored in Plex Video Store Directory\",\"$(du -s "$VIDEO_STORE_DIRECTORY" | tr -s ' ' | cut -f 1 -d" " | tail -n1)\"
 	echo \"$u\",\"1K blocks total in Plex Video Work File System\",\"$(df "$VIDEO_WORK_FILE_SYSTEM" | tr -s ' ' | cut -f 2 -d" " | tail -n1)\"
 	echo \"$u\",\"1K blocks total in Plex Video Store File System\",\"$(df "$VIDEO_STORE_FILE_SYSTEM" | tr -s ' ' | cut -f 2 -d" " | tail -n1)\"
 	echo \"$u\",\"1K blocks used in Plex Video Work File System\",\"$(df "$VIDEO_WORK_FILE_SYSTEM" | tr -s ' ' | cut -f 3 -d" " | tail -n1)\"
@@ -38,6 +37,11 @@ function f_system_snapshot () {
 	echo \"$u\",\"1K blocks available in Plex Video Store File System\",\"$(df "$VIDEO_STORE_FILE_SYSTEM" | tr -s ' ' | cut -f 4 -d" " | tail -n1)\"
 	echo \"$u\",\"Use Percentage in Plex Video Work File System\",\"$(df "$VIDEO_WORK_FILE_SYSTEM" | tr -s ' ' | cut -f 5 -d" " | tail -n1)\"
 	echo \"$u\",\"Use Percentage in Plex Video Store File System\",\"$(df "$VIDEO_STORE_FILE_SYSTEM" | tr -s ' ' | cut -f 5 -d" " | tail -n1)\"
+	echo \"$u\",\"Instances of cold-backup\",\"$(f_program_instances "cold-backup")\"; done
+	echo \"$u\",\"Instances of HandBrakeCLI\",\"$(f_program_instances "HandBrakeCLI")\"; done
+	for f in "$SBIN_DIR/lgh"*; do echo \"$u\",\"Instances of $f\",\"$(f_program_instances "$f")\"; done
+	echo \"$u\",\"Instances of postfix\",\"$(f_program_instances "postfix")\"; done
+	echo \"$u\",\"Instances of plexmediaserver\",\"$(f_program_instances "plexmediaserver")\"; done
 	}
 
 function f_beep () {
@@ -49,6 +53,11 @@ function f_balk () {
 	# Usage: f_balk "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
 		f_log_and_echo "$1" "$2"
 		f_beep
+	}
+
+function f_program_instances () {
+	# Returns an integer of the number of instances of programs containing the value of $1 are running
+	echo `expr $(ps -ef | grep "$1" | wc -l) - 1`
 	}
 
 function f_die () {
