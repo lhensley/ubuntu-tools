@@ -34,7 +34,7 @@
 	if [ $(ps -ef | grep $RUNNING_PROGRAMS | wc -l) -ne "1" ]; then OBJECTION+="Uninterruptible programs running. "; fi
 # Anyone logged in
 	USERS_LOGGED_IN=f_users_logged_in
-	if [ $USERS_LOGGED_IN -ne "0" ]; OBJECTION+="Users logged in. "; fi
+	if [ $USERS_LOGGED_IN -ne "0" ]; then OBJECTION+="Users logged in. "; fi
 
 # echo "Starting safe reboot." | mail text_alerts
 	if [ "$OBJECTION" == "" ]; then
