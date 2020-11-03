@@ -35,14 +35,14 @@
 	USERS_LOGGED_IN=$(f_users_logged_in)
 	if [ "$USERS_LOGGED_IN" -ne "0" ]; then OBJECTION+="Users logged in. "; fi
 
-# echo "Starting safe reboot." | mail text_alerts
+# Act on data gleaned above.
 	if [ "$OBJECTION" == "" ]; then
+		echo "Starting safe reboot." | mail text_alerts
 		upd
 		rm $RESET_FLAG_FILE
-		echo "Reboot here. " | mail text_alerts
-	#	init 6
+		# init 6
 	else
-		f_log_and_echo "No update: $OBJECTION"
+		f_log_and_echo "No update: $OBJECTION" false
 	fi
 
 # Include script footer file
