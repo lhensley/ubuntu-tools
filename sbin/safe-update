@@ -6,13 +6,15 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
+# Initialize objection
+	OBJECTION=""
 # No flag set
-	if ! f_file_exists "$RESET_FLAG_FILE"; then echo "NO RESET FLAG"; exit 1; fi
+	if ! f_file_exists "$RESET_FLAG_FILE"; then OBJECTION+="No reset flag. "; fi
 # After 9:59pm
 	echo Hour: $(date +%H)
-	if [ "$(date +%H)" -gt "21" ]; then echo "TOO LATE"; exit 1; fi
+	if [ "$(date +%H)" -gt "21" ]; then OBJECTION+="Too late. "; fi
 # Before 7am
-	if [ "$(date +%H)" -lt "7" ]; then echo "TOO EARLY"; exit 1; fi
+	if [ "$(date +%H)" -lt "7" ]; then OBJECTION+=."Too early "; fi
 # Uninterruptible program is running
 	RUNNING_PROGRAMS='/usr/bin/tar\|'
 	RUNNING_PROGRAMS+='/usr/local/sbin/backup\|'
@@ -29,17 +31,20 @@
 	RUNNING_PROGRAMS+='/usr/bin/HandBrakeCLI\|'
 	RUNNING_PROGRAMS+='Transcoder'
 	ps -ef | grep $RUNNING_PROGRAMS
-	if [ $(ps -ef | grep $RUNNING_PROGRAMS | wc -l) -ne "1" ]; then echo "UNINTERRUPTIBLE PROGRAMS RUNNING"; exit 1; fi
+	if [ $(ps -ef | grep $RUNNING_PROGRAMS | wc -l) -ne "1" ]; then OBJECTION+="Uninterruptible programs running. "; fi
 # Anyone logged in
 	USERS_LOGGED_IN=f_users_logged_in
-	echo Users logged in: $USERS_LOGGED_IN
-	if [ $USERS_LOGGED_IN -ne "0" ]; echo "USERS LOGGED IN"; then exit 1; fi
+	f_log_and_echo Users logged in: $USERS_LOGGED_IN
+	if [ $USERS_LOGGED_IN -ne "0" ]; OBJECTION+="Users logged in. "; fi
 
 # echo "Starting safe reboot." | mail text_alerts
-	upd
-	rm $RESET_FLAG_FILE
-	echo "Reboot here."
-#	init 6
+	if [ "$OBJECTION" == "" ]; then
+		upd
+		rm $RESET_FLAG_FILE
+		echo "Reboot here. " | mail text_alerts
+	#	init 6
+	else
+		f_log_and_echo "No update: $OBJECTION"
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
