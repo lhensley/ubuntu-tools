@@ -84,7 +84,7 @@ function f_system_snapshot_json () {
 	echo "  "\"Plex Media Server is Busy\": $(f_plexmediaserver_is_busy)
 	echo "  "\"Plex Media Server is Recording\": $(f_plexmediaserver_is_recording)
 	echo "  "\"Reset Flag Set\": $(f_is_file "$RESET_FLAG_FILE")
-echo "}"
+	echo "}"
 	}
 
 f_plexmediaserver_is_busy () {
