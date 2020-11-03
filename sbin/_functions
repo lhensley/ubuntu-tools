@@ -54,6 +54,12 @@ function f_system_snapshot_json () {
 	echo "  "\"Timezone\": \"$(date -d"$d" +"%Z")\"
 	echo "  "\"Host\": \"$(hostname -s)\"
 	echo "  "\"Up Time\": \"$(uptime)\"
+	echo "  "\"Up Since\": \"$(date -d"$(uptime -s)" +"%m/%d/%Y %H:%M:%S")\"
+	UPTIME=$(cat /proc/loadavg)
+	echo "  "\"Load average\": $UPTIME
+	echo "  "\"N1\": $(echo $UPTIME) | tr -s ' ' | cut -f 1 | tail -n1)
+	echo "  "\"N2\": $(echo $UPTIME) | tr -s ' ' | cut -f 2 | tail -n1)
+	echo "  "\"N3\": $(echo $UPTIME) | tr -s ' ' | cut -f 3 | tail -n1)
 	echo "  "\"Plex Video Work Directory\": \"$VIDEO_WORK_DIRECTORY\"
 	echo "  "\"Plex Video Store Directory\": \"$VIDEO_STORE_DIRECTORY\"
 	echo "  "\".ts files in Plex Video Work Directory\": $(find "$VIDEO_WORK_DIRECTORY" -name "*.ts" -print | wc -l)
@@ -61,7 +67,7 @@ function f_system_snapshot_json () {
 	echo "  "\".m4v files in Plex Video Work Directory\": $(find "$VIDEO_WORK_DIRECTORY" -name "*.m4v" -print | wc -l)
 	echo "  "\".m4v files in Plex Video Store Directory\": $(find "$VIDEO_STORE_DIRECTORY" -name "*.m4v" -print | wc -l)
 	echo "  "\"1K blocks stored in Plex Video Work Directory\": $(du -s "$VIDEO_WORK_DIRECTORY" | tr -s ' ' | cut -f 1 | tail -n1)
-	echo "  "\"1K blocks stored in Plex Video Store Directory\": $(du -s "$VIDEO_STORE_DIRECTORY" | tr -s ' ' | cut -f 1 -d" " | tail -n1)
+	echo "  "\"1K blocks stored in Plex Video Store Directory\": $(du -s "$VIDEO_STORE_DIRECTORY" | tr -s ' ' | cut -f 1 | tail -n1)
 	echo "  "\"1K blocks total in Plex Video Work File System\": $(df "$VIDEO_WORK_FILE_SYSTEM" | tr -s ' ' | cut -f 2 -d" " | tail -n1)
 	echo "  "\"1K blocks total in Plex Video Store File System\": $(df "$VIDEO_STORE_FILE_SYSTEM" | tr -s ' ' | cut -f 2 -d" " | tail -n1)
 	echo "  "\"1K blocks used in Plex Video Work File System\": $(df "$VIDEO_WORK_FILE_SYSTEM" | tr -s ' ' | cut -f 3 -d" " | tail -n1)
