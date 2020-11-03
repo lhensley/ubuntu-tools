@@ -9,9 +9,8 @@
 # Initialize objection
 	OBJECTION=""
 # No flag set
-	if ! f_is_file "$RESET_FLAG_FILE"; then OBJECTION+="No reset flag. "; fi
+	if [ ! f_is_file "$RESET_FLAG_FILE" ]; then OBJECTION+="No reset flag. "; fi
 # After 9:59pm
-	echo Hour: $(date +%H)
 	if [ "$(date +%H)" -gt "21" ]; then OBJECTION+="Too late. "; fi
 # Before 7am
 	if [ "$(date +%H)" -lt "7" ]; then OBJECTION+=."Too early "; fi
