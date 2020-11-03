@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Include script setup file
+	source script-setup
+    source _functions-staging
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Set $RESET_FLAG_FILE
+	touch $RESET_FLAG_FILE
+	chown root:root $RESET_FLAG_FILE
+	chmod 644 $RESET_FLAG_FILE
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0

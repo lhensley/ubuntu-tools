@@ -346,6 +346,9 @@ source /etc/os-release
 	if [ $HOSTNAME == "nuc01" ]; then RELAYHOST="mail.mchsi.com"; fi  # Mediacom Cable Internet
 	if [ $HOSTNAME == "red" ]; then RELAYHOST="mail.mchsi.com"; fi    # Mediacom Cable Internet
 
+# reset-when-ready
+	RESET_FLAG_FILE="/tmp/reset-when-ready"
+
 # System Snapshot File
 	SYSTEM_SNAPSHOT_FILE="$ADMIN_HOME_DIR/.system-snapshot-data.csv"
 	SYSTEM_SNAPSHOT_FILE_PERMISSIONS=640
