@@ -7,6 +7,7 @@
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 # After 9:59pm
+	echo Hour: $(date +%H)
 	if [ "$(date +%H)" -gt "21" ]; then exit 1; fi
 # Before 7am
 	if [ "$(date +%H)" -lt "7" ]; then exit 1; fi
@@ -25,13 +26,16 @@
 	RUNNING_PROGRAMS+='/usr/bin/rsync\|'
 	RUNNING_PROGRAMS+='/usr/bin/HandBrakeCLI\|'
 	RUNNING_PROGRAMS+='Transcoder'
-	if [ $(ps -ef | grep $RUNNING_PROGRAMS) -ne "1" ]; then exit 1; fi
+	ps -ef | grep $RUNNING_PROGRAMS
+	if [ $(ps -ef | grep $RUNNING_PROGRAMS | wc -l) -ne "1" ]; then exit 1; fi
 # Anyone logged in
 	USERS_LOGGED_IN=f_users_logged_in
+	echo Users logged in: $USERS_LOGGED_IN
 	if [ $USERS_LOGGED_IN -ne "0" ]; then exit 1; fi
 
 # echo "Starting safe reboot." | mail text_alerts
 	upd
+	rm $RESET_FLAG_FILE
 	echo "Reboot here."
 #	init 6
 
