@@ -49,14 +49,12 @@ function f_system_snapshot () {
 
 function f_system_snapshot_json () {
 	d=$(date)
+	UPTIME=$(cat /proc/loadavg)
 	echo "{"
+	echo "  "\"Host\": \"$(hostname -s)\"
+	echo "  "\"Up Since\": \"$(date -d"$(uptime -s)" +"%m/%d/%Y %H:%M:%S")\"
 	echo "  "\"Timestamp\": \"$(date -d"$d" +"%m/%d/%Y %H:%M:%S")\"
 	echo "  "\"Timezone\": \"$(date -d"$d" +"%Z")\"
-	echo "  "\"Host\": \"$(hostname -s)\"
-	echo "  "\"Up Time\": \"$(uptime)\"
-	echo "  "\"Up Since\": \"$(date -d"$(uptime -s)" +"%m/%d/%Y %H:%M:%S")\"
-	UPTIME=$(cat /proc/loadavg)
-	echo "  "\"Load average\": $UPTIME
 	echo "  "\"Load average past 1 minute\": $(echo $UPTIME | tr -s ' ' | cut -f 1 -d " " | tail -n1)
 	echo "  "\"Load average past 5 minutes\": $(echo $UPTIME | tr -s ' ' | cut -f 2 -d " " | tail -n1)
 	echo "  "\"Load average past 15 minutes\": $(echo $UPTIME | tr -s ' ' | cut -f 3 -d " " | tail -n1)
@@ -85,7 +83,8 @@ function f_system_snapshot_json () {
 	echo "  "\"Instances of plexmediaserver\": $(f_program_instances "plexmediaserver")
 	echo "  "\"Plex Media Server is Busy\": $(f_plexmediaserver_is_busy)
 	echo "  "\"Plex Media Server is Recording\": $(f_plexmediaserver_is_recording)
-	echo "}"
+	echo "  "\"Reset Flag Set\": f_is_file "$RESET_FLAG_FILE"
+echo "}"
 	}
 
 f_plexmediaserver_is_busy () {
