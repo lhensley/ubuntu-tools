@@ -6,34 +6,10 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-# After 9:59pm
-	if [ "$(date +%H)" -gt "21" ]; then exit 1; fi
-# Before 7am
-	if [ "$(date +%H)" -lt "7" ]; then exit 1; fi
-# Uninterruptible program is running
-	RUNNING_PROGRAMS='/usr/bin/tar\|'
-	RUNNING_PROGRAMS+='/usr/local/sbin/backup\|'
-	RUNNING_PROGRAMS+='/usr/local/sbin/cold-backup\|'
-	RUNNING_PROGRAMS+='/usr/local/sbin/cold-restore\|'
-	RUNNING_PROGRAMS+='/usr/local/sbin/configure-installer\|'
-	RUNNING_PROGRAMS+='/usr/local/sbin/db-backup\|'
-	RUNNING_PROGRAMS+='/usr/local/sbin/initialize-server\|'
-	RUNNING_PROGRAMS+='/usr/local/sbin/install-virtual-host\|'
-	RUNNING_PROGRAMS+='/usr/local/sbin/rip\|'
-	RUNNING_PROGRAMS+='/usr/local/sbin/upd\|'
-	RUNNING_PROGRAMS+='/usr/bin/apt-get\|'
-	RUNNING_PROGRAMS+='/usr/bin/rsync\|'
-	RUNNING_PROGRAMS+='/usr/bin/HandBrakeCLI\|'
-	RUNNING_PROGRAMS+='Transcoder'
-	if [ $(ps -ef | grep $RUNNING_PROGRAMS) -ne "1" ]; then exit 1; fi
-# Anyone logged in
-	USERS_LOGGED_IN=f_users_logged_in
-	if [ $USERS_LOGGED_IN -ne "0" ]; then exit 1; fi
-
-# echo "Starting safe reboot." | mail text_alerts
-	upd
-	echo "Reboot here."
-#	init 6
+# Set $RESET_FLAG_FILE
+	touch $RESET_FLAG_FILE
+	chown root:root $RESET_FLAG_FILE
+	chmod 644 $RESET_FLAG_FILE
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
