@@ -76,11 +76,11 @@ function f_system_snapshot_json () {
 	echo "  "\"Use Percentage in Plex Video Work File System\": $PCT
 	PCT=$(df "$VIDEO_STORE_FILE_SYSTEM" | tr -s ' ' | cut -f 5 -d" " | tail -n1); PCT="${PCT::-1}"
 	echo "  "\"Use Percentage in Plex Video Store File System\": $PCT
-	echo "  "\"Instances of cold-backup\": $(f_program_instances "cold-backup")
-	echo "  "\"Instances of HandBrakeCLI\": $(f_program_instances "HandBrakeCLI")
-	for f in "$SBIN_DIR/lgh"*; do echo "  "\"Instances of $(basename "$f")\": $(f_program_instances "$f"); done
-	echo "  "\"Instances of postfix\": $(f_program_instances "postfix")
-	echo "  "\"Instances of plexmediaserver\": $(f_program_instances "plexmediaserver")
+	echo "  "\"Instances containing cold-backup\": $(f_program_instances "cold-backup")
+	echo "  "\"Instances containing HandBrakeCLI\": $(f_program_instances "HandBrakeCLI")
+	for f in "$SBIN_DIR/lgh"*; do echo "  "\"Instances containing $(basename "$f")\": $(f_program_instances "$f"); done
+	echo "  "\"Instances containing postfix\": $(f_program_instances "postfix")
+	echo "  "\"Instances containing plexmediaserver\": $(f_program_instances "plexmediaserver")
 	echo "  "\"Plex Media Server is Busy\": $(f_plexmediaserver_is_busy)
 	echo "  "\"Plex Media Server is Recording\": $(f_plexmediaserver_is_recording)
 	echo "  "\"Reset Flag Set\": $(f_is_file "$RESET_FLAG_FILE")
