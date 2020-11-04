@@ -78,7 +78,7 @@ function f_system_snapshot_json () {
 	echo "  "\"Use Percentage in Plex Video Store File System\": $PCT
 	echo "  "\"Instances of cold-backup\": $(f_program_instances "cold-backup")
 	echo "  "\"Instances of HandBrakeCLI\": $(f_program_instances "HandBrakeCLI")
-	for f in "$SBIN_DIR/lgh"*; do echo "  "\"Instances of $f\": $(f_program_instances "$f"); done
+	for f in "$SBIN_DIR/lgh"*; do echo "  "\"Instances of $(basename "$f")\": $(f_program_instances "$f"); done
 	echo "  "\"Instances of postfix\": $(f_program_instances "postfix")
 	echo "  "\"Instances of plexmediaserver\": $(f_program_instances "plexmediaserver")
 	echo "  "\"Plex Media Server is Busy\": $(f_plexmediaserver_is_busy)
