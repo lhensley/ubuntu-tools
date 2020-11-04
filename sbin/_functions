@@ -470,7 +470,7 @@ function f_transcode_handbrake_source_video_file () {
 		if ! $(f_is_file "$SOURCE_FILE");       then f_die "Source file not found: $SOURCE_FILE" true;            return; fi 
 		if ! $(f_is_directory "$SOURCE_ROOT");  then f_die "Source root directory not found: $SOURCE_ROOT" true;  return; fi 
 		if ! $(f_is_directory "$TARGET_ROOT");  then f_die "Target root directory not found: $TARGET_ROOT" true;  return; fi
-		DIAG_SOURCE_FILE="$SOURCE_FILE"
+#		DIAG_SOURCE_FILE="$SOURCE_FILE"
 
 	# Calculate definition of $TARGET_FILE
 		TARGET_FILE=$TARGET_ROOT/$(f_target_relative_path_and_filename_no_ext)$TARGET_FILE_EXTENSION
@@ -484,12 +484,12 @@ function f_transcode_handbrake_source_video_file () {
 		if ! $(f_is_directory "$TARGET_DIR"); then f_die "Target transcode directory not found: $TARGET_DIR" true;  return; fi
 		TIMESTART=$(currenttimeinseconds)
 		SOURCE_FILE_BASE=$(basename "$SOURCE_FILE")
-		TEMP_ERRORS=false
-		TEMP_THIS_SCRIPT=$(basename "$0")
-		TEMP_ERROR_LOG="/tmp/Error Log for $HOSTNAME $TEMP_THIS_SCRIPT $(date) $(uuidgen)"
-		if [ "$SOURCE_FILE" != "$DIAG_SOURCE_FILE" ] ; then f_die "$SOURCE_FILE != $DIAG_SOURCE_FILE" true ; fi
-		if ! $(f_is_file "$SOURCE_FILE"); then f_die "Source file (pt. 2) not found: $SOURCE_FILE" true; return; fi 
-		echo "$TEMP_ERROR_LOG" > "$TEMP_ERROR_LOG"
+#		TEMP_ERRORS=false
+#		TEMP_THIS_SCRIPT=$(basename "$0")
+#		TEMP_ERROR_LOG="/tmp/Error Log for $HOSTNAME $TEMP_THIS_SCRIPT $(date) $(uuidgen)"
+#		if [ "$SOURCE_FILE" != "$DIAG_SOURCE_FILE" ] ; then f_die "$SOURCE_FILE != $DIAG_SOURCE_FILE" true ; fi
+#		if ! $(f_is_file "$SOURCE_FILE"); then f_die "Source file (pt. 2) not found: $SOURCE_FILE" true; return; fi 
+#		echo "$TEMP_ERROR_LOG" > "$TEMP_ERROR_LOG"
 		f_log_and_echo "Transcoding $SOURCE_FILE to $TARGET_FILE" false
 		nice -19 "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE"
 		exit_status=$?
@@ -500,10 +500,10 @@ function f_transcode_handbrake_source_video_file () {
 			chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
 			fi
 		if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
-				TEMP_ERRORS=true
-				echo "$HANDBRAKE_CLI: FAILED with error #$exit_status for $IN_FILE" >> "$TEMP_ERROR_LOG"				
-				f_balk "$HANDBRAKE_CLI: FAILED with error #$exit_status for $SOURCE_FILE" false
-				cat "$TEMP_ERROR_LOG" | mail -s "Error Log for $HOSTNAME $TEMP_THIS_SCRIPT" admin
+#				TEMP_ERRORS=true
+#				echo "$HANDBRAKE_CLI: FAILED with error #$exit_status for $SOURCE_FILE" >> "$TEMP_ERROR_LOG"				
+				f_balk "$HANDBRAKE_CLI: FAILED with error #$exit_status for $SOURCE_FILE" true
+#				cat "$TEMP_ERROR_LOG" | mail -s "Error Log for $HOSTNAME $TEMP_THIS_SCRIPT" admin
 			else
 				rm "$SOURCE_FILE" # Delete input file
 				f_log_and_echo "Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" false
