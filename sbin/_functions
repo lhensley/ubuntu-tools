@@ -51,38 +51,38 @@ function f_system_snapshot_json () {
 	d=$(date)
 	UPTIME=$(cat /proc/loadavg)
 	echo "{"
-	echo "  "\"Host\": \"$(hostname -s)\"
-	echo "  "\"Up Since\": \"$(date -d"$(uptime -s)" +"%m/%d/%Y %H:%M:%S")\"
-	echo "  "\"Timestamp\": \"$(date -d"$d" +"%m/%d/%Y %H:%M:%S")\"
-	echo "  "\"Timezone\": \"$(date -d"$d" +"%Z")\"
-	echo "  "\"Load average past 1 minute\": $(echo $UPTIME | tr -s ' ' | cut -f 1 -d " " | tail -n1)
-	echo "  "\"Load average past 5 minutes\": $(echo $UPTIME | tr -s ' ' | cut -f 2 -d " " | tail -n1)
-	echo "  "\"Load average past 15 minutes\": $(echo $UPTIME | tr -s ' ' | cut -f 3 -d " " | tail -n1)
-	echo "  "\"Plex Video Work Directory\": \"$VIDEO_WORK_DIRECTORY\"
-	echo "  "\"Plex Video Store Directory\": \"$VIDEO_STORE_DIRECTORY\"
-	echo "  "\".ts files in Plex Video Work Directory\": $(find "$VIDEO_WORK_DIRECTORY" -name "*.ts" -print | wc -l)
-	echo "  "\".ts files in Plex Video Store Directory\": $(find "$VIDEO_STORE_DIRECTORY" -name "*.ts" -print | wc -l)
-	echo "  "\".m4v files in Plex Video Work Directory\": $(find "$VIDEO_WORK_DIRECTORY" -name "*.m4v" -print | wc -l)
-	echo "  "\".m4v files in Plex Video Store Directory\": $(find "$VIDEO_STORE_DIRECTORY" -name "*.m4v" -print | wc -l)
-	echo "  "\"1K blocks stored in Plex Video Work Directory\": $(du -s "$VIDEO_WORK_DIRECTORY" | tr -s ' ' | cut -f 1 | tail -n1)
-	echo "  "\"1K blocks stored in Plex Video Store Directory\": $(du -s "$VIDEO_STORE_DIRECTORY" | tr -s ' ' | cut -f 1 | tail -n1)
-	echo "  "\"1K blocks total in Plex Video Work File System\": $(df "$VIDEO_WORK_FILE_SYSTEM" | tr -s ' ' | cut -f 2 -d" " | tail -n1)
-	echo "  "\"1K blocks total in Plex Video Store File System\": $(df "$VIDEO_STORE_FILE_SYSTEM" | tr -s ' ' | cut -f 2 -d" " | tail -n1)
-	echo "  "\"1K blocks used in Plex Video Work File System\": $(df "$VIDEO_WORK_FILE_SYSTEM" | tr -s ' ' | cut -f 3 -d" " | tail -n1)
-	echo "  "\"1K blocks used in Plex Video Store File System\": $(df "$VIDEO_STORE_FILE_SYSTEM" | tr -s ' ' | cut -f 3 -d" " | tail -n1)
-	echo "  "\"1K blocks available in Plex Video Work File System\": $(df "$VIDEO_WORK_FILE_SYSTEM" | tr -s ' ' | cut -f 4 -d" " | tail -n1)
-	echo "  "\"1K blocks available in Plex Video Store File System\": $(df "$VIDEO_STORE_FILE_SYSTEM" | tr -s ' ' | cut -f 4 -d" " | tail -n1)
+	echo "  "\"Host\": \"$(hostname -s)\",
+	echo "  "\"Up Since\": \"$(date -d"$(uptime -s)" +"%m/%d/%Y %H:%M:%S")\",
+	echo "  "\"Timestamp\": \"$(date -d"$d" +"%m/%d/%Y %H:%M:%S")\",
+	echo "  "\"Timezone\": \"$(date -d"$d" +"%Z")\",
+	echo "  "\"Load average past 1 minute\": $(echo $UPTIME | tr -s ' ' | cut -f 1 -d " " | tail -n1),
+	echo "  "\"Load average past 5 minutes\": $(echo $UPTIME | tr -s ' ' | cut -f 2 -d " " | tail -n1),
+	echo "  "\"Load average past 15 minutes\": $(echo $UPTIME | tr -s ' ' | cut -f 3 -d " " | tail -n1),
+	echo "  "\"Plex Video Work Directory\": \"$VIDEO_WORK_DIRECTORY\",
+	echo "  "\"Plex Video Store Directory\": \"$VIDEO_STORE_DIRECTORY\",
+	echo "  "\".ts files in Plex Video Work Directory\": $(find "$VIDEO_WORK_DIRECTORY" -name "*.ts" -print | wc -l),
+	echo "  "\".ts files in Plex Video Store Directory\": $(find "$VIDEO_STORE_DIRECTORY" -name "*.ts" -print | wc -l),
+	echo "  "\".m4v files in Plex Video Work Directory\": $(find "$VIDEO_WORK_DIRECTORY" -name "*.m4v" -print | wc -l),
+	echo "  "\".m4v files in Plex Video Store Directory\": $(find "$VIDEO_STORE_DIRECTORY" -name "*.m4v" -print | wc -l),
+	echo "  "\"1K blocks stored in Plex Video Work Directory\": $(du -s "$VIDEO_WORK_DIRECTORY" | tr -s ' ' | cut -f 1 | tail -n1),
+	echo "  "\"1K blocks stored in Plex Video Store Directory\": $(du -s "$VIDEO_STORE_DIRECTORY" | tr -s ' ' | cut -f 1 | tail -n1),
+	echo "  "\"1K blocks total in Plex Video Work File System\": $(df "$VIDEO_WORK_FILE_SYSTEM" | tr -s ' ' | cut -f 2 -d" " | tail -n1),
+	echo "  "\"1K blocks total in Plex Video Store File System\": $(df "$VIDEO_STORE_FILE_SYSTEM" | tr -s ' ' | cut -f 2 -d" " | tail -n1),
+	echo "  "\"1K blocks used in Plex Video Work File System\": $(df "$VIDEO_WORK_FILE_SYSTEM" | tr -s ' ' | cut -f 3 -d" " | tail -n1),
+	echo "  "\"1K blocks used in Plex Video Store File System\": $(df "$VIDEO_STORE_FILE_SYSTEM" | tr -s ' ' | cut -f 3 -d" " | tail -n1),
+	echo "  "\"1K blocks available in Plex Video Work File System\": $(df "$VIDEO_WORK_FILE_SYSTEM" | tr -s ' ' | cut -f 4 -d" " | tail -n1),
+	echo "  "\"1K blocks available in Plex Video Store File System\": $(df "$VIDEO_STORE_FILE_SYSTEM" | tr -s ' ' | cut -f 4 -d" " | tail -n1),
 	PCT=$(df "$VIDEO_WORK_FILE_SYSTEM" | tr -s ' ' | cut -f 5 -d" " | tail -n1); PCT="${PCT::-1}"
-	echo "  "\"Use Percentage in Plex Video Work File System\": $PCT
+	echo "  "\"Use Percentage in Plex Video Work File System\": $PCT,
 	PCT=$(df "$VIDEO_STORE_FILE_SYSTEM" | tr -s ' ' | cut -f 5 -d" " | tail -n1); PCT="${PCT::-1}"
-	echo "  "\"Use Percentage in Plex Video Store File System\": $PCT
-	echo "  "\"Instances containing cold-backup\": $(f_program_instances "cold-backup")
-	echo "  "\"Instances containing HandBrakeCLI\": $(f_program_instances "HandBrakeCLI")
-	for f in "$SBIN_DIR/lgh"*; do echo "  "\"Instances containing $(basename "$f")\": $(f_program_instances "$f"); done
-	echo "  "\"Instances containing postfix\": $(f_program_instances "postfix")
-	echo "  "\"Instances containing plexmediaserver\": $(f_program_instances "plexmediaserver")
-	echo "  "\"Plex Media Server is Busy\": $(f_plexmediaserver_is_busy)
-	echo "  "\"Plex Media Server is Recording\": $(f_plexmediaserver_is_recording)
+	echo "  "\"Use Percentage in Plex Video Store File System\": $PCT,
+	echo "  "\"Instances containing cold-backup\": $(f_program_instances "cold-backup"),
+	echo "  "\"Instances containing HandBrakeCLI\": $(f_program_instances "HandBrakeCLI"),
+	for f in "$SBIN_DIR/lgh"*; do echo "  "\"Instances containing $(basename "$f")\": $(f_program_instances "$f"),; done
+	echo "  "\"Instances containing postfix\": $(f_program_instances "postfix"),
+	echo "  "\"Instances containing plexmediaserver\": $(f_program_instances "plexmediaserver"),
+	echo "  "\"Plex Media Server is Busy\": $(f_plexmediaserver_is_busy),
+	echo "  "\"Plex Media Server is Recording\": $(f_plexmediaserver_is_recording),
 	echo "  "\"Reset Flag Set\": $(f_is_file "$RESET_FLAG_FILE")
 	echo "}"
 	}

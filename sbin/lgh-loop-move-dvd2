@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Usage
+program-name -[options] source-root-dir target-root-dir move-mask
+options 
+	same as rsync
+	--quiet and --verbose apply to program-name, not rsync
+	--wait-after-source-scan
+	--email-alert-recipient
+
+exit 1
+
+
+
+# Define file locations
+	SOURCE_ROOT_DIR="/home/lhensley/Videos/HandBrake-Completed"
+	TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/cloteal/Plex/uploads"
+	TARGET_SERVER="nuc01.lanehensley.org"
+	WAIT_AFTER_SOURCE_SCAN="6h"
+	MOVE_MASK="*.m4v"
+
+# Do the looping work
+	THIS_SCRIPT=$(basename "$0")
+	while true; do
+        sudo -u $ADMIN_USER \
+			See https://github.com/lhensley/go/blob/master/documentation/rsync%20options.md
+			rsync --remove-source-files --include $MOVE_MASK -aloprtv \
+			"$SOURCE_ROOT_DIR"/* "$TARGET_SERVER:$TARGET_ROOT_DIR" \
+			| logger -t "$THIS_SCRIPT"
+		f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false
+		sleep "$WAIT_AFTER_SOURCE_SCAN"
+        done
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+
