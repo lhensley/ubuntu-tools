@@ -25,8 +25,8 @@
 			EXCLUDE_MASK1="*.ts"
 			EXCLUDE_MASK2=".*"
 			EXCLUDE_MASK3=".grab/"
+		# See https://github.com/lhensley/go/blob/master/documentation/rsync%20options.md
         sudo -u $ADMIN_USER \
-			See https://github.com/lhensley/go/blob/master/documentation/rsync%20options.md
 			rsync --remove-source-files --include "$MOVE_MASK" \
 			--exclude "$EXCLUDE_MASK1" --exclude "$EXCLUDE_MASK2" \
 			--exclude "$EXCLUDE_MASK3" -aloprtv \
