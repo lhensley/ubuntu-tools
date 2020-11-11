@@ -9,7 +9,7 @@ FUNCTIONS_ARE_DEFINED=false
 
 function f_log_and_echo () {
 # Usage f_log_and_echo "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
-	if $2; then echo $(basename $0): $1 | mail $TEXT_ALERTS; fi
+	if $2; then echo $HOSTNAME $(basename $0): $1 | mail $TEXT_ALERTS; fi
 	logger -t "$(basename $0)" $1
 	# >&2 echo $(basename $0): $1
 	echo $(basename $0): $1
