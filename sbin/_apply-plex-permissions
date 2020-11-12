@@ -5,7 +5,7 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-f_log_and_echo "Setting Plex data file permissions. This may take a while." false
+f_log_and_echo "Applying Plex data file permissions. This may take a while." false
 f_set_plex_media_recursive_permissions > /dev/null
 
 # Include script footer file
