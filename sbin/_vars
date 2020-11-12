@@ -332,7 +332,8 @@ source /etc/os-release
 			declare -A PLEX_ROOT
 			PLEX_ROOT[/mnt/cloteal/Plex]=true
 			PLEX_ROOT[/mnt/bertha/Plex]=true
-			PLEX_ROOT[/var/lib/plexmediaserver/Library]=true	
+			PLEX_ROOT[/var/lib/plexmediaserver/Library/store]=true	
+			PLEX_ROOT[/var/lib/plexmediaserver/Library/work]=true	
 		VIDEO_WORK_FILE_SYSTEM="/"
 		VIDEO_WORK_DIRECTORY="/var/lib/plexmediaserver/Library/work"
 		VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
