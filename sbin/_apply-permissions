@@ -8,8 +8,6 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-f_log_and_echo "Setting permissions. This may take a while." false
-
 # Set ownership and permissions in $SBIN_DIR
 	chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
 	find $SBIN_DIR -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1 # Consistent with /usr/sbin, usr/bin/, and other comparable directories
@@ -110,8 +108,9 @@ f_log_and_echo "Setting permissions. This may take a while." false
 		chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.vim*
 		fi
 
+# This is broken out into a separate script: _apply-plex-permissions
 # Plex Media Server Video Files
-	f_set_plex_media_recursive_permissions > /dev/null
+#	f_set_plex_media_recursive_permissions > /dev/null
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
