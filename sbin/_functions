@@ -293,12 +293,10 @@ function f_mount_ro_fs_as_ro () {
 	}
 
 function f_set_plex_media_recursive_permissions () {
-	f_require_directory "$VIDEO_WORK_DIRECTORY" false
-    find "$VIDEO_WORK_DIRECTORY"  -type d -print -exec chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS {} \;
-    find "$VIDEO_WORK_DIRECTORY"  -type f -print -exec chmod $PLEX_VIDEO_FILE_PERMISSIONS {} \;
-	f_require_directory "$VIDEO_STORE_DIRECTORY" false
-    find "$VIDEO_STORE_DIRECTORY" -type d -print -exec chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS {} \;
-    find "$VIDEO_STORE_DIRECTORY" -type f -print -exec chmod $PLEX_VIDEO_FILE_PERMISSIONS {} \;
+	for KEY in "${!PLEX_ROOT[@]}"; do 
+		find "$KEY" -type d -print -exec chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS {} \;
+		find "$KEY" -type f -print -exec chmod $PLEX_VIDEO_FILE_PERMISSIONS {} \;
+		done
 	}
 
 function f_only_on_server () {

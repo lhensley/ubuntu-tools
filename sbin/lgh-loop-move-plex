@@ -1,8 +1,5 @@
 #!/bin/bash
 # This script should be run as root from cron, executed at boot time.
-# For now, this should ONLY run on oz, because server-specific values are defined.
-# MOVE (not copy) files to new directory or server/directory
-# Useful for MOVING (not copying) completed video files
 # Does NOT remove extraneous files from target directories
 
 # Include script setup file
