@@ -111,7 +111,7 @@ f_log_and_echo "Setting permissions." false
 		fi
 
 # Plex Media Server Video Files
-	f_set_plex_media_recursive_permissions
+	f_set_plex_media_recursive_permissions > /dev/null
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
