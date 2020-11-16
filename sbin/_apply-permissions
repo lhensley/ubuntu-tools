@@ -109,7 +109,8 @@
 		fi
 
 # Plex Media Server Video Files
-	_apply-plex-permissions
+	echo Applying Plex permissions ...
+	_apply-plex-permissions > /dev/null
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
