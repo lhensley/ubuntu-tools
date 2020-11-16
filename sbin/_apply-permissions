@@ -108,9 +108,8 @@
 		chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.vim*
 		fi
 
-# This is broken out into a separate script: _apply-plex-permissions
 # Plex Media Server Video Files
-#	f_set_plex_media_recursive_permissions > /dev/null
+	_apply-plex-permissions
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

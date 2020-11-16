@@ -332,6 +332,7 @@ source /etc/os-release
 			declare -A PLEX_ROOT
 			PLEX_ROOT[/mnt/cloteal/Plex]=true
 			PLEX_ROOT[/mnt/bertha/Plex]=true
+			PLEX_ROOT[/var/lib/plexmediaserver/Library/metadata]=true	
 			PLEX_ROOT[/var/lib/plexmediaserver/Library/store]=true	
 			PLEX_ROOT[/var/lib/plexmediaserver/Library/work]=true	
 		VIDEO_WORK_FILE_SYSTEM="/"
@@ -345,6 +346,9 @@ source /etc/os-release
 		# Set them all as true
 		# Example: PLEX_ROOT[/mnt/cloteal/Plex]=true
 			declare -A PLEX_ROOT
+			PLEX_ROOT[/var/lib/plexmediaserver/Library/metadata]=true	
+			PLEX_ROOT[/var/lib/plexmediaserver/Library/store]=true	
+			PLEX_ROOT[/var/lib/plexmediaserver/Library/work]=true	
 			PLEX_ROOT[/mnt/ssd1tb/plex]=true
 			PLEX_ROOT[/mnt/ext10tb01/plex]=true	
 		VIDEO_WORK_FILE_SYSTEM="/mnt/ssd1tb"
