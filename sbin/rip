@@ -22,8 +22,13 @@ if [ -z "$2" ]; then
 f_require_value "MakeMKV Program Path" "${PATHNAME[makemkvcon]}"
 f_require_value "MakeMKV Output Directory" "$MAKEMKV_OUTPUT_DIRECTORY"
 
-sudo -u $RUN_AS mkdir -p "$MAKEMKV_OUTPUT_DIRECTORY/$1"
-f_require_directory "$MAKEMKV_OUTPUT_DIRECTORY/$1"
+# Delete the target directory if it already exists.
+# Useful if it's necessary to re-rip a DVD.
+	sudo -u $RUN_AS rm -fr "$MAKEMKV_OUTPUT_DIRECTORY/$1"
+# Create the target directory.
+	sudo -u $RUN_AS mkdir -p "$MAKEMKV_OUTPUT_DIRECTORY/$1"
+# Test that the directory creation worked.
+	f_require_directory "$MAKEMKV_OUTPUT_DIRECTORY/$1"
 
 sudo -u $RUN_AS nice "${PATHNAME[makemkvcon]}" --minlength=$MINLENGTH mkv disc:0 all "$MAKEMKV_OUTPUT_DIRECTORY/$1"
 exit_status=$?
