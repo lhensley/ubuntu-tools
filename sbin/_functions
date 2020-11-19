@@ -569,6 +569,7 @@ f_iterate_handbrake_source_video_files() {
 	# $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE
 										# "original rip info" means source file stat mtime
 
+	set -x
 	# Do the work
 		# SOURCE_FILE is the newest file found, based on the sort shown below.
 		#   The sort can be fooled by a "newer" directory structure name, because the sort is on the full pathname. 
