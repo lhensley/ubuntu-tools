@@ -569,7 +569,6 @@ f_iterate_handbrake_source_video_files() {
 	# $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE
 										# "original rip info" means source file stat mtime
 
-	set -x
 	# Do the work
 		# SOURCE_FILE is the newest file found, based on the sort shown below.
 		#   The sort can be fooled by a "newer" directory structure name, because the sort is on the full pathname. 
@@ -580,7 +579,7 @@ f_iterate_handbrake_source_video_files() {
 		touch "$SUCCESSFUL_TRANSCODE_FLAG"
 		while $(f_is_file "$SUCCESSFUL_TRANSCODE_FLAG"); do
 			rm -f "$SUCCESSFUL_TRANSCODE_FLAG"
-			find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort | cut -f 2 | \  
+			find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort | cut -f 2 | \
 				while read SOURCE_FILE; do echo ""; f_transcode_handbrake_source_video_file; done
 			done
 	}
