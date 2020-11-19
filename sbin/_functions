@@ -593,17 +593,7 @@ f_show_eligible_transcoding () {
 
 f_remove_empty_directories () {
 	if $(f_variable_has_content "$1"); then 
-		# get directory list
-			find "$1" -type d -print > dirs$$
-		# reverse the listing
-			tac dirs$$ > revdirs$$
-			while read dirname
-			do
-				rmdir $dirname 2>/dev/null
-			done < revdirs$$
-		# clean up
-			rm dirs$$
-			rm revdirs$$
+		find "$1" -type d -print | sort -r | while read d; do rmdir "$d" > /dev/null 2>&1; done
 		fi
 	}
 	
