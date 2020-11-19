@@ -477,6 +477,7 @@ function f_transcode_handbrake_source_video_file () {
     # $USE_PARENT_DIR_AS_BASENAME       # May be useful for ripped DVDs. TBD. Think about this first                     (default defined in _vars)
 	# $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE
 										# "original rip info" means source file stat mtime
+	# $SUCCESSFUL_TRANSCODE_FLAG		# Touch this file whenever a successful transcode occurs.
 
 	# Try to create $TARGET_ROOT, in case it doesn't yet exist
 		sudo -u plex mkdir -p "$TARGET_ROOT"
@@ -522,6 +523,7 @@ function f_transcode_handbrake_source_video_file () {
 			else
 				rm "$SOURCE_FILE" # Delete input file
 				f_log_and_echo "Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))" false
+				touch "$SUCCESSFUL_TRANSCODE_FLAG"
 				echo
 			fi # End of check for transcoding failure
 		fi
@@ -573,8 +575,13 @@ f_iterate_handbrake_source_video_files() {
 		#   Oh well. Fix this if that becomes an issue.
 		# Re 'echo ""' below, see https://mark.biek.org/blog/2018/10/bash-whileread-loop-breaking-early. Added 10/23/2020. Seems to work!
 
-		find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort | cut -f 2 \  
-			| while read SOURCE_FILE; do echo "" | f_transcode_handbrake_source_video_file; done
+		SUCCESSFUL_TRANSCODE_FLAG="/tmp/successful-transcode-from-PID-$$"
+		touch "$SUCCESSFUL_TRANSCODE_FLAG"
+		while $(f_is_file "$SUCCESSFUL_TRANSCODE_FLAG"); do
+			rm -f "$SUCCESSFUL_TRANSCODE_FLAG"
+			find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort | cut -f 2 \  
+				| while read SOURCE_FILE; do echo "" | f_transcode_handbrake_source_video_file; done
+			done
 	}
 	
 f_show_eligible_transcoding () {
