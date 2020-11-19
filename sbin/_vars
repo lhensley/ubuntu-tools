@@ -255,7 +255,7 @@ source /etc/os-release
 			MOUNT_POINT_DEFINITION[/mnt/ssd1tb]="UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb ext4 defaults 0 0"
 		MOUNT_POINT_DESCRIPTION[/mnt/ext10tb01]="External Hard Drive for Plex, 10TB (rerun)"
 			MOUNT_POINT_DEFINITION[/mnt/ext10tb01]="UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 rw,defaults 0 0"
-		MOUNT_POINT_DESCRIPTION[/mnt/Black1TB]="# Black 1TB
+		MOUNT_POINT_DESCRIPTION[/mnt/Black1TB]="# Black 1TB"
 			MOUNT_POINT_DEFINITION[/mnt/Black1TB]="# UUID=c359e0c7-c6a1-4a49-b7eb-82fe3e5f0f25 /mnt/Black1TB ext4 ro,defaults 0 0"
 		MOUNT_POINT_DESCRIPTION[/mnt/5TBC]="# Black 5TB (C) External Seagate"
 			MOUNT_POINT_DEFINITION[/mnt/5TBC]="UUID=fa9f5c57-94fd-4706-979e-4c30189592a5 /mnt/5TBC ext4 ro,defaults 0 0"
