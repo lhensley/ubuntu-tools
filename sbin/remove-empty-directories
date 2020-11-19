@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Include script setup file
+	source script-setup
+    source _functions-staging
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+if $(f_variable_has_content "$1"); then 
+	f_remove_empty_directories "$1"
+else
+	f_remove_empty_directories .
+fi
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
