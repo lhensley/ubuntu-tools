@@ -596,7 +596,7 @@ f_remove_empty_directories () {
 		# get directory list
 			find "$1" -type d -print > dirs$$
 		# reverse the listing
-			tail -r dirs$$ > revdirs$$
+			tac dirs$$ > revdirs$$
 			while read dirname
 			do
 				rmdir $dirname 2>/dev/null
