@@ -571,13 +571,10 @@ f_iterate_handbrake_source_video_files() {
 		# SOURCE_FILE is the newest file found, based on the sort shown below.
 		#   The sort can be fooled by a "newer" directory structure name, because the sort is on the full pathname. 
 		#   Oh well. Fix this if that becomes an issue.
-
-		TEMP_FILE="/tmp/f_iterate_handbrake_source_video_files $(date) $(uuidgen)"
-		find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort | cut -f 2 > "$TEMP_FILE"
-		# f_diags_iterate_handbrake_source_video_files
 		# Re 'echo ""' below, see https://mark.biek.org/blog/2018/10/bash-whileread-loop-breaking-early. Added 10/23/2020. Seems to work!
-		while read SOURCE_FILE; do echo "" | f_transcode_handbrake_source_video_file; done < "$TEMP_FILE"
-		rm "$TEMP_FILE"
+
+		find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort | cut -f 2 \  
+			| while read SOURCE_FILE; do echo "" | f_transcode_handbrake_source_video_file; done
 	}
 	
 f_show_eligible_transcoding () {
@@ -590,7 +587,7 @@ f_show_eligible_transcoding () {
 
 	find "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -print
 	}
-
+	
 f_remove_empty_directories () {
 	if $(f_variable_has_content "$1"); then 
 		find "$1" -type d -print | sort -r | while read d; do rmdir "$d" > /dev/null 2>&1; done
