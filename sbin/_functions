@@ -580,7 +580,7 @@ f_iterate_handbrake_source_video_files() {
 		while $(f_is_file "$SUCCESSFUL_TRANSCODE_FLAG"); do
 			rm -f "$SUCCESSFUL_TRANSCODE_FLAG"
 			find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort | cut -f 2 | \  
-				while read SOURCE_FILE; do echo "" | f_transcode_handbrake_source_video_file; done
+				while read SOURCE_FILE; do echo ""; f_transcode_handbrake_source_video_file; done
 			done
 	}
 	
