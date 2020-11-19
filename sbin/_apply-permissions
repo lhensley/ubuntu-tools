@@ -37,6 +37,7 @@
 		chmod 755 "${PATHNAME[lhlib]}"
 		chmod 755 "${PATHNAME[makemkvcon]}"
 		chmod 755 "${PATHNAME[process_incoming_scans]}"
+		chmod 755 "${PATHNAME[remove_empty_directories]}"
 		chmod 755 "${PATHNAME[rip]}"
 		chmod 755 "${PATHNAME[script_footer]}" 
 		chmod 755 "${PATHNAME[script_setup]}" 
