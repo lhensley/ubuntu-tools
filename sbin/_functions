@@ -573,7 +573,7 @@ f_iterate_handbrake_source_video_files() {
 		#   Oh well. Fix this if that becomes an issue.
 		# Re 'echo ""' below, see https://mark.biek.org/blog/2018/10/bash-whileread-loop-breaking-early. Added 10/23/2020. Seems to work!
 
-		SUCCESSFUL_TRANSCODE_FLAG="/tmp/successful-transcode-from-PID-$$"
+		SUCCESSFUL_TRANSCODE_FLAG=/tmp/SuccessfulTranscodeFromPID.$$
 		touch "$SUCCESSFUL_TRANSCODE_FLAG"
 		while $(f_is_file "$SUCCESSFUL_TRANSCODE_FLAG"); do
 			rm -f "$SUCCESSFUL_TRANSCODE_FLAG"

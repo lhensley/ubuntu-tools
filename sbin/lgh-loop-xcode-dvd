@@ -25,7 +25,7 @@
     PREPEND_PARENT_DIR_TO_BASENAME=true                    # Normally used for Zoom meeting recordings                                    (default defined in _vars)
     APPEND_UUID_TO_TARGET_FILE=false                       # Normally used for Plex files so that multiple media files can be retained.   (default defined in _vars)
     USE_PARENT_DIR_AS_BASENAME=false                       # May be useful for ripped DVDs. TBD. Think about this first                   (default defined in _vars)
-	APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE=false
+	APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE=true
 										                   # "original rip info" means source file stat mtime
 
 # Do the looping work
