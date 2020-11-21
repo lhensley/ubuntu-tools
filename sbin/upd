@@ -9,7 +9,7 @@
 	f_require_root
 
 # Update from github.com
-	_git
+	f_git
 
 # Update Dynamic DNS
 	ddclient -daemon 0

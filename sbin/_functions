@@ -391,7 +391,7 @@ function f_run_apt_updates () {
 	apt -y autoremove
 	}
 
-f_upd () {
+function f_upd () {
 	# This is a pass-thru function for. Abstracts out in case there is later
 	#	more to f_upd than just f_run_apt_updates.
 	f_run_apt_updates
