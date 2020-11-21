@@ -515,7 +515,6 @@ function f_apply_permissions () {
 		# Confirm that referenced files below exist.
 			f_require_file "${PATHNAME[_functions]}" 
 			f_require_file "${PATHNAME[_vars]}"
-			f_require_file "${PATHNAME[currenttimeinseconds]}"
 			f_require_file "${PATHNAME[intervalinseconds]}"
 			f_require_file "${PATHNAME[lhlib]}"
 			f_require_file "${PATHNAME[makemkvcon]}"
