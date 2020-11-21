@@ -1,5 +1,5 @@
 #!/bin/bash
-# This script should be run as root from cron, executed at boot time.
+# This script should be run as lhensley from cron, executed at boot time.
 # Does NOT remove extraneous files from target directories
 
 # Include script setup file
@@ -23,7 +23,7 @@
 			EXCLUDE_MASK2=".*"
 			EXCLUDE_MASK3=".grab/"
 		# See https://github.com/lhensley/go/blob/master/documentation/rsync%20options.md
-        sudo -u $ADMIN_USER \
+#        sudo -u $ADMIN_USER \
 			rsync --remove-source-files --include "$MOVE_MASK" \
 			--exclude "$EXCLUDE_MASK1" --exclude "$EXCLUDE_MASK2" \
 			--exclude "$EXCLUDE_MASK3" -aloprtv \

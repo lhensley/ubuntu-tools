@@ -1,14 +1,13 @@
 #!/bin/bash
-# make-mysql-ssl-certs
-#
 # Adapted from https://dev.mysql.com/doc/refman/8.0/en/creating-ssl-files-using-openssl.html
-#
-#
-# Include header file
-PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/../script-setup
 
-set -x
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Require root
+	f_require_root
 
 DIR=$HOME_DIRECTORY/openssl
 OPEN_SSL_CONFIGS=/etc/ssl
@@ -224,9 +223,6 @@ ssl_cert=$DIR/server-cert.pem
 ssl_key=$DIR/server-key.pem
 EOF
 
-
-
-
 USER_ME="lhensley"
 HOME_DIRECTORY="/home/$USER_ME"
 
@@ -238,8 +234,11 @@ cp "$MYSQL_SERVER_BIN_DIR/client-cert.pem" "$MYSQL_CLIENT_CERTS_DIR/$(hostname)-
 cp "$MYSQL_SERVER_BIN_DIR/client-key.pem" "$MYSQL_CLIENT_CERTS_DIR/$(hostname)-MySQL-client-key.pem"
 chown -R $USER_ME:$USER_ME "$MYSQL_CLIENT_CERTS_DIR"
 
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
 
-
+exit 0
 
 
 

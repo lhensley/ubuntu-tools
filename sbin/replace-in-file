@@ -1,11 +1,16 @@
 #!/bin/bash
-# replace-in-file
-
 # Usage: replace-in-file path_and_filename search_text replace_text
 # Until I do some more work on this, the search and replace strings cannot include / \1 through \9 " ' or &
 
-# Include header file
-logger Begin $0
-source $(dirname $0)/script-setup
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 sed -i "s/$2/$3/g" $1
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0

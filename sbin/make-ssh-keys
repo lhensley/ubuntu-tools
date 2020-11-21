@@ -1,39 +1,30 @@
 #!/bin/bash
 # make-ssh-keys
 
-debug_mode=false
-#debug_mode=true
-if $debug_mode ; then
-  set -x
-  fi
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-# Include header file
-PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/script-setup
-
-if [[ $NAME = "Ubuntu" ]]; then
-    if [[ $(echo $VERSION_ID | cut -c1-3) = "20." ]]; then
-      echo "Ubuntu version 20 confirmed."
-    else
-      echo "This script does not support version $VERSION_ID of Ubuntu."
-      exit 1
-    fi
-else
-  echo "This script works only on Ubuntu."
-  exit 1
-fi
+# Run requirements
+	f_require_ubuntu
+	f_require_minimum_version_number 20
 
 # Do updates
-apt-get update && apt -y dist-upgrade && apt -y clean && apt -y autoremove
+	f_run_apt_updates
 
 # Make $USER_ME and $USER_UBUNTU users and give them sudo access and ssh access
-ssh-keygen -C "$SSH_KEY_NAME" -P "" -f "$HOME_ME/.ssh/id_rsa"
+	ssh-keygen -C "$SSH_KEY_NAME" -P "" -f "$HOME_ME/.ssh/id_rsa"
 
 # Invoke /usr/local/sbin/apply-configs
-$SBIN_DIR/apply-configs
+	f_apply-configs
 
 # Display the public key
-echo "IMPORTANT: Add this public key to git/go/configs/ssh/home-.ssh-authorized_keys"
-cat "$HOME_ME/.ssh/id_rsa.pub"
+	echo "IMPORTANT: Add this public key to git/go/configs/ssh/home-.ssh-authorized_keys"
+	cat "$HOME_ME/.ssh/id_rsa.pub"
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
 
 exit 0

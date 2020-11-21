@@ -1,32 +1,36 @@
 #!/bin/bash
-# plex-status
 
-production_mode=true
-debug_mode=false
-# debug_mode=true
-if $debug_mode ; then
-  set -x
-  fi
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-# Make sure only root can run our script
-if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as root."
-  exit 1
-fi
+# Require root
+	f_require_root
 
-# Confirm that this host is oz
-if [[ $(hostname -s) != "oz" ]]; then
-  echo "This script can ony be run on server oz."
-  exit 1
-fi
+# From plexstatus
+	df -Ht ext4
+	systemctl status plexmediaserver
 
-ROOT_WORK="/mnt/ssd1tb/plex"
-ROOT_STORE="/mnt/rerun/plex"
+# From system-snapshot
+	echo Plex Video Work Directory: $VIDEO_WORK_DIRECTORY
+	echo Plex Video Store Directory: $VIDEO_STORE_DIRECTORY
+	echo .ts files in Plex Video Work Directory: $(find "$VIDEO_WORK_DIRECTORY" -name "*.ts" -print | wc -l)
+	echo .ts files in Plex Video Store Directory: $(find "$VIDEO_STORE_DIRECTORY" -name "*.ts" -print | wc -l)
+	echo .m4v files in Plex Video Work Directory: $(find "$VIDEO_WORK_DIRECTORY" -name "*.m4v" -print | wc -l)
+	echo .m4v files in Plex Video Store Directory: $(find "$VIDEO_STORE_DIRECTORY" -name "*.m4v" -print | wc -l)
+	PCT=$(df "$VIDEO_WORK_FILE_SYSTEM" | tr -s ' ' | cut -f 5 -d" " | tail -n1); PCT="${PCT::-1}"
+	echo Use Percentage in Plex Video Work File System: $PCT
+	PCT=$(df "$VIDEO_STORE_FILE_SYSTEM" | tr -s ' ' | cut -f 5 -d" " | tail -n1); PCT="${PCT::-1}"
+	echo Use Percentage in Plex Video Store File System: $PCT
+	echo Instances containing plexmediaserver: $(f_program_instances "plexmediaserver")
+	echo Plex Media Server is Busy: $(f_plexmediaserver_is_busy)
+	echo Plex Media Server is Recording: $(f_plexmediaserver_is_recording)
+	echo Plex Media Server is Scanning: $(f_plexmediaserver_is_scanning)
+	echo Plex Media Server is Generating Video Thumbnails: $(f_plexmediaserver_is_generating_video_thumbnails)
 
-FILE_COUNT=0
-
-FILE_COUNT=$(find "$ROOT_WORK" -type f -name "*.ts" | wc -l)
-
-echo "Count $FILE_COUNT"
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
 
 exit 0

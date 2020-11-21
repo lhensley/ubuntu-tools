@@ -1,14 +1,14 @@
-#!/bin/bash
-
 # Include script setup file
 	source script-setup
-    source _functions-staging
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
+# Require root
+	f_require_root
+
 # Set $RESET_FLAG_FILE
 	touch $RESET_FLAG_FILE
-	chown root:root $RESET_FLAG_FILE
+	chown $ROOT_USER:$ROOT_USER $RESET_FLAG_FILE
 	chmod 644 $RESET_FLAG_FILE
 
 # Include script footer file

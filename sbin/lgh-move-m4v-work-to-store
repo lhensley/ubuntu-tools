@@ -13,7 +13,7 @@
 	THIS_SCRIPT=$(basename "$0")
 
 # Do the work
-    sudo -u $ADMIN_USER \
+#    sudo -u $ADMIN_USER \
 		rsync --remove-source-files --include $MOVE_MASK --exclude ".grab/" --exclude "*.ts" \
 			--archive --links --owner --perms --times --verbose \
 			"$SOURCE_ROOT_DIR" "$TARGET_ROOT_DIR" \

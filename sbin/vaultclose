@@ -1,5 +1,9 @@
 #!/bin/bash
-# closevault
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 BASEDIR="/home/lhensley/.cryfs-basedir"
 MOUNTDIR="/home/lhensley/vault"
@@ -17,3 +21,7 @@ if grep -qs "$MOUNTDIR " /proc/mounts; then
 else
     echo "$MOUNTDIR is already closed."
 fi
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"

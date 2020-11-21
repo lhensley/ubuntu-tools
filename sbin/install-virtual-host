@@ -1,33 +1,35 @@
 #!/bin/bash
-# install-virtual-host
 
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-# DEFINE THESE VARIABLES BEFORE RUNNING THE SCRIPT!
-# fqdn='domain.tld'
-web_admin_user=$ADMIN_NAME
-web_admin_email=$ADMIN_EMAIL
-remove=false
-mysql_root_user=''
-mysql_root_password=''
-script_name=$0
-current_directory=$(pwd)
-docroot_base="/var/www"
-apache2_configs="/etc/apache2"
-error_log="/var/log/apache2/error.log"
-custom_log="/var/log/apache2/access.log"
-certificate_conf_dir="/etc/letsencrypt"
-certificate_live_dir="live"
-install_wordpress=false
+# Require root
+	f_require_root
 
-debug_mode=false
-#debug_mode=true
-if $debug_mode ; then
-  set -x
-  fi
+# DEFINE THESE VARIABLES BEFORE RUNNING THE SCRIPT!
+    # fqdn='domain.tld'
+    web_admin_user=$ADMIN_NAME
+    web_admin_email=$ADMIN_EMAIL
+    remove=false
+    mysql_root_user=''
+    mysql_root_password=''
+    script_name=$0
+    current_directory=$(pwd)
+    docroot_base="/var/www"
+    apache2_configs="/etc/apache2"
+    error_log="/var/log/apache2/error.log"
+    custom_log="/var/log/apache2/access.log"
+    certificate_conf_dir="/etc/letsencrypt"
+    certificate_live_dir="live"
+    install_wordpress=false
+
+    debug_mode=false
+    #debug_mode=true
+    if $debug_mode ; then
+      set -x
+      fi
 
 # Abort and exit
 function abort_and_exit {
@@ -41,12 +43,6 @@ function clean_exit {
   cd $current_directory
   exit 0
   }
-
-# Make sure only root can run our script
-if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as root." 1>&2
-  abort_and_exit
-  fi
 
 function print_usage {
   echo "Usage: $script_name [options] fully-qualified-domain-name"
@@ -163,7 +159,7 @@ if [ -d "$docroot" ]; then # If docroot already exists
   fi
 
 # Do updates and install needed tools
-_run_apt_updates
+f_run_apt_updates
 # For Ubuntu 18
 # apt-get install -y wget apg certbot python python-certbot-apache
 # For Ubuntu 18

@@ -1,5 +1,4 @@
 #!/bin/bash
-# rip
 
 # Include script setup file
 	source script-setup

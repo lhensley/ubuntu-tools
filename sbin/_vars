@@ -450,8 +450,6 @@ source /etc/os-release
 	PATHNAME[db_backup]="$SBIN_DIR/db-backup"
 	PATHNAME[ddnscheck]="$SBIN_DIR/ddnscheck"
 	PATHNAME[get_config]="$SBIN_DIR/get-config"
-	PATHNAME[intervalinseconds]="$SBIN_DIR/intervalinseconds"
-	PATHNAME[lanelog]="$SBIN_DIR/lanelog"
 	PATHNAME[lgh]="$SBIN_DIR/lgh"
 	PATHNAME[lhlib]="$SBIN_DIR/lhlib"
 	PATHNAME[loop_forever]="$SBIN_DIR/loop-forever"
@@ -460,11 +458,7 @@ source /etc/os-release
 	PATHNAME[make_ssh_keys]="$SBIN_DIR/make-ssh-keys"
 	PATHNAME[makemkvcon]="/usr/bin/makemkvcon"
 	PATHNAME[master_loop]="$SBIN_DIR/master-loop"
-	PATHNAME[move_m4v_to_storage]="$SBIN_DIR/move-m4v-to-storage"
-	PATHNAME[move_one_file]="$SBIN_DIR/move-one-file"
 	PATHNAME[move_scans_to_onedrive]="$SBIN_DIR/move-scans-to-onedrive"
-	PATHNAME[plexstatus]="$SBIN_DIR/plexstatus"
-	PATHNAME[plex_status]="$SBIN_DIR/plex-status"
 	PATHNAME[process_ts]="$SBIN_DIR/process-ts"
 	PATHNAME[process_incoming_scans]="$SBIN_DIR/process-incoming-scans"
 	PATHNAME[remove_empty_directories]="$SBIN_DIR/remove-empty-directories"
@@ -477,9 +471,7 @@ source /etc/os-release
 	PATHNAME[stopwatch]="$SBIN_DIR/stopwatch"
 	PATHNAME[syncplex]="$SBIN_DIR/syncplex"
 	PATHNAME[tar]="/bin/tar"
-	PATHNAME[timeformat]="$SBIN_DIR/timeformat"
 	PATHNAME[transcode_ripped_dvds]="$SBIN_DIR/transcode-ripped-dvds"
-	PATHNAME[tv_show_filter_status]="$SBIN_DIR/tv-show-filter-status"
 	PATHNAME[unlockserver]="$SBIN_DIR/unlockserver"
 	PATHNAME[upd]="$SBIN_DIR/upd"
 	PATHNAME[vaultclose]="$SBIN_DIR/vaultclose"
@@ -503,14 +495,14 @@ source /etc/os-release
 # Example: DISABLE_START_MESSAGE[${PATHNAME[lgh]}]=true
 # If the variable is defined at all, it resolves to true, even if the assigned falue is false
 	declare -A DISABLE_START_MESSAGE
-	DISABLE_START_MESSAGE[${PATHNAME[timeformat]}]=true
+	# DISABLE_START_MESSAGE[${PATHNAME[timeformat]}]=true
 
 # Disable end message for these scripts
 # DEPENDENT ON PATHNAME ARRAY DEFINITION ABOVE
 # Example: DISABLE_END_MESSAGE[${PATHNAME[lgh]}]=true
 # If the variable is defined at all, it resolves to true, even if the assigned falue is false
 	declare -A DISABLE_END_MESSAGE
-	DISABLE_END_MESSAGE[${PATHNAME[timeformat]}]=true
+	# DISABLE_END_MESSAGE[${PATHNAME[timeformat]}]=true
 
 # Restrict some scripts to particular hosts.
 # If a script pathname is referenced even once, 

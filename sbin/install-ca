@@ -1,66 +1,52 @@
 #!/bin/bash
-# install-ca
 # NOTE: This script is intended to be run on a dedicated certificate authority server (i.e., ca).
 # Procedure adapted from https://www.digitalocean.com/community/tutorials/how-to-set-up-and-configure-a-certificate-authority-ca-on-ubuntu-20-04
 
-# Include header file
-# PROGRAM_DIRECTORY=$(dirname $0)
-# source $PROGRAM_DIRECTORY/../script-setup
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-# Make sure only root can run our script
-if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as root."
-  exit 1
-fi
-
-logger Installing Certificate Authority
+# Require root
+	f_require_root
 
 # Run apt updates
-# "update" downloads package information from all configured sources
-apt -y update
-# "upgrade" is an extraneous subset of "dist-upgrade" below
-#    sudo apt -y upgrade \
-# "dist-upgrade" installs available upgrades of all packages
-# currently installed on the system and intelligently handles
-# changing dependencies with new versions of packages
-apt -y dist-upgrade
-# "clean" clears out the local repository of retrieved package files.
-apt -y clean
-# "autoremove" removes those dependencies that were installed with
-# now-removed applications and that are no longer used
-# by anything else on the system
-apt -y autoremove
-# Install any *.deb files in the home directory
-# apt-get install -y $HOME_DIRECTORY/*.deb && rm -f $HOME_DIRECTORY/*.deb
-# NOTE: IPv4 Public Address is in IPV4_PUBLIC_ADDRESS
+	f_run_apt_updates
 
 # Install Easy-RSA
-apt-get install -y easy-rsa
+	apt-get install -y easy-rsa
 
 # Preparing a Public Key Infrastructure Directory
-mkdir ~/easy-rsa
-ln -s /usr/share/easy-rsa/* ~/easy-rsa/
-chmod 700 /home/lhensley/easy-rsa
-cd ~/easy-rsa
-./easyrsa init-pki
+	mkdir ~/easy-rsa
+	ln -s /usr/share/easy-rsa/* ~/easy-rsa/
+	chmod 700 /home/lhensley/easy-rsa
+	cd ~/easy-rsa
+	./easyrsa init-pki
 
 # Creating a Certificate Authority
-echo 'set_var EASYRSA_BATCH          "yes"' > vars
-echo 'set_var EASYRSA_REQ_COUNTRY    "US"' >> vars
-echo 'set_var EASYRSA_REQ_PROVINCE   "IA"' >> vars
-echo 'set_var EASYRSA_REQ_CITY       "Des Moines"' >> vars
-echo 'set_var EASYRSA_REQ_ORG        "Hog Heaven DSM"' >> vars
-echo 'set_var EASYRSA_REQ_EMAIL      "root@lanehensley.org"' >> vars
-echo 'set_var EASYRSA_REQ_OU         "CA"' >> vars
-echo 'set_var EASYRSA_REQ_CN         "CA"' >> vars
-echo 'set_var EASYRSA_ALGO           "ec"' >> vars
-echo 'set_var EASYRSA_DIGEST         "sha512"' >> vars
-./easyrsa build-ca nopass
+	echo 'set_var EASYRSA_BATCH          "yes"' > vars
+	echo 'set_var EASYRSA_REQ_COUNTRY    "US"' >> vars
+	echo 'set_var EASYRSA_REQ_PROVINCE   "IA"' >> vars
+	echo 'set_var EASYRSA_REQ_CITY       "Des Moines"' >> vars
+	echo 'set_var EASYRSA_REQ_ORG        "Hog Heaven DSM"' >> vars
+	echo 'set_var EASYRSA_REQ_EMAIL      "root@lanehensley.org"' >> vars
+	echo 'set_var EASYRSA_REQ_OU         "CA"' >> vars
+	echo 'set_var EASYRSA_REQ_CN         "CA"' >> vars
+	echo 'set_var EASYRSA_ALGO           "ec"' >> vars
+	echo 'set_var EASYRSA_DIGEST         "sha512"' >> vars
+	./easyrsa build-ca nopass
 
 # Fix permissions
-chown -R lhensley:lhensley ~/easy-rsa
+	chown -R lhensley:lhensley ~/easy-rsa
 
 # Display ca.crt location
-sftp nuc01.lanehensley.org <<EOF
-echo "Done. Now copy ONLY ~/easy-rsa/pki/ca.crt to clients and servers."
+	sftp nuc01.lanehensley.org <<EOF
+	echo "Done. Now copy ONLY ~/easy-rsa/pki/ca.crt to clients and servers."
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+
 

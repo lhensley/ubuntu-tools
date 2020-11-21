@@ -1,8 +1,12 @@
 #!/bin/bash
-# plex-config-backup
 
 # Include script setup file
-source $(dirname $0)/script-setup
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Require root
+	f_require_root
 
 f_require_config "plex.backup.app.support"
 f_require_config "plex.live.app.support"
@@ -15,5 +19,7 @@ cp -R "${LANE_CONFIG[plex.live.app.support]}"/* "${LANE_CONFIG[plex.backup.app.s
 systemctl start plexmediaserver
 
 # Include script footer file
-f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
-source ${LANE_CONFIG[script.script-footer.pathname]}
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0

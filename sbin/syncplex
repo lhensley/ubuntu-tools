@@ -1,13 +1,15 @@
 #!/bin/bash
-# syncplex
 
-# Include header file
-PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/script-setup
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Require root
+	f_require_root
 
 # Set key file permissions ############################################
-find /mnt/cloteal/Plex -type d -print -exec chmod 775 {} \; >> /dev/null 2>&1
-find /mnt/cloteal/Plex -type f -print -exec chmod 664 {} \; >> /dev/null 2>&1
+	f_apply_plex_permissions
 
 # Set variables
 SLEEP=15
@@ -101,3 +103,4 @@ $RSYNC \
 
 # Remove all remaining tempfiles. #####################################
 source $SCRIPTS_DIRECTORY/cleanup-and-exit
+

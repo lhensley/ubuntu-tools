@@ -1,14 +1,15 @@
 #!/bin/bash
-# install-openvpn
 
-# Include header file
-PROGRAM_DIRECTORY=$(dirname $0)
-source $PROGRAM_DIRECTORY/../script-setup
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-logger Installing OpenVPN
+# Require root
+	f_require_root
 
 # Run apt updates
-/usr/local/sbin/_run_apt_updates
+	f_run_apt_updates
 
 # NOTE: IPv4 Public Address is in IPV4_PUBLIC_ADDRESS
 
@@ -21,7 +22,6 @@ logger Installing OpenVPN
 #   May 6, 2020
 
 
-
 # Abandoned code fragment from cyerciti.biz installation tutorial
 # Following https://www.cyberciti.biz/faq/ubuntu-20-04-lts-set-up-openvpn-server-in-5-minutes/
 # apt-get update && apt-get -y install ca-certificates wget net-tools gnupg
@@ -30,3 +30,8 @@ logger Installing OpenVPN
 # apt update && apt -y install openvpn-as
 # apt-get install -y openvpn
 
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
