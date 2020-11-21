@@ -370,8 +370,8 @@ function f_git () {
 		find $SBIN_DIR -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
 		find $SBIN_DIR -type f -print -exec chmod 755 {} \; >> /dev/null 2>&1
 
-	# Invoke /usr/local/sbin/_apply-configs
-		$SBIN_DIR/_apply-configs
+	# Apply configs
+		f_apply-configs
 	}
 
 function f_run_apt_updates () {
