@@ -8,6 +8,9 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
+# Require root
+	r_require_root
+
 # Set ownership and permissions in $SBIN_DIR
 	chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
 	find $SBIN_DIR -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1 # Consistent with /usr/sbin, usr/bin/, and other comparable directories

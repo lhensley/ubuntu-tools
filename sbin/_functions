@@ -50,7 +50,7 @@ function f_system_snapshot () {
 function f_require_root () {
 	# If running with root privileges, do nothing. Otherwise, abort with error.
 	if [[ $EUID -ne 0 ]]; then
-		f_die "Aborting. Root privileges required." false
+		f_die "Root privileges required." false
 	    fi
 	}
 
@@ -144,7 +144,7 @@ function f_die () {
 	# Usage: f_die "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
 	# Note: No need to include $0
 		f_balk "FATAL: $1" "$2"   # report and log the objection
-		exit 1             # die
+		exit -1				      # die
 	}
 
 function f_debug () {
@@ -635,6 +635,26 @@ f_watch_wait_upload () {
 				sudo -u $ADMIN_USER rclone copy $WATCH_DIRECTORY/$TEMP_FILE $REMOTE_NAME:$REMOTE_DIRECTORY/
 				rm -f "$TEMP_FILE"
 			done
+	}
+
+f_run_apt_updates () {
+	# Changed apt-get to apt 1/31/19.
+	# See https://itsfoss.com/apt-vs-apt-difference/ for rationale.
+	#
+	# "update" downloads package information from all configured sources
+	apt -y update
+	# "upgrade" is an extraneous subset of "dist-upgrade" below
+	#    sudo apt -y upgrade \
+	# "dist-upgrade" installs available upgrades of all packages
+	# currently installed on the system and intelligently handles
+	# changing dependencies with new versions of packages
+	apt -y dist-upgrade
+	# "clean" clears out the local repository of retrieved package files.
+	apt -y clean
+	# "autoremove" removes those dependencies that were installed with
+	# now-removed applications and that are no longer used
+	# by anything else on the system
+	apt -y autoremove
 	}
 
 #########################################################################################################
