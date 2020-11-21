@@ -42,7 +42,7 @@ function f_require_confirmation {
 	}
 
 function f_require_ubuntu () {
-	if ! [ $NAME == "Ubuntu" ]; then
+	if ! [ $NAME == "Ubuntu3" ]; then
 		f_die "This script works only on Ubuntu." false
 		fi
 	}
