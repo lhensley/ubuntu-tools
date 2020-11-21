@@ -9,7 +9,7 @@
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 # Require root
-	r_require_root
+	f_require_root
 
 # Set ownership and permissions in $SBIN_DIR
 	chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
