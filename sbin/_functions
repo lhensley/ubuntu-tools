@@ -49,14 +49,16 @@ function f_require_ubuntu () {
 
 function f_require_minimum_version_number () {
 # EXAMPLE: f_require_minimum_version_number 16.04
-	if ! [ "$1" -lt "$VERSION_ID" ]; then
+#	if ! [ "$1" -lt "$VERSION_ID" ]; then
+	if (( $(echo "$VERSION_ID > $1" |bc -l) )); then
 		f_die "This script requires at least OS version $1." false
 		fi
 	}
 
 function f_require_maximum_version_number () {
 # EXAMPLE: f_require_maximum_version_number 18.04
-	if ! [ "$1" -gt "$VERSION_ID" ]; then
+#	if ! [ "$1" -gt "$VERSION_ID" ]; then
+	if (( $(echo "$VERSION_ID > $1" |bc -l) )); then
 		f_die "This script does not work after OS version $1." false
 		fi
 	}
