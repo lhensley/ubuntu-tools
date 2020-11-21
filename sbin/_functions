@@ -371,7 +371,7 @@ function f_git () {
 		find $SBIN_DIR -type f -print -exec chmod 755 {} \; >> /dev/null 2>&1
 
 	# Apply configs
-		f_apply-configs
+		f_apply_configs
 	}
 
 function f_run_apt_updates () {
