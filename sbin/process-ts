@@ -55,7 +55,7 @@ else
     # "${PATHNAME[transcode_ripped_dvds]}" # Pick up ripped DVDs first, if any
 
     # Do the transcoding
-    TIMESTART=$(currenttimeinseconds)
+    TIMESTART=$(date +%s)
     IN_FILE_BASE=$(basename "$IN_FILE")
     logger $0: Transcoding $IN_FILE_BASE
     nice "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$IN_FILE" -o "$OUT_FILE"
@@ -68,7 +68,7 @@ else
             exit $exit_status
         else
             rm "$IN_FILE" # Delete input file
-            logger $0: Transcoding complete in $(timeformat $(( $(currenttimeinseconds) - TIMESTART )))
+            logger $0: Transcoding complete in $(timeformat $(( $(date +%s) - TIMESTART )))
         fi # End of check for transcoding failure
 
     # Move all .m4v files from $VIDEO_WORK_DIRECTORY to $VIDEO_STORE_DIRECTORY.

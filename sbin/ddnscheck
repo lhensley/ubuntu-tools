@@ -1,16 +1,27 @@
 #!/bin/bash
-#
 
-status=/tmp/last-known-public-ip-address.txt
-touch "$status"
-str=$( wget -q -O - checkip.dyndns.org | sed -e 's/.*Current IP Address: //;s/<.*$//' )
-if { IFS= read -r line1 &&
-     [[ $line1 != $str ]] ||
-     IFS= read -r $line2
-   } < "$status" ; then
-  echo "$str" | mail -s "DDNS Update" lane lanecell
-  echo "$str" > "$status"
-fi
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
+# Require root
+	f_require_root
 
+# Do the work
+	status=/tmp/last-known-public-ip-address.txt
+	touch "$status"
+	str=$( wget -q -O - checkip.dyndns.org | sed -e 's/.*Current IP Address: //;s/<.*$//' )
+	if { IFS= read -r line1 &&
+		 [[ $line1 != $str ]] ||
+		 IFS= read -r $line2
+	   } < "$status" ; then
+	  echo "$str" | mail -s "DDNS Update" lane lanecell
+	  echo "$str" > "$status"
+	fi
 
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0

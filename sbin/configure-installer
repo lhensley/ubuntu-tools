@@ -23,20 +23,6 @@ if [[ $EUID -ne 0 ]]; then
 		exit 1
 		fi
 
-install_apache2=true
-install_certbot=true
-install_chrome=true
-install_cubic=true
-install_handbrake=true
-install_lsyncd=true
-install_mailutils=true
-install_makemkv=true
-install_openssl=true
-install_php=true
-install_rclone=true
-install_webmin=true
-install_zoom=true
-
 # Add universe repository
     add-apt-repository universe
     apt update
@@ -56,6 +42,20 @@ install_zoom=true
     # now-removed applications and that are no longer used
     # by anything else on the system
     apt -y autoremove
+
+install_apache2=true
+install_certbot=true
+install_chrome=true
+install_cubic=true
+install_handbrake=true
+install_lsyncd=true
+install_mailutils=true
+install_makemkv=true
+install_openssl=true
+install_php=true
+install_rclone=true
+install_webmin=true
+install_zoom=true
 
 # Install git and ufw and open the git port
     DEBIAN_FRONTEND=noninteractive apt-get install -yq git

@@ -8,23 +8,10 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-# Require ubuntu
+# Require a specific OS environment
 	f_require_ubuntu
-
-# Require root
+    f_require_minimum_version_number 20
 	f_require_root
-
-if [[ $NAME = "Ubuntu" ]]; then
-    if [[ $(echo $VERSION_ID | cut -c1-3) == "20." ]]; then
-      echo "Ubuntu version 20 confirmed."
-    else
-      echo "This script does not support version $VERSION_ID of Ubuntu."
-      exit 1
-    fi
-else
-  echo "This script works only on Ubuntu."
-  exit 1
-fi
 
 install_dos2unix=true
 install_mysql_server=true
