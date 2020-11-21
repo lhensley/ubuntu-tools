@@ -582,6 +582,18 @@ f_iterate_handbrake_source_video_files() {
 			done
 	}
 	
+f_xcode_queue () {
+	# CRITICAL: Define these variables BEFORE calling this function:
+    # $SOURCE_FILE_NAME_PATTERN         # For Plex DVR,                 this is "$PLEX_FILE_NAME_PATTERN"                (defined in _vars)
+                                        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_FILE_NAME_PATTERN"             (defined in _vars)
+                                        # For Zoom meeting recordings,  this is "$ZOOM_FILE_NAME_PATTERN"                (defined in _vars)
+    # $SOURCE_ROOT                      # For Plex DVR, this is "$VIDEO_WORK_DIRECTORY"                                  (defined in _vars)
+	    	     							# For DVDs ripped with MakeMKV, this is "$MAKEMKV_OUTPUT_DIRECTORY"              (defined in _vars)
+	    	     							# For Zoom meeting recordings,  this is "$ZOOM_RAW_FILES"                        (defined in _vars)
+
+	find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort | cut -f 2
+	}
+
 f_show_eligible_transcoding () {
 	# ONE pass through all matching source files, displaying but not processing them
 	# CRITICAL: Define these variables BEFORE calling this function:
