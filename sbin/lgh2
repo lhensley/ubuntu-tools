@@ -12,8 +12,7 @@
 # Do the work
 	mkdir -p $(dirname $1)
 	touch $1
-	# for f in "$1"; do echo \"$u\",\"Instances of $(basename "$f")\",\"$(f_program_instances "$f")\"; done
-	cp $1 $1.backup.$(date "+%Y.%m.%d-%H.%M.%S")
+	# for f in "$@"; do cp $f $f.backup.$(date "+%Y.%m.%d-%H.%M.%S"); done
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

@@ -1,9 +1,4 @@
 #!/bin/bash
-# _apply-configs
-
-# Invoked by _git and setup/setup-os
-# Changed apt-get to apt 1/31/19.
-# See https://itsfoss.com/apt-vs-apt-difference/ for rationale.
 
 # Include script setup file
 	source script-setup
@@ -13,78 +8,14 @@
 # Require root
 	f_require_root
 
-# ddclient
-	if [ -f $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
-		cp $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf /etc/
-		cp $GIT_GO_CONFIGS/ddclient/etc-default-ddclient /etc/default/ddclient
-		fi
-
-# fstab
-	if [ -f $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab ]; then
-		cp $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab /etc/fstab.from.git
-		fi
-
-# Git
-# Note that the original .gitconfig is made during setup/setup-os (original installation)
-# using sudo, so the file is written to user root's home directory.
-# That's why the copying goes from root to admin home directories.
-	cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
-
-# lsyncd
-if [ -f $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
-	cp $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua /etc/lsyncd
-	systemctl restart lsyncd
-	fi
-
-# resolvconf
-if [ -f $GIT_GO_CONFIGS/resolvconf/head ]; then
-	mkdir -p /etc/resolvconf/resolv.conf.f
-	cp $GIT_GO_CONFIGS/resolvconf/head /etc/resolvconf/resolv.conf.d/
-	fi
-
-# .ssh/authorized_keys
-if [ -f "$GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys" ]; then
-	mkdir -p $ADMIN_HOME_DIR/.ssh
-	mkdir -p $ROOT_HOME_DIR/.ssh
-	cp $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys $ADMIN_HOME_DIR/.ssh/authorized_keys
-	cp $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys $ROOT_HOME_DIR/.ssh/authorized_keys
-	fi
-
-# SSHD config file
-if [ -f $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
-	cp $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config $SSHD_CONFIG
-	fi
-
-# HandBrake config file
-if [ -f "$GIT_GO_CONFIGS/handbrake/Lane 1080p (BluRay).json" ]; then
-	mkdir -p $ADMIN_HOME_DIR/.HandBrake
-	mkdir -p $ROOT_HOME_DIR/.HandBrake
-	cp $GIT_GO_CONFIGS/handbrake/* $ADMIN_HOME_DIR/.HandBrake/
-	cp $GIT_GO_CONFIGS/handbrake/* $ROOT_HOME_DIR/.HandBrake/
-	fi
-
-# Vim and vi config file
-if [ -f $GIT_GO_CONFIGS/vim/.vimrc ]; then
-	cp $GIT_GO_CONFIGS/vim/.vim* $ADMIN_HOME_DIR/
-	cp $GIT_GO_CONFIGS/vim/.vim* $ROOT_HOME_DIR/
-	fi
-
-# Apply permissions
-	_apply-permissions
-
-# lsyncd
-if [ -f $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
-	systemctl restart lsyncd
-	fi
-
-# SSHD config file
-if [ -f $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
-	systemctl restart ssh
-	fi
+# Do the work
+	# NOTE: Recommend leaving the f_balk command below until this script no longer is called by other scripts.
+	# When it's time, you may want to leave the script intact so it can be invoked from the command line, but drop the balk warning below.
+	f_balk "DEPRICATED. Source _functions and call f_apply_configs. For now, running it anyway." false
+	f_apply_configs
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
 
 exit 0
-

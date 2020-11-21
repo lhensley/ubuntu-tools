@@ -397,6 +397,173 @@ function f_upd () {
 	f_run_apt_updates
 	}
 
+function f_apply_configs () {
+	# ddclient
+		if [ -f $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
+			cp $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf /etc/
+			cp $GIT_GO_CONFIGS/ddclient/etc-default-ddclient /etc/default/ddclient
+			fi
+	# fstab
+		if [ -f $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab ]; then
+			cp $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab /etc/fstab.from.git
+			fi
+	# Git
+	# Note that the original .gitconfig is made during setup/setup-os (original installation)
+	# using sudo, so the file is written to user root's home directory.
+	# That's why the copying goes from root to admin home directories.
+		cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
+	# lsyncd
+	if [ -f $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
+		cp $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua /etc/lsyncd
+		systemctl restart lsyncd
+		fi
+	# resolvconf
+	if [ -f $GIT_GO_CONFIGS/resolvconf/head ]; then
+		mkdir -p /etc/resolvconf/resolv.conf.f
+		cp $GIT_GO_CONFIGS/resolvconf/head /etc/resolvconf/resolv.conf.d/
+		fi
+	# .ssh/authorized_keys
+	if [ -f "$GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys" ]; then
+		mkdir -p $ADMIN_HOME_DIR/.ssh
+		mkdir -p $ROOT_HOME_DIR/.ssh
+		cp $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys $ADMIN_HOME_DIR/.ssh/authorized_keys
+		cp $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys $ROOT_HOME_DIR/.ssh/authorized_keys
+		fi
+	# SSHD config file
+	if [ -f $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
+		cp $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config $SSHD_CONFIG
+		fi
+	# HandBrake config file
+	if [ -f "$GIT_GO_CONFIGS/handbrake/Lane 1080p (BluRay).json" ]; then
+		mkdir -p $ADMIN_HOME_DIR/.HandBrake
+		mkdir -p $ROOT_HOME_DIR/.HandBrake
+		cp $GIT_GO_CONFIGS/handbrake/* $ADMIN_HOME_DIR/.HandBrake/
+		cp $GIT_GO_CONFIGS/handbrake/* $ROOT_HOME_DIR/.HandBrake/
+		fi
+	# Vim and vi config file
+	if [ -f $GIT_GO_CONFIGS/vim/.vimrc ]; then
+		cp $GIT_GO_CONFIGS/vim/.vim* $ADMIN_HOME_DIR/
+		cp $GIT_GO_CONFIGS/vim/.vim* $ROOT_HOME_DIR/
+		fi
+	# Apply permissions
+		f_apply-permissions
+	# lsyncd
+	if [ -f $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
+		systemctl restart lsyncd
+		fi
+	# SSHD config file
+	if [ -f $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
+		systemctl restart ssh
+		fi
+	}
+
+function f_apply_permissions () {
+	# Set ownership and permissions in $SBIN_DIR
+		chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
+		find $SBIN_DIR -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1 # Consistent with /usr/sbin, usr/bin/, and other comparable directories
+		find $SBIN_DIR -type f -print -exec chmod 750 {} \; >> /dev/null 2>&1 # By default, block access for non-root.
+
+	# Exceptions: These can be read or run by anyone
+		# Confirm that referenced files below exist.
+			f_require_file "${PATHNAME[_functions]}" 
+			f_require_file "${PATHNAME[_vars]}"
+			f_require_file "${PATHNAME[currenttimeinseconds]}"
+			f_require_file "${PATHNAME[intervalinseconds]}"
+			f_require_file "${PATHNAME[lhlib]}"
+			f_require_file "${PATHNAME[makemkvcon]}"
+			f_require_file "${PATHNAME[process_incoming_scans]}"
+			f_require_file "${PATHNAME[rip]}"
+			f_require_file "${PATHNAME[script_footer]}"
+			f_require_file "${PATHNAME[script_setup]}"
+			f_require_file "${PATHNAME[timeformat]}"
+			f_require_file "${PATHNAME[transcode_ripped_dvds]}"
+			# f_require_file "${PATHNAME[upd]}"
+			# f_require_file "${PATHNAME[_apply_configs]}"
+		# These based on functional requirements
+			chmod 755 "${PATHNAME[_functions]}"
+			chmod 755 "${PATHNAME[_vars]}"
+			chmod 755 "${PATHNAME[currenttimeinseconds]}"
+			chmod 755 "${PATHNAME[intervalinseconds]}"
+			chmod 755 "${PATHNAME[lhlib]}"
+			chmod 755 "${PATHNAME[makemkvcon]}"
+			chmod 755 "${PATHNAME[process_incoming_scans]}"
+			chmod 755 "${PATHNAME[remove_empty_directories]}"
+			chmod 755 "${PATHNAME[rip]}"
+			chmod 755 "${PATHNAME[script_footer]}" 
+			chmod 755 "${PATHNAME[script_setup]}" 
+			chmod 755 "${PATHNAME[timeformat]}"
+			chmod 755 "${PATHNAME[transcode_ripped_dvds]}"
+		# These based on desire. CAUTION: Don't expose anything that has a password or code in it.
+			# chmod 740 "${PATHNAME[upd]}"
+			# chmod 740 "${PATHNAME[_apply_configs]}"
+
+	# ddclient
+		if [ -f $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
+			f_require_file "/etc/ddclient.conf"
+			f_require_file "/etc/default/ddclient"
+			chmod 600 /etc/ddclient.conf /etc/default/ddclient # confirmed value
+			chown $ROOT_USER:$ROOT_USER /etc/ddclient.conf /etc/default/ddclient
+			fi
+
+	# fstab
+		if [ -f $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab ]; then
+			chown $ROOT_USER:$ROOT_USER /etc/fstab*
+			chmod 664 /etc/fstab* # confirmed value
+			fi
+
+	# Git
+		f_require_file "$ROOT_HOME_DIR/.gitconfig"
+		chmod 600 $ROOT_HOME_DIR/.gitconfig
+		chmod 600 $ADMIN_HOME_DIR/.gitconfig
+		chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.gitconfig
+		chown $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.gitconfig
+		chmod -R 400 $GIT_ROOT/*
+
+	# lsyncd
+		if [ -f $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
+			chown $ROOT_USER:$ROOT_USER /etc/lsyncd/lsyncd.conf.lua # NOT confirmed; relevant to system viability?
+			chmod 600 /etc/lsyncd/lsyncd.conf.lua # NOT confirmed; relevant to system viability?
+			fi
+
+	# resolvconf
+		if [ -f $GIT_GO_CONFIGS/resolvconf/head ]; then
+			chown $ROOT_USER:$ROOT_USER /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
+			chmod 644 /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
+			fi
+
+	# .ssh/authorized_keys
+	#	if [ -f $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys ]; then
+			chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh # Confirmed
+			chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh # Confirmed
+			chmod -f 700 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh # Confirmed
+			chmod -f 644 $ADMIN_HOME_DIR/.ssh/id_rsa.pub $ROOT_HOME_DIR/.ssh/id_rsa.pub # Confirmed
+			chmod -f 600 $ADMIN_HOME_DIR/.ssh/id_rsa $ROOT_HOME_DIR/.ssh/id_rsa $ADMIN_HOME_DIR/.ssh/authorized_keys $ROOT_HOME_DIR/.ssh/authorized_keys # Confirmed
+			f_debug
+	#		fi
+
+	# SSHD config file
+		if [ -f $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
+			chown $ROOT_USER:$ROOT_USER "$SSHD_CONFIG" # Confirmed
+			chmod 644 "$SSHD_CONFIG" # Confirmed
+			fi
+
+	# HandBrake config file
+		chmod -fR 600 $ADMIN_HOME_DIR/.HandBrake
+		chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.HandBrake $ADMIN_HOME_DIR/Videos/*
+		chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.HandBrake/*
+
+	# Vim and vi config files
+		if [ -f $GIT_GO_CONFIGS/vim/.vimrc ]; then
+			chmod 600 $ADMIN_HOME_DIR/.vim*
+			chown $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.vim*
+			chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.vim*
+			fi
+
+	# Plex Media Server Video Files
+		echo Applying Plex permissions ...
+		f_set_plex_media_recursive_permissions > /dev/null
+	}
+
 function f_move_one_file () {
 	# This creates the directory structure for the target if it doesn't aleady exist
 	# and applies Plex Library directory and file permissions if requested.
