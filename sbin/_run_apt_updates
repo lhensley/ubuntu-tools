@@ -6,7 +6,7 @@
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 # Require root
-	r_require_root
+	f_require_root
 
 # Do the work
 	f_balk "DEPRICATED. Source _functions and call f_run_apt_updates instead. For now, running it anyway." false
