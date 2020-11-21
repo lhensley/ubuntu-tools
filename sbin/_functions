@@ -143,7 +143,7 @@ function f_program_instances () {
 function f_die () {
 	# Usage: f_die "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
 	# Note: No need to include $0
-		f_balk "FATAL $1" "$2"   # report and log the objection
+		f_balk "FATAL: $1" "$2"   # report and log the objection
 		exit 1             # die
 	}
 
