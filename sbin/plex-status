@@ -9,8 +9,8 @@
 	f_require_root
 
 # From plexstatus
-	df -Ht ext4
-	systemctl status plexmediaserver
+	# df -Ht ext4
+	# systemctl status plexmediaserver
 
 # From system-snapshot
 	echo Plex Video Work Directory: $VIDEO_WORK_DIRECTORY
