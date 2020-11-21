@@ -14,6 +14,9 @@
 # Update Dynamic DNS
 	ddclient -daemon 0
 
+# Other updates
+	f_upd
+
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
