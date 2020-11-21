@@ -6,7 +6,7 @@
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 # Do the work
-	for f in "$@"; do if f_is_file "$f"; then mkdir -p $(dirname $f); cp $f $f.backup.$(date "+%Y.%m.%d-%H.%M.%S %Z"); fi; done > /dev/null 2>&1
+	for f in "$@"; do if f_is_file "$f"; then mkdir -p $(dirname $f); cp $f $f.backup.$(date "+%Y.%m.%d-%H.%M.%S.%Z"); fi; done > /dev/null 2>&1
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
