@@ -6,7 +6,7 @@
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 f_require_ubuntu
-f_require_minimum_version_number 20.6
+f_require_minimum_version_number
 f_require_maximum_version_number 16.1
 f_log_and_echo "Script executes." false
 
