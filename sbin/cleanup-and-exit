@@ -1,6 +1,7 @@
 #!/bin/bash
-# cleanup-and-exit
-#
+# This should be mothballed soon. 11/21/2020
+
+f_deprecated "(nothing)"
 
 # Remove all remaining tempfiles. #####################################
 rm /tmp/$LANE_SCRIPTS_PREFIX-$UUID* > /dev/null 2>&1

@@ -1,28 +1,21 @@
-
 #!/bin/bash
 # initialize-server
 # PURPOSE: Installs basic software, initializes, and configures
 # IMPORTANT: Check variables at the top of the script before running it!
-
-install_dos2unix=true
-install_mysql_server=true
-install_phpmyadmin=true
-install_plexmediaserver=true
-install_tautulli=true
-
-# Make sure we're root.
-if [[ $EUID -ne 0 ]]; then
-        echo "Use sudo. $0 must be run as root." 1>&2
-        exit 1
-    fi
 
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
+# Require ubuntu
+	f_require_ubuntu
+
+# Require root
+	f_require_root
+
 if [[ $NAME = "Ubuntu" ]]; then
-    if [[ $(echo $VERSION_ID | cut -c1-3) = "20." ]]; then
+    if [[ $(echo $VERSION_ID | cut -c1-3) == "20." ]]; then
       echo "Ubuntu version 20 confirmed."
     else
       echo "This script does not support version $VERSION_ID of Ubuntu."
@@ -33,7 +26,11 @@ else
   exit 1
 fi
 
-# set -x
+install_dos2unix=true
+install_mysql_server=true
+install_phpmyadmin=true
+install_plexmediaserver=true
+install_tautulli=true
 
 # Copy git configs to $ADMIN_USER
 if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then

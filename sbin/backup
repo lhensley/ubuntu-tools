@@ -1,6 +1,10 @@
 #!/bin/bash
 # backup
 
+# This is the old backup file for nuc01
+# May be safe to delete it, if the cold-backup option is working.
+# Still need to review this document to be sure.
+
 
 # TEMPORARILY_DISABLED
 exit 1

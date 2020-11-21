@@ -6,6 +6,9 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
+# Require root
+	f_require_root
+
 # Export cron jobs for $CRONTAB_BACKUP_USERS
 for SELECTED_USER in $CRONTAB_BACKUP_USERS; do 
 	crontab -l -u $SELECTED_USER > $(eval echo "~$SELECTED_USER")/.crontab-archive

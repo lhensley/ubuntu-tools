@@ -6,19 +6,11 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
+# Require root
+	f_require_root
+
 # Confirm that this is what the user wants
-	echo -en "\007" # Beep
-	echo
-	echo "CAUTION CAUTION CAUTION"
-	echo
-	echo "This will overwrite your current system configuration and data."
-	read -p "To continue, type the word Restore (case sensitive) and press <ENTER>.  " ANSWER
-	echo
-	if [ "$ANSWER" != "Restore" ]; then
-		echo $0: ABORT from user.
-		logger $0: ABORT from user.
-		exit 1
-		fi
+	r_require_confirmation "This will overwrite your current system configuration and data." "Restore"
 
 # Change working directory
 # Heavy error checking because this HAS to be right, or results could be catastrophic.

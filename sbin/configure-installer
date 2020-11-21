@@ -4,20 +4,6 @@
 # IMPORTANT: Check variables at the top of the script before running it!
 # Instructions for creating a custom ISO installation are at https://linuxhint.com/customize_ubuntu_iso_create_spin/
 
-install_apache2=true
-install_certbot=true
-install_chrome=true
-install_cubic=true
-install_handbrake=true
-install_lsyncd=true
-install_mailutils=true
-install_makemkv=true
-install_openssl=true
-install_php=true
-install_rclone=true
-install_webmin=true
-install_zoom=true
-
 # Make sure we're root.
 if [[ $EUID -ne 0 ]]; then
         echo "Use sudo. $0 must be run as root." 1>&2
@@ -37,7 +23,19 @@ if [[ $EUID -ne 0 ]]; then
 		exit 1
 		fi
 
-set -x
+install_apache2=true
+install_certbot=true
+install_chrome=true
+install_cubic=true
+install_handbrake=true
+install_lsyncd=true
+install_mailutils=true
+install_makemkv=true
+install_openssl=true
+install_php=true
+install_rclone=true
+install_webmin=true
+install_zoom=true
 
 # Add universe repository
     add-apt-repository universe

@@ -1,39 +1,15 @@
 #!/bin/bash
 
-# NOTE: Wildcards and multiple files are not yet allowed. Maybe later.
-# Creates an empty source file if it doesn't already exist.
-# THIS SCRIPT NEEDS WORK.
-
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 # Do the work
-	mkdir -p $(dirname $1)
-	touch $1
-	# for f in "$1"; do echo \"$u\",\"Instances of $(basename "$f")\",\"$(f_program_instances "$f")\"; done
-	cp $1 $1.backup.$(date "+%Y.%m.%d-%H.%M.%S")
+	f_backup_file
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
 
 exit 0
-
-
-
-
-#!/bin/bash
-# backup-file
-
-# NOTE: Wildcards and multiple files are not yet allowed. Maybe later.
-# Creates an empty source file if it doesn't already exist.
-
-# Include header file
-logger Begin $0
-source $(dirname $0)/script-setup
-
-mkdir -p $(dirname $1)
-touch $1
-cp $1 $1.backup.$(date "+%Y.%m.%d-%H.%M.%S")

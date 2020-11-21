@@ -11,7 +11,7 @@
 # Do the work
 	# NOTE: Recommend leaving the f_balk command below until this script no longer is called by other scripts.
 	# When it's time, you may want to leave the script intact so it can be invoked from the command line, but drop the balk warning below.
-	f_balk "DEPRICATED. Source _functions and call f_apply_configs. For now, running it anyway." false
+	f_deprecated f_apply_configs
 	f_apply_configs
 
 # Include script footer file

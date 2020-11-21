@@ -9,7 +9,7 @@
 	f_require_root
 
 # Do the work
-	f_balk "DEPRICATED. Source _functions and call f_run_apt_updates instead. For now, running it anyway." false
+	f_deprecated f_run_apt_updates
 	f_run_apt_updates
 
 # Include script footer file

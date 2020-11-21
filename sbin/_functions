@@ -15,6 +15,52 @@ function f_log_and_echo () {
 	echo $(basename $0): $1
 	}
 
+function f_backup_file () {
+	for f in "$@"; do if f_is_file "$f"; then mkdir -p $(dirname $f); cp $f $f.backup.$(date "+%Y.%m.%d-%H.%M.%S.%Z"); fi; done > /dev/null 2>&1
+	}
+
+function f_deprecated () {
+	# Usage: f_deprecated FUNCTION-TO-CALL-INSTEAD
+	f_balk "DEPRECATED. Source _functions and call $1. For now, running it anyway." false
+	}
+
+function f_require_confirmation {
+	# USAGE: f_require_confirmation REASON-FOR-WARNING CONFIRMATION-WORD
+	# EXAMPLE: f_require_confirmation "This will delete all your files" "Delete"
+	# Confirm that this is what the user wants
+		f_beep
+		echo
+		echo "CAUTION CAUTION CAUTION"
+		echo
+		echo "$1"
+		read -p "To continue, type the word $2 (case sensitive) and press <ENTER>.  " ANSWER
+		echo
+		if [ "$ANSWER" != "$2" ]; then
+			f_log_and_echo "ABORT from user."
+			exit 1
+			fi
+	}
+
+function f_require_ubuntu () {
+	if ! [ $NAME == "Ubuntu" ]; then
+		f_die "This script works only on Ubuntu." false
+		fi
+	}
+
+function f_require_minimum_version_number () {
+# EXAMPLE: f_require_minimum_version_number 16.04
+	if ! [ "$1" -lt "$VERSION_ID" ]; then
+		f_die "This script requires at least OS version $1." false
+		fi
+	}
+
+function f_require_maximum_version_number () {
+# EXAMPLE: f_require_maximum_version_number 18.04
+	if ! [ "$1" -gt "$VERSION_ID" ]; then
+		f_die "This script does not work after OS version $1." false
+		fi
+	}
+
 function f_system_snapshot () {
 	u=$(uuidgen)
 	d=$(date)
