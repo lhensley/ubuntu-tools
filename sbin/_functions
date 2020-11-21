@@ -547,7 +547,6 @@ function f_apply_permissions () {
 			f_require_file "${PATHNAME[rip]}"
 			f_require_file "${PATHNAME[script_footer]}"
 			f_require_file "${PATHNAME[script_setup]}"
-			f_require_file "${PATHNAME[transcode_ripped_dvds]}"
 			# f_require_file "${PATHNAME[upd]}"
 			# f_require_file "${PATHNAME[_apply_configs]}"
 		# These based on functional requirements
@@ -558,7 +557,6 @@ function f_apply_permissions () {
 			chmod 755 "${PATHNAME[rip]}"
 			chmod 755 "${PATHNAME[script_footer]}" 
 			chmod 755 "${PATHNAME[script_setup]}" 
-			chmod 755 "${PATHNAME[transcode_ripped_dvds]}"
 		# These based on desire. CAUTION: Don't expose anything that has a password or code in it.
 			# chmod 740 "${PATHNAME[upd]}"
 			# chmod 740 "${PATHNAME[_apply_configs]}"
