@@ -529,7 +529,6 @@ function f_apply_permissions () {
 		# These based on functional requirements
 			chmod 755 "${PATHNAME[_functions]}"
 			chmod 755 "${PATHNAME[_vars]}"
-			chmod 755 "${PATHNAME[currenttimeinseconds]}"
 			chmod 755 "${PATHNAME[intervalinseconds]}"
 			chmod 755 "${PATHNAME[lhlib]}"
 			chmod 755 "${PATHNAME[makemkvcon]}"
