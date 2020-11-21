@@ -11,7 +11,7 @@
 	f_require_root
 
 # Only allow this to run on server oz.
-	f_only_on_server "oz"s
+	f_only_on_server "oz"
 
 # Set variables
 	WATCH_DIRECTORY="/home/brother/Scans"
