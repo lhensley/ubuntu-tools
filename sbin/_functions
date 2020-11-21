@@ -340,7 +340,41 @@ function f_relocate_files () {
 			do echo "" | f_move_one_plex_file "$THIS_FILE" "$THIS_TARGET_ROOT_DIRECTORY/$THIS_FILE"; done
 	}
 
-function f_run_apt_updates() {
+function f_git () {
+	# Install git token
+	# To get a new token, go to https://github.com/settings/tokens.
+		git config --global url."https://api:$GIT_TOKEN@github.com/".insteadOf "https://github.com/"
+		git config --global url."https://ssh:$GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
+		git config --global url."https://git:$GIT_TOKEN@github.com/".insteadOf "git@github.com:"
+
+	# This section re-pulls all go files from github and updates $SBIN_DIR
+		# Change to local repository directory
+			CURRENT_DIRECTORY=$(pwd)
+			cd $GIT_GO
+		# Blow away any local changes not uploaded to github
+			git reset --hard
+		# Select the designated branch
+			git checkout $GIT_BRANCH
+		# Pull down a copy of the repository
+			git pull
+		# Set permissions for git directory
+			chmod -R 400 $GIT_ROOT
+		# Copy scripts into $SBIN_DIR
+			rm -rf $SBIN_DIR
+			cp -r $GIT_GO_SBIN $SBIN_PARENT
+			cd $CURRENT_DIRECTORY
+			logger $0: git branch $GIT_BRANCH pulled.
+
+	# Set ownership and permissions in $SBIN_DIR (to be overwritten by _apply-configs)
+		chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
+		find $SBIN_DIR -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
+		find $SBIN_DIR -type f -print -exec chmod 755 {} \; >> /dev/null 2>&1
+
+	# Invoke /usr/local/sbin/_apply-configs
+		$SBIN_DIR/_apply-configs
+	}
+
+function f_run_apt_updates () {
 	# "update" downloads package information from all configured sources
 	apt -y update
 	# "upgrade" is an extraneous subset of "dist-upgrade" below
@@ -355,6 +389,12 @@ function f_run_apt_updates() {
 	# now-removed applications and that are no longer used
 	# by anything else on the system
 	apt -y autoremove
+	}
+
+f_upd () {
+	# This is a pass-thru function for. Abstracts out in case there is later
+	#	more to f_upd than just f_run_apt_updates.
+	f_run_apt_updates
 	}
 
 function f_move_one_file () {
