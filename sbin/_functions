@@ -543,7 +543,6 @@ function f_apply_permissions () {
 		# Confirm that referenced files below exist.
 			f_require_file "${PATHNAME[_functions]}" 
 			f_require_file "${PATHNAME[_vars]}"
-			f_require_file "${PATHNAME[lhlib]}"
 			f_require_file "${PATHNAME[makemkvcon]}"
 			f_require_file "${PATHNAME[process_incoming_scans]}"
 			f_require_file "${PATHNAME[rip]}"
@@ -555,7 +554,6 @@ function f_apply_permissions () {
 		# These based on functional requirements
 			chmod 755 "${PATHNAME[_functions]}"
 			chmod 755 "${PATHNAME[_vars]}"
-			chmod 755 "${PATHNAME[lhlib]}"
 			chmod 755 "${PATHNAME[makemkvcon]}"
 			chmod 755 "${PATHNAME[process_incoming_scans]}"
 			chmod 755 "${PATHNAME[remove_empty_directories]}"
