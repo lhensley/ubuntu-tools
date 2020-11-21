@@ -5,7 +5,8 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-f_system_snapshot_json
+f_require_root
+f_log_and_echo "Script executes."
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

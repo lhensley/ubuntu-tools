@@ -47,6 +47,13 @@ function f_system_snapshot () {
 	echo \"$u\",\"Plex Media Server is Recording\",\"$(f_plexmediaserver_is_recording)\"
 	}
 
+function f_require_root () {
+	# If running with root privileges, do nothing. Otherwise, abort with error.
+	if [[ $EUID -ne 0 ]]; then
+		f_die "Aborting. Root privileges required." false
+	    fi
+	}
+
 function f_system_snapshot_json () {
 	d=$(date)
 	UPTIME=$(cat /proc/loadavg)
@@ -577,8 +584,7 @@ f_iterate_handbrake_source_video_files() {
 		touch "$SUCCESSFUL_TRANSCODE_FLAG"
 		while $(f_is_file "$SUCCESSFUL_TRANSCODE_FLAG"); do
 			rm -f "$SUCCESSFUL_TRANSCODE_FLAG"
-			find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort | cut -f 2 | \
-				while read SOURCE_FILE; do echo ""; f_transcode_handbrake_source_video_file; done
+			f_xcode_queue | while read SOURCE_FILE; do echo ""; f_transcode_handbrake_source_video_file; done
 			done
 	}
 	
