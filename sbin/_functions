@@ -756,7 +756,8 @@ function f_transcode_handbrake_source_video_file () {
 	# $SUCCESSFUL_TRANSCODE_FLAG		# Touch this file whenever a successful transcode occurs.
 
 	# Try to create $TARGET_ROOT, in case it doesn't yet exist
-		sudo -u plex mkdir -p "$TARGET_ROOT"
+		# sudo -u plex mkdir -p "$TARGET_ROOT"
+		mkdir -p "$TARGET_ROOT"
 
 	# Test existence of files and directories
 		if ! $(f_is_file "$SOURCE_FILE");       then f_die "Source file not found: $SOURCE_FILE" true;            return; fi 
@@ -772,7 +773,8 @@ function f_transcode_handbrake_source_video_file () {
 
 	if ! $(f_filter "$SOURCE_FILE" "$IGNORE_TV_SHOWS") || ! $USE_TV_FILTERS; then
 		# Do the transcoding
-		sudo -u plex mkdir -p "$TARGET_DIR"
+		# sudo -u plex mkdir -p "$TARGET_DIR"
+		mkdir -p "$TARGET_DIR"
 		if ! $(f_is_directory "$TARGET_DIR"); then f_die "Target transcode directory not found: $TARGET_DIR" true;  return; fi
 		TIMESTART=$(date +%s)
 		SOURCE_FILE_BASE=$(basename "$SOURCE_FILE")
@@ -785,11 +787,11 @@ function f_transcode_handbrake_source_video_file () {
 		f_log_and_echo "Transcoding $SOURCE_FILE to $TARGET_FILE" false
 		nice -19 "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE"
 		exit_status=$?
-		chown $RUN_AS:$RUN_AS "$TARGET_FILE"
-		chmod $DEFAULT_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
+		# chown $RUN_AS:$RUN_AS "$TARGET_FILE"
+		# chmod $DEFAULT_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
 		if $SET_PLEX_PERMISSIONS; then
-			chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
-			chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
+			# chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
+			# chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
 			fi
 		if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
 #				TEMP_ERRORS=true
@@ -797,7 +799,7 @@ function f_transcode_handbrake_source_video_file () {
 				f_balk "$HANDBRAKE_CLI: FAILED with error #$exit_status for $SOURCE_FILE" true
 #				cat "$TEMP_ERROR_LOG" | mail -s "Error Log for $HOSTNAME $TEMP_THIS_SCRIPT" admin
 			else
-				rm "$SOURCE_FILE" # Delete input file
+				rm "$SOURCE_FILE" # Delete source file
 				f_log_and_echo "Transcoding complete in $(timeformat $(( $(date +%s) - TIMESTART )))" false
 				touch "$SUCCESSFUL_TRANSCODE_FLAG"
 				echo
