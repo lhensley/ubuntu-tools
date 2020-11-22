@@ -1,0 +1,59 @@
+#!/usr/bin/vi
+
+Daemons vs Services
+Ref: https://askubuntu.com/questions/192058/what-is-technical-difference-between-daemon-service-and-process#:~:text=The%20word%20daemon%20for%20denoting,is%20what%20a%20server%20provides.
+Simple Example & Overview: https://medium.com/@benmorel/creating-a-linux-service-with-systemd-611b5c8b91d6
+	.service files go in /etc/systemd/system directory (or /lib/systemd/system ?)
+Detailed: https://linuxconfig.org/how-to-create-systemd-service-unit-in-linux
+Best: https://www.linode.com/docs/quick-answers/linux/start-service-at-boot/
+
+Secure remote mount: SSHFS
+Ref: https://www.server-world.info/en/note?os=Ubuntu_20.04&p=ssh&f=8
+Install:
+	apt-get install -y sshfs
+
+Lane Daemons
+	lgh-transcode	Video Transcoding
+	lgh-files		File Transfer Queueing (maybe this exists?)
+	lgh-mirror		Cold Backup Management
+	lgh-archives		Archive Management
+	lgh-watch		Custom Analysis, Logging, Notification
+
+
+Using https://www.linode.com/docs/quick-answers/linux/start-service-at-boot/ as my guide:
+	1&2. Test Daemon: /usr/local/sbin/services/lgh-test-daemon
+	3. Unit file: Create this file, permissions root:root 644: /lib/systemd/system/lgh-test.service
+		# Lane service file
+
+		[Unit]
+		Description=Lane test systemd service
+
+		[Service]
+		ExecStart=/bin/bash /usr/local/sbin/services/lgh-test-daemon
+		Type=notify
+		User=lhensley
+		Group=lhensley
+#		PIDFile=/run/mysqld/mysqld.pid
+		PermissionsStartOnly=true
+#		ExecStartPre=/usr/share/mysql/mysql-systemd-start pre
+		ExecStart=/usr/sbin/mysqld
+		TimeoutSec=600
+		Restart=on-failure
+#		RuntimeDirectory=mysqld
+#		RuntimeDirectoryMode=755
+		LimitNOFILE=10000
+		
+		[Install]
+		WantedBy=multi-user.target
+	4. Copy to /etc/systemd/system and set permissions
+		sudo chown root:root /lib/systemd/system/lgh-test.service
+		sudo chmod 644 /lib/systemd/system/lgh-test.service
+		sudo cp /lib/systemd/system/lgh-test.service /etc/systemd/system/
+
+	Start and test
+		sudo systemctl start lgh-test
+		sudo systemctl status lgh-test
+
+	Enable
+		sudo systemctl enable lgh-test
+

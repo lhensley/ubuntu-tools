@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Require root
+	f_require_root
+
+# Set Variables
+	EXEC_TARGET_DIR="$SBIN_DIR"
+	EXEC_TARGET_FILE="$EXEC_TARGET_DIR/$1"
+	SERVICE_LIB_DIR="/lib/systemd/system"
+	SERVICE_LIB_FILE="$SERVICE_LIB_DIR/$1.service"
+	SERVICE_ETC_DIR="/etc/systemd/system"
+	SERVICE_ETC_FILE="$SERVICE_ETC_DIR/$1.service"
+
+# Ensure that a target service has been specified
+	if [ "$1" == "" ]; then
+		f_die "No target service specified."
+		fi
+
+# Do the installation, including ownerships, permissions, enable, start
+	f_log_and_echo "Attempting to stop the serivce, if running"
+	systemctl stop "$1"
+	f_log_and_echo "Attempting to disable the serivce, if enabled"
+	systemctl disable "$1"
+	f_log_and_echo "Removing service and exec files."
+	rm -f "$EXEC_TARGET_FILE"
+	rm -f "$SERVICE_LIB_FILE"
+	rm -f "$SERVICE_ETC_FILE"
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
