@@ -13,6 +13,7 @@
 	# systemctl status plexmediaserver
 
 # From system-snapshot
+	echo
 	echo Plex Video Work Directory: $VIDEO_WORK_DIRECTORY
 	echo Plex Video Store Directory: $VIDEO_STORE_DIRECTORY
 	echo .ts files in Plex Video Work Directory: $(find "$VIDEO_WORK_DIRECTORY" -name "*.ts" -print | wc -l)
@@ -28,6 +29,7 @@
 	echo Plex Media Server is Recording: $(f_plexmediaserver_is_recording)
 	echo Plex Media Server is Scanning: $(f_plexmediaserver_is_scanning)
 	echo Plex Media Server is Generating Video Thumbnails: $(f_plexmediaserver_is_generating_video_thumbnails)
+	echo
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

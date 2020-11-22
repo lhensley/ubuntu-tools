@@ -903,8 +903,8 @@ f_watch_wait_upload () {
 			while read TEMP_PATH TEMP_ACTION TEMP_FILE; do
 				f_log_and_echo "Moving $TEMP_FILE to $REMOTE_NAME:$REMOTE_DIRECTORY" false
 				rclone move "$WATCH_DIRECTORY/$TEMP_FILE" "$REMOTE_NAME:$REMOTE_DIRECTORY"
-				rm -f "$TEMP_FILE"
 			done
+		f_log_and_echo "Loop ended." false
 	}
 
 f_run_apt_updates () {
