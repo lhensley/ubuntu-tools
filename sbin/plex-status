@@ -13,23 +13,21 @@
 	# systemctl status plexmediaserver
 
 # From system-snapshot
-	echo
-	echo Plex Video Work Directory: $VIDEO_WORK_DIRECTORY
-	echo Plex Video Store Directory: $VIDEO_STORE_DIRECTORY
-	echo .ts files in Plex Video Work Directory: $(find "$VIDEO_WORK_DIRECTORY" -name "*.ts" -print | wc -l)
-	echo .ts files in Plex Video Store Directory: $(find "$VIDEO_STORE_DIRECTORY" -name "*.ts" -print | wc -l)
-	echo .m4v files in Plex Video Work Directory: $(find "$VIDEO_WORK_DIRECTORY" -name "*.m4v" -print | wc -l)
-	echo .m4v files in Plex Video Store Directory: $(find "$VIDEO_STORE_DIRECTORY" -name "*.m4v" -print | wc -l)
+	echo "                       "Plex Video Work Directory: $VIDEO_WORK_DIRECTORY
+	echo "                      "Plex Video Store Directory: $VIDEO_STORE_DIRECTORY
+	echo "          ".ts files in Plex Video Work Directory: $(find "$VIDEO_WORK_DIRECTORY" -name "*.ts" -print | wc -l)
+	echo "         ".ts files in Plex Video Store Directory: $(find "$VIDEO_STORE_DIRECTORY" -name "*.ts" -print | wc -l)
+	echo "         ".m4v files in Plex Video Work Directory: $(find "$VIDEO_WORK_DIRECTORY" -name "*.m4v" -print | wc -l)
+	echo "        ".m4v files in Plex Video Store Directory: $(find "$VIDEO_STORE_DIRECTORY" -name "*.m4v" -print | wc -l)
 	PCT=$(df "$VIDEO_WORK_FILE_SYSTEM" | tr -s ' ' | cut -f 5 -d" " | tail -n1); PCT="${PCT::-1}"
-	echo Use Percentage in Plex Video Work File System: $PCT
+	echo "   "Use Percentage in Plex Video Work File System: $PCT
 	PCT=$(df "$VIDEO_STORE_FILE_SYSTEM" | tr -s ' ' | cut -f 5 -d" " | tail -n1); PCT="${PCT::-1}"
-	echo Use Percentage in Plex Video Store File System: $PCT
-	echo Instances containing plexmediaserver: $(f_program_instances "plexmediaserver")
-	echo Plex Media Server is Busy: $(f_plexmediaserver_is_busy)
-	echo Plex Media Server is Recording: $(f_plexmediaserver_is_recording)
-	echo Plex Media Server is Scanning: $(f_plexmediaserver_is_scanning)
-	echo Plex Media Server is Generating Video Thumbnails: $(f_plexmediaserver_is_generating_video_thumbnails)
-	echo
+	echo "  "Use Percentage in Plex Video Store File System: $PCT
+	echo "            "Instances containing plexmediaserver: $(f_program_instances "plexmediaserver")
+	echo "                       "Plex Media Server is Busy: $(f_plexmediaserver_is_busy)
+	echo "                  "Plex Media Server is Recording: $(f_plexmediaserver_is_recording)
+	echo "                   "Plex Media Server is Scanning: $(f_plexmediaserver_is_scanning)
+	echo ""Plex Media Server is Generating Video Thumbnails: $(f_plexmediaserver_is_generating_video_thumbnails)
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
