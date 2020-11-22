@@ -389,13 +389,13 @@ function f_move_one_plex_file () {
 	if ! $(f_is_file "$SOURCE_FILE");                   then f_balk "Source file not found: $1" false; return; fi 
 	mkdir -p "$TARGET_DIR"
 	if ! $(f_is_directory "$TARGET_DIR"); then f_balk "Target directory not found: $TARGET_DIR" false; return; fi 
-	chown $PLEX_USER:$PLEX_USER "$TARGET_DIR"
-	chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS "$TARGET_DIR"
+	# chown $PLEX_USER:$PLEX_USER "$TARGET_DIR"
+	# chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS "$TARGET_DIR"
 	mv "$SOURCE_FILE" "$TARGET_DIR/"
 	exit_code=$?
 	if [ $exit_code -ne 0 ];										then f_balk "Can't move '$SOURCE_FILE' to '$TARGET_FILE'"; return; fi
-	chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
-	chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
+	# chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
+	# chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
 	}
 
 function f_relocate_files () {
@@ -640,17 +640,17 @@ function f_move_one_file () {
 	if ! $(f_is_file "$SOURCE_FILE");	  then f_balk "Source file not found: $1" false;                return; fi 
 	mkdir -p "$TARGET_DIR"
 	if ! $(f_is_directory "$TARGET_DIR"); then f_balk "Target directory not found: $TARGET_DIR" false;  return; fi 
-	if $SET_PLEX_PERMISSIONS; then
-		chown $PLEX_USER:$PLEX_USER "$TARGET_DIR"
-		chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS "$TARGET_DIR"
-		fi
+#	if $SET_PLEX_PERMISSIONS; then
+#		chown $PLEX_USER:$PLEX_USER "$TARGET_DIR"
+#		chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS "$TARGET_DIR"
+#		fi
 	mv "$SOURCE_FILE" "$TARGET_DIR/"
 	exit_code=$?
 	if [ $exit_code -ne 0 ];				  then f_balk "Can't move '$SOURCE_FILE' to '$TARGET_FILE'";    return; fi
-	if $SET_PLEX_PERMISSIONS; then
-		chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
-		chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
-		fi
+#	if $SET_PLEX_PERMISSIONS; then
+#		chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
+#
+#		fi
 	}
 
 function f_move_completed_handbrake_files () {
@@ -789,10 +789,10 @@ function f_transcode_handbrake_source_video_file () {
 		exit_status=$?
 		# chown $RUN_AS:$RUN_AS "$TARGET_FILE"
 		# chmod $DEFAULT_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
-		if $SET_PLEX_PERMISSIONS; then
-			# chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
-			# chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
-			fi
+#		if $SET_PLEX_PERMISSIONS; then
+#			chown $PLEX_USER:$PLEX_USER "$TARGET_FILE"
+#			chmod $PLEX_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
+#			fi
 		if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
 #				TEMP_ERRORS=true
 #				echo "$HANDBRAKE_CLI: FAILED with error #$exit_status for $SOURCE_FILE" >> "$TEMP_ERROR_LOG"				
