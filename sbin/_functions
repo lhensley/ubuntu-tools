@@ -172,20 +172,20 @@ f_plexmediaserver_is_busy () {
 f_plexmediaserver_is_generating_video_thumbnails () {
 	TEST_TEXT="plexmediaserver/Plex Transcoder"
 	TEST_TEXT_2="codec:v"
-	if [ $(ps -ef | grep "$TEST_TEXT" | grep "$TEST_TEXT_2" | wc -l) -gt "0" ]; then echo true; else echo false; fi
+	echo $(ps -ef | grep "$TEST_TEXT" | grep "$TEST_TEXT_2" | wc -l)
 	}
 
 f_plexmediaserver_is_recording () {
 	TEST_TEXT="plexmediaserver/Plex Transcoder"
 #	TEST_TEXT_2="-i http://127.0.0.1:32400/livetv"
 	TEST_TEXT_2="codec:0"
-	if [ $(ps -ef | grep "$TEST_TEXT" | grep "$TEST_TEXT_2" | wc -l) -gt "0" ]; then echo true; else echo false; fi
+	echo $(ps -ef | grep "$TEST_TEXT" | grep "$TEST_TEXT_2" | wc -l)
 	}
 
 f_plexmediaserver_is_scanning () {
 	TEST_TEXT="plexmediaserver/Plex Transcoder"
 	TEST_TEXT_2="codec:#0x101"
-	if [ $(ps -ef | grep "$TEST_TEXT" | grep "$TEST_TEXT_2" | wc -l) -gt "0" ]; then echo true; else echo false; fi
+	echo $(ps -ef | grep "$TEST_TEXT" | grep "$TEST_TEXT_2" | wc -l)
 	}
 
 f_users_logged_in () {
@@ -731,7 +731,7 @@ function f_target_relative_path_and_filename_no_ext () {
 	echo "$RELATIVE_FILE"
 }
 
-function f_transcode_handbrake_source_video_file () {
+function f_transcode_file () {
 	# Replaces f_process_ts_file
 	# CRITICAL: Define these variables BEFORE calling this function:
     # $WAIT_AFTER_SOURCE_SCAN           # How long to wait after looping through all source files
@@ -786,7 +786,7 @@ function f_transcode_handbrake_source_video_file () {
 #		echo "$TEMP_ERROR_LOG" > "$TEMP_ERROR_LOG"
 		f_log_and_echo "Transcoding $SOURCE_FILE to $TARGET_FILE" false
 		nice -19 "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE"
-		exit_status=$?
+		exit_status=$? # 0 = No Error, 1 = Cancelled, 2 = Invalid Input, 3 = Initialization error, 4 = Unknown Error
 		# chown $RUN_AS:$RUN_AS "$TARGET_FILE"
 		# chmod $DEFAULT_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
 #		if $SET_PLEX_PERMISSIONS; then
@@ -795,37 +795,21 @@ function f_transcode_handbrake_source_video_file () {
 #			fi
 		if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
 #				TEMP_ERRORS=true
-#				echo "$HANDBRAKE_CLI: FAILED with error #$exit_status for $SOURCE_FILE" >> "$TEMP_ERROR_LOG"				
-				f_balk "$HANDBRAKE_CLI: FAILED with error #$exit_status for $SOURCE_FILE" true
+#				echo "HandBrakeCLI: FAILED with error #$exit_status for $SOURCE_FILE" >> "$TEMP_ERROR_LOG"				
+				f_balk "HandBrakeCLI: FAILED with error #$exit_status for $SOURCE_FILE" true
+				if [ $exit_status -eq 2 ]; then rm "$SOURCE_FILE"; f_balk "Deleting corrupted file $SOURCE_FILE" true; fi
 #				cat "$TEMP_ERROR_LOG" | mail -s "Error Log for $HOSTNAME $TEMP_THIS_SCRIPT" admin
 			else
 				rm "$SOURCE_FILE" # Delete source file
-				f_log_and_echo "Transcoding complete in $(timeformat $(( $(date +%s) - TIMESTART )))" false
+				f_log_and_echo "Transcoding complete in $(f_timeformat $(( $(date +%s) - TIMESTART )))" false
 				touch "$SUCCESSFUL_TRANSCODE_FLAG"
 				echo
 			fi # End of check for transcoding failure
 		fi
 	}
 
-f_diags_iterate_handbrake_source_video_files() {
-	TEMP_FILE_DIAGNOSTICS="/tmp/diagnostics file list $(date) $(uuidgen)"
-	echo "WAIT_AFTER_SOURCE_SCAN: $WAIT_AFTER_SOURCE_SCAN" >> "$TEMP_FILE_DIAGNOSTICS"
-	echo "SOURCE_FILE_NAME_PATTERN: $SOURCE_FILE_NAME_PATTERN" >> "$TEMP_FILE_DIAGNOSTICS"
-	echo "SOURCE_ROOT: $SOURCE_ROOT" >> "$TEMP_FILE_DIAGNOSTICS"
-	echo "TARGET_ROOT: $TARGET_ROOT" >> "$TEMP_FILE_DIAGNOSTICS"
-	echo "TARGET_FILE_EXTENSION: $TARGET_FILE_EXTENSION" >> "$TEMP_FILE_DIAGNOSTICS"
-	echo "SET_PLEX_PERMISSIONS: $SET_PLEX_PERMISSIONS" >> "$TEMP_FILE_DIAGNOSTICS"
-	echo "USE_TV_FILTERS: $USE_TV_FILTERS" >> "$TEMP_FILE_DIAGNOSTICS"
-	echo "FLATTEN_TARGET_DIRECTORY: $FLATTEN_TARGET_DIRECTORY" >> "$TEMP_FILE_DIAGNOSTICS"
-	echo "PREPEND_PARENT_DIR_TO_BASENAME: $PREPEND_PARENT_DIR_TO_BASENAME" >> "$TEMP_FILE_DIAGNOSTICS"
-	echo "APPEND_UUID_TO_TARGET_FILE: $APPEND_UUID_TO_TARGET_FILE" >> "$TEMP_FILE_DIAGNOSTICS"
-	echo "USE_PARENT_DIR_AS_BASENAME: $USE_PARENT_DIR_AS_BASENAME" >> "$TEMP_FILE_DIAGNOSTICS"
-	cat "$TEMP_FILE_DIAGNOSTICS" | mail -s "Pre-Run Transcode Diagnostic Data for $HOSTNAME $0" admin
-	rm "$TEMP_FILE_DIAGNOSTICS"
-	}
-
 f_iterate_handbrake_source_video_files() {
-	# ONE pass through all matching source files, invoking f_transcode_handbrake_source_video_file for each
+	# ONE pass through all matching source files, invoking f_transcode_file for each
 	# CRITICAL: Define these variables BEFORE calling this function:
     # $WAIT_AFTER_SOURCE_SCAN           # How long to wait after looping through all source files
     # $SOURCE_FILE_NAME_PATTERN         # For Plex DVR,                 this is "$PLEX_FILE_NAME_PATTERN"                (defined in _vars)
@@ -857,7 +841,7 @@ f_iterate_handbrake_source_video_files() {
 		touch "$SUCCESSFUL_TRANSCODE_FLAG"
 		while $(f_is_file "$SUCCESSFUL_TRANSCODE_FLAG"); do
 			rm -f "$SUCCESSFUL_TRANSCODE_FLAG"
-			f_xcode_queue | while read SOURCE_FILE; do echo ""; f_transcode_handbrake_source_video_file; done
+			f_xcode_queue | while read SOURCE_FILE; do echo ""; f_transcode_file; done
 			done
 	}
 	
