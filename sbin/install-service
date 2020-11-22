@@ -28,7 +28,7 @@
 		fi
 
 # Confirm presence and absence of all the right files
-	Program instances: $(f_program_instances "$1")
+	echo Program instances: $(f_program_instances "$1")
 	if [[ $(f_program_instances "$1") -gt 0 ]]; then f_die "Process already running: $1" false; fi
 	if ! f_is_file "$EXEC_SOURCE_FILE"; then f_die "File not found: $EXEC_SOURCE_FILE" false; fi
 	if ! f_is_file "$SERVICE_SOURCE_FILE"; then f_die "File not found: $SERVICE_SOURCE_FILE" false; fi
