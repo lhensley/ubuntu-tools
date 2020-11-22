@@ -10,8 +10,8 @@ FUNCTIONS_ARE_DEFINED=false
 function f_log_and_echo () {
 # Usage f_log_and_echo "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
 	if $2; then echo $HOSTNAME $(basename $0): $1 | mail $TEXT_ALERTS; fi
-	logger -t "$(basename $0)" $1
-	# >&2 echo $(basename $0): $1
+	logger -t "$(basename $0)[$$]" $1
+	# >&2 echo $(basename $0)[$$]: $1
 	echo $(basename $0): $1
 	}
 
@@ -218,7 +218,7 @@ function f_die () {
 function f_debug () {
     # $1: message to log, only used when $DEBUG_MODE == true
     if [ ! $DEBUG_MODE ]; then
-        logger -t "$(basename $0)" DEBUG: $1
+        logger -t "$(basename $0)[$$]" DEBUG: $1
         fi
     }
 
@@ -227,7 +227,7 @@ function f_debug_variable () {
     # $2: variable_value ("$variable_name")
     # Example: f_debug_variable "var" "$var"
     if [ ! $DEBUG_MODE ]; then
-        logger -t "$(basename $0)" DEBUG: $1 = $2
+        logger -t "$(basename $0)[$$]" DEBUG: $1 = $2
         fi
     }
 
@@ -321,9 +321,9 @@ function f_local_copy() {
 
 function f_install() {
 	if ! [ -x "$(command -v $1)" ]; then   
-		logger -t "$(basename $0)" Installing $1
+		logger -t "$(basename $0)[$$]" Installing $1
 		DEBIAN_FRONTEND=noninteractive apt-get install -yq $1
-		logger -t "$(basename $0)" Installation of $1 done exit code $?
+		logger -t "$(basename $0)[$$]" Installation of $1 done exit code $?
 	fi
 	}
 
@@ -920,6 +920,6 @@ f_run_apt_updates () {
 
 # Log the completion
 if [ ! $DEBUG_MODE ]; then
-	logger -t "$(basename $0)" Functions loaded from _functions
+	logger -t "$(basename $0)[$$]" Functions loaded from _functions
 	fi
 
