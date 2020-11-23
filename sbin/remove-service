@@ -9,8 +9,6 @@
 	f_require_root
 
 # Set Variables
-	EXEC_TARGET_DIR="$SBIN_DIR"
-	EXEC_TARGET_FILE="$EXEC_TARGET_DIR/$1"
 	SERVICE_LIB_DIR="/lib/systemd/system"
 	SERVICE_LIB_FILE="$SERVICE_LIB_DIR/$1.service"
 	SERVICE_ETC_DIR="/etc/systemd/system"
@@ -27,7 +25,6 @@
 	f_log_and_echo "Attempting to disable the serivce, if enabled" false
 	systemctl disable "$1"
 	f_log_and_echo "Removing service and exec files." false
-	rm "$EXEC_TARGET_FILE"
 	rm "$SERVICE_LIB_FILE"
 	rm "$SERVICE_ETC_FILE"
 
