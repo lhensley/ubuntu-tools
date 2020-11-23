@@ -37,12 +37,12 @@
 	if $(f_is_file "$SERVICE_ETC_FILE"); then f_die "File already exists: $SERVICE_ETC_FILE" false; fi
 
 # Do the installation, including ownerships, permissions, enable, start
-	f_log_and_echo "Setting permissions on service and exec files."
+	f_log_and_echo "Setting permissions on service and exec files." false
 	chown $USER_ROOT:$USER_ROOT "$EXEC_SOURCE_FILE"
 	chown $USER_ROOT:$USER_ROOT "$SERVICE_SOURCE_FILE"
 	chmod $EXEC_PERMISSIONS "$EXEC_SOURCE_FILE"
 	chmod $SERVICE_PERMISSIONS "$SERVICE_SOURCE_FILE"
-	f_log_and_echo "Installing service and exec files."
+	f_log_and_echo "Installing service and exec files." false
 	cp "$EXEC_SOURCE_FILE" "$EXEC_TARGET_FILE"
 	cp "$SERVICE_SOURCE_FILE" "$SERVICE_LIB_FILE"
 	cp "$SERVICE_SOURCE_FILE" "$SERVICE_ETC_FILE"
