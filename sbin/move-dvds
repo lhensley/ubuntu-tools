@@ -9,6 +9,7 @@
 	if [ "$1" != "start" ]; then
 		f_die "Normally run as a systemd service. Try $0 start" false
 		fi
+	f_log_and_echo "My Parent ID is $$ $PPID"
 
 # Define file locations
 	SOURCE_ROOT_DIR="/home/lhensley/Videos/HandBrake-Completed"
