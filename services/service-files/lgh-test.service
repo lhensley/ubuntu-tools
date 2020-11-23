@@ -9,7 +9,7 @@ WantedBy=multi-user.target
 
 [Service]
 ExecStart=/bin/bash /usr/local/sbin/lgh-test
-Type=notify
+Type=simple
 User=lhensley
 Group=lhensley
 PermissionsStartOnly=true
