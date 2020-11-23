@@ -47,8 +47,7 @@
 	cp "$SERVICE_SOURCE_FILE" "$SERVICE_LIB_FILE"
 	cp "$SERVICE_SOURCE_FILE" "$SERVICE_ETC_FILE"
 	echo
-	echo "     To enable (auto-start) the service:  sudo systemctl enable $1"
-	echo "                   To start the service:  sudo systemctl enable $1"
+	echo "To enable (auto-start) and start the service:  sudo systemctl enable $1 && sudo systemctl start $1"
 	echo
 
 # Include script footer file
