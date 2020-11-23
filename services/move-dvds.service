@@ -1,0 +1,18 @@
+# Move DVDs Service File
+
+[Unit]
+Description=Service to Move Transcoded DVD Files to nuc01
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+ExecStart=/bin/bash /usr/local/sbin/move-dvds start
+# Leave Type=simple unless the process forks.
+Type=simple
+User=lhensley
+Group=lhensley
+PermissionsStartOnly=true
+TimeoutSec=600
+Restart=on-failure

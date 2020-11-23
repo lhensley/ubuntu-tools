@@ -1,10 +1,14 @@
 #!/bin/bash
-# This script should be run as lhensley from cron, executed at boot time.
 
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# "Run as a service" check
+	if [ "$1" != "start" ]; then
+		f_die "Normally run as a systemd service. Try $0 start" false
+		fi
 
 # Define file locations
 	SOURCE_ROOT_DIR="/home/lhensley/Videos/HandBrake-Completed"
