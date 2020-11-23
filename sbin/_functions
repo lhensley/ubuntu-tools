@@ -797,8 +797,8 @@ function f_transcode_file () {
 		if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
 #				TEMP_ERRORS=true
 #				echo "HandBrakeCLI: FAILED with error #$exit_status for $SOURCE_FILE" >> "$TEMP_ERROR_LOG"				
-				f_balk "HandBrakeCLI: FAILED with error #$exit_status for $SOURCE_FILE" true
-				if [ $exit_status -eq 2 ]; then rm "$SOURCE_FILE"; f_balk "Deleting corrupted file $SOURCE_FILE" true; fi
+				f_balk "HandBrakeCLI: FAILED with error #$exit_status for $SOURCE_FILE" false
+				if [ $exit_status -eq 2 ]; then rm "$SOURCE_FILE"; f_balk "Deleting corrupted file $SOURCE_FILE" false; fi
 #				cat "$TEMP_ERROR_LOG" | mail -s "Error Log for $HOSTNAME $TEMP_THIS_SCRIPT" admin
 			else
 				rm "$SOURCE_FILE" # Delete source file
