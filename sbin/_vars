@@ -369,6 +369,9 @@ source /etc/os-release
 # reset-when-ready
 	RESET_FLAG_FILE="/tmp/reset-when-ready"
 
+# SBIN
+	SBIN_PERMISSIONS=755
+
 # System Snapshot File
 	SYSTEM_SNAPSHOT_FILE="$ADMIN_HOME_DIR/.system-snapshot-data.csv"
 	SYSTEM_SNAPSHOT_JSON_FILE="$ADMIN_HOME_DIR/.system-snapshot-data.json"

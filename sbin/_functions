@@ -537,7 +537,7 @@ function f_apply_permissions () {
 		chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
 		# find $SBIN_DIR -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1 # Consistent with /usr/sbin, usr/bin/, and other comparable directories
 		# find $SBIN_DIR -type f -print -exec chmod 750 {} \; >> /dev/null 2>&1 # By default, block access for non-root.
-		find $SBIN_DIR -print -exec chmod 755 {} \; >> /dev/null 2>&1 # Consistent with /usr/sbin, usr/bin/, and other comparable directories
+		find $SBIN_DIR -print -exec chmod $SBIN_PERMISSIONS {} \; >> /dev/null 2>&1 # Consistent with /usr/sbin, usr/bin/, and other comparable directories
 
 	# Exceptions: These can be read or run by anyone
 		# Confirm that referenced files below exist.
