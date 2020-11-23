@@ -1,22 +1,22 @@
 #!/bin/bash
-# Waits for files to enter $WATCH_DIRECTORY and uploads the to $REMOTE_NAME:$REMOTE_DIRECTORY. Loops forever.
-# This script should be run as root from cron, executed at boot time.
 
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-# Only allow this to run on server oz.
-	f_only_on_server "oz"
+# Define file locations
+	SOURCE_ROOT_DIR="$VIDEO_WORK_DIRECTORY"
+	TARGET_ROOT_DIR="$VIDEO_STORE_DIRECTORY"
+	MOVE_MASK="*.m4v"
+	THIS_SCRIPT=$(basename "$0")
 
-# Set variables
-	WATCH_DIRECTORY="/home/brother/Scans"
-	REMOTE_NAME="lane-onedrive"
-	REMOTE_DIRECTORY="Brother"
-
-# Watch and wait
-	f_watch_wait_upload
+# Do the work
+#    sudo -u $ADMIN_USER \
+		rsync --remove-source-files --include $MOVE_MASK --exclude ".grab/" --exclude "*.ts" \
+			--archive --links --owner --perms --times --verbose \
+			"$SOURCE_ROOT_DIR" "$TARGET_ROOT_DIR" \
+			| logger -t "$THIS_SCRIPT"
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

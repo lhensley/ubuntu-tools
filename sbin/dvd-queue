@@ -1,6 +1,4 @@
 #!/bin/bash
-# Looks for for files ripped from a DVD, and transcodes them. Pauses, then repeats forever.
-# This script should be run as root from cron, executed at boot time.
 
 # Include script setup file
 	source script-setup

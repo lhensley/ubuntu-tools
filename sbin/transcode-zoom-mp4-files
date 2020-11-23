@@ -1,11 +1,14 @@
 #!/bin/bash
-# Looks for for Zoom recordings and transcodes them. Pauses, then repeats forever.
-# This script should be run as root from cron, executed at boot time.
 
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ];         then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting;         exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ];         then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting;         exit 1; fi
+
+# "Run as a service" check
+	if [ "$PPID" != "1" ]; then
+		f_die "This script only runs as a systemd service. Try sudo systemctl start $(basename $0)" false
+		fi
 
 # Set the variables
     WAIT_AFTER_SOURCE_SCAN="1h"                         # How long to wait after looping through all source files

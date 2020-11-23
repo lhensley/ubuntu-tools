@@ -1,11 +1,14 @@
 #!/bin/bash
-# This script should be run as lhensley from cron, executed at boot time.
-# Does NOT remove extraneous files from target directories
 
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# "Run as a service" check
+	if [ "$PPID" != "1" ]; then
+		f_die "This script only runs as a systemd service. Try sudo systemctl start $(basename $0)" false
+		fi
 
 # Only allow this to run on server oz.
 	f_only_on_server "oz"
