@@ -6,10 +6,9 @@
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 # "Run as a service" check
-	if [ "$1" != "start" ]; then
-		f_die "Normally run as a systemd service. Try $0 start" false
+	if [ "$PPID" != "1" ]; then
+		f_die "This script only runs as a systemd service. Try sudo systemctl start $(basename $0)" false
 		fi
-	f_log_and_echo "My Parent ID is $$ $PPID" false
 
 # Define file locations
 	SOURCE_ROOT_DIR="/home/lhensley/Videos/HandBrake-Completed"

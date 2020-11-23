@@ -1,4 +1,5 @@
 # Move DVDs Service File
+# See https://www.freedesktop.org/software/systemd/man/systemd.service.html for help.
 
 [Unit]
 Description=Service to Move Transcoded DVD Files to nuc01
@@ -8,11 +9,13 @@ After=network.target
 WantedBy=multi-user.target
 
 [Service]
-ExecStart=/bin/bash /usr/local/sbin/move-dvds start
-# Leave Type=simple unless the process forks.
-Type=simple
+ExecStart=/bin/bash /usr/local/sbin/move-dvds
+# Leave Type=simple unless the process forks. Defaults this way anyway if ExecStart is used.
+# Type=simple
 User=lhensley
 Group=lhensley
-PermissionsStartOnly=true
-TimeoutSec=600
+# PermissionsStartOnly is deprecated.
+# PermissionsStartOnly=true
+# On TimeoutSec, try default and add a value here only if necessary.
+# TimeoutSec=600
 Restart=on-failure
