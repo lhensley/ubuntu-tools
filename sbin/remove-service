@@ -27,9 +27,9 @@
 	f_log_and_echo "Attempting to disable the serivce, if enabled"
 	systemctl disable "$1"
 	f_log_and_echo "Removing service and exec files."
-	rm -f "$EXEC_TARGET_FILE"
-	rm -f "$SERVICE_LIB_FILE"
-	rm -f "$SERVICE_ETC_FILE"
+	rm "$EXEC_TARGET_FILE"
+	rm "$SERVICE_LIB_FILE"
+	rm "$SERVICE_ETC_FILE"
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

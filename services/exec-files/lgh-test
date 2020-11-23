@@ -1,21 +1,14 @@
 #!/bin/bash
 # DAEMON
 
-echo "A" > /tmp/killme
-
 # Include script setup file
 	source script-setup
-echo "B" >> /tmp/killme
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
-echo "C" >> /tmp/killme
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
-echo "E" >> /tmp/killme
 
 while true; do
 	env
-echo "F" >> /tmp/killme
 	f_log_and_echo "Starting sleep." false
-echo "G" >> /tmp/killme
 	sleep 24h;
 	f_log_and_echo "Ending sleep." false
 	done

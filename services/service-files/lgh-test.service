@@ -1,7 +1,7 @@
 # Lane test service file
 
 [Unit]
-Description=Lane test systemd service
+Description=Lane Test Systemd Service
 After=network.target
 
 [Install]
@@ -9,10 +9,10 @@ WantedBy=multi-user.target
 
 [Service]
 ExecStart=/bin/bash /usr/local/sbin/lgh-test
+# Leave Type=simple unless the process forks.
 Type=simple
 User=lhensley
 Group=lhensley
 PermissionsStartOnly=true
 TimeoutSec=600
 Restart=on-failure
-
