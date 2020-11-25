@@ -37,7 +37,7 @@
     # f_require_maximum_version_number "version-number"
     # f_only_on_server "hostname"
     # f_require_confirmation "This text is displayed, requesting confirmation word." "ConfirmationWord"
-    set -x # For debugging
+    # set -x # For debugging
 
 
 ###################################################
