@@ -30,7 +30,7 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 61; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 61; fi
 # Uncomment requirements for script execution
-	# f_require_root
+	f_require_root
     # f_require_ubuntu
     # f_deprecated
     # f_require_minimum_version_number "version-number"
@@ -45,28 +45,19 @@
 
 function f_print_usage {
   echo
-  # Print usage. Break lines as needed below.
-  echo Usage: $(basename "$0") [-ABCqVv -a value-a --optiona=value-a -b value-b --optionb=value-b -c value-c --optionc=value-c --quiet --verbose --version --help] argument-1 argument-2 [argument-3]
-  # Include version number.
+  echo Usage: $(basename "$0") [-pqVv -set-plex-file-permissions --quiet --verbose --version --help]
   echo "Version $VERSION_NUMBER"
-  # Describe what the program does. Optionally: display version number, author, etc. EXAMPLE:
   echo Issues a pull request to github repository and updates files, permissions, and configurations on local system accordingly.
-  # Describe any requirements for running the script (e.g., root, specific server, OS minimum). EXAMPLE:
-  # echo Requires root.
+  echo Requires root.
   echo
   echo "Options:"
-  echo "  -A --optionA                 Definition of option -A"
-  echo "  -a value --optiona=value-a   Definition of option -a"
-  echo "  -B --optionB                 Definition of option -B"
-  echo "  -b value --optionb=value-b   Definition of option -b"
-  echo "  -C --optionC                 Definition of option -C"
-  echo "  -c value --optionc=value-c   Definition of option -c"
-  echo "  -q --quiet                   Mimimal output
-  echo "  -V --verbose                 Verbose output
-  echo "  -v --version                 Display version number, then exit (no other options processed)"
-  echo "  --help                       Display usage and help information, then exit (no other options processed)"
+  echo "  -p --set-plex-file-permissions    Updates Plex Media Server file permissions globally. May take a while."
+  echo "  -q --quiet                        Mimimal output"
+  echo "  -V --verbose                      Verbose output"
+  echo "  -v --version                      Display version number, then exit (no other options processed)"
+  echo "  --help                            Display usage and help information, then exit (no other options processed)"
   echo
-  echo "Example usage: " [sudo] $(basename "$0") -A -a value-a -B -optionb=value-b -C -c value-c argument-1 argument-2 [argument-3]
+  echo "Example usage: " [sudo] $(basename "$0") --set-plex-file-permissions
   echo
   # Describe any exit codes returned. For examples below, comment out any unused values. EXAMPLE:
   echo Return values:
@@ -74,10 +65,10 @@ function f_print_usage {
   echo "  " $EXIT_CODE_INTERNAL_ERROR on internal error,
   echo "  " $EXIT_CODE_INVALID_OPTIONS if invalid options specified,
   echo "  " $EXIT_CODE_ROOT_REQUIRED if root required,
-  echo "  " $EXIT_CODE_UBUNTU_REQUIRED if Ubuntu required,
-  echo "  " $EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED if minimum OS version required,
-  echo "  " $EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED if maximum OS version required,
-  echo "  " $EXIT_CODE_SPECIFIC_SERVER_REQUIRED if specific server required,
+  # echo "  " $EXIT_CODE_UBUNTU_REQUIRED if Ubuntu required,
+  # echo "  " $EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED if minimum OS version required,
+  # echo "  " $EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED if maximum OS version required,
+  # echo "  " $EXIT_CODE_SPECIFIC_SERVER_REQUIRED if specific server required,
   echo "  " $EXIT_CODE=USER_ABORT on user abort
   echo
 }
@@ -90,12 +81,7 @@ QUIET_MODE=false
 VERBOSE_MODE=false
 ARGS="" # Add arguments to primary function called as needed
 REDIRECT="" # Switch to "> /dev/null" or "> /dev/null 2>&1" for quiet mode
-OPTION_A=false
-OPTION_a=false
-OPTION_B=false
-OPTION_b=false
-OPTION_C=false
-OPTION_c=false
+SET_PLEX_FILE_PERMISSIONS=false
 # Option arguments can remain undefined.
 
 
@@ -137,47 +123,17 @@ while : ; do
            ;;
       -q | --quiet)  # Quiet mode
            QUIET_MODE=true
+           REDIRECT="> /dev/null"
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
       -V | --verbose)  # Verbose mode
            VERBOSE_MODE=true
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      -A | --optionA)  # Do something here or just set variables
-           OPTION_A=true
-           # echo Option -A was selected.
+      -P | --set-plex-file-permissions)  # Set Plex Media Server video file permissions
+           SET_PLEX_FILE_PERMISSIONS=true
+           ARGS+=" --set-plex-file-permissions"
            shift # Only one (default) shift for a switch, i.e., no argument
-           ;;
-      -a | --optiona)  # Do something here or just set variables
-           OPTION_a=true
-           OPTION_a_ARGUMENT="$2"
-           # echo Option -a was selected.
-           # echo Option -a argument: $$OPTION_a_ARGUMENT
-           shift 2 # Two shifts because the option takes an argument
-           ;;
-      -B | --optionB)  # Do something here or just set variables
-           OPTION_B=true
-           # echo Option -B was selected.
-           shift # Only one (default) shift for a switch, i.e., no argument
-           ;;
-      -b | --optionb)  # Do something here or just set variables
-           OPTION_b=true
-           OPTION_b_ARGUMENT="$2"
-           # echo Option -b was selected.
-           # echo Option -b argument: $$OPTION_b_ARGUMENT
-           shift 2 # Two shifts because the option takes an argument
-           ;;
-      -C | --optionC)  # Do something here or just set variables
-           OPTION_C=true
-           # echo Option -C was selected.
-           shift # Only one (default) shift for a switch, i.e., no argument
-           ;;
-      -c | --optionc)  # Do something here or just set variables
-           OPTION_c=true
-           OPTION_c_ARGUMENT="$2"
-           # echo Option -c was selected.
-           # echo Option -c argument: $$OPTION_c_ARGUMENT
-           shift 2 # Two shifts because the option takes an argument
            ;;
       # -- means the end of the arguments; drop this, and break out of the while loop
       --) shift; break ;;
@@ -195,19 +151,10 @@ shift $((OPTIND -1))
 #   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
-
-echo
-echo -A: $OPTION_A
-echo -a: $OPTION_a
-echo -a argument: $OPTION_a_ARGUMENT
-echo -B: $OPTION_B
-echo -b: $OPTION_b
-echo -c argument: $OPTION_b_ARGUMENT
-echo -C: $OPTION_C
-echo -c: $OPTION_c
-echo -c argument: $OPTION_c_ARGUMENT
-echo "Parameters remaining are: $@"
-echo
+# Note: Verbose mode is enabled, but it doesn't yet do anything
+# Note: As of 11/25/2020, --set-plex-file-permissions is ignored, but that is the default behavior.
+f_git $ARGS $REDIRECT
+fi
 
 
 ###################################################
