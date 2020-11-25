@@ -98,7 +98,7 @@ VERSION_NUMBER="0.1.x"
 QUIET_MODE=false
 VERBOSE_MODE=false
 ARGS="" # Add arguments to primary function called as needed
-REDIRECT="" # Switch to "> /dev/null" or "> /dev/null 2>&1" for quiet mode
+REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode
 OPTION_A=false
 OPTION_a=false
 OPTION_B=false
@@ -146,6 +146,8 @@ while : ; do
            ;;
       -q | --quiet)  # Quiet mode
            QUIET_MODE=true
+           REDIRECT="/dev/null"
+           ARGS+=" --quiet"
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
       -V | --verbose)  # Verbose mode
@@ -192,11 +194,10 @@ while : ; do
       --) shift; break ;;
   esac
 done
-shift $((OPTIND -1))
 
 
 ###################################################
-# Do whatever the script is supposed to do
+# Do the work.
 # IMPORTANT NOTES: 
 #   Don't forget that you still can read and use environment variables!
 #       Best practice: Required values should be required on and read from the command line, not environment variables.

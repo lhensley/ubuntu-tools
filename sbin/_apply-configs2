@@ -47,7 +47,7 @@ function f_print_usage {
   echo
   echo Usage: $(basename "$0") [-pqVv -set-plex-file-permissions --quiet --verbose --version --help]
   echo "Version $VERSION_NUMBER"
-  echo Issues a pull request to github repository and updates files, permissions, and configurations on local system accordingly.
+  echo Apply permissions and configurations on local system accordingly.
   echo Requires root or sudo.
   echo
   echo "Options:"
@@ -154,37 +154,63 @@ done
 #   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
-# Install git token
-# To get a new token, go to https://github.com/settings/tokens.
-	git config --global url."https://api:$GIT_TOKEN@github.com/".insteadOf "https://github.com/" > $REDIRECT
-	git config --global url."https://ssh:$GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/" > $REDIRECT
-	git config --global url."https://git:$GIT_TOKEN@github.com/".insteadOf "git@github.com:" $> REDIRECT
-
-# This section re-pulls all go files from github and updates $SBIN_DIR
-	# Change to local repository directory
-		CURRENT_DIRECTORY=$(pwd)
-		cd $GIT_GO
-	# Blow away any local changes not uploaded to github
-		git reset --hard > $REDIRECT
-	# Select the designated branch
-		git checkout $GIT_BRANCH > $REDIRECT
-	# Pull down a copy of the repository
-		git pull > $REDIRECT
-	# Set permissions for git directory
-		chmod -R 400 $GIT_ROOT
-	# Copy scripts into $SBIN_DIR
-		rm -rf $SBIN_DIR
-		cp -r $GIT_GO_SBIN $SBIN_PARENT
-		cd $CURRENT_DIRECTORY
-		f_log_and_echo "git branch $GIT_BRANCH pulled." false > $REDIRECT
-
-# Set ownership and permissions in $SBIN_DIR (to be overwritten by _apply-configs)
-	chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
-	find $SBIN_DIR -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
-	find $SBIN_DIR -type f -print -exec chmod 755 {} \; >> /dev/null 2>&1
-
-# Apply configs
-	f_apply_configs $ARGS
+# ddclient
+	if [ -f $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
+		cp $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf /etc/
+		cp $GIT_GO_CONFIGS/ddclient/etc-default-ddclient /etc/default/ddclient
+		fi
+# fstab
+	if [ -f $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab ]; then
+		cp $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab /etc/fstab.from.git
+		fi
+# Git
+# Note that the original .gitconfig is made during setup/setup-os (original installation)
+# using sudo, so the file is written to user root's home directory.
+# That's why the copying goes from root to admin home directories.
+	cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
+# lsyncd
+if [ -f $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
+	cp $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua /etc/lsyncd
+	systemctl restart lsyncd
+	fi
+# resolvconf
+if [ -f $GIT_GO_CONFIGS/resolvconf/head ]; then
+	mkdir -p /etc/resolvconf/resolv.conf.f
+	cp $GIT_GO_CONFIGS/resolvconf/head /etc/resolvconf/resolv.conf.d/
+	fi
+# .ssh/authorized_keys
+if [ -f "$GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys" ]; then
+	mkdir -p $ADMIN_HOME_DIR/.ssh
+	mkdir -p $ROOT_HOME_DIR/.ssh
+	cp $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys $ADMIN_HOME_DIR/.ssh/authorized_keys
+	cp $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys $ROOT_HOME_DIR/.ssh/authorized_keys
+	fi
+# SSHD config file
+if [ -f $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
+	cp $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config $SSHD_CONFIG
+	fi
+# HandBrake config file
+if [ -f "$GIT_GO_CONFIGS/handbrake/Lane 1080p (BluRay).json" ]; then
+	mkdir -p $ADMIN_HOME_DIR/.HandBrake
+	mkdir -p $ROOT_HOME_DIR/.HandBrake
+	cp $GIT_GO_CONFIGS/handbrake/* $ADMIN_HOME_DIR/.HandBrake/
+	cp $GIT_GO_CONFIGS/handbrake/* $ROOT_HOME_DIR/.HandBrake/
+	fi
+# Vim and vi config file
+if [ -f $GIT_GO_CONFIGS/vim/.vimrc ]; then
+	cp $GIT_GO_CONFIGS/vim/.vim* $ADMIN_HOME_DIR/
+	cp $GIT_GO_CONFIGS/vim/.vim* $ROOT_HOME_DIR/
+	fi
+# Apply permissions
+	f_apply_permissions $ARGS
+# lsyncd
+if [ -f $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
+	systemctl restart lsyncd
+	fi
+# SSHD config file
+if [ -f $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
+	systemctl restart ssh
+	fi
 
 
 ###################################################
