@@ -37,7 +37,7 @@
     # f_require_maximum_version_number "version-number"
     # f_only_on_server "hostname"
     # f_require_confirmation "This text is displayed, requesting confirmation word." "ConfirmationWord"
-    # set -x # For debugging
+    set -x # For debugging
 
 
 ###################################################
@@ -83,7 +83,7 @@ VERSION_NUMBER="0.1.x"
 QUIET_MODE=false
 VERBOSE_MODE=false
 ARGS="" # Add arguments to primary function called as needed
-REDIRECT="" # Switch to "> /dev/null" or "> /dev/null 2>&1" for quiet mode
+UNSET REDIRECT # Switch to " > /dev/null" or " > /dev/null 2>&1" for quiet mode
 SET_PLEX_FILE_PERMISSIONS=false
 # Option arguments can remain undefined.
 
@@ -126,7 +126,7 @@ while : ; do
            ;;
       -q | --quiet)  # Quiet mode
            QUIET_MODE=true
-           REDIRECT="> /dev/null"
+           REDIRECT=" > /dev/null"
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
       -V | --verbose)  # Verbose mode
