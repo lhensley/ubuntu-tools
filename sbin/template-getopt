@@ -47,7 +47,7 @@ function f_print_usage {
   echo "  -c value --optionc=value-c   Definition of option -c"
   echo "  --help                       Display usage and help information, then exit (no other options processed)"
   echo
-  echo "Example usage:     " sudo $(basename "$0") -A -a value-a -B -optionb=value-b -C -c value-c argument-1 argument-2 argument-3
+  echo "Example usage: " [sudo] $(basename "$0") -A -a value-a -B -optionb=value-b -C -c value-c argument-1 argument-2 [argument-3]
   echo
 }
 
@@ -144,6 +144,7 @@ shift $((OPTIND -1))
 ###################################################
 # Do the work
 # Do whatever the script is supposed to do
+# IMPORTANT: Don't forget that you still can read and use environment variables!
 
 echo
 echo -A: $OPTION_A
