@@ -83,7 +83,7 @@ VERSION_NUMBER="0.1.x"
 QUIET_MODE=false
 VERBOSE_MODE=false
 ARGS="" # Add arguments to primary function called as needed
-UNSET REDIRECT # Switch to " > /dev/null" or " > /dev/null 2>&1" for quiet mode
+REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode
 SET_PLEX_FILE_PERMISSIONS=false
 # Option arguments can remain undefined.
 
@@ -126,7 +126,7 @@ while : ; do
            ;;
       -q | --quiet)  # Quiet mode
            QUIET_MODE=true
-           REDIRECT=" \> /dev/null"
+           REDIRECT="/dev/null"
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
       -V | --verbose)  # Verbose mode
@@ -156,9 +156,9 @@ shift $((OPTIND -1))
 
 # Install git token
 # To get a new token, go to https://github.com/settings/tokens.
-	git config --global url."https://api:$GIT_TOKEN@github.com/".insteadOf "https://github.com/" $REDIRECT
-	git config --global url."https://ssh:$GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/" $REDIRECT
-	git config --global url."https://git:$GIT_TOKEN@github.com/".insteadOf "git@github.com:" $REDIRECT
+	git config --global url."https://api:$GIT_TOKEN@github.com/".insteadOf "https://github.com/" > $REDIRECT
+	git config --global url."https://ssh:$GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/" > $REDIRECT
+	git config --global url."https://git:$GIT_TOKEN@github.com/".insteadOf "git@github.com:" $> REDIRECT
 
 # This section re-pulls all go files from github and updates $SBIN_DIR
 	# Change to local repository directory
@@ -184,7 +184,7 @@ shift $((OPTIND -1))
 	find $SBIN_DIR -type f -print -exec chmod 755 {} \; >> /dev/null 2>&1
 
 # Apply configs
-	f_apply_configs $ARGS $REDIRECT
+	f_apply_configs $ARGS > $REDIRECT
 
 
 ###################################################
