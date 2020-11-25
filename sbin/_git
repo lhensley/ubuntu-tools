@@ -154,9 +154,37 @@ shift $((OPTIND -1))
 #   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
-# Note: Verbose mode is enabled, but it doesn't yet do anything
-# Note: As of 11/25/2020, --set-plex-file-permissions is ignored, but that is the default behavior.
-f_git $ARGS $REDIRECT
+# Install git token
+# To get a new token, go to https://github.com/settings/tokens.
+	git config --global url."https://api:$GIT_TOKEN@github.com/".insteadOf "https://github.com/" $REDIRECT
+	git config --global url."https://ssh:$GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/" $REDIRECT
+	git config --global url."https://git:$GIT_TOKEN@github.com/".insteadOf "git@github.com:" $REDIRECT
+
+# This section re-pulls all go files from github and updates $SBIN_DIR
+	# Change to local repository directory
+		CURRENT_DIRECTORY=$(pwd)
+		cd $GIT_GO
+	# Blow away any local changes not uploaded to github
+		git reset --hard
+	# Select the designated branch
+		git checkout $GIT_BRANCH
+	# Pull down a copy of the repository
+		git pull
+	# Set permissions for git directory
+		chmod -R 400 $GIT_ROOT
+	# Copy scripts into $SBIN_DIR
+		rm -rf $SBIN_DIR
+		cp -r $GIT_GO_SBIN $SBIN_PARENT
+		cd $CURRENT_DIRECTORY
+		f_log_and_echo "git branch $GIT_BRANCH pulled." $REDIRECT
+
+# Set ownership and permissions in $SBIN_DIR (to be overwritten by _apply-configs)
+	chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
+	find $SBIN_DIR -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
+	find $SBIN_DIR -type f -print -exec chmod 755 {} \; >> /dev/null 2>&1
+
+# Apply configs
+	f_apply_configs $ARGS $REDIRECT
 
 
 ###################################################
