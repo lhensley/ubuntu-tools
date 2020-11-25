@@ -69,7 +69,7 @@ function f_print_usage {
   # echo "  " $EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED if minimum OS version required,
   # echo "  " $EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED if maximum OS version required,
   # echo "  " $EXIT_CODE_SPECIFIC_SERVER_REQUIRED if specific server required,
-  echo "  " $EXIT_CODE=USER_ABORT on user abort
+  echo "  " $EXIT_CODE_USER_ABORT on user abort
   echo
 }
 
