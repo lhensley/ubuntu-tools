@@ -139,8 +139,12 @@ while : ; do
            ARGS+=" --set-plex-file-permissions"
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      # -- means the end of the arguments; drop this, and break out of the while loop
-      --) shift; break ;;
+      --) # -- means the end of the arguments; drop this, and break out of the while loop
+           shift
+           break 
+           ;;
+      *) f_die "Unexpected option: $1 - Script programming error. Valid option has no handler." false $EXIT_CODE_INTERNAL_ERROR
+           ;;
   esac
 done
 

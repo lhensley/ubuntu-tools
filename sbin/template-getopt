@@ -190,8 +190,12 @@ while : ; do
            # echo Option -c argument: $$OPTION_c_ARGUMENT
            shift 2 # Two shifts because the option takes an argument
            ;;
-      # -- means the end of the arguments; drop this, and break out of the while loop
-      --) shift; break ;;
+      --) # -- means the end of the arguments; drop this, and break out of the while loop
+           shift
+           break 
+           ;;
+      *) f_die "Unexpected option: $1 - Script programming error. Valid option has no handler." false $EXIT_CODE_INTERNAL_ERROR
+           ;;
   esac
 done
 
