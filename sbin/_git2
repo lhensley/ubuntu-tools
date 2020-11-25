@@ -154,7 +154,6 @@ shift $((OPTIND -1))
 # Note: Verbose mode is enabled, but it doesn't yet do anything
 # Note: As of 11/25/2020, --set-plex-file-permissions is ignored, but that is the default behavior.
 f_git $ARGS $REDIRECT
-fi
 
 
 ###################################################
