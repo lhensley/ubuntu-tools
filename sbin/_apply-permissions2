@@ -104,8 +104,8 @@ SET_PLEX_FILE_PERMISSIONS=false
 #       In this example, options A, B, and C are switches; a, b, and c expect arguments
 #       Similarly for long options, options optionA, optionB, and optionC are switches; optiona, optionb, and optionc expect arguments
 #   The '-- "$@"' at the end means that all other command arguments are "remaining arguments".
-PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options ABCVvqa:b:c: \
-    --long optionA,optionB,optionC,help,optiona:,optionb:,optionc:,quiet,verbose,version \
+PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options ABCVpvqa:b:c: \
+    --long optionA,optionB,optionC,help,optiona:,optionb:,optionc:,quiet,set-plex-file-permissions,verbose,version \
     -- "$@")
 VALID_ARGUMENTS=$?
 if [ "$VALID_ARGUMENTS" != "0" ]; then f_print_usage; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
