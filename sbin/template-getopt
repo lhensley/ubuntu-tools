@@ -52,7 +52,13 @@ function f_print_usage {
   # Describe what the program does. Optionally: display version number, author, etc. EXAMPLE:
   echo Issues a pull request to github repository and updates files, permissions, and configurations on local system accordingly.
   # Describe any requirements for running the script (e.g., root, specific server, OS minimum). EXAMPLE:
-  # echo Requires root.
+  # echo THIS COMMAND IS DEPRECATED.
+  # echo Requires root or sudo.
+  # echo Runs only on Ubuntu.
+  # echo Runs only on OS version XXX and higher.
+  # echo Runs only on OS version XXX and lower.
+  # echo Runs only on server XXX.
+  # echo Requires manual user confirmation to run.
   echo
   echo "Options:"
   echo "  -A --optionA                 Definition of option -A"
@@ -66,7 +72,7 @@ function f_print_usage {
   echo "  -v --version                 Display version number, then exit (no other options processed)"
   echo "  --help                       Display usage and help information, then exit (no other options processed)"
   echo
-  echo "Example usage: " [sudo] $(basename "$0") -A -a value-a -B -optionb=value-b -C -c value-c argument-1 argument-2 [argument-3]
+  echo "Example usage:" sudo $(basename "$0") -A -a value-a -B -optionb=value-b -C -c value-c argument-1 argument-2 [argument-3]
   echo
   # Describe any exit codes returned. For examples below, comment out any unused values. EXAMPLE:
   echo Return values:
@@ -78,6 +84,9 @@ function f_print_usage {
   echo "  " $EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED if minimum OS version required,
   echo "  " $EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED if maximum OS version required,
   echo "  " $EXIT_CODE_SPECIFIC_SERVER_REQUIRED if specific server required,
+  echo "  " $EXIT_CODE_FILE_NOT_FOUND if file not found,
+  echo "  " $EXIT_CODE_DIRECTORY_NOT_FOUND if directory not found,
+  echo "  " $EXIT_CODE_FILE_IN_USE if file in use,
   echo "  " $EXIT_CODE_USER_ABORT on user abort
   echo
 }

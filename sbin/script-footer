@@ -1,12 +1,9 @@
 #!/bin/bash
 # $SBIN_DIR/script-footer
 
-# If configured, send a text message to note the end of script processing. Default = "false"
-# if [ "$(f_get-config script.$(basename $0).text-end)" == "true" ]; then f_text_alert "$0: end"; fi
-
-# If not disabled, log the start of script processing. Default = "false" (i.e., not disabled, so do log start)
-if [[ ! ${DISABLE_START_MESSAGE[$0]} ]]; then
+# Set to false 11/25/2020. Do it manually if you want it.
+if $LOG_END; then
 	logger -t "$(basename $0)" End
 	fi
 
-exit 0
+exit $EXIT_STATUS_SUCCESS

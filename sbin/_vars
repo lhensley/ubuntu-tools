@@ -89,6 +89,10 @@ source /etc/os-release
 	#CONFIG_system_log_level
 	LOG_LEVEL=2
 	TEXT_LEVEL=2
+	# Set to false 11/25/2020. Do it manually if you want it.
+	LOG_START=false
+	# Set to false 11/25/2020. Do it manually if you want it.
+	LOG_END=false
 
 # Exit codes
 	EXIT_CODE_SUCCESS=0
@@ -100,6 +104,9 @@ source /etc/os-release
 	EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED=66
 	EXIT_CODE_SPECIFIC_SERVER_REQUIRED=67
 	EXIT_CODE_USER_ABORT=68
+	EXIT_CODE_FILE_NOT_FOUND=69
+	EXIT_CODE_DIRECTORY_NOT_FOUND=70
+	EXIT_CODE_FILE_IN_USE=71
 
 # Text Alerts
 # DEPENDENT on user definitions above

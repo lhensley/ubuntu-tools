@@ -11,7 +11,6 @@ function f_log_and_echo () {
 # Usage f_log_and_echo "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
 	if $2; then echo $HOSTNAME $(basename $0): $1 | mail $TEXT_ALERTS; fi
 	logger -t "$(basename $0)[$$]" $1
-	# >&2 echo $(basename $0)[$$]: $1
 	echo $(basename $0)[$$]: $1
 	}
 
@@ -43,23 +42,23 @@ function f_require_confirmation {
 
 function f_require_ubuntu () {
 	if ! [ $NAME == "Ubuntu" ]; then
-		f_die "This script works only on Ubuntu." false
+		f_die "This script works only on Ubuntu." false $EXIT_CODE_UBUNTU_REQUIRED
 		fi
 	}
 
 function f_require_minimum_version_number () {
 # EXAMPLE: f_require_minimum_version_number 16.04
-	if [ "$1" == "" ]; then f_die "Minimum version number required but not defined." false; fi
+	if [ "$1" == "" ]; then f_die "Minimum version number required but not defined." false $EXIT_CODE_INTERNAL_ERROR; fi
 	if (( $(echo "$VERSION_ID < $1" |bc -l) )); then
-		f_die "This script requires at least OS version $1." false
+		f_die "This script requires at least OS version $1." false $EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED
 		fi
 	}
 
 function f_require_maximum_version_number () {
 # EXAMPLE: f_require_maximum_version_number 18.04
-	if [ "$1" == "" ]; then f_die "Maximum version number required but not defined." false; fi
+	if [ "$1" == "" ]; then f_die "Maximum version number required but not defined." false $EXIT_CODE_INTERNAL_ERROR; fi
 	if (( $(echo "$VERSION_ID > $1" |bc -l) )); then
-		f_die "This script does not work after OS version $1." false
+		f_die "This script does not work after OS version $1." false $EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED
 		fi
 	}
 
@@ -98,7 +97,7 @@ function f_system_snapshot () {
 function f_require_root () {
 	# If running with root privileges, do nothing. Otherwise, abort with error.
 	if [[ $EUID -ne 0 ]]; then
-		f_die "Root privileges required." false
+		f_die "Root privileges required." false $EXIT_CODE_ROOT_REQUIRED
 	    fi
 	}
 
@@ -144,7 +143,7 @@ function f_system_snapshot_json () {
 	echo "}"
 	}
 
-f_timeformat () {
+function f_timeformat () {
 # Usage timeformat number-of-seconds
 
 	t=$1
@@ -164,31 +163,31 @@ f_timeformat () {
 	printf "%02d:%02d\n" $m $s
 	}
 
-f_plexmediaserver_is_busy () {
+function f_plexmediaserver_is_busy () {
 	TEST_TEXT="plexmediaserver/Plex Transcoder"
 	if [ $(ps -ef | grep "$TEST_TEXT" | wc -l) -gt "1" ]; then echo true; else echo false; fi
 	}
 
-f_plexmediaserver_is_generating_video_thumbnails () {
+function f_plexmediaserver_is_generating_video_thumbnails () {
 	TEST_TEXT="plexmediaserver/Plex Transcoder"
 	TEST_TEXT_2="codec:v"
 	echo $(ps -ef | grep "$TEST_TEXT" | grep "$TEST_TEXT_2" | wc -l)
 	}
 
-f_plexmediaserver_is_recording () {
+function f_plexmediaserver_is_recording () {
 	TEST_TEXT="plexmediaserver/Plex Transcoder"
 #	TEST_TEXT_2="-i http://127.0.0.1:32400/livetv"
 	TEST_TEXT_2="codec:0"
 	echo $(ps -ef | grep "$TEST_TEXT" | grep "$TEST_TEXT_2" | wc -l)
 	}
 
-f_plexmediaserver_is_scanning () {
+function f_plexmediaserver_is_scanning () {
 	TEST_TEXT="plexmediaserver/Plex Transcoder"
 	TEST_TEXT_2="codec:#0x101"
 	echo $(ps -ef | grep "$TEST_TEXT" | grep "$TEST_TEXT_2" | wc -l)
 	}
 
-f_users_logged_in () {
+function f_users_logged_in () {
 	who | wc -l
 	}
 
@@ -199,7 +198,9 @@ function f_beep () {
 function f_balk () {
 	# Report and log the objection; does NOT exit the program or function
 	# Usage: f_balk "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
-		f_log_and_echo "$1" "$2"
+		SEND_TEXT_ALERT=false
+		if [ "$2" != "" ]; then SEND_TEXT_ALERT="$2"; fi
+		f_log_and_echo "$1" $SEND_TEXT_ALERT
 		f_beep
 	}
 
@@ -209,10 +210,12 @@ function f_program_instances () {
 	}
 
 function f_die () {
-	# Usage: f_die "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
+	# Usage: f_die "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE" "EXIT_CODE"
 	# Note: No need to include $0
 		f_balk "FATAL: $1" "$2"   # report and log the objection
-		exit -1				      # die
+		EXIT_CODE=$EXIT_CODE_INTERNAL_ERROR
+		if [ "$3" != "" ]; then EXIT_CODE="$3"; fi
+		exit $EXIT_CODE # die
 	}
 
 function f_debug () {
@@ -241,7 +244,7 @@ function f_require_value {
 	# $1 = Variable name  e.g., "INPUT_FILE"
 	# $2 = Content of variable, e.g., "$INPUT_FILE"
 	# $3 = Send text alert (true or false)
-    if ! $(f_variable_has_content "$2"); then f_die "Value of $1 undefined at line ${BASH_LINENO[$i]}" false; fi
+    if ! $(f_variable_has_content "$2"); then f_die "Value of $1 undefined at line ${BASH_LINENO[$i]}" false $EXIT_CODE_INTERNAL_ERROR; fi
     }
 
 function f_is_file {
@@ -252,7 +255,7 @@ function f_is_file {
 
 function f_require_file {
     # Usage: f_require_file "file_or_path_name" "send_text_alert_true_or_false"
-	if ! $(f_is_file "$1"); then f_die "File not found: $1 at line ${BASH_LINENO[$i]}" true; fi
+	if ! $(f_is_file "$1"); then f_die "File not found: $1 at line ${BASH_LINENO[$i]}" true $EXIT_CODE_FILE_NOT_FOUND; fi
     }
 
 function f_is_directory {
@@ -263,7 +266,7 @@ function f_is_directory {
 
 function f_require_directory {
     # Usage: f_require_directory "directory_name" "send_text_alert_true_or_false"
-	if ! $(f_is_directory "$1"); then f_die "Directory not found: $1 at line ${BASH_LINENO[$i]}" true; fi
+	if ! $(f_is_directory "$1"); then f_die "Directory not found: $1 at line ${BASH_LINENO[$i]}" true $EXIT_CODE_DIRECTORY_NOT_FOUND; fi
     }
 
 function f_require_true {
@@ -275,7 +278,7 @@ function f_require_true {
 function f_file_not_in_use {
 	# Usage: f_file_not_in_use "file_that_must_not_be_in_use" "failure_message" "send_text_alert_true_or_false"
     f_require_file "$1" false
-    if [ -n "$(lsof "$1" 2>/dev/null)" ]; then f_die "$2" "$3"; fi
+    if [ -n "$(lsof "$1" 2>/dev/null)" ]; then f_die "$2" "$3" $EXIT_CODE_FILE_IN_USE; fi
     }
 
 function f_in_use {
@@ -376,7 +379,7 @@ function f_set_plex_media_recursive_permissions () {
 
 function f_only_on_server () {
 	# $1 = allowed-short-host-name
-	if [ $HOSTNAME != "$1" ]; then f_die "This script runs only on $1." true; fi
+	if [ $HOSTNAME != "$1" ]; then f_die "This script runs only on $1." false $EXIT_CODE_SPECIFIC_SERVER_REQUIRED; fi
 	}
 
 function f_move_one_plex_file () {
@@ -775,7 +778,7 @@ function f_transcode_file () {
 		# Do the transcoding
 		# sudo -u plex mkdir -p "$TARGET_DIR"
 		mkdir -p "$TARGET_DIR"
-		if ! $(f_is_directory "$TARGET_DIR"); then f_die "Target transcode directory not found: $TARGET_DIR" true;  return; fi
+		if ! $(f_is_directory "$TARGET_DIR"); then f_die "Target transcode directory not found: $TARGET_DIR" true $EXIT_CODE_DIRECTORY_NOT_FOUND;  return; fi
 		TIMESTART=$(date +%s)
 		SOURCE_FILE_BASE=$(basename "$SOURCE_FILE")
 #		TEMP_ERRORS=false
