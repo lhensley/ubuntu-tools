@@ -20,8 +20,10 @@ function f_print_usage {
   echo "  -b    Definition of option -b"
   echo "  -C    Definition of option -C"
   echo "  -c    Definition of option -c"
-  echo "Example usage:     sudo $(basename '$0') -A -a argument-1"
+  echo "Example usage:     " sudo $(basename "$0") -A -a argument-1
 }
+
+f_print_usage
 
 exit 0
 
