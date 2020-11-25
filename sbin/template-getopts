@@ -1,29 +1,70 @@
 #!/bin/bash
 
-###################################################
-# Basic Setup
-
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-###################################################
-# Functions
+# Require root
+	f_require_root
 
-function f_print_usage {
-  echo Usage: $(basename "$0") [options] argument-1 argument-2 argument-3
+# DEFINE THESE VARIABLES BEFORE RUNNING THE SCRIPT!
+    # fqdn='domain.tld'
+    web_admin_user=$ADMIN_NAME
+    web_admin_email=$ADMIN_EMAIL
+    remove=false
+    mysql_root_user=''
+    mysql_root_password=''
+    script_name=$0
+    current_directory=$(pwd)
+    docroot_base="/var/www"
+    apache2_configs="/etc/apache2"
+    error_log="/var/log/apache2/error.log"
+    custom_log="/var/log/apache2/access.log"
+    certificate_conf_dir="/etc/letsencrypt"
+    certificate_live_dir="live"
+    install_wordpress=false
+
+    debug_mode=false
+    #debug_mode=true
+    if $debug_mode ; then
+      set -x
+      fi
+
+# Abort and exit
+function abort_and_exit {
+  cd $current_directory
+  echo "Aborted."
+  exit 1
+  }
+
+# Clean exit
+function clean_exit {
+  cd $current_directory
+  exit 0
+  }
+
+function print_usage {
+  echo "Usage: $script_name [options] fully-qualified-domain-name"
   echo "Options:"
-  echo "  -A    Definition of option -A"
-  echo "  -a    Definition of option -a"
-  echo "  -B    Definition of option -B"
-  echo "  -b    Definition of option -b"
-  echo "  -C    Definition of option -C"
-  echo "  -c    Definition of option -c"
-  echo "Example usage:     sudo $(basename '$0') -A -a argument-1"
+  echo "  -a    Apache2 Configs Directory (default: /etc/apache2)"
+  echo "  -c    Certificate Config Directory (default: /etc/letsencrypt)"
+  echo "  -d    Document Root Container Directory (default: /var/www)"
+  echo "  -e    Error log file (default: /var/log/apache2/error.log)"
+  echo "  -f    Custom log file (default: /var/log/apache2/access.log)"
+  echo "  -h    Display this help message"
+  echo "  -l    Live Certificate Config Directory (default: \"live\" in directory specified with -c)"
+  echo "  -p    MySQL Password; only needed if WordPress is being installed"
+  echo "  -u    MySQL User Name; only needed if WordPress is being installed"
+  echo "  -w    Web Admin User's Full Name (default: \"Lane Hensley\")"
+  echo "  -W    Install WordPress"
+  echo "  -x    Web Admin User's Email Address (default \"lane.hensley@alumni.duke.edu\")"
+  echo "  -X    Remove/uninstall the virtual host"
+  echo "Example installation with WordPress:     sudo $script_name -W -u MYSQL_USER -p MYSQL_PASSWORD FQDN"
+  echo "Example installation without WordPress:  sudo $script_name FQDN"
+  echo "Example removal including WordPress:     sudo $script_name -X -W FQDN"
+  echo "Example removal without WordPress:       sudo $script_name -X FQDN"
 }
-
-exit 0
 
 # Following tutorial at https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/
 while getopts ":a:c:d:e:f:hl:p:u:w:Wx:X" opt; do
@@ -38,7 +79,7 @@ while getopts ":a:c:d:e:f:hl:p:u:w:Wx:X" opt; do
            ;;
       f )  custom_log=$OPTARG
            ;;
-      h )  f_print_usage
+      h )  print_usage
            clean_exit
            ;;
       l )  certificate_live_dir=$OPTARG
@@ -55,7 +96,7 @@ while getopts ":a:c:d:e:f:hl:p:u:w:Wx:X" opt; do
            ;;
       X )  remove=true
            ;;
-      \? ) f_print_usage
+      \? ) print_usage
            ;;
       : )  echo "Invalid option: $OPTARG requires an argument" 1>&2
            ;;
