@@ -43,6 +43,7 @@ function f_print_usage {
   echo "  -b value --optionb=value-b   Definition of option -b"
   echo "  -C --optionC                 Definition of option -C"
   echo "  -c value --optionc=value-c   Definition of option -c"
+  echo "  -\? --help                    Display usage and help information, then exit (no other options processed)"
   echo "Example usage:     " sudo $(basename "$0") -A -a value-a -B -optionb=value-b -C -c value-c argument-1 argument-2 argument-3
 }
 
@@ -76,52 +77,64 @@ OPTION_c=false
 #   Colon after an option means an argument is required. 
 #       In this example, options A, B, and C are switches; a, b, and c expect arguments
 #       Similarly for long options, options optionA, optionB, and optionC are switches; optiona, optionb, and optionc expect arguments
-#   Unclear what the '-- "$@"' at the end of the command is for.
-PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options ABCa:b:c: --long optionA,optionB,optionC,optiona:,optionb:,optionc: -- "$@")
+#   The '-- "$@"' at the end means that all other command arguments are "remaining arguments".
+PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options ABC\?a:b:c: --long optionA,optionB,optionC,help,optiona:,optionb:,optionc: -- "$@")
 VALID_ARGUMENTS=$?
 if [ "$VALID_ARGUMENTS" != "0" ]; then
   f_print_usage; exit -1
 fi
+# Note about next command: 
+# By reading that set of standardised arguments into the shell's input arguments 
+#   the shell script now thinks that it was called with these simpler, standardised set of arguments.
+eval set -- "$PARSED_ARGUMENTS"
 
-echo $PARSED_ARGUMENTS
-exit -0
+exit 0
 
-while getopt ":A:a:B:b:C:c:" opt; do
-    case ${opt} in
-      A )  # Do something here or just set variables
+while : ; do
+    case "$1" in
+      \? | help )
+            echo "Value use of \?"
+           f_print_usage
+           exit -1
+           ;;   
+      A | optionA)  # Do something here or just set variables
            OPTION_A=true
            echo Option -A was selected.
+           shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      a )  # Do something here or just set variables
+      a | optiona)  # Do something here or just set variables
            OPTION_a=true
-           OPTION_a_ARGUMENT=$OPTARG
+           OPTION_a_ARGUMENT="$2"
            echo Option -a was selected.
            echo Option -a argument: $$OPTION_a_ARGUMENT
+           shift 2 # Two shifts because the option takes an argument
            ;;
-      B )  # Do something here or just set variables
+      B | optionB)  # Do something here or just set variables
            OPTION_B=true
            echo Option -B was selected.
+           shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      b )  # Do something here or just set variables
+      b | optionb)  # Do something here or just set variables
            OPTION_b=true
-           OPTION_b_ARGUMENT=$OPTARG
+           OPTION_b_ARGUMENT="$2"
            echo Option -b was selected.
            echo Option -b argument: $$OPTION_b_ARGUMENT
+           shift 2 # Two shifts because the option takes an argument
            ;;
-      C )  # Do something here or just set variables
+      C | optionC)  # Do something here or just set variables
            OPTION_C=true
            echo Option -C was selected.
+           shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      c )  # Do something here or just set variables
+      c | optionc)  # Do something here or just set variables
            OPTION_c=true
-           OPTION_c_ARGUMENT=$OPTARG
+           OPTION_c_ARGUMENT="$2"
            echo Option -c was selected.
            echo Option -c argument: $$OPTION_c_ARGUMENT
+           shift 2 # Two shifts because the option takes an argument
            ;;
-      \? ) f_print_usage
-           ;;
-      : )  echo "Invalid option: $OPTARG requires an argument" 1>&2
-           ;;
+      # -- means the end of the arguments; drop this, and break out of the while loop
+      --) shift; break ;;
   esac
 done
 shift $((OPTIND -1))
