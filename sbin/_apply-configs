@@ -47,7 +47,7 @@ function f_print_usage {
   echo
   echo Usage: $(basename "$0") [-pqVv -set-plex-file-permissions --quiet --verbose --version --help]
   echo "Version $VERSION_NUMBER"
-  echo Apply permissions and configurations on local system accordingly.
+  echo Apply configureations and selected permissions on local system.
   echo Requires root or sudo.
   echo
   echo "Options:"

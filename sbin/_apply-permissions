@@ -1,21 +1,258 @@
 #!/bin/bash
 
+
+###################################################
+# Notes
+#
+# "getopts" is built into shell, which makes it run faster then "getopt", which is an external command
+# But "getopts" does not support long command line arguments (e.g., shellscriptname --argument=value)
+# STRONG RECOMMENDATION: Use getopt and not getopts
+# Following tutorial at https://www.shellscript.sh/tips/getopt/
+# man page for getopt is at https://man7.org/linux/man-pages/man1/getopt.1.html
+# Defining terms
+#    argument: any text appended to a command (syn.: parameter)
+#    parameter: synonym for argument
+#    option: a command argument preceded by a single or double hyphen (e.g., -o, or --option)
+#       An option may have an argument of its own (an "option argument", e.g., -o value-o, or --option value-o, or --option=value-o)
+#       All options are arguments, but not all arguments are options.
+#    short option: an option consisting of single hyphen and letter, with or without an option argument specified (e.g., -a value-a -b)
+#    long option: an option consisting of a double hyphen and word, with or without an option argument specified (e.g., --arga value-a --argb=value-b --argc)
+#    switch: a short or long option, with no option argument specified (e.g., -a --argb)
+#       All switches are options, but not all options are switches.
+#    remaining arguments: command line arguments that are neither options nor option arguments
+
+
+###################################################
+# Basic Setup
+
 # Include script setup file
 	source script-setup
-	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
-	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
-
-# Require root
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 61; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 61; fi
+# Uncomment requirements for script execution
 	f_require_root
+    # f_require_ubuntu
+    # f_deprecated
+    # f_require_minimum_version_number "version-number"
+    # f_require_maximum_version_number "version-number"
+    # f_only_on_server "hostname"
+    # f_require_confirmation "This text is displayed, requesting confirmation word." "ConfirmationWord"
+    # set -x # For debugging
 
-# Do the work
-	# NOTE: Recommend leaving the f_balk command below until this script no longer is called by other scripts.
-	# When it's time, you may want to leave the script intact so it can be invoked from the command line, but drop the balk warning below.
-	f_deprecated f_apply_configs f_apply_permissions
-	f_apply_permissions
+
+###################################################
+# Functions
+
+function f_print_usage {
+  echo
+  echo Usage: $(basename "$0") [-pqVv -set-plex-file-permissions --quiet --verbose --version --help]
+  echo "Version $VERSION_NUMBER"
+  echo Apply selected permissions on local system.
+  echo Requires root or sudo.
+  echo
+  echo "Options:"
+  echo "  -p --set-plex-file-permissions    Updates Plex Media Server file permissions globally. May take a while."
+  echo "  -q --quiet                        Mimimal output"
+  echo "  -V --verbose                      Verbose output"
+  echo "  -v --version                      Display version number, then exit (no other options processed)"
+  echo "  --help                            Display usage and help information, then exit (no other options processed)"
+  echo
+  echo "Example usage: " [sudo] $(basename "$0") --set-plex-file-permissions
+  echo
+  # Describe any exit codes returned. For examples below, comment out any unused values. EXAMPLE:
+  echo Return values:
+  echo "  " $EXIT_CODE_SUCCESS on success,
+  echo "  " $EXIT_CODE_INTERNAL_ERROR on internal error,
+  echo "  " $EXIT_CODE_INVALID_OPTIONS if invalid options specified,
+  echo "  " $EXIT_CODE_ROOT_REQUIRED if root required,
+  # echo "  " $EXIT_CODE_UBUNTU_REQUIRED if Ubuntu required,
+  # echo "  " $EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED if minimum OS version required,
+  # echo "  " $EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED if maximum OS version required,
+  # echo "  " $EXIT_CODE_SPECIFIC_SERVER_REQUIRED if specific server required,
+  # echo "  " $EXIT_CODE_FILE_NOT_FOUND if file not found,
+  # echo "  " $EXIT_CODE_DIRECTORY_NOT_FOUND if directory not found,
+  # echo "  " $EXIT_CODE_FILE_IN_USE if file in use,
+  echo "  " $EXIT_CODE_USER_ABORT on user abort
+  echo
+}
+
+
+###################################################
+# Set default variable values
+VERSION_NUMBER="0.1.x"
+QUIET_MODE=false
+VERBOSE_MODE=false
+ARGS="" # Add arguments to primary function called as needed
+REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode
+SET_PLEX_FILE_PERMISSIONS=false
+# Option arguments can remain undefined.
+
+
+###################################################
+# Parse options and arguments with getopt
+
+# Note about the following call to getopt
+#   Options used here with the getopt command itself
+#       --name : Script name, used for reporting errors
+#       --options : Definition of short options
+#       --longoptions (--long) : Definition of long options
+#   Options used used with the getopt command itself
+#       --alternative : Allow long options to start with a single '-'.
+#       --help : Display help text and exit.  No other output is generated.
+#       --quiet, --test, --unquoted, --version
+#   Colon after an option means an argument is required. 
+#       In this example, options A, B, and C are switches; a, b, and c expect arguments
+#       Similarly for long options, options optionA, optionB, and optionC are switches; optiona, optionb, and optionc expect arguments
+#   The '-- "$@"' at the end means that all other command arguments are "remaining arguments".
+PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options pVvq \
+    --long help,quiet,set-plex-file-permissions,verbose,version \
+    -- "$@")
+VALID_ARGUMENTS=$?
+if [ "$VALID_ARGUMENTS" != "0" ]; then f_print_usage; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
+# Note about next command: 
+# By reading that set of standardised arguments into the shell's input arguments 
+#   the shell script now thinks that it was called with these simpler, standardised set of arguments.
+eval set -- "$PARSED_ARGUMENTS"
+
+while : ; do
+    case "$1" in
+      --help )
+           f_print_usage
+           exit $EXIT_CODE_SUCCESS
+           ;;   
+      -v | --version)  # Version number
+           echo $VERSION_NUMBER
+           exit $EXIT_CODE_SUCCESS
+           ;;
+      -q | --quiet)  # Quiet mode
+           QUIET_MODE=true
+           REDIRECT="/dev/null"
+           ARGS+=" --quiet"
+           shift # Only one (default) shift for a switch, i.e., no argument
+           ;;
+      -V | --verbose)  # Verbose mode
+           VERBOSE_MODE=true
+           shift # Only one (default) shift for a switch, i.e., no argument
+           ;;
+      -p | --set-plex-file-permissions)  # Set Plex Media Server video file permissions
+           SET_PLEX_FILE_PERMISSIONS=true
+           ARGS+=" --set-plex-file-permissions"
+           shift # Only one (default) shift for a switch, i.e., no argument
+           ;;
+      # -- means the end of the arguments; drop this, and break out of the while loop
+      --) shift; break ;;
+  esac
+done
+
+
+###################################################
+# Do the work.
+# IMPORTANT NOTES: 
+#   Don't forget that you still can read and use environment variables!
+#       Best practice: Required values should be required on and read from the command line, not environment variables.
+#           Environment variables are fine for optional values.
+#   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
+#   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
+
+	# Set ownership and permissions in $SBIN_DIR
+		chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
+		# find $SBIN_DIR -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1 # Consistent with /usr/sbin, usr/bin/, and other comparable directories
+		# find $SBIN_DIR -type f -print -exec chmod 750 {} \; >> /dev/null 2>&1 # By default, block access for non-root.
+		find $SBIN_DIR -print -exec chmod $SBIN_PERMISSIONS {} \; >> /dev/null 2>&1 # Consistent with /usr/sbin, usr/bin/, and other comparable directories
+
+	# Exceptions: These can be read or run by anyone
+		# Confirm that referenced files below exist.
+			f_require_file "${PATHNAME[_functions]}" 
+			f_require_file "${PATHNAME[_vars]}"
+			f_require_file "${PATHNAME[makemkvcon]}"
+			f_require_file "${PATHNAME[rip]}"
+			f_require_file "${PATHNAME[script_footer]}"
+			f_require_file "${PATHNAME[script_setup]}"
+			# f_require_file "${PATHNAME[upd]}"
+			# f_require_file "${PATHNAME[_apply_configs]}"
+		# These based on functional requirements
+			chmod 755 "${PATHNAME[_functions]}"
+			chmod 755 "${PATHNAME[_vars]}"
+			chmod 755 "${PATHNAME[makemkvcon]}"
+			chmod 755 "${PATHNAME[remove_empty_directories]}"
+			chmod 755 "${PATHNAME[rip]}"
+			chmod 755 "${PATHNAME[script_footer]}" 
+			chmod 755 "${PATHNAME[script_setup]}" 
+		# These based on desire. CAUTION: Don't expose anything that has a password or code in it.
+			# chmod 740 "${PATHNAME[upd]}"
+			# chmod 740 "${PATHNAME[_apply_configs]}"
+
+	# ddclient
+		if [ -f $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
+			f_require_file "/etc/ddclient.conf"
+			f_require_file "/etc/default/ddclient"
+			chmod 600 /etc/ddclient.conf /etc/default/ddclient # confirmed value
+			chown $ROOT_USER:$ROOT_USER /etc/ddclient.conf /etc/default/ddclient
+			fi
+
+	# fstab
+		if [ -f $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab ]; then
+			chown $ROOT_USER:$ROOT_USER /etc/fstab*
+			chmod 664 /etc/fstab* # confirmed value
+			fi
+
+	# Git
+		f_require_file "$ROOT_HOME_DIR/.gitconfig"
+		chmod 600 $ROOT_HOME_DIR/.gitconfig
+		chmod 600 $ADMIN_HOME_DIR/.gitconfig
+		chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.gitconfig
+		chown $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.gitconfig
+		chmod -R 400 $GIT_ROOT/*
+
+	# lsyncd
+		if [ -f $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
+			chown $ROOT_USER:$ROOT_USER /etc/lsyncd/lsyncd.conf.lua # NOT confirmed; relevant to system viability?
+			chmod 600 /etc/lsyncd/lsyncd.conf.lua # NOT confirmed; relevant to system viability?
+			fi
+
+	# resolvconf
+		if [ -f $GIT_GO_CONFIGS/resolvconf/head ]; then
+			chown $ROOT_USER:$ROOT_USER /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
+			chmod 644 /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
+			fi
+
+	# .ssh/authorized_keys
+	#	if [ -f $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys ]; then
+			chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh # Confirmed
+			chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh # Confirmed
+			chmod -f 700 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh # Confirmed
+			chmod -f 644 $ADMIN_HOME_DIR/.ssh/id_rsa.pub $ROOT_HOME_DIR/.ssh/id_rsa.pub # Confirmed
+			chmod -f 600 $ADMIN_HOME_DIR/.ssh/id_rsa $ROOT_HOME_DIR/.ssh/id_rsa $ADMIN_HOME_DIR/.ssh/authorized_keys $ROOT_HOME_DIR/.ssh/authorized_keys # Confirmed
+			f_debug
+	#		fi
+
+	# SSHD config file
+		if [ -f $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
+			chown $ROOT_USER:$ROOT_USER "$SSHD_CONFIG" # Confirmed
+			chmod 644 "$SSHD_CONFIG" # Confirmed
+			fi
+
+	# HandBrake config file
+		chmod -fR 600 $ADMIN_HOME_DIR/.HandBrake
+		chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.HandBrake $ADMIN_HOME_DIR/Videos/*
+		chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.HandBrake/*
+
+	# Vim and vi config files
+		if [ -f $GIT_GO_CONFIGS/vim/.vimrc ]; then
+			chmod 600 $ADMIN_HOME_DIR/.vim*
+			chown $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.vim*
+			chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.vim*
+			fi
+
+	# Plex Media Server Video Files
+		if $SET_PLEX_FILE_PERMISSIONS; then
+			echo Applying Plex permissions ... > $REDIRECT
+			f_set_plex_media_recursive_permissions > /dev/null
+			fi
+
+###################################################
+# Wrap up.
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
-
-exit 0
