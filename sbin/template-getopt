@@ -35,6 +35,7 @@
 # Functions
 
 function f_print_usage {
+  echo
   echo Usage: $(basename "$0") [options] argument-1 argument-2 argument-3
   echo "Options:"
   echo "  -A --optionA                 Definition of option -A"
@@ -43,8 +44,9 @@ function f_print_usage {
   echo "  -b value --optionb=value-b   Definition of option -b"
   echo "  -C --optionC                 Definition of option -C"
   echo "  -c value --optionc=value-c   Definition of option -c"
-  echo "  -\? --help                    Display usage and help information, then exit (no other options processed)"
+  echo "  --help                       Display usage and help information, then exit (no other options processed)"
   echo "Example usage:     " sudo $(basename "$0") -A -a value-a -B -optionb=value-b -C -c value-c argument-1 argument-2 argument-3
+  echo
 }
 
 
@@ -92,41 +94,40 @@ exit 0
 
 while : ; do
     case "$1" in
-      \? | help )
-            echo "Value use of \?"
+      --help )
            f_print_usage
            exit -1
            ;;   
-      A | optionA)  # Do something here or just set variables
+      -A | --optionA)  # Do something here or just set variables
            OPTION_A=true
            echo Option -A was selected.
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      a | optiona)  # Do something here or just set variables
+      -a | --optiona)  # Do something here or just set variables
            OPTION_a=true
            OPTION_a_ARGUMENT="$2"
            echo Option -a was selected.
            echo Option -a argument: $$OPTION_a_ARGUMENT
            shift 2 # Two shifts because the option takes an argument
            ;;
-      B | optionB)  # Do something here or just set variables
+      -B | --optionB)  # Do something here or just set variables
            OPTION_B=true
            echo Option -B was selected.
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      b | optionb)  # Do something here or just set variables
+      -b | --optionb)  # Do something here or just set variables
            OPTION_b=true
            OPTION_b_ARGUMENT="$2"
            echo Option -b was selected.
            echo Option -b argument: $$OPTION_b_ARGUMENT
            shift 2 # Two shifts because the option takes an argument
            ;;
-      C | optionC)  # Do something here or just set variables
+      -C | --optionC)  # Do something here or just set variables
            OPTION_C=true
            echo Option -C was selected.
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      c | optionc)  # Do something here or just set variables
+      -c | --optionc)  # Do something here or just set variables
            OPTION_c=true
            OPTION_c_ARGUMENT="$2"
            echo Option -c was selected.
@@ -144,10 +145,18 @@ shift $((OPTIND -1))
 # Do the work
 # Do whatever the script is supposed to do
 
-echo ARG_1: $1
-echo ARG_2: $2
-echo ARG_3: $3
-
+echo
+echo -A: $OPTION_A
+echo -a: $OPTION_a
+echo -a argument: $OPTION_a_ARGUMENT
+echo -B: $OPTION_B
+echo -b: $OPTION_b
+echo -c argument: $OPTION_b_ARGUMENT
+echo -C: $OPTION_C
+echo -c: $OPTION_c
+echo -c argument: $OPTION_c_ARGUMENT
+echo "Parameters remaining are: $@"
+echo
 
 ###################################################
 # Wrap up.
