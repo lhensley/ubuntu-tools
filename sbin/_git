@@ -134,7 +134,7 @@ while : ; do
            VERBOSE_MODE=true
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      -P | --set-plex-file-permissions)  # Set Plex Media Server video file permissions
+      -p | --set-plex-file-permissions)  # Set Plex Media Server video file permissions
            SET_PLEX_FILE_PERMISSIONS=true
            ARGS+=" --set-plex-file-permissions"
            shift # Only one (default) shift for a switch, i.e., no argument
