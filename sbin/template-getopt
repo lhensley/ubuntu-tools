@@ -6,15 +6,18 @@
 #
 # "getopts" is built into shell, which makes it run faster then "getopt", which is an external command
 # But "getopts" does not support long command line arguments (e.g., shellscriptname --argument=value)
-# RECOMMENDATION: Use getopt and not getopts (i.e., don't use this template)
-# Following tutorial at https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/
+# RECOMMENDATION: Use getopt and not getopts (i.e., use this template)
+# Following tutorial at https://www.shellscript.sh/tips/getopt/
+# man page for getopt is at https://man7.org/linux/man-pages/man1/getopt.1.html
 # Defining terms
 #    argument: any text appended to a command (syn.: parameter)
 #    parameter: synonym for argument
-#    option: a command argument preceded by a single or double hyphen (e.g., -o)
-#       An option may have an argument of its own (an "option argument", e.g., -o value-o)
+#    option: a command argument preceded by a single or double hyphen (e.g., -o, or --option)
+#       An option may have an argument of its own (an "option argument", e.g., -o value-o, or --option value-o, or --option=value-o)
 #       All options are arguments, but not all arguments are options.
-#    switch: an option with no option argument specified (e.g., -a)
+#    short option: an option consisting of single hyphen and letter, with or without an option argument specified (e.g., -a value-a -b)
+#    long option: an option consisting of a double hyphen and word, with or without an option argument specified (e.g., --arga value-a --argb=value-b --argc)
+#    switch: a short or long option, with no option argument specified (e.g., -a --argb)
 #       All switches are options, but not all options are switches.
 #    remaining arguments: command line arguments that are neither options nor option arguments
 
@@ -34,13 +37,13 @@
 function f_print_usage {
   echo Usage: $(basename "$0") [options] argument-1 argument-2 argument-3
   echo "Options:"
-  echo "  -A    Definition of option -A"
-  echo "  -a    Definition of option -a"
-  echo "  -B    Definition of option -B"
-  echo "  -b    Definition of option -b"
-  echo "  -C    Definition of option -C"
-  echo "  -c    Definition of option -c"
-  echo "Example usage:     " sudo $(basename "$0") -A -a argument-1
+  echo "  -A --optionA                 Definition of option -A"
+  echo "  -a value --optiona=value-a   Definition of option -a"
+  echo "  -B --optionB                 Definition of option -B"
+  echo "  -b value --optionb=value-b   Definition of option -b"
+  echo "  -C --optionC                 Definition of option -C"
+  echo "  -c value --optionc=value-c   Definition of option -c"
+  echo "Example usage:     " sudo $(basename "$0") -A -a value-a -B -optionb=value-b -C -c value-c argument-1 argument-2 argument-3
 }
 
 
@@ -56,15 +59,38 @@ OPTION_c=false
 
 
 ###################################################
-# Parse options and arguments with getopts
+# Parse options and arguments with getopt
 
-while getopts ":A:a:B:b:C:c:" opt; do
+# Note about the following call to getopt
+#   Options used here with the getopt command itself
+#       --name : Script name, used for reporting errors
+#       --options : 
+#       --longoptions :
+#   Options used used with the getopt command itself
+#       --alternative : Allow long options to start with a single '-'.
+#       --help : Display help text and exit.  No other output is generated.
+#       --quiet : 
+#       --test : 
+#       --unquoted :
+#       --version : 
+#   Colon after an option means an argument is required. 
+#       In this example, options A, B, and C are switches; a, b, and c expect arguments
+#       Similarly for long options, options optionA, optionB, and optionC are switches; optiona, optionb, and optionc expect arguments
+#   Unclear what the '-- "$@"' at the end of the command is for.
+PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options ABCa:b:c: --long optionA,optionB,optionC,optiona:,optionb:,optionc: -- "$@")
+VALID_ARGUMENTS=$?
+if [ "$VALID_ARGUMENTS" != "0" ]; then
+  f_print_usage; exit -1
+fi
+
+echo $PARSED_ARGUMENTS
+exit -0
+
+while getopt ":A:a:B:b:C:c:" opt; do
     case ${opt} in
       A )  # Do something here or just set variables
            OPTION_A=true
-           OPTION_A_ARGUMENT=$OPTARG
            echo Option -A was selected.
-           echo Option -A argument: $$OPTION_A_ARGUMENT
            ;;
       a )  # Do something here or just set variables
            OPTION_a=true
@@ -74,9 +100,7 @@ while getopts ":A:a:B:b:C:c:" opt; do
            ;;
       B )  # Do something here or just set variables
            OPTION_B=true
-           OPTION_B_ARGUMENT=$OPTARG
            echo Option -B was selected.
-           echo Option -B argument: $$OPTION_B_ARGUMENT
            ;;
       b )  # Do something here or just set variables
            OPTION_b=true
@@ -86,9 +110,7 @@ while getopts ":A:a:B:b:C:c:" opt; do
            ;;
       C )  # Do something here or just set variables
            OPTION_C=true
-           OPTION_C_ARGUMENT=$OPTARG
            echo Option -C was selected.
-           echo Option -C argument: $$OPTION_C_ARGUMENT
            ;;
       c )  # Do something here or just set variables
            OPTION_c=true
