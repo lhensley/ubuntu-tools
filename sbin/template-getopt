@@ -37,6 +37,7 @@
 function f_print_usage {
   echo
   echo Usage: $(basename "$0") [options] argument-1 argument-2 argument-3
+  echo
   echo "Options:"
   echo "  -A --optionA                 Definition of option -A"
   echo "  -a value --optiona=value-a   Definition of option -a"
@@ -45,6 +46,7 @@ function f_print_usage {
   echo "  -C --optionC                 Definition of option -C"
   echo "  -c value --optionc=value-c   Definition of option -c"
   echo "  --help                       Display usage and help information, then exit (no other options processed)"
+  echo
   echo "Example usage:     " sudo $(basename "$0") -A -a value-a -B -optionb=value-b -C -c value-c argument-1 argument-2 argument-3
   echo
 }
@@ -98,38 +100,38 @@ while : ; do
            ;;   
       -A | --optionA)  # Do something here or just set variables
            OPTION_A=true
-           echo Option -A was selected.
+           # echo Option -A was selected.
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
       -a | --optiona)  # Do something here or just set variables
            OPTION_a=true
            OPTION_a_ARGUMENT="$2"
-           echo Option -a was selected.
-           echo Option -a argument: $$OPTION_a_ARGUMENT
+           # echo Option -a was selected.
+           # echo Option -a argument: $$OPTION_a_ARGUMENT
            shift 2 # Two shifts because the option takes an argument
            ;;
       -B | --optionB)  # Do something here or just set variables
            OPTION_B=true
-           echo Option -B was selected.
+           # echo Option -B was selected.
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
       -b | --optionb)  # Do something here or just set variables
            OPTION_b=true
            OPTION_b_ARGUMENT="$2"
-           echo Option -b was selected.
-           echo Option -b argument: $$OPTION_b_ARGUMENT
+           # echo Option -b was selected.
+           # echo Option -b argument: $$OPTION_b_ARGUMENT
            shift 2 # Two shifts because the option takes an argument
            ;;
       -C | --optionC)  # Do something here or just set variables
            OPTION_C=true
-           echo Option -C was selected.
+           # echo Option -C was selected.
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
       -c | --optionc)  # Do something here or just set variables
            OPTION_c=true
            OPTION_c_ARGUMENT="$2"
-           echo Option -c was selected.
-           echo Option -c argument: $$OPTION_c_ARGUMENT
+           # echo Option -c was selected.
+           # echo Option -c argument: $$OPTION_c_ARGUMENT
            shift 2 # Two shifts because the option takes an argument
            ;;
       # -- means the end of the arguments; drop this, and break out of the while loop
