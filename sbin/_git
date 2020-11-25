@@ -165,18 +165,18 @@ shift $((OPTIND -1))
 		CURRENT_DIRECTORY=$(pwd)
 		cd $GIT_GO
 	# Blow away any local changes not uploaded to github
-		git reset --hard
+		git reset --hard > $REDIRECT
 	# Select the designated branch
-		git checkout $GIT_BRANCH
+		git checkout $GIT_BRANCH > $REDIRECT
 	# Pull down a copy of the repository
-		git pull
+		git pull > $REDIRECT
 	# Set permissions for git directory
 		chmod -R 400 $GIT_ROOT
 	# Copy scripts into $SBIN_DIR
 		rm -rf $SBIN_DIR
 		cp -r $GIT_GO_SBIN $SBIN_PARENT
 		cd $CURRENT_DIRECTORY
-		f_log_and_echo "git branch $GIT_BRANCH pulled." false $REDIRECT
+		f_log_and_echo "git branch $GIT_BRANCH pulled." false > $REDIRECT
 
 # Set ownership and permissions in $SBIN_DIR (to be overwritten by _apply-configs)
 	chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
