@@ -104,8 +104,8 @@ SET_PLEX_FILE_PERMISSIONS=false
 #       In this example, options A, B, and C are switches; a, b, and c expect arguments
 #       Similarly for long options, options optionA, optionB, and optionC are switches; optiona, optionb, and optionc expect arguments
 #   The '-- "$@"' at the end means that all other command arguments are "remaining arguments".
-PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options ABCVpvqa:b:c: \
-    --long optionA,optionB,optionC,help,optiona:,optionb:,optionc:,quiet,set-plex-file-permissions,verbose,version \
+PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options pVvq \
+    --long help,quiet,set-plex-file-permissions,verbose,version \
     -- "$@")
 VALID_ARGUMENTS=$?
 if [ "$VALID_ARGUMENTS" != "0" ]; then f_print_usage; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
@@ -134,7 +134,7 @@ while : ; do
            VERBOSE_MODE=true
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      -P | --set-plex-file-permissions)  # Set Plex Media Server video file permissions
+      -p | --set-plex-file-permissions)  # Set Plex Media Server video file permissions
            SET_PLEX_FILE_PERMISSIONS=true
            ARGS+=" --set-plex-file-permissions"
            shift # Only one (default) shift for a switch, i.e., no argument
@@ -154,101 +154,6 @@ done
 #   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
-# Set ownership and permissions in $SBIN_DIR
-	chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
-	# find $SBIN_DIR -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1 # Consistent with /usr/sbin, usr/bin/, and other comparable directories
-	# find $SBIN_DIR -type f -print -exec chmod 750 {} \; >> /dev/null 2>&1 # By default, block access for non-root.
-	find $SBIN_DIR -print -exec chmod $SBIN_PERMISSIONS {} \; >> /dev/null 2>&1 # Consistent with /usr/sbin, usr/bin/, and other comparable directories
-
-# Exceptions: These can be read or run by anyone
-	# Confirm that referenced files below exist.
-		f_require_file "${PATHNAME[_functions]}" 
-		f_require_file "${PATHNAME[_vars]}"
-		f_require_file "${PATHNAME[makemkvcon]}"
-		f_require_file "${PATHNAME[rip]}"
-		f_require_file "${PATHNAME[script_footer]}"
-		f_require_file "${PATHNAME[script_setup]}"
-		# f_require_file "${PATHNAME[upd]}"
-		# f_require_file "${PATHNAME[_apply_configs]}"
-	# These based on functional requirements
-		chmod 755 "${PATHNAME[_functions]}"
-		chmod 755 "${PATHNAME[_vars]}"
-		chmod 755 "${PATHNAME[makemkvcon]}"
-		chmod 755 "${PATHNAME[remove_empty_directories]}"
-		chmod 755 "${PATHNAME[rip]}"
-		chmod 755 "${PATHNAME[script_footer]}" 
-		chmod 755 "${PATHNAME[script_setup]}" 
-	# These based on desire. CAUTION: Don't expose anything that has a password or code in it.
-		# chmod 740 "${PATHNAME[upd]}"
-		# chmod 740 "${PATHNAME[_apply_configs]}"
-
-# ddclient
-	if [ -f $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
-		f_require_file "/etc/ddclient.conf"
-		f_require_file "/etc/default/ddclient"
-		chmod 600 /etc/ddclient.conf /etc/default/ddclient # confirmed value
-		chown $ROOT_USER:$ROOT_USER /etc/ddclient.conf /etc/default/ddclient
-		fi
-
-# fstab
-	if [ -f $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab ]; then
-		chown $ROOT_USER:$ROOT_USER /etc/fstab*
-		chmod 664 /etc/fstab* # confirmed value
-		fi
-
-# Git
-	f_require_file "$ROOT_HOME_DIR/.gitconfig"
-	chmod 600 $ROOT_HOME_DIR/.gitconfig
-	chmod 600 $ADMIN_HOME_DIR/.gitconfig
-	chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.gitconfig
-	chown $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.gitconfig
-	chmod -R 400 $GIT_ROOT/*
-
-# lsyncd
-	if [ -f $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
-		chown $ROOT_USER:$ROOT_USER /etc/lsyncd/lsyncd.conf.lua # NOT confirmed; relevant to system viability?
-		chmod 600 /etc/lsyncd/lsyncd.conf.lua # NOT confirmed; relevant to system viability?
-		fi
-
-# resolvconf
-	if [ -f $GIT_GO_CONFIGS/resolvconf/head ]; then
-		chown $ROOT_USER:$ROOT_USER /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
-		chmod 644 /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
-		fi
-
-# .ssh/authorized_keys
-#	if [ -f $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys ]; then
-		chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh # Confirmed
-		chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh # Confirmed
-		chmod -f 700 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh # Confirmed
-		chmod -f 644 $ADMIN_HOME_DIR/.ssh/id_rsa.pub $ROOT_HOME_DIR/.ssh/id_rsa.pub # Confirmed
-		chmod -f 600 $ADMIN_HOME_DIR/.ssh/id_rsa $ROOT_HOME_DIR/.ssh/id_rsa $ADMIN_HOME_DIR/.ssh/authorized_keys $ROOT_HOME_DIR/.ssh/authorized_keys # Confirmed
-		f_debug
-#		fi
-
-# SSHD config file
-	if [ -f $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
-		chown $ROOT_USER:$ROOT_USER "$SSHD_CONFIG" # Confirmed
-		chmod 644 "$SSHD_CONFIG" # Confirmed
-		fi
-
-# HandBrake config file
-	chmod -fR 600 $ADMIN_HOME_DIR/.HandBrake
-	chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.HandBrake $ADMIN_HOME_DIR/Videos/*
-	chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.HandBrake/*
-
-# Vim and vi config files
-	if [ -f $GIT_GO_CONFIGS/vim/.vimrc ]; then
-		chmod 600 $ADMIN_HOME_DIR/.vim*
-		chown $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.vim*
-		chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.vim*
-		fi
-
-# Plex Media Server Video Files
-	if $SET_PLEX_FILE_PERMISSIONS; then
-		echo Applying Plex permissions ... > $REDIRECT
-		f_set_plex_media_recursive_permissions > /dev/null
-		fi
 
 
 ###################################################
