@@ -90,8 +90,6 @@ fi
 #   the shell script now thinks that it was called with these simpler, standardised set of arguments.
 eval set -- "$PARSED_ARGUMENTS"
 
-exit 0
-
 while : ; do
     case "$1" in
       --help )
