@@ -246,7 +246,7 @@ done
 
 	# Plex Media Server Video Files
 		if $SET_PLEX_FILE_PERMISSIONS; then
-			echo Applying Plex permissions ...
+			echo Applying Plex permissions ... > $REDIRECT
 			f_set_plex_media_recursive_permissions > /dev/null
 			fi
 
