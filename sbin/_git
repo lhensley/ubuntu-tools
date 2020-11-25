@@ -126,7 +126,7 @@ while : ; do
            ;;
       -q | --quiet)  # Quiet mode
            QUIET_MODE=true
-           REDIRECT=" > /dev/null"
+           REDIRECT=" \> /dev/null"
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
       -V | --verbose)  # Verbose mode
