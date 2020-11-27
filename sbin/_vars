@@ -26,6 +26,7 @@
 	SBIN_DIR="/usr/local/sbin"
 	SBIN_PARENT="$(dirname $SBIN_DIR)"
 	DOMAIN_NAME=lanehensley.org
+	COLOPHON="by Lane Hensley, lane.hensley@alumni.duke.edu, https://lanehensley.org"
 
 # /etc/os-release defines a lot of environment variables 
 # Sample:
@@ -116,6 +117,22 @@ source /etc/os-release
 	TEXT_ALERT[admin]=$ADMIN_CELL_EMAIL
 	TEXT_ALERTS=""
 	for KEY in "${!TEXT_ALERT[@]}"; do TEXT_ALERTS+="${TEXT_ALERT[$KEY]} "; done
+
+# Text Markup Codes
+	BOLD=$(tput bold)
+	NORMAL=$(tput sgr0)
+	UNDERLINE=$(tput smul)
+	DIM=$(tput dim)
+	REVERSE=$(tput rev)
+	STANDOUT=$(tput smso)
+	BLACK=$(tput setf 0)
+	BLUE=$(tput setf 1)
+	GREEN=$(tput setf 2)
+	CYAN=$(tput setf 3)
+	RED=$(tput setf 4)
+	MAGENTA=$(tput setf 5)
+	YELLOW=$(tput setf 6)
+	WHITE=$(tput setf 7)
 
 # Email Alerts
 # DEPENDENT on user definitions above
