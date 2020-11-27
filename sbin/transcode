@@ -98,7 +98,7 @@ function f_print_usage {
   echo " -u, --append-uuid-to-target-file   generates and appends a random UUID"
   echo "                                    to the target filename"
   echo " -x, --target-file-extension        filename extension for the target file;"
-  echo "                                    include the dot \(e.g., \".m4v\"\);"
+  echo '                                    include the dot (e.g., ".m4v");'
   echo "                                    if not specified, the environment"
   echo "                                    variable \$TARGET_FILE_EXTENSION"
   echo "                                    defined in $SBIN_DIR/_vars"
@@ -113,8 +113,7 @@ function f_print_usage {
   echo RETURN VALUES:
   echo "   " $EXIT_CODE_SUCCESS on success,
   echo "   " $EXIT_CODE_CANCELLED if HandBrakeCLI is cancelled,
-  echo "   " $EXIT_CODE_INVALID_INPUT if HandBrakeCLI aborts,
-  echo "     " because --source-file is corrupted,
+  echo "   " $EXIT_CODE_INVALID_INPUT if HandBrakeCLI aborts because --source-file is corrupted
   echo "   " $EXIT_CODE_INITIALIZATION_ERROR if HandBrakeCLI fails to initialize,
   echo "   " $EXIT_CODE_UNKNOWN_HANDBRAKE_ERROR if HandBrakeCLI returns an unknown error,
   echo "  " $EXIT_CODE_INTERNAL_ERROR on internal error,
@@ -171,7 +170,7 @@ EXIT_CODE_UNKNOWN_HANDBRAKE_ERROR=4
 #   The '-- "$@"' at the end means that all other command arguments are "remaining arguments".
 LONG_OPTIONS="use-parent-directory-name,flatten-target-directory,handbrake-presets-file:,"
 LONG_OPTIONS+="append-source-info,nice-value:,prepend-parent-directory,target-root:,test,dry-run,"
-LONG_OPTIONS+="source-file:,target-file-extension:,append-uuid-to-target-file,quiet,verbose,version"
+LONG_OPTIONS+="source-file:,target-file-extension:,append-uuid-to-target-file,quiet,verbose,version,help"
 PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options dfh:in:pr:s:tux:vq? \
     --long $LONG_OPTIONS -- "$@")
 VALID_ARGUMENTS=$?
