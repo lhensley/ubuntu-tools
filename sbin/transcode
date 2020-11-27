@@ -111,12 +111,12 @@ function f_print_usage {
   echo
   # Describe any exit codes returned. For examples below, comment out any unused values. EXAMPLE:
   echo RETURN VALUES:
-  echo "  " $EXIT_CODE_SUCCESS on success,
-  echo "  " $EXIT_CODE_CANCELLED if HandBrakeCLI is cancelled,
-  echo "  " $EXIT_CODE_INVALID_INPUT if HandBrakeCLI aborts,
-  echo "    " because --source-file is corrupted,
-  echo "  " $EXIT_CODE_INITIALIZATION_ERROR if HandBrakeCLI fails to initialize,
-  echo "  " $EXIT_CODE_UNKNOWN_HANDBRAKE_ERROR if HandBrakeCLI returns an unknown error,
+  echo "   " $EXIT_CODE_SUCCESS on success,
+  echo "   " $EXIT_CODE_CANCELLED if HandBrakeCLI is cancelled,
+  echo "   " $EXIT_CODE_INVALID_INPUT if HandBrakeCLI aborts,
+  echo "     " because --source-file is corrupted,
+  echo "   " $EXIT_CODE_INITIALIZATION_ERROR if HandBrakeCLI fails to initialize,
+  echo "   " $EXIT_CODE_UNKNOWN_HANDBRAKE_ERROR if HandBrakeCLI returns an unknown error,
   echo "  " $EXIT_CODE_INTERNAL_ERROR on internal error,
   echo "  " $EXIT_CODE_INVALID_OPTIONS if invalid options specified,
 #  echo "  " $EXIT_CODE_ROOT_REQUIRED if root required,
