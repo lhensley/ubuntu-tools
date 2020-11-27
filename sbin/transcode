@@ -127,7 +127,7 @@ function f_print_usage {
   echo "  " $EXIT_CODE_DIRECTORY_NOT_FOUND if directory not found,
   echo "  " $EXIT_CODE_FILE_IN_USE if file in use,
   echo "  " $EXIT_CODE_USER_ABORT on user abort,
-  echo "  " $EXIT_CODE_SEGMENTATION_ERROR on segmentation error
+  echo " " $EXIT_CODE_SEGMENTATION_ERROR on segmentation error
   echo
   echo ""
 }
@@ -312,7 +312,7 @@ if ! $(f_variable_has_content "$TARGET_FILE"); then f_die "Target file undefined
 		# Exit code 139 seems to correspond to a "segmentation fault" that will cause a core dump and repeat every time the same source file is used for transcoding.
 	if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
 			f_die "HandBrakeCLI: FAILED with error #$exit_status for $SOURCE_FILE" false $exit_status
-			if [ $exit_status -eq 2 || $exit_status -eq 139]; then rm "$SOURCE_FILE"; f_balk "Deleting corrupted file $SOURCE_FILE" false; fi
+			if [ $exit_status -eq 2 || $exit_status -eq 139]; then sudo -u plex rm "$SOURCE_FILE"; f_balk "Deleting corrupted file $SOURCE_FILE" false; fi
 		else
 			rm "$SOURCE_FILE" # Delete source file
 			if ! $QUIET_MODE; then f_log_and_echo "Transcoding complete in $(f_timeformat $(( $(date +%s) - TIMESTART )))" false; fi
