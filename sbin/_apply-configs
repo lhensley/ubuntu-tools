@@ -206,7 +206,7 @@ if [ -f $GIT_GO_CONFIGS/vim/.vimrc ]; then
 	cp $GIT_GO_CONFIGS/vim/.vim* $ROOT_HOME_DIR/
 	fi
 # Apply permissions
-	_apply_permissions $ARGS
+	_apply-permissions $ARGS
 # lsyncd
 if [ -f $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
 	systemctl restart lsyncd
