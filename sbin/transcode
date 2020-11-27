@@ -311,7 +311,7 @@ if ! $(f_variable_has_content "$TARGET_FILE"); then f_die "Target file undefined
     exit_status=$? # 0 = No Error, 1 = Cancelled, 2 = Invalid Input, 3 = Initialization error, 4 = Unknown Error
 	if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
 			f_die "HandBrakeCLI: FAILED with error #$exit_status for $SOURCE_FILE" false $exit_status
-			if [ $exit_status -eq 2 ]; then rm "$SOURCE_FILE"; f_balk "Deleting corrupted file $SOURCE_FILE" false; fi
+			# if [ $exit_status -eq 2 ]; then rm "$SOURCE_FILE"; f_balk "Deleting corrupted file $SOURCE_FILE" false; fi
 		else
 			rm "$SOURCE_FILE" # Delete source file
 			if ! $QUIET_MODE; then f_log_and_echo "Transcoding complete in $(f_timeformat $(( $(date +%s) - TIMESTART )))" false; fi
