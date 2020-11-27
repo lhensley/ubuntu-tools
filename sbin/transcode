@@ -182,65 +182,65 @@ eval set -- "$PARSED_ARGUMENTS"
 
 while : ; do
     case "$1" in
-      -? | --help ) # Optional
+      --help ) # Optional
            f_print_usage
            exit $EXIT_CODE_SUCCESS
            ;;
-      --version)  # Version number - Optional
+      --version )  # Version number - Optional
            echo $VERSION_NUMBER
            exit $EXIT_CODE_SUCCESS
            ;;
-      -q | --quiet)  # Quiet mode - Optional
+      -q | --quiet )  # Quiet mode - Optional
            QUIET_MODE=true
            REDIRECT="/dev/null"
            ARGS+=" --quiet"
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      -v | --verbose)  # Verbose mode - Optional
+      -v | --verbose )  # Verbose mode - Optional
            VERBOSE_MODE=true
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      -d | --use-parent-directory-name)  # - Optional
+      -d | --use-parent-directory-name )  # - Optional
            USE_PARENT_DIR_AS_BASENAME=true
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      -f | --flatten-target-directory)  # - Optional
+      -f | --flatten-target-directory )  # - Optional
            FLATTEN_TARGET_DIRECTORY=true
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      -h | --handbrake-presets-file)  # - Optional
+      -h | --handbrake-presets-file )  # - Optional
            HANDBRAKE_PRESETS="$2"
            shift 2 # Two shifts because the option takes an argument
            ;;
-      -i | --append-source-info)  # - Optional
+      -i | --append-source-info )  # - Optional
            APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE=true
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      -n | --nice-value)  # - Optional
+      -n | --nice-value )  # - Optional
            NICE_VALUE="$2"
            shift 2 # Two shifts because the option takes an argument
            ;;
-      -p | --prepend-parent-directory)  # - Optional
+      -p | --prepend-parent-directory )  # - Optional
            PREPEND_PARENT_DIR_TO_BASENAME=true
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      -r | --target-root)  # - Optional
+      -r | --target-root )  # - Optional
            TARGET_ROOT="$2"
            shift 2 # Two shifts because the option takes an argument
            ;;
-      -s | --source-file)  # - Optional
+      -s | --source-file )  # - Optional
            SOURCE_FILE="$2"
            shift 2 # Two shifts because the option takes an argument
            ;;
-      -t | --test | --dry-run) # - Optional
+      -t | --test | --dry-run ) # - Optional
            TEST_MODE=true
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      -u | --append-uuid-to-target-file)  # - Optional
+      -u | --append-uuid-to-target-file )  # - Optional
            APPEND_UUID_TO_TARGET_FILE=true
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      -x | --target-file-extension)  # - Optional
+      -x | --target-file-extension )  # - Optional
            TARGET_FILE_EXTENSION="$2"
            shift 2 # Two shifts because the option takes an argument
            ;;
