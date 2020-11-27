@@ -98,7 +98,7 @@ function f_print_usage {
   echo " -u, --append-uuid-to-target-file   generates and appends a random UUID"
   echo "                                    to the target filename"
   echo " -x, --target-file-extension        filename extension for the target file;"
-  echo "                                    include the dot (e.g., \".m4v\");"
+  echo "                                    include the dot \(e.g., \".m4v\"\);"
   echo "                                    if not specified, the environment"
   echo "                                    variable \$TARGET_FILE_EXTENSION"
   echo "                                    defined in $SBIN_DIR/_vars"
