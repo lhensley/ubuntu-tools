@@ -72,7 +72,8 @@ function f_print_usage {
   # echo "  " $EXIT_CODE_FILE_NOT_FOUND if file not found,
   # echo "  " $EXIT_CODE_DIRECTORY_NOT_FOUND if directory not found,
   # echo "  " $EXIT_CODE_FILE_IN_USE if file in use,
-  echo "  " $EXIT_CODE_USER_ABORT on user abort
+  echo "  " $EXIT_CODE_USER_ABORT on user abort,
+  echo "  " $EXIT_CODE_SEGMENTATION_ERROR on segmentation error
   echo
 }
 
@@ -116,6 +117,8 @@ eval set -- "$PARSED_ARGUMENTS"
 
 while : ; do
     case "$1" in
+	  # IMPORTANT: Make sure --help is the first case option so that -? (wildcard) will be caught here.
+	  # But DON'T include -? in the call to getopt, or in the --help case option.
       --help )
            f_print_usage
            exit $EXIT_CODE_SUCCESS

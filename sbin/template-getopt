@@ -42,15 +42,18 @@
 
 ###################################################
 # Functions
+# NOTE: The example below is taken from the transcode script.
 
 function f_print_usage {
   echo
   # Print usage. Break lines as needed below.
-  echo Usage: $(basename "$0") [-ABCqVv -a value-a --optiona=value-a -b value-b --optionb=value-b -c value-c --optionc=value-c --quiet --verbose --version --help] argument-1 argument-2 [argument-3]
+  echo Usage: $(basename "$0") [OPTION...]
   # Include version number.
   echo "Version $VERSION_NUMBER"
+  echo "$COLOPHON"
   # Describe what the program does. Optionally: display version number, author, etc. EXAMPLE:
-  echo Issues a pull request to github repository and updates files, permissions, and configurations on local system accordingly.
+  echo Invokes HandBrakeCLI to transcode --source-file using specified options.
+  echo The options also determine the name and location of the target file.
   # Describe any requirements for running the script (e.g., root, specific server, OS minimum). EXAMPLE:
   # echo THIS COMMAND IS DEPRECATED.
   # echo Requires root or sudo.
@@ -60,35 +63,74 @@ function f_print_usage {
   # echo Runs only on server XXX.
   # echo Requires manual user confirmation to run.
   echo
-  echo "Options:"
-  echo "  -A --optionA                 Definition of option -A"
-  echo "  -a value --optiona=value-a   Definition of option -a"
-  echo "  -B --optionB                 Definition of option -B"
-  echo "  -b value --optionb=value-b   Definition of option -b"
-  echo "  -C --optionC                 Definition of option -C"
-  echo "  -c value --optionc=value-c   Definition of option -c"
-  echo "  -q --quiet                   Mimimal output
-  echo "  -V --verbose                 Verbose output
-  echo "  -v --version                 Display version number, then exit (no other options processed)"
-  echo "  --help                       Display usage and help information, then exit (no other options processed)"
+  echo "OPTIONS"
+  echo " -d, --use-parent-directory-name    use the source file parent"
+  echo "                                    directory name as target filename"
+  echo " -f, --flatten-target-directory     store target files directly"
+  echo "                                    in the --target-root directory"
+  echo " -h, --handbrake-presets-file       HandBrake JSON file to use"
+  echo "                                    for running HandBrakeCLI"
+  echo "                                    if not specified, the variable"
+  echo "                                    \$HANDBRAKE_PRESETS defined in"
+  echo "                                    $SBIN_DIR/_vars"
+  echo "                                    is used"
+  echo " -i, --append-source-info           append the hostname"
+  echo "                                    of the source file and its mtime"
+  echo " -n, --nice-value=INTEGER           nice value to use when running"
+  echo "                                    HandBrakeCLI; see nice(1);"
+  echo "                                    if not specified, the environment"
+  echo "                                    variable \$NICE_VALUE is"
+  echo "                                    recognized if it exists;"
+  echo "                                    ignored if out of range (-20 to 19)"
+  echo " -p, --prepend-parent-directory     prepend the source file parent"
+  echo "                                    directory name to the target filename"
+  echo " -r, --target-root=DIRECTORY        container directory in which target"
+  echo "                                    file are created, normally in a"
+  echo "                                    subdirectory. If not specified,"
+  echo "                                    the variable \$TARGET_ROOT defined in"
+  echo "                                    $SBIN_DIR/_vars"
+  echo "                                    is used"
+  echo " -s, --source-file=FILE             file to be transcoded; mandatory,"
+  echo "                                    but if not specified, the environment"
+  echo "                                    variable \$SOURCE_FILE will be used"
+  echo "                                    if defined"
+  echo " -t, --test, --dry-run              run the program without executing"
+  echo "                                    HandBrakeCLI; --verbose recommended"
+  echo " -u, --append-uuid-to-target-file   generates and appends a random UUID"
+  echo "                                    to the target filename"
+  echo " -x, --target-file-extension        filename extension for the target file;"
+  echo '                                    include the dot (e.g., ".m4v");'
+  echo "                                    if not specified, the environment"
+  echo "                                    variable \$TARGET_FILE_EXTENSION"
+  echo "                                    defined in $SBIN_DIR/_vars"
+  echo "                                    is used"
   echo
-  echo "Example usage:" sudo $(basename "$0") -A -a value-a -B -optionb=value-b -C -c value-c argument-1 argument-2 [argument-3]
+  echo " -q, --quiet                        print and log with mimimal detail"
+  echo " -v, --verbose                      print and log with great detail"
+  echo " -?, --help                         give this help list and exit"
+  echo "     --version                      print program version and exit"
   echo
   # Describe any exit codes returned. For examples below, comment out any unused values. EXAMPLE:
-  echo Return values:
-  echo "  " $EXIT_CODE_SUCCESS on success,
+  echo RETURN VALUES:
+  echo "   " $EXIT_CODE_SUCCESS on success,
+  echo "   " $EXIT_CODE_CANCELLED if HandBrakeCLI is cancelled,
+  echo "   " $EXIT_CODE_INVALID_INPUT if HandBrakeCLI aborts because --source-file is corrupted
+  echo "   " $EXIT_CODE_INITIALIZATION_ERROR if HandBrakeCLI fails to initialize,
+  echo "   " $EXIT_CODE_UNKNOWN_HANDBRAKE_ERROR if HandBrakeCLI returns an unknown error,
   echo "  " $EXIT_CODE_INTERNAL_ERROR on internal error,
   echo "  " $EXIT_CODE_INVALID_OPTIONS if invalid options specified,
-  echo "  " $EXIT_CODE_ROOT_REQUIRED if root required,
-  echo "  " $EXIT_CODE_UBUNTU_REQUIRED if Ubuntu required,
-  echo "  " $EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED if minimum OS version required,
-  echo "  " $EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED if maximum OS version required,
-  echo "  " $EXIT_CODE_SPECIFIC_SERVER_REQUIRED if specific server required,
+#  echo "  " $EXIT_CODE_ROOT_REQUIRED if root required,
+#  echo "  " $EXIT_CODE_UBUNTU_REQUIRED if Ubuntu required,
+#  echo "  " $EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED if minimum OS version required,
+#  echo "  " $EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED if maximum OS version required,
+#  echo "  " $EXIT_CODE_SPECIFIC_SERVER_REQUIRED if specific server required,
   echo "  " $EXIT_CODE_FILE_NOT_FOUND if file not found,
   echo "  " $EXIT_CODE_DIRECTORY_NOT_FOUND if directory not found,
   echo "  " $EXIT_CODE_FILE_IN_USE if file in use,
-  echo "  " $EXIT_CODE_USER_ABORT on user abort
+  echo "  " $EXIT_CODE_USER_ABORT on user abort,
+  echo "  " $EXIT_CODE_SEGMENTATION_ERROR on segmentation error
   echo
+  echo ""
 }
 
 
@@ -97,19 +139,15 @@ function f_print_usage {
 VERSION_NUMBER="0.1.x"
 QUIET_MODE=false
 VERBOSE_MODE=false
+TEST_MODE=false
 ARGS="" # Add arguments to primary function called as needed
 REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode
-OPTION_A=false
-OPTION_a=false
-OPTION_B=false
-OPTION_b=false
-OPTION_C=false
-OPTION_c=false
 # Option arguments can remain undefined.
 
 
 ###################################################
 # Parse options and arguments with getopt
+# NOTE: This example is taken from the transcode script.
 
 # Note about the following call to getopt
 #   Options used here with the getopt command itself
@@ -124,9 +162,11 @@ OPTION_c=false
 #       In this example, options A, B, and C are switches; a, b, and c expect arguments
 #       Similarly for long options, options optionA, optionB, and optionC are switches; optiona, optionb, and optionc expect arguments
 #   The '-- "$@"' at the end means that all other command arguments are "remaining arguments".
-PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options ABCVvqa:b:c: \
-    --long optionA,optionB,optionC,help,optiona:,optionb:,optionc:,quiet,verbose,version \
-    -- "$@")
+LONG_OPTIONS="use-parent-directory-name,flatten-target-directory,handbrake-presets-file:,"
+LONG_OPTIONS+="append-source-info,nice-value:,prepend-parent-directory,target-root:,test,dry-run,"
+LONG_OPTIONS+="source-file:,target-file-extension:,append-uuid-to-target-file,quiet,verbose,version,help"
+PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options dfh:in:pr:s:tux:vq? \
+    --long $LONG_OPTIONS -- "$@")
 VALID_ARGUMENTS=$?
 if [ "$VALID_ARGUMENTS" != "0" ]; then f_print_usage; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
 # Note about next command: 
@@ -136,58 +176,66 @@ eval set -- "$PARSED_ARGUMENTS"
 
 while : ; do
     case "$1" in
-      --help )
+      --help ) # Optional
            f_print_usage
            exit $EXIT_CODE_SUCCESS
-           ;;   
-      -v | --version)  # Version number
+           ;;
+      --version )  # Version number - Optional
            echo $VERSION_NUMBER
            exit $EXIT_CODE_SUCCESS
            ;;
-      -q | --quiet)  # Quiet mode
+      -q | --quiet )  # Quiet mode - Optional
            QUIET_MODE=true
            REDIRECT="/dev/null"
            ARGS+=" --quiet"
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      -V | --verbose)  # Verbose mode
+      -v | --verbose )  # Verbose mode - Optional
            VERBOSE_MODE=true
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      -A | --optionA)  # Do something here or just set variables
-           OPTION_A=true
-           # echo Option -A was selected.
+      -d | --use-parent-directory-name )  # - Optional
+           USE_PARENT_DIR_AS_BASENAME=true
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      -a | --optiona)  # Do something here or just set variables
-           OPTION_a=true
-           OPTION_a_ARGUMENT="$2"
-           # echo Option -a was selected.
-           # echo Option -a argument: $$OPTION_a_ARGUMENT
+      -f | --flatten-target-directory )  # - Optional
+           FLATTEN_TARGET_DIRECTORY=true
+           shift # Only one (default) shift for a switch, i.e., no argument
+           ;;
+      -h | --handbrake-presets-file )  # - Optional
+           HANDBRAKE_PRESETS="$2"
            shift 2 # Two shifts because the option takes an argument
            ;;
-      -B | --optionB)  # Do something here or just set variables
-           OPTION_B=true
-           # echo Option -B was selected.
+      -i | --append-source-info )  # - Optional
+           APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE=true
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      -b | --optionb)  # Do something here or just set variables
-           OPTION_b=true
-           OPTION_b_ARGUMENT="$2"
-           # echo Option -b was selected.
-           # echo Option -b argument: $$OPTION_b_ARGUMENT
+      -n | --nice-value )  # - Optional
+           NICE_VALUE="$2"
            shift 2 # Two shifts because the option takes an argument
            ;;
-      -C | --optionC)  # Do something here or just set variables
-           OPTION_C=true
-           # echo Option -C was selected.
+      -p | --prepend-parent-directory )  # - Optional
+           PREPEND_PARENT_DIR_TO_BASENAME=true
            shift # Only one (default) shift for a switch, i.e., no argument
            ;;
-      -c | --optionc)  # Do something here or just set variables
-           OPTION_c=true
-           OPTION_c_ARGUMENT="$2"
-           # echo Option -c was selected.
-           # echo Option -c argument: $$OPTION_c_ARGUMENT
+      -r | --target-root )  # - Optional
+           TARGET_ROOT="$2"
+           shift 2 # Two shifts because the option takes an argument
+           ;;
+      -s | --source-file )  # - Optional
+           SOURCE_FILE="$2"
+           shift 2 # Two shifts because the option takes an argument
+           ;;
+      -t | --test | --dry-run ) # - Optional
+           TEST_MODE=true
+           shift # Only one (default) shift for a switch, i.e., no argument
+           ;;
+      -u | --append-uuid-to-target-file )  # - Optional
+           APPEND_UUID_TO_TARGET_FILE=true
+           shift # Only one (default) shift for a switch, i.e., no argument
+           ;;
+      -x | --target-file-extension )  # - Optional
+           TARGET_FILE_EXTENSION="$2"
            shift 2 # Two shifts because the option takes an argument
            ;;
       --) # -- means the end of the arguments; drop this, and break out of the while loop
