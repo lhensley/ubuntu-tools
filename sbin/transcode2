@@ -93,7 +93,7 @@ function f_print_usage {
   echo "                                    but if not specified, the environment"
   echo "                                    variable \$SOURCE_FILE will be used"
   echo "                                    if defined"
-  echo " -t, --test, --dry-run              run the program without executing
+  echo " -t, --test, --dry-run              run the program without executing"
   echo "                                    HandBrakeCLI; --verbose recommended"
   echo " -u, --append-uuid-to-target-file   generates and appends a random UUID"
   echo "                                    to the target filename"
