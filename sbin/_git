@@ -162,7 +162,7 @@ done
 # To get a new token, go to https://github.com/settings/tokens.
 	git config --global url."https://api:$GIT_TOKEN@github.com/".insteadOf "https://github.com/" > $REDIRECT
 	git config --global url."https://ssh:$GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/" > $REDIRECT
-	git config --global url."https://git:$GIT_TOKEN@github.com/".insteadOf "git@github.com:" $> REDIRECT
+	git config --global url."https://git:$GIT_TOKEN@github.com/".insteadOf "git@github.com:" $> $REDIRECT
 
 # This section re-pulls all go files from github and updates $SBIN_DIR
 	# Change to local repository directory

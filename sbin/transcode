@@ -264,8 +264,8 @@ done
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
 # Test existence of files and directories
-	if ! $(f_is_file "$HANDBRAKE_CLI");     then f_die "Source file not found: $HANDBRAKE_CLI" false $EXIT_CODE_FILE_NOT_FOUND;          return; fi 
-	if ! $(f_is_file "$HANDBRAKE_PRESETS"); then f_die "Source file not found: $HANDBRAKE_PRESETS" false $EXIT_CODE_FILE_NOT_FOUND;      return; fi 
+	if ! $(f_is_file "$HANDBRAKE_CLI");     then f_die "HandBrakeCLI not found: $HANDBRAKE_CLI" false $EXIT_CODE_FILE_NOT_FOUND;          return; fi 
+	if ! $(f_is_file "$HANDBRAKE_PRESETS"); then f_die "HandBrake presets file not found: $HANDBRAKE_PRESETS" false $EXIT_CODE_FILE_NOT_FOUND;      return; fi 
 	if ! $(f_is_file "$SOURCE_FILE");       then f_die "Source file not found: $SOURCE_FILE" false $EXIT_CODE_FILE_NOT_FOUND;            return; fi 
 
 # Calculate definition of $TARGET_FILE
@@ -277,7 +277,7 @@ if ! $(f_variable_has_content "$TARGET_FILE"); then f_die "Target file undefined
 # Do the transcoding
 	TIMESTART=$(date +%s)
 	SOURCE_FILE_BASE=$(basename "$SOURCE_FILE")
-	if ! QUIET_MODE; then f_log_and_echo "Transcoding $SOURCE_FILE to $TARGET_FILE" false; fi
+	if ! $QUIET_MODE; then f_log_and_echo "Transcoding $SOURCE_FILE to $TARGET_FILE" false; fi
     if $VERBOSE_MODE; then 
             HANDBRAKE_OUTPUT="/dev/stdout"
             f_log_and_echo "$COLOPHON"
@@ -297,9 +297,9 @@ if ! $(f_variable_has_content "$TARGET_FILE"); then f_die "Target file undefined
         else
             HANDBRAKE_OUTPUT="/dev/null"
         fi
-    $HANDBRAKE_COMMAND="$HANDBRAKE_CLI --preset-import-file \"$HANDBRAKE_PRESETS\" -i \"$SOURCE_FILE\" -o \"$TARGET_FILE\""
+    HANDBRAKE_COMMAND="$HANDBRAKE_CLI --preset-import-file \"$HANDBRAKE_PRESETS\" -i \"$SOURCE_FILE\" -o \"$TARGET_FILE\""
     if $TEST_MODE; then
-            f_log_and_echo "Test Mode: Would have run: $HANDBRAKE_COMMAND" false
+            f_die "Test Mode: Would have run: $HANDBRAKE_COMMAND" false $EXIT_CODE_SUCCESS
         else
             	mkdir -p "$TARGET_DIR"
 	        if ! $(f_is_directory "$TARGET_DIR"); then 
