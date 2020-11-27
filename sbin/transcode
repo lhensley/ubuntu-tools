@@ -119,11 +119,11 @@ function f_print_usage {
   echo "  " $EXIT_CODE_UNKNOWN_HANDBRAKE_ERROR if HandBrakeCLI returns an unknown error,
   echo "  " $EXIT_CODE_INTERNAL_ERROR on internal error,
   echo "  " $EXIT_CODE_INVALID_OPTIONS if invalid options specified,
-  echo "  " $EXIT_CODE_ROOT_REQUIRED if root required,
-  echo "  " $EXIT_CODE_UBUNTU_REQUIRED if Ubuntu required,
-  echo "  " $EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED if minimum OS version required,
-  echo "  " $EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED if maximum OS version required,
-  echo "  " $EXIT_CODE_SPECIFIC_SERVER_REQUIRED if specific server required,
+#  echo "  " $EXIT_CODE_ROOT_REQUIRED if root required,
+#  echo "  " $EXIT_CODE_UBUNTU_REQUIRED if Ubuntu required,
+#  echo "  " $EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED if minimum OS version required,
+#  echo "  " $EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED if maximum OS version required,
+#  echo "  " $EXIT_CODE_SPECIFIC_SERVER_REQUIRED if specific server required,
   echo "  " $EXIT_CODE_FILE_NOT_FOUND if file not found,
   echo "  " $EXIT_CODE_DIRECTORY_NOT_FOUND if directory not found,
   echo "  " $EXIT_CODE_FILE_IN_USE if file in use,
@@ -265,15 +265,15 @@ done
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
 # Test existence of files and directories
-	if ! $(f_is_file "$HANDBRAKE_CLI");     then f_die "Source file not found: $HANDBRAKE_CLI" false;          return; fi 
-	if ! $(f_is_file "$HANDBRAKE_PRESETS"); then f_die "Source file not found: $HANDBRAKE_PRESETS" false;      return; fi 
-	if ! $(f_is_file "$SOURCE_FILE");       then f_die "Source file not found: $SOURCE_FILE" false;            return; fi 
+	if ! $(f_is_file "$HANDBRAKE_CLI");     then f_die "Source file not found: $HANDBRAKE_CLI" false $EXIT_CODE_FILE_NOT_FOUND;          return; fi 
+	if ! $(f_is_file "$HANDBRAKE_PRESETS"); then f_die "Source file not found: $HANDBRAKE_PRESETS" false $EXIT_CODE_FILE_NOT_FOUND;      return; fi 
+	if ! $(f_is_file "$SOURCE_FILE");       then f_die "Source file not found: $SOURCE_FILE" false $EXIT_CODE_FILE_NOT_FOUND;            return; fi 
 
 # Calculate definition of $TARGET_FILE
 	TARGET_FILE=$TARGET_ROOT/$(f_target_relative_path_and_filename_no_ext)$TARGET_FILE_EXTENSION
 	TARGET_DIR=$(dirname "$TARGET_FILE")
 
-if ! $(f_variable_has_content "$TARGET_FILE"); then f_die "Target file undefined" true; return; fi
+if ! $(f_variable_has_content "$TARGET_FILE"); then f_die "Target file undefined" true $EXIT_CODE_FILE_NOT_FOUND; fi
 
 # Do the transcoding
 	TIMESTART=$(date +%s)
@@ -303,8 +303,8 @@ if ! $(f_variable_has_content "$TARGET_FILE"); then f_die "Target file undefined
             f_log_and_echo "Test Mode: Would have run: $HANDBRAKE_COMMAND" false
         else
             	mkdir -p "$TARGET_DIR"
-	        if ! $(f_is_directory "$TARGET_DIR"); 
-                then f_die "Target transcode directory not found: $TARGET_DIR" true $EXIT_CODE_DIRECTORY_NOT_FOUND; return; 
+	        if ! $(f_is_directory "$TARGET_DIR"); then 
+                f_die "Target transcode directory not found: $TARGET_DIR" true $EXIT_CODE_DIRECTORY_NOT_FOUND;
                 fi
     		    "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE" > $HANDBRAKE_OUTPUT 2>&1
 		fi
