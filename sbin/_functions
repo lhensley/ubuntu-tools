@@ -680,7 +680,7 @@ f_xcode_queue () {
 	    	     							# For DVDs ripped with MakeMKV, this is "$MAKEMKV_OUTPUT_DIRECTORY"              (defined in _vars)
 	    	     							# For Zoom meeting recordings,  this is "$ZOOM_RAW_FILES"                        (defined in _vars)
 
-	find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort | cut -f 2
+	echo $(find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort | cut -f 2)
 	}
 
 f_show_eligible_transcoding () {
