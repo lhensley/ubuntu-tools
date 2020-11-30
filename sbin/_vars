@@ -307,6 +307,7 @@ source /etc/os-release
 	GIT_GO_SERVICES=$GIT_GO/services
 	GIT_GO_SETUP=$GIT_GO/setup                           # Formerly system.git.go.setup
 	GIT_TOKEN=4b662b7d4431ec1956127aa9d4fdbd8d75ec821a   # Formerly system.git.token
+	SERVICES_DIR="/lib/systemd/system"
 
 # HandBrake
 # DEPENDENT ON $ADMIN_HOME_DIR DEFINITION ABOVE
@@ -407,6 +408,10 @@ source /etc/os-release
 
 # SBIN
 	SBIN_PERMISSIONS=755
+
+# SERVICES
+	SERVICES_DIR_PERMISSIONS=755
+	SERVICES_FILE_PERMISSIONS=644
 
 # System Snapshot File
 	SYSTEM_SNAPSHOT_FILE="$ADMIN_HOME_DIR/.system-snapshot-data.csv"
