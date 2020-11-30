@@ -8,7 +8,7 @@
 FUNCTIONS_ARE_DEFINED=false
 
 function f_log_and_echo () {
-# Usage f_log_and_echo "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"
+# Usage f_log_and_echo "$MESSAGE_TO_STDERR_AND_LOG" "$SEND_TEXT_ALERT_TRUE_OR_FALSE"
 	if $2; then echo $HOSTNAME $(basename $0): $1 | mail $TEXT_ALERTS; fi
 	logger -t "$(basename $0)[$$]" $1
 	if ! $SERVICE_FLAG; then echo $(basename $0): $1; fi
@@ -675,7 +675,7 @@ f_iterate_handbrake_source_video_files() {
 				echo ""
 				f_transcode_file
 				done
-			f_log_and_echo "Sleeping 30 minutes."; sleep 30m
+			f_log_and_echo "Sleeping 30 minutes." false; sleep 30m
 			done
 	}
 
