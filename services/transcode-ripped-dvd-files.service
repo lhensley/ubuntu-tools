@@ -12,8 +12,8 @@ WantedBy=multi-user.target
 ExecStart=/bin/bash /usr/local/sbin/transcode-ripped-dvd-files
 # Leave Type=simple unless the process forks. Defaults this way anyway if ExecStart is used.
 # Type=simple
-User=lhensley
-Group=lhensley
+User=root
+Group=root
 # PermissionsStartOnly is deprecated.
 # PermissionsStartOnly=true
 # On TimeoutSec, try default and add a value here only if necessary.
