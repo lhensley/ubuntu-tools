@@ -179,7 +179,7 @@ done
 	# Copy scripts into $SBIN_DIR
 		rm -rf $SBIN_DIR
 		cp -r $GIT_GO_SBIN $SBIN_PARENT
-        cp -r $GIT_GO_SERVICES/* $SERVICES_DIR/
+        cp -r $GIT_GO_SERVICES/*.services $SERVICES_DIR/
 		cd $CURRENT_DIRECTORY
 		f_log_and_echo "git branch $GIT_BRANCH pulled." false > $REDIRECT
 
