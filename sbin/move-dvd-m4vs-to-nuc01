@@ -9,6 +9,7 @@
 	if [ "$PPID" != "1" ]; then
 		f_die "This script only runs as a systemd service. Try sudo systemctl start $(basename $0)" false
 		fi
+	SERVICE_FLAG=true;
 
 # Define file locations
 	SOURCE_ROOT_DIR="/home/lhensley/Videos/HandBrake-Completed"
