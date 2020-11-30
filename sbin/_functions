@@ -664,10 +664,17 @@ f_iterate_handbrake_source_video_files() {
 		# Re 'echo ""' below, see https://mark.biek.org/blog/2018/10/bash-whileread-loop-breaking-early. Added 10/23/2020. Seems to work!
 
 		SUCCESSFUL_TRANSCODE_FLAG=/tmp/SuccessfulTranscodeFromPID.$$
-		touch "$SUCCESSFUL_TRANSCODE_FLAG"
-		while $(f_is_file "$SUCCESSFUL_TRANSCODE_FLAG"); do
-			rm -f "$SUCCESSFUL_TRANSCODE_FLAG"
-			f_xcode_queue | while read SOURCE_FILE; do echo ""; f_transcode_file; done
+#		touch "$SUCCESSFUL_TRANSCODE_FLAG"
+#		while $(f_is_file "$SUCCESSFUL_TRANSCODE_FLAG"); do
+#			rm -f "$SUCCESSFUL_TRANSCODE_FLAG"
+#			f_xcode_queue | while read SOURCE_FILE; do echo ""; f_transcode_file; done
+#			done
+		while true; do 
+			f_xcode_queue | while read SOURCE_FILE 
+				do echo ""
+				f_transcode_file
+				done
+			sleep 30m
 			done
 	}
 	
@@ -677,10 +684,11 @@ f_xcode_queue () {
                                         # For DVDs ripped with MakeMKV, this is "$MAKEMKV_FILE_NAME_PATTERN"             (defined in _vars)
                                         # For Zoom meeting recordings,  this is "$ZOOM_FILE_NAME_PATTERN"                (defined in _vars)
     # $SOURCE_ROOT                      # For Plex DVR, this is "$VIDEO_WORK_DIRECTORY"                                  (defined in _vars)
-	    	     							# For DVDs ripped with MakeMKV, this is "$MAKEMKV_OUTPUT_DIRECTORY"              (defined in _vars)
-	    	     							# For Zoom meeting recordings,  this is "$ZOOM_RAW_FILES"                        (defined in _vars)
+    	     							# For DVDs ripped with MakeMKV, this is "$MAKEMKV_OUTPUT_DIRECTORY"              (defined in _vars)
+    	     							# For Zoom meeting recordings,  this is "$ZOOM_RAW_FILES"                        (defined in _vars)
 
-	echo $(find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort | cut -f 2)
+	# https://unix.stackexchange.com/questions/29899/how-can-i-use-find-and-sort-the-results-by-mtime
+	find -L "$SOURCE_ROOT" -type f -name "$SOURCE_FILE_NAME_PATTERN" -printf "%T+\t%p\n" | sort | cut -f 2
 	}
 
 f_show_eligible_transcoding () {
