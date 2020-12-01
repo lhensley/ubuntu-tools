@@ -567,3 +567,4 @@ source /etc/os-release
 	if [ ! $DEBUG_MODE ]; then
 		logger $0: Variables loaded from _vars
 		fi
+
