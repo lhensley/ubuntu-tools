@@ -98,7 +98,7 @@ function f_system_snapshot () {
 function f_require_root () {
 	# If running with root privileges, do nothing. Otherwise, abort with error.
 	if [[ $EUID -ne 0 ]]; then
-		echo "You are not using root credentials."
+		# echo "You are not using root credentials."
 		f_die "Root privileges required." false $EXIT_CODE_ROOT_REQUIRED
 	    fi
 	}
