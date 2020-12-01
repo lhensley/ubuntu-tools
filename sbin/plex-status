@@ -38,6 +38,7 @@
 	X=$(ps -ef | grep "$HANDBRAKE_CLI" | grep "$VIDEO_WORK_DIRECTORY")
 	R=${X#*$VIDEO_WORK_DIRECTORY}
 	echo $(( ${#X} - ${#R} - ${#VIDEO_WORK_DIRECTORY} ))
+	echo $R
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
