@@ -27,7 +27,7 @@
 	echo "                 "Instances containing plexmediaserver: $(f_program_instances "plexmediaserver")
 	echo "                            "Plex Media Server is Busy: $(f_plexmediaserver_is_busy)
 	echo "                       "Plex Media Server is Recording: $(f_plexmediaserver_is_recording)
-	find "$VIDEO_WORK_FILE_SYSTEM/.grab" -name *.ts -print | while read TITLE; do echo "" | \
+	find "$VIDEO_WORK_DIRECTORY/.grab" -name *.ts -print | while read TITLE; do echo "" | \
 	echo "                                                        $TITLE"; done;
 	echo "                        "Plex Media Server is Scanning: $(f_plexmediaserver_is_scanning)
 	echo "     "Plex Media Server is Generating Video Thumbnails: $(f_plexmediaserver_is_generating_video_thumbnails)
