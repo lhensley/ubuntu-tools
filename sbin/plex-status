@@ -35,7 +35,9 @@
 	echo "                        "Plex Media Server is Scanning: $(f_plexmediaserver_is_scanning)
 	echo "     "Plex Media Server is Generating Video Thumbnails: $(f_plexmediaserver_is_generating_video_thumbnails)
 	echo
-	ps -ef | grep "$HANDBRAKE_CLI" | grep json
+	X=$(ps -ef | grep "$HANDBRAKE_CLI" | grep "$VIDEO_WORK_DIRECTORY")
+	R=${X#*$VIDEO_WORK_DIRECTORY}
+	echo $(( ${#X} - ${#R} - ${#VIDEO_WORK_DIRECTORY} ))
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
