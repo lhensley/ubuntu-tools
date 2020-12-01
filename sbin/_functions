@@ -612,10 +612,12 @@ function f_transcode_file () {
 #		if ! $(f_is_file "$SOURCE_FILE"); then f_die "Source file (pt. 2) not found: $SOURCE_FILE" true; return; fi 
 #		echo "$TEMP_ERROR_LOG" > "$TEMP_ERROR_LOG"
 		f_log_and_echo "Transcoding $SOURCE_FILE to $TARGET_FILE" false
+		echo "$SOURCE_FILE" > /tmp/transcoding[$$]
 #		nice -19 "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE" > /dev/null 2>&1
 		"$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE" > /dev/null 2>&1
 		exit_status=$? # 0 = No Error, 1 = Cancelled, 2 = Invalid Input, 3 = Initialization error, 4 = Unknown Error
 			# Exit code 139 seems to correspond to a "segmentation fault" that will cause a core dump and repeat every time the same source file is used for transcoding.
+		rm /tmp/transcoding[$$]
 		# chown $RUN_AS:$RUN_AS "$TARGET_FILE"
 		# chmod $DEFAULT_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
 #		if $SET_PLEX_PERMISSIONS; then
