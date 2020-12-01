@@ -27,7 +27,7 @@
 	echo "                 "Instances containing plexmediaserver: $(f_program_instances "plexmediaserver")
 	echo "                            "Plex Media Server is Busy: $(f_plexmediaserver_is_busy)
 	if [ $(f_plexmediaserver_is_recording) -eq 0 ] then
-		echo "                       "Plex Media Server is Recording: 0"
+		echo "                       "Plex Media Server is Recording: 0
 	else
 		find "$VIDEO_WORK_DIRECTORY/tv/.grab" -name *.ts -print | while read TITLE; do \
 			echo "                       Plex Media Server is Recording: $(basename \""$TITLE" .ts)"; done;
