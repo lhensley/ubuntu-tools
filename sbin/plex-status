@@ -38,7 +38,8 @@
 	X=$(ps -ef | grep "$HANDBRAKE_CLI" | grep "$VIDEO_WORK_DIRECTORY")
 	# R=${X#*$VIDEO_WORK_DIRECTORY"/tv/"}
 	# S=${R#*".ts"}
-	C1=${#"$VIDEO_WORK_DIRECTORY/tv/"}
+	C0="$VIDEO_WORK_DIRECTORY/tv/"
+	C1=${#C0}
 	C2=`expr index "$X" ".ts"`
 	R=${X:C1:C2}
 #T=${X:0:$(( ${#R} - ${#S} - ${#".ts"} ))}
