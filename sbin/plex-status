@@ -34,8 +34,6 @@
 		fi
 	echo "                        "Plex Media Server is Scanning: $(f_plexmediaserver_is_scanning)
 	echo "     "Plex Media Server is Generating Video Thumbnails: $(f_plexmediaserver_is_generating_video_thumbnails)
-	echo
-	X=$(ps -ef | grep "$HANDBRAKE_CLI" | grep "$VIDEO_WORK_DIRECTORY")
 	T_L_TEXT="$VIDEO_WORK_DIRECTORY/tv/"
 	T_TEXT_WITHOUT_LEFT=${X#*$T_L_TEXT}
 	T_L_LENGTH=$(( ${#X} - ${#T_TEXT_WITHOUT_LEFT} ))
@@ -44,31 +42,9 @@
 	T_X_LENGTH=${#X}
 	T_M_LENGTH=$(( T_M_LENGTH=T_X_LENGTH-(T_L_LENGTH+T_R_LENGTH) ))
 	Y=$(basename "${X:T_L_LENGTH:T_M_LENGTH}")
-
-	echo X $X
-	echo T_L_TEXT $T_L_TEXT
-	echo T_TEXT_WITHOUT_LEFT $T_TEXT_WITHOUT_LEFT
-	echo T_L_LENGTH $T_L_LENGTH
-	echo T_R_TEXT $T_R_TEXT
-	echo T_R_LENGTH $T_R_LENGTH
-	echo T_M_LENGTH $T_M_LENGTH
-	echo Y $Y
-
-	exit 0
-
-	C1=${#C0}
-	C2=`expr index "$X" ".ts"`
-	R=${X:C1:C2}
-#T=${X:0:$(( ${#R} - ${#S} - ${#".ts"} ))}
-	# echo $(( ${#X} - ${#R} - ${#VIDEO_WORK_DIRECTORY} ))
-	echo $X
-	echo $C0
-	echo $C1
-	echo $C2
-	echo $R
-	# echo $S
-	# echo $T
-
+	echo "                             "HandBrake is transcoding: $Y
+	echo
+	X=$(ps -ef | grep "$HANDBRAKE_CLI" | grep "$VIDEO_WORK_DIRECTORY")
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
