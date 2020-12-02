@@ -38,7 +38,7 @@
 	X=$(ps -ef | grep "$HANDBRAKE_CLI" | grep "$VIDEO_WORK_DIRECTORY")
 	R=${X#*$VIDEO_WORK_DIRECTORY"/tv/"}
 	S=${R#*".ts"}
-	T=${R,0,$(( ${#R} - ${#S} - ${#VIDEO_STORE_DIRECTORY} ))}
+	T=${R,0,$(( ${#R} - ${#S} - ${#".ts"} ))}
 	# echo $(( ${#X} - ${#R} - ${#VIDEO_WORK_DIRECTORY} ))
 	echo $R
 	echo $S
