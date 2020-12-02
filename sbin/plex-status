@@ -38,7 +38,14 @@
 	X=$(ps -ef | grep "$HANDBRAKE_CLI" | grep "$VIDEO_WORK_DIRECTORY")
 	# R=${X#*$VIDEO_WORK_DIRECTORY"/tv/"}
 	# S=${R#*".ts"}
-	C0="$VIDEO_WORK_DIRECTORY/tv/"
+	T_L_TEXT="$VIDEO_WORK_DIRECTORY/tv/"
+	T_R_TEXT=".ts"
+	T_L_TEXT_POSITION=`expr index "$X" "$T_L_TEXT"`
+	T_L_LENGTH=$(( $T_L_LENGTH_POSITION + ${#"$T_L_TEXT"} ))
+
+	echo T_L_LENGTH
+	exit 0
+
 	C1=${#C0}
 	C2=`expr index "$X" ".ts"`
 	R=${X:C1:C2}
