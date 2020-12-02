@@ -39,15 +39,17 @@
 	# R=${X#*$VIDEO_WORK_DIRECTORY"/tv/"}
 	# S=${R#*".ts"}
 	T_L_TEXT="$VIDEO_WORK_DIRECTORY/tv/"
-	T_R_TEXT=".ts"
+	# T_R_TEXT=".ts"
 	T_TEXT_WITHOUT_LEFT=${X#*$T_L_TEXT}
 	T_L_LENGTH=$(( ${#X} - ${#T_TEXT_WITHOUT_LEFT} ))
+	T_R_TEXT=${T_TEXT_WITHOUT_LEFT#*".ts -o "}
 
 	echo X $X
 	echo T_L_TEXT $T_L_TEXT
-	echo T_R_TEXT $T_R_TEXT
 	echo T_TEXT_WITHOUT_LEFT $T_TEXT_WITHOUT_LEFT
 	echo T_L_LENGTH $T_L_LENGTH
+	echo T_R_TEXT $T_R_TEXT
+
 	exit 0
 
 	C1=${#C0}
