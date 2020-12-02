@@ -41,9 +41,9 @@
 	T_L_TEXT="$VIDEO_WORK_DIRECTORY/tv/"
 	T_R_TEXT=".ts"
 	T_L_TEXT_POSITION=`expr index "$X" "$T_L_TEXT"`
-	T_L_LENGTH=$(( $T_L_LENGTH_POSITION + ${#"$T_L_TEXT"} ))
+	T_L_LENGTH=$(( $T_L_LENGTH_POSITION + ${#T_L_TEXT} ))
 
-	echo T_L_LENGTH
+	echo $T_L_LENGTH
 	exit 0
 
 	C1=${#C0}
