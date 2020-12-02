@@ -44,7 +44,8 @@
 	T_L_LENGTH=$(( ${#X} - ${#T_TEXT_WITHOUT_LEFT} ))
 	T_R_TEXT=".ts -o "${T_TEXT_WITHOUT_LEFT#*".ts -o "}
 	T_R_LENGTH=$(( ${#T_R_TEXT} ))
-	T_M_LENGTH=$(( ${#X}=(${#T_L_LENGTH}-${#T_R_LENGTH}) ))
+	T_X_LENGTH=${#X}
+	T_M_LENGTH=$(( T_M_LENGTH=T_X_LENGTH-(T_L_LENGTH+T_R_LENGTH) ))
 	Y=${X:T_L_LENGTH:T_M_LENGTH}
 
 	echo X $X
