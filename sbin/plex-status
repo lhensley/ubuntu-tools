@@ -36,13 +36,16 @@
 	echo "     "Plex Media Server is Generating Video Thumbnails: $(f_plexmediaserver_is_generating_video_thumbnails)
 	echo
 	X=$(ps -ef | grep "$HANDBRAKE_CLI" | grep "$VIDEO_WORK_DIRECTORY")
-	R=${X#*$VIDEO_WORK_DIRECTORY"/tv/"}
-	S=${R#*".ts"}
-	T=${R:0:$(( ${#R} - ${#S} - ${#".ts"} ))}
+	# R=${X#*$VIDEO_WORK_DIRECTORY"/tv/"}
+	# S=${R#*".ts"}
+	C1=${#"$VIDEO_WORK_DIRECTORY/tv/"}
+	C2=`expr index "$X" ".ts"`
+	R=${X:C1:C2}
+#T=${X:0:$(( ${#R} - ${#S} - ${#".ts"} ))}
 	# echo $(( ${#X} - ${#R} - ${#VIDEO_WORK_DIRECTORY} ))
 	echo $R
-	echo $S
-	echo $T
+	# echo $S
+	# echo $T
 
 
 # Include script footer file
