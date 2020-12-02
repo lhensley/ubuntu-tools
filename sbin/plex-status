@@ -44,6 +44,10 @@
 	R=${X:C1:C2}
 #T=${X:0:$(( ${#R} - ${#S} - ${#".ts"} ))}
 	# echo $(( ${#X} - ${#R} - ${#VIDEO_WORK_DIRECTORY} ))
+	echo $X
+	echo $C0
+	echo $C1
+	echo $C2
 	echo $R
 	# echo $S
 	# echo $T
