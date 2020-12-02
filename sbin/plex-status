@@ -40,14 +40,13 @@
 	# S=${R#*".ts"}
 	T_L_TEXT="$VIDEO_WORK_DIRECTORY/tv/"
 	T_R_TEXT=".ts"
-	T_L_TEXT_POSITION=${X#*$T_L_TEXT}
-	# T_L_TEXT_POSITION=`expr index "$X" "$T_L_TEXT"`
-	T_L_LENGTH=$(( $T_L_LENGTH_POSITION + ${#T_L_TEXT} ))
+	T_TEXT_WITHOUT_LEFT=${X#*$T_L_TEXT}
+	T_L_LENGTH=$(( ${#X} - ${#T_TEXT_WITHOUT_LEFT} ))
 
 	echo X $X
 	echo T_L_TEXT $T_L_TEXT
 	echo T_R_TEXT $T_R_TEXT
-	echo T_L_TEXT_POSITION $T_L_TEXT_POSITION
+	echo T_TEXT_WITHOUT_LEFT $T_TEXT_WITHOUT_LEFT
 	echo T_L_LENGTH $T_L_LENGTH
 	exit 0
 
