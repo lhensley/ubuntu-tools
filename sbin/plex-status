@@ -43,7 +43,7 @@
 		T_X_LENGTH=${#X}
 		T_M_LENGTH=$(( T_M_LENGTH=T_X_LENGTH-(T_L_LENGTH+T_R_LENGTH) ))
 		Y=$(basename "${X:T_L_LENGTH:T_M_LENGTH}")
-	echo "                             "HandBrake is transcoding: $Y
+	echo "                             "HandBrake is Transcoding: $Y
 	echo
 
 # Include script footer file

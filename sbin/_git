@@ -180,7 +180,7 @@ done
 		rm -rf $SBIN_DIR
 		cp -r $GIT_GO_SBIN $SBIN_PARENT
         cp -r $GIT_GO_SERVICES/*.service $SERVICES_DIR/
-		cd $CURRENT_DIRECTORY
+		cd "$CURRENT_DIRECTORY"
 		f_log_and_echo "git branch $GIT_BRANCH pulled." false > $REDIRECT
 
 # Set ownership and permissions in $SBIN_DIR (to be overwritten by _apply-configs)
