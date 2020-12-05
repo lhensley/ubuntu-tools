@@ -21,10 +21,10 @@
 	echo "              ".m4v files in Plex Video Work Directory: $(find "$VIDEO_WORK_DIRECTORY" -name "*.m4v" -print | wc -l)
 	echo "             ".m4v files in Plex Video Store Directory: $(find "$VIDEO_STORE_DIRECTORY" -name "*.m4v" -print | wc -l)
 	PCT=$(df "$VIDEO_WORK_FILE_SYSTEM" | tr -s ' ' | cut -f 5 -d" " | tail -n1); PCT="${PCT::-1}"
-	echo "        "Use Percentage in Plex Video Work File System: $PCT
+	echo "                   "Use of Plex Video Work File System: $PCT\%
 	PCT=$(df "$VIDEO_STORE_FILE_SYSTEM" | tr -s ' ' | cut -f 5 -d" " | tail -n1); PCT="${PCT::-1}"
-	echo "       "Use Percentage in Plex Video Store File System: $PCT
-	echo "                 "Instances containing plexmediaserver: $(f_program_instances "plexmediaserver")
+	echo "                  "Use of Plex Video Store File System: $PCT\%
+	# echo "                 "Instances containing plexmediaserver: $(f_program_instances "plexmediaserver")
 	echo "                            "Plex Media Server is Busy: $(f_plexmediaserver_is_busy)
 	if [ $(f_plexmediaserver_is_recording) -eq 0 ]; then
 		echo "                       Plex Media Server is Recording: 0"
