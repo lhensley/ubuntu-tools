@@ -35,7 +35,7 @@
 	echo "                        "Plex Media Server is Scanning: $(f_plexmediaserver_is_scanning)
 	echo "     "Plex Media Server is Generating Video Thumbnails: $(f_plexmediaserver_is_generating_video_thumbnails)
 		X=$(ps -ef | grep "$HANDBRAKE_CLI" | grep "$VIDEO_WORK_DIRECTORY")
-		if [ $x != "" ]; then
+		if [ "$x" != "" ]; then
 			T_L_TEXT="$VIDEO_WORK_DIRECTORY/tv/"
 			T_TEXT_WITHOUT_LEFT=${X#*$T_L_TEXT}
 			T_L_LENGTH=$(( ${#X} - ${#T_TEXT_WITHOUT_LEFT} ))
