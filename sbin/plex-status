@@ -34,7 +34,7 @@
 		fi
 	echo "                        "Plex Media Server is Scanning: $(f_plexmediaserver_is_scanning)
 	echo "     "Plex Media Server is Generating Video Thumbnails: $(f_plexmediaserver_is_generating_video_thumbnails)
-		X=$(ps -ef | grep "$HANDBRAKE_CLI" | grep "$VIDEO_WORK_DIRECTORY")
+		$Y=""; X=$(ps -ef | grep "$HANDBRAKE_CLI" | grep "$VIDEO_WORK_DIRECTORY")
 		if [ "$x" != "" ]; then
 			T_L_TEXT="$VIDEO_WORK_DIRECTORY/tv/"
 			T_TEXT_WITHOUT_LEFT=${X#*$T_L_TEXT}
@@ -43,8 +43,8 @@
 			T_R_LENGTH=$(( ${#T_R_TEXT} ))
 			T_X_LENGTH=${#X}
 			T_M_LENGTH=$(( T_M_LENGTH=T_X_LENGTH-(T_L_LENGTH+T_R_LENGTH) ))
+			Y=$(basename "${X:T_L_LENGTH:T_M_LENGTH}")
 			fi
-		Y=$(basename "${X:T_L_LENGTH:T_M_LENGTH}")
 	echo "                             "HandBrake is Transcoding: $Y
 	echo
 
