@@ -42,7 +42,7 @@
 		T_R_LENGTH=$(( ${#T_R_TEXT} ))
 		T_X_LENGTH=${#X}
 		T_M_LENGTH=$(( T_M_LENGTH=T_X_LENGTH-(T_L_LENGTH+T_R_LENGTH) ))
-		Y=$(basename "${X:T_L_LENGTH:T_M_LENGTH}")
+		if [ ! T_M_LENGTH -lt 0 ]; then Y=$(basename "${X:T_L_LENGTH:T_M_LENGTH}"); fi
 	echo "                             "HandBrake is Transcoding: $Y
 	echo
 
