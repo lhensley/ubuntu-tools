@@ -600,29 +600,21 @@ function f_transcode_file () {
 
 	if ! $(f_variable_has_content "$TARGET_FILE"); then f_die "Store file undefined" true; return; fi
 
-	if ! $(f_filter "$SOURCE_FILE" "$IGNORE_TV_SHOWS") || ! $USE_TV_FILTERS; then
-		# Do the transcoding
-		# sudo -u plex mkdir -p "$TARGET_DIR"
-		if ! $(f_is_file "$SOURCE_FILE"); then f_die "Source file not found: $SOURCE_FILE" true; return; fi 
-		mkdir -p "$TARGET_DIR"
-		if ! $(f_is_directory "$TARGET_DIR"); then f_die "Target transcode directory not found: $TARGET_DIR" true $EXIT_CODE_DIRECTORY_NOT_FOUND;  return; fi
-		TIMESTART=$(date +%s)
-		SOURCE_FILE_BASE=$(basename "$SOURCE_FILE")
-#		TEMP_ERRORS=false
-#		TEMP_THIS_SCRIPT=$(basename "$0")
-#		TEMP_ERROR_LOG="/tmp/Error Log for $HOSTNAME $TEMP_THIS_SCRIPT $(date) $(uuidgen)"
-#		if [ "$SOURCE_FILE" != "$DIAG_SOURCE_FILE" ] ; then f_die "$SOURCE_FILE != $DIAG_SOURCE_FILE" true ; fi
-#		if ! $(f_is_file "$SOURCE_FILE"); then f_die "Source file (pt. 2) not found: $SOURCE_FILE" true; return; fi 
-#		echo "$TEMP_ERROR_LOG" > "$TEMP_ERROR_LOG"
-		if $(f_is_file "$SOURCE_FILE") && ! $(f_in_use "$SOURCE_FILE"); then
+	if $(f_is_file "$SOURCE_FILE") && ! $(f_in_use "$SOURCE_FILE"); then
+		if ! $(f_filter "$SOURCE_FILE" "$IGNORE_TV_SHOWS") || ! $USE_TV_FILTERS; then
+			# Do the transcoding
+			# sudo -u plex mkdir -p "$TARGET_DIR"
+			if ! $(f_is_file "$SOURCE_FILE"); then f_die "Source file not found: $SOURCE_FILE" true; return; fi 
+			mkdir -p "$TARGET_DIR"
+			if ! $(f_is_directory "$TARGET_DIR"); then f_die "Target transcode directory not found: $TARGET_DIR" true $EXIT_CODE_DIRECTORY_NOT_FOUND;  return; fi
+			TIMESTART=$(date +%s)
+			SOURCE_FILE_BASE=$(basename "$SOURCE_FILE")
 			f_log_and_echo "Transcoding $SOURCE_FILE to $TARGET_FILE" false
 			echo "$SOURCE_FILE" > /tmp/transcoding[$$]
 			"$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE" > /dev/null 2>&1
 			exit_status=$? # 0 = No Error, 1 = Cancelled, 2 = Invalid Input, 3 = Initialization error, 4 = Unknown Error
 				# Exit code 139 seems to correspond to a "segmentation fault" that will cause a core dump and repeat every time the same source file is used for transcoding.
 			rm /tmp/transcoding[$$]
-			# chown $RUN_AS:$RUN_AS "$TARGET_FILE"
-			# chmod $DEFAULT_VIDEO_FILE_PERMISSIONS "$TARGET_FILE"
 			if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
 					f_balk "HandBrakeCLI: FAILED with error #$exit_status for $SOURCE_FILE" false
 					if [ $exit_status -eq 2 || $exit_status -eq 139 ] ; then rm "$SOURCE_FILE"; f_balk "Deleting corrupted file $SOURCE_FILE" false; fi
@@ -666,11 +658,6 @@ f_iterate_handbrake_source_video_files() {
 		# Re 'echo ""' below, see https://mark.biek.org/blog/2018/10/bash-whileread-loop-breaking-early. Added 10/23/2020. Seems to work!
 
 		SUCCESSFUL_TRANSCODE_FLAG=/tmp/SuccessfulTranscodeFromPID.$$
-#		touch "$SUCCESSFUL_TRANSCODE_FLAG"
-#		while $(f_is_file "$SUCCESSFUL_TRANSCODE_FLAG"); do
-#			rm -f "$SUCCESSFUL_TRANSCODE_FLAG"
-#			f_xcode_queue | while read SOURCE_FILE; do echo ""; f_transcode_file; done
-#			done
 		while true; do 
 			echo "" | f_xcode_queue | while read SOURCE_FILE; do
 				echo "" | f_transcode_file
