@@ -13,7 +13,7 @@
 	# systemctl status plexmediaserver
 
 echo $(f_is_file "test.ini")
-echo [ ! $(f_in_use "test.ini") ]
+echo [ ! f_in_use "test.ini" ]
 echo [ $(f_is_file "test.ini") && ! $(f_in_use "test.ini" false) ]
 
 # Include script footer file
