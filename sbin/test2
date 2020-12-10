@@ -14,7 +14,7 @@
 
 echo $(f_is_file "$SOURCE_FILE")
 echo ! $(f_in_use "$SOURCE_FILE" false)
-echo [ $(f_is_file "$SOURCE_FILE") && ! $(f_in_use "$SOURCE_FILE" false ]
+echo [ $(f_is_file "$SOURCE_FILE") && ! $(f_in_use "$SOURCE_FILE" false) ]
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
