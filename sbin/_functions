@@ -507,8 +507,8 @@ function f_target_relative_path_and_filename_no_ext () {
 										# "original rip info" means source file stat mtime
 
 	# Test existence of some values of required variables
-	if ! $(f_is_directory "$SOURCE_ROOT"); then f_balk "Source root directory not found: $SOURCE_ROOT" true; return; fi
-	if ! $(f_is_file "$SOURCE_FILE");      then f_balk "Source file not found: $SOURCE_FILE"           true; return; fi
+	if ! $(f_is_directory "$SOURCE_ROOT"); then f_balk "Source root directory not found: $SOURCE_ROOT" false; return; fi
+	if ! $(f_is_file "$SOURCE_FILE");      then f_balk "Source file not found: $SOURCE_FILE"           false; return; fi
 
 	SOURCE_ROOT_LENGTH=${#SOURCE_ROOT}
 	SOURCE_FILE_LENGTH=${#SOURCE_FILE}
@@ -604,7 +604,7 @@ function f_transcode_file () {
 		if ! $(f_filter "$SOURCE_FILE" "$IGNORE_TV_SHOWS") || ! $USE_TV_FILTERS; then
 			# Do the transcoding
 			# sudo -u plex mkdir -p "$TARGET_DIR"
-			if ! $(f_is_file "$SOURCE_FILE"); then f_die "Source file not found: $SOURCE_FILE" true; return; fi 
+			if ! $(f_is_file "$SOURCE_FILE"); then f_die "Source file not found: $SOURCE_FILE" false; return; fi 
 			mkdir -p "$TARGET_DIR"
 			if ! $(f_is_directory "$TARGET_DIR"); then f_die "Target transcode directory not found: $TARGET_DIR" true $EXIT_CODE_DIRECTORY_NOT_FOUND;  return; fi
 			TIMESTART=$(date +%s)
