@@ -286,7 +286,7 @@ function f_file_not_in_use {
 function f_in_use {
 	# Usage: if $(f_in_use "$SAMPLE"); then commands_if_true; else commands_if_false; fi
 	# $1 = "$string_to_check"
-	https://unix.stackexchange.com/questions/296389/shell-script-if-file-is-not-being-used-condition
+	# https://unix.stackexchange.com/questions/296389/shell-script-if-file-is-not-being-used-condition
     if [ -n "$(lsof "$1" 2>/dev/null)" ]; then echo true; else echo false; fi
 	}
 
