@@ -614,7 +614,7 @@ function f_transcode_file () {
 #		if [ "$SOURCE_FILE" != "$DIAG_SOURCE_FILE" ] ; then f_die "$SOURCE_FILE != $DIAG_SOURCE_FILE" true ; fi
 #		if ! $(f_is_file "$SOURCE_FILE"); then f_die "Source file (pt. 2) not found: $SOURCE_FILE" true; return; fi 
 #		echo "$TEMP_ERROR_LOG" > "$TEMP_ERROR_LOG"
-		if [ $(f_is_file "$SOURCE_FILE") && ! $(f_in_use "$SOURCE_FILE" false) ]; then
+		if $(f_is_file "$SOURCE_FILE") && ! $(f_in_use "$SOURCE_FILE"); then
 			f_log_and_echo "Transcoding $SOURCE_FILE to $TARGET_FILE" false
 			echo "$SOURCE_FILE" > /tmp/transcoding[$$]
 			"$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE" > /dev/null 2>&1
