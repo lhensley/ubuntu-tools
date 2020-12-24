@@ -196,6 +196,9 @@ done
 # Apply configs
 	f_apply_configs $ARGS
 
+# Reload systemd manager configuration
+    systemctl daemon-reload
+
 
 ###################################################
 # Wrap up.
