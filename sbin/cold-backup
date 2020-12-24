@@ -9,6 +9,11 @@
 # Require root
 	f_require_root
 
+# If file system is not mounted, die
+	if [ "findmnt $COLD_BACKUP_FILE_SYSTEM" ]; then
+		f_fie "$FILE_SYSTEM is not mounted." true
+	fi
+
 # Export cron jobs for $CRONTAB_BACKUP_USERS
 for SELECTED_USER in $CRONTAB_BACKUP_USERS; do 
 	crontab -l -u $SELECTED_USER > $(eval echo "~$SELECTED_USER")/.crontab-archive

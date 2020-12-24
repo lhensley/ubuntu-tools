@@ -1,0 +1,12 @@
+#
+# Peripherals for adam
+#
+# adam: 12TBA (12TB) UUID=901c4177-b514-408a-997c-0cbeee89fa6e
+UUID=901c4177-b514-408a-997c-0cbeee89fa6e /mnt/12TBA ext4 defaults 0 0
+#
+# adam: 3TBB (3TB) UUID=74fcf036-b72c-47d9-be61-e63bdaf31881
+UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/3TBB ext4 defaults 0 0
+#
+# adam: 5TBD (5TB) UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85
+UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/5TBD ext4 defaults 0 0
+#
