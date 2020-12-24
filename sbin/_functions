@@ -3,6 +3,7 @@
 
 # Check to ensure that variables are defined
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $(basename $0): Variables not defined. Aborting; logger -t "$(basename $0)": Variables not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $(basename $0): Variables not defined. Aborting; logger -t "$(basename $0)": Variables not defined. Aborting; exit 1; fi
 
 # Set a flag to confirm that the functions are not yet defined
 FUNCTIONS_ARE_DEFINED=false
@@ -620,6 +621,7 @@ function f_transcode_file () {
 					if [ $exit_status -eq 2 || $exit_status -eq 139 ] ; then rm "$SOURCE_FILE"; f_balk "Deleting corrupted file $SOURCE_FILE" false; fi
 				else
 					rm "$SOURCE_FILE" # Delete source file
+					f_set_plex_media_recursive_permissions
 					f_log_and_echo "Transcoding complete in $(f_timeformat $(( $(date +%s) - TIMESTART )))" false
 					touch "$SUCCESSFUL_TRANSCODE_FLAG"
 					echo

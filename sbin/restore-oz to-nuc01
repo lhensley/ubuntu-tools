@@ -8,14 +8,10 @@
 # Require root
 	f_require_root
 
-# Require server oz
-	f_only_on_server oz
+# Require server nuc01
+	f_only_on_server nuc01
 
-umount /mnt/5TBC
-f_mount_ro_fs_as_rw /mnt/5TBC 
-rsync -aloprtvE --delete /mnt/ext10tb01/plex/* /mnt/5TBC/archives/oz/plex
-umount /mnt/5TBC
-mount /mnt/5TBC
+rsync -aloprtvE /mnt/5TBC/archives/oz/plex/dvr-oz/* /mnt/cloteal/Plex/Pool06-1TB/dvr-nuc01
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
