@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Require root
+	f_require_root
+
+# Require server oz
+	f_only_on_server adam
+
+# umount /mnt/5TBC
+# f_mount_ro_fs_as_rw /mnt/5TBC 
+sudo $ADMIN_USER rsync -aloprtvE --delete nuc01:/mnt/cloteal/Plex/* /mnt/12TBA/archives/nuc01/plex
+# umount /mnt/5TBC
+# mount /mnt/5TBC
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
