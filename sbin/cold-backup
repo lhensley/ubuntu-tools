@@ -11,7 +11,7 @@
 
 # If file system is not mounted, die
 	if [ "findmnt $COLD_BACKUP_FILE_SYSTEM" ]; then
-		f_die "$FILE_SYSTEM is not mounted." true
+		f_die "$COLD_BACUP_FILE_SYSTEM is not mounted." true
 	fi
 
 # Export cron jobs for $CRONTAB_BACKUP_USERS
