@@ -13,7 +13,7 @@
 
 # umount /mnt/5TBC
 # f_mount_ro_fs_as_rw /mnt/5TBC 
-sudo $ADMIN_USER rsync -aloprtvE --delete nuc01:/mnt/cloteal/Plex/* /mnt/12TBA/archives/nuc01/plex
+sudo -u $ADMIN_USER rsync -aloprtvE --delete nuc01:/mnt/cloteal/Plex/* /mnt/12TBA/archives/nuc01/plex
 # umount /mnt/5TBC
 # mount /mnt/5TBC
 
