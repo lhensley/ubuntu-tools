@@ -10,7 +10,7 @@
 	f_require_root
 
 # If file system is not mounted, die
-	if [ "findmnt $COLD_BACKUP_FILE_SYSTEM" ]; then
+	if [ ! "findmnt $COLD_BACKUP_FILE_SYSTEM" ]; then
 		f_die "$COLD_BACKUP_FILE_SYSTEM is not mounted." true
 	fi
 
