@@ -10,7 +10,7 @@
 
 # Require server oz
 	f_only_on_server oz
-
+	
 umount /mnt/5TBC
 f_mount_ro_fs_as_rw /mnt/5TBC 
 rsync -aloprtvE --delete /mnt/ext10tb01/plex/* /mnt/5TBC/archives/oz/plex

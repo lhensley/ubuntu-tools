@@ -353,7 +353,7 @@ function f_mount_ro_fs_as_rw () {
 		fi
 	# If file system is not mounted read-write, die
 		if [ ! $(findmnt "$FILE_SYSTEM" -n -o options | grep "rw,") ]; then
-			f_fie "$FILE_SYSTEM is not mounted with rw option" true
+			f_die "$FILE_SYSTEM is not mounted with rw option" true
 		fi
 	}
 	
