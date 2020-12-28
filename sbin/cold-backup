@@ -57,10 +57,10 @@ rsync -aloprtvER --delete $COLD_BACKUP_SOURCES "$COLD_BACKUP_DIRECTORY"
 # Start services as needed
 	systemctl start $COLD_PROTECTED_SERVICES
 
-# Archive the cold backup
- 	mkdir -p "$THIS_ARCHIVE_DIRECTORY"
- 	nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
-	nice cp "$ARCHIVE_TAR_FULL_WEEKDAY" "$ARCHIVE_TAR_FULL_MONTH"
+# # Archive the cold backup
+#  	mkdir -p "$THIS_ARCHIVE_DIRECTORY"
+#  	nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
+# 	nice cp "$ARCHIVE_TAR_FULL_WEEKDAY" "$ARCHIVE_TAR_FULL_MONTH"
 
 if [ $COLD_BACKUP_FS_READ_ONLY ]; then
 	cd /
