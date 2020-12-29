@@ -9,6 +9,9 @@ UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs       noauto    0       0
 # bertha (3TB) UUID=d28256f9-c258-451e-b299-d4849cf19e0b
 UUID=d28256f9-c258-451e-b299-d4849cf19e0b /mnt/bertha ext4 defaults 0 0
 #
+# nuc01: bob (1TB SSD internal, Samsung EVO 960)
+UUID="d8f30f08-2698-411c-a3ea-32b9748e9ba9" /mnt/bob ext4 defaults 0 0
+#
 # cloteal (10TB) UUID=4e356144-2e69-4812-8958-d035a9ebc28e
 UUID=4e356144-2e69-4812-8958-d035a9ebc28e /mnt/cloteal ext4 defaults 0 0
 #
