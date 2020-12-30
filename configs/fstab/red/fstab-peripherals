@@ -1,8 +1,13 @@
-
-
-# These are the known peripheral (including internal non-root filesystem drives) mounts
-# as of 9/7/2020
-
-#//nell.local/mnt /mnt/nell-mnt cifs noauto,credentials=/etc/samba/user,noexec 0 0
-#//nell.local/mnt        /mnt/nell-mnt   cifs    noauto,user,username=lhensley,workgroup=WORKGROUP,gid=1000,password=hacker92260,credentials=/etc/samba/user,uid=1000    0       0
-
+#
+# red (/dev/sdb1): 12TBA (12TB) UUID=901c4177-b514-408a-997c-0cbeee89fa6e
+UUID=901c4177-b514-408a-997c-0cbeee89fa6e /mnt/12TBA ext4 defaults 0 0
+#
+# red (/dev/sde1): 3TBB (3TB) UUID=74fcf036-b72c-47d9-be61-e63bdaf31881
+UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/3TBB ext4 defaults 0 0
+#
+# red (/dev/sdd1): 5TBD (5TB) UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85
+UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/5TBD ext4 defaults 0 0
+#
+# red (/dev/sdc): 2TBHDA (2TB) Disk and Partition UUID="d003e7a3-acd2-43e7-8d4a-5d1a85ebdba5"
+UUID="d003e7a3-acd2-43e7-8d4a-5d1a85ebdba5" /mnt/500GBA ext4 defaults 0 0 
+#
