@@ -359,7 +359,11 @@ function f_mount_ro_fs_as_rw () {
 #		fi
 	echo "C"
 	# Return true if function succeeds
-		return $(findmnt "$FILE_SYSTEM" -n -o options | grep "rw," | wc -l )
+	if $(findmnt "$FILE_SYSTEM" -n -o options | grep "rw," | wc -l ) ; then
+			return true
+		else
+			return false
+		fi
 	}
 	
 function f_mount_ro_fs_as_ro () {
