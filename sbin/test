@@ -7,9 +7,11 @@
 
 ####################################################################################################
 
+echo Begin
 TIMESTART=$(date +%s)
 "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$1" -o "$1.m4v"
 f_log_and_echo "Transcoding complete in $(f_timeformat $(( $(date +%s) - TIMESTART )))" false
+echo End
 
 ####################################################################################################
 
