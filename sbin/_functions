@@ -348,7 +348,7 @@ function f_mount_ro_fs_as_rw () {
 			umount "$FILE_SYSTEM"
 		fi
 	# If file system is not mounted, mount it read-write
-		if [ "findmnt $FILE_SYSTEM" ]; then
+		if [ ! "findmnt $FILE_SYSTEM" ]; then
 			mount -o rw "$FILE_SYSTEM"
 		fi
 #	# If file system is not mounted read-write, die
