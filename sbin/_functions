@@ -356,7 +356,7 @@ function f_mount_ro_fs_as_rw () {
 #			f_die "$FILE_SYSTEM is not mounted with rw option" true
 #		fi
 	# Return true if function succeeds
-		return $(findmnt "$FILE_SYSTEM" -n -o options | grep "rw,")
+		return $(findmnt "$FILE_SYSTEM" -n -o options | grep "rw," | wc -l )
 	}
 	
 function f_mount_ro_fs_as_ro () {
@@ -375,13 +375,13 @@ function f_mount_ro_fs_as_ro () {
 #			f_die "$FILE_SYSTEM is not mounted with ro option" true
 #		fi
 	# Return true if function succeeds
-		return $(findmnt "$FILE_SYSTEM" -n -o options | grep "ro,")
+		return $(findmnt "$FILE_SYSTEM" -n -o options | grep "ro," | wc -l )
 	}
 
 function f_is_mounted () {
 	FILE_SYSTEM=$1
 	# Return true if function succeeds
-		return $(findmnt "$FILE_SYSTEM" -n -o options)
+		return $(findmnt "$FILE_SYSTEM" -n -o options | wc -l)
 	}
 
 function f_set_plex_media_recursive_permissions () {
