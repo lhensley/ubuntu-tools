@@ -38,7 +38,8 @@ mkdir -p "$COLD_BACKUP_DIRECTORY"
 	# Back up MySQL
 		systemctl stop mysql
 		mkdir -p "$COLD_BACKUP_DIRECTORY/var/lib/mysql"
-		rsync -aloprtvER --delete /var/lib/mysql/* "$COLD_BACKUP_DIRECTORY/var/lib/mysql"
+#		rsync -aloprtvER --delete /var/lib/mysql/* "$COLD_BACKUP_DIRECTORY/var/lib/mysql"
+		rsync -aloprtvER --delete /var/lib/mysql/* "$COLD_BACKUP_DIRECTORY"
 		systemctl start mysql
 	# Back up Postfix
 		systemctl stop postfix
