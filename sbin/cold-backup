@@ -9,6 +9,11 @@
 # Require root
 	f_require_root
 
+# $COLD_BACKUP_FILE_SYSTEM can't be root
+	if [ "$COLD_BACKUP_FILE_SYSTEM" == "/" ]; then
+		f_die "Backup file system cannot be /." true
+		fi
+
 # Export cron jobs for $CRONTAB_BACKUP_USERS
 for SELECTED_USER in $CRONTAB_BACKUP_USERS; do 
 	crontab -l -u $SELECTED_USER > $(eval echo "~$SELECTED_USER")/.crontab-archive
@@ -17,7 +22,7 @@ for SELECTED_USER in $CRONTAB_BACKUP_USERS; do
 	done
 
 # Make the cold backup file system writable
-if [ f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM" ]; then
+if [ ! f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM" ]; then
 	f_die "$COLD_BACKUP_FILE_SYSTEM is not mounted." true
 	fi
 
@@ -38,13 +43,12 @@ mkdir -p "$COLD_BACKUP_DIRECTORY"
 	# Back up MySQL
 		systemctl stop mysql
 		mkdir -p "$COLD_BACKUP_DIRECTORY/var/lib/mysql"
-#		rsync -aloprtvER --delete /var/lib/mysql/* "$COLD_BACKUP_DIRECTORY/var/lib/mysql"
 		rsync -aloprtvER --delete /var/lib/mysql/* "$COLD_BACKUP_DIRECTORY"
 		systemctl start mysql
 	# Back up Postfix
 		systemctl stop postfix
 		mkdir -p "$COLD_BACKUP_DIRECTORY/var/lib/postfix"
-		rsync -aloprtvER --delete /var/lib/postfix/* "$COLD_BACKUP_DIRECTORY/var/lib/postfix"
+		rsync -aloprtvER --delete /var/lib/postfix/* "$COLD_BACKUP_DIRECTORY"
 		systemctl start postfix
 
 # Start services as needed
