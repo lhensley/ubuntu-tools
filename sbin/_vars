@@ -177,7 +177,9 @@ source /etc/os-release
 
 # Backup COLD # cold backup
 # DEPENDENT on definition of $HOSTNAME, but that's built-in
-	COLD_PROTECTED_SERVICES="apache2 cron ddclient fail2ban lsyncd mysql plexmediaserver postfix proftpd tautulli webmin"
+	Adjusted 12/30/2020 because none of these services were coming back.
+	# COLD_PROTECTED_SERVICES="apache2 cron ddclient fail2ban lsyncd mysql plexmediaserver postfix proftpd tautulli webmin"
+	COLD_PROTECTED_SERVICES="cron mysql postfix"
 		# Previously incuded gdm3, but that turns off the console.
 	COLD_BACKUP_FILE_SYSTEM="/"                                # Default
 	COLD_BACKUP_FS_READ_ONLY=false                             # Default

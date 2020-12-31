@@ -196,8 +196,9 @@ done
 # Apply configs
 	f_apply_configs $ARGS
 
-# Reload systemd manager configuration
-    systemctl daemon-reload
+# # REMOVED THIS COMMAND 12/30/2020: Trying to isolate something that's killing all the systemd services on oz
+# # Reload systemd manager configuration
+#     systemctl daemon-reload
 
 
 ###################################################

@@ -21,6 +21,8 @@ for SELECTED_USER in $CRONTAB_BACKUP_USERS; do
 	chown $SELECTED_USER $(eval echo "~$SELECTED_USER")/.crontab-archive
 	done
 
+# Dropped several services covered here in Dec 2020 because all services were being killed and not returning.s
+# See COLD_PROTECTED_SERVICES in _vars
 # Stop services as needed
 	systemctl stop $COLD_PROTECTED_SERVICES
 
@@ -57,6 +59,7 @@ rsync -aloprtvER --delete $COLD_BACKUP_SOURCES "$COLD_BACKUP_DIRECTORY"
 # Start services as needed
 	systemctl start $COLD_PROTECTED_SERVICES
 
+# Commented this out December 2020 because the drive itself was removed, causing data to be written into the mount point (need to fix)
 # # Archive the cold backup
 #  	mkdir -p "$THIS_ARCHIVE_DIRECTORY"
 #  	nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
