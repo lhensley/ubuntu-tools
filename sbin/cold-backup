@@ -62,7 +62,7 @@ if [ $COLD_BACKUP_FS_READ_ONLY ]; then
 
 # Restore working directory
 cd "$CURRENT_DIRECTORY"
-
+ 
 # Update log
 	echo
 	echo Backup completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
