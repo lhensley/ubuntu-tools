@@ -177,9 +177,9 @@ source /etc/os-release
 
 # Backup COLD # cold backup
 # DEPENDENT on definition of $HOSTNAME, but that's built-in
-	Adjusted 12/30/2020 because none of these services were coming back.
+	# Adjusted 12/30/2020 because none of these services were coming back.
 	# COLD_PROTECTED_SERVICES="apache2 cron ddclient fail2ban lsyncd mysql plexmediaserver postfix proftpd tautulli webmin"
-	COLD_PROTECTED_SERVICES="cron mysql postfix"
+	COLD_PROTECTED_SERVICES="mysql postfix"
 		# Previously incuded gdm3, but that turns off the console.
 	COLD_BACKUP_FILE_SYSTEM="/"                                # Default
 	COLD_BACKUP_FS_READ_ONLY=false                             # Default
@@ -189,12 +189,12 @@ source /etc/os-release
 		COLD_RESTORE_POINT="/"
 		# COLD_RESTORE_POINT="/var/restore-points/START_DATEANDTIMESTAMP/"
 	COLD_BACKUP_LOG="$ADMIN_HOME_DIR/.coldstorage.log"
-	if [ $HOSTNAME == "eve" ]; then
-		COLD_BACKUP_FILE_SYSTEM="/mnt/3TBB"
+	if [ $HOSTNAME == "nuc01" ]; then
+		COLD_BACKUP_FILE_SYSTEM="/mnt/5TBE"
 		COLD_BACKUP_FS_READ_ONLY=true
 		COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
 		fi
-	if [ $HOSTNAME == "nuc01" ]; then
+	if [ $HOSTNAME == "red" ]; then
 		COLD_BACKUP_FILE_SYSTEM="/mnt/5TBE"
 		COLD_BACKUP_FS_READ_ONLY=true
 		COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
@@ -208,8 +208,8 @@ source /etc/os-release
 	COLD_BACKUP_SOURCES="etc home opt root"
 	COLD_BACKUP_SOURCES+=" var/www"
 	COLD_BACKUP_SOURCES+=" var/lib/plexmediaserver/Library"
-	COLD_BACKUP_SOURCES+=" var/lib/mysql"
-	COLD_BACKUP_SOURCES+=" var/lib/postfix"
+#	COLD_BACKUP_SOURCES+=" var/lib/mysql"
+#	COLD_BACKUP_SOURCES+=" var/lib/postfix"
 	COLD_RESTORE_EXCLUDES="--exclude=.config/os-install-info.txt"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/fstab*"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/systemd/system"

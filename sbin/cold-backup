@@ -9,11 +9,6 @@
 # Require root
 	f_require_root
 
-# If file system is not mounted, die
-	if [ ! "findmnt $COLD_BACKUP_FILE_SYSTEM" ]; then
-		f_die "$COLD_BACKUP_FILE_SYSTEM is not mounted." true
-	fi
-
 # Export cron jobs for $CRONTAB_BACKUP_USERS
 for SELECTED_USER in $CRONTAB_BACKUP_USERS; do 
 	crontab -l -u $SELECTED_USER > $(eval echo "~$SELECTED_USER")/.crontab-archive
@@ -21,15 +16,15 @@ for SELECTED_USER in $CRONTAB_BACKUP_USERS; do
 	chown $SELECTED_USER $(eval echo "~$SELECTED_USER")/.crontab-archive
 	done
 
-# Dropped several services covered here in Dec 2020 because all services were being killed and not returning.s
+# Make the cold backup file system writable
+if [ f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM" ]; then
+	f_die "$COLD_BACKUP_FILE_SYSTEM is not mounted." true
+	fi
+
+# Dropped several services covered here in Dec 2020 because all services were being killed and not returning.
 # See COLD_PROTECTED_SERVICES in _vars
 # Stop services as needed
-	systemctl stop $COLD_PROTECTED_SERVICES
-
-# Make the cold backup file system writable
-if [ $COLD_BACKUP_FS_READ_ONLY ]; then
-	f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"
-	fi
+#	systemctl stop $COLD_PROTECTED_SERVICES
 
 # Store current directory and switch to root
 CURRENT_DIRECTORY="$(pwd)"
@@ -39,31 +34,26 @@ cd /
 mkdir -p "$COLD_BACKUP_DIRECTORY"
 
 # Do backup with rsync
-# rsync options used
-#    -a = archive mode, equivalent to -rlptgoD
-#    -g = preserve group ownership
-#    -l = recreate symlinks on destination
-#    -n = dry run
-#    -o = preserve owner
-#    -p = preserve permissions
-#    -q = quiet
-#    -r = recursive (includes subdirectories)
-#    -t = preserve modification times
-#    -v = verbose
-#    -D = preserve device files and special files
-#    -E = preserve executability
-#    -R = use relative paths (see https://linux.die.net/man/1/rsync for more info)
-#    --delete = delete extraneous files from dest dirs
-rsync -aloprtvER --delete $COLD_BACKUP_SOURCES "$COLD_BACKUP_DIRECTORY"
+	rsync -aloprtvER --delete $COLD_BACKUP_SOURCES "$COLD_BACKUP_DIRECTORY"
+	# Back up MySQL
+		systemctl stop mysql
+		mkdir -p "$COLD_BACKUP_DIRECTORY/var/lib/mysql"
+		rsync -aloprtvER --delete /var/lib/mysql/* "$COLD_BACKUP_DIRECTORY/var/lib/mysql"
+		systemctl start mysql
+	# Back up Postfix
+		systemctl stop postfix
+		mkdir -p "$COLD_BACKUP_DIRECTORY/var/lib/postfix"
+		rsync -aloprtvER --delete /var/lib/postfix/* "$COLD_BACKUP_DIRECTORY/var/lib/postfix"
+		systemctl start postfix
 
 # Start services as needed
-	systemctl start $COLD_PROTECTED_SERVICES
+#	systemctl start $COLD_PROTECTED_SERVICES
 
-# Commented this out December 2020 because the drive itself was removed, causing data to be written into the mount point (need to fix)
-# # Archive the cold backup
-#  	mkdir -p "$THIS_ARCHIVE_DIRECTORY"
-#  	nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
-# 	nice cp "$ARCHIVE_TAR_FULL_WEEKDAY" "$ARCHIVE_TAR_FULL_MONTH"
+Commented this out December 2020 because the drive itself was removed, causing data to be written into the mount point (need to fix)
+# Archive the cold backup
+ 	mkdir -p "$THIS_ARCHIVE_DIRECTORY"
+ 	nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
+	nice cp "$ARCHIVE_TAR_FULL_WEEKDAY" "$ARCHIVE_TAR_FULL_MONTH"
 
 if [ $COLD_BACKUP_FS_READ_ONLY ]; then
 	cd /
