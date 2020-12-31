@@ -49,7 +49,7 @@ mkdir -p "$COLD_BACKUP_DIRECTORY"
 # Start services as needed
 #	systemctl start $COLD_PROTECTED_SERVICES
 
-Commented this out December 2020 because the drive itself was removed, causing data to be written into the mount point (need to fix)
+# Commented this out December 2020 because the drive itself was removed, causing data to be written into the mount point (need to fix)
 # Archive the cold backup
  	mkdir -p "$THIS_ARCHIVE_DIRECTORY"
  	nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
