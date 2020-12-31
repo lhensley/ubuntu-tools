@@ -22,7 +22,7 @@ for SELECTED_USER in $CRONTAB_BACKUP_USERS; do
 	done
 
 # Make the cold backup file system writable
-if [ ! f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM" ]; then
+if [ ! $(f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM") ]; then
 	f_die "$COLD_BACKUP_FILE_SYSTEM is not mounted." true
 	fi
 
