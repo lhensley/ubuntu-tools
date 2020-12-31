@@ -62,7 +62,7 @@ mkdir -p "$COLD_BACKUP_DIRECTORY"
 
 if [ $COLD_BACKUP_FS_READ_ONLY ]; then
 	cd /
-	f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY
+	f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY > /dev/null
 	fi
 
 # Restore working directory
