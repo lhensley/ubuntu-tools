@@ -379,7 +379,11 @@ function f_mount_ro_fs_as_ro () {
 #			f_die "$FILE_SYSTEM is not mounted with ro option" true
 #		fi
 	# Return true if function succeeds
-		return $(findmnt "$FILE_SYSTEM" -n -o options | grep "ro," | wc -l )
+	if [ $(findmnt "$FILE_SYSTEM" -n -o options | grep "ro," | wc -l ) ] ; then
+			echo true
+		else
+			echo false
+		fi
 	}
 
 function f_is_mounted () {
