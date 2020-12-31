@@ -26,6 +26,8 @@ if [ ! $(f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM") ]; then
 	f_die "$COLD_BACKUP_FILE_SYSTEM is not mounted." true
 	fi
 
+exit 0
+
 # Dropped several services covered here in Dec 2020 because all services were being killed and not returning.
 # See COLD_PROTECTED_SERVICES in _vars
 # Stop services as needed
