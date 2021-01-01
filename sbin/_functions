@@ -630,8 +630,8 @@ function f_transcode_file () {
 			SOURCE_FILE_BASE=$(basename "$SOURCE_FILE")
 			f_log_and_echo "Transcoding $SOURCE_FILE to $TARGET_FILE" false
 			echo "$SOURCE_FILE" > /tmp/transcoding[$$]
-			# Throttle CPU on nuc01 to 300% (4 cores = 400%)
-			if [ $HOSTNAME="nuc01" ]; then echo "sleep 3; cpulimit HandBrakeCLI -l 300" | at now ; fi
+			# Throttle CPU on nuc01 to 250% (4 cores = 400%)
+			if [ $HOSTNAME="nuc01" ]; then echo "sleep 3; cpulimit HandBrakeCLI -l 250" | at now ; fi
 			"$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE" > /dev/null 2>&1
 			exit_status=$? # 0 = No Error, 1 = Cancelled, 2 = Invalid Input, 3 = Initialization error, 4 = Unknown Error
 				# Exit code 139 seems to correspond to a "segmentation fault" that will cause a core dump and repeat every time the same source file is used for transcoding.
