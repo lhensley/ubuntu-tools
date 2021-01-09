@@ -36,29 +36,51 @@ CURRENT_DIRECTORY="$(pwd)"
 cd /
 
 # Make container directory
-mkdir -p "$COLD_BACKUP_DIRECTORY"
+mkdir -p -m 700 "$COLD_BACKUP_DIRECTORY"
+chmod 700 "$COLD_BACKUP_DIRECTORY"
+chown root:root "$COLD_BACKUP_DIRECTORY"
+
+# Make temp cold backup directory
+mkdir -p -m 700 "$TEMP_COLD_BACKUP_DIRECTORY"
+chmod 700 "$TEMP_COLD_BACKUP_DIRECTORY"
+chown root:root "$TEMP_COLD_BACKUP_DIRECTORY"
+
+# Make temp archive directory
+mkdir -p -m 700 "$TEMP_ARCHIVE_DIRECTORY"
+chmod 700 "$TEMP_ARCHIVE_DIRECTORY"
+chown root:root "$TEMP_ARCHIVE_DIRECTORY"
 
 # Do backup with rsync
-	rsync -aloprtvER --delete $COLD_BACKUP_SOURCES "$COLD_BACKUP_DIRECTORY"
+	rsync -aloprtvER --delete $COLD_BACKUP_SOURCES "$TEMP_COLD_BACKUP_DIRECTORY"
 	# Back up MySQL
 		systemctl stop mysql
-		mkdir -p "$COLD_BACKUP_DIRECTORY/var/lib/mysql"
+		mkdir -p -m 700 "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/mysql"
+		chmod 700 "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/mysql"
+		chowm root:root "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/mysql"
 		rsync -aloprtvER --delete /var/lib/mysql/* "$COLD_BACKUP_DIRECTORY"
 		systemctl start mysql
 	# Back up Postfix
 		systemctl stop postfix
-		mkdir -p "$COLD_BACKUP_DIRECTORY/var/lib/postfix"
+		mkdir -p -m 700 "$COLD_BACKUP_DIRECTORY/var/lib/postfix"
+		chmod 700 "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/postfix"
+		chowm root:root "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/postfix"
 		rsync -aloprtvER --delete /var/lib/postfix/* "$COLD_BACKUP_DIRECTORY"
 		systemctl start postfix
+	# Remove crontab export file
+		rm "$(eval echo "~$SELECTED_USER")/.crontab-archive"
 
 # Start services as needed
 #	systemctl start $COLD_PROTECTED_SERVICES
 
 # Commented this out December 2020 because the drive itself was removed, causing data to be written into the mount point (need to fix)
 # Archive the cold backup
- 	mkdir -p "$THIS_ARCHIVE_DIRECTORY"
- 	nice tar $BACKUP_OPTIONS $COLD_BACKUP_DIRECTORY
-	nice cp "$ARCHIVE_TAR_FULL_WEEKDAY" "$ARCHIVE_TAR_FULL_MONTH"
+ 	mkdir -p -m 700 "$THIS_ARCHIVE_DIRECTORY"
+	chmod 700 "$THIS_ARCHIVE_DIRECTORY"
+	chown root:root "$THIS_ARCHIVE_DIRECTORY"
+ 	nice tar $BACKUP_OPTIONS $TEMP_COLD_BACKUP_DIRECTORY
+	nice cp "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE" "$ARCHIVE_TAR_FULL_WEEKDAY"
+	nice cp "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE" "$ARCHIVE_TAR_FULL_MONTH"
+#	rm "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
 
 if [ $COLD_BACKUP_FS_READ_ONLY ]; then
 	cd /

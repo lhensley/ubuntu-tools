@@ -185,6 +185,12 @@ source /etc/os-release
 	COLD_BACKUP_FS_READ_ONLY=false                             # Default
 	COLD_BACKUP_PARENT_DIRECTORY="/var/local"                  # Default
 	COLD_BACKUP_SUBDIRECTORY="cold-backup"                     # Default
+	TEMP_COLD_BACKUP_DIRECTORY="/var/tmp/cold-backup"		   # Default
+	TEMP_COLD_BACKUP_PARENT_DIRECTORY="/var/tmp"			   # Default
+	TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"                # Default
+	TEMP_ARCHIVE_DIRECTORY="/var/tmp/archive"		   # Default
+	TEMP_ARCHIVE_PARENT_DIRECTORY="/var/tmp"			   # Default
+	TEMP_ARCHIVE_SUBDIRECTORY="archive"						# Default
 	# Default COLD_RESTORE_POINT = "/", but "/var/restore-points/START_DATEANDTIMESTAMP/" recommended for trouble-shooting
 		COLD_RESTORE_POINT="/"
 		# COLD_RESTORE_POINT="/var/restore-points/START_DATEANDTIMESTAMP/"
@@ -235,7 +241,7 @@ source /etc/os-release
 	BACKUP_OPTION[--gzip]=true 
 	BACKUP_OPTION[--auto-compress]=true
 	BACKUP_OPTION[--preserve-permissions]=true
-	BACKUP_OPTION[--file=$ARCHIVE_TAR_FULL_WEEKDAY]=true
+	BACKUP_OPTION[--file=$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE]=true
 	BACKUP_OPTION[--exclude-vcs]=true
 	BACKUP_OPTION[--exclude-caches]=true
 	BACKUP_OPTION[--totals]=true
