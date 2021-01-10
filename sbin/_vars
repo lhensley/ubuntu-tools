@@ -381,10 +381,10 @@ source /etc/os-release
 			PLEX_ROOT[/var/lib/plexmediaserver/Library/work]=true	
 		VIDEO_WORK_FILE_SYSTEM="/"
 		VIDEO_WORK_DIRECTORY="/var/lib/plexmediaserver/Library/work"
-		# VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
-		# VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/Plex/Pool06-1TB/dvr-nuc01"
-		VIDEO_STORE_FILE_SYSTEM="/mnt/bob"
-		VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex/dvr-nuc01"
+		VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
+		VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/Plex/Pool06-1TB/dvr-nuc01"
+		# VIDEO_STORE_FILE_SYSTEM="/mnt/bob"
+		# VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex/dvr-nuc01"
 		PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
 		fi
 	if [ $HOSTNAME == "oz" ]; then 

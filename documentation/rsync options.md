@@ -6,7 +6,7 @@
 #       dry run
 #    -a --archive    
 #       archive mode, equivalent to -rlptgoD
-#    -g --quiet
+#    -g
 #       preserve group ownership
 #    -l --links
 #       recreate symlinks on destination
