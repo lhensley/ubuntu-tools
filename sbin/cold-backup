@@ -85,7 +85,8 @@ for SELECTED_USER in $CRONTAB_BACKUP_USERS; do
 
 if [ $COLD_BACKUP_FS_READ_ONLY ]; then
 	cd /
-	f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY > /dev/null
+	umount -q "$COLD_BACKUP_FILE_SYSTEM"
+	# f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY > /dev/null
 	fi
 
 # Restore working directory
