@@ -343,7 +343,7 @@ function f_chmod() {
 
 function f_mount_ro_fs_as_rw () {
 	FILE_SYSTEM=$1
-	umount "$FILE_SYSTEM"
+	umount -q "$FILE_SYSTEM"
 	mount -o rw "$FILE_SYSTEM"
 	# Return true if function succeeds
 	if [ $(findmnt "$FILE_SYSTEM" -n -o options | grep "rw," | wc -l ) -gt 0 ] ; then
