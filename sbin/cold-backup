@@ -14,13 +14,88 @@
 		f_die "Backup file system cannot be /." true
 		fi
 
-echo "A" f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"
-echo "B" $(f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM")
-
 # Make the cold backup file system writable
 if ! $(f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM") ; then
 	f_die "$COLD_BACKUP_FILE_SYSTEM is not mounted." true
 	fi
+
+# Dropped several services covered here in Dec 2020 because all services were being killed and not returning.
+# See COLD_PROTECTED_SERVICES in _vars
+# Stop services as needed
+#	systemctl stop $COLD_PROTECTED_SERVICES
+
+# Store current directory and switch to root
+CURRENT_DIRECTORY="$(pwd)"
+cd /
+
+# Make container directory
+mkdir -p -m 700 "$COLD_BACKUP_DIRECTORY"
+chmod 700 "$COLD_BACKUP_DIRECTORY"
+chown root:root "$COLD_BACKUP_DIRECTORY"
+
+# Make temp cold backup directory
+mkdir -p -m 700 "$TEMP_COLD_BACKUP_DIRECTORY"
+chmod 700 "$TEMP_COLD_BACKUP_DIRECTORY"
+chown root:root "$TEMP_COLD_BACKUP_DIRECTORY"
+
+# Make temp archive directory
+mkdir -p -m 700 "$TEMP_ARCHIVE_DIRECTORY"
+chmod 700 "$TEMP_ARCHIVE_DIRECTORY"
+chown root:root "$TEMP_ARCHIVE_DIRECTORY"
+
+# Export cron jobs for $CRONTAB_BACKUP_USERS
+for SELECTED_USER in $CRONTAB_BACKUP_USERS; do 
+	crontab -l -u $SELECTED_USER > $(eval echo "~$SELECTED_USER")/.crontab-archive 2>/dev/null
+	chmod 600 $(eval echo "~$SELECTED_USER")/.crontab-archive
+	chown $SELECTED_USER $(eval echo "~$SELECTED_USER")/.crontab-archive
+	done
+
+# Do backup with rsync
+	rsync -aloprtvER --delete $COLD_BACKUP_SOURCES "$TEMP_COLD_BACKUP_DIRECTORY"
+	# Back up MySQL
+		systemctl stop mysql
+		mkdir -p -m 700 "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/mysql"
+		chmod 700 "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/mysql"
+		chowm root:root "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/mysql"
+		rsync -aloprtvER --delete /var/lib/mysql/* "$COLD_BACKUP_DIRECTORY"
+		systemctl start mysql
+	# Back up Postfix
+		systemctl stop postfix
+		mkdir -p -m 700 "$COLD_BACKUP_DIRECTORY/var/lib/postfix"
+		chmod 700 "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/postfix"
+		chowm root:root "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/postfix"
+		rsync -aloprtvER --delete /var/lib/postfix/* "$COLD_BACKUP_DIRECTORY"
+		systemctl start postfix
+
+# Remove crontab export file
+	rm "$(eval echo "~$SELECTED_USER")/.crontab-archive"
+
+# Start services as needed
+#	systemctl start $COLD_PROTECTED_SERVICES
+
+# Commented this out December 2020 because the drive itself was removed, causing data to be written into the mount point (need to fix)
+# Archive the cold backup
+ 	mkdir -p -m 700 "$THIS_ARCHIVE_DIRECTORY"
+	chmod 700 "$THIS_ARCHIVE_DIRECTORY"
+	chown root:root "$THIS_ARCHIVE_DIRECTORY"
+ 	nice tar $BACKUP_OPTIONS $TEMP_COLD_BACKUP_DIRECTORY
+	nice cp "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE" "$ARCHIVE_TAR_FULL_WEEKDAY"
+	nice cp "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE" "$ARCHIVE_TAR_FULL_MONTH"
+#	rm "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
+
+if [ $COLD_BACKUP_FS_READ_ONLY ]; then
+	cd /
+	f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY > /dev/null
+	fi
+
+# Restore working directory
+cd "$CURRENT_DIRECTORY"
+ 
+# Update log
+	echo
+	echo Backup completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
+	echo Backup completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') >> $COLD_BACKUP_LOG
+	chown $ADMIN_USER $COLD_BACKUP_LOG
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
