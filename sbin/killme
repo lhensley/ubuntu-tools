@@ -14,8 +14,7 @@
 		f_die "Backup file system cannot be /." true
 		fi
 
-echo "A" f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"
-echo "B" $(f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM")
+echo "Result: " $(f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM")
 
 # Make the cold backup file system writable
 if ! $(f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM") ; then
