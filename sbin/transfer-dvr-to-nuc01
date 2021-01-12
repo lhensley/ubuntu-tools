@@ -6,20 +6,19 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-# Require root
-	f_require_root
+#!/bin/sh
 
-# $COLD_BACKUP_FILE_SYSTEM can't be root
-	if [ "$COLD_BACKUP_FILE_SYSTEM" == "/" ]; then
-		f_die "Backup file system cannot be /." true
-		fi
+lockdir=/tmp/upload-to-nuc01.lock
 
-echo "Result: " $(f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM")
+if ! mkdir "$lockdir"; then
+   f_die "rsync already in progress"
+fi
 
-# Make the cold backup file system writable
-if ! $(f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM") ; then
-	f_die "$COLD_BACKUP_FILE_SYSTEM is not mounted." true
-	fi
+trap 'rmdir "$lockdir"' EXIT
+
+PATH=$PATH:/usr/local/bin
+
+rsync -aloprtvE --remove-source-files $VIDEO_STORE_DIRECTORY/* nuc01.lanehensley.org:/mnt/cloteal/Plex/Pool06-1TB/dvr-nuc01
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
