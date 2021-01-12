@@ -343,20 +343,10 @@ function f_chmod() {
 
 function f_mount_ro_fs_as_rw () {
 	FILE_SYSTEM=$1
-	# If file system is mounted and read-only, unmount
-		if [ $(findmnt "$FILE_SYSTEM" -n -o options | grep "ro,") ]; then
-			umount "$FILE_SYSTEM"
-		fi
-	# If file system is not mounted, mount it read-write
-		if [ ! "findmnt $FILE_SYSTEM" ]; then
-			mount -o rw "$FILE_SYSTEM"
-		fi
-#	# If file system is not mounted read-write, die
-#		if [ ! $(findmnt "$FILE_SYSTEM" -n -o options | grep "rw,") ]; then
-#			f_die "$FILE_SYSTEM is not mounted with rw option" true
-#		fi
+	umount "$FILE_SYSTEM"
+	mount -o rw "$FILE_SYSTEM"
 	# Return true if function succeeds
-	if [ $(findmnt "$FILE_SYSTEM" -n -o options | grep "rw," | wc -l ) ] ; then
+	if [ $(findmnt "$FILE_SYSTEM" -n -o options | grep "rw," | wc -l ) -gt 0 ] ; then
 			echo true
 		else
 			echo false
