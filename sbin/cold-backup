@@ -57,14 +57,14 @@ for SELECTED_USER in $CRONTAB_BACKUP_USERS; do
 		mkdir -p -m 700 "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/mysql"
 		chmod 700 "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/mysql"
 		chowm root:root "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/mysql"
-		rsync -aloprtvER --delete /var/lib/mysql/* "$COLD_BACKUP_DIRECTORY"
+		rsync -aloprtvER --delete /var/lib/mysql/* "$TEMP_COLD_BACKUP_DIRECTORY"
 		systemctl start mysql
 	# Back up Postfix
 		systemctl stop postfix
 		mkdir -p -m 700 "$COLD_BACKUP_DIRECTORY/var/lib/postfix"
 		chmod 700 "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/postfix"
 		chowm root:root "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/postfix"
-		rsync -aloprtvER --delete /var/lib/postfix/* "$COLD_BACKUP_DIRECTORY"
+		rsync -aloprtvER --delete /var/lib/postfix/* "$TEMP_COLD_BACKUP_DIRECTORY"
 		systemctl start postfix
 
 # Remove crontab export file
@@ -79,8 +79,9 @@ for SELECTED_USER in $CRONTAB_BACKUP_USERS; do
 	chmod 700 "$THIS_ARCHIVE_DIRECTORY"
 	chown root:root "$THIS_ARCHIVE_DIRECTORY"
  	nice tar $BACKUP_OPTIONS $TEMP_COLD_BACKUP_DIRECTORY
-	nice cp "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE" "$ARCHIVE_TAR_FULL_WEEKDAY"
+#	nice cp "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE" "$ARCHIVE_TAR_FULL_WEEKDAY"
 	nice cp "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE" "$ARCHIVE_TAR_FULL_MONTH"
+	mv "$TEMP_ARCHIVE_DIRECTORY/"* $THIS_ARCHIVE_DIRECTORY/
 #	rm "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
 
 if [ $COLD_BACKUP_FS_READ_ONLY ]; then
