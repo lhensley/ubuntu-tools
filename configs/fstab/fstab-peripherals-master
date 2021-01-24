@@ -25,7 +25,7 @@ UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 ro,defaults 0 0
 # UUID=4e356144-2e69-4812-8958-d035a9ebc28e /mnt/cloteal ext4 defaults 0 0
 #
 # nuc01: MyBook3T01 (3TB) UUID=C6B89CABB89C9B8D
-# UUID=C6B89CABB89C9B8D /mnt/MyBook3T01 ntfs noauto 0 0
+# UUID=C6B89CABB89C9B8D /mnt/MyBook3T01 ntfs defaults 0 0
 #
 # nuc01: Silver5TB-A (5TB) UUID=0A538B3244DE3676
 # UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs defaults 0 0
@@ -53,7 +53,7 @@ UUID="d003e7a3-acd2-43e7-8d4a-5d1a85ebdba5" /mnt/2TBHDA ext4 defaults 0 0
 UUID="c31872ad-78cf-4ca5-ba5d-7e5c6b70a7e7" /mnt/500GBA ext4 defaults 0 0
 #
 # DEAD: Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE
-# UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs       noauto    0       0
+# UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs       defaults    0       0
 #
 # Bind mount
 #/mnt/cloteal/PlexUploads /home/plex-swap/uploads none bind 0 0
