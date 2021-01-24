@@ -34,9 +34,9 @@ exit_status=$?
 f_beep
 eject
 if [ $exit_status -eq 0 ] ; then
-  echo "$1: Disk ripping completed successfully." | mail "$TEXT_ALERTS"
+	echo "$1: Disk ripping completed successfully." | mail "$TEXT_ALERTS"
   else echo "$1: Disk ripping FAILED. Code $exit_status" | mail "$TEXT_ALERTS"
-  fi
+	fi
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

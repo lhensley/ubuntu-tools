@@ -13,7 +13,10 @@
         "copy:eac3"
       ],
       "AudioEncoderFallback": "ac3",
-      "AudioLanguageList": [],
+      "AudioLanguageList": [
+        "eng",
+        "any"
+      ],
       "AudioList": [
         {
           "AudioBitrate": 160,
@@ -29,10 +32,10 @@
         }
       ],
       "AudioSecondaryEncoderMode": true,
-      "AudioTrackSelectionBehavior": "first",
+      "AudioTrackSelectionBehavior": "all",
       "ChapterMarkers": true,
       "ChildrenArray": [],
-      "Default": false,
+      "Default": true,
       "FileFormat": "mp4",
       "Folder": false,
       "FolderOpen": false,
@@ -43,9 +46,8 @@
       "PictureLeftCrop": 0,
       "PictureRightCrop": 2,
       "PictureTopCrop": 58,
-      "PictureDARWidth": 851,
+      "PictureDARWidth": 0,
       "PictureDeblockPreset": "off",
-      "PictureDeblockTune": "off",
       "PictureDeinterlaceFilter": "decomb",
       "PictureCombDetectPreset": "default",
       "PictureCombDetectCustom": "",
@@ -65,8 +67,8 @@
       "PictureLooseCrop": false,
       "PictureModulus": 2,
       "PicturePAR": "auto",
-      "PicturePARWidth": 32,
-      "PicturePARHeight": 27,
+      "PicturePARWidth": 0,
+      "PicturePARHeight": 0,
       "PictureForceHeight": 0,
       "PictureForceWidth": 0,
       "PresetName": "Lane 1080p (BluRay, All Languages)",
