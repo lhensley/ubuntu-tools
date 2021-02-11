@@ -153,6 +153,12 @@ if $install_plexmediaserver ; then
     ufw app update lane-applications
     echo "Special LANE applications installed to ufw."
 
+# Patch to add automatic updates for Plex Media Server.
+# Not sure what happens if PMS isn't already installed in the first place. Oh well.
+# From https://forums.plex.tv/t/plex-media-server-automatic-update-ubuntu/462840
+    echo deb https://downloads.plex.tv/repo/deb public main | sudo tee /etc/apt/sources.list.d/plexmediaserver.list
+    curl https://downloads.plex.tv/plex-keys/PlexSign.key | sudo apt-key add -
+
 if $install_mysql_server ; then
   echo "Installing mysql server"
 ###### EXTREMELY IMPORTANT: Edit /etc/mysql/mysql.conf.d/mysqld.cnf and open up bind-address * ###########

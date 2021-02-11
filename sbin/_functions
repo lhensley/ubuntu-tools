@@ -383,12 +383,14 @@ function f_is_mounted () {
 	}
 
 function f_set_plex_media_recursive_permissions () {
-		chown -R plex:plex $SBIN_DIR $VIDEO_WORK_DIRECTORY
-		chown -R plex:plex $SBIN_DIR $VIDEO_STORE_DIRECTORY
+		set -x
+		chown -R plex:plex $SBIN_DIR '$VIDEO_WORK_DIRECTORY'
+		chown -R plex:plex $SBIN_DIR '$VIDEO_STORE_DIRECTORY'
 		find $VIDEO_WORK_DIRECTORY -type d -print -exec chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS {} \;
 		find $VIDEO_WORK_DIRECTORY -type f -print -exec chmod $PLEX_VIDEO_FILE_PERMISSIONS {} \;
 		find $VIDEO_STORE_DIRECTORY -type d -print -exec chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS {} \;
 		find $VIDEO_STORE_DIRECTORY -type f -print -exec chmod $PLEX_VIDEO_FILE_PERMISSIONS {} \;
+		set +x
 	}
 
 function f_only_on_server () {
