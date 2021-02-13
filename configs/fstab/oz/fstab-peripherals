@@ -8,5 +8,5 @@ UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb ext4 defaults 0 0
 
 # External Hard Drive for Plex, 10TB
 # Name: rerun
-UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 ro,defaults 0 0
+UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 rw,defaults 0 0
 
