@@ -1,5 +1,6 @@
 #!/bin/bash
 # Bash functions for Lane applications
+# Howdy!
 
 # Check to ensure that variables are defined
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $(basename $0): Variables not defined. Aborting; logger -t "$(basename $0)": Variables not defined. Aborting; exit 1; fi
