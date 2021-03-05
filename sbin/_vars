@@ -202,6 +202,9 @@ source /etc/os-release
 		TEMP_COLD_BACKUP_DIRECTORY="/mnt/bob/cold-backup"
 		TEMP_COLD_BACKUP_PARENT_DIRECTORY="/mnt/bob"
 		TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"
+		TEMP_ARCHIVE_DIRECTORY="/mnt/bob/archive"
+		TEMP_ARCHIVE_PARENT_DIRECTORY="/mnt/bob"
+		TEMP_ARCHIVE_SUBDIRECTORY="archive"
 		fi
 	if [ $HOSTNAME == "red" ]; then
 		COLD_BACKUP_FILE_SYSTEM="/mnt/5TBD"
