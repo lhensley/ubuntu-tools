@@ -245,6 +245,7 @@ source /etc/os-release
 	BACKUP_OPTION[--auto-compress]=true
 	BACKUP_OPTION[--preserve-permissions]=true
 	BACKUP_OPTION[--file=$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE]=true
+	BACKUP_OPTION[--exclude "/var/lib/plexmediaserver/Library/Application Support"]=true
 	BACKUP_OPTION[--exclude-vcs]=true
 	BACKUP_OPTION[--exclude-caches]=true
 	BACKUP_OPTION[--totals]=true

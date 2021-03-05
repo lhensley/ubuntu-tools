@@ -14,7 +14,6 @@
 		f_die "Backup file system cannot be /." true
 		fi
 
-ls /mnt/5TBE/cold-backup | mail -s "Test 1" lane
 # Make the cold backup file system writable
 if ! $(f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM") ; then
 	f_die "$COLD_BACKUP_FILE_SYSTEM is not mounted." true
@@ -25,30 +24,25 @@ if ! $(f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM") ; then
 # Stop services as needed
 #	systemctl stop $COLD_PROTECTED_SERVICES
 
-ls /mnt/5TBE/cold-backup | mail -s "Test 2" lane
 # Store current directory and switch to root
 CURRENT_DIRECTORY="$(pwd)"
 cd /
 
-ls /mnt/5TBE/cold-backup | mail -s "Test 3" lane
 # Make container directory
 mkdir -p -m 700 "$COLD_BACKUP_DIRECTORY"
 chmod 700 "$COLD_BACKUP_DIRECTORY"
 chown root:root "$COLD_BACKUP_DIRECTORY"
 
-ls /mnt/5TBE/cold-backup | mail -s "Test 4" lane
 # Make temp cold backup directory
 mkdir -p -m 700 "$TEMP_COLD_BACKUP_DIRECTORY"
 chmod 700 "$TEMP_COLD_BACKUP_DIRECTORY"
 chown root:root "$TEMP_COLD_BACKUP_DIRECTORY"
 
-ls /mnt/5TBE/cold-backup | mail -s "Test 4" lane
 # Make temp archive directory
 mkdir -p -m 700 "$TEMP_ARCHIVE_DIRECTORY"
 chmod 700 "$TEMP_ARCHIVE_DIRECTORY"
 chown root:root "$TEMP_ARCHIVE_DIRECTORY"
 
-ls /mnt/5TBE/cold-backup | mail -s "Test 5" lane
 # Export cron jobs for $CRONTAB_BACKUP_USERS
 for SELECTED_USER in $CRONTAB_BACKUP_USERS; do 
 	crontab -l -u $SELECTED_USER > $(eval echo "~$SELECTED_USER")/.crontab-archive 2>/dev/null
@@ -56,7 +50,6 @@ for SELECTED_USER in $CRONTAB_BACKUP_USERS; do
 	chown $SELECTED_USER $(eval echo "~$SELECTED_USER")/.crontab-archive
 	done
 
-ls /mnt/5TBE/cold-backup | mail -s "Test 6" lane
 # Do backup with rsync to $TEMP_COLD_BACKUP_DIRECTORY
 	rsync -aloprtvER --delete $COLD_BACKUP_SOURCES "$TEMP_COLD_BACKUP_DIRECTORY"
 	# Back up MySQL
@@ -74,45 +67,34 @@ ls /mnt/5TBE/cold-backup | mail -s "Test 6" lane
 		rsync -aloprtvER --delete /var/lib/postfix/* "$TEMP_COLD_BACKUP_DIRECTORY"  # --delete means from the target
 		systemctl start postfix
 
-ls /mnt/5TBE/cold-backup | mail -s "Test 7" lane
 # Remove crontab export file
 	rm "$(eval echo "~$SELECTED_USER")/.crontab-archive"
 
-ls /mnt/5TBE/cold-backup | mail -s "Test 8" lane
 # Start services as needed
 #	systemctl start $COLD_PROTECTED_SERVICES
 
-ls /mnt/5TBE/cold-backup | mail -s "Test 9" lane
 # Commented this out December 2020 because the drive itself was removed, causing data to be written into the mount point (need to fix)
 # Archive the cold backup
  	mkdir -p -m 700 "$THIS_ARCHIVE_DIRECTORY"
 	chmod 700 "$THIS_ARCHIVE_DIRECTORY"
 	chown root:root "$THIS_ARCHIVE_DIRECTORY"
-	ls /mnt/5TBE/cold-backup | mail -s "Test 9a" lane
 	# Create $ARCHIVE_TAR_WEEKDAY_FILE in $TEMP_ARCHIVE_DIRECTORY (usually /var/tmp/archive)
-	ls /mnt/5TBE/cold-backup | mail -s "Test 9b" lane
  	nice tar $BACKUP_OPTIONS $TEMP_COLD_BACKUP_DIRECTORY
-	ls /mnt/5TBE/cold-backup | mail -s "Test 9c" lane
 #	nice cp "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE" "$ARCHIVE_TAR_FULL_WEEKDAY"
 	nice cp "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE" "$ARCHIVE_TAR_FULL_MONTH"
-	ls /mnt/5TBE/cold-backup | mail -s "Test 9d" lane
 	mv "$TEMP_ARCHIVE_DIRECTORY/"* $THIS_ARCHIVE_DIRECTORY/
-#	rsync -aloprtvER --delete $TEMP_COLD_BACKUP_DIRECTORY/* "$COLD_BACKUP_DIRECTORY"
+#	rsync -aloprtvER --delete $TEMP_COLD_BACKUP_DIRECTORY/* "$COLD_BACKUP_DIRECTORY"  # --delete means from the target
 #   TRIED REMOVING the R option 3/1/2021; cold-backup directory was being copied to 5TBE as /mnt/5TBE/cold-backup/mnt/bob/cold-backup/*
-	ls /mnt/5TBE/cold-backup | mail -s "Test 9e" lane
 	rsync -aloprtvE --delete $TEMP_COLD_BACKUP_DIRECTORY/* "$COLD_BACKUP_DIRECTORY"  # --delete means from the target
 #	rm "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
 
-ls /mnt/5TBE/cold-backup | mail -s "Test 10" lane
 if [ $COLD_BACKUP_FS_READ_ONLY ]; then
 	cd /
-	ls /mnt/5TBE/cold-backup | mail -s "Test 10a" lane
 	umount -q "$COLD_BACKUP_FILE_SYSTEM"
 	# f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY > /dev/null
 	fi
 
 # Restore working directory
-ls /mnt/5TBE/cold-backup | mail -s "Test 11" lane
 cd "$CURRENT_DIRECTORY"
  
 # Update log
