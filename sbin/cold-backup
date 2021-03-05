@@ -87,11 +87,9 @@ for SELECTED_USER in $CRONTAB_BACKUP_USERS; do
 	# Move the weekday and monthly version from the temporary directory to the permanent archive directory
 		mv "$TEMP_ARCHIVE_DIRECTORY/"* $THIS_ARCHIVE_DIRECTORY/
 	# rsync the temp cold-backup directory to its permanent counterpart
-		# TRIED REMOVING the R option 3/1/2021; cold-backup directory was being copied to 5TBE as /mnt/5TBE/cold-backup/mnt/bob/cold-backup/*
-		# rsync -aloprtvER --delete $TEMP_COLD_BACKUP_DIRECTORY/* "$COLD_BACKUP_DIRECTORY"  # --delete means from the target
 		rsync -aloprtvE --delete $TEMP_COLD_BACKUP_DIRECTORY/* "$COLD_BACKUP_DIRECTORY"  # --delete means from the target
-	# Remove the contents of the temporary archive directory. Or not.
-		# rm "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
+	# Remove the contents of the temporary archive directory.
+		rm "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
 
 if [ $COLD_BACKUP_FS_READ_ONLY ]; then
 	cd /
