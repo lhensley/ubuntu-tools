@@ -75,18 +75,23 @@ for SELECTED_USER in $CRONTAB_BACKUP_USERS; do
 
 # Commented this out December 2020 because the drive itself was removed, causing data to be written into the mount point (need to fix)
 # Archive the cold backup
- 	mkdir -p -m 700 "$THIS_ARCHIVE_DIRECTORY"
-	chmod 700 "$THIS_ARCHIVE_DIRECTORY"
-	chown root:root "$THIS_ARCHIVE_DIRECTORY"
+ 	# Make the archive directory for this server and set its permissions
+		mkdir -p -m 700 "$THIS_ARCHIVE_DIRECTORY"
+		chmod 700 "$THIS_ARCHIVE_DIRECTORY"
+		chown root:root "$THIS_ARCHIVE_DIRECTORY"
 	# Create $ARCHIVE_TAR_WEEKDAY_FILE in $TEMP_ARCHIVE_DIRECTORY (usually /var/tmp/archive)
- 	nice tar $BACKUP_OPTIONS $TEMP_COLD_BACKUP_DIRECTORY
-#	nice cp "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE" "$ARCHIVE_TAR_FULL_WEEKDAY"
-	nice cp "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE" "$ARCHIVE_TAR_FULL_MONTH"
-	mv "$TEMP_ARCHIVE_DIRECTORY/"* $THIS_ARCHIVE_DIRECTORY/
-#	rsync -aloprtvER --delete $TEMP_COLD_BACKUP_DIRECTORY/* "$COLD_BACKUP_DIRECTORY"  # --delete means from the target
-#   TRIED REMOVING the R option 3/1/2021; cold-backup directory was being copied to 5TBE as /mnt/5TBE/cold-backup/mnt/bob/cold-backup/*
-	rsync -aloprtvE --delete $TEMP_COLD_BACKUP_DIRECTORY/* "$COLD_BACKUP_DIRECTORY"  # --delete means from the target
-#	rm "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
+ 		nice tar $BACKUP_OPTIONS $TEMP_COLD_BACKUP_DIRECTORY
+	# Copy the weekday archive (tar) file to a monthly version
+		# nice cp "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE" "$ARCHIVE_TAR_FULL_WEEKDAY"
+		nice cp "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE" "$ARCHIVE_TAR_FULL_MONTH"
+	# Move the weekday and monthly version from the temporary directory to the permanent archive directory
+		mv "$TEMP_ARCHIVE_DIRECTORY/"* $THIS_ARCHIVE_DIRECTORY/
+	# rsync the temp cold-backup directory to its permanent counterpart
+		# TRIED REMOVING the R option 3/1/2021; cold-backup directory was being copied to 5TBE as /mnt/5TBE/cold-backup/mnt/bob/cold-backup/*
+		# rsync -aloprtvER --delete $TEMP_COLD_BACKUP_DIRECTORY/* "$COLD_BACKUP_DIRECTORY"  # --delete means from the target
+		rsync -aloprtvE --delete $TEMP_COLD_BACKUP_DIRECTORY/* "$COLD_BACKUP_DIRECTORY"  # --delete means from the target
+	# Remove the contents of the temporary archive directory. Or not.
+		# rm "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
 
 if [ $COLD_BACKUP_FS_READ_ONLY ]; then
 	cd /
