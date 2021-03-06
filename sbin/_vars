@@ -217,9 +217,9 @@ source /etc/os-release
 		COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
 		fi
 	COLD_BACKUP_DIRECTORY="$COLD_BACKUP_PARENT_DIRECTORY/$COLD_BACKUP_SUBDIRECTORY"
-	COLD_BACKUP_EXCLUDES="--exclude='/var/lib/plexmediaserver/Library/Application Support/Cache'"
-	COLD_BACKUP_EXCLUDES+=" --exclude=/var/lib/plexmediaserver/Library/work/*"
+	COLD_BACKUP_EXCLUDES="--exclude='/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Cache'"
 	COLD_BACKUP_EXCLUDES+=" --exclude=/var/lib/plexmediaserver/Library/store/*"
+	COLD_BACKUP_EXCLUDES+=" --exclude=/var/lib/plexmediaserver/Library/work/*"
 	COLD_BACKUP_SOURCES="$COLD_BACKUP_EXCLUDES etc home opt root"
 	COLD_BACKUP_SOURCES+=" var/www"
 	COLD_BACKUP_SOURCES+=" var/lib/plexmediaserver/Library"
