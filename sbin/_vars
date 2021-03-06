@@ -228,9 +228,9 @@ source /etc/os-release
 	COLD_RESTORE_EXCLUDES="--exclude=.config/os-install-info.txt"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/fstab*"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/systemd/system"
-	COLD_RESTORE_EXCLUDES+=" --exclude=.cache"
+#	COLD_RESTORE_EXCLUDES+=" --exclude=.cache"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/mtab"
-	COLD_RESTORE_EXCLUDES+=" --exclude='/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Cache'"
+#	COLD_RESTORE_EXCLUDES+=" --exclude='/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Cache'"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/os-release"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/rc*"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/udisks2"
@@ -253,9 +253,9 @@ source /etc/os-release
 	BACKUP_OPTION[--file=$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE]=true
 #	BACKUP_OPTION[--exclude --exclude=/mnt/bob/cold-backup/var/lib/plexmediaserver/Library]=true
 #	BACKUP_OPTION[--exclude --exclude=/var/lib/plexmediaserver/Library]=true
-	BACKUP_OPTION[--exclude='plexmediaserver/Library/Application Support/Cache']=true
-	BACKUP_OPTION[--exclude=plexmediaserver/Library/work/movies]=true
-	BACKUP_OPTION[--exclude=plexmediaserver/Library/work/tv]=true
+#	BACKUP_OPTION[--exclude='plexmediaserver/Library/Application Support/Cache']=true
+#	BACKUP_OPTION[--exclude=plexmediaserver/Library/work/movies]=true
+#	BACKUP_OPTION[--exclude=plexmediaserver/Library/work/tv]=true
 	BACKUP_OPTION[--exclude-vcs]=true
 	BACKUP_OPTION[--exclude-caches]=true
 	BACKUP_OPTION[--totals]=true
