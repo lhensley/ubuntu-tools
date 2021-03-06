@@ -86,7 +86,9 @@ rsync -aloprtvER --delete $COLD_BACKUP_SOURCES "$TEMP_COLD_BACKUP_DIRECTORY"
 		chown root:root "$THIS_ARCHIVE_DIRECTORY"
 	# Create $ARCHIVE_TAR_WEEKDAY_FILE in $TEMP_ARCHIVE_DIRECTORY (usually /var/tmp/archive)
 		f_log_and_echo "Creating $ARCHIVE_TAR_WEEKDAY_FILE in $TEMP_ARCHIVE_DIRECTORY" false
- 		nice tar $BACKUP_OPTIONS $TEMP_COLD_BACKUP_DIRECTORY
+		################ TESTING #####################
+ 		# nice tar $BACKUP_OPTIONS $TEMP_COLD_BACKUP_DIRECTORY
+ 		echo nice tar $BACKUP_OPTIONS $TEMP_COLD_BACKUP_DIRECTORY
 	# Copy the weekday archive (tar) file to a monthly version
 		f_log_and_echo "Copying $TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE to $ARCHIVE_TAR_FULL_MONTH" false
 		# nice cp "$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE" "$ARCHIVE_TAR_FULL_WEEKDAY"

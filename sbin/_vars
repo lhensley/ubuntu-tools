@@ -188,9 +188,9 @@ source /etc/os-release
 	TEMP_COLD_BACKUP_DIRECTORY="/var/tmp/cold-backup"		   # Default
 	TEMP_COLD_BACKUP_PARENT_DIRECTORY="/var/tmp"			   # Default
 	TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"                # Default
-	TEMP_ARCHIVE_DIRECTORY="/var/tmp/archive"		   # Default
-	TEMP_ARCHIVE_PARENT_DIRECTORY="/var/tmp"			   # Default
-	TEMP_ARCHIVE_SUBDIRECTORY="archive"						# Default
+	TEMP_ARCHIVE_DIRECTORY="/var/tmp/archives"		           # Default
+	TEMP_ARCHIVE_PARENT_DIRECTORY="/var/tmp"			       # Default
+	TEMP_ARCHIVE_SUBDIRECTORY="archives"					   # Default
 	# Default COLD_RESTORE_POINT = "/", but "/var/restore-points/START_DATEANDTIMESTAMP/" recommended for trouble-shooting
 		COLD_RESTORE_POINT="/"
 		# COLD_RESTORE_POINT="/var/restore-points/START_DATEANDTIMESTAMP/"
@@ -202,9 +202,9 @@ source /etc/os-release
 		TEMP_COLD_BACKUP_DIRECTORY="/mnt/bob/cold-backup"
 		TEMP_COLD_BACKUP_PARENT_DIRECTORY="/mnt/bob"
 		TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"
-		TEMP_ARCHIVE_DIRECTORY="/mnt/bob/archive"
+		TEMP_ARCHIVE_DIRECTORY="/mnt/bob/archives"
 		TEMP_ARCHIVE_PARENT_DIRECTORY="/mnt/bob"
-		TEMP_ARCHIVE_SUBDIRECTORY="archive"
+		TEMP_ARCHIVE_SUBDIRECTORY="archives"
 		fi
 	if [ $HOSTNAME == "red" ]; then
 		COLD_BACKUP_FILE_SYSTEM="/mnt/5TBD"
@@ -227,7 +227,7 @@ source /etc/os-release
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/systemd/system"
 	COLD_RESTORE_EXCLUDES+=" --exclude=.cache"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/mtab"
-	COLD_RESTORE_EXCLUDES+=" --exclude=\"/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Cache\""
+	COLD_RESTORE_EXCLUDES+=" --exclude='/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Cache'"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/os-release"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/rc*"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/udisks2"
