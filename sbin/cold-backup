@@ -29,16 +29,19 @@ CURRENT_DIRECTORY="$(pwd)"
 cd /
 
 # Make container directory
+f_log_and_echo "Making container directory" false
 mkdir -p -m 700 "$COLD_BACKUP_DIRECTORY"
 chmod 700 "$COLD_BACKUP_DIRECTORY"
 chown root:root "$COLD_BACKUP_DIRECTORY"
 
 # Make temp cold backup directory
+f_log_and_echo "Making temp cold backup directory" false
 mkdir -p -m 700 "$TEMP_COLD_BACKUP_DIRECTORY"
 chmod 700 "$TEMP_COLD_BACKUP_DIRECTORY"
 chown root:root "$TEMP_COLD_BACKUP_DIRECTORY"
 
 # Make temp archive directory
+f_log_and_echo "Making temp archive directory" false
 mkdir -p -m 700 "$TEMP_ARCHIVE_DIRECTORY"
 chmod 700 "$TEMP_ARCHIVE_DIRECTORY"
 chown root:root "$TEMP_ARCHIVE_DIRECTORY"
@@ -53,10 +56,7 @@ for SELECTED_USER in $CRONTAB_BACKUP_USERS; do
 
 # Do backup with rsync to $TEMP_COLD_BACKUP_DIRECTORY
 f_log_and_echo "Backing up to $TEMP_COLD_BACKUP_DIRECTORY" false
-rsync -aloprtvER --delete --exclude='plexmediaserver/Library/Application Support/Cache' \
-	--exclude=plexmediaserver/Library/work/* \
-	--exclude=plexmediaserver/Library/store/* \
-	$COLD_BACKUP_SOURCES "$TEMP_COLD_BACKUP_DIRECTORY"
+rsync -aloprtvER --delete $COLD_BACKUP_SOURCES "$TEMP_COLD_BACKUP_DIRECTORY"
 # Back up MySQL
 	f_log_and_echo "Backing up MySQL" false
 	systemctl stop mysql
