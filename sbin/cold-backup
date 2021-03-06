@@ -53,8 +53,10 @@ for SELECTED_USER in $CRONTAB_BACKUP_USERS; do
 
 # Do backup with rsync to $TEMP_COLD_BACKUP_DIRECTORY
 f_log_and_echo "Backing up to $TEMP_COLD_BACKUP_DIRECTORY" false
-f_log_and_echo "rsync -aloprtvER --delete $COLD_BACKUP_SOURCES $TEMP_COLD_BACKUP_DIRECTORY" false
-rsync -aloprtvER --delete $COLD_BACKUP_SOURCES "$TEMP_COLD_BACKUP_DIRECTORY"
+rsync -aloprtvER --delete --exclude='plexmediaserver/Library/Application Support/Cache' \
+	--exclude=plexmediaserver/Library/work/* \
+	--exclude=plexmediaserver/Library/store/* \
+	$COLD_BACKUP_SOURCES "$TEMP_COLD_BACKUP_DIRECTORY"
 # Back up MySQL
 	f_log_and_echo "Backing up MySQL" false
 	systemctl stop mysql
