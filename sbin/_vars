@@ -220,6 +220,7 @@ source /etc/os-release
 	COLD_BACKUP_EXCLUDES="--exclude='/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Cache'"
 	COLD_BACKUP_EXCLUDES+=" --exclude=/var/lib/plexmediaserver/Library/store/*"
 	COLD_BACKUP_EXCLUDES+=" --exclude=/var/lib/plexmediaserver/Library/work/*"
+	COLD_BACKUP_EXCLUDES+=" --exclude=.cache"
 	COLD_BACKUP_SOURCES="$COLD_BACKUP_EXCLUDES etc home opt root"
 	COLD_BACKUP_SOURCES+=" var/www"
 	COLD_BACKUP_SOURCES+=" var/lib/plexmediaserver/Library"
