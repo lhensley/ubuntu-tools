@@ -34,6 +34,13 @@ UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 rw,defaults 0 0
 # UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0
 #
 #
+# oz: External Hard Drive for Plex, 10TB (rerun)
+UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 defaults 0 0
+#
+# oz: 5TBC (5TB) Black 5TB External Seagate
+UUID=fa9f5c57-94fd-4706-979e-4c30189592a5 /mnt/5TBC ext4 defaults 0 0
+#
+#
 # red (/dev/sdb1): 12TBA (12TB) UUID=901c4177-b514-408a-997c-0cbeee89fa6e
 UUID=901c4177-b514-408a-997c-0cbeee89fa6e /mnt/12TBA ext4 defaults 0 0
 #
