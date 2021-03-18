@@ -21,66 +21,85 @@ TMP='/tmp'
 DOWNLOAD_FILE="https://files.phpmyadmin.net/phpMyAdmin/$1/phpMyAdmin-$1-all-languages.tar.gz"
 EXTRACT_FOLDER="phpMyAdmin-$1-all-languages"
 TARFILE="$EXTRACT_FOLDER.tar.gz"
+CURRENT_DIRECTORY=($pwd)
 
 # Download the application
+echo "Downloading the application."
 cd $TMP
 wget "$DOWNLOAD_FILE"
 exit_code=$?
 if [ $exit_code -ne 0 ]; then f_die "Can't download $DOWNLOAD_FILE"; fi
 
-# Move old version out.
+# Move existing application directory.
+echo "Moving existing application directory."
 mv "$PARENT_DIR/$LIVE_DIR" "$PARENT_DIR/$OLD_DIR"
 exit_code=$?
 if [ $exit_code -ne 0 ]; then f_die "Can't move $PARENT_DIR/$LIVE_DIR"; fi
 
 # Create the new directory
+echo "Creating the new directory."
 mkdir "$PARENT_DIR/$LIVE_DIR"
 exit_code=$?
 if [ $exit_code -ne 0 ]; then f_die "Can't create $PARENT_DIR/$LIVE_DIR"; fi
 
 # Copy the config file from the old directory to the new one.
+echo "Copying the config file from the old directory to the new one."
 cp "$PARENT_DIR/$OLD_DIR/config.inc.php" "$PARENT_DIR/$LIVE_DIR/"
 exit_code=$?
 if [ $exit_code -ne 0 ]; then f_die "Can't copy "$PARENT_DIR/$OLD_DIR/config.inc.php to $PARENT_DIR/$LIVE_DIR"; fi
 
 # Move the downloaded file into the new directory
+echo "Moving the downloaded file into the new directory."
 mv "$TMP/$TARFILE" "$PARENT_DIR/$LIVE_DIR/"
 exit_code=$?
 if [ $exit_code -ne 0 ]; then f_die "Can't move $TMP/$TARFILE to $PARENT_DIR/$LIVE_DIR"; fi
 
 # Change to the new directory
+echo "Changing to the new directory."
 cd "$PARENT_DIR/$LIVE_DIR"
 exit_code=$?
 if [ $exit_code -ne 0 ]; then f_die "Can't change to $PARENT_DIR/$LIVE_DIR"; fi
 
 # Extract the tar file
+echo "Extracting the tar file."
 tar xzf $TARFILE
 exit_code=$?
 if [ $exit_code -ne 0 ]; then f_die "Can't extract $TARFILE"; fi
 
 # Move the extracted files into the new directory
+echo "Moving the extracted files into the new directory."
 mv "$PARENT_DIR/$LIVE_DIR/EXTRACT_FOLDER/"* .
 exit_code=$?
 if [ $exit_code -ne 0 ]; then f_die "Can't move extracted files into $PARENT_DIR/$LIVE_DIR"; fi
 
 # Remove the tar file
+echo "Removing the tar file."
 rm $TARFILE
 exit_code=$?
 if [ $exit_code -ne 0 ]; then f_die "Can't remove $PARENT_DIR/$LIVE_DIR/$TARFILE"; fi
 
 # Remove the extraction directory
+echo "Removing the extraction directory."
 rmdir $EXTRACT_FOLDER
 exit_code=$?
 if [ $exit_code -ne 0 ]; then f_die "Can't remove directory $PARENT_DIR/$LIVE_DIR/$EXTRACT_FOLDER"; fi
 
 # Set ownership to root
+echo "Setting ownership to root."
 chown -R root:root "$PARENT_DIR/$LIVE_DIR"
 exit_code=$?
 if [ $exit_code -ne 0 ]; then f_die "Can't set root as owner of the new installation"; fi
 
+# Change back to previous directory
+echo "Changing directory back to $CURRENT_DIRECTORY."
+cd "$CURRENT_DIRECTORY"
+exit_code=$?
+if [ $exit_code -ne 0 ]; then f_die "Can't change to $CURRENT_DIRECTORY"; fi
+
 echo "Upgrade complete."
 echo "See https://docs.phpmyadmin.net/en/latest/setup.html#upgrading-from-an-older-version"
-echo "    for additional information."
+echo "    to see if you need to make changes to $PARENT_DIR/$LIVE_DIR/config.inc.php"
+echo "    and for additional information."
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
