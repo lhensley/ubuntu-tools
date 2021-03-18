@@ -8,8 +8,8 @@
 # Require root
 	f_require_root
 
-if [$# -ne 1]; 
-    then f_die "Usage: upgrade-phpmyadmin VERSION (e.g., upgrade-phpmyadmin 5.1.0)" false
+if ["$#" -ne 1]; 
+    then f_die "Usage: upgrade-phpmyadmin VERSION (e.g., upgrade-phpmyadmin 5.1.0)" false; fi
 fi
 
 # Set variables
