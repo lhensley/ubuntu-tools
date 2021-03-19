@@ -1,24 +1,20 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * phpMyAdmin sample configuration, you can use it as base for
  * manual configuration. For easier setup you can use setup/
  *
  * All directives are explained in documentation in the doc/ folder
  * or at <https://docs.phpmyadmin.net/>.
- *
- * @package PhpMyAdmin
  */
+
+declare(strict_types=1);
 
 /**
- * Blowfish Secret
  * This is needed for cookie based authentication to encrypt password in
  * cookie. Needs to be 32 chars long.
- * THE ONE SHOWN IS A PLACE HOLDER. MAKE YOUR OWN!
+ * See https://phpsolved.com/phpmyadmin-blowfish-secret-generator/ to generate a random code.
  */
-$cfg['Blowfish Secret'] = 'Qok7qxYX,=UZtDTTcv@(H^UE@JRLXwyu'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
-
-$cfg['ForceSSL'] = true;
+$cfg['blowfish_secret'] = ''; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
 
 /**
  * Servers configuration
@@ -28,13 +24,13 @@ $i = 0;
 /**
  * First server
  */
-#$i++;
+$i++;
 /* Authentication type */
-#$cfg['Servers'][$i]['auth_type'] = 'cookie';
+$cfg['Servers'][$i]['auth_type'] = 'cookie';
 /* Server parameters */
-#$cfg['Servers'][$i]['host'] = 'localhost';
-#$cfg['Servers'][$i]['compress'] = false;
-#$cfg['Servers'][$i]['AllowNoPassword'] = false;
+$cfg['Servers'][$i]['host'] = 'localhost';
+$cfg['Servers'][$i]['compress'] = false;
+$cfg['Servers'][$i]['AllowNoPassword'] = false;
 
 /**
  * phpMyAdmin configuration storage settings.
@@ -67,39 +63,6 @@ $i = 0;
 // $cfg['Servers'][$i]['central_columns'] = 'pma__central_columns';
 // $cfg['Servers'][$i]['designer_settings'] = 'pma__designer_settings';
 // $cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';
-
-/**
- * Server nuc01
-*/
-$i++;
-$cfg['Servers'][$i]['verbose'] = 'nuc01';
-$cfg['Servers'][$i]['host'] = 'nuc01.local';
-$cfg['Servers'][$i]['port'] = '';
-$cfg['Servers'][$i]['socket'] = '';
-$cfg['Servers'][$i]['connect_type'] = 'tcp';
-$cfg['Servers'][$i]['extension'] = 'mysqli';
-$cfg['Servers'][$i]['auth_type'] = 'cookie';
-$cfg['Servers'][$i]['AllowNoPassword'] = false;
-#$cfg['Servers'][$i]['ssl'] = true;
-#$cfg['Servers'][$i]['ssl_key'] = '/usr/share/phpmyadmin/client-certs/nuc01-MySQL-client-key.pem';
-#$cfg['Servers'][$i]['ssl_cert'] = '/usr/share/phpmyadmin/client-certs/nuc01-MySQL-client-cert.pem';
-#$cfg['Servers'][$i]['ssl_ca'] = '/usr/share/phpmyadmin/client-certs/nuc01-MySQL-ca.pem';
-$cfg['Servers'][$i]['compress'] = false;
-/**
- * Server red
- */
-$i++;
-$cfg['Servers'][$i]['verbose'] = 'red';
-$cfg['Servers'][$i]['host'] = 'red.local';
-$cfg['Servers'][$i]['port'] = '';
-$cfg['Servers'][$i]['socket'] = '';
-$cfg['Servers'][$i]['connect_type'] = 'tcp';
-$cfg['Servers'][$i]['extension'] = 'mysqli';
-$cfg['Servers'][$i]['auth_type'] = 'cookie';
-$cfg['Servers'][$i]['AllowNoPassword'] = false;
-$cfg['Servers'][$i]['ssl'] = true;
-$cfg['Servers'][$i]['ssl_ca'] = '/etc/phpmyadmin/rds-combined-ca-bundle.pem';
-$cfg['Servers'][$i]['compress'] = false;
 
 /**
  * End of servers configuration
