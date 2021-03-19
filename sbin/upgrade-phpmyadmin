@@ -70,7 +70,7 @@ if [ $exit_code -ne 0 ]; then f_die "Can't extract $TARFILE"; fi
 
 # Move the extracted files into the new directory
 echo "Moving the extracted files into the new directory."
-mv "$PARENT_DIR/$LIVE_DIR/EXTRACT_FOLDER/"* .
+mv "$PARENT_DIR/$LIVE_DIR/$EXTRACT_FOLDER/"* .
 exit_code=$?
 if [ $exit_code -ne 0 ]; then f_die "Can't move extracted files into $PARENT_DIR/$LIVE_DIR"; fi
 
