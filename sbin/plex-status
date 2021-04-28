@@ -12,6 +12,11 @@
 	# df -Ht ext4
 	# systemctl status plexmediaserver
 
+# Check instances of key processes
+	echo
+	ps -ef | grep HandBrakeCLI
+	ps -ef | grep rsync
+
 # From system-snapshot
 	echo
 	echo "                            "Plex Video Work Directory: $VIDEO_WORK_DIRECTORY
