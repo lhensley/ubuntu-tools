@@ -9,6 +9,7 @@
 	f_require_root
 
 echo basename "$1"
+echo $(basename "$1")
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
