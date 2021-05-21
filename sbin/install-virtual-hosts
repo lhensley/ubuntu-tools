@@ -259,43 +259,30 @@ if ! echo "<VirtualHost *:443>" > $site_conf; then
   echo "Could not create $site_conf."
   abort_and_exit
   fi
-echo "DocumentRoot \"$docroot\"" >> $site_conf
-echo "ServerAdmin $web_admin_email" >> $site_conf
-echo "ErrorLog $error_log" >> $site_conf
-echo "CustomLog $custom_log combined" >> $site_conf
+echo "ServerName $fqdn" >> $site_conf
+echo "DocumentRoot $docroot" >> $site_conf
+echo "" >> $site_conf
 echo "<Directory $docroot>" >> $site_conf
-echo "Options FollowSymLinks" >> $site_conf
-echo "AllowOverride Limit Options FileInfo" >> $site_conf
-echo "DirectoryIndex index.php" >> $site_conf
-echo "Order allow,deny" >> $site_conf
-echo "Allow from all" >> $site_conf
+echo "    Options FollowSymLinks" >> $site_conf
+echo "    AllowOverride Limit Options FileInfo" >> $site_conf
+echo "    DirectoryIndex index.php" >> $site_conf
+echo "    Order allow,deny" >> $site_conf
+echo "    Allow from all" >> $site_conf
 echo "</Directory>" >> $site_conf
-echo "<Directory $docroot/wp-content>" >> $site_conf
-echo "Options FollowSymLinks" >> $site_conf
-echo "Order allow,deny" >> $site_conf
-echo "Allow from all" >> $site_conf
-echo "</Directory>" >> $site_conf
+echo "" >> $site_conf
+if $install_wordpress ; then
+    echo "<Directory $docroot/wp-content>" >> $site_conf
+    echo "    Options FollowSymLinks" >> $site_conf
+    echo "    Order allow,deny" >> $site_conf
+    echo "    Allow from all" >> $site_conf
+    echo "</Directory>" >> $site_conf
+    echo "" >> $site_conf
+    fi
 echo "SSLEngine on" >> $site_conf
-echo "LogLevel emerg" >> $site_conf
-echo "ServerName $fqdn" >> $site_conf
-echo "SSLCertificateFile $certificate_live_dir/$fqdn/fullchain.pem" >> $site_conf
-echo "SSLCertificateKeyFile $certificate_live_dir/$fqdn/privkey.pem" >> $site_conf
-echo "Include $certificate_conf_dir/options-ssl-apache.conf" >> $site_conf
 echo "SSLProtocol +TLSv1.2" >> $site_conf
-echo "</VirtualHost>" >> $site_conf
-echo "<VirtualHost *:80>" >> $site_conf
-echo "DocumentRoot \"$docroot\"" >> $site_conf
-echo "ServerName $fqdn" >> $site_conf
-echo "RewriteEngine On" >> $site_conf
-echo "RewriteCond %{SERVER_PORT} 80" >> $site_conf
-echo "RewriteRule ^(.*)$ https://$fqdn$1 [R=301,L]" >> $site_conf
-echo "RewriteCond %{SERVER_NAME} =$fqdn" >> $site_conf
-echo "RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]" >> $site_conf
-echo "<Directory "$docroot">" >> $site_conf
-echo "allow from all" >> $site_conf
-echo "Options None" >> $site_conf
-echo "Require all granted" >> $site_conf
-echo "</Directory>" >> $site_conf
+echo "Include $certificate_conf_dir/options-ssl-apache.conf" >> $site_conf
+echo "SSLCertificateFile \"$certificate_live_dir/$fqdn/fullchain.pem\"" >> $site_conf
+echo "SSLCertificateKeyFile \"$certificate_live_dir/$fqdn/privkey.pem\"" >> $site_conf
 echo "</VirtualHost>" >> $site_conf
 chown root:root $site_conf
 chmod 644 $site_conf

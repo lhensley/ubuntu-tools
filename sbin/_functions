@@ -434,19 +434,19 @@ function f_git () {
 
 function f_run_apt_updates () {
 	# "update" downloads package information from all configured sources
-	apt -y update
+	apt-get -y update
 	# "upgrade" is an extraneous subset of "dist-upgrade" below
-	#    sudo apt -y upgrade \
+	#    sudo apt-get -y upgrade \
 	# "dist-upgrade" installs available upgrades of all packages
 	# currently installed on the system and intelligently handles
 	# changing dependencies with new versions of packages
-	apt -y dist-upgrade
+	apt-get -y dist-upgrade
 	# "clean" clears out the local repository of retrieved package files.
-	apt -y clean
+	apt-get -y clean
 	# "autoremove" removes those dependencies that were installed with
 	# now-removed applications and that are no longer used
 	# by anything else on the system
-	apt -y autoremove
+	apt-get -y autoremove
 	}
 
 function f_upd () {
@@ -730,22 +730,24 @@ f_watch_wait_upload () {
 
 f_run_apt_updates () {
 	# Changed apt-get to apt 1/31/19.
+	# Changed it back 5/21/21 because apt began reporting: 
+	#	WARNING : apt does not have a stable CLI interface. Use with caution in scripts.
 	# See https://itsfoss.com/apt-vs-apt-difference/ for rationale.
 	#
 	# "update" downloads package information from all configured sources
-	apt -y update
+	apt-get -y update
 	# "upgrade" is an extraneous subset of "dist-upgrade" below
-	#    sudo apt -y upgrade \
+	#    sudo apt-get -y upgrade \
 	# "dist-upgrade" installs available upgrades of all packages
 	# currently installed on the system and intelligently handles
 	# changing dependencies with new versions of packages
-	apt -y dist-upgrade
+	apt-get -y dist-upgrade
 	# "clean" clears out the local repository of retrieved package files.
-	apt -y clean
+	apt-get -y clean
 	# "autoremove" removes those dependencies that were installed with
 	# now-removed applications and that are no longer used
 	# by anything else on the system
-	apt -y autoremove
+	apt-get -y autoremove
 	}
 
 #########################################################################################################
