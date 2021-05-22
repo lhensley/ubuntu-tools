@@ -14,18 +14,19 @@
 # Check number of arguments
 if [ $# -ne 1 ]; then 
     echo "Please specify the download file."
+	echo "You can find it at https://community.limesurvey.org/downloads/"
 	echo "Usage: update-limesurvey DOWNLOAD_URL"
 fi
 
 # Define variables
 	limesurvey="/tmp/limesurvey"
 
-# Explain ourselves to those watching
-	echo Downloading "\"$1\"" to "\"$limesurvey\""
-
 # Get rid of any older updates.
 	rm -rf "$limesurvey"
-	echo "URGENT: Need to test for rm success."
+    if $(f_is_directory "$limesurvey"); then f_die "Can't remove $limesurvey." false -1; fi
+	
+# Explain ourselves to the user
+	echo Downloading "\"$1\"" to "\"$limesurvey\""
 
 # Try to download the file
 	wget -V -O "$limesurvey" "$1"
