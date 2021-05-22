@@ -47,7 +47,7 @@ fi
 
 # Unzip the downloaded file
 	echo "Unzipping the downloaded file."
-	if ! unzip -qq "$zip_file" -d /tmp; then
+	if ! unzip -qq "$zip_file" -d /tmp ; then
 		f_die "Can't unzip the downloaded file." false -1
 		fi
 
@@ -57,7 +57,7 @@ fi
 		fi
 
 # Remove the downloaded file
-	rm "$zip_file""
+	rm "$zip_file"
 
 # Assigning ownership of downloaded files.
 	echo "Assigning ownership of downloaded files."
