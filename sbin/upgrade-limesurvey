@@ -73,7 +73,7 @@ fi
 		fi
 
 # Archive the existing installation
-	echo "Archiving the existing installation."
+	echo "Archiving the existing installation to $archive_file."
 	if ! tar -zcf "$archive_file" "$install_dir" > /dev/null 2>&1 ; then
 		f_die "Can't archive the existing installation." false -1
 		fi
