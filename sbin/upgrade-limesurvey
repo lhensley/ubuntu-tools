@@ -40,15 +40,13 @@ fi
 		f_die "Can't download $1" false -1
 		fi
 
-# Explain ourselves to the user
-	echo Working on the update ...
-	
 # Try to rename the downloaded file
 	if ! mv "$temp_dir/"lime* "$zip_file"; then
 		f_die "Can't find LimeSurvey in the downloaded materials." false -1
 		fi
 
 # Unzip the downloaded file
+	echo "Unzipping the downloaded file."
 	if ! unzip -qq "$zip_file" -d /tmp; then
 		f_die "Can't unzip the downloaded file." false -1
 		fi
@@ -61,12 +59,14 @@ fi
 # Remove the downloaded file
 	rm "$zip_file""
 
-# Change ownership of downloaded files.
+# Assigning ownership of downloaded files.
+	echo "Assigning ownership of downloaded files."
 	if ! chown -R www-data:www-data "$tmp_dir"; then
 		f_die "Can't change ownership of downloaded files." false -1
 		fi
 
 # Copy over customizations from existing installation
+	echo "Copying over custominzations from existing installation."
 	if ! cp "$install_dir/application/config/security.php" "$temp_dir/application/config/security.php"; then
 		f_die "Can't copy over customizations from existing installation." false -1
 		fi
@@ -78,21 +78,25 @@ fi
 		fi
 
 # Archive the existing installation
-if ! tar -zcf "$archive_file" "$install_dir"; then
+	echo "Archiving the existing installation."
+	if ! tar -zcf "$archive_file" "$install_dir" ; then
 		f_die "Can't archive the existing installation." false -1
 		fi
 
 # Remove the existing installation
-	if ! rm -r "$install_dir/"*; then
+	echo "Removing the existing installation."
+	if ! rm -r "$install_dir/"* ; then
 		f_die "Can't remove the existing installation." false -1
 		fi
 
 # Install the upgrade
-	if ! cp -r "$temp_dir/"* "$install_dir/"; then
+	echo "Installing the upgraded software."
+	if ! cp -r "$temp_dir/"* "$install_dir"/ ; then
 		f_die "Can't install the upgrade." false -1
 		fi
 
-# Update the database.
+# Update the database schema.
+	echo "Updating the database schema."
 	php "$install_dir/application/commands/console.php" updatedb
 
 # Victory lap
