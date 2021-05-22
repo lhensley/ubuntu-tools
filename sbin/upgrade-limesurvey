@@ -26,7 +26,7 @@ fi
 	if ! $(f_is_directory "$install_dir"); then install_dir="/var/www/s2.lanehensley.org"; fi
 	if ! $(f_is_directory "$install_dir"); then f_die "Can't find installation directory $install_dir" false -1; fi
 	zip_file=$temp_dir/limesurvey.zip
-	archive_file=$(echo ~/LimeSurveyArchive-$(date "+%Y.%m.%d-%H.%M.%S.%Z").tar.gz)
+	archive_file=$(echo $ADMIN_HOME_DIR/LimeSurveyArchive-$(date "+%Y.%m.%d-%H.%M.%S.%Z").tar.gz)
 
 # Get rid of any older updates.
 	rm -rf "$temp_dir"
