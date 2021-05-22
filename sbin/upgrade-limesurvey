@@ -79,7 +79,7 @@ fi
 
 # Archive the existing installation
 	echo "Archiving the existing installation."
-	if ! tar -zcf "$archive_file" "$install_dir" ; then
+	if ! tar -zcf "$archive_file" "$install_dir" > /dev/null 2>&1 ; then
 		f_die "Can't archive the existing installation." false -1
 		fi
 
@@ -95,14 +95,15 @@ fi
 		f_die "Can't install the upgrade." false -1
 		fi
 
-# Update the database schema.
-	echo "Updating the database schema."
-	php "$install_dir/application/commands/console.php" updatedb
+# # Update the database schema.
+# 	echo "Updating the database schema."
+# 	php "$install_dir/application/commands/console.php" updatedb
 
 # Victory lap
 	echo ""
 	echo "Your upgrade is DONE."
 	echo "An archive of the old installation is at $archive_file"
+	echo "Make sure to go to the admin page to see in a database update is necessary."
 	echo "You may need to clear your browser cache and cookies."
 
 # Include script footer file
