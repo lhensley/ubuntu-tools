@@ -5,14 +5,35 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
+# Arguments
+# $1: latest release from https://community.limesurvey.org/downloads/, VERY latest, not LTS.
+
 # Require root
 	f_require_root
 
-echo basename "$1"
-echo $(basename "$1")
+# Check number of arguments
+if [$# -ne 1]; then 
+    echo "Please specify the download file."
+	echo "Usage: update-limesurvey DOWNLOAD_URL"
+fi
+
+# Define variables
+	limesurvey="/tmp/limesurvey"
+
+# Explain ourselves to those watching
+	echo Downloading "\"$1\"" to "\"$limesurvey\""
+
+# Get rid of any older updates.
+	rm -rf "$limesurvey"
+	echo "Need to test for rm success."
+
+# Try to download the file
+	wget -V -O "$limesurvey" "$1"
+	echo "Need to test for wget success."
+
+# Look for it at "\"$limesurvey\""
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
-
 
