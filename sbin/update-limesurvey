@@ -26,7 +26,7 @@ fi
 	if ! $(f_is_directory "$install_dir"); then install_dir = "/var/www/s2.lanehensley.org" false -1; fi
 	if ! $(f_is_directory "$install_dir"); then f_die "Can't find installation directory" false -1; fi
 	zip_file=$temp_dir/limesurvey.zip
-	archive_file=$(echo ~/LimeSurvey Archive $(date "+%Y.%m.%d-%H.%M.%S.%Z").tar.gz)
+	archive_file=$(echo ~/LimeSurveyArchive-$(date "+%Y.%m.%d-%H.%M.%S.%Z").tar.gz)
 
 # Get rid of any older updates.
 	rm -rf "$temp_dir"
@@ -44,12 +44,12 @@ fi
 	echo Working on the update ...
 	
 # Try to rename the downloaded file
-	if ! mv $temp_dir/lime* $zip_file; then
+	if ! mv "$temp_dir/"lime* "$zip_file"; then
 		f_die "Can't find LimeSurvey in the downloaded materials." false -1
 		fi
 
 # Unzip the downloaded file
-	if ! unzip $zip_file -d /tmp; then
+	if ! unzip "$zip_file" -d /tmp; then
 		f_fie "Can't unzip the downloaded file." false -1
 		fi
 
@@ -59,45 +59,47 @@ fi
 		fi
 
 # Remove the downloaded file
-	rm $zip_file
+	rm "$zip_file""
 
 # Change ownership of downloaded files.
-	if ! chown -R www-data:www-data $tmp_dir; then
+	if ! chown -R www-data:www-data "$tmp_dir"; then
 		f_fie "Can't change ownership of downloaded files." false -1
 		fi
 
 # Copy over customizations from existing installation
-	if ! cp $install_dir/application/config/security.php $temp_dir/application/config/security.php; then
+	if ! cp "$install_dir/application/config/security.php" "$temp_dir/application/config/security.php"; then
 		f_fie "Can't copy over customizations from existing installation." false -1
 		fi
-	if ! cp $install_dir/application/config/config.php $temp_dir/application/config/config.php; then
+	if ! cp "$install_dir/application/config/config.php" "$temp_dir/application/config/config.php"; then
 		f_fie "Can't copy over customizations from existing installation." false -1
 		fi
-	if ! cp -r $install_dir/upload $temp_dir/; then
+	if ! cp -r "$install_dir/upload" "$temp_dir/"; then
 		f_fie "Can't copy over customizations from existing installation." false -1
 		fi
 
 # Archive the existing installation
-if ! tar -zcvf $archive_file $install_dir; then
+if ! tar -zcvf "$archive_file" "$install_dir"; then
 		f_fie "Can't archive the existing installation." false -1
 		fi
 
 # Remove the existing installation
-	if ! rm -r $install_dir/*; then
+	if ! rm -r "$install_dir/"*; then
 		f_fie "Can't remove the existing installation." false -1
 		fi
 
 # Install the upgrade
-	if ! cp -r $temp_dir/* $install_dir/; then
+	if ! cp -r "$temp_dir/"* "$install_dir/"; then
 		f_fie "Can't install the upgrade." false -1
 		fi
+
+# Update the database.
+	php "$install_dir/application/commands/console.php" updatedb
 
 # Victory lap
 	echo ""
 	echo "Your upgrade is DONE."
 	echo "An archive of the old installation is at $archive_file"
-	echo "IMPORTANT: Clear your browser cache and cookies."
-	echo "IMPORTANT: Visit your admin page and see if a database scheme upgrade is needed."
+	echo "You may need to clear your browser cache and cookies."
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
