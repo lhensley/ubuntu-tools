@@ -49,12 +49,12 @@ fi
 		fi
 
 # Unzip the downloaded file
-	if ! unzip "$zip_file" -d /tmp; then
+	if ! unzip -qq "$zip_file" -d /tmp; then
 		f_fie "Can't unzip the downloaded file." false -1
 		fi
 
 # Test for the presence of a key file to confirm that the download actually is LimeSurvey
-	if ! $(f_is_file "$tempdir/application/core/ConsoleApplication.php"); then
+	if ! $(f_is_file "$temp_dir/application/core/ConsoleApplication.php"); then
 		f_die "The downloaded file doesn't seem to be a LimeSurvey distribution." false -1
 		fi
 
@@ -78,7 +78,7 @@ fi
 		fi
 
 # Archive the existing installation
-if ! tar -zcvf "$archive_file" "$install_dir"; then
+if ! tar -zcf "$archive_file" "$install_dir"; then
 		f_fie "Can't archive the existing installation." false -1
 		fi
 
