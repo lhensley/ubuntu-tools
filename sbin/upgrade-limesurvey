@@ -60,13 +60,11 @@ fi
 	rm "$zip_file"
 
 # Assigning ownership of downloaded files.
-	echo "Assigning ownership of downloaded files."
 	if ! chown -R www-data:www-data "$temp_dir"; then
 		f_die "Can't change ownership of downloaded files." false -1
 		fi
 
 # Copy over customizations from existing installation
-	echo "Copying over custominzations from existing installation."
 	if ! cp "$install_dir/application/config/security.php" "$temp_dir/application/config/security.php"; then
 		f_die "Can't copy over customizations from existing installation." false -1
 		fi
@@ -84,7 +82,6 @@ fi
 		fi
 
 # Remove the existing installation
-	echo "Removing the existing installation."
 	if ! rm -r "$install_dir/"* ; then
 		f_die "Can't remove the existing installation." false -1
 		fi
