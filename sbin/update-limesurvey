@@ -25,11 +25,11 @@ fi
 
 # Get rid of any older updates.
 	rm -rf "$limesurvey"
-	echo "Need to test for rm success."
+	echo "URGENT: Need to test for rm success."
 
 # Try to download the file
 	wget -V -O "$limesurvey" "$1"
-	echo "Need to test for wget success."
+	echo "URGENT: Need to test for wget success."
 
 # Look for it at "\"$limesurvey\""
 
