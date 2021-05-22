@@ -59,11 +59,6 @@ fi
 # Remove the downloaded file
 	rm "$zip_file"
 
-# Assigning ownership of downloaded files.
-	if ! chown -R www-data:www-data "$temp_dir"; then
-		f_die "Can't change ownership of downloaded files." false -1
-		fi
-
 # Copy over customizations from existing installation
 	if ! cp "$install_dir/application/config/security.php" "$temp_dir/application/config/security.php"; then
 		f_die "Can't copy over customizations from existing installation." false -1
@@ -90,6 +85,11 @@ fi
 	echo "Installing the upgraded software."
 	if ! cp -r "$temp_dir/"* "$install_dir"/ ; then
 		f_die "Can't install the upgrade." false -1
+		fi
+
+# Assigning ownership of downloaded files.
+	if ! chown -R www-data:www-data "$install_dir"; then
+		f_die "Can't change ownership of downloaded files." false -1
 		fi
 
 # # Update the database schema.
