@@ -60,8 +60,10 @@ fi
 	rm "$zip_file"
 
 # Copy over customizations from existing installation
-	if ! cp "$install_dir/application/config/security.php" "$temp_dir/application/config/security.php"; then
-		f_die "Can't copy over customizations from existing installation." false -1
+	if $(f_is_file "$install_dir/application/config/security.php"); then
+		if ! cp "$install_dir/application/config/security.php" "$temp_dir/application/config/security.php"; then
+			f_die "Can't copy over customizations from existing installation." false -1
+			fi
 		fi
 	if ! cp "$install_dir/application/config/config.php" "$temp_dir/application/config/config.php"; then
 		f_die "Can't copy over customizations from existing installation." false -1
