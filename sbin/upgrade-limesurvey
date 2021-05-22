@@ -61,7 +61,7 @@ fi
 
 # Assigning ownership of downloaded files.
 	echo "Assigning ownership of downloaded files."
-	if ! chown -R www-data:www-data "$tmp_dir"; then
+	if ! chown -R www-data:www-data "$temp_dir"; then
 		f_die "Can't change ownership of downloaded files." false -1
 		fi
 
