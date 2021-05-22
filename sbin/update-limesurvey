@@ -12,7 +12,7 @@
 	f_require_root
 
 # Check number of arguments
-if [$# -ne 1]; then 
+if [ $# -ne 1 ]; then 
     echo "Please specify the download file."
 	echo "Usage: update-limesurvey DOWNLOAD_URL"
 fi
