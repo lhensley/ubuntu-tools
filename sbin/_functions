@@ -44,7 +44,7 @@ function f_require_confirmation {
 	}
 
 function f_require_host () {
-	if ! [ ""$HOST" != "$1" ]; then
+	if ! [ "$HOST" != "$1" ]; then
 		f_die "This script works only on $1." false $EXIT_CODE_WRONG_HOST
 		fi
 	}
