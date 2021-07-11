@@ -9,9 +9,10 @@
 	f_require_root
 
 rsync -av --delete /mnt/cloteal/plex/* /mnt/Silver5TB-A/archives/plex
+rsync -av --delete /mnt/cloteal/plex-tv/* /mnt/Silver5TB-A/archives/plex-tv
+
 rsync -av --delete /mnt/cloteal/plex-dvr/* /mnt/Silver5TB-B/archives/plex-dvr
 rsync -av --delete /mnt/cloteal/plex-other/* /mnt/Silver5TB-B/archives/plex-other
-rsync -av --delete /mnt/cloteal/plex-tv/* /mnt/Silver5TB-B/archives/plex-tv
 rsync -av --delete /mnt/cloteal/plex-videos/* /mnt/Silver5TB-B/archives/plex-videos
 
 # Include script footer file
