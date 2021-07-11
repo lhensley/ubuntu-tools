@@ -43,6 +43,12 @@ function f_require_confirmation {
 			fi
 	}
 
+function f_require_host () {
+	if ! [ ""$HOST" != "$1" ]; then
+		f_die "This script works only on $1." false $EXIT_CODE_WRONG_HOST
+		fi
+	}
+
 function f_require_ubuntu () {
 	if ! [ $NAME == "Ubuntu" ]; then
 		f_die "This script works only on Ubuntu." false $EXIT_CODE_UBUNTU_REQUIRED

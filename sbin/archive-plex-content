@@ -8,6 +8,9 @@
 # Require root
 	f_require_root
 
+# Run only on nuc01
+	f_require_host nuc01
+
 rsync -av --delete /mnt/cloteal/plex/* /mnt/Silver5TB-A/archives/plex
 rsync -av --delete /mnt/cloteal/plex-tv/* /mnt/Silver5TB-A/archives/plex-tv
 
