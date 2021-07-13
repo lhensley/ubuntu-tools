@@ -11,9 +11,14 @@
 # Run only on nuc01
 	f_require_host nuc01
 
+ROUTER_IP_ADDRESS="182.168.168.2"
+ERROR_TOKEN="/var/tmp/error_pinging_router"
+
 ping -c1 192.168.168.2
 if [ $? -eq 0 ]; then
-	echo "Error pinging router." | mail textalerts
+	if $(f_is_file "$ERROR_TOKEN"); then f_balk "Router ping restored." TRUE | mail textalerts; rm "$ERROR_TOKEN"; fi	
+else
+	if $(f_is_file "$ERROR_TOKEN"); then true; else f_balk "Error pinging router." TRUE | mail textalerts; touch "$ERROR_TOKEN"; fi	
 fi
 
 # Include script footer file
