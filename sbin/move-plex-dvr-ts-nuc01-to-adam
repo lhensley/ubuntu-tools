@@ -6,10 +6,10 @@
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 # "Run as a service" check
-	if [ "$PPID" != "1" ]; then
-		f_die "This script only runs as a systemd service. Try sudo systemctl start $(basename $0)" false
-		fi
-	SERVICE_FLAG=true;
+#	if [ "$PPID" != "1" ]; then
+#		f_die "This script only runs as a systemd service. Try sudo systemctl start $(basename $0)" false
+#		fi
+#	SERVICE_FLAG=true;
 
 # Only allow this to run on server adam.
 	f_only_on_server "adam"
