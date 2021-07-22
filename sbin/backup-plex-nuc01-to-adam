@@ -14,9 +14,8 @@
 # Run the backup (rsync)
 	for this_directory in "plex" "plex-dvr" "plexlinks" "plex-other" "plex-tv" "plex-videos"
 		do
-		echo $this_directory
+			sudo -u $ADMIN_USER rsync -aloprtvE --delete "nuc01:/mnt/cloteal/$this_directory/"* "/mnt/12TBA/archives/nuc01/$this_directory"
 		done
-# 	sudo -u $ADMIN_USER rsync -aloprtvE --delete nuc01:/mnt/cloteal/plex/* /mnt/12TBA/archives/nuc01/plex
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
