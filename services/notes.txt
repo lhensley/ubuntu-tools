@@ -7,53 +7,21 @@ Simple Example & Overview: https://medium.com/@benmorel/creating-a-linux-service
 Detailed: https://linuxconfig.org/how-to-create-systemd-service-unit-in-linux
 Best: https://www.linode.com/docs/quick-answers/linux/start-service-at-boot/
 
-Secure remote mount: SSHFS
-Ref: https://www.server-world.info/en/note?os=Ubuntu_20.04&p=ssh&f=8
-Install:
-	apt-get install -y sshfs
 
-Lane Daemons
-	lgh-transcode	Video Transcoding
-	lgh-files		File Transfer Queueing (maybe this exists?)
-	lgh-mirror		Cold Backup Management
-	lgh-archives		Archive Management
-	lgh-watch		Custom Analysis, Logging, Notification
+Lane Services ("unit files")
+	Developed and stored in $GIT_GO_SERVICES
+	upd script copies them to $SERVICES_DIR
 
 
-Using https://www.linode.com/docs/quick-answers/linux/start-service-at-boot/ as my guide:
-	1&2. Test Daemon: /usr/local/sbin/services/lgh-test-daemon
-	3. Unit file: Create this file, permissions root:root 644: /lib/systemd/system/lgh-test.service
-		# Lane service file
-
-		[Unit]
-		Description=Lane test systemd service
-
-		[Service]
-		ExecStart=/bin/bash /usr/local/sbin/services/lgh-test-daemon
-		Type=notify
-		User=lhensley
-		Group=lhensley
-#		PIDFile=/run/mysqld/mysqld.pid
-		PermissionsStartOnly=true
-#		ExecStartPre=/usr/share/mysql/mysql-systemd-start pre
-		ExecStart=/usr/sbin/mysqld
-		TimeoutSec=600
-		Restart=on-failure
-#		RuntimeDirectory=mysqld
-#		RuntimeDirectoryMode=755
-		LimitNOFILE=10000
-		
-		[Install]
-		WantedBy=multi-user.target
-	4. Copy to /etc/systemd/system and set permissions
-		sudo chown root:root /lib/systemd/system/lgh-test.service
-		sudo chmod 644 /lib/systemd/system/lgh-test.service
-		sudo cp /lib/systemd/system/lgh-test.service /etc/systemd/system/
+Pull up any unit file from the $GIT_GO_SERVICES directory. They're easy to adapt. Things you'll need to specify:
+	Description
+	Executable
+	User/Group Running the Executable
 
 	Start and test
-		sudo systemctl start lgh-test
-		sudo systemctl status lgh-test
+		sudo systemctl start SERVICE_NAME
+		sudo systemctl status SERVICE_NAME
 
-	Enable
-		sudo systemctl enable lgh-test
+	Enable (have it automatically start on bootup)
+		sudo systemctl enable SERVICE_NAME
 
