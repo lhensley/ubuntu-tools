@@ -1,6 +1,15 @@
 #
+# nuc01: 3TBA (3TB) NFS
+adam:/mnt/3TBB /mnt/3TBB nfs rw
+#
+# nuc01: 5TBD (5TB) NFS
+adam:/mnt/5TBD /mnt/5TBD nfs rw
+#
 # nuc01: 5TBE (5TB) Black 5TB External Seagate
 UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 ro,defaults 0 0
+#
+# nuc01: 12TBA (12TB) NFS
+adam:/mnt/12TBA /mnt/12TBA nfs rw
 #
 # nuc01: bertha (3TB) UUID=d28256f9-c258-451e-b299-d4849cf19e0b
 UUID=d28256f9-c258-451e-b299-d4849cf19e0b /mnt/bertha ext4 defaults 0 0

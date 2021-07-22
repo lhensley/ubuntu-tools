@@ -12,8 +12,17 @@
 # To show all UUIDs on the system, use:     sudo blkid | grep UUID=
 #
 #
+# nuc01: 3TBA (3TB) NFS
+adam:/mnt/3TBB /mnt/3TBB nfs rw
+#
+# nuc01: 5TBD (5TB) NFS
+adam:/mnt/5TBD /mnt/5TBD nfs rw
+#
 # nuc01: 5TBE (5TB) Black 5TB External Seagate
-UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 rw,defaults 0 0
+UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 ro,defaults 0 0
+#
+# nuc01: 12TBA (12TB) NFS
+adam:/mnt/12TBA /mnt/12TBA nfs rw
 #
 # nuc01: bertha (3TB) UUID=d28256f9-c258-451e-b299-d4849cf19e0b
 # UUID=d28256f9-c258-451e-b299-d4849cf19e0b /mnt/bertha ext4 defaults 0 0
@@ -41,20 +50,20 @@ UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 defaults 0 0
 UUID=fa9f5c57-94fd-4706-979e-4c30189592a5 /mnt/5TBC ext4 defaults 0 0
 #
 #
-# red (/dev/sdb1): 12TBA (12TB) UUID=901c4177-b514-408a-997c-0cbeee89fa6e
+# adam: 12TBA (12TB) UUID=901c4177-b514-408a-997c-0cbeee89fa6e
 UUID=901c4177-b514-408a-997c-0cbeee89fa6e /mnt/12TBA ext4 defaults 0 0
 #
-# red (/dev/sde1): 3TBB (3TB) UUID=74fcf036-b72c-47d9-be61-e63bdaf31881
+# adam: 3TBB (3TB) UUID=74fcf036-b72c-47d9-be61-e63bdaf31881
 UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/3TBB ext4 defaults 0 0
 #
-# red (/dev/sdd1): 5TBD (5TB) UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85
+# adam: 5TBD (5TB) UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85
 UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/5TBD ext4 defaults 0 0
-#
-# red (/dev/sdc): 2TBHDA (2TB) Disk and Partition UUID="d003e7a3-acd2-43e7-8d4a-5d1a85ebdba5"
-UUID="d003e7a3-acd2-43e7-8d4a-5d1a85ebdba5" /mnt/2TBHDA ext4 defaults 0 0 
 #
 #
 # UNINSTALLED
+#
+# 2TBHDA (2TB) Disk and Partition UUID="d003e7a3-acd2-43e7-8d4a-5d1a85ebdba5"
+UUID="d003e7a3-acd2-43e7-8d4a-5d1a85ebdba5" /mnt/2TBHDA ext4 defaults 0 0 
 #
 # 500GBA (500GB) Disk and Partition UUID="c31872ad-78cf-4ca5-ba5d-7e5c6b70a7e7"
 UUID="c31872ad-78cf-4ca5-ba5d-7e5c6b70a7e7" /mnt/500GBA ext4 defaults 0 0
