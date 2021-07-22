@@ -12,7 +12,7 @@
 	f_git
 
 # Update Dynamic DNS
-	ddclient -daemon 0
+	if $(f_is_file "/usr/sbin/ddclient"); then ddclient -daemon 0; fi
 
 # Other updates
 	f_upd
