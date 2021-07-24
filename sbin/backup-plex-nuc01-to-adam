@@ -15,7 +15,7 @@
 	for this_directory in "plex" "plex-dvr" "plexlinks" "plex-other" "plex-tv" "plex-videos"
 		do
 #			sudo -u $ADMIN_USER rsync -aloprtvE --delete "nuc01:/mnt/cloteal/$this_directory/"* "/mnt/12TBA/archives/nuc01/plexcontent/$this_directory"
-			rsync -aloprtvE --delete "nuc01:/mnt/cloteal/$this_directory/"* "/mnt/12TBA/archives/nuc01/plexcontent/$this_directory"
+			rsync -aloprtvE --delete "nuc01.lan:/mnt/cloteal/$this_directory/"* "/mnt/12TBA/archives/nuc01/plexcontent/$this_directory"
 		done
 
 # Include script footer file
