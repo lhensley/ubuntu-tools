@@ -399,7 +399,7 @@ source /etc/os-release
 			PLEX_ROOT[/mnt/cloteal/plex]=true
 			PLEX_ROOT[/mnt/cloteal/plex-dvr]=true
 			PLEX_ROOT[/mnt/bertha/plex]=true
-			PLEX_DOOR[/mnt/bob/plex]=true
+			PLEX_ROOT[/mnt/bob/plex]=true
 			PLEX_ROOT[/var/lib/plexmediaserver/Library/metadata]=true	
 			PLEX_ROOT[/var/lib/plexmediaserver/Library/store]=true	
 			PLEX_ROOT[/var/lib/plexmediaserver/Library/work]=true	
@@ -433,7 +433,7 @@ source /etc/os-release
 			PLEX_ROOT[/mnt/cloteal/plex]=true
 			PLEX_ROOT[/mnt/cloteal/plex-dvr]=true
 			PLEX_ROOT[/mnt/bertha/plex]=true
-			PLEX_DOOR[/mnt/bob/plex]=true
+			PLEX_ROOT[/mnt/bob/plex]=true
 		VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
 		VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
 		VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in/tv"
