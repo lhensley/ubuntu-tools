@@ -14,9 +14,12 @@
 # Mount target file system
 	echo Mounting target file system.
 	TARGET_FILE_SYSTEM="/mnt/12TBA"
-	mount --all
-	if ! [ $(f_is_mounted "$TARGET_FILE_SYSTEM") ]; then
-		f_die "$TARGET_FILE_SYSTEM is not mounted." true
+#	mount --all
+#	if ! [ $(f_is_mounted "$TARGET_FILE_SYSTEM") ]; then
+#		f_die "$TARGET_FILE_SYSTEM is not mounted." true
+#		fi
+	if ! $(f_mount_fs_as_rw "$TARGET_FILE_SYSTEM") ; then
+		f_die "$TARGET_FILE_SYSTEM cannot be mounted." true
 		fi
 	echo Target file system mounted.
 	exit -1

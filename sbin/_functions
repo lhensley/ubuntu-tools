@@ -348,8 +348,25 @@ function f_chmod() {
 	fi
 	}
 
+function f_mount_fs_as_rw () {
+	# USAGE (using f_die as error handler):
+		# if ! $(f_mount_fs_as_rw "$FILE_SYSTEM_NAME") ; then
+		# 	f_die "$FILE_SYSTEM_NAME is not mounted." true
+		# 	fi
+	FILE_SYSTEM=$1
+	umount -q "$FILE_SYSTEM"
+	mount -o rw "$FILE_SYSTEM"
+	# Return true if function succeeds
+	if [ $(findmnt "$FILE_SYSTEM" -n -o options | grep "rw," | wc -l ) -gt 0 ] ; then
+			echo true
+		else
+			echo false
+		fi
+	}
+	
 function f_mount_ro_fs_as_rw () {
-	#USAGE (using f_die as error handler):
+	# NOTE: Currently, this doesn't confirm that the file system is "ro" prior to acting. Does it matter?
+	# USAGE (using f_die as error handler):
 		# if ! $(f_mount_ro_fs_as_rw "$FILE_SYSTEM_NAME") ; then
 		# 	f_die "$FILE_SYSTEM_NAME is not mounted." true
 		# 	fi
@@ -391,8 +408,15 @@ function f_mount_ro_fs_as_ro () {
 		fi
 	}
 
-function f_is_mounted () {
-	# Usage: if $(f_is_mounted "file_system_name"); then commands_if_true; else commands_if_false; fi
+function f_is_mounted ()
+	# Usage 1 (die if target file system IS mounted; otherwise continue):
+	# if [ $(f_is_mounted "$TARGET_FILE_SYSTEM") ]; then
+	# 	f_die "$TARGET_FILE_SYSTEM is mounted." true
+	# 	fi
+	# Usage 2 (die if target file system IS NOT mounted; otherwise continue):
+	# if ! [ $(f_is_mounted "$TARGET_FILE_SYSTEM") ]; then
+	# 	f_die "$TARGET_FILE_SYSTEM is not mounted." true
+	# 	fi
 	FILE_SYSTEM=$1
 	# Return true if function succeeds
 	if [ $(findmnt "$FILE_SYSTEM" -n -o options wc -l ) ] ; then
