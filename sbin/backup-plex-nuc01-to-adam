@@ -11,22 +11,32 @@
 # Require server nuc01
 	f_only_on_server nuc01
 
-# Mount target file system
-	echo Mounting target file system.
+# Define variables
+	SOURCE_PLEX_DVR_TS_CONTAINER_DIR="/mnt/bob/plex-dvr"
+	SOURCE_PLEX_CONTENT_DIR="/mnt/cloteal"
 	TARGET_FILE_SYSTEM="/mnt/12TBA"
+	TARGET_PLEX_CONTENT_DIR="$TARGET_FILE_SYSTEM/archives/nuc01/plexcontent"
+	TARGET_PLEX_DVR_TS_CONTAINER_DIR="$TARGET_PLEX_CONTENT_DIR/plex-dvr-in"
+
+# Mount target file system
 	if ! $(f_mount_fs_as_rw "$TARGET_FILE_SYSTEM") ; then
 		f_die "$TARGET_FILE_SYSTEM cannot be mounted." true
 		fi
-	echo Target file system mounted.
 
-# Run the backup (rsync)
+# Backup all Plex content directories using rsync
 	for this_directory in "plex" "plex-dvr" "plexlinks" "plex-other" "plex-tv" "plex-videos"
 		do
-			echo Syncing /mnt/cloteal/$this_directory ...
-			rsync -aloprtvE --delete "/mnt/cloteal/$this_directory/"* "$TARGET_FILE_SYSTEM/archives/nuc01/plexcontent/$this_directory"
-#			rsync -aloprtvE --delete "nuc01.lanehensley.org:/mnt/cloteal/$this_directory/"* "/mnt/12TBA/archives/nuc01/plexcontent/$this_directory"
-#			sudo -u $ADMIN_USER rsync -aloprtvE --delete "nuc01.lanehensley.org:/mnt/cloteal/$this_directory/"* "/mnt/12TBA/archives/nuc01/plexcontent/$this_directory"
+			SOURCE_DIR="SOURCE_PLEX_CONTENT_DIR/$this_directory"
+			TARGET_DIR="$TARGET_PLEX_CONTENT_DIR/$this_directory"
+			rsync -aloprtvE --delete "$SOURCE_DIR/"* "$TARGET_DIR"
 		done
+
+# Move (removing source) all completed Plex DVR TS files using rsync
+	echo Start TS
+	rsync --archive --links --owner --perms --recursive --times \
+		--verbose --executability --remove-source-files \
+		"$SOURCE_PLEX_DVR_TS_CONTAINER_DIR/"* "$TARGET_PLEX_DVR_TS_CONTAINER_DIR"
+	echo End TS
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
