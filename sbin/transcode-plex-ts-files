@@ -5,6 +5,9 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ];         then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting;         exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ];         then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting;         exit 1; fi
 
+# Require server adam
+	f_only_on_server adam
+
 # "Run as a service" check
 	if [ "$PPID" != "1" ]; then
 		f_die "This script only runs as a systemd service. Try sudo systemctl start $(basename $0)" false
@@ -14,13 +17,23 @@
 # Loop indefinitely
     while true ; do
 
+# Mount source file system
+	if ! $(f_mount_fs_as_rw "$VIDEO_WORK_FILE_SYSTEM") ; then
+		f_die "$VIDEO_WORK_FILE_SYSTEM cannot be mounted." true
+		fi
+
+# Mount target file system
+	if ! $(f_mount_fs_as_rw "$VIDEO_STORE_FILE_SYSTEM") ; then
+		f_die "$VIDEO_STORE_FILE_SYSTEM cannot be mounted." true
+		fi
+
 # Look for .ts files in the STORE directory
 # Set the variables
     WAIT_AFTER_SOURCE_SCAN="1h"                         # How long to wait after looping through all source files
     SOURCE_FILE_NAME_PATTERN="$PLEX_FILE_NAME_PATTERN"  # For Plex DVR,                 this is "$PLEX_FILE_NAME_PATTERN"              (defined in _vars)
                                                         # For DVDs ripped with MakeMKV, this is "$MAKEMKV_FILE_NAME_PATTERN"           (defined in _vars)
                                                         # For Zoom meeting recordings,  this is "$ZOOM_FILE_NAME_PATTERN"              (defined in _vars)
-    SOURCE_ROOT="$VIDEO_STORE_DIRECTORY"                 # For Plex DVR, this is "$VIDEO_WORK_DIRECTORY"                                (defined in _vars)
+    SOURCE_ROOT="$VIDEO_STORE_DIRECTORY"                # For Plex DVR, this is "$VIDEO_WORK_DIRECTORY"                                (defined in _vars)
 	  	     					                        # For DVDs ripped with MakeMKV, this is "$MAKEMKV_OUTPUT_DIRECTORY"            (defined in _vars)
 	  	     					                        # For Zoom meeting recordings,  this is "$ZOOM_RAW_FILES"                      (defined in _vars)
     TARGET_ROOT="$VIDEO_STORE_DIRECTORY"                # For Plex DVR, this is "$VIDEO_STORE_DIRECTORY"                               (defined in _vars)
