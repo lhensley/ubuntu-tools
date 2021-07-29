@@ -349,6 +349,10 @@ function f_chmod() {
 	}
 
 function f_mount_ro_fs_as_rw () {
+	#USAGE (using f_die as error handler):
+	if ! $(f_mount_ro_fs_as_rw "$FILE_SYSTEM_NAME") ; then
+		f_die "$FILE_SYSTEM_NAME is not mounted." true
+		fi
 	FILE_SYSTEM=$1
 	umount -q "$FILE_SYSTEM"
 	mount -o rw "$FILE_SYSTEM"
@@ -361,6 +365,10 @@ function f_mount_ro_fs_as_rw () {
 	}
 	
 function f_mount_ro_fs_as_ro () {
+	#USAGE (using f_die as error handler):
+	if ! $(f_mount_ro_fs_as_ro "$FILE_SYSTEM_NAME") ; then
+		f_die "$FILE_SYSTEM_NAME is not mounted." true
+		fi
 	FILE_SYSTEM=$1
 	FS_READ_ONLY=$2
 	# If file system is mounted and read-write, unmount
@@ -384,6 +392,7 @@ function f_mount_ro_fs_as_ro () {
 	}
 
 function f_is_mounted () {
+	# Usage: if $(f_is_mounted "file_system_name"); then commands_if_true; else commands_if_false; fi
 	FILE_SYSTEM=$1
 	# Return true if function succeeds
 		return $(findmnt "$FILE_SYSTEM" -n -o options | wc -l)

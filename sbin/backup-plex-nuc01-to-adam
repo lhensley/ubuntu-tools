@@ -8,14 +8,21 @@
 # Require root
 	f_require_root
 
-# Require server adam
-	f_only_on_server adam
+# Require server nuc01
+	f_only_on_server nuc01
+
+# Mount target file system
+	TARGET_FILE_SYSTEM="/mnt/12TBA"
+	if ! $(f_mount_ro_fs_as_rw "$TARGET_FILE_SYSTEM") ; then
+		f_die "$TARGET_FILE_SYSTEM is not mounted." true
+		fi
 
 # Run the backup (rsync)
 	for this_directory in "plex" "plex-dvr" "plexlinks" "plex-other" "plex-tv" "plex-videos"
 		do
+			rsync -aloprtvE --delete "/mnt/cloteal/$this_directory/"* "TARGET_FILE_SYSTEM/archives/nuc01/plexcontent/$this_directory"
 #			rsync -aloprtvE --delete "nuc01.lanehensley.org:/mnt/cloteal/$this_directory/"* "/mnt/12TBA/archives/nuc01/plexcontent/$this_directory"
-			sudo -u $ADMIN_USER rsync -aloprtvE --delete "nuc01.lanehensley.org:/mnt/cloteal/$this_directory/"* "/mnt/12TBA/archives/nuc01/plexcontent/$this_directory"
+#			sudo -u $ADMIN_USER rsync -aloprtvE --delete "nuc01.lanehensley.org:/mnt/cloteal/$this_directory/"* "/mnt/12TBA/archives/nuc01/plexcontent/$this_directory"
 		done
 
 # Include script footer file
