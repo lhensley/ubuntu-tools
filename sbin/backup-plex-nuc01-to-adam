@@ -20,6 +20,7 @@
 # Run the backup (rsync)
 	for this_directory in "plex" "plex-dvr" "plexlinks" "plex-other" "plex-tv" "plex-videos"
 		do
+			echo Syncing /mnt/cloteal/$this_directory ...
 			rsync -aloprtvE --delete "/mnt/cloteal/$this_directory/"* "TARGET_FILE_SYSTEM/archives/nuc01/plexcontent/$this_directory"
 #			rsync -aloprtvE --delete "nuc01.lanehensley.org:/mnt/cloteal/$this_directory/"* "/mnt/12TBA/archives/nuc01/plexcontent/$this_directory"
 #			sudo -u $ADMIN_USER rsync -aloprtvE --delete "nuc01.lanehensley.org:/mnt/cloteal/$this_directory/"* "/mnt/12TBA/archives/nuc01/plexcontent/$this_directory"
