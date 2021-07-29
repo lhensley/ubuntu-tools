@@ -408,7 +408,7 @@ function f_mount_ro_fs_as_ro () {
 		fi
 	}
 
-function f_is_mounted ()
+function f_is_mounted () {
 	# Usage 1 (die if target file system IS mounted; otherwise continue):
 	# if [ $(f_is_mounted "$TARGET_FILE_SYSTEM") ]; then
 	# 	f_die "$TARGET_FILE_SYSTEM is mounted." true
