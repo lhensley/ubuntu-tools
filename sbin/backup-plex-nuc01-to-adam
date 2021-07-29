@@ -18,6 +18,7 @@
 		f_die "$TARGET_FILE_SYSTEM is not mounted." true
 		fi
 	echo Target file system mounted.
+	exit -1
 
 # Run the backup (rsync)
 	for this_directory in "plex" "plex-dvr" "plexlinks" "plex-other" "plex-tv" "plex-videos"
