@@ -26,20 +26,19 @@
 # Backup all Plex content directories using rsync
 	for this_directory in "plex" "plex-dvr" "plexlinks" "plex-other" "plex-tv" "plex-videos"
 		do
-			SOURCE_DIR="SOURCE_PLEX_CONTENT_DIR/$this_directory"
+			SOURCE_DIR="$SOURCE_PLEX_CONTENT_DIR/$this_directory"
 			TARGET_DIR="$TARGET_PLEX_CONTENT_DIR/$this_directory"
-			echo $SOURCE_DIR
-			echo $TARGET_DIR
 			echo
-			# rsync -aloprtvE --delete "$SOURCE_DIR/"* "$TARGET_DIR"
+			echo Backing up $SOURCE_DIR to $TARGET_DIR
+			rsync -aloprtvE --delete "$SOURCE_DIR/"* "$TARGET_DIR"
 		done
 
-# Move (removing source) all completed Plex DVR TS files using rsync
-	echo Start TS
+# Move (removing source) all recorded Plex DVR TS files for conversion to M4V
+	echo
+	echo Moving all recorded Plex DVR TS files for conversion to M4V
 	rsync --archive --links --owner --perms --recursive --times \
 		--verbose --executability --remove-source-files \
 		"$SOURCE_PLEX_DVR_TS_CONTAINER_DIR/"* "$TARGET_PLEX_DVR_TS_CONTAINER_DIR"
-	echo End TS
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
