@@ -28,7 +28,10 @@
 		do
 			SOURCE_DIR="SOURCE_PLEX_CONTENT_DIR/$this_directory"
 			TARGET_DIR="$TARGET_PLEX_CONTENT_DIR/$this_directory"
-			rsync -aloprtvE --delete "$SOURCE_DIR/"* "$TARGET_DIR"
+			echo $SOURCE_DIR
+			echo $TARGET_DIR
+			echo
+			# rsync -aloprtvE --delete "$SOURCE_DIR/"* "$TARGET_DIR"
 		done
 
 # Move (removing source) all completed Plex DVR TS files using rsync
