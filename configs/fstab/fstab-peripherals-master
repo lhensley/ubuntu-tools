@@ -42,6 +42,15 @@ adam:/mnt/12TBA /mnt/12TBA nfs rw
 # nuc01: Silver5TB-B (5TB) UUID 634B5E207BE18E54
 # UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0
 #
+# nuc01: 3TBB (3TB) NFS from adam
+adam:/mnt/3TBB /mnt/3TBB nfs rw
+#
+# nuc01: 5TBD (5TB) NFS from adam
+adam:/mnt/5TBD /mnt/5TBD nfs rw
+#
+# nuc01: 12TBA (12TB) NFS from adam
+adam:/mnt/12TBA /mnt/12TBA nfs rw
+#
 #
 # oz: External Hard Drive for Plex, 10TB (rerun)
 UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 defaults 0 0
