@@ -395,7 +395,11 @@ function f_is_mounted () {
 	# Usage: if $(f_is_mounted "file_system_name"); then commands_if_true; else commands_if_false; fi
 	FILE_SYSTEM=$1
 	# Return true if function succeeds
-		return $(findmnt "$FILE_SYSTEM" -n -o options | wc -l)
+	if [ $(findmnt "$FILE_SYSTEM" -n -o options wc -l ) ] ; then
+			echo true
+		else
+			echo false
+		fi
 	}
 
 function f_set_plex_media_recursive_permissions () {
