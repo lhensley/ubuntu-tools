@@ -12,44 +12,35 @@
 # To show all UUIDs on the system, use:     sudo blkid | grep UUID=
 #
 #
-# nuc01: 3TBA (3TB) NFS
-adam:/mnt/3TBB /mnt/3TBB nfs rw
-#
-# nuc01: 5TBD (5TB) NFS
-adam:/mnt/5TBD /mnt/5TBD nfs rw
-#
-# nuc01: 5TBE (5TB) Black 5TB External Seagate
-UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 ro,defaults 0 0
-#
-# nuc01: 12TBA (12TB) NFS
-adam:/mnt/12TBA /mnt/12TBA nfs rw
-#
-# nuc01: bertha (3TB) UUID=d28256f9-c258-451e-b299-d4849cf19e0b
-# UUID=d28256f9-c258-451e-b299-d4849cf19e0b /mnt/bertha ext4 defaults 0 0
-#
-# nuc01: bob (1TB SSD internal, Samsung EVO 960)
-# UUID="d8f30f08-2698-411c-a3ea-32b9748e9ba9" /mnt/bob ext4 defaults 0 0
-#
-# nuc01: cloteal (10TB) UUID=4e356144-2e69-4812-8958-d035a9ebc28e
-# UUID=4e356144-2e69-4812-8958-d035a9ebc28e /mnt/cloteal ext4 defaults 0 0
-#
-# nuc01: MyBook3T01 (3TB) UUID=C6B89CABB89C9B8D
-# UUID=C6B89CABB89C9B8D /mnt/MyBook3T01 ntfs defaults 0 0
-#
-# nuc01: Silver5TB-A (5TB) UUID=0A538B3244DE3676
-# UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs defaults 0 0
-#
-# nuc01: Silver5TB-B (5TB) UUID 634B5E207BE18E54
-# UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0
-#
 # nuc01: 3TBB (3TB) NFS from adam
 adam:/mnt/3TBB /mnt/3TBB nfs rw
 #
 # nuc01: 5TBD (5TB) NFS from adam
 adam:/mnt/5TBD /mnt/5TBD nfs rw
 #
+# nuc01: 5TBE (5TB) Black 5TB External Seagate
+UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 ro,defaults 0 0
+#
 # nuc01: 12TBA (12TB) NFS from adam
 adam:/mnt/12TBA /mnt/12TBA nfs rw
+#
+# nuc01: bertha (3TB) UUID=d28256f9-c258-451e-b299-d4849cf19e0b
+UUID=d28256f9-c258-451e-b299-d4849cf19e0b /mnt/bertha ext4 defaults 0 0
+#
+# nuc01: bob (1TB SSD internal, Samsung EVO 960)
+UUID="d8f30f08-2698-411c-a3ea-32b9748e9ba9" /mnt/bob ext4 defaults 0 0
+#
+# nuc01: cloteal (10TB) UUID=4e356144-2e69-4812-8958-d035a9ebc28e
+UUID=4e356144-2e69-4812-8958-d035a9ebc28e /mnt/cloteal ext4 defaults 0 0
+#
+# nuc01: MyBook3T01 (3TB) UUID=C6B89CABB89C9B8D
+UUID=C6B89CABB89C9B8D /mnt/MyBook3T01 ntfs defaults 0 0
+#
+# nuc01: Silver5TB-A (5TB) UUID=0A538B3244DE3676
+UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs defaults 0 0
+#
+# nuc01: Silver5TB-B (5TB) UUID 634B5E207BE18E54
+UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0
 #
 #
 # oz: External Hard Drive for Plex, 10TB (rerun)
@@ -67,6 +58,18 @@ UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/3TBB ext4 defaults 0 0
 #
 # adam: 5TBD (5TB) UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85
 UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/5TBD ext4 defaults 0 0
+#
+# adam: bertha (3TB) NFS from n6
+n6:/mnt/bertha /mnt/bertha nfs rw
+#
+# adam: bob (2TB) NFS from n6
+n6:/mnt/bob /mnt/bob nfs rw
+#
+# adam: cloteal (10TB) NFS from n6
+n6:/mnt/cloteal /mnt/cloteal nfs rw
+#
+# adam: MyBook3T01 (3TB) NFS from n6
+n6:/mnt/MyBook3T01 /mnt/MyBook3T01 nfs rw
 #
 #
 # UNINSTALLED
