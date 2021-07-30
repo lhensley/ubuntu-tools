@@ -386,7 +386,7 @@ source /etc/os-release
 	d="/"
 	VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
 	VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
-	VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in/tv"
+	VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in"
 	VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex-dvr"
 	PLEX_LIVE_APPLICATION_SUPPORT="/var/lib/plexmediaserver/Library"
 	PLEX_BACKUP_FILE_SYSTEM="$THIS_ARCHIVE_FILE_SYSTEM"
@@ -405,7 +405,7 @@ source /etc/os-release
 			PLEX_ROOT[/var/lib/plexmediaserver/Library/work]=true	
 		VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
 		VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
-		VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in/tv"
+		VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in"
 		VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex-dvr"
 		PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
 		fi
@@ -436,7 +436,7 @@ source /etc/os-release
 			PLEX_ROOT[/mnt/bob/plex]=true
 		VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
 		VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
-		VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in/tv"
+		VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in"
 		VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex-dvr"
 		PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
 		fi
