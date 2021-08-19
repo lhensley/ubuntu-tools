@@ -1,4 +1,7 @@
 #
+# To find all UUIDs on connected devices: sudo blkid | grep UUID
+# When possible, use the UUID and not PARTUUID.
+#
 # adam: 12TBA (12TB) UUID=901c4177-b514-408a-997c-0cbeee89fa6e
 UUID=901c4177-b514-408a-997c-0cbeee89fa6e /mnt/12TBA ext4 defaults 0 0
 #

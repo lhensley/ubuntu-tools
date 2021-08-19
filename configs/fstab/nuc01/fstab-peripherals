@@ -1,4 +1,7 @@
 #
+# To find all UUIDs on connected devices: sudo blkid | grep UUID
+# When possible, use the UUID and not PARTUUID.
+#
 # nuc01: 3TBB (3TB) NFS from adam
 adam:/mnt/3TBB /mnt/3TBB nfs rw
 #

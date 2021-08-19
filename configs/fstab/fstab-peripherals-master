@@ -9,7 +9,9 @@
 #    sudo mkfs.ext4 /dev/yourpartitionhere
 #        NOTE: The UUID will change!
 #
-# To show all UUIDs on the system, use:     sudo blkid | grep UUID=
+#
+# To find all UUIDs on connected devices: sudo blkid | grep UUID
+# When possible, use the UUID and not PARTUUID.
 #
 #
 # nuc01: 3TBB (3TB) NFS from adam
