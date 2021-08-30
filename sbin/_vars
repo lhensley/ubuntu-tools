@@ -17,14 +17,15 @@
 	# HOSTNAME (this host, not FQDN)
 	# SHELL
 	# USER (Current user)
-		RUN_AS=$USER
+		RUN_AS="$USER"
 
 # Global
 	HOME_ROOT="/home"
 	SBIN_DIR="/usr/local/sbin"
 	SBIN_PARENT="$(dirname $SBIN_DIR)"
 	DOMAIN_NAME=lanehensley.org
-	COLOPHON="by Lane Hensley, lane.hensley@alumni.duke.edu, https://lanehensley.org"
+	DOMAIN_LOCAL=lan
+	COLOPHON="by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
 
 # /etc/os-release defines a lot of environment variables 
 # Sample:
@@ -45,7 +46,7 @@ source /etc/os-release
 # Start timestamps
 # Ref https://www.cyberciti.biz/faq/linux-unix-formatting-dates-for-display/ for date format %codes
 	START_DATEANDTIMESTAMP=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')     # Like 2020-09-07-16-05-23-CDT. Used in naming SSH keys and backing up installed files like fstab
-	START_DATESTAMP=$(/bin/date '+%Y-%m-%d   ')                     # Like 2020-09-07. Used in backup variables below
+	START_DATESTAMP=$(/bin/date '+%Y-%m-%d')                        # Like 2020-09-07. Used in backup variables below
 	START_DAYSTAMP=$(/bin/date '+%d')                               # Like 07
 	START_MONTHSTAMP=$(/bin/date '+%Y-%m')                          # Like 2020-09
 	START_TIMESTAMP=$(/bin/date)                                    # Like Mon 07 Sep 2020 04:01:23 PM CDT
@@ -53,18 +54,279 @@ source /etc/os-release
 	START_WEEKDAYSTAMP2=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z-%a')     # Like 2020-09-07-16-05-23-CDT-Mon. Used in backup variables below
 	START_WEEKDAYSTAMP3=$(/bin/date '+%w-%a')                       # Like 0-Sun, 1-Mon, 2-Tue, etc. Used in backup variables below
 
+# Define hosts-specific variables
+	declare -A IP4
+		IP4[default]="127.0.0.1"
+		IP4[adam]="a4.$DOMAIN_NAME"
+		IP4[nuc01]="n4.$DOMAIN_NAME"
+		IP4[oz]="o4.$DOMAIN_NAME"
+		if [ -z "${IP4[$HOSTNAME]}" ]; then 
+			if [ -z "$IP4[default]" ]; then unset IP4[this]; 
+				else IP4[this]="${IP4[default]}"; fi; 
+			else IP4[this]="${IP4[$HOSTNAME]}"; fi
+		IP4="${IP4[this]}"
+	declare -A IP6
+		IP6[default]="::1"
+		IP6[adam]="a6.$DOMAIN_NAME"
+		IP6[nuc01]="n6.$DOMAIN_NAME"
+		IP6[oz]="o6.$DOMAIN_NAME"
+		if [ -z "${IP6[$HOSTNAME]}" ]; then 
+			if [ -z "$IP6[default]" ]; then unset IP6[this]; 
+				else IP6[this]="${IP6[default]}"; fi; 
+			else IP6[this]="${IP6[$HOSTNAME]}"; fi
+		IP6="${IP6[this]}"
+	declare -A NETADDR
+		NETADDR[default]="${IP6[default]}"
+		NETADDR[this]="${IP6[$HOSTNAME]}"
+		NETADDR="${NETADDR[this]}"
+	declare -A TEMP_FILE_SYSTEM
+		TEMP_FILE_SYSTEM[default]="/"
+		TEMP_FILE_SYSTEM[adam]="${TEMP_FILE_SYSTEM[default]}"
+		TEMP_FILE_SYSTEM[nuc01]="/mnt/bob"
+		TEMP_FILE_SYSTEM[oz]="/mnt/ssd1tb"
+		if [ -z "${TEMP_FILE_SYSTEM[$HOSTNAME]}" ]; then 
+			if [ -z "$TEMP_FILE_SYSTEM[default]" ]; then unset IP6[this]; 
+				else TEMP_FILE_SYSTEM[this]="${TEMP_FILE_SYSTEM[default]}"; fi; 
+			else TEMP_FILE_SYSTEM[this]="${TEMP_FILE_SYSTEM[$HOSTNAME]}"; fi
+		TEMP_FILE_SYSTEM="${TEMP_FILE_SYSTEM[this]}"
+	declare -A TEMP_ROOT
+		TEMP_ROOT[default]="${TEMP_FILE_SYSTEM[default]}/var/tmp"
+		TEMP_ROOT[adam]="${TEMP_FILE_SYSTEM[adam]}/var/tmp"
+		TEMP_ROOT[nuc01]="${TEMP_FILE_SYSTEM[nuc01]}"
+		TEMP_ROOT[oz]="${TEMP_FILE_SYSTEM[oz]}"
+		if [ -z "${TEMP_ROOT[$HOSTNAME]}" ]; then 
+			if [ -z "$TEMP_ROOT[default]" ]; then unset TEMP_ROOT[this]; 
+				else TEMP_ROOT[this]="${TEMP_ROOT[default]}"; fi; 
+			else TEMP_ROOT[this]="${TEMP_ROOT[$HOSTNAME]}"; fi
+		TEMP_ROOT="${TEMP_ROOT[this]}"
+  # Define all Plex data root directories
+  # Set them all as true
+  # Example: PLEX_DATA_ROOT[nuc01,/mnt/cloteal/plex]=true
+  # IMPORTANT: If you leave anything out, the missing directories won't be backed up.
+  # MORE IMPORTANT: I'm not sure this section still is used for anything ... 8/29/2021
+	declare -A PLEX_DATA_ROOT
+		PLEX_DATA_ROOT[adam,/mnt/cloteal/plex]=true
+		PLEX_DATA_ROOT[adam,/mnt/cloteal/plex-dvr]=true
+		PLEX_DATA_ROOT[adam,/mnt/bertha/plex]=true
+		PLEX_DATA_ROOT[adam,/mnt/bob/plex]=true
+		PLEX_DATA_ROOT[nuc01,/mnt/cloteal/plex]=true
+		PLEX_DATA_ROOT[nuc01,/mnt/cloteal/plex-dvr]=true
+		PLEX_DATA_ROOT[nuc01,/mnt/bertha/plex]=true
+		PLEX_DATA_ROOT[nuc01,/mnt/bob/plex]=true
+		PLEX_DATA_ROOT[nuc01,/var/lib/plexmediaserver/Library/metadata]=true	
+		PLEX_DATA_ROOT[nuc01,/var/lib/plexmediaserver/Library/store]=true	
+		PLEX_DATA_ROOT[nuc01,/var/lib/plexmediaserver/Library/work]=true	
+		PLEX_DATA_ROOT[oz,/var/lib/plexmediaserver/Library/metadata]=true	
+		PLEX_DATA_ROOT[oz,/var/lib/plexmediaserver/Library/store]=true	
+		PLEX_DATA_ROOT[oz,/var/lib/plexmediaserver/Library/work]=true	
+		PLEX_DATA_ROOT[oz,/mnt/ssd1tb/plex]=true
+		PLEX_DATA_ROOT[oz,/mnt/ext10tb01/plex]=true
+		for idx in "${!PLEX_DATA_ROOT[@]}"; do
+			IFS=',' read -r HOSTX PATHX <<< "$idx"
+			if [ "$HOSTX"=="$HOSTNAME" ]; then PLEX_DATA_ROOT[this,$PATHX]=true; fi
+			done
+	declare -A VIDEO_WORK_FILE_SYSTEM
+		VIDEO_WORK_FILE_SYSTEM[default]="/"
+		VIDEO_WORK_FILE_SYSTEM[adam]="${TEMP_FILE_SYSTEM[nuc01]}"
+		VIDEO_WORK_FILE_SYSTEM[nuc01]="${TEMP_FILE_SYSTEM[nuc01]}"
+		VIDEO_WORK_FILE_SYSTEM[oz]="${TEMP_FILE_SYSTEM[oz]}"
+		if [ -z "${VIDEO_WORK_FILE_SYSTEM[$HOSTNAME]}" ]; then 
+			if [ -z "${VIDEO_WORK_FILE_SYSTEM[default]}" ]; then unset VIDEO_WORK_FILE_SYSTEM[this]; 
+				else VIDEO_WORK_FILE_SYSTEM[this]="${VIDEO_WORK_FILE_SYSTEM[default]}"; fi; 
+			else VIDEO_WORK_FILE_SYSTEM[this]="${VIDEO_WORK_FILE_SYSTEM[$HOSTNAME]}"; fi
+		VIDEO_WORK_FILE_SYSTEM="${VIDEO_WORK_FILE_SYSTEM[this]}"
+	declare -A VIDEO_WORK_DIRECTORY
+		VIDEO_WORK_DIRECTORY[default]="/"
+		VIDEO_WORK_DIRECTORY[adam]="${VIDEO_WORK_FILE_SYSTEM[adam]}/plex/dvr/in"
+		VIDEO_WORK_DIRECTORY[nuc01]="${VIDEO_WORK_FILE_SYSTEM[nuc01]}/plex/dvr-oz"
+		VIDEO_WORK_DIRECTORY[oz]="${VIDEO_WORK_FILE_SYSTEM[oz]}/plex/dvr/in"
+		if [ -z "${VIDEO_WORK_DIRECTORY[$HOSTNAME]}" ]; then 
+			if [ -z "$VIDEO_WORK_DIRECTORY[default]" ]; then unset VIDEO_WORK_DIRECTORY[this]; 
+				else VIDEO_WORK_DIRECTORY[this]="${VIDEO_WORK_DIRECTORY[default]}"; fi; 
+			else VIDEO_WORK_DIRECTORY[this]="${VIDEO_WORK_DIRECTORY[$HOSTNAME]}"; fi
+		VIDEO_WORK_DIRECORY="${VIDEO_WORK_DIRECTORY[this]}"
+	declare -A VIDEO_STORE_FILE_SYSTEM
+		VIDEO_STORE_FILE_SYSTEM[default]="/"
+		VIDEO_STORE_FILE_SYSTEM[adam]="/mnt/cloteal"
+		VIDEO_STORE_FILE_SYSTEM[nuc01]="/mnt/cloteal"
+		VIDEO_STORE_FILE_SYSTEM[oz]="/mnt/ext10tb01"
+		if [ -z "${VIDEO_STORE_FILE_SYSTEM[$HOSTNAME]}" ]; then 
+			if [ -z "{$VIDEO_STORE_FILE_SYSTEM[default]}" ]; then unset VIDEO_STORE_FILE_SYSTEM[this]; 
+				else VIDEO_STORE_FILE_SYSTEM[this]="${VIDEO_STORE_FILE_SYSTEM[default]}"; fi; 
+			else VIDEO_STORE_FILE_SYSTEM[this]="${VIDEO_STORE_FILE_SYSTEM[$HOSTNAME]}"; fi
+		VIDEO_STORE_FILE_SYSTEM="${VIDEO_STORE_FILE_SYSTEM[this]}"
+	declare -A VIDEO_STORE_DIRECTORY
+		VIDEO_STORE_DIRECTORY[default]="/"
+		VIDEO_STORE_DIRECTORY[adam]="${VIDEO_STORE_FILE_SYSTEM[nuc01]}/plex-dvr"
+		VIDEO_STORE_DIRECTORY[nuc01]="${VIDEO_STORE_FILE_SYSTEM[nuc01]}/plex-dvr"
+		VIDEO_STORE_DIRECTORY[oz]="${VIDEO_STORE_FILE_SYSTEM[oz]}/plex/dvr-oz"
+		if [ -z "${VIDEO_STORE_DIRECTORY[$HOSTNAME]}" ]; then 
+			if [ -z "$VIDEO_STORE_DIRECTORY[default]" ]; then unset VIDEO_STORE_DIRECTORY[this]; 
+				else VIDEO_STORE_DIRECTORY[this]="${VIDEO_STORE_DIRECTORY[default]}"; fi; 
+			else VIDEO_STORE_DIRECTORY[this]="${VIDEO_STORE_DIRECTORY[$HOSTNAME]}"; fi
+		VIDEO_STORE_DIRECTORY="${VIDEO_STORE_DIRECTORY[this]}"
+
+  # Archive Directories, Files, and Paths
+  # DEPENDENT on timestamp definitions
+  # DEPENDENT on definition of $HOSTNAME, but that's built-in
+	declare -A ARCHIVE_FILE_SYSTEM
+		ARCHIVE_FILE_SYSTEM[default]="/"
+		ARCHIVE_FILE_SYSTEM[adam]="/mnt/3TBD"
+		ARCHIVE_FILE_SYSTEM[nuc01]="/mnt/5TBE"
+		ARCHIVE_FILE_SYSTEM[oz]="/mnt/5TBC"
+		if [ -z "${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}" ]; then 
+			if [ -z "$ARCHIVE_FILE_SYSTEM[default]" ]; then unset ARCHIVE_FILE_SYSTEM[this]; 
+				else ARCHIVE_FILE_SYSTEM[this]="${ARCHIVE_FILE_SYSTEM[default]}"; fi; 
+			else ARCHIVE_FILE_SYSTEM[this]="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
+		ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[this]}"
+	declare -A ARCHIVE_DIRECTORY
+		ARCHIVE_DIRECTORY[default]="/var/lib/archives/$HOSTNAME"
+		ARCHIVE_DIRECTORY[adam]="${ARCHIVE_FILE_SYSTEM[adam]}/archives/adam"
+		ARCHIVE_DIRECTORY[nuc01]="${ARCHIVE_FILE_SYSTEM[nuc01]}/archives/nuc01"
+		ARCHIVE_DIRECTORY[oz]="${ARCHIVE_FILE_SYSTEM[oz]}/archives/oz"
+		if [ -z "${ARCHIVE_DIRECTORY[$HOSTNAME]}" ]; then
+			if [ -z "$ARCHIVE_DIRECTORY[default]" ]; then unset ARCHIVE_DIRECTORY[this];
+				else ARCHIVE_DIRECTORY[this]="${ARCHIVE_DIRECTORY[default]}"; fi;
+			else ARCHIVE_DIRECTORY[this]="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
+		ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[this]}"
+	THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[this]}"
+	THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[this]}"
+	ARCHIVE_TAR_FILE="$HOSTNAME-$START_DATESTAMP.gz"
+		ARCHIVE_TAR_FULL="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_FILE"
+	ARCHIVE_TAR_WEEKDAY_FILE="$HOSTNAME-weekday-$START_WEEKDAYSTAMP3.gz"
+		ARCHIVE_TAR_FULL_WEEKDAY="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
+	ARCHIVE_TAR_DAY_FILE="$HOSTNAME-day-$START_DAYSTAMP.gz"
+		ARCHIVE_TAR_FULL_DAY="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_DAY_FILE"
+	ARCHIVE_TAR_MONTH_FILE="$HOSTNAME-month-$START_MONTHSTAMP.gz"
+		ARCHIVE_TAR_FULL_MONTH="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_MONTH_FILE"
+	PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
+
+	declare -A COLD_BACKUP_FILE_SYSTEM
+		COLD_BACKUP_FILE_SYSTEM[default]="${ARCHIVE_FILE_SYSTEM[default]}"
+		COLD_BACKUP_FILE_SYSTEM[adam]="${ARCHIVE_FILE_SYSTEM[adam]}"
+		COLD_BACKUP_FILE_SYSTEM[nuc01]="${ARCHIVE_FILE_SYSTEM[nuc01]}"
+		COLD_BACKUP_FILE_SYSTEM[oz]="${ARCHIVE_FILE_SYSTEM[oz]}"
+		if [ -z "${COLD_BACKUP_FILE_SYSTEM[$HOSTNAME]}" ]; then
+			if [ -z "$COLD_BACKUP_FILE_SYSTEM[default]" ]; then unset COLD_BACKUP_FILE_SYSTEM[this];
+				else COLD_BACKUP_FILE_SYSTEM[this]="${COLD_BACKUP_FILE_SYSTEM[default]}"; fi;
+			else COLD_BACKUP_FILE_SYSTEM[this]="${COLD_BACKUP_FILE_SYSTEM[$HOSTNAME]}"; fi
+		COLD_BACKUP_FILE_SYSTEM="$THIS_ARCHIVE_FILE_SYSTEM"
+	declare -A COLD_BACKUP_FS_READ_ONLY
+		COLD_BACKUP_FS_READ_ONLY[default]=false
+		COLD_BACKUP_FS_READ_ONLY[adam]=false
+		COLD_BACKUP_FS_READ_ONLY[nuc01]=false
+		COLD_BACKUP_FS_READ_ONLY[oz]=false
+		if [ -z "${COLD_BACKUP_FS_READ_ONLY[$HOSTNAME]}" ]; then
+			if [ -z "$COLD_BACKUP_FS_READ_ONLY[default]" ]; then unset COLD_BACKUP_FS_READ_ONLY[this];
+				else COLD_BACKUP_FS_READ_ONLY[this]="${COLD_BACKUP_FS_READ_ONLY[default]}"; fi;
+			else COLD_BACKUP_FS_READ_ONLY[this]="${COLD_BACKUP_FS_READ_ONLY[$HOSTNAME]}"; fi
+		COLD_BACKUP_FS_READ_ONLY="${COLD_BACKUP_FS_READ_ONLY[this]}"
+	declare -A COLD_BACKUP_PARENT_DIRECTORY
+		COLD_BACKUP_PARENT_DIRECTORY[default]="/var/local"
+		COLD_BACKUP_PARENT_DIRECTORY[adam]="${COLD_BACKUP_FILE_SYSTEM[nuc01]}"
+		COLD_BACKUP_PARENT_DIRECTORY[nuc01]="/mnt/bob"
+		COLD_BACKUP_PARENT_DIRECTORY[oz]="/mnt/ssd1tb"
+		if [ -z "${COLD_BACKUP_PARENT_DIRECTORY[$HOSTNAME]}" ]; then
+			if [ -z "$COLD_BACKUP_PARENT_DIRECTORY[default]" ]; then unset COLD_BACKUP_PARENT_DIRECTORY[this];
+				else COLD_BACKUP_PARENT_DIRECTORY[this]="${COLD_BACKUP_PARENT_DIRECTORY[default]}"; fi;
+			else COLD_BACKUP_PARENT_DIRECTORY[this]="${COLD_BACKUP_PARENT_DIRECTORY[$HOSTNAME]}"; fi
+		COLD_BACKUP_PARENT_DIRECTORY="${COLD_BACKUP_PARENT_DIRECTORY[this]}"
+	declare -A COLD_BACKUP_SUBDIRECTORY
+		COLD_BACKUP_SUBDIRECTORY[default]="cold-backup"
+		COLD_BACKUP_SUBDIRECTORY[adam]="${COLD_BACKUP_SUBDIRECTORY[default]}"
+		COLD_BACKUP_SUBDIRECTORY[nuc01]="${COLD_BACKUP_SUBDIRECTORY[default]}"
+		COLD_BACKUP_SUBDIRECTORY[oz]="${COLD_BACKUP_SUBDIRECTORY[default]}"
+		if [ -z "${COLD_BACKUP_SUBDIRECTORY[$HOSTNAME]}" ]; then
+			if [ -z "$COLD_BACKUP_SUBDIRECTORY[default]" ]; then unset COLD_BACKUP_SUBDIRECTORY[this];
+				else COLD_BACKUP_SUBDIRECTORY[this]="${COLD_BACKUP_SUBDIRECTORY[default]}"; fi;
+			else COLD_BACKUP_SUBDIRECTORY[this]="${COLD_BACKUP_SUBDIRECTORY[$HOSTNAME]}"; fi
+		COLD_BACKUP_SUBDIRECTORY="${COLD_BACKUP_SUBDIRECTORY[this]}"
+	declare -A COLD_BACKUP_PARENT_DIRECTORY
+		COLD_BACKUP_PARENT_DIRECTORY[default]="${COLD_BACKUP_FILE_SYSTEM[default]}"
+		COLD_BACKUP_PARENT_DIRECTORY[adam]="${COLD_BACKUP_FILE_SYSTEM[adam]}"
+		COLD_BACKUP_PARENT_DIRECTORY[nuc01]="${COLD_BACKUP_FILE_SYSTEM[nuc01]}"
+		COLD_BACKUP_PARENT_DIRECTORY[oz]="${COLD_BACKUP_FILE_SYSTEM[oz]}"
+		if [ -z "${COLD_BACKUP_PARENT_DIRECTORY[$HOSTNAME]}" ]; then
+			if [ -z "$COLD_BACKUP_PARENT_DIRECTORY[default]" ]; then unset COLD_BACKUP_PARENT_DIRECTORY[this];
+				else COLD_BACKUP_PARENT_DIRECTORY[this]="${COLD_BACKUP_PARENT_DIRECTORY[default]}"; fi;
+			else COLD_BACKUP_PARENT_DIRECTORY[this]="${COLD_BACKUP_PARENT_DIRECTORY[$HOSTNAME]}"; fi
+		COLD_BACKUP_PARENT_DIRECTORY="${COLD_BACKUP_PARENT_DIRECTORY[this]}"
+	declare -A TEMP_COLD_BACKUP_PARENT_DIRECTORY
+		TEMP_COLD_BACKUP_PARENT_DIRECTORY[default]="${TEMP_ROOT[default]}"
+		TEMP_COLD_BACKUP_PARENT_DIRECTORY[adam]="${TEMP_ROOT[adam]}"
+		TEMP_COLD_BACKUP_PARENT_DIRECTORY[nuc01]="${TEMP_ROOT[nuc01]}"
+		TEMP_COLD_BACKUP_PARENT_DIRECTORY[oz]="${TEMP_ROOT[oz]}"
+		if [ -z "${TEMP_COLD_BACKUP_PARENT_DIRECTORY[$HOSTNAME]}" ]; then
+			if [ -z "$TEMP_COLD_BACKUP_PARENT_DIRECTORY[default]" ]; then unset TEMP_COLD_BACKUP_PARENT_DIRECTORY[this];
+				else TEMP_COLD_BACKUP_PARENT_DIRECTORY[this]="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[default]}"; fi;
+			else TEMP_COLD_BACKUP_PARENT_DIRECTORY[this]="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[$HOSTNAME]}"; fi
+		TEMP_COLD_BACKUP_PARENT_DIRECTORY="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[this]}"
+	declare -A TEMP_COLD_BACKUP_SUBDIRECTORY
+		TEMP_COLD_BACKUP_SUBDIRECTORY[default]="cold-backup"
+		TEMP_COLD_BACKUP_SUBDIRECTORY[adam]="${TEMP_COLD_BACKUP_SUBDIRECTORY[default]}"
+		TEMP_COLD_BACKUP_SUBDIRECTORY[nuc01]="${TEMP_COLD_BACKUP_SUBDIRECTORY[default]}"
+		TEMP_COLD_BACKUP_SUBDIRECTORY[oz]="${TEMP_COLD_BACKUP_SUBDIRECTORY[default]}"
+		if [ -z "${TEMP_COLD_BACKUP_SUBDIRECTORY[$HOSTNAME]}" ]; then
+			if [ -z "$TEMP_COLD_BACKUP_SUBDIRECTORY[default]" ]; then unset TEMP_COLD_BACKUP_SUBDIRECTORY[this];
+				else TEMP_COLD_BACKUP_SUBDIRECTORY[this]="${TEMP_COLD_BACKUP_SUBDIRECTORY[default]}"; fi;
+			else TEMP_COLD_BACKUP_SUBDIRECTORY[this]="${TEMP_COLD_BACKUP_SUBDIRECTORY[$HOSTNAME]}"; fi
+		TEMP_COLD_BACKUP_SUBDIRECTORY="${TEMP_COLD_BACKUP_SUBDIRECTORY[this]}"
+	declare -A TEMP_COLD_BACKUP_DIRECTORY
+		TEMP_COLD_BACKUP_DIRECTORY[default]="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[default]}/${TEMP_COLD_BACKUP_SUBDIRECTORY[default]}"
+		TEMP_COLD_BACKUP_DIRECTORY[adam]="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[adam]}/${TEMP_COLD_BACKUP_SUBDIRECTORY[adam]}"
+		TEMP_COLD_BACKUP_DIRECTORY[nuc01]="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[nuc01]}/${TEMP_COLD_BACKUP_SUBDIRECTORY[nuc01]}"
+		TEMP_COLD_BACKUP_DIRECTORY[oz]="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[oz]}/${TEMP_COLD_BACKUP_SUBDIRECTORY[oz]}"
+		if [ -z "${TEMP_COLD_BACKUP_DIRECTORY[$HOSTNAME]}" ]; then
+			if [ -z "$TEMP_COLD_BACKUP_DIRECTORY[default]" ]; then unset TEMP_COLD_BACKUP_DIRECTORY[this];
+				else TEMP_COLD_BACKUP_DIRECTORY[this]="${TEMP_COLD_BACKUP_DIRECTORY[default]}"; fi;
+			else TEMP_COLD_BACKUP_DIRECTORY[this]="${TEMP_COLD_BACKUP_DIRECTORY[$HOSTNAME]}"; fi
+		TEMP_COLD_BACKUP_DIRECTORY="${TEMP_COLD_BACKUP_DIRECTORY[this]}"
+	declare -A TEMP_ARCHIVE_PARENT_DIRECTORY
+		TEMP_ARCHIVE_PARENT_DIRECTORY[default]="${TEMP_ROOT[default]}"
+		TEMP_ARCHIVE_PARENT_DIRECTORY[adam]="${TEMP_ROOT[adam]}"
+		TEMP_ARCHIVE_PARENT_DIRECTORY[nuc01]="${TEMP_ROOT[nuc01]}"
+		TEMP_ARCHIVE_PARENT_DIRECTORY[oz]="${TEMP_ROOT[oz]}"
+		if [ -z "${TEMP_ARCHIVE_PARENT_DIRECTORY[$HOSTNAME]}" ]; then
+			if [ -z "$TEMP_ARCHIVE_PARENT_DIRECTORY[default]" ]; then unset TEMP_ARCHIVE_PARENT_DIRECTORY[this];
+				else TEMP_ARCHIVE_PARENT_DIRECTORY[this]="${TEMP_ARCHIVE_PARENT_DIRECTORY[default]}"; fi;
+			else TEMP_ARCHIVE_PARENT_DIRECTORY[this]="${TEMP_ARCHIVE_PARENT_DIRECTORY[$HOSTNAME]}"; fi
+		TEMP_ARCHIVE_PARENT_DIRECTORY="${TEMP_ARCHIVE_PARENT_DIRECTORY[this]}"
+	declare -A TEMP_ARCHIVE_SUBDIRECTORY
+		TEMP_ARCHIVE_SUBDIRECTORY[default]="archives"
+		TEMP_ARCHIVE_SUBDIRECTORY[adam]="${TEMP_ARCHIVE_SUBDIRECTORY[default]}"
+		TEMP_ARCHIVE_SUBDIRECTORY[nuc01]="${TEMP_ARCHIVE_SUBDIRECTORY[default]}"
+		TEMP_ARCHIVE_SUBDIRECTORY[oz]="${TEMP_ARCHIVE_SUBDIRECTORY[default]}"
+		if [ -z "${TEMP_ARCHIVE_SUBDIRECTORY[$HOSTNAME]}" ]; then
+			if [ -z "$TEMP_ARCHIVE_SUBDIRECTORY[default]" ]; then unset TEMP_ARCHIVE_SUBDIRECTORY[this];
+				else TEMP_ARCHIVE_SUBDIRECTORY[this]="${TEMP_ARCHIVE_SUBDIRECTORY[default]}"; fi;
+			else TEMP_ARCHIVE_SUBDIRECTORY[this]="${TEMP_ARCHIVE_SUBDIRECTORY[$HOSTNAME]}"; fi
+		TEMP_ARCHIVE_SUBDIRECTORY="${TEMP_ARCHIVE_SUBDIRECTORY[this]}"
+	declare -A TEMP_ARCHIVE_DIRECTORY
+		TEMP_ARCHIVE_DIRECTORY[default]="${TEMP_ARCHIVE_PARENT_DIRECTORY[default]}/${TEMP_ARCHIVE_SUBDIRECTORY[default]}"
+		TEMP_ARCHIVE_DIRECTORY[adam]="${ARCHIVE_FILE_SYSTEM[adam]}/${TEMP_ARCHIVE_SUBDIRECTORY[adam]}"
+		TEMP_ARCHIVE_DIRECTORY[nuc01]="${ARCHIVE_FILE_SYSTEM[nuc01]}/${TEMP_ARCHIVE_SUBDIRECTORY[nuc01]}"
+		TEMP_ARCHIVE_DIRECTORY[oz]="${ARCHIVE_FILE_SYSTEM[oz]}/${TEMP_ARCHIVE_SUBDIRECTORY[oz]}"
+		if [ -z "${TEMP_ARCHIVE_DIRECTORY[$HOSTNAME]}" ]; then
+			if [ -z "$TEMP_ARCHIVE_DIRECTORY[default]" ]; then unset TEMP_ARCHIVE_DIRECTORY[this];
+				else TEMP_ARCHIVE_DIRECTORY[this]="${TEMP_ARCHIVE_DIRECTORY[default]}"; fi;
+			else TEMP_ARCHIVE_DIRECTORY[this]="${TEMP_ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
+		TEMP_ARCHIVE_DIRECTORY="${TEMP_ARCHIVE_DIRECTORY[this]}"
+
+
+
+
 # About This Script (or at least the one sourcing it)
-	PROGRAM_DIRECTORY=$(dirname $0)
-	UUID=$(uuidgen)
+	PROGRAM_DIRECTORY="$(dirname $0)"
+	UUID="$(uuidgen)"
 
 # Current user info
-	CURRENT_USER=$USER
-	CURRENT_HOME_DIR=$HOME
+	CURRENT_USER="$USER"
+	CURRENT_HOME_DIR="$HOME"
 
 # Admin user info
 # Dependent on section Global
 	ADMIN_USER=lhensley
-	ADMIN_HOME_DIR=$HOME_ROOT/$ADMIN_USER
+	ADMIN_HOME_DIR="$HOME_ROOT/$ADMIN_USER"
 	ADMIN_CELL_EMAIL=7608514641@vtext.com
 	ADMIN_EMAIL=lane@lanehensley.org
 	ADMIN_NAME="Lane Hensley"
@@ -72,8 +334,8 @@ source /etc/os-release
 # Root user info
 	ROOT_USER=root
 	ROOT_HOME_DIR=/root
-	ROOT_EMAIL=root@$HOSTNAME@$DOMAIN_NAME
-	ROOT_NAME="Root at $HOSTNAME@$DOMAIN_NAME"
+	ROOT_EMAIL=root@$HOSTNAME.$DOMAIN_NAME
+	ROOT_NAME="root at $HOSTNAME.$DOMAIN_NAME"
 
 # Temp file definitions
 # DEPENDENT ON ABOUT THIS SCRIPT ABOVE
@@ -114,32 +376,32 @@ source /etc/os-release
 # Set as many as desired. Must be email addresses that forward to SMS
 # Example: TEXT_ALERT[becky]=7608515830@vtext.com
 	declare -A TEXT_ALERT
-	TEXT_ALERT[admin]=$ADMIN_CELL_EMAIL
+	TEXT_ALERT[admin]="$ADMIN_CELL_EMAIL"
 	TEXT_ALERTS=""
 	for KEY in "${!TEXT_ALERT[@]}"; do TEXT_ALERTS+="${TEXT_ALERT[$KEY]} "; done
 
 # Text Markup Codes
-#	BOLD=$(tput bold)
-#	NORMAL=$(tput sgr0)
-#	UNDERLINE=$(tput smul)
-#	DIM=$(tput dim)
-#	REVERSE=$(tput rev)
-#	STANDOUT=$(tput smso)
-#	BLACK=$(tput setf 0)
-#	BLUE=$(tput setf 1)
-#	GREEN=$(tput setf 2)
-#	CYAN=$(tput setf 3)
-#	RED=$(tput setf 4)
-#	MAGENTA=$(tput setf 5)
-#	YELLOW=$(tput setf 6)
-#	WHITE=$(tput setf 7)
+#	BOLD="$(tput bold)"
+#	NORMAL="$(tput sgr0)"
+#	UNDERLINE="$(tput smul)"
+#	DIM="$(tput dim)"
+#	REVERSE="$(tput rev)"
+#	STANDOUT="$(tput smso)"
+#	BLACK="$(tput setf 0)"
+#	BLUE="$(tput setf 1)"
+#	GREEN="$(tput setf 2)"
+#	CYAN="$(tput setf 3)"
+#	RED="$(tput setf 4)"
+#	MAGENTA="$(tput setf 5)"
+#	YELLOW="$(tput setf 6)"
+#	WHITE="$(tput setf 7)"
 
 # Email Alerts
 # DEPENDENT on user definitions above
 # Set as many as desired.
 # Example: EMAIL_ALERT[becky]=rkh@georgetown.edu
 	declare -A EMAIL_ALERT
-	EMAIL_ALERT[admin]=$ADMIN_EMAIL
+	EMAIL_ALERT[admin]="$ADMIN_EMAIL"
 	EMAIL_ALERTS=""
 	for KEY in "${!EMAIL_ALERT[@]}"; do EMAIL_ALERTS+="${EMAIL_ALERT[$KEY]} "; done
 
@@ -147,82 +409,18 @@ source /etc/os-release
 	WEB_ROOTS="/var/www"
 	THIS_WEB_ROOT="$WEB_ROOTS/html"
 
-# Archive Directories, Files, and Paths
-# DEPENDENT on definition of $HOSTNAME, but that's built-in
-	declare -A ARCHIVE_FILE_SYSTEM
-		ARCHIVE_FILE_SYSTEM[default]="/"
-		ARCHIVE_FILE_SYSTEM[eve]="/mnt/3TBB"
-		ARCHIVE_FILE_SYSTEM[nuc01]="/mnt/5TBE"
-		ARCHIVE_FILE_SYSTEM[oz]="/mnt/5TBC"
-	declare -A ARCHIVE_DIRECTORY
-		ARCHIVE_DIRECTORY[default]="/var/lib/archives/$HOSTNAME"
-		ARCHIVE_DIRECTORY[eve]=${ARCHIVE_FILE_SYSTEM[eve]}/archives/eve
-		ARCHIVE_DIRECTORY[nuc01]=${ARCHIVE_FILE_SYSTEM[nuc01]}/archives/nuc01
-		ARCHIVE_DIRECTORY[oz]=${ARCHIVE_FILE_SYSTEM[oz]}/archives/oz
-	THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[default]}"
-		if [ $HOSTNAME == "eve" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[eve]}"; fi
-		if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[nuc01]}"; fi
-		if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[oz]}"; fi
-	THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[default]}"
-		if [ $HOSTNAME == "eve" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[eve]}"; fi
-		if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[nuc01]}"; fi
-		if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[oz]}"; fi
-	ARCHIVE_TAR_FILE="$HOSTNAME-$START_DATESTAMP.gz"
-		ARCHIVE_TAR_FULL="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_FILE"
-	ARCHIVE_TAR_WEEKDAY_FILE="$HOSTNAME-weekday-$START_WEEKDAYSTAMP3.gz"
-		ARCHIVE_TAR_FULL_WEEKDAY="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
-	ARCHIVE_TAR_DAY_FILE="$HOSTNAME-day-$START_DAYSTAMP.gz"
-		ARCHIVE_TAR_FULL_DAY="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_DAY_FILE"
-	ARCHIVE_TAR_MONTH_FILE="$HOSTNAME-month-$START_MONTHSTAMP.gz"
-		ARCHIVE_TAR_FULL_MONTH="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_MONTH_FILE"
-
 # Backup COLD # cold backup
 # DEPENDENT on definition of $HOSTNAME, but that's built-in
 	# Adjusted 12/30/2020 because none of these services were coming back.
 	# COLD_PROTECTED_SERVICES="apache2 cron ddclient fail2ban lsyncd mysql plexmediaserver postfix proftpd tautulli webmin"
 	COLD_PROTECTED_SERVICES="mysql postfix"
 		# Previously incuded gdm3, but that turns off the console.
-	COLD_BACKUP_FILE_SYSTEM="/"                                # Default
-	COLD_BACKUP_FS_READ_ONLY=false                             # Default
-	COLD_BACKUP_PARENT_DIRECTORY="/var/local"                  # Default
-	COLD_BACKUP_SUBDIRECTORY="cold-backup"                     # Default
-	TEMP_COLD_BACKUP_DIRECTORY="/var/tmp/cold-backup"		   # Default
-	TEMP_COLD_BACKUP_PARENT_DIRECTORY="/var/tmp"			   # Default
-	TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"                # Default
-	TEMP_ARCHIVE_DIRECTORY="/var/tmp/archives"		           # Default
-	TEMP_ARCHIVE_PARENT_DIRECTORY="/var/tmp"			       # Default
-	TEMP_ARCHIVE_SUBDIRECTORY="archives"					   # Default
-	# Default COLD_RESTORE_POINT = "/", but "/var/restore-points/START_DATEANDTIMESTAMP/" recommended for trouble-shooting
+
+# Default COLD_RESTORE_POINT = "/", but "/var/restore-points/$START_DATEANDTIMESTAMP/" recommended for trouble-shooting
 		COLD_RESTORE_POINT="/"
-		# COLD_RESTORE_POINT="/var/restore-points/START_DATEANDTIMESTAMP/"
+		# COLD_RESTORE_POINT="/var/restore-points/$START_DATEANDTIMESTAMP/"
 	COLD_BACKUP_LOG="$ADMIN_HOME_DIR/.coldstorage.log"
-	if [ $HOSTNAME == "nuc01" ]; then
-		COLD_BACKUP_FILE_SYSTEM="/mnt/5TBE"
-		COLD_BACKUP_FS_READ_ONLY=false
-		COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
-		TEMP_COLD_BACKUP_DIRECTORY="/mnt/bob/cold-backup"
-		TEMP_COLD_BACKUP_PARENT_DIRECTORY="/mnt/bob"
-		TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"
-		TEMP_ARCHIVE_DIRECTORY="/mnt/bob/archives"
-		TEMP_ARCHIVE_PARENT_DIRECTORY="/mnt/bob"
-		TEMP_ARCHIVE_SUBDIRECTORY="archives"
-		fi
-	if [ $HOSTNAME == "red" ]; then
-		COLD_BACKUP_FILE_SYSTEM="/mnt/5TBD"
-		COLD_BACKUP_FS_READ_ONLY=false
-		COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
-		fi
-	if [ $HOSTNAME == "oz" ]; then
-		COLD_BACKUP_FILE_SYSTEM="/mnt/5TBC"
-		COLD_BACKUP_FS_READ_ONLY=false
-		COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
-		TEMP_COLD_BACKUP_DIRECTORY="/mnt/ssd1tb/cold-backup"
-		TEMP_COLD_BACKUP_PARENT_DIRECTORY="/mnt/ssd1tb"
-		TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"
-		TEMP_ARCHIVE_DIRECTORY="/mnt/ssd1tb/archives"
-		TEMP_ARCHIVE_PARENT_DIRECTORY="/mnt/ssd1tb"
-		TEMP_ARCHIVE_SUBDIRECTORY="archives"
-		fi
+
 	COLD_BACKUP_DIRECTORY="$COLD_BACKUP_PARENT_DIRECTORY/$COLD_BACKUP_SUBDIRECTORY"
 	COLD_BACKUP_EXCLUDES="--exclude='/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Cache'"
 	COLD_BACKUP_EXCLUDES+=" --exclude=/var/lib/plexmediaserver/Library/store/*"
@@ -267,7 +465,7 @@ source /etc/os-release
 	BACKUP_OPTION[--exclude-caches]=true
 	BACKUP_OPTION[--totals]=true
 	BACKUP_OPTION[--verbose]=true
-	# BACKUP_OPTION[--exclude-from=$TEMP_SOCKETS_BACKUP]=true
+	# BACKUP_OPTION[--exclude-from="$TEMP_SOCKETS_BACKUP"]=true
 	# Ref: https://bytefreaks.net/gnulinux/bash/bash-how-to-iterate-over-associative-array-and-print-all-keyvalue-pairs
 	BACKUP_OPTIONS=""; 
 	for KEY in "${!BACKUP_OPTION[@]}"; do BACKUP_OPTIONS+=$KEY" "; done
@@ -281,58 +479,15 @@ source /etc/os-release
 	# Ref: https://bytefreaks.net/gnulinux/bash/bash-how-to-iterate-over-associative-array-and-print-all-keyvalue-pairs
 	BACKUP_SOURCES=""; for KEY in "${!BACKUP_SOURCE[@]}"; do BACKUP_SOURCES+=$KEY" "; done
 
-# Peripheral File System Mount Points
-# This info is appended to /etc/fstab, and the mount points (key values) are created, at system installation
-# Example: MOUNT_POINT_DESCRIPTION[/mnt/Black4T01]="Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE"
-# Example: MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs defaults 0 0"
-	declare -A MOUNT_POINT_DESCRIPTION
-	declare -A MOUNT_POINT_DEFINITION
-	if [ $HOSTNAME == "eve" ]; then
-		MOUNT_POINT_DESCRIPTION[/mnt/5TBD]="# Black 5TB External Seagate"
-			MOUNT_POINT_DEFINITION[/mnt/5TBD]="UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/5TBD ext4 defaults 0 0"
-		MOUNT_POINT_DESCRIPTION[/mnt/3TBB]="# Black 3TB External Drive (formerly attached to pearl)"
-			MOUNT_POINT_DEFINITION[/mnt/3TBB]="UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/3TBB ext4 ro,defaults 0 0"
-	fi
-	if [ $HOSTNAME == "nuc01" ]; then
-		MOUNT_POINT_DESCRIPTION[/mnt/Black4T01]="Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE"
-			MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs noauto 0 0"
-		MOUNT_POINT_DESCRIPTION[/mnt/bertha]="bertha (3TB) UUID=d28256f9-c258-451e-b299-d4849cf19e0b"
-			MOUNT_POINT_DEFINITION[/mnt/bertha]="UUID=d28256f9-c258-451e-b299-d4849cf19e0b /mnt/bertha ext4 defaults 0 0"
-		MOUNT_POINT_DESCRIPTION[/mnt/cloteal]="cloteal (10TB) UUID=4e356144-2e69-4812-8958-d035a9ebc28e"
-			MOUNT_POINT_DEFINITION[/mnt/cloteal]="UUID=4e356144-2e69-4812-8958-d035a9ebc28e /mnt/cloteal ext4 defaults 0 0"
-		MOUNT_POINT_DESCRIPTION[/mnt/MyBook3T01]="MyBook3T01 (3TB) UUID=C6B89CABB89C9B8D"
-			MOUNT_POINT_DEFINITION[/mnt/MyBook3T01]="UUID=C6B89CABB89C9B8D /mnt/MyBook3T01 ntfs defaults 0 0"
-		MOUNT_POINT_DESCRIPTION[/mnt/Silver5TB-A]="Silver5TB-A (5TB) UUID=0A538B3244DE3676"
-			MOUNT_POINT_DEFINITION[/mnt/Silver5TB-A]="UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs defaults 0 0"
-		MOUNT_POINT_DESCRIPTION[/mnt/Silver5TB-B]="Silver5TB-B (5TB) UUID 634B5E207BE18E54"
-			MOUNT_POINT_DEFINITION[/mnt/Silver5TB-B]="UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0"
-		MOUNT_POINT_DESCRIPTION[/mnt/5TBE]="# Black 5TB External Seagate"
-			MOUNT_POINT_DEFINITION[/mnt/5TBE]="UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 defaults 0 0"
-		MOUNT_POINT_DESCRIPTION[/home/plex-swap/uploads]="Bind mount"
-			MOUNT_POINT_DEFINITION[/home/plex-swap/uploads]="#/mnt/cloteal/PlexUploads /home/plex-swap/uploads none bind 0 0"
-		MOUNT_POINT_DESCRIPTION[/home/plex-swap/downloads]="Bind mount"
-			MOUNT_POINT_DEFINITION[/home/plex-swap/downloads]="#/mnt/cloteal/Plex /home/plex-swap/downloads none bind 0 0"
-	fi
-	if [ $HOSTNAME == "oz" ]; then
-		MOUNT_POINT_DESCRIPTION[/mnt/ssd1tb]="Internal SSD drive, 1T"
-			MOUNT_POINT_DEFINITION[/mnt/ssd1tb]="UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb ext4 defaults 0 0"
-		MOUNT_POINT_DESCRIPTION[/mnt/ext10tb01]="External Hard Drive for Plex, 10TB (rerun)"
-			MOUNT_POINT_DEFINITION[/mnt/ext10tb01]="UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 rw,defaults 0 0"
-		MOUNT_POINT_DESCRIPTION[/mnt/Black1TB]="# Black 1TB"
-			MOUNT_POINT_DEFINITION[/mnt/Black1TB]="# UUID=c359e0c7-c6a1-4a49-b7eb-82fe3e5f0f25 /mnt/Black1TB ext4 noauto 0 0"
-		MOUNT_POINT_DESCRIPTION[/mnt/5TBC]="# Black 5TB (C) External Seagate"
-			MOUNT_POINT_DEFINITION[/mnt/5TBC]="UUID=fa9f5c57-94fd-4706-979e-4c30189592a5 /mnt/5TBC ext4 default 0 0"
-	fi
-
 # Git
 	GIT_BRANCH="master"
 	# GIT_BRANCH="dev"
 	GIT_ROOT="/var/local/git"                            # Formerly system.git
 	GIT_GO="$GIT_ROOT/go"                                # Formerly system.git.go
-	GIT_GO_CONFIGS=$GIT_GO/configs                       # Formerly system.git.go.configs
-	GIT_GO_SBIN=$GIT_GO/sbin                             # Formerly #system.git.go.sbin
-	GIT_GO_SERVICES=$GIT_GO/services
-	GIT_GO_SETUP=$GIT_GO/setup                           # Formerly system.git.go.setup
+	GIT_GO_CONFIGS="$GIT_GO/configs"                     # Formerly system.git.go.configs
+	GIT_GO_SBIN="$GIT_GO/sbin"                           # Formerly #system.git.go.sbin
+	GIT_GO_SERVICES="$GIT_GO/services"
+	GIT_GO_SETUP="$GIT_GO/setup"                         # Formerly system.git.go.setup
 	GIT_TOKEN=4b662b7d4431ec1956127aa9d4fdbd8d75ec821a   # Formerly system.git.token
 	SERVICES_DIR="/lib/systemd/system"
 
@@ -346,7 +501,7 @@ source /etc/os-release
 
 # Installation
 	OS_INSTALL_INFO_FILE=.config/os-install-info.txt
-	OS_INSTALL_INFO_PATH=$ROOT_HOME_DIR/$OS_INSTALL_INFO_FILE
+	OS_INSTALL_INFO_PATH="$ROOT_HOME_DIR/$OS_INSTALL_INFO_FILE"
 	
 # MakeMKV
 	MAKEMKV_OUTPUT_DIRECTORY="$ADMIN_HOME_DIR/Videos/MakeMKV-Completed"
@@ -357,7 +512,7 @@ source /etc/os-release
 	MYSQL_ADMIN_NAME="admin"
 	MYSQL_CLIENT_CERTS_DIR="$ADMIN_HOME_DIR/certs"
 	MYSQL_CONFIGS="/etc/mysql/conf.d"
-	MYSQL_DUMP_DIR=$ADMIN_HOME_DIR/mysql-dumps
+	MYSQL_DUMP_DIR="$ADMIN_HOME_DIR/mysql-dumps"
 	MYSQL_SERVER_BIN_DIR="/var/lib/mysql"
 
 # MySQL Backups
@@ -391,62 +546,13 @@ source /etc/os-release
 	PLEX_LIVE_APPLICATION_SUPPORT="/var/lib/plexmediaserver/Library"
 	PLEX_BACKUP_FILE_SYSTEM="$THIS_ARCHIVE_FILE_SYSTEM"
 	PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
-	if [ $HOSTNAME == "nuc01" ]; then 
-		# Define all Plex data root directories
-		# Set them all as true
-		# Example: PLEX_ROOT[/mnt/cloteal/plex]=true
-			declare -A PLEX_ROOT
-			PLEX_ROOT[/mnt/cloteal/plex]=true
-			PLEX_ROOT[/mnt/cloteal/plex-dvr]=true
-			PLEX_ROOT[/mnt/bertha/plex]=true
-			PLEX_ROOT[/mnt/bob/plex]=true
-			PLEX_ROOT[/var/lib/plexmediaserver/Library/metadata]=true	
-			PLEX_ROOT[/var/lib/plexmediaserver/Library/store]=true	
-			PLEX_ROOT[/var/lib/plexmediaserver/Library/work]=true	
-		VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
-		VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
-		VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in"
-		VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex-dvr"
-		PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
-		fi
-	if [ $HOSTNAME == "oz" ]; then 
-		# Define all Plex data root directories
-		# Set them all as true
-		# Example: PLEX_ROOT[/mnt/cloteal/plex]=true
-			declare -A PLEX_ROOT
-			PLEX_ROOT[/var/lib/plexmediaserver/Library/metadata]=true	
-			PLEX_ROOT[/var/lib/plexmediaserver/Library/store]=true	
-			PLEX_ROOT[/var/lib/plexmediaserver/Library/work]=true	
-			PLEX_ROOT[/mnt/ssd1tb/plex]=true
-			PLEX_ROOT[/mnt/ext10tb01/plex]=true	
-		VIDEO_WORK_FILE_SYSTEM="/mnt/ssd1tb"
-		VIDEO_WORK_DIRECTORY="/mnt/ssd1tb/plex/dvr-oz"
-		VIDEO_STORE_FILE_SYSTEM="/mnt/ext10tb01"
-		VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex/dvr-oz"
-		PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
-		fi
-	if [ $HOSTNAME == "adam" ]; then 
-		# Define all Plex data root directories
-		# Set them all as true
-		# Example: PLEX_ROOT[/mnt/cloteal/plex]=true
-			declare -A PLEX_ROOT
-			PLEX_ROOT[/mnt/cloteal/plex]=true
-			PLEX_ROOT[/mnt/cloteal/plex-dvr]=true
-			PLEX_ROOT[/mnt/bertha/plex]=true
-			PLEX_ROOT[/mnt/bob/plex]=true
-		VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
-		VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
-		VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in"
-		VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex-dvr"
-		PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
-		fi
 
 # Postfix Setup
-	MAILNAME=$HOSTNAME
+	MAILNAME="$HOSTNAME"
 	MAIN_MAILER_TYPE="'Internet with smarthost'"
 	RELAYHOST="mail.twc.com"                                          # Spectrum Internet (DEFAULT for Austin)
-	if [ $HOSTNAME == "nuc01" ]; then RELAYHOST="mail.mchsi.com"; fi  # Mediacom Cable Internet
-	if [ $HOSTNAME == "red" ]; then RELAYHOST="mail.mchsi.com"; fi    # Mediacom Cable Internet
+#	if [ $HOSTNAME == "nuc01" ]; then RELAYHOST="mail.mchsi.com"; fi  # Mediacom Cable Internet
+#	if [ $HOSTNAME == "red" ]; then RELAYHOST="mail.mchsi.com"; fi    # Mediacom Cable Internet
 
 # reset-when-ready
 	RESET_FLAG_FILE="/tmp/reset-when-ready"
@@ -608,8 +714,10 @@ source /etc/os-release
 # Set a flag to confirm that the variables are defined
 	VARIABLES_ARE_DEFINED=true
 
+# Display all defined variables (used only for troubleshooting)
+# ( set -o posix ; set )
+
 # Log the completion
 	if [ ! $DEBUG_MODE ]; then
 		logger $0: Variables loaded from _vars
 		fi
-
