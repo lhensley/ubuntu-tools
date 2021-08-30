@@ -54,6 +54,8 @@ source /etc/os-release
 	START_WEEKDAYSTAMP2=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z-%a')     # Like 2020-09-07-16-05-23-CDT-Mon. Used in backup variables below
 	START_WEEKDAYSTAMP3=$(/bin/date '+%w-%a')                       # Like 0-Sun, 1-Mon, 2-Tue, etc. Used in backup variables below
 
+
+
 # Define hosts-specific variables
 	declare -A IP4
 		IP4[default]="127.0.0.1"
@@ -201,6 +203,50 @@ source /etc/os-release
 		ARCHIVE_TAR_FULL_MONTH="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_MONTH_FILE"
 	PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
 
+
+# Define host-specific values
+	# default
+		# Network Addressing
+			# IP4 address from DNS, except for "default, which hardcodes localhost"
+				HOST[default,ip4]="127.0.0.1"
+			# IP6 address from DNS, except for "default, which hardcodes localhost"
+				HOST[default,ip6]="::1"
+			# Works ONLY on the local network; hard-coded IP4 address
+				HOST[default,local]="127.0.0.1"
+			# Preferred network address; normally the ip6 address
+				HOST[default,netaddr]=${HOST[default,ip6]}
+		# Temporary file storage locations; used for Plex DVR raw files and cold backup staging
+			# Used for temporary storage and quick storage response time
+				HOST[default,temp_file_system]="/"
+			# Root directory of temporary storage
+				HOST[default,temp_file_root]="/var/tmp"
+		# Plex Transcoding; defines transcoding only, not Plex functioning
+			# File system where transcode scripts can find raw .ts files made by Plex DVR
+				HOST[default,video_work_file_system]="/"
+			# Base path where transcode scripts can find raw .ts files made by Plex DVR
+				HOST[default,video_work_base_path]="/"
+			# File system for Plex DVR files transcoded to .m4v by HandBrake
+				HOST[default,video_store_file_system]="/" 
+			# Base path for Plex DVR files transcoded to .m4v by HandBrake
+				HOST[default,video_store_base_path]="/"
+		# Archive locations
+			# DEPENDENT on timestamp definitions
+			# DEPENDENT on definition of $HOSTNAME, but that's built-in
+			# File system where archives are stored. Typically this is a 5TB external drive, if there is one.
+				HOST[default,archive_file_system]="/"	# Bad idea to leave this on root file system.
+			# Base path where archives are stored. Typically this is a 5TB external drive, if there is one.
+				HOST[default,archive_base_path]="/var/lib/archives/$HOSTNAME"   # Bad idea to leave this on root file system.
+		# Cold backup locations and behavior
+			# File system where cold backups are stored. Typically this is based on archive location info above.
+				HOST[default,cold_backup_storage_file_system]="${HOST[default,archive_file_system]}"
+			# Behavior of the cold backup file system: read-only, true or false
+			# IMPORTANT: This does not set /etc/fstab. It only determines whether to mount and unmount manually.
+				HOST[default,cold_backup_storage_file_system_read_only]=false
+			# Base path of cold backup storage. CAUTION: Root file system will quickly fill if "/var/local" is used.
+				HOST[default,cold_backup_storage_base_path]="/var/local"
+			# Container path of cold backup storage.
+				HOST[default,cold_backup_storage_container_directory]="cold-backup"
+
 	declare -A COLD_BACKUP_FILE_SYSTEM
 		COLD_BACKUP_FILE_SYSTEM[default]="${ARCHIVE_FILE_SYSTEM[default]}"
 		COLD_BACKUP_FILE_SYSTEM[adam]="${ARCHIVE_FILE_SYSTEM[adam]}"
@@ -221,11 +267,14 @@ source /etc/os-release
 				else COLD_BACKUP_FS_READ_ONLY[this]="${COLD_BACKUP_FS_READ_ONLY[default]}"; fi;
 			else COLD_BACKUP_FS_READ_ONLY[this]="${COLD_BACKUP_FS_READ_ONLY[$HOSTNAME]}"; fi
 		COLD_BACKUP_FS_READ_ONLY="${COLD_BACKUP_FS_READ_ONLY[this]}"
+
+#### CRITICAL: Check these values, and check version A compliance
+
 	declare -A COLD_BACKUP_PARENT_DIRECTORY
 		COLD_BACKUP_PARENT_DIRECTORY[default]="/var/local"
-		COLD_BACKUP_PARENT_DIRECTORY[adam]="${COLD_BACKUP_FILE_SYSTEM[nuc01]}"
-		COLD_BACKUP_PARENT_DIRECTORY[nuc01]="/mnt/bob"
-		COLD_BACKUP_PARENT_DIRECTORY[oz]="/mnt/ssd1tb"
+		COLD_BACKUP_PARENT_DIRECTORY[adam]="${COLD_BACKUP_FILE_SYSTEM[adam]}"
+		COLD_BACKUP_PARENT_DIRECTORY[nuc01]="${COLD_BACKUP_FILE_SYSTEM[nuc01]}"
+		COLD_BACKUP_PARENT_DIRECTORY[oz]="${COLD_BACKUP_FILE_SYSTEM[oz]}"
 		if [ -z "${COLD_BACKUP_PARENT_DIRECTORY[$HOSTNAME]}" ]; then
 			if [ -z "$COLD_BACKUP_PARENT_DIRECTORY[default]" ]; then unset COLD_BACKUP_PARENT_DIRECTORY[this];
 				else COLD_BACKUP_PARENT_DIRECTORY[this]="${COLD_BACKUP_PARENT_DIRECTORY[default]}"; fi;
