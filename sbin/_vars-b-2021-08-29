@@ -246,6 +246,45 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 			# Behavior of the archive storage file system: read-only, true or false
 			# IMPORTANT: This does not set /etc/fstab. It only determines whether to mount and unmount manually.
 				HOST[$THISHOST,archive_storage_file_system_read_only]=false
+	# Clean up
+		# Name of this host
+			unset THISHOST
+		# Network Addressing
+			# Safe local address
+				unset HOST[default,local]
+			# Preferred global address; normally the ip6 address
+				unset HOST[default,global]
+		# Work file container location; used for Plex DVR raw files and cold backup staging
+		# CAUTION: Root file system will quickly fill; use large storage device.
+			# Used for temporary storage and quick storage response time
+				unset HOST[default,work_container]
+		# Plex Transcoding; defines transcoding only, not Plex functioning
+			# App container name (default="plex")
+				unset HOST[default,plex_app_container]
+			# Function container name (default="dvr")
+				unset HOST[default,plex_function_container]
+			# .ts files container name (default="in")
+				unset HOST[default,plex_function_ts_container]
+			# .mkv files container name (default="out")
+				unset HOST[default,plex_function_mkv_container]
+			# Base path where transcode scripts can find raw .ts files made by Plex DVR
+				unset HOST[default,video_work_container]
+			# Base path for Plex DVR files transcoded to .m4v by HandBrake
+				unset HOST[default,video_store_container]
+		# Archive locations
+			# DEPENDENT on timestamp definitions
+			# DEPENDENT on definition of $HOSTNAME, but that's built-in
+			# Archive STORAGE container parent name
+				unset HOST[default,archive_app_parent]
+			# App container name (Normally "archives")
+				unset HOST[default,archive_app_container]
+			# Base path for temporary archive storage.
+				unset HOST[default,temp_archive_base_path]
+			# Base path where completed archives are STORED long term. Typically this is a 5TB external drive, if there is one.
+				unset HOST[default,archive_base_path]
+			# Behavior of the archive storage file system: read-only, true or false
+			# IMPORTANT: This does not set /etc/fstab. It only determines whether to mount and unmount manually.
+				unset HOST[default,archive_storage_file_system_read_only]
 
 
 # Define hosts-specific variables
