@@ -92,7 +92,7 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_function_container]}"
 					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_function_ts_container]}"
 			# Base path for Plex DVR files transcoded to .m4v by HandBrake
-				HOST[$THISHOST,video_store_container]="${HOST[$THISHOST,store_container]}"
+				HOST[$THISHOST,video_store_container]="${HOST[$THISHOST,work_container]}"
 					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_app_container]}"
 					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_container]}"
 					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_mkv_container]}"
@@ -127,7 +127,7 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 			# App container name (default="plex")
 				HOST[$THISHOST,plex_app_container]="${HOST[default,plex_app_container]}"
 			# Function container name (default="dvr")
-				HOST[$THISHOST,plex_function_container]="${HOST[default,plex_function_container]}"
+				HOST[$THISHOST,plex_function_container]="plex-dvr"
 			# .ts files container name (default="in")
 				HOST[$THISHOST,plex_function_ts_container]="${HOST[default,plex_function_ts_container]}"
 			# .mkv files container name (default="out")
@@ -138,10 +138,9 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_function_container]}"
 					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_function_ts_container]}"
 			# Base path for Plex DVR files transcoded to .m4v by HandBrake
-				HOST[$THISHOST,video_store_container]="/mnt/cloteal/plex-dvr"   # NOT STANDARD
-#				HOST[$THISHOST,video_store_container]="${HOST[$THISHOST,store_container]}"
+				HOST[$THISHOST,video_store_container]="/mnt/cloteal"
 #					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_app_container]}"
-#					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_container]}"
+					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_container]}"
 #					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_mkv_container]}"
 		# Archive locations
 			# DEPENDENT on timestamp definitions
@@ -187,7 +186,7 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 #					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_function_ts_container]}"
 			# Base path for Plex DVR files transcoded to .m4v by HandBrake
 				HOST[$THISHOST,video_store_container]="${HOST[nuc01,video_store_container]}"  # Temporarily pointing to nuc01
-#				HOST[$THISHOST,video_store_container]="${HOST[$THISHOST,store_container]}"
+#				HOST[$THISHOST,video_store_container]="${HOST[$THISHOST,work_container]}"
 #					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_app_container]}"
 #					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_container]}"
 #					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_mkv_container]}"
