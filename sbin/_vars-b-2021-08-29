@@ -68,11 +68,10 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 		# Name of this host
 			THISHOST="default"
 		# Network Addressing
-			# Calculated
-				# Safe local address
-					HOST[$THISHOST,local]="$THISHOST.$DOMAIN_LOCAL"
-				# Preferred global address; normally the ip6 address
-					HOST[$THISHOST,global]="$THISHOST.$DOMAIN_NAME"
+			# Safe local address
+				HOST[$THISHOST,local]="$THISHOST.$DOMAIN_LOCAL"
+			# Preferred global address; normally the ip6 address
+				HOST[$THISHOST,global]="$THISHOST.$DOMAIN_NAME"
 		# Work file container location; used for Plex DVR raw files and cold backup staging
 		# CAUTION: Root file system will quickly fill; use large storage device.
 			# Used for temporary storage and quick storage response time
@@ -114,11 +113,10 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 		# Name of this host
 			THISHOST="nuc01"
 		# Network Addressing
-			# Calculated
-				# Safe local address
-					HOST[$THISHOST,local]="${HOST[$THISHOST,local]}"
-				# Preferred global address; normally the ip6 address
-					HOST[$THISHOST,global]="${HOST[$THISHOST,global]}"
+			# Safe local address
+				HOST[$THISHOST,local]="$THISHOST.$DOMAIN_LOCAL"
+			# Preferred global address; normally the ip6 address
+				HOST[$THISHOST,global]="$THISHOST.$DOMAIN_NAME"
 		# Work file container location; used for Plex DVR raw files and cold backup staging
 		# CAUTION: Root file system will quickly fill; use large storage device.
 			# Used for temporary storage and quick storage response time
@@ -160,11 +158,10 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 		# Name of this host
 			THISHOST="adam"
 		# Network Addressing
-			# Calculated
-				# Safe local address
-					HOST[$THISHOST,local]="${HOST[$THISHOST,local]}"
-				# Preferred global address; normally the ip6 address
-					HOST[$THISHOST,global]="${HOST[$THISHOST,global]}"
+			# Safe local address
+				HOST[$THISHOST,local]="$THISHOST.$DOMAIN_LOCAL"
+			# Preferred global address; normally the ip6 address
+				HOST[$THISHOST,global]="$THISHOST.$DOMAIN_NAME"
 		# Work file container location; used for Plex DVR raw files and cold backup staging
 		# CAUTION: Root file system will quickly fill; use large storage device.
 			# Used for temporary storage and quick storage response time
@@ -208,11 +205,10 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 		# Name of this host
 			THISHOST="oz"
 		# Network Addressing
-			# Calculated
-				# Safe local address
-					HOST[$THISHOST,local]="${HOST[$THISHOST,local]}"
-				# Preferred global address; normally the ip6 address
-					HOST[$THISHOST,global]="${HOST[$THISHOST,global]}"
+			# Safe local address
+				HOST[$THISHOST,local]="$THISHOST.$DOMAIN_LOCAL"
+			# Preferred global address; normally the ip6 address
+				HOST[$THISHOST,global]="$THISHOST.$DOMAIN_NAME"
 		# Work file container location; used for Plex DVR raw files and cold backup staging
 		# CAUTION: Root file system will quickly fill; use large storage device.
 			# Used for temporary storage and quick storage response time
