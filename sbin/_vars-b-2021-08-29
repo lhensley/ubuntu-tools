@@ -70,7 +70,7 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 		# Network Addressing
 			# Calculated
 				# Safe local address
-					HOSTX[$THISHOST,local]="$THISHOST.$DOMAIN_LOCAL"
+					HOST[$THISHOST,local]="$THISHOST.$DOMAIN_LOCAL"
 				# Preferred global address; normally the ip6 address
 					HOST[$THISHOST,global]="$THISHOST.$DOMAIN_NAME"
 		# Work file container location; used for Plex DVR raw files and cold backup staging
