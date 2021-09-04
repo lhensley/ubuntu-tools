@@ -201,6 +201,12 @@ function f_users_logged_in () {
 	who | wc -l
 	}
 
+function f_file_system_of () {
+	# Returns the file system name when $1 is a file or directory path
+	# Apparently not portable outside Linux, but who cares?
+	stat -c '%m' "$1"
+	}
+
 function f_beep () {
 	echo -en "\007" # Beep
 	}

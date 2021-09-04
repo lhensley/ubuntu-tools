@@ -26,8 +26,6 @@
 	DOMAIN_NAME=lanehensley.org
 	DOMAIN_LOCAL=lan
 	COLOPHON="by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
-	LOCALHOST4="127.0.0.1"
-	LOCALHOST6="::1"
 
 # /etc/os-release defines a lot of environment variables 
 # Sample:
@@ -69,181 +67,189 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 		# Name of this host
 			THISHOST=default
 		# Network Addressing
-			# IP4 address from DNS, except for "default", which hardcodes localhost
-				HOST[$THISHOST,ip4]="$LOCALHOST4"
-			# IP6 address from DNS, except for "default", which hardcodes localhost
-				HOST[$THISHOST,ip6]="$LOCALHOST6"
-			# Works ONLY on the local network; hard-coded IP4 address
-				HOST[$THISHOST,local]="$LOCALHOST4"
-			# Preferred network address; normally the ip6 address
-				HOST[$THISHOST,netaddr]=${HOST[$THISHOST,ip6]}
-		# Temporary file storage locations; used for Plex DVR raw files and cold backup staging
-		# CAUTION: Root file system (e.g., / or /var/tmp) will quickly fill; use large storage device.
+			# Calculated
+				# Safe local address
+					HOST[$THISHOST,local]="$THISHOST.$DOMAIN_LOCAL"
+				# Preferred global address; normally the ip6 address
+					HOST[$THISHOST,global]="$THISHOST.$DOMAIN_NAME"
+		# Work file container location; used for Plex DVR raw files and cold backup staging
+		# CAUTION: Root file system will quickly fill; use large storage device.
 			# Used for temporary storage and quick storage response time
-				HOST[$THISHOST,temp_file_system]="/"
-			# Root directory of temporary storage.
-				HOST[$THISHOST,temp_file_root]="/var/tmp"
+				HOST[$THISHOST,work_container]="/var/local"
 		# Plex Transcoding; defines transcoding only, not Plex functioning
-			# File system where transcode scripts can find raw .ts files made by Plex DVR
-				HOST[$THISHOST,video_work_file_system]="/"
+			# App container name (default="plex")
+				HOST[$THISHOST,plex_app_container]="plex"
+			# Function container name (default="dvr")
+				HOST[$THISHOST,plex_function_container]="dvr"
+			# .ts files container name (default="in")
+				HOST[$THISHOST,plex_function_ts_container]="in"
+			# .mkv files container name (default="out")
+				HOST[$THISHOST,plex_function_mkv_container]="out"
 			# Base path where transcode scripts can find raw .ts files made by Plex DVR
-				HOST[$THISHOST,video_work_base_path]="$PLEX_APPLICATION_SUPPORT_PATH/dvr/in"
-			# File system for Plex DVR files transcoded to .m4v by HandBrake
-				HOST[$THISHOST,video_store_file_system]="/"
+				HOST[$THISHOST,video_work_container]="${HOST[$THISHOST,work_container]}"
+					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_app_container]}"
+					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_function_container]}"
+					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_function_ts_container]}"
 			# Base path for Plex DVR files transcoded to .m4v by HandBrake
-				HOST[$THISHOST,video_store_base_path]="$PLEX_APPLICATION_SUPPORT_PATH/dvr/out"
+				HOST[$THISHOST,video_store_container]="${HOST[$THISHOST,store_container]}"
+					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_app_container]}"
+					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_container]}"
+					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_mkv_container]}"
 		# Archive locations
 			# DEPENDENT on timestamp definitions
 			# DEPENDENT on definition of $HOSTNAME, but that's built-in
-			# File system where archives are stored. Typically this is a 5TB external drive, if there is one.
-				HOST[$THISHOST,archive_file_system]="/"	# Bad idea to leave this on root file system.
-			# Base path where archives are stored. Typically this is a 5TB external drive, if there is one.
-				HOST[$THISHOST,archive_base_path]="/var/lib/archives/$HOSTNAME"   # Bad idea to leave this on root file system.
-			# Parent directory of temporary archive storage. CAUTION: Root file system will quickly fill if used.
-				HOST[$THISHOST,temp_archive_parent_directory]="${TEMP_ROOT[$THISHOST]}"
-			# Container path of temporary archive storage.
-				HOST[$THISHOST,temp_archive_container]="archives"
-			# Full path of temporary archive storage.
-				HOST[$THISHOST,temp_archive_path]="${TEMP_ARCHIVE_PARENT_DIRECTORY[$THISHOST]}/${TEMP_ARCHIVE_SUBDIRECTORY[$THISHOST]}"
-		# Cold backup locations and behavior
-			# File system where cold backups are stored. Typically this is based on archive location info above.
-				HOST[$THISHOST,cold_backup_storage_file_system]="${HOST[$THISHOST,archive_file_system]}"
-			# Behavior of the cold backup file system: read-only, true or false
+			# Archive STORAGE container parent name
+				HOST[$THISHOST,archive_app_parent]="${HOST[$THISHOST,work_container]}"
+			# App container name (Normally "archives")
+				HOST[$THISHOST,archive_app_container]="archives"
+			# Base path for temporary archive storage.
+				HOST[$THISHOST,temp_archive_base_path]="${HOST[$THISHOST,archive_app_parent]}/${HOST[$THISHOST,archive_app_container]}/tmp"
+			# Base path where completed archives are STORED long term. Typically this is a 5TB external drive, if there is one.
+				HOST[$THISHOST,archive_base_path]="${HOST[$THISHOST,work_container]}/${HOST[$THISHOST,archive_app_container]}/$HOSTNAME"
+			# Behavior of the archive storage file system: read-only, true or false
 			# IMPORTANT: This does not set /etc/fstab. It only determines whether to mount and unmount manually.
-				HOST[$THISHOST,cold_backup_storage_file_system_read_only]=false
-			# Base path of cold backup storage. CAUTION: Root file system will quickly fill if used.
-				HOST[$THISHOST,cold_backup_storage_base_path]="/var/local"
-			# Container path of cold backup storage.
-				HOST[$THISHOST,cold_backup_storage_container_directory]="cold-backup"
-			# Parent directory of cold backup storage. CAUTION: Root file system will quickly fill if used.
-			# QUESTION: Isn't this the same thing as cold_backup_storage_base_path? Why is this here?
-				HOST[$THISHOST,cold_backup_storage_parent_directory]="${HOST[$THISHOST,cold_backup_storage_base_path]}"
-			# Parent directory of temporary cold backup storage. CAUTION: Root file system will quickly fill if used.
-				HOST[$THISHOST,temp_cold_backup_parent_directory]="${TEMP_ROOT[$THISHOST]}"
-			# Container path of temporary cold backup storage.
-				HOST[$THISHOST,temp_cold_backup_container]="cold-backup"
-			# Full path of temporary cold backup storage.
-				HOST[$THISHOST,temp_cold_backup_path]="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[$THISHOST]}/${TEMP_COLD_BACKUP_SUBDIRECTORY[$THISHOST]}"
+				HOST[$THISHOST,archive_storage_file_system_read_only]=false
 	# nuc01 #IMPORTANT: This section needs to come BEFORE adam; adam definitions point to nuc01
 		# Name of this host
 			THISHOST=nuc01
 		# Network Addressing
-			# IP4 address from DNS
-				HOST[$THISHOST,ip4]="n4.$DOMAIN_NAME"
-			# IP6 address from DNS
-				HOST[$THISHOST,ip6]="n6.$DOMAIN_NAME"
-			# Works ONLY on the local network; hard-coded IP4 address
-				HOST[$THISHOST,local]="$HOSTNAME.$DOMAIN_LOCAL"
-			# Preferred network address; normally the ip6 address
-				HOST[$THISHOST,netaddr]=${HOST[$THISHOST,ip6]}
-		# Temporary file storage locations; used for Plex DVR raw files and cold backup staging
-		# CAUTION: Root file system (e.g., / or /var/tmp) will quickly fill; use large storage device.
+			# Calculated
+				# Safe local address
+					HOST[$THISHOST,local]="${HOST[$THISHOST,local]}"
+				# Preferred global address; normally the ip6 address
+					HOST[$THISHOST,global]="${HOST[$THISHOST,global]}"
+		# Work file container location; used for Plex DVR raw files and cold backup staging
+		# CAUTION: Root file system will quickly fill; use large storage device.
 			# Used for temporary storage and quick storage response time
-				HOST[$THISHOST,temp_file_system]="/mnt/bob"
-			# Root directory of temporary storage.
-				HOST[$THISHOST,temp_file_root]="${HOST[$THISHOST,temp_file_system]}"
+				HOST[$THISHOST,work_container]="/mnt/bob"
 		# Plex Transcoding; defines transcoding only, not Plex functioning
-			# File system where transcode scripts can find raw .ts files made by Plex DVR
-				HOST[$THISHOST,video_work_file_system]="${HOST[$THISHOST,temp_file_system]}"
+			# App container name (default="plex")
+				HOST[$THISHOST,plex_app_container]="${HOST[default,plex_app_container]}"
+			# Function container name (default="dvr")
+				HOST[$THISHOST,plex_function_container]="${HOST[default,plex_function_container]}"
+			# .ts files container name (default="in")
+				HOST[$THISHOST,plex_function_ts_container]="${HOST[default,plex_function_ts_container]}"
+			# .mkv files container name (default="out")
+				HOST[$THISHOST,plex_function_mkv_container]="${HOST[default,plex_function_mkv_container]}"
 			# Base path where transcode scripts can find raw .ts files made by Plex DVR
-				HOST[$THISHOST,video_work_base_path]="${HOST[$THISHOST,temp_file_system]}/dvr/in"
-			# File system for Plex DVR files transcoded to .m4v by HandBrake
-				HOST[$THISHOST,video_store_file_system]="/mnt/cloteal"
+				HOST[$THISHOST,video_work_container]="${HOST[$THISHOST,work_container]}"
+					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_app_container]}"
+					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_function_container]}"
+					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_function_ts_container]}"
 			# Base path for Plex DVR files transcoded to .m4v by HandBrake
-				HOST[$THISHOST,video_store_base_path]="${HOST[$THISHOST,video_store_file_system]}/plex-dvr"
+				HOST[$THISHOST,video_store_container]="/mnt/cloteal/plex-dvr"   # NOT STANDARD
+#				HOST[$THISHOST,video_store_container]="${HOST[$THISHOST,store_container]}"
+#					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_app_container]}"
+#					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_container]}"
+#					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_mkv_container]}"
 		# Archive locations
 			# DEPENDENT on timestamp definitions
 			# DEPENDENT on definition of $HOSTNAME, but that's built-in
-			# File system where archives are stored. Typically this is a 5TB external drive, if there is one.
-				HOST[$THISHOST,archive_file_system]="/mnt/5TBE"	# Bad idea to leave this on root file system.
-			# Base path where archives are stored. Typically this is a 5TB external drive, if there is one.
-				HOST[$THISHOST,archive_base_path]="${HOST[$THISHOST,archive_file_system]}/archives/$THISHOST"   # Bad idea to leave this on root file system.
-			# Parent directory of temporary archive storage. CAUTION: Root file system will quickly fill if used.
-				HOST[$THISHOST,temp_archive_parent_directory]="${HOST[$THISHOST,temp_file_root]}"
-			# Container path of temporary archive storage.
-				HOST[$THISHOST,temp_archive_container]="${HOST[default,temp_archive_container]}"
-			# Full path of temporary archive storage.
-				HOST[$THISHOST,temp_archive_path]="${HOST[$THISHOST,temp_archive_parent_directory]}/${HOST[$THISHOST,temp_archive_container]}"
-		# Cold backup locations and behavior
-			# File system where cold backups are stored. Typically this is based on archive location info above.
-				HOST[$THISHOST,cold_backup_storage_file_system]="${HOST[$THISHOST,archive_file_system]}"
-			# Behavior of the cold backup file system: read-only, true or false
+			# Archive STORAGE container parent name
+				HOST[$THISHOST,archive_app_parent]="/mnt/5TBE"
+			# App container name
+				HOST[$THISHOST,archive_app_container]="${HOST[default,archive_app_container]}"
+			# Base path for temporary archive storage.
+				HOST[$THISHOST,temp_archive_base_path]="${HOST[$THISHOST,work_container]}/${HOST[$THISHOST,archive_app_container]}/tmp"
+			# Base path where completed archives are STORED long term. Typically this is a 5TB external drive, if there is one.
+				HOST[$THISHOST,archive_base_path]="${HOST[$THISHOST,app_parent]}/${HOST[$THISHOST,archive_app_container]}/$HOSTNAME"
+			# Behavior of the archive storage file system: read-only, true or false
 			# IMPORTANT: This does not set /etc/fstab. It only determines whether to mount and unmount manually.
-				HOST[$THISHOST,cold_backup_storage_file_system_read_only]=false
-			# Base path of cold backup storage. CAUTION: Root file system will quickly fill if used.
-				HOST[$THISHOST,cold_backup_storage_base_path]="/var/local"
-			# Container path of cold backup storage.
-				HOST[$THISHOST,cold_backup_storage_container_directory]="cold-backup"
-			# Parent directory of cold backup storage. CAUTION: Root file system will quickly fill if used.
-			# QUESTION: Isn't this the same thing as cold_backup_storage_base_path? Why is this here?
-				HOST[$THISHOST,cold_backup_storage_parent_directory]="${HOST[$THISHOST,cold_backup_storage_base_path]}"
-			# Parent directory of temporary cold backup storage. CAUTION: Root file system will quickly fill if used.
-				HOST[$THISHOST,temp_cold_backup_parent_directory]="${TEMP_ROOT[$THISHOST]}"
-			# Container path of temporary cold backup storage.
-				HOST[$THISHOST,temp_cold_backup_container]="cold-backup"
-			# Full path of temporary cold backup storage.
-				HOST[$THISHOST,temp_cold_backup_path]="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[$THISHOST]}/${TEMP_COLD_BACKUP_SUBDIRECTORY[$THISHOST]}"
-	# adam IMPORTANT: This section needs to come AFTER nuc01; adam definitions point to nuc01
+				HOST[$THISHOST,archive_storage_file_system_read_only]=false
+	# adam #IMPORTANT: This section needs to come AFTER nuc01; adam definitions point to nuc01
 		# Name of this host
 			THISHOST=adam
 		# Network Addressing
-			# IP4 address from DNS
-				HOST[$THISHOST,ip4]="a4.$DOMAIN_NAME"
-			# IP6 address from DNS
-				HOST[$THISHOST,ip6]="a6.$DOMAIN_NAME"
-			# Works ONLY on the local network; hard-coded IP4 address
-				HOST[$THISHOST,local]="$HOSTNAME.$DOMAIN_LOCAL"
-			# Preferred network address; normally the ip6 address
-				HOST[$THISHOST,netaddr]=${HOST[$THISHOST,ip6]}
-		# Temporary file storage locations; used for Plex DVR raw files and cold backup staging
-		# CAUTION: Root file system (e.g., / or /var/tmp) will quickly fill; use large storage device.
+			# Calculated
+				# Safe local address
+					HOST[$THISHOST,local]="${HOST[$THISHOST,local]}"
+				# Preferred global address; normally the ip6 address
+					HOST[$THISHOST,global]="${HOST[$THISHOST,global]}"
+		# Work file container location; used for Plex DVR raw files and cold backup staging
+		# CAUTION: Root file system will quickly fill; use large storage device.
 			# Used for temporary storage and quick storage response time
-				HOST[$THISHOST,temp_file_system]=
-			# Root directory of temporary storage.
-				HOST[$THISHOST,temp_file_root]=
+				HOST[$THISHOST,work_container]="${HOST[default,work_container]}"
 		# Plex Transcoding; defines transcoding only, not Plex functioning
-			# File system where transcode scripts can find raw .ts files made by Plex DVR
-				HOST[$THISHOST,video_work_file_system]="${HOST[default,temp_file_system]}"
+			# App container name (default="plex")
+				HOST[$THISHOST,archive_app_container]="${HOST[default,archive_app_container]}"
+			# Function container name (default="dvr")
+				HOST[$THISHOST,plex_function_container]="${HOST[default,plex_function_container]}"
+			# .ts files container name (default="in")
+				HOST[$THISHOST,plex_function_ts_container]="${HOST[default,plex_function_ts_container]}"
+			# .mkv files container name (default="out")
+				HOST[$THISHOST,plex_function_mkv_container]="${HOST[default,plex_function_mkv_container]}"
 			# Base path where transcode scripts can find raw .ts files made by Plex DVR
-				HOST[$THISHOST,video_work_base_path]="/"
-			# File system for Plex DVR files transcoded to .m4v by HandBrake
-				HOST[$THISHOST,video_store_file_system]="/" 
+				HOST[$THISHOST,video_work_container]="${HOST[nuc01,video_work_container]}"  # Temporarily pointing to nuc01
+#				HOST[$THISHOST,video_work_container]="${HOST[$THISHOST,work_container]}"
+#					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_app_container]}"
+#					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_function_container]}"
+#					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_function_ts_container]}"
 			# Base path for Plex DVR files transcoded to .m4v by HandBrake
-				HOST[$THISHOST,video_store_base_path]="/"
+				HOST[$THISHOST,video_store_container]="${HOST[nuc01,video_store_container]}"  # Temporarily pointing to nuc01
+#				HOST[$THISHOST,video_store_container]="${HOST[$THISHOST,store_container]}"
+#					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_app_container]}"
+#					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_container]}"
+#					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_mkv_container]}"
 		# Archive locations
 			# DEPENDENT on timestamp definitions
 			# DEPENDENT on definition of $HOSTNAME, but that's built-in
-			# File system where archives are stored. Typically this is a 5TB external drive, if there is one.
-				HOST[$THISHOST,archive_file_system]="/"	# Bad idea to leave this on root file system.
-			# Base path where archives are stored. Typically this is a 5TB external drive, if there is one.
-				HOST[$THISHOST,archive_base_path]="/var/lib/archives/$HOSTNAME"   # Bad idea to leave this on root file system.
-			# Parent directory of temporary archive storage. CAUTION: Root file system will quickly fill if used.
-				HOST[$THISHOST,temp_archive_parent_directory]="${TEMP_ROOT[$THISHOST]}"
-			# Container path of temporary archive storage.
-				HOST[$THISHOST,temp_archive_container]="archives"
-			# Full path of temporary archive storage.
-				HOST[$THISHOST,temp_archive_path]="${TEMP_ARCHIVE_PARENT_DIRECTORY[$THISHOST]}/${TEMP_ARCHIVE_SUBDIRECTORY[$THISHOST]}"
-		# Cold backup locations and behavior
-			# File system where cold backups are stored. Typically this is based on archive location info above.
-				HOST[$THISHOST,cold_backup_storage_file_system]="${HOST[$THISHOST,archive_file_system]}"
-			# Behavior of the cold backup file system: read-only, true or false
+			# Archive STORAGE container parent name
+				HOST[$THISHOST,archive_app_parent]="/mnt/5TBD"
+			# App container name
+				HOST[$THISHOST,archive_app_container]="${HOST[default,archive_app_container]}"
+			# Base path for temporary archive storage.
+				HOST[$THISHOST,temp_archive_base_path]="${HOST[$THISHOST,work_container]}/${HOST[$THISHOST,archive_app_container]}/tmp"
+			# Base path where completed archives are STORED long term. Typically this is a 5TB external drive, if there is one.
+				HOST[$THISHOST,archive_base_path]="${HOST[$THISHOST,app_parent]}/${HOST[$THISHOST,archive_app_container]}/$HOSTNAME"
+			# Behavior of the archive storage file system: read-only, true or false
 			# IMPORTANT: This does not set /etc/fstab. It only determines whether to mount and unmount manually.
-				HOST[$THISHOST,cold_backup_storage_file_system_read_only]=false
-			# Base path of cold backup storage. CAUTION: Root file system will quickly fill if used.
-				HOST[$THISHOST,cold_backup_storage_base_path]="/var/local"
-			# Container path of cold backup storage.
-				HOST[$THISHOST,cold_backup_storage_container_directory]="cold-backup"
-			# Parent directory of cold backup storage. CAUTION: Root file system will quickly fill if used.
-			# QUESTION: Isn't this the same thing as cold_backup_storage_base_path? Why is this here?
-				HOST[$THISHOST,cold_backup_storage_parent_directory]="${HOST[$THISHOST,cold_backup_storage_base_path]}"
-			# Parent directory of temporary cold backup storage. CAUTION: Root file system will quickly fill if used.
-				HOST[$THISHOST,temp_cold_backup_parent_directory]="${TEMP_ROOT[$THISHOST]}"
-			# Container path of temporary cold backup storage.
-				HOST[$THISHOST,temp_cold_backup_container]="cold-backup"
-			# Full path of temporary cold backup storage.
-				HOST[$THISHOST,temp_cold_backup_path]="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[$THISHOST]}/${TEMP_COLD_BACKUP_SUBDIRECTORY[$THISHOST]}"
-
-
+				HOST[$THISHOST,archive_storage_file_system_read_only]=false
+	# oz
+		# Name of this host
+			THISHOST=oz
+		# Network Addressing
+			# Calculated
+				# Safe local address
+					HOST[$THISHOST,local]="${HOST[$THISHOST,local]}"
+				# Preferred global address; normally the ip6 address
+					HOST[$THISHOST,global]="${HOST[$THISHOST,global]}"
+		# Work file container location; used for Plex DVR raw files and cold backup staging
+		# CAUTION: Root file system will quickly fill; use large storage device.
+			# Used for temporary storage and quick storage response time
+				HOST[$THISHOST,work_container]="/mnt/ssd1tb"
+		# Plex Transcoding; defines transcoding only, not Plex functioning
+			# App container name (default="plex")
+				HOST[$THISHOST,plex_app_container]="${HOST[default,plex_app_container]}"
+			# Function container name (default="dvr-oz")
+				HOST[$THISHOST,plex_function_container]="${HOST[default,plex_function_container]}"
+			# .ts files container name (default="in")
+				HOST[$THISHOST,plex_function_ts_container]="${HOST[default,plex_function_ts_container]}"
+			# .mkv files container name (default="out")
+				HOST[$THISHOST,plex_function_mkv_container]="${HOST[default,plex_function_mkv_container]}"
+			# Base path where transcode scripts can find raw .ts files made by Plex DVR
+				HOST[$THISHOST,video_work_container]="${HOST[$THISHOST,work_container]}"
+					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_app_container]}"
+					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_function_container]}"
+					HOST[$THISHOST,video_work_container]+="/${HOST[$THISHOST,plex_function_ts_container]}"
+			# Base path for Plex DVR files transcoded to .m4v by HandBrake
+				HOST[$THISHOST,video_store_container]="/mnt/ext10tb01"
+					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_app_container]}"
+					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_container]}"
+					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_mkv_container]}"
+		# Archive locations
+			# DEPENDENT on timestamp definitions
+			# DEPENDENT on definition of $HOSTNAME, but that's built-in
+			# Archive STORAGE container parent name
+				HOST[$THISHOST,archive_app_parent]="/mnt/5TBE"
+			# App container name
+				HOST[$THISHOST,archive_app_container]="${HOST[default,archive_app_container]}"
+			# Base path for temporary archive storage.
+				HOST[$THISHOST,temp_archive_base_path]="${HOST[$THISHOST,work_container]}/${HOST[$THISHOST,archive_app_container]}/tmp"
+			# Base path where completed archives are STORED long term. Typically this is a 5TB external drive, if there is one.
+				HOST[$THISHOST,archive_base_path]="${HOST[$THISHOST,app_parent]}/${HOST[$THISHOST,archive_app_container]}/$HOSTNAME"
+			# Behavior of the archive storage file system: read-only, true or false
+			# IMPORTANT: This does not set /etc/fstab. It only determines whether to mount and unmount manually.
+				HOST[$THISHOST,archive_storage_file_system_read_only]=false
 
 
 # Define hosts-specific variables
@@ -908,7 +914,7 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 	VARIABLES_ARE_DEFINED=true
 
 # Display all defined variables (used only for troubleshooting)
-# ( set -o posix ; set )
+( set -o posix ; set )
 
 # Log the completion
 	if [ ! $DEBUG_MODE ]; then
