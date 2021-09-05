@@ -31,6 +31,11 @@
 			rsync --remove-source-files --include "$MOVE_MASK" \
 			--exclude "$EXCLUDE_MASK1" --exclude "$EXCLUDE_MASK2" -aloprtv \
 			"$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR"
+
+			SOURCE_ROOT_DIR="/mnt/12TBA/plexcontent/dvr"
+			rsync --remove-source-files --include "$MOVE_MASK" \
+			--exclude "$EXCLUDE_MASK1" --exclude "$EXCLUDE_MASK2" -aloprtv \
+			"$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR"
 #			| logger -t "$THIS_SCRIPT"
 #		f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false
 #		sleep "$WAIT_AFTER_SOURCE_SCAN"
