@@ -19,8 +19,8 @@
 	while true; do
 		# Define file locations
 			SOURCE_SERVER="a6"
+			SOURCE_ROOT_DIR="/mnt/12TBA/plexcontent/dvr"
 			TARGET_ROOT_DIR="/var/lib/plexmediaserver/Library/work"
-			SOURCE_ROOT_DIR="/mnt/12TBA/plex-conversion/ts"
 			WAIT_AFTER_SOURCE_SCAN="1h"
 			MOVE_MASK="*.ts"
 			EXCLUDE_MASK1="*.m4v"
@@ -31,7 +31,7 @@
 			--exclude "$EXCLUDE_MASK1" --exclude "$EXCLUDE_MASK2" -aloprtv \
 			"$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR" \
 			| logger -t "$THIS_SCRIPT"
-		f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false
+#		f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false
 #		sleep "$WAIT_AFTER_SOURCE_SCAN"
         done
 
