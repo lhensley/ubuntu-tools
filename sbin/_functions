@@ -211,6 +211,11 @@ function f_beep () {
 	echo -en "\007" # Beep
 	}
 
+function f_grep () {
+	# Same as grep, but filters out self reference
+	ps -ef | grep $1 | grep -v "grep $1" | grep -v "auto $1"
+	}
+	
 function f_balk () {
 	# Report and log the objection; does NOT exit the program or function
 	# Usage: f_balk "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE"

@@ -14,8 +14,8 @@
 
 # Check instances of key processes
 	echo
-	ps -ef | grep HandBrakeCLI
-	ps -ef | grep rsync
+	f_grep HandBrakeCLI
+	f_grep rsync
 
 # From system-snapshot
 	echo
