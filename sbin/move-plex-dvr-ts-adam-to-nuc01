@@ -27,7 +27,7 @@
 			EXCLUDE_MASK2=".grab/"
 		# See https://github.com/lhensley/go/blob/master/documentation/rsync%20options.md
 #       sudo -u $ADMIN_USER \
-			rsync --dry-run --remove-source-files --include "$MOVE_MASK" \
+			rsync --remove-source-files --include "$MOVE_MASK" \
 			--exclude "$EXCLUDE_MASK1" --exclude "$EXCLUDE_MASK2" -aloprtv \
 			"$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR"
 #			| logger -t "$THIS_SCRIPT"
