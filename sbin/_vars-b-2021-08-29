@@ -44,9 +44,9 @@
 source /etc/os-release
 
 # Basic Plex info
-PLEX_INSTALLATION_PATH="/var/lib/plexmediaserver"
-PLEX_LIBRARY_PATH="$PLEX_INSTALLATION_PATH/Library"
-PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
+	PLEX_INSTALLATION_PATH="/var/lib/plexmediaserver"
+	PLEX_LIBRARY_PATH="$PLEX_INSTALLATION_PATH/Library"
+	PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 
 # Start timestamps
 # Ref https://www.cyberciti.biz/faq/linux-unix-formatting-dates-for-display/ for date format %codes
@@ -58,9 +58,6 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 	START_WEEKDAYSTAMP=$(/bin/date '+%a')                           # Like Mon. Used in backup variables below
 	START_WEEKDAYSTAMP2=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z-%a')     # Like 2020-09-07-16-05-23-CDT-Mon. Used in backup variables below
 	START_WEEKDAYSTAMP3=$(/bin/date '+%w-%a')                       # Like 0-Sun, 1-Mon, 2-Tue, etc. Used in backup variables below
-
-
-
 
 # Define host-specific values
 	declare -A HOST
@@ -95,9 +92,32 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_app_container]}"
 					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_container]}"
 					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_mkv_container]}"
-		# Archive locations
+		# Cold Backup Assembly Location
+			# Base path for temporary archive storage.
+				HOST[$THISHOST,temp_archive_base_path]="${HOST[$THISHOST,archive_app_parent]}/${HOST[$THISHOST,archive_app_container]}/tmp"
+			# Cold backup STORAGE container parent name
+				HOST[$THISHOST,cold_backup_app_parent]="${HOST[$THISHOST,work_container]}"
+			# App container name (Normally "cold-backup")
+				HOST[$THISHOST,archive_app_container]="cold-backup"
+			# Base path where completed archives are STORED long term. Typically this is a 5TB external drive, if there is one.
+				HOST[$THISHOST,archive_base_path]="${HOST[$THISHOST,work_container]}/${HOST[$THISHOST,archive_app_container]}/$THISHOST"
+			# Behavior of the archive storage file system: read-only, true or false
+			# IMPORTANT: This does not set /etc/fstab. It only determines whether to mount and unmount manually.
+				HOST[$THISHOST,archive_storage_file_system_read_only]=false
+		# Cold Backup Storage locations
+			# Cold backup STORAGE container parent name
+				HOST[$THISHOST,cold_backup_app_parent]="${HOST[$THISHOST,work_container]}"
+			# App container name (Normally "cold-backup")
+				HOST[$THISHOST,archive_app_container]="cold-backup"
+			# Base path for temporary archive storage.
+				HOST[$THISHOST,temp_archive_base_path]="${HOST[$THISHOST,archive_app_parent]}/${HOST[$THISHOST,archive_app_container]}/tmp"
+			# Base path where completed archives are STORED long term. Typically this is a 5TB external drive, if there is one.
+				HOST[$THISHOST,archive_base_path]="${HOST[$THISHOST,work_container]}/${HOST[$THISHOST,archive_app_container]}/$THISHOST"
+			# Behavior of the archive storage file system: read-only, true or false
+			# IMPORTANT: This does not set /etc/fstab. It only determines whether to mount and unmount manually.
+				HOST[$THISHOST,archive_storage_file_system_read_only]=false
+		# Archive (TAR file) locations
 			# DEPENDENT on timestamp definitions
-			# DEPENDENT on definition of $HOSTNAME, but that's built-in
 			# Archive STORAGE container parent name
 				HOST[$THISHOST,archive_app_parent]="${HOST[$THISHOST,work_container]}"
 			# App container name (Normally "archives")
@@ -105,7 +125,7 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 			# Base path for temporary archive storage.
 				HOST[$THISHOST,temp_archive_base_path]="${HOST[$THISHOST,archive_app_parent]}/${HOST[$THISHOST,archive_app_container]}/tmp"
 			# Base path where completed archives are STORED long term. Typically this is a 5TB external drive, if there is one.
-				HOST[$THISHOST,archive_base_path]="${HOST[$THISHOST,work_container]}/${HOST[$THISHOST,archive_app_container]}/$HOSTNAME"
+				HOST[$THISHOST,archive_base_path]="${HOST[$THISHOST,work_container]}/${HOST[$THISHOST,archive_app_container]}/$THISHOST"
 			# Behavior of the archive storage file system: read-only, true or false
 			# IMPORTANT: This does not set /etc/fstab. It only determines whether to mount and unmount manually.
 				HOST[$THISHOST,archive_storage_file_system_read_only]=false
@@ -142,7 +162,6 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 #					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_mkv_container]}"
 		# Archive locations
 			# DEPENDENT on timestamp definitions
-			# DEPENDENT on definition of $HOSTNAME, but that's built-in
 			# Archive STORAGE container parent name
 				HOST[$THISHOST,archive_app_parent]="/mnt/5TBE"
 			# App container name
@@ -150,7 +169,7 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 			# Base path for temporary archive storage.
 				HOST[$THISHOST,temp_archive_base_path]="${HOST[$THISHOST,work_container]}/${HOST[$THISHOST,archive_app_container]}/tmp"
 			# Base path where completed archives are STORED long term. Typically this is a 5TB external drive, if there is one.
-				HOST[$THISHOST,archive_base_path]="${HOST[$THISHOST,app_parent]}/${HOST[$THISHOST,archive_app_container]}/$HOSTNAME"
+				HOST[$THISHOST,archive_base_path]="${HOST[$THISHOST,app_parent]}/${HOST[$THISHOST,archive_app_container]}/$THISHOST"
 			# Behavior of the archive storage file system: read-only, true or false
 			# IMPORTANT: This does not set /etc/fstab. It only determines whether to mount and unmount manually.
 				HOST[$THISHOST,archive_storage_file_system_read_only]=false
@@ -189,7 +208,6 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 #					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_mkv_container]}"
 		# Archive locations
 			# DEPENDENT on timestamp definitions
-			# DEPENDENT on definition of $HOSTNAME, but that's built-in
 			# Archive STORAGE container parent name
 				HOST[$THISHOST,archive_app_parent]="/mnt/5TBD"
 			# App container name
@@ -197,7 +215,7 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 			# Base path for temporary archive storage.
 				HOST[$THISHOST,temp_archive_base_path]="${HOST[$THISHOST,work_container]}/${HOST[$THISHOST,archive_app_container]}/tmp"
 			# Base path where completed archives are STORED long term. Typically this is a 5TB external drive, if there is one.
-				HOST[$THISHOST,archive_base_path]="${HOST[$THISHOST,app_parent]}/${HOST[$THISHOST,archive_app_container]}/$HOSTNAME"
+				HOST[$THISHOST,archive_base_path]="${HOST[$THISHOST,app_parent]}/${HOST[$THISHOST,archive_app_container]}/$THISHOST"
 			# Behavior of the archive storage file system: read-only, true or false
 			# IMPORTANT: This does not set /etc/fstab. It only determines whether to mount and unmount manually.
 				HOST[$THISHOST,archive_storage_file_system_read_only]=false
@@ -234,7 +252,6 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 					HOST[$THISHOST,video_store_container]+="/${HOST[$THISHOST,plex_function_mkv_container]}"
 		# Archive locations
 			# DEPENDENT on timestamp definitions
-			# DEPENDENT on definition of $HOSTNAME, but that's built-in
 			# Archive STORAGE container parent name
 				HOST[$THISHOST,archive_app_parent]="/mnt/5TBE"
 			# App container name
@@ -242,7 +259,7 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 			# Base path for temporary archive storage.
 				HOST[$THISHOST,temp_archive_base_path]="${HOST[$THISHOST,work_container]}/${HOST[$THISHOST,archive_app_container]}/tmp"
 			# Base path where completed archives are STORED long term. Typically this is a 5TB external drive, if there is one.
-				HOST[$THISHOST,archive_base_path]="${HOST[$THISHOST,app_parent]}/${HOST[$THISHOST,archive_app_container]}/$HOSTNAME"
+				HOST[$THISHOST,archive_base_path]="${HOST[$THISHOST,app_parent]}/${HOST[$THISHOST,archive_app_container]}/$THISHOST"
 			# Behavior of the archive storage file system: read-only, true or false
 			# IMPORTANT: This does not set /etc/fstab. It only determines whether to mount and unmount manually.
 				HOST[$THISHOST,archive_storage_file_system_read_only]=false
@@ -272,8 +289,6 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 			# Base path for Plex DVR files transcoded to .m4v by HandBrake
 				unset HOST[default,video_store_container]
 		# Archive locations
-			# DEPENDENT on timestamp definitions
-			# DEPENDENT on definition of $HOSTNAME, but that's built-in
 			# Archive STORAGE container parent name
 				unset HOST[default,archive_app_parent]
 			# App container name (Normally "archives")
@@ -285,269 +300,6 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 			# Behavior of the archive storage file system: read-only, true or false
 			# IMPORTANT: This does not set /etc/fstab. It only determines whether to mount and unmount manually.
 				unset HOST[default,archive_storage_file_system_read_only]
-
-
-# Define hosts-specific variables
-	declare -A IP4
-		IP4[default]="$LOCALHOST4"
-		IP4[adam]="a4.$DOMAIN_NAME"
-		IP4[nuc01]="n4.$DOMAIN_NAME"
-		IP4[oz]="o4.$DOMAIN_NAME"
-		if [ -z "${IP4[$HOSTNAME]}" ]; then 
-			if [ -z "$IP4[default]" ]; then unset IP4[this]; 
-				else IP4[this]="${IP4[default]}"; fi; 
-			else IP4[this]="${IP4[$HOSTNAME]}"; fi
-		IP4="${IP4[this]}"
-	declare -A IP6
-		IP6[default]="$LOCALHOST6"
-		IP6[adam]="a6.$DOMAIN_NAME"
-		IP6[nuc01]="n6.$DOMAIN_NAME"
-		IP6[oz]="o6.$DOMAIN_NAME"
-		if [ -z "${IP6[$HOSTNAME]}" ]; then 
-			if [ -z "$IP6[default]" ]; then unset IP6[this]; 
-				else IP6[this]="${IP6[default]}"; fi; 
-			else IP6[this]="${IP6[$HOSTNAME]}"; fi
-		IP6="${IP6[this]}"
-	declare -A NETADDR
-		NETADDR[default]="${IP6[default]}"
-		NETADDR[this]="${IP6[$HOSTNAME]}"
-		NETADDR="${NETADDR[this]}"
-	declare -A TEMP_FILE_SYSTEM
-		TEMP_FILE_SYSTEM[default]="/"
-		TEMP_FILE_SYSTEM[adam]="${TEMP_FILE_SYSTEM[default]}"
-		TEMP_FILE_SYSTEM[nuc01]="/mnt/bob"
-		TEMP_FILE_SYSTEM[oz]="/mnt/ssd1tb"
-		if [ -z "${TEMP_FILE_SYSTEM[$HOSTNAME]}" ]; then 
-			if [ -z "$TEMP_FILE_SYSTEM[default]" ]; then unset IP6[this]; 
-				else TEMP_FILE_SYSTEM[this]="${TEMP_FILE_SYSTEM[default]}"; fi; 
-			else TEMP_FILE_SYSTEM[this]="${TEMP_FILE_SYSTEM[$HOSTNAME]}"; fi
-		TEMP_FILE_SYSTEM="${TEMP_FILE_SYSTEM[this]}"
-	declare -A TEMP_ROOT
-		TEMP_ROOT[default]="${TEMP_FILE_SYSTEM[default]}/var/tmp"
-		TEMP_ROOT[adam]="${TEMP_FILE_SYSTEM[adam]}/var/tmp"
-		TEMP_ROOT[nuc01]="${TEMP_FILE_SYSTEM[nuc01]}"
-		TEMP_ROOT[oz]="${TEMP_FILE_SYSTEM[oz]}"
-		if [ -z "${TEMP_ROOT[$HOSTNAME]}" ]; then 
-			if [ -z "$TEMP_ROOT[default]" ]; then unset TEMP_ROOT[this]; 
-				else TEMP_ROOT[this]="${TEMP_ROOT[default]}"; fi; 
-			else TEMP_ROOT[this]="${TEMP_ROOT[$HOSTNAME]}"; fi
-		TEMP_ROOT="${TEMP_ROOT[this]}"
-  # Define all Plex data root directories
-  # Set them all as true
-  # Example: PLEX_DATA_ROOT[nuc01,/mnt/cloteal/plex]=true
-  # IMPORTANT: If you leave anything out, the missing directories won't be backed up.
-  # MORE IMPORTANT: I'm not sure this section still is used for anything ... 8/29/2021
-	declare -A PLEX_DATA_ROOT
-		PLEX_DATA_ROOT[adam,/mnt/cloteal/plex]=true
-		PLEX_DATA_ROOT[adam,/mnt/cloteal/plex-dvr]=true
-		PLEX_DATA_ROOT[adam,/mnt/bertha/plex]=true
-		PLEX_DATA_ROOT[adam,/mnt/bob/plex]=true
-		PLEX_DATA_ROOT[nuc01,/mnt/cloteal/plex]=true
-		PLEX_DATA_ROOT[nuc01,/mnt/cloteal/plex-dvr]=true
-		PLEX_DATA_ROOT[nuc01,/mnt/bertha/plex]=true
-		PLEX_DATA_ROOT[nuc01,/mnt/bob/plex]=true
-		PLEX_DATA_ROOT[nuc01,/var/lib/plexmediaserver/Library/metadata]=true	
-		PLEX_DATA_ROOT[nuc01,/var/lib/plexmediaserver/Library/store]=true	
-		PLEX_DATA_ROOT[nuc01,/var/lib/plexmediaserver/Library/work]=true	
-		PLEX_DATA_ROOT[oz,/var/lib/plexmediaserver/Library/metadata]=true	
-		PLEX_DATA_ROOT[oz,/var/lib/plexmediaserver/Library/store]=true	
-		PLEX_DATA_ROOT[oz,/var/lib/plexmediaserver/Library/work]=true	
-		PLEX_DATA_ROOT[oz,/mnt/ssd1tb/plex]=true
-		PLEX_DATA_ROOT[oz,/mnt/ext10tb01/plex]=true
-		for idx in "${!PLEX_DATA_ROOT[@]}"; do
-			IFS=',' read -r HOSTX PATHX <<< "$idx"
-			if [ "$HOSTX"=="$HOSTNAME" ]; then PLEX_DATA_ROOT[this,$PATHX]=true; fi
-			done
-	declare -A VIDEO_WORK_FILE_SYSTEM
-		VIDEO_WORK_FILE_SYSTEM[default]="/"
-		VIDEO_WORK_FILE_SYSTEM[adam]="${TEMP_FILE_SYSTEM[nuc01]}"
-		VIDEO_WORK_FILE_SYSTEM[nuc01]="${TEMP_FILE_SYSTEM[nuc01]}"
-		VIDEO_WORK_FILE_SYSTEM[oz]="${TEMP_FILE_SYSTEM[oz]}"
-		if [ -z "${VIDEO_WORK_FILE_SYSTEM[$HOSTNAME]}" ]; then 
-			if [ -z "${VIDEO_WORK_FILE_SYSTEM[default]}" ]; then unset VIDEO_WORK_FILE_SYSTEM[this]; 
-				else VIDEO_WORK_FILE_SYSTEM[this]="${VIDEO_WORK_FILE_SYSTEM[default]}"; fi; 
-			else VIDEO_WORK_FILE_SYSTEM[this]="${VIDEO_WORK_FILE_SYSTEM[$HOSTNAME]}"; fi
-		VIDEO_WORK_FILE_SYSTEM="${VIDEO_WORK_FILE_SYSTEM[this]}"
-	declare -A VIDEO_WORK_DIRECTORY
-		VIDEO_WORK_DIRECTORY[default]="/"
-		VIDEO_WORK_DIRECTORY[adam]="${VIDEO_WORK_FILE_SYSTEM[adam]}/plex/dvr/in"
-		VIDEO_WORK_DIRECTORY[nuc01]="${VIDEO_WORK_FILE_SYSTEM[nuc01]}/plex/dvr-oz"
-		VIDEO_WORK_DIRECTORY[oz]="${VIDEO_WORK_FILE_SYSTEM[oz]}/plex/dvr/in"
-		if [ -z "${VIDEO_WORK_DIRECTORY[$HOSTNAME]}" ]; then 
-			if [ -z "$VIDEO_WORK_DIRECTORY[default]" ]; then unset VIDEO_WORK_DIRECTORY[this]; 
-				else VIDEO_WORK_DIRECTORY[this]="${VIDEO_WORK_DIRECTORY[default]}"; fi; 
-			else VIDEO_WORK_DIRECTORY[this]="${VIDEO_WORK_DIRECTORY[$HOSTNAME]}"; fi
-		VIDEO_WORK_DIRECORY="${VIDEO_WORK_DIRECTORY[this]}"
-	declare -A VIDEO_STORE_FILE_SYSTEM
-		VIDEO_STORE_FILE_SYSTEM[default]="/"
-		VIDEO_STORE_FILE_SYSTEM[adam]="/mnt/cloteal"
-		VIDEO_STORE_FILE_SYSTEM[nuc01]="/mnt/cloteal"
-		VIDEO_STORE_FILE_SYSTEM[oz]="/mnt/ext10tb01"
-		if [ -z "${VIDEO_STORE_FILE_SYSTEM[$HOSTNAME]}" ]; then 
-			if [ -z "{$VIDEO_STORE_FILE_SYSTEM[default]}" ]; then unset VIDEO_STORE_FILE_SYSTEM[this]; 
-				else VIDEO_STORE_FILE_SYSTEM[this]="${VIDEO_STORE_FILE_SYSTEM[default]}"; fi; 
-			else VIDEO_STORE_FILE_SYSTEM[this]="${VIDEO_STORE_FILE_SYSTEM[$HOSTNAME]}"; fi
-		VIDEO_STORE_FILE_SYSTEM="${VIDEO_STORE_FILE_SYSTEM[this]}"
-	declare -A VIDEO_STORE_DIRECTORY
-		VIDEO_STORE_DIRECTORY[default]="/"
-		VIDEO_STORE_DIRECTORY[adam]="${VIDEO_STORE_FILE_SYSTEM[nuc01]}/plex-dvr"
-		VIDEO_STORE_DIRECTORY[nuc01]="${VIDEO_STORE_FILE_SYSTEM[nuc01]}/plex-dvr"
-		VIDEO_STORE_DIRECTORY[oz]="${VIDEO_STORE_FILE_SYSTEM[oz]}/plex/dvr-oz"
-		if [ -z "${VIDEO_STORE_DIRECTORY[$HOSTNAME]}" ]; then 
-			if [ -z "$VIDEO_STORE_DIRECTORY[default]" ]; then unset VIDEO_STORE_DIRECTORY[this]; 
-				else VIDEO_STORE_DIRECTORY[this]="${VIDEO_STORE_DIRECTORY[default]}"; fi; 
-			else VIDEO_STORE_DIRECTORY[this]="${VIDEO_STORE_DIRECTORY[$HOSTNAME]}"; fi
-		VIDEO_STORE_DIRECTORY="${VIDEO_STORE_DIRECTORY[this]}"
-
-  # Archive Directories, Files, and Paths
-  # DEPENDENT on timestamp definitions
-  # DEPENDENT on definition of $HOSTNAME, but that's built-in
-	declare -A ARCHIVE_FILE_SYSTEM
-		ARCHIVE_FILE_SYSTEM[default]="/"
-		ARCHIVE_FILE_SYSTEM[adam]="/mnt/3TBD"
-		ARCHIVE_FILE_SYSTEM[nuc01]="/mnt/5TBE"
-		ARCHIVE_FILE_SYSTEM[oz]="/mnt/5TBC"
-		if [ -z "${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}" ]; then 
-			if [ -z "$ARCHIVE_FILE_SYSTEM[default]" ]; then unset ARCHIVE_FILE_SYSTEM[this]; 
-				else ARCHIVE_FILE_SYSTEM[this]="${ARCHIVE_FILE_SYSTEM[default]}"; fi; 
-			else ARCHIVE_FILE_SYSTEM[this]="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
-		ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[this]}"
-	declare -A ARCHIVE_DIRECTORY
-		ARCHIVE_DIRECTORY[default]="/var/lib/archives/$HOSTNAME"
-		ARCHIVE_DIRECTORY[adam]="${ARCHIVE_FILE_SYSTEM[adam]}/archives/adam"
-		ARCHIVE_DIRECTORY[nuc01]="${ARCHIVE_FILE_SYSTEM[nuc01]}/archives/nuc01"
-		ARCHIVE_DIRECTORY[oz]="${ARCHIVE_FILE_SYSTEM[oz]}/archives/oz"
-		if [ -z "${ARCHIVE_DIRECTORY[$HOSTNAME]}" ]; then
-			if [ -z "$ARCHIVE_DIRECTORY[default]" ]; then unset ARCHIVE_DIRECTORY[this];
-				else ARCHIVE_DIRECTORY[this]="${ARCHIVE_DIRECTORY[default]}"; fi;
-			else ARCHIVE_DIRECTORY[this]="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
-		ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[this]}"
-	THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[this]}"
-	THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[this]}"
-	ARCHIVE_TAR_FILE="$HOSTNAME-$START_DATESTAMP.gz"
-		ARCHIVE_TAR_FULL="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_FILE"
-	ARCHIVE_TAR_WEEKDAY_FILE="$HOSTNAME-weekday-$START_WEEKDAYSTAMP3.gz"
-		ARCHIVE_TAR_FULL_WEEKDAY="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
-	ARCHIVE_TAR_DAY_FILE="$HOSTNAME-day-$START_DAYSTAMP.gz"
-		ARCHIVE_TAR_FULL_DAY="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_DAY_FILE"
-	ARCHIVE_TAR_MONTH_FILE="$HOSTNAME-month-$START_MONTHSTAMP.gz"
-		ARCHIVE_TAR_FULL_MONTH="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_MONTH_FILE"
-	PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
-
-	declare -A COLD_BACKUP_FILE_SYSTEM
-		COLD_BACKUP_FILE_SYSTEM[default]="${ARCHIVE_FILE_SYSTEM[default]}"
-		COLD_BACKUP_FILE_SYSTEM[adam]="${ARCHIVE_FILE_SYSTEM[adam]}"
-		COLD_BACKUP_FILE_SYSTEM[nuc01]="${ARCHIVE_FILE_SYSTEM[nuc01]}"
-		COLD_BACKUP_FILE_SYSTEM[oz]="${ARCHIVE_FILE_SYSTEM[oz]}"
-		if [ -z "${COLD_BACKUP_FILE_SYSTEM[$HOSTNAME]}" ]; then
-			if [ -z "$COLD_BACKUP_FILE_SYSTEM[default]" ]; then unset COLD_BACKUP_FILE_SYSTEM[this];
-				else COLD_BACKUP_FILE_SYSTEM[this]="${COLD_BACKUP_FILE_SYSTEM[default]}"; fi;
-			else COLD_BACKUP_FILE_SYSTEM[this]="${COLD_BACKUP_FILE_SYSTEM[$HOSTNAME]}"; fi
-		COLD_BACKUP_FILE_SYSTEM="$THIS_ARCHIVE_FILE_SYSTEM"
-	declare -A COLD_BACKUP_FS_READ_ONLY
-		COLD_BACKUP_FS_READ_ONLY[default]=false
-		COLD_BACKUP_FS_READ_ONLY[adam]=false
-		COLD_BACKUP_FS_READ_ONLY[nuc01]=false
-		COLD_BACKUP_FS_READ_ONLY[oz]=false
-		if [ -z "${COLD_BACKUP_FS_READ_ONLY[$HOSTNAME]}" ]; then
-			if [ -z "$COLD_BACKUP_FS_READ_ONLY[default]" ]; then unset COLD_BACKUP_FS_READ_ONLY[this];
-				else COLD_BACKUP_FS_READ_ONLY[this]="${COLD_BACKUP_FS_READ_ONLY[default]}"; fi;
-			else COLD_BACKUP_FS_READ_ONLY[this]="${COLD_BACKUP_FS_READ_ONLY[$HOSTNAME]}"; fi
-		COLD_BACKUP_FS_READ_ONLY="${COLD_BACKUP_FS_READ_ONLY[this]}"
-
-	declare -A COLD_BACKUP_PARENT_DIRECTORY
-		COLD_BACKUP_PARENT_DIRECTORY[default]="/var/local"
-		COLD_BACKUP_PARENT_DIRECTORY[adam]="${COLD_BACKUP_FILE_SYSTEM[adam]}"
-		COLD_BACKUP_PARENT_DIRECTORY[nuc01]="${COLD_BACKUP_FILE_SYSTEM[nuc01]}"
-		COLD_BACKUP_PARENT_DIRECTORY[oz]="${COLD_BACKUP_FILE_SYSTEM[oz]}"
-		if [ -z "${COLD_BACKUP_PARENT_DIRECTORY[$HOSTNAME]}" ]; then
-			if [ -z "$COLD_BACKUP_PARENT_DIRECTORY[default]" ]; then unset COLD_BACKUP_PARENT_DIRECTORY[this];
-				else COLD_BACKUP_PARENT_DIRECTORY[this]="${COLD_BACKUP_PARENT_DIRECTORY[default]}"; fi;
-			else COLD_BACKUP_PARENT_DIRECTORY[this]="${COLD_BACKUP_PARENT_DIRECTORY[$HOSTNAME]}"; fi
-		COLD_BACKUP_PARENT_DIRECTORY="${COLD_BACKUP_PARENT_DIRECTORY[this]}"
-	declare -A COLD_BACKUP_SUBDIRECTORY
-		COLD_BACKUP_SUBDIRECTORY[default]="cold-backup"
-		COLD_BACKUP_SUBDIRECTORY[adam]="${COLD_BACKUP_SUBDIRECTORY[default]}"
-		COLD_BACKUP_SUBDIRECTORY[nuc01]="${COLD_BACKUP_SUBDIRECTORY[default]}"
-		COLD_BACKUP_SUBDIRECTORY[oz]="${COLD_BACKUP_SUBDIRECTORY[default]}"
-		if [ -z "${COLD_BACKUP_SUBDIRECTORY[$HOSTNAME]}" ]; then
-			if [ -z "$COLD_BACKUP_SUBDIRECTORY[default]" ]; then unset COLD_BACKUP_SUBDIRECTORY[this];
-				else COLD_BACKUP_SUBDIRECTORY[this]="${COLD_BACKUP_SUBDIRECTORY[default]}"; fi;
-			else COLD_BACKUP_SUBDIRECTORY[this]="${COLD_BACKUP_SUBDIRECTORY[$HOSTNAME]}"; fi
-		COLD_BACKUP_SUBDIRECTORY="${COLD_BACKUP_SUBDIRECTORY[this]}"
-	declare -A COLD_BACKUP_PARENT_DIRECTORY
-		COLD_BACKUP_PARENT_DIRECTORY[default]="${COLD_BACKUP_FILE_SYSTEM[default]}"
-		COLD_BACKUP_PARENT_DIRECTORY[adam]="${COLD_BACKUP_FILE_SYSTEM[adam]}"
-		COLD_BACKUP_PARENT_DIRECTORY[nuc01]="${COLD_BACKUP_FILE_SYSTEM[nuc01]}"
-		COLD_BACKUP_PARENT_DIRECTORY[oz]="${COLD_BACKUP_FILE_SYSTEM[oz]}"
-		if [ -z "${COLD_BACKUP_PARENT_DIRECTORY[$HOSTNAME]}" ]; then
-			if [ -z "$COLD_BACKUP_PARENT_DIRECTORY[default]" ]; then unset COLD_BACKUP_PARENT_DIRECTORY[this];
-				else COLD_BACKUP_PARENT_DIRECTORY[this]="${COLD_BACKUP_PARENT_DIRECTORY[default]}"; fi;
-			else COLD_BACKUP_PARENT_DIRECTORY[this]="${COLD_BACKUP_PARENT_DIRECTORY[$HOSTNAME]}"; fi
-		COLD_BACKUP_PARENT_DIRECTORY="${COLD_BACKUP_PARENT_DIRECTORY[this]}"
-	declare -A TEMP_COLD_BACKUP_PARENT_DIRECTORY
-		TEMP_COLD_BACKUP_PARENT_DIRECTORY[default]="${TEMP_ROOT[default]}"
-		TEMP_COLD_BACKUP_PARENT_DIRECTORY[adam]="${TEMP_ROOT[adam]}"
-		TEMP_COLD_BACKUP_PARENT_DIRECTORY[nuc01]="${TEMP_ROOT[nuc01]}"
-		TEMP_COLD_BACKUP_PARENT_DIRECTORY[oz]="${TEMP_ROOT[oz]}"
-		if [ -z "${TEMP_COLD_BACKUP_PARENT_DIRECTORY[$HOSTNAME]}" ]; then
-			if [ -z "$TEMP_COLD_BACKUP_PARENT_DIRECTORY[default]" ]; then unset TEMP_COLD_BACKUP_PARENT_DIRECTORY[this];
-				else TEMP_COLD_BACKUP_PARENT_DIRECTORY[this]="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[default]}"; fi;
-			else TEMP_COLD_BACKUP_PARENT_DIRECTORY[this]="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[$HOSTNAME]}"; fi
-		TEMP_COLD_BACKUP_PARENT_DIRECTORY="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[this]}"
-	declare -A TEMP_COLD_BACKUP_SUBDIRECTORY
-		TEMP_COLD_BACKUP_SUBDIRECTORY[default]="cold-backup"
-		TEMP_COLD_BACKUP_SUBDIRECTORY[adam]="${TEMP_COLD_BACKUP_SUBDIRECTORY[default]}"
-		TEMP_COLD_BACKUP_SUBDIRECTORY[nuc01]="${TEMP_COLD_BACKUP_SUBDIRECTORY[default]}"
-		TEMP_COLD_BACKUP_SUBDIRECTORY[oz]="${TEMP_COLD_BACKUP_SUBDIRECTORY[default]}"
-		if [ -z "${TEMP_COLD_BACKUP_SUBDIRECTORY[$HOSTNAME]}" ]; then
-			if [ -z "$TEMP_COLD_BACKUP_SUBDIRECTORY[default]" ]; then unset TEMP_COLD_BACKUP_SUBDIRECTORY[this];
-				else TEMP_COLD_BACKUP_SUBDIRECTORY[this]="${TEMP_COLD_BACKUP_SUBDIRECTORY[default]}"; fi;
-			else TEMP_COLD_BACKUP_SUBDIRECTORY[this]="${TEMP_COLD_BACKUP_SUBDIRECTORY[$HOSTNAME]}"; fi
-		TEMP_COLD_BACKUP_SUBDIRECTORY="${TEMP_COLD_BACKUP_SUBDIRECTORY[this]}"
-	declare -A TEMP_COLD_BACKUP_DIRECTORY
-		TEMP_COLD_BACKUP_DIRECTORY[default]="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[default]}/${TEMP_COLD_BACKUP_SUBDIRECTORY[default]}"
-		TEMP_COLD_BACKUP_DIRECTORY[adam]="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[adam]}/${TEMP_COLD_BACKUP_SUBDIRECTORY[adam]}"
-		TEMP_COLD_BACKUP_DIRECTORY[nuc01]="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[nuc01]}/${TEMP_COLD_BACKUP_SUBDIRECTORY[nuc01]}"
-		TEMP_COLD_BACKUP_DIRECTORY[oz]="${TEMP_COLD_BACKUP_PARENT_DIRECTORY[oz]}/${TEMP_COLD_BACKUP_SUBDIRECTORY[oz]}"
-		if [ -z "${TEMP_COLD_BACKUP_DIRECTORY[$HOSTNAME]}" ]; then
-			if [ -z "$TEMP_COLD_BACKUP_DIRECTORY[default]" ]; then unset TEMP_COLD_BACKUP_DIRECTORY[this];
-				else TEMP_COLD_BACKUP_DIRECTORY[this]="${TEMP_COLD_BACKUP_DIRECTORY[default]}"; fi;
-			else TEMP_COLD_BACKUP_DIRECTORY[this]="${TEMP_COLD_BACKUP_DIRECTORY[$HOSTNAME]}"; fi
-		TEMP_COLD_BACKUP_DIRECTORY="${TEMP_COLD_BACKUP_DIRECTORY[this]}"
-	declare -A TEMP_ARCHIVE_PARENT_DIRECTORY
-		TEMP_ARCHIVE_PARENT_DIRECTORY[default]="${TEMP_ROOT[default]}"
-		TEMP_ARCHIVE_PARENT_DIRECTORY[adam]="${TEMP_ROOT[adam]}"
-		TEMP_ARCHIVE_PARENT_DIRECTORY[nuc01]="${TEMP_ROOT[nuc01]}"
-		TEMP_ARCHIVE_PARENT_DIRECTORY[oz]="${TEMP_ROOT[oz]}"
-		if [ -z "${TEMP_ARCHIVE_PARENT_DIRECTORY[$HOSTNAME]}" ]; then
-			if [ -z "$TEMP_ARCHIVE_PARENT_DIRECTORY[default]" ]; then unset TEMP_ARCHIVE_PARENT_DIRECTORY[this];
-				else TEMP_ARCHIVE_PARENT_DIRECTORY[this]="${TEMP_ARCHIVE_PARENT_DIRECTORY[default]}"; fi;
-			else TEMP_ARCHIVE_PARENT_DIRECTORY[this]="${TEMP_ARCHIVE_PARENT_DIRECTORY[$HOSTNAME]}"; fi
-		TEMP_ARCHIVE_PARENT_DIRECTORY="${TEMP_ARCHIVE_PARENT_DIRECTORY[this]}"
-	declare -A TEMP_ARCHIVE_SUBDIRECTORY
-		TEMP_ARCHIVE_SUBDIRECTORY[default]="archives"
-		TEMP_ARCHIVE_SUBDIRECTORY[adam]="${TEMP_ARCHIVE_SUBDIRECTORY[default]}"
-		TEMP_ARCHIVE_SUBDIRECTORY[nuc01]="${TEMP_ARCHIVE_SUBDIRECTORY[default]}"
-		TEMP_ARCHIVE_SUBDIRECTORY[oz]="${TEMP_ARCHIVE_SUBDIRECTORY[default]}"
-		if [ -z "${TEMP_ARCHIVE_SUBDIRECTORY[$HOSTNAME]}" ]; then
-			if [ -z "$TEMP_ARCHIVE_SUBDIRECTORY[default]" ]; then unset TEMP_ARCHIVE_SUBDIRECTORY[this];
-				else TEMP_ARCHIVE_SUBDIRECTORY[this]="${TEMP_ARCHIVE_SUBDIRECTORY[default]}"; fi;
-			else TEMP_ARCHIVE_SUBDIRECTORY[this]="${TEMP_ARCHIVE_SUBDIRECTORY[$HOSTNAME]}"; fi
-		TEMP_ARCHIVE_SUBDIRECTORY="${TEMP_ARCHIVE_SUBDIRECTORY[this]}"
-	declare -A TEMP_ARCHIVE_DIRECTORY
-		TEMP_ARCHIVE_DIRECTORY[default]="${TEMP_ARCHIVE_PARENT_DIRECTORY[default]}/${TEMP_ARCHIVE_SUBDIRECTORY[default]}"
-		TEMP_ARCHIVE_DIRECTORY[adam]="${ARCHIVE_FILE_SYSTEM[adam]}/${TEMP_ARCHIVE_SUBDIRECTORY[adam]}"
-		TEMP_ARCHIVE_DIRECTORY[nuc01]="${ARCHIVE_FILE_SYSTEM[nuc01]}/${TEMP_ARCHIVE_SUBDIRECTORY[nuc01]}"
-		TEMP_ARCHIVE_DIRECTORY[oz]="${ARCHIVE_FILE_SYSTEM[oz]}/${TEMP_ARCHIVE_SUBDIRECTORY[oz]}"
-		if [ -z "${TEMP_ARCHIVE_DIRECTORY[$HOSTNAME]}" ]; then
-			if [ -z "$TEMP_ARCHIVE_DIRECTORY[default]" ]; then unset TEMP_ARCHIVE_DIRECTORY[this];
-				else TEMP_ARCHIVE_DIRECTORY[this]="${TEMP_ARCHIVE_DIRECTORY[default]}"; fi;
-			else TEMP_ARCHIVE_DIRECTORY[this]="${TEMP_ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
-		TEMP_ARCHIVE_DIRECTORY="${TEMP_ARCHIVE_DIRECTORY[this]}"
-
-
-
 
 # About This Script (or at least the one sourcing it)
 	PROGRAM_DIRECTORY="$(dirname $0)"
@@ -643,6 +395,35 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 	WEB_ROOTS="/var/www"
 	THIS_WEB_ROOT="$WEB_ROOTS/html"
 
+# Archive Directories, Files, and Paths
+# DEPENDENT on definition of $HOSTNAME, but that's built-in
+    declare -A ARCHIVE_FILE_SYSTEM
+        ARCHIVE_FILE_SYSTEM[default]="/"
+        ARCHIVE_FILE_SYSTEM[eve]="/mnt/3TBB"
+        ARCHIVE_FILE_SYSTEM[nuc01]="/mnt/5TBE"
+        ARCHIVE_FILE_SYSTEM[oz]="/mnt/5TBC"
+    declare -A ARCHIVE_DIRECTORY
+        ARCHIVE_DIRECTORY[default]="/var/lib/archives/$HOSTNAME"
+        ARCHIVE_DIRECTORY[eve]=${ARCHIVE_FILE_SYSTEM[eve]}/archives/eve
+        ARCHIVE_DIRECTORY[nuc01]=${ARCHIVE_FILE_SYSTEM[nuc01]}/archives/nuc01
+        ARCHIVE_DIRECTORY[oz]=${ARCHIVE_FILE_SYSTEM[oz]}/archives/oz
+    THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[default]}"
+        if [ $HOSTNAME == "eve" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[eve]}"; fi
+        if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[nuc01]}"; fi
+        if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[oz]}"; fi
+    THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[default]}"
+        if [ $HOSTNAME == "eve" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[eve]}"; fi
+        if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[nuc01]}"; fi
+        if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[oz]}"; fi
+    ARCHIVE_TAR_FILE="$HOSTNAME-$START_DATESTAMP.gz"
+        ARCHIVE_TAR_FULL="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_FILE"
+    ARCHIVE_TAR_WEEKDAY_FILE="$HOSTNAME-weekday-$START_WEEKDAYSTAMP3.gz"
+        ARCHIVE_TAR_FULL_WEEKDAY="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
+    ARCHIVE_TAR_DAY_FILE="$HOSTNAME-day-$START_DAYSTAMP.gz"
+        ARCHIVE_TAR_FULL_DAY="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_DAY_FILE"
+    ARCHIVE_TAR_MONTH_FILE="$HOSTNAME-month-$START_MONTHSTAMP.gz"
+        ARCHIVE_TAR_FULL_MONTH="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_MONTH_FILE"
+
 # Backup COLD # cold backup
 # DEPENDENT on definition of $HOSTNAME, but that's built-in
 	# Adjusted 12/30/2020 because none of these services were coming back.
@@ -651,14 +432,18 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 		# Previously incuded gdm3, but that turns off the console.
 
 # Default COLD_RESTORE_POINT = "/", but "/var/restore-points/$START_DATEANDTIMESTAMP/" recommended for trouble-shooting
-		COLD_RESTORE_POINT="/"
-		# COLD_RESTORE_POINT="/var/restore-points/$START_DATEANDTIMESTAMP/"
 	COLD_BACKUP_LOG="$ADMIN_HOME_DIR/.coldstorage.log"
+	COLD_BACKUP_DIRECTORY="$HOST{[$HOSTNAME,temp_archive_base_path]}"
+	COLD_RESTORE_POINT="/"
 
-	COLD_BACKUP_DIRECTORY="$COLD_BACKUP_PARENT_DIRECTORY/$COLD_BACKUP_SUBDIRECTORY"
-	COLD_BACKUP_EXCLUDES="--exclude='/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Cache'"
-	COLD_BACKUP_EXCLUDES+=" --exclude=/var/lib/plexmediaserver/Library/store/*"
-	COLD_BACKUP_EXCLUDES+=" --exclude=/var/lib/plexmediaserver/Library/work/*"
+# Basic Plex info
+	PLEX_INSTALLATION_PATH="/var/lib/plexmediaserver"
+	PLEX_LIBRARY_PATH="$PLEX_INSTALLATION_PATH/Library"
+	PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
+
+	COLD_BACKUP_EXCLUDES="--exclude='$PLEX_APPLICATION_SUPPORT_PATH/Plex Media Server/Cache'"
+	COLD_BACKUP_EXCLUDES+=" --exclude=$PLEX_LIBRARY_PATH/store/*"
+	COLD_BACKUP_EXCLUDES+=" --exclude=$PLEX_LIBRARY_PATH/work/*"
 	COLD_BACKUP_EXCLUDES+=" --exclude=.cache"
 	COLD_BACKUP_EXCLUDES+=" --exclude=Cache"
 	COLD_BACKUP_SOURCES="$COLD_BACKUP_EXCLUDES etc home opt root"
@@ -667,9 +452,7 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 	COLD_RESTORE_EXCLUDES="--exclude=.config/os-install-info.txt"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/fstab*"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/systemd/system"
-#	COLD_RESTORE_EXCLUDES+=" --exclude=.cache"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/mtab"
-#	COLD_RESTORE_EXCLUDES+=" --exclude='/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Cache'"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/os-release"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/rc*"
 	COLD_RESTORE_EXCLUDES+=" --exclude=etc/udisks2"
@@ -689,12 +472,7 @@ PLEX_APPLICATION_SUPPORT_PATH="$PLEX_LIBRARY_PATH/Application Support"
 	BACKUP_OPTION[--gzip]=true 
 	BACKUP_OPTION[--auto-compress]=true
 	BACKUP_OPTION[--preserve-permissions]=true
-	BACKUP_OPTION[--file=$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE]=true
-#	BACKUP_OPTION[--exclude --exclude=/mnt/bob/cold-backup/var/lib/plexmediaserver/Library]=true
-#	BACKUP_OPTION[--exclude --exclude=/var/lib/plexmediaserver/Library]=true
-#	BACKUP_OPTION[--exclude='plexmediaserver/Library/Application Support/Cache']=true
-#	BACKUP_OPTION[--exclude=plexmediaserver/Library/work/movies]=true
-#	BACKUP_OPTION[--exclude=plexmediaserver/Library/work/tv]=true
+	BACKUP_OPTION[--file="$HOST{[$HOSTNAME,temp_archive_base_path]}"/$ARCHIVE_TAR_WEEKDAY_FILE]=true
 	BACKUP_OPTION[--exclude-vcs]=true
 	BACKUP_OPTION[--exclude-caches]=true
 	BACKUP_OPTION[--totals]=true
