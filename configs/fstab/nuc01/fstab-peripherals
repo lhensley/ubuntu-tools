@@ -3,16 +3,19 @@
 # When possible, use the UUID and not PARTUUID.
 #
 # nuc01: 3TBB (3TB) NFS from adam
-adam:/mnt/3TBB /mnt/3TBB nfs rw
+a6:/mnt/3TBB /mnt/3TBB nfs rw
+#
+# nuc01: 5TBC (5TB) NFS from o6
+o6:/mnt/5TBC /mnt/5TBC nfs rw
 #
 # nuc01: 5TBD (5TB) NFS from adam
-adam:/mnt/5TBD /mnt/5TBD nfs rw
+a6:/mnt/5TBD /mnt/5TBD nfs rw
 #
 # nuc01: 5TBE (5TB) Black 5TB External Seagate
 UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 ro,defaults 0 0
 #
 # nuc01: 12TBA (12TB) NFS from adam
-adam:/mnt/12TBA /mnt/12TBA nfs rw
+a6:/mnt/12TBA /mnt/12TBA nfs rw
 #
 # nuc01: 12TBB (12TB) UUID=27cf148b-4b43-4747-8a4f-e7013639b989
 UUID=27cf148b-4b43-4747-8a4f-e7013639b989 /mnt/12TBB ext4 defaults 0 0
@@ -26,6 +29,9 @@ UUID=d8f30f08-2698-411c-a3ea-32b9748e9ba9 /mnt/bob ext4 defaults 0 0
 # nuc01: cloteal (10TB) UUID=4e356144-2e69-4812-8958-d035a9ebc28e
 UUID=4e356144-2e69-4812-8958-d035a9ebc28e /mnt/cloteal ext4 defaults 0 0
 #
+# nuc01: ext10tb01 (10TB) NFS from o6; external drive for Plex
+o6:/mnt/ext10tb01 /mnt/ext10tb01 nfs rw
+#
 # nuc01: MyBook3T01 (3TB) UUID=C6B89CABB89C9B8D
 UUID=C6B89CABB89C9B8D /mnt/MyBook3T01 ntfs defaults 0 0
 #
@@ -34,4 +40,7 @@ UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs defaults 0 0
 #
 # nuc01: Silver5TB-B (5TB) UUID 634B5E207BE18E54
 UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0
+#
+# nuc01: ssd1tb (1TB) NFS from o6; internal SSD drive
+o6:/mnt/ssd1tb /mnt/ssd1tb nfs rw
 #
