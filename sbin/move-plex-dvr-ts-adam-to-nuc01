@@ -16,30 +16,32 @@
 
 # Do the looping work
 	THIS_SCRIPT=$(basename "$0")
-#	while true; do
-		# Define file locations
-			SOURCE_SERVER="a6"
-#			SOURCE_ROOT_DIR="/mnt/12TBA/plexcontent/dvr"
-            SOURCE_ROOT_DIR="/var/lib/plexmediaserver/Library/work"
-			TARGET_ROOT_DIR="/mnt/bob/plex/dvr/in"
-			WAIT_AFTER_SOURCE_SCAN="1h"
-#			MOVE_MASK="*.ts"
-#			EXCLUDE_MASK1="*.m4v"
-			EXCLUDE_MASK2=".grab/"
-		# See https://github.com/lhensley/go/blob/master/documentation/rsync%20options.md
-#       sudo -u $ADMIN_USER \
-			rsync --remove-source-files --include "$MOVE_MASK" \
-			--exclude "$EXCLUDE_MASK1" --exclude "$EXCLUDE_MASK2" -aloprtv \
-			"$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR"
 
-			SOURCE_ROOT_DIR="/mnt/12TBA/plexcontent/dvr"
-			rsync --remove-source-files --include "$MOVE_MASK" \
-			--exclude "$EXCLUDE_MASK1" --exclude "$EXCLUDE_MASK2" -aloprtv \
-			"$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR"
-#			| logger -t "$THIS_SCRIPT"
-#		f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false
-#		sleep "$WAIT_AFTER_SOURCE_SCAN"
-#        done
+	EXCLUDE_MASK2=".grab/"
+
+	SOURCE_ROOT_DIR="/mnt/bob/plex/dvr/tv"
+	TARGET_ROOT_DIR="/mnt/bob/plex/dvr/in/tv"
+	rsync --remove-source-files \
+		--exclude "$EXCLUDE_MASK2" -aloprtv \
+	"$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR"
+
+	SOURCE_ROOT_DIR="/mnt/bob/plex/dvr/movies"
+	TARGET_ROOT_DIR="/mnt/bob/plex/dvr/in/movies"
+	rsync --remove-source-files \
+		--exclude "$EXCLUDE_MASK2" -aloprtv \
+	"$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR"
+
+    SOURCE_ROOT_DIR="/var/lib/plexmediaserver/Library/work"
+	TARGET_ROOT_DIR="/mnt/bob/plex/dvr/in"
+	rsync --remove-source-files \
+		--exclude "$EXCLUDE_MASK2" -aloprtv \
+	"$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR"
+
+	SOURCE_ROOT_DIR="/mnt/12TBA/plexcontent/dvr"
+	TARGET_ROOT_DIR="/mnt/bob/plex/dvr/in"
+	rsync --remove-source-files \
+		--exclude "$EXCLUDE_MASK2" -aloprtv \
+	"$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR"
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
