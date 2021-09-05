@@ -16,7 +16,7 @@
 
 # Do the looping work
 	THIS_SCRIPT=$(basename "$0")
-	while true; do
+#	while true; do
 		# Define file locations
 			SOURCE_SERVER="a6"
 			SOURCE_ROOT_DIR="/mnt/12TBA/plexcontent/dvr"
@@ -27,13 +27,13 @@
 			EXCLUDE_MASK2=".grab/"
 		# See https://github.com/lhensley/go/blob/master/documentation/rsync%20options.md
 #       sudo -u $ADMIN_USER \
-			rsync --dry-run --verbose --remove-source-files --include "$MOVE_MASK" \
+			rsync --remove-source-files --include "$MOVE_MASK" \
 			--exclude "$EXCLUDE_MASK1" --exclude "$EXCLUDE_MASK2" -aloprtv \
 			"$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR" \
 			| logger -t "$THIS_SCRIPT"
 #		f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false
 #		sleep "$WAIT_AFTER_SOURCE_SCAN"
-        done
+#        done
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
