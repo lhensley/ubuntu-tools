@@ -29,7 +29,7 @@
 #       sudo -u $ADMIN_USER \
 			rsync --dry-run --remove-source-files --include "$MOVE_MASK" \
 			--exclude "$EXCLUDE_MASK1" --exclude "$EXCLUDE_MASK2" -aloprtv \
-			"$SOURCE_SERVER:$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR" \
+			"$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR" \
 			| logger -t "$THIS_SCRIPT"
 		f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false
 #		sleep "$WAIT_AFTER_SOURCE_SCAN"
