@@ -12,6 +12,10 @@
 	# df -Ht ext4
 	# systemctl status plexmediaserver
 
+# Name the server
+	echo $HOSTNAME
+	echo
+
 # Check instances of key processes
 	echo
 	f_grep HandBrakeCLI
