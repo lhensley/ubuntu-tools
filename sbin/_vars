@@ -375,7 +375,7 @@ source /etc/os-release
 # phpMyAdmin
         PHPMYADMIN_DIR="/usr/share/phpmyadmin"
 
-# Plex Media Server
+# Media Server
 # DEPENDENT on Archives Directories definitions above
 # DEPENDENT on MKMKV above
         PLEX_USER="plex"
@@ -419,8 +419,8 @@ source /etc/os-release
                         PLEX_ROOT[/var/lib/plexmediaserver/Library/work]=true
                         PLEX_ROOT[/mnt/ssd1tb/plex]=true
                         PLEX_ROOT[/mnt/ext10tb01/plex]=true
-                VIDEO_WORK_FILE_SYSTEM="/mnt/ssd1tb"
-                VIDEO_WORK_DIRECTORY="/mnt/ssd1tb/plex/dvr-oz"
+                VIDEO_WORK_FILE_SYSTEM="/mnt/ext10tb01"
+                VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr-in"
                 VIDEO_STORE_FILE_SYSTEM="/mnt/ext10tb01"
                 VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex/dvr-oz"
                 PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
