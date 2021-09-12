@@ -17,13 +17,15 @@
 	EXCLUDE_MASK2=".grab/"
 
     SOURCE_ROOT_DIR="/var/lib/plexmediaserver/Library/work"
-	TARGET_ROOT_DIR="/mnt/ssd1tb/plex/dvr-oz"
+#	TARGET_ROOT_DIR="/mnt/ssd1tb/plex/dvr-oz"
+	TARGET_ROOT_DIR="/mnt/ext10tb01/plex/dvr-in"
 	rsync --remove-source-files \
 		--exclude "$EXCLUDE_MASK2" -aloprtv \
 	"$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR"
 
 	SOURCE_ROOT_DIR="/mnt/12TBA/plexcontent/dvr"
-	TARGET_ROOT_DIR="/mnt/ssd1tb/plex/dvr-oz"
+#	TARGET_ROOT_DIR="/mnt/ssd1tb/plex/dvr-oz"
+	TARGET_ROOT_DIR="/mnt/ext10tb01/plex/dvr-in"
 	rsync --remove-source-files \
 		--exclude "$EXCLUDE_MASK2" -aloprtv \
 	"$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR"
