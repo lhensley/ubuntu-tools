@@ -23,6 +23,7 @@ TARFILE="$EXTRACT_FOLDER.tar.gz"
 CURRENT_DIRECTORY=$(pwd)
 CONFIG_FILE="config.inc.php"
 CONFIG_PATH="$PARENT_DIR/$LIVE_DIR/$CONFIG_FILE"
+CONFIG_PATH_OLD="$PARENT_DIR/OLD_DIR/$CONFIG_FILE"
 ETC_CONFIG_PATH="/etc/phpmyadmin/$CONFIG_FILE"
 
 # Download the application
@@ -52,7 +53,7 @@ if [ $exit_code -ne 0 ]; then f_die "Can't create $PARENT_DIR/$LIVE_DIR/tmp."; f
 
 # Copy the config file from the old directory to the new one.
 echo "Copying the config file from the old directory to the new one."
-cp "$CONFIG_PATH" "$PARENT_DIR/$LIVE_DIR/"
+cp "$CONFIG_PATH_OLD" "$PARENT_DIR/$LIVE_DIR/"
 exit_code=$?
 if [ $exit_code -ne 0 ]; then CONFIG_PATH="$ETC_CONFIG_PATH."; fi
 
