@@ -19,7 +19,7 @@
 	while true; do
 		# Define file locations
 			SOURCE_ROOT_DIR="/mnt/ext10tb01/plex/dvr-oz"
-			TARGET_ROOT_DIR="/mnt/cloteal/Plex/Pool06-1TB/dvr-nuc01"
+			TARGET_ROOT_DIR="/mnt/12TBB/Plex/Pool06-1TB/dvr-nuc01"
 			TARGET_SERVER="nuc01.lanehensley.org"
 			WAIT_AFTER_SOURCE_SCAN="6h"
 			MOVE_MASK="*.m4v"

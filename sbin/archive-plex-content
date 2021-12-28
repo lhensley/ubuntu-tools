@@ -11,12 +11,12 @@
 # Run only on nuc01
 	f_require_host nuc01
 
-rsync -av --delete /mnt/cloteal/plex/* /mnt/Silver5TB-A/archives/plex
-rsync -av --delete /mnt/cloteal/plex-tv/* /mnt/Silver5TB-A/archives/plex-tv
+rsync -av --delete /mnt/12TBB/plex/* /mnt/Silver5TB-A/archives/plex
+rsync -av --delete /mnt/12TBB/plex-tv/* /mnt/Silver5TB-A/archives/plex-tv
 
-rsync -av --delete /mnt/cloteal/plex-dvr/* /mnt/Silver5TB-B/archives/plex-dvr
-rsync -av --delete /mnt/cloteal/plex-other/* /mnt/Silver5TB-B/archives/plex-other
-rsync -av --delete /mnt/cloteal/plex-videos/* /mnt/Silver5TB-B/archives/plex-videos
+rsync -av --delete /mnt/12TBB/plex-dvr/* /mnt/Silver5TB-B/archives/plex-dvr
+rsync -av --delete /mnt/12TBB/plex-other/* /mnt/Silver5TB-B/archives/plex-other
+rsync -av --delete /mnt/12TBB/plex-videos/* /mnt/Silver5TB-B/archives/plex-videos
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

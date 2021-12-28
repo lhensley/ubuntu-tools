@@ -9,11 +9,11 @@
 	f_only_on_server red
 
 # Make target directories
-	mkdir -p /mnt/12TBA/archives/nuc01/plex/cloteal
+	mkdir -p /mnt/12TBA/archives/nuc01/plex/12TBB
 	mkdir -p /mnt/12TBA/archives/nuc01/plex/work
 	
 # Sync files to red
-	rsync -r --delete nuc01:/mnt/cloteal/Plex/* /mnt/12TBA/archives/nuc01/plex/cloteal
+	rsync -r --delete nuc01:/mnt/12TBB/Plex/* /mnt/12TBA/archives/nuc01/plex/12TBB
 	rsync -r --delete nuc01:/var/lib/plexmediaserver/Library/work /mnt/12TBA/archives/nuc01/plex/work
 
 # Include script footer file

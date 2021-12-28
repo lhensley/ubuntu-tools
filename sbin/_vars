@@ -385,7 +385,7 @@ source /etc/os-release
         unset PLEX_ROOT
         d="/"
         VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
-        VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
+        VIDEO_STORE_FILE_SYSTEM="/mnt/12TBB"
         VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in"
         VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex-dvr"
         PLEX_LIVE_APPLICATION_SUPPORT="/var/lib/plexmediaserver/Library"
@@ -394,17 +394,17 @@ source /etc/os-release
         if [ $HOSTNAME == "nuc01" ]; then 
                 # Define all Plex data root directories
                 # Set them all as true
-                # Example: PLEX_ROOT[/mnt/cloteal/plex]=true
+                # Example: PLEX_ROOT[/mnt/12TBB/plex]=true
                         declare -A PLEX_ROOT
-                        PLEX_ROOT[/mnt/cloteal/plex]=true
-                        PLEX_ROOT[/mnt/cloteal/plex-dvr]=true
+                        PLEX_ROOT[/mnt/12TBB/plex]=true
+                        PLEX_ROOT[/mnt/12TBB/plex-dvr]=true
                         PLEX_ROOT[/mnt/bertha/plex]=true
                         PLEX_ROOT[/mnt/bob/plex]=true
                         PLEX_ROOT[/var/lib/plexmediaserver/Library/metadata]=true
                         PLEX_ROOT[/var/lib/plexmediaserver/Library/store]=true
                         PLEX_ROOT[/var/lib/plexmediaserver/Library/work]=true
                 VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
-                VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
+                VIDEO_STORE_FILE_SYSTEM="/mnt/12TBB"
                 VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in"
                 VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex-dvr"
                 PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
@@ -412,7 +412,7 @@ source /etc/os-release
         if [ $HOSTNAME == "oz" ]; then 
                 # Define all Plex data root directories
                 # Set them all as true
-                # Example: PLEX_ROOT[/mnt/cloteal/plex]=true
+                # Example: PLEX_ROOT[/mnt/12TBB/plex]=true
                         declare -A PLEX_ROOT
                         PLEX_ROOT[/var/lib/plexmediaserver/Library/metadata]=true
                         PLEX_ROOT[/var/lib/plexmediaserver/Library/store]=true
@@ -428,14 +428,14 @@ source /etc/os-release
         if [ $HOSTNAME == "adam" ]; then 
                 # Define all Plex data root directories
                 # Set them all as true
-                # Example: PLEX_ROOT[/mnt/cloteal/plex]=true
+                # Example: PLEX_ROOT[/mnt/12TBB/plex]=true
                         declare -A PLEX_ROOT
-                        PLEX_ROOT[/mnt/cloteal/plex]=true
-                        PLEX_ROOT[/mnt/cloteal/plex-dvr]=true
+                        PLEX_ROOT[/mnt/12TBB/plex]=true
+                        PLEX_ROOT[/mnt/12TBB/plex-dvr]=true
                         PLEX_ROOT[/mnt/bertha/plex]=true
                         PLEX_ROOT[/mnt/bob/plex]=true
                 VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
-                VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
+                VIDEO_STORE_FILE_SYSTEM="/mnt/12TBB"
                 VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in"
                 VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex-dvr"
                 PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"

@@ -12,7 +12,7 @@
 	f_only_on_server adam
 
 # Define variables
-	SOURCE_FILE_SYSTEM="/mnt/cloteal"
+	SOURCE_FILE_SYSTEM="/mnt/12TBB"
 	SOURCE_PLEX_CONTENT_DIR="$SOURCE_FILE_SYSTEM"
 #	SOURCE_PLEX_DVR_TS_CONTAINER_DIR="/var/lib/plexmediaserver/Library/work/tv"
 	TARGET_FILE_SYSTEM="/mnt/12TBA"

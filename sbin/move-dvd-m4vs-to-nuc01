@@ -13,7 +13,7 @@
 
 # Define file locations
 	SOURCE_ROOT_DIR="/home/lhensley/Videos/HandBrake-Completed"
-	TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/cloteal/Plex/uploads"
+	TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/12TBB/Plex/uploads"
 	TARGET_SERVER="nuc01.lanehensley.org"
 	WAIT_AFTER_SOURCE_SCAN="6h"
 	MOVE_MASK="*.m4v"

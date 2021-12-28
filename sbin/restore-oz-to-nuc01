@@ -11,7 +11,7 @@
 # Require server nuc01
 	f_only_on_server nuc01
 
-rsync -aloprtvE /mnt/5TBC/archives/oz/plex/dvr-oz/* /mnt/cloteal/Plex/Pool06-1TB/dvr-nuc01
+rsync -aloprtvE /mnt/5TBC/archives/oz/plex/dvr-oz/* /mnt/12TBB/Plex/Pool06-1TB/dvr-nuc01
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
