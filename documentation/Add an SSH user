@@ -8,3 +8,6 @@ Generate an SSH key pair for the new user. See Generate an SSH Key Pair.
 		Add to Microsoft Visual Studio as directed from make-ssh-keys-for-new-user
 
 
+		sudo rsync -aloprtv "/home/[new-user-name]/.ssh/"* "$TARGET_DIR"
+
+
