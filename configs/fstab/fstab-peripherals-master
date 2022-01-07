@@ -52,14 +52,6 @@
 # UUID=C6B89CABB89C9B8D /mnt/MyBook3T01 ntfs defaults 0 0
 # n4:/mnt/MyBook3T01 /mnt/MyBook3T01 nfs rw
 #
-# Silver5TB-A (5TB)
-# UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs defaults 0 0
-# n4:/mnt/SilverTB-A /mnt/SilverTB-A nfs rw
-#
-# Silver5TB-B (5TB)
-# UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0
-# n4:/mnt/SilverTB-B /mnt/SilverTB-B nfs rw
-#
 #######################################################################################################
 #
 # oz
@@ -116,4 +108,12 @@
 # Bind mount
 #/mnt/cloteal/PlexUploads /home/plex-swap/uploads none bind 0 0
 #/mnt/cloteal/Plex /home/plex-swap/downloads none bind 0 0
+#
+# Silver5TB-A (5TB)
+# UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs defaults 0 0
+# n4:/mnt/SilverTB-A /mnt/SilverTB-A nfs rw
+#
+# Silver5TB-B (5TB)
+# UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0
+# n4:/mnt/SilverTB-B /mnt/SilverTB-B nfs rw
 #
