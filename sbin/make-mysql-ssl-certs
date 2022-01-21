@@ -9,7 +9,7 @@
 # Require root
 	f_require_root
 
-DIR=$HOME_DIRECTORY/openssl
+DIR=~/openssl
 OPEN_SSL_CONFIGS=/etc/ssl
 PRIV=$DIR/private
 PWD=$(uuidgen)
