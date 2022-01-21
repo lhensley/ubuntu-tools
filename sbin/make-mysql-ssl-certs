@@ -18,7 +18,7 @@
 # Create certs
     echo "Creating certificates."
     rm $MYSQL_DATA_DIR/*.pem
-    mysql_ssl_rsa_setup --datadir="$MYSQL_DATA_DIR" --verbose
+    mysql_ssl_rsa_setup --datadir="$MYSQL_DATA_DIR"
     chown mysql:mysql $MYSQL_DATA_DIR/*.pem
     systemctl restart mysql
 
@@ -45,7 +45,7 @@
     echo 
     echo "sudo systemctl restart mysql"
     echo 
-    echo 
+    echo "Client certificates are in $ADMIN_HOME_DIR/mysql_client_certs"
 
 exit
 
