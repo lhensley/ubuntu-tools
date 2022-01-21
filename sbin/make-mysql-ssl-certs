@@ -16,13 +16,15 @@
     echo MYSQL_CLIENT_DIR="$ADMIN_HOME_DIR/mysql_client_certs"
 
 # Create certs
+    echo "Creating certificates."
     rm $MYSQL_DATA_DIR/*.pem
     mysql_ssl_rsa_setup --datadir=$MYSQL_DATA_DIR
     chown mysql:mysql $MYSQL_DATA_DIR/*.pem
     systemctl restart mysql
 
 # Copy client certs to home directory
-    rm -R $MYSQL_CLIENT_DIR
+    echo "Copying client certificates to home directory."
+    rm -fR $MYSQL_CLIENT_DIR
     mkdir -p $MYSQL_CLIENT_DIR
     cp "$MYSQL_DATA_DIR/ca.pem" "$MYSQL_CLIENT_DIR/$(hostname)-MySQL-ca.pem"
     cp "$MYSQL_DATA_DIR/client-cert.pem" "$MYSQL_CLIENT_DIR/$(hostname)-MySQL-client-cert.pem"
