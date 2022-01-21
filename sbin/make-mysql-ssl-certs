@@ -14,7 +14,6 @@
     MYSQL_CLIENT_DIR="$ADMIN_HOME_DIR/mysql_client_certs"
     echo MYSQL_DATA_DIR="/var/lib/mysql"
     echo MYSQL_CLIENT_DIR="$ADMIN_HOME_DIR/mysql_client_certs"
-    exit
 
 # Create certs
     rm $MYSQL_DATA_DIR/*.pem
