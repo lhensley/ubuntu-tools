@@ -18,7 +18,7 @@
 # Create certs
     echo "Creating certificates."
     rm $MYSQL_DATA_DIR/*.pem
-    mysql_ssl_rsa_setup --datadir=$MYSQL_DATA_DIR
+    mysql_ssl_rsa_setup --datadir="$MYSQL_DATA_DIR" --verbose
     chown mysql:mysql $MYSQL_DATA_DIR/*.pem
     systemctl restart mysql
 
@@ -29,7 +29,7 @@
     cp "$MYSQL_DATA_DIR/ca.pem" "$MYSQL_CLIENT_DIR/$(hostname)-MySQL-ca.pem"
     cp "$MYSQL_DATA_DIR/client-cert.pem" "$MYSQL_CLIENT_DIR/$(hostname)-MySQL-client-cert.pem"
     cp "$MYSQL_DATA_DIR/client-key.pem" "$MYSQL_CLIENT_DIR/$(hostname)-MySQL-client-key.pem"
-    chown $ADMIN_USER:$ADMIN_USER "$MYSQL_CLIENT_DIR/*.pem"
+    chown -R $ADMIN_USER:$ADMIN_USER "$MYSQL_CLIENT_DIR"
 
 # Report server requirements
     echo 
@@ -42,6 +42,7 @@
     echo "bind_address=*"
     echo 
     echo "and issue this command:"
+    echo 
     echo "sudo systemctl restart mysql"
     echo 
     echo 
