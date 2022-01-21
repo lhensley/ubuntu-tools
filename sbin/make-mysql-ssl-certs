@@ -9,6 +9,45 @@
 # Require root
 	f_require_root
 
+# Set variables
+    MYSQL_DATA_DIR='/var/lib/mysql'
+    MYSQL_CLIENT_DIR='$ADMIN_HOME_DIR/mysql_client_certs'
+
+# Create certs
+    rm $MYSQL_DATA_DIR/*.pem
+    mysql_ssl_rsa_setup --datadir=$MYSQL_DATA_DIR
+    chown mysql:mysql $MYSQL_DATA_DIR/*.pem
+    systemctl restart mysql
+
+# Copy client certs to home directory
+    rm -R $MYSQL_CLIENT_DIR
+    mkdir -p $MYSQL_CLIENT_DIR
+    cp "$MYSQL_DATA_DIR/ca.pem" "$MYSQL_CLIENT_DIR/$(hostname)-MySQL-ca.pem"
+    cp "$MYSQL_DATA_DIR/client-cert.pem" "$MYSQL_CLIENT_DIR/$(hostname)-MySQL-client-cert.pem"
+    cp "$MYSQL_DATA_DIR/client-key.pem" "$MYSQL_CLIENT_DIR/$(hostname)-MySQL-client-key.pem"
+    chown $ADMIN_USER:$ADMIN_USER "$MYSQL_CLIENT_DIR/*.pem"
+
+# Report server requirements
+    echo 
+    echo "Add the lines below to /etc/mysql/my.cnf"
+    echo 
+    echo "[mysqld]"
+    echo "require_secure_transport=ON"
+    echo "tls_version=TLSv1.3"
+    echo "admin_tls_version=TLSv1.3"
+    echo "bind_address=*"
+    echo 
+    echo "and issue this command:"
+    echo "sudo systemctl restart mysql"
+    echo 
+    echo 
+
+exit
+
+
+
+
+
 DIR=$ADMIN_HOME_DIR/openssl
 OPEN_SSL_CONFIGS=/etc/ssl
 PRIV=$DIR/private
