@@ -31,6 +31,12 @@
     cp "$MYSQL_DATA_DIR/client-key.pem" "$MYSQL_CLIENT_DIR/$(hostname)-MySQL-client-key.pem"
     chown -R $ADMIN_USER:$ADMIN_USER "$MYSQL_CLIENT_DIR"
 
+# Copy client certs to /var/www/certs
+    echo "Copying client certificates to /var/www/certs."
+    mkdir -p /var/www/certs
+    cp $MYSQL_CLIENT_DIR/*.pem /var/www/certs
+    chown -R www-data:www-data /var/www/certs
+ 
 # Report server requirements
     echo 
     echo "Add the lines below to /etc/mysql/my.cnf"
