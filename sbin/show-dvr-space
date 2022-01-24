@@ -10,8 +10,7 @@
 	f_require_root
 
 # Do stuff here
-	du -hs /mnt/12TBB/plex-dvr/movies/*	
-	du -hs /mnt/12TBB/plex-dvr/tv/*	
+	du -hs /mnt/12TBB/plex-dvr/movies/* /mnt/12TBB/plex-dvr/tv/* | sort -h
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
