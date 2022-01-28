@@ -192,9 +192,9 @@ source /etc/os-release
         TEMP_ARCHIVE_DIRECTORY="/var/tmp/archives"                         # Default
         TEMP_ARCHIVE_PARENT_DIRECTORY="/var/tmp"                               # Default
         TEMP_ARCHIVE_SUBDIRECTORY="archives"                                       # Default
-        # Default COLD_RESTORE_POINT = "/", but "/var/restore-points/START_DATEANDTIMESTAMP/" recommended for trouble-shooting
+        # Default COLD_RESTORE_POINT = "/", but "/var/restore-points/$START_DATEANDTIMESTAMP/" recommended for trouble-shooting
                 COLD_RESTORE_POINT="/"
-                # COLD_RESTORE_POINT="/var/restore-points/START_DATEANDTIMESTAMP/"
+                # COLD_RESTORE_POINT="/var/restore-points/$START_DATEANDTIMESTAMP/"
         COLD_BACKUP_LOG="$ADMIN_HOME_DIR/.coldstorage.log"
         if [ $HOSTNAME == "nuc01" ]; then
                 COLD_BACKUP_FILE_SYSTEM="/mnt/5TBE"
