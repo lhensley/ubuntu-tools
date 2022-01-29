@@ -211,12 +211,13 @@ source /etc/os-release
                 COLD_BACKUP_FILE_SYSTEM="/mnt/5TBD"
                 COLD_BACKUP_FS_READ_ONLY=false
                 COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
-                TEMP_COLD_BACKUP_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM/cold-backup"
-                TEMP_COLD_BACKUP_PARENT_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM"
-                TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"
-                TEMP_ARCHIVE_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM/archives"
-                TEMP_ARCHIVE_PARENT_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM"
-                TEMP_ARCHIVE_SUBDIRECTORY="archives"
+                # Commenting out all below to keep defaults because only the root file system is an SSD.
+                # TEMP_COLD_BACKUP_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM/cold-backup"
+                # TEMP_COLD_BACKUP_PARENT_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM"
+                # TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"
+                # TEMP_ARCHIVE_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM/archives"
+                # TEMP_ARCHIVE_PARENT_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM"
+                # TEMP_ARCHIVE_SUBDIRECTORY="archives"
                 fi
         if [ $HOSTNAME == "oz" ]; then
                 COLD_BACKUP_FILE_SYSTEM="/mnt/5TBC"
