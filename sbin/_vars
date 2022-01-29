@@ -24,7 +24,7 @@
         SBIN_DIR="/usr/local/sbin"
         SBIN_PARENT="$(dirname $SBIN_DIR)"
         DOMAIN_NAME=lanehensley.org
-        COLOPHON="by Lane Hensley, lane.hensley@alumni.duke.edu, https://lanehensley.org"
+        COLOPHON="by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
 
 # /etc/os-release defines a lot of environment variables 
 # Sample:
