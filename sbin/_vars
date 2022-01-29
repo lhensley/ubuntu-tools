@@ -151,22 +151,22 @@ source /etc/os-release
 # DEPENDENT on definition of $HOSTNAME, but that's built-in
         declare -A ARCHIVE_FILE_SYSTEM
                 ARCHIVE_FILE_SYSTEM[default]="/"
-                ARCHIVE_FILE_SYSTEM[eve]="/mnt/3TBB"
                 ARCHIVE_FILE_SYSTEM[nuc01]="/mnt/5TBE"
+                ARCHIVE_FILE_SYSTEM[adam]="/mnt/5TBD"
                 ARCHIVE_FILE_SYSTEM[oz]="/mnt/5TBC"
         declare -A ARCHIVE_DIRECTORY
                 ARCHIVE_DIRECTORY[default]="/var/lib/archives/$HOSTNAME"
-                ARCHIVE_DIRECTORY[eve]=${ARCHIVE_FILE_SYSTEM[eve]}/archives/eve
-                ARCHIVE_DIRECTORY[nuc01]=${ARCHIVE_FILE_SYSTEM[nuc01]}/archives/nuc01
-                ARCHIVE_DIRECTORY[oz]=${ARCHIVE_FILE_SYSTEM[oz]}/archives/oz
+                ARCHIVE_DIRECTORY[nuc01]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
+                ARCHIVE_DIRECTORY[adam]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
+                ARCHIVE_DIRECTORY[oz]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
         THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[default]}"
-                if [ $HOSTNAME == "eve" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[eve]}"; fi
-                if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[nuc01]}"; fi
-                if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[oz]}"; fi
+                if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "adam" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
         THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[default]}"
-                if [ $HOSTNAME == "eve" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[eve]}"; fi
-                if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[nuc01]}"; fi
-                if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[oz]}"; fi
+                if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "adam" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
         ARCHIVE_TAR_FILE="$HOSTNAME-$START_DATESTAMP.gz"
                 ARCHIVE_TAR_FULL="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_FILE"
         ARCHIVE_TAR_WEEKDAY_FILE="$HOSTNAME-weekday-$START_WEEKDAYSTAMP3.gz"
@@ -207,10 +207,16 @@ source /etc/os-release
                 TEMP_ARCHIVE_PARENT_DIRECTORY="/mnt/bob"
                 TEMP_ARCHIVE_SUBDIRECTORY="archives"
                 fi
-        if [ $HOSTNAME == "red" ]; then
+        if [ $HOSTNAME == "adam" ]; then
                 COLD_BACKUP_FILE_SYSTEM="/mnt/5TBD"
                 COLD_BACKUP_FS_READ_ONLY=false
                 COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
+                TEMP_COLD_BACKUP_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM/cold-backup"
+                TEMP_COLD_BACKUP_PARENT_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM"
+                TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"
+                TEMP_ARCHIVE_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM/archives"
+                TEMP_ARCHIVE_PARENT_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM"
+                TEMP_ARCHIVE_SUBDIRECTORY="archives"
                 fi
         if [ $HOSTNAME == "oz" ]; then
                 COLD_BACKUP_FILE_SYSTEM="/mnt/5TBC"
@@ -281,17 +287,15 @@ source /etc/os-release
         # Ref: https://bytefreaks.net/gnulinux/bash/bash-how-to-iterate-over-associative-array-and-print-all-keyvalue-pairs
         BACKUP_SOURCES=""; for KEY in "${!BACKUP_SOURCE[@]}"; do BACKUP_SOURCES+=$KEY" "; done
 
+##################################################################################
+##### IMPORTANT: Update this to draw data from git. This is WAY out of date. #####
+##################################################################################
 # Peripheral File System Mount Points
 # This info is appended to /etc/fstab, and the mount points (key values) are created, at system installation
 # Example: MOUNT_POINT_DESCRIPTION[/mnt/Black4T01]="Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE"
 # Example: MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs defaults 0 0"
         declare -A MOUNT_POINT_DESCRIPTION
         declare -A MOUNT_POINT_DEFINITION
-        if [ $HOSTNAME == "eve" ]; then
-                MOUNT_POINT_DESCRIPTION[/mnt/5TBD]="# Black 5TB External Seagate"
-                        MOUNT_POINT_DEFINITION[/mnt/5TBD]="UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/5TBD ext4 defaults 0 0"
-                MOUNT_POINT_DESCRIPTION[/mnt/3TBB]="# Black 3TB External Drive (formerly attached to pearl)"
-                        MOUNT_POINT_DEFINITION[/mnt/3TBB]="UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/3TBB ext4 ro,defaults 0 0"
         fi
         if [ $HOSTNAME == "nuc01" ]; then
                 MOUNT_POINT_DESCRIPTION[/mnt/Black4T01]="Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE"
@@ -375,6 +379,9 @@ source /etc/os-release
 # phpMyAdmin
         PHPMYADMIN_DIR="/usr/share/phpmyadmin"
 
+#########################################################################
+##### IMPORTANT: Update this to draw data. This is WAY out of date. #####
+#########################################################################
 # Media Server
 # DEPENDENT on Archives Directories definitions above
 # DEPENDENT on MKMKV above
