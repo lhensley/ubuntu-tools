@@ -30,7 +30,7 @@
 	if [ $# -gt 1 ]; then
 		RESTORE_POINT="$2"
 		fi
-	mkdir "$RESTORE_POINT"
+	mkdir -p "$RESTORE_POINT"
 	if [ $? -gt 0 ]; then
 		f_log_and_echo "$0: FATAL: Can't create restore point \"$2\""
 		exit 1
