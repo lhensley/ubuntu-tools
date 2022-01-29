@@ -19,7 +19,7 @@
 		fi
 
 # Make sure the archive file exists
-	if $(f_is_file "$1"); then
+	if !$(f_is_file "$1"); then
 		f_log_and_echo "$0: FATAL: \"$1\" is not a file."
 		echo "USAGE: $0 ArchivePathAndFile [RestorePointDirectory]"
 		echo "  Default RestorePointDirectory = /var/restore-points/(RestoreStartDateAndTime)"
