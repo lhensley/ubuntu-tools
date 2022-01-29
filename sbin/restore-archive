@@ -21,7 +21,8 @@
 	if $(f_is_file "$1"); then
 		f_log_and_echo "$0: FATAL: \"$1\" is not a file."
 		echo "USAGE: $0 ArchivePathAndFile [RestorePointDirectory]"
-		echo "  Default RestorePointDirecty = /var/restore-points/(RestoreStartDateAndTime)"
+		echo "  Default RestorePointDirectory = /var/restore-points/(RestoreStartDateAndTime)"
+		echo "  Using the default RestorePointDirectory is recommended."
 		exit 1
 		fi
 
@@ -36,75 +37,17 @@
 		exit 1
 		fi
 
-echo $#
-exit 1
-
-
-# Change working directory
-# Heavy error checking because this HAS to be right, or results could be catastrophic.
-if [ ! -d "$COLD_BACKUP_DIRECTORY" ]; then
-	f_log_and_echo "$0: FATAL: $COLD_BACKUP_DIRECTORY is not a directory"
-	exit 1
-	fi
-cd "$COLD_BACKUP_DIRECTORY"
-if [ $? -gt 0 ]; then
-	f_log_and_echo "$0: FATAL: Can't cd to $COLD_BACKUP_DIRECTORY"
-	exit 1
-	fi
-
-# Stop services as needed
-	systemctl stop $COLD_PROTECTED_SERVICES
-
-# Do restore with rsync
-# rsync options used
-#    -a = archive mode, equivalent to -rlptgoD
-#    -g = preserve group ownership
-#    -l = recreate symlinks on destination
-#    -n = dry run
-#    -o = preserve owner
-#    -p = preserve permissions
-#    -q = quiet
-#    -r = recursive (includes subdirectories)
-#    -t = preserve modification times
-#    -v = verbose
-#    -D = preserve device files and special files
-#    -E = preserve executability
-#    -R = use relative paths (see https://linux.die.net/man/1/rsync for more info)
-#    --delete = delete extraneous files from dest dirs
-if [ ! -d $COLD_RESTORE_POINT ]; then mkdir -p $COLD_RESTORE_POINT; fi
-rsync -aloprtvER --delete $COLD_RESTORE_EXCLUDES $COLD_BACKUP_SOURCES $COLD_RESTORE_POINT
-
-set +x
-
-# Return to previous directory
-cd "$CURRENT_DIRECTORY"
-
-# Fix some permisson problems
-  # Unclear why this would be necessary but otherwise ends up owned by user mysql 9/16/2020
-		chown -R postfix:postfix /var/lib/postfix
-  # Unclear why this would be necessary but otherwise ends up owned by user tautulli 9/16/2020
-		chown -R mysql:adm /var/log/mysql
-		chown -R mysql:mysql /var/lib/mysql*
-
-# Import cron jobs for $CRONTAB_BACKUP_USERS
-for SELECTED_USER in $CRONTAB_BACKUP_USERS; do 
-	crontab -u $SELECTED_USER $(eval echo "~$SELECTED_USER")/.crontab-archive
-	done
+# Start the restoration
+	tar -zvxf "$1" -C "$RESTORE_POINT" 
+	if [ $? -gt 0 ]; then
+		f_log_and_echo "$0: FATAL: Restore from \"$1\" to \"$RESTORE_POINT\" failed."
+		exit 1
+		fi
 
 # Update log
 	echo
-	echo Restore completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
-	echo Restore completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') >> $COLD_BACKUP_LOG
-	chown $ADMIN_USER $COLD_BACKUP_LOG
-
-# Recommend reboot
-	echo
-	echo -en "\007" # Beep
-	echo "Restore done. "
-	echo "$COLD_PROTECTED_SERVICES stopped."
-	echo "IMMEDIATE reboot VERY STRONGLY recommended."
-	echo "To reboot, type: sudo init 6"
-	echo
+	echo Restore from \"$1\" to \"$RESTORE_POINT\" completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
+	echo Restore from \"$1\" to \"$RESTORE_POINT\" completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') >> $COLD_BACKUP_LOG
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
