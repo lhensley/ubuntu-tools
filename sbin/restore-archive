@@ -11,7 +11,7 @@
 
 # Make sure the archive file is specified
 	if [ $# -lt 1 ]; then
-		f_log_and_echo "$0: FATAL: No archive file specified."
+		f_log_and_echo "FATAL: No archive file specified."
 		echo "USAGE: $0 ArchivePathAndFile [RestorePointDirectory]"
 		echo "  Default RestorePointDirectory = /var/restore-points/(RestoreStartDateAndTime)"
 		echo "  Using the default RestorePointDirectory is recommended."
@@ -20,7 +20,7 @@
 
 # Make sure the archive file exists
 	if !($(f_is_file "$1")); then
-		f_log_and_echo "$0: FATAL: \"$1\" is not a file."
+		f_log_and_echo "FATAL: \"$1\" is not a file."
 		echo "USAGE: $0 ArchivePathAndFile [RestorePointDirectory]"
 		echo "  Default RestorePointDirectory = /var/restore-points/(RestoreStartDateAndTime)"
 		echo "  Using the default RestorePointDirectory is recommended."
@@ -34,14 +34,14 @@
 		fi
 	mkdir -p "$RESTORE_POINT"
 	if [ $? -gt 0 ]; then
-		f_log_and_echo "$0: FATAL: Can't create restore point \"$2\""
+		f_log_and_echo "FATAL: Can't create restore point \"$2\""
 		exit 1
 		fi
 
 # Start the restoration
 	tar -zvxf "$1" -C "$RESTORE_POINT" 
 	if [ $? -gt 0 ]; then
-		f_log_and_echo "$0: FATAL: Restore from \"$1\" to \"$RESTORE_POINT\" failed."
+		f_log_and_echo "FATAL: Restore from \"$1\" to \"$RESTORE_POINT\" failed."
 		exit 1
 		fi
 
