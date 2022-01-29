@@ -9,10 +9,36 @@
 # Require root
 	f_require_root
 
+# Make sure the archive file is specified
+	if [ $# -lt 1 ]; then
+		f_log_and_echo "$0: FATAL: No archive file specified."
+		echo "USAGE: $0 ArchivePathAndFile [RestorePointDirectory]"
+		echo "  Default RestorePointDirecty = /var/restore-points/(RestoreStartDateAndTime)"
+		exit 1
+		fi
+
+# Make sure the archive file exists
+	if $(f_is_file "$1"); then
+		f_log_and_echo "$0: FATAL: \"$1\" is not a file."
+		echo "USAGE: $0 ArchivePathAndFile [RestorePointDirectory]"
+		echo "  Default RestorePointDirecty = /var/restore-points/(RestoreStartDateAndTime)"
+		exit 1
+		fi
+
+# Make the restore point directory
+	RESTORE_POINT="/var/restore-points/$START_DATEANDTIMESTAMP"
+	if [ $# -gt 1 ]; then
+		RESTORE_POINT="$2"
+		fi
+	mkdir "$RESTORE_POINT"
+	if [ $? -gt 0 ]; then
+		f_log_and_echo "$0: FATAL: Can't create restore point \"$2\""
+		exit 1
+		fi
+
 echo $#
 exit 1
 
-# if [ $# -lt  ]
 
 # Change working directory
 # Heavy error checking because this HAS to be right, or results could be catastrophic.
