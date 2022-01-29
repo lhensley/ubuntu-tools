@@ -13,7 +13,8 @@
 	if [ $# -lt 1 ]; then
 		f_log_and_echo "$0: FATAL: No archive file specified."
 		echo "USAGE: $0 ArchivePathAndFile [RestorePointDirectory]"
-		echo "  Default RestorePointDirecty = /var/restore-points/(RestoreStartDateAndTime)"
+		echo "  Default RestorePointDirectory = /var/restore-points/(RestoreStartDateAndTime)"
+		echo "  Using the default RestorePointDirectory is recommended."
 		exit 1
 		fi
 
