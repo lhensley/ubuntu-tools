@@ -296,7 +296,6 @@ source /etc/os-release
 # Example: MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs defaults 0 0"
         declare -A MOUNT_POINT_DESCRIPTION
         declare -A MOUNT_POINT_DEFINITION
-        fi
         if [ $HOSTNAME == "nuc01" ]; then
                 MOUNT_POINT_DESCRIPTION[/mnt/Black4T01]="Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE"
                         MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs noauto 0 0"
