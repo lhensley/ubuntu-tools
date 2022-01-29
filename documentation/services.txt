@@ -10,7 +10,7 @@ Best: https://www.linode.com/docs/quick-answers/linux/start-service-at-boot/
 
 Lane Services ("unit files")
 	Developed and stored in $GIT_GO_SERVICES
-	upd script copies them to $SERVICES_DIR
+	upd script copies them to $SERVICES_DIR ("/lib/systemd/system")
 
 
 Pull up any unit file from the $GIT_GO_SERVICES directory. They're easy to adapt. Things you'll need to specify:
@@ -22,6 +22,6 @@ Pull up any unit file from the $GIT_GO_SERVICES directory. They're easy to adapt
 		sudo systemctl start SERVICE_NAME
 		sudo systemctl status SERVICE_NAME
 
-	Enable (have it automatically start on bootup)
+	Enable (have it automatically start on bootup) (Creates a symlink to the .service file in /etc/systemd/system/multi-user.target.wants)
 		sudo systemctl enable SERVICE_NAME
 
