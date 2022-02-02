@@ -26,7 +26,7 @@
         DOMAIN_NAME=lanehensley.org
         COLOPHON="by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
 
-# /etc/os-release defines a lot of environment variables 
+# /etc/os-release defines a lot of environment variables
 # Sample:
 #    NAME="Ubuntu"
 #    VERSION="18.04.4 LTS (Bionic Beaver)"
