@@ -79,6 +79,10 @@ UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/3TBB ext4 defaults 0 0
 UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/5TBD ext4 defaults 0 0
 # a4:/mnt/5TBD /mnt/5TBD nfs rw
 #
+# adam: 5TBF (5TB) UUID=C824163824162A48
+UUID=C824163824162A48 /mnt/5TBF ntfs defaults 0 0
+# a4:/mnt/5TBF /mnt/5TBF ntfs rw
+#
 #######################################################################################################
 #
 # Uninstalled
