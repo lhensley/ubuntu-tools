@@ -171,23 +171,25 @@ done
 		find $SERVICES_DIR -type f -print -exec chmod $SERVICES_FILES_PERIOSSIONS {} \; >> /dev/null 2>&1
 		
 	# Exceptions: These can be read or run by anyone
-		# Confirm that referenced files below exist.
-			f_require_file "${PATHNAME[_functions]}" 
-			f_require_file "${PATHNAME[_vars]}"
-			f_require_file "${PATHNAME[makemkvcon]}"
-			f_require_file "${PATHNAME[rip]}"
-			f_require_file "${PATHNAME[script_footer]}"
-			f_require_file "${PATHNAME[script_setup]}"
-			# f_require_file "${PATHNAME[upd]}"
-			# f_require_file "${PATHNAME[_apply_configs]}"
+#		# 2/16/2022: Not sure why it's necessary to confirm existence of these files except to keep chmod from failing below,
+#		# which can be managed with the --silent flag. Added that to all chmods below.
+#		# Confirm that referenced files below exist.
+#			f_require_file "${PATHNAME[_functions]}" 
+#			f_require_file "${PATHNAME[_vars]}"
+#			f_require_file "${PATHNAME[makemkvcon]}"
+#			f_require_file "${PATHNAME[rip]}"
+#			f_require_file "${PATHNAME[script_footer]}"
+#			f_require_file "${PATHNAME[script_setup]}"
+#			# f_require_file "${PATHNAME[upd]}"
+#			# f_require_file "${PATHNAME[_apply_configs]}"
 		# These based on functional requirements
-			chmod 755 "${PATHNAME[_functions]}"
-			chmod 755 "${PATHNAME[_vars]}"
-			chmod 755 "${PATHNAME[makemkvcon]}"
-			chmod 755 "${PATHNAME[remove_empty_directories]}"
-			chmod 755 "${PATHNAME[rip]}"
-			chmod 755 "${PATHNAME[script_footer]}" 
-			chmod 755 "${PATHNAME[script_setup]}" 
+			chmod --silent 755 "${PATHNAME[_functions]}"
+			chmod --silent 755 "${PATHNAME[_vars]}"
+			chmod --silent 755 "${PATHNAME[makemkvcon]}"
+			chmod --silent 755 "${PATHNAME[remove_empty_directories]}"
+			chmod --silent 755 "${PATHNAME[rip]}"
+			chmod --silent 755 "${PATHNAME[script_footer]}" 
+			chmod --silent 755 "${PATHNAME[script_setup]}" 
 		# These based on desire. CAUTION: Don't expose anything that has a password or code in it.
 			# chmod 740 "${PATHNAME[upd]}"
 			# chmod 740 "${PATHNAME[_apply_configs]}"
