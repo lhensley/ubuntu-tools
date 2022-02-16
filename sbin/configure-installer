@@ -4,6 +4,29 @@
 # IMPORTANT: Check variables at the top of the script before running it!
 # Instructions for creating a custom ISO installation are at https://linuxhint.com/customize_ubuntu_iso_create_spin/
 
+# If this is set to false, GUI app installations will be ignored.
+# CAUTION: If accidentally set to true, all required GUI packages also will be installed.
+is_desktop=false
+
+# Used for installing git
+my_full_name="Lane Hensley"
+my_email="lane@lanehensley.org"
+
+# Which optional software to install
+install_apache2=true
+install_certbot=true
+install_chrome=true
+install_cubic=true
+install_handbrake=true
+install_lsyncd=true
+install_mailutils=true
+install_makemkv=true
+install_openssl=true
+install_php=true
+install_rclone=true
+install_webmin=true
+install_zoom=true
+
 # Make sure we're root.
 if [[ $EUID -ne 0 ]]; then
         echo "Use sudo. $0 must be run as root." 1>&2
@@ -43,28 +66,14 @@ if [[ $EUID -ne 0 ]]; then
     # by anything else on the system
     apt -y autoremove
 
-install_apache2=true
-install_certbot=true
-install_chrome=true
-install_cubic=true
-install_handbrake=true
-install_lsyncd=true
-install_mailutils=true
-install_makemkv=true
-install_openssl=true
-install_php=true
-install_rclone=true
-install_webmin=true
-install_zoom=true
-
 # Install git and ufw and open the git port
     DEBIAN_FRONTEND=noninteractive apt-get install -yq git
     ufw allow git
 
 # Configure git
     cd
-    git config --global user.name "Lane Hensley"
-    git config --global user.email "lane.hensley@alumni.duke.edu"
+    git config --global user.name "$my_full_name"
+    git config --global user.email "$my_email"
     git config --global credential.helper store
     git config --global credential.helper cache
     git config --global credential.helper 'cache --timeout=600'
@@ -102,25 +111,31 @@ install_zoom=true
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 # Install cubic
-if $install_cubic ; then
-    apt-add-repository ppa:cubic-wizard/release
-    apt update
-    apt install -y cubic
+if $is_desktop ; then
+    if $install_cubic ; then
+        apt-add-repository ppa:cubic-wizard/release
+        apt update
+        apt install -y cubic
+        fi
     fi
 
 # The machine will brick without these drivers.
 # Next time a new ISO is generated, this section should be removed from initialize-server because its also in the configure-installer script.
-apt-get -y install nvidia-driver-390
+if $is_desktop ; then
+    apt-get -y install nvidia-driver-390
+    fi
 
 # Install MakeMKV
 # DON'T USE THE SNAP INSTALLER
-if $install_makemkv ; then
-  echo "Installing MakeMKV"
-  printf '\n\n' | add-apt-repository ppa:heyarje/makemkv-beta
-  apt-get update
-  DEBIAN_FRONTEND=noninteractive apt-get install -yq makemkv-bin makemkv-oss ccextractor
-  echo "MakeMKV installed."
-  fi
+if $is_desktop ; then
+    if $install_makemkv ; then
+      echo "Installing MakeMKV"
+      printf '\n\n' | add-apt-repository ppa:heyarje/makemkv-beta
+      apt-get update
+      DEBIAN_FRONTEND=noninteractive apt-get install -yq makemkv-bin makemkv-oss ccextractor
+      echo "MakeMKV installed."
+      fi
+    fi
 
 # Install uncomplicated, no-down-side utilities (formerly install-utils)
     f_install at
@@ -132,9 +147,7 @@ if $install_makemkv ; then
     f_install exiftool
     f_install fail2ban
     f_install ffmpeg
-    f_install filezilla
     f_install ghostscript             # Compressing PDF scans
-    f_install gimp
     f_install git && ufw allow git
     f_install gpg
     f_install gzip
@@ -156,7 +169,11 @@ if $install_makemkv ; then
     # f_install uuid                  # Use uuidgen instead. It's built-in.
     f_install vim
     f_install wget
-    f_install xrdp
+    if $is_desktop ; then
+        f_install filezilla
+        f_install gimp
+        f_install xrdp
+        fi
 
 if $install_apache2 ; then
   echo "Installing apache2"
@@ -171,10 +188,12 @@ if $install_apache2 ; then
   fi
 
 # Install Google Chrome
-    DEBIAN_FRONTEND=noninteractive apt-get install -yq wget gdebi-core
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    gdebi --n google-chrome-stable_current_amd64.deb
-    rm ./google-chrome-stable_current_amd64.deb
+    if $is_desktop ; then
+        DEBIAN_FRONTEND=noninteractive apt-get install -yq wget gdebi-core
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        gdebi --n google-chrome-stable_current_amd64.deb
+        rm ./google-chrome-stable_current_amd64.deb
+        fi
 
 if $install_openssl ; then
   echo "Installing openssl"
@@ -231,23 +250,27 @@ if $install_webmin ; then
   fi
 
 # Install Zoom Client
-if $install_zoom ; then
-  echo "Installing Zoom Client"
-  wget https://zoom.us/client/latest/zoom_amd64.deb
-  DEBIAN_FRONTEND=noninteractive apt-get install -yq ./zoom_amd64.deb
-  rm ./zoom_amd64.deb
-  echo "Zoom Client installed."
-  fi
+  if $is_desktop ; then
+    if $install_zoom ; then
+      echo "Installing Zoom Client"
+      wget https://zoom.us/client/latest/zoom_amd64.deb
+      DEBIAN_FRONTEND=noninteractive apt-get install -yq ./zoom_amd64.deb
+      rm ./zoom_amd64.deb
+      echo "Zoom Client installed."
+      fi
+    fi
 
 # Install Google Chrome
-if $install_chrome ; then
-  echo "Installing Google Chrome"
-  DEBIAN_FRONTEND=noninteractive apt-get install -yq gdebi-core
-  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-  gdebi --n google-chrome-stable_current_amd64.deb
-  rm ./google-chrome-stable_current_amd64.deb
-  echo "Google Chrome installed."
-  fi
+  if $is_desktop ; then
+    if $install_chrome ; then
+      echo "Installing Google Chrome"
+      DEBIAN_FRONTEND=noninteractive apt-get install -yq gdebi-core
+      wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      gdebi --n google-chrome-stable_current_amd64.deb
+      rm ./google-chrome-stable_current_amd64.deb
+      echo "Google Chrome installed."
+      fi
+    fi
 
 # Install lsyncd
 if $install_lsyncd ; then
