@@ -1,0 +1,19 @@
+127.0.0.1       localhost
+
+# The following lines are desirable for IPv6 capable hosts
+::1     localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+192.168.168.2                            router.lanehensley.org r4.lanehensley.org router r4 gateway
+192.168.168.11                           nuc01.lanehensley.org  n4.lanehensley.org nuc01  n4 nuc01 nuc plex db dsm www
+192.168.168.12                           adam.lanehensley.org   a4.lanehensley.org adam   a4
+192.168.168.13                           oz.lanehensley.org     o4.lanehensley.org pz     o4
+# 31 128 186
+
+2604:2d80:5397:1b00:2de0:808b:aadf:2525  n6.lanehensley.org n6
+2604:2d80:5397:1b00:f60c:4768:d0d4:36ba  a6.lanehensley.org a6
+2604:2d80:5397:1b00:3b34:5282:b306:45fe  o6.lanehensley.org o6
+

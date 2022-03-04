@@ -18,6 +18,7 @@ install_mysql_server=true
 install_phpmyadmin=true
 install_plexmediaserver=true
 install_tautulli=true
+install_apt_cacher_ng=true
 
 # Copy git configs to $ADMIN_USER
 if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
@@ -192,6 +193,13 @@ if $install_mysql_server ; then
     chown $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.my.cnf"*
     chmod 600 "$ROOT_HOME_DIR/.my.cnf"*
   echo "MySQL server installed."
+  fi
+
+if $install_apt_cacher_ng ; then
+  echo "Installing apt-gacher-ng"
+  # Based on https://www.tecmint.com/apt-cache-server-in-ubuntu/
+  apt install apt-cacher-ng avahi-daemon squid-deb-proxy-client
+  echo "apt-gacher-ng installed"
   fi
 
 # phpMyAdmin should be installed AFTER php and MySQL
