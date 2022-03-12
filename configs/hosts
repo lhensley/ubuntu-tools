@@ -10,7 +10,7 @@ ff02::2 ip6-allrouters
 192.168.168.2                            router.lanehensley.org r4.lanehensley.org router r4 gateway
 192.168.168.11                           nuc01.lanehensley.org  n4.lanehensley.org nuc01  n4 nuc01 nuc plex db dsm www
 192.168.168.12                           adam.lanehensley.org   a4.lanehensley.org adam   a4
-192.168.168.13                           oz.lanehensley.org     o4.lanehensley.org pz     o4
+192.168.168.13                           oz.lanehensley.org     o4.lanehensley.org oz     o4
 # 31 128 186
 
 2604:2d80:5397:1b00:2de0:808b:aadf:2525  n6.lanehensley.org n6

@@ -1,0 +1,42 @@
+# Let NetworkManager manage all devices on this system
+# adam
+network:
+  version: 2
+  renderer: NetworkManager
+  ethernets:
+    wired0:
+      match:
+        name: enx00e04c68001e
+      dhcp4: false
+      dhcp6: true
+      addresses:
+        - '192.168.168.12/24'
+        - '2604:2d80:5397:1b00:f60c:4768:d0d4:36ba/64'
+      routes:
+      - to: default
+        via: '192.168.168.2'
+        metric: 100
+#      gateway4: '192.168.168.2'
+      nameservers:
+        addresses: ['192.168.168.2', '8.8.8.8', '2001:4860:4860::8888', '2001:4860:4860::8844']
+        search: [lanehensley.org, local, lan]
+  wifis:
+    wifi0:
+      match:
+        name: wlp1s0
+      dhcp4: false
+      dhcp6: true
+      addresses:
+        - '192.168.168.15/24'
+        - '2604:2d80:5397:1b00:8656:4511:b2cf:631f/64'
+      routes:
+      - to: default
+        via: '192.168.168.2'
+        metric: 200
+#      gateway4: '192.168.168.2'
+      nameservers:
+        addresses: ['192.168.168.2', '8.8.8.8', '2001:4860:4860::8888', '2001:4860:4860::8844']
+        search: [lanehensley.org, local, lan]
+      access-points:
+        "Hog Heaven DSM":
+          password: "fuckitymcfuckface"
