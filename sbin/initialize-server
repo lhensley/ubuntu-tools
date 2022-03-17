@@ -3,6 +3,8 @@
 # PURPOSE: Installs basic software, initializes, and configures
 # IMPORTANT: Check variables at the top of the script before running it!
 
+# DON'T RUN THIS unless you already have run configure-installer, or are installing a customized ISO.
+
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
