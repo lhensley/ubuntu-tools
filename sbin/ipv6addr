@@ -1,0 +1,5 @@
+#!/bin/bash
+
+ip -o -6 addr list | grep 'scope global' | grep -v temporary | head -n 1 | awk '{print $4}' | cut -d/ -f1
+
+exit 0
