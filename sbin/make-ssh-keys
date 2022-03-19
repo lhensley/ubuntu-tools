@@ -23,8 +23,8 @@
 	cat "$SSH_LOCATION.pub" >> "$ADMIN_HOME_DIR/.ssh/authorized_keys"
 	echo "Public key attached." | mail -s "$SSH_LOCATION.pub" -A "$SSH_LOCATION.pub" lane@lanehensley.org
 
-# Invoke /usr/local/sbin/apply-configs
-	f_apply-configs
+# Apply configs to set permissions within ~/.ssh
+	f_apply_configs
 
 # Display the public key
 	echo ""
