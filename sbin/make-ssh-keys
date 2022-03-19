@@ -16,7 +16,7 @@
 # Make $USER_ME and $USER_UBUNTU users and give them sudo access and ssh access
 	# ssh-keygen -C "$SSH_KEY_NAME" -P "" -f "$HOME_ME/.ssh/id_rsa"
 	SSH_IMPRESS="$ADMIN_EMAIL-$START_DATEANDTIMESTAMP"
-	SSH_LOCATION="$HOME_ME/.ssh/$SSH_IMPRESS"
+	SSH_LOCATION="$ADMIN_HOME_DIR/.ssh/$SSH_IMPRESS"
 	rm "$SSH_LOCATION"*
 	ssh-keygen -t ed25519 -f "$SSH_LOCATION" -C "$SSH_IMPRESS" -P "" -q
 	cat "$SSH_LOCATION.pub" >> './ssh/authorized_keys'
