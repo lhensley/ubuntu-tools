@@ -1,4 +1,3 @@
-ssh-keygen -t ed25519 -C "your_email@example.com
 # Variable definitions for Lane applications
 
 # Debug Mode
@@ -24,7 +23,7 @@ ssh-keygen -t ed25519 -C "your_email@example.com
         HOME_ROOT="/home"
         SBIN_DIR="/usr/local/sbin"
         SBIN_PARENT="$(dirname $SBIN_DIR)"
-        DOMAIN_NAME=lanehensley.org
+        DOMAIN_NAME="lanehensley.org"
         COLOPHON="by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
 
 # /etc/os-release defines a lot of environment variables
