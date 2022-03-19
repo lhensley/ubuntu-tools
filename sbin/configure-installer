@@ -158,6 +158,7 @@ if $is_desktop ; then
     f_install bridge-utils
     # f_install ifupdown              # Used for /etc/network/interfaces manual configuration; interferes with Network Manager
     f_install proftpd                 # For scanning to brother@oz
+    f_install putty-tools
     f_install resolvconf
     f_install rsync
     f_install ripmime                 # Process files sent by email

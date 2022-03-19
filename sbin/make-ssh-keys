@@ -15,13 +15,15 @@
 
 # Make $USER_ME and $USER_UBUNTU users and give them sudo access and ssh access
 	# ssh-keygen -C "$SSH_KEY_NAME" -P "" -f "$HOME_ME/.ssh/id_rsa"
-	SSH_IMPRESS="$ADMIN_EMAIL-$START_DATEANDTIMESTAMP"
+	SSH_IMPRESS="$ADMIN_EMAIL-$START_DATEANDTIMESTAMP-id_ed25519"
 	SSH_LOCATION="$ADMIN_HOME_DIR/.ssh/$SSH_IMPRESS"
 	rm -f "$SSH_LOCATION"
 	rm -f "$SSH_LOCATION.pub"
 	ssh-keygen -t ed25519 -f "$SSH_LOCATION" -C "$SSH_IMPRESS" -P "" -q
+	puttygen "$SSH_LOCATION" -o "$SSH_LOCATION-Putty-Private.ppk" -O private -q
+	puttygen "$SSH_LOCATION" -o "$SSH_LOCATION-Putty-Public" -O public -q
 	cat "$SSH_LOCATION.pub" >> "$ADMIN_HOME_DIR/.ssh/authorized_keys"
-	echo "Public key attached." | mail -s "$SSH_LOCATION.pub" -A "$SSH_LOCATION.pub" lane@lanehensley.org
+	#echo "Public key attached." | mail -s "$SSH_LOCATION.pub" -A "$SSH_LOCATION.pub" $ADMIN_EMAIL
 
 # Apply configs to set permissions within ~/.ssh
 	f_apply_configs
