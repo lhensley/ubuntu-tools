@@ -20,8 +20,8 @@
 	rm -f "$SSH_LOCATION"
 	rm -f "$SSH_LOCATION.pub"
 	ssh-keygen -t ed25519 -f "$SSH_LOCATION" -C "$SSH_IMPRESS" -P "" -q
-	cat "$SSH_LOCATION.pub" >> "$ADMIN_HOME_DIR/ssh/authorized_keys"
-	mail lane@lanehensley.org -s "$SSH_LOCATION.pub" -A "$SSH_LOCATION.pub"
+	cat "$SSH_LOCATION.pub" >> "$ADMIN_HOME_DIR/.ssh/authorized_keys"
+	mail -s "$SSH_LOCATION.pub" -A "$SSH_LOCATION.pub" lane@lanehensley.org
 
 # Invoke /usr/local/sbin/apply-configs
 	f_apply-configs
