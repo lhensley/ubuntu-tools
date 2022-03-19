@@ -17,15 +17,18 @@
 	# ssh-keygen -C "$SSH_KEY_NAME" -P "" -f "$HOME_ME/.ssh/id_rsa"
 	SSH_IMPRESS="$ADMIN_EMAIL-$START_DATEANDTIMESTAMP"
 	SSH_LOCATION="$ADMIN_HOME_DIR/.ssh/$SSH_IMPRESS"
-	rm "$SSH_LOCATION"*
+	rm "$SSH_LOCATION"
+	rm "$SSH_LOCATION.pub"
 	ssh-keygen -t ed25519 -f "$SSH_LOCATION" -C "$SSH_IMPRESS" -P "" -q
-	cat "$SSH_LOCATION.pub" >> './ssh/authorized_keys'
+	cat "$SSH_LOCATION.pub" >> '$ADMIN_HOME_DIR/ssh/authorized_keys'
 	mail lane@lanehensley.org -s "$SSH_LOCATION.pub" -A "$SSH_LOCATION.pub"
 
 # Invoke /usr/local/sbin/apply-configs
 	f_apply-configs
 
 # Display the public key
+	echo ""
+	echo ""
 	echo "IMPORTANT: Add this public key to git/go/configs/ssh/home-.ssh-authorized_keys"
 	echo ""
 	echo "# $SSH_IMPRESS"
