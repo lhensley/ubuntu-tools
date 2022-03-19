@@ -34,6 +34,8 @@
 	echo "# $SSH_IMPRESS"
 	cat "$SSH_LOCATION.pub"
 	echo "#"
+	echo ""
+	echo ""
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
