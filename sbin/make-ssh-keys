@@ -22,6 +22,8 @@
 	ssh-keygen -t ed25519 -f "$SSH_LOCATION" -C "$SSH_IMPRESS" -P "" -q
 	puttygen "$SSH_LOCATION" -o "$SSH_LOCATION-Putty-Private.ppk" -O private -q
 	puttygen "$SSH_LOCATION" -o "$SSH_LOCATION-Putty-Public" -O public -q
+	cp -f "$SSH_LOCATION" "$ADMIN_HOME_DIR/.ssh/id_ed25519"
+	cp -f "$SSH_LOCATION.pub" "$ADMIN_HOME_DIR/.ssh/id_ed25519.pub"
 	cat "$SSH_LOCATION.pub" >> "$ADMIN_HOME_DIR/.ssh/authorized_keys"
 	#echo "Public key attached." | mail -s "$SSH_LOCATION.pub" -A "$SSH_LOCATION.pub" $ADMIN_EMAIL
 
