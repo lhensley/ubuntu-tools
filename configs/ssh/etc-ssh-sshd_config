@@ -53,7 +53,7 @@
 #IgnoreRhosts yes
 
 # To disable tunneled clear text passwords, change to no here!
-PasswordAuthentication yes
+PasswordAuthentication no
 #PermitEmptyPasswords no
 
 # Change to yes to enable challenge-response passwords (beware issues with
@@ -81,7 +81,7 @@ ChallengeResponseAuthentication no
 # If you just want the PAM account and session checks to run without
 # PAM authentication, then enable this but set PasswordAuthentication
 # and ChallengeResponseAuthentication to 'no'.
-UsePAM yes
+UsePAM no
 
 #AllowAgentForwarding yes
 #AllowTcpForwarding yes
@@ -90,7 +90,7 @@ X11Forwarding yes
 #X11DisplayOffset 10
 #X11UseLocalhost yes
 #PermitTTY yes
-PrintMotd no
+PrintMotd yes
 #PrintLastLog yes
 #TCPKeepAlive yes
 #UseLogin no
@@ -121,7 +121,7 @@ Subsystem       sftp    /usr/lib/openssh/sftp-server
 #       PermitTTY no
 #       ForceCommand cvs server
 
-AllowUsers lhensley elie medijoke
+AllowUsers lhensley
 GatewayPorts no
 AllowTcpForwarding yes
 LoginGraceTime 20
