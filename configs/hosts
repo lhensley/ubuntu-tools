@@ -4,18 +4,10 @@ ff00::0 ip6-mcastprefix
 ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 
-# 2604:2d80:538b:8e00::3 n6 nuc01 nuc plex db dsm www
-# 2604:2d80:538b:8e00::4 o6 oz
-# 2604:2d80:538b:8e00::6 a6 adam
-
-fe80::1229:cdf9:1149:302b n6 nuc01 nuc plex db dsm www
-fe80::6a16:400e:85ca:3792 o6 oz
-fe80::b042:6b2:809d:4cc8 a6 adam
-
 127.0.0.1 localhost
 
-192.168.168.2 r4 router gateway googlewifi
-192.168.168.3 n4
-192.168.168.4 o4
-192.168.168.6 a4
+192.168.168.2 router gateway googlewifi
+192.168.168.3 nuc01 nuc plex db dsm www
+192.168.168.4 oz
+192.168.168.6 adam
 

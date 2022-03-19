@@ -1,8 +1,11 @@
 # chmod 600 ~/.ssh/authorized_keys
 # SSH Public Keys
-# Uncomment an ssh-rsa line for it to be recognized
+# Uncomment an ssh- line for it to be recognized
 # https://github.com/lhensley/go.git
 #
+#
+# 2022-03-18-adam.lanehensley.org
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPCMWKZ+BQ1hj/FSW+LKtR3i+cJe7+vyJ2bHOwYVSnXW 2022-03-18-adam.lanehensley.org
 #
 # adam 2021-09-05
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDsoIavxA8rz8lFerYDUmmdbBT7xCiIbreiW46Tuuxz3voDher1gpyNRQHML43A+VmWIVXBvNAX/uI2mhy6KFoqzUrw0LwcgwLY02yy63drE7XREhRfH7X4CN33BQp4zZ56479nsFpBzMfeI1veeLTJjD5Mx4hm3ewk/3YkHw9Ntyqn+JuX90yjHOquWvZ/znrX1FlXsau+bjGDupWdaUJAPnIcnkFrtuUJxFx0X7RU4ngaAvbsEQzByN1wtIm/P+6EUOW7tWrodxvbT72IgW58rd4ocQf3WNRtBpBzCNFDjvwKeWr6uAfqGRgLl2qlNHqMxt4QB6PTUtganv9Hwvgbzfvnjtaj/fVS98z5TmYVG/ykPRj3/VHfxco+/mw66FiErOekiHVVTBEis8ozgtT2Magm4tAlVvG9HR1HqqiWrz//4wg61dyO1/lM/kzG07S9V9xISJUbE3VtcV7XqBEOAfSrSmVoaV5eQxFjVgfprWFfQmpR/1ww9kPaly4hryc= adam 2021-09-05
