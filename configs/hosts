@@ -1,3 +1,6 @@
+
+# /etc/hosts
+
 ::1 localhost ip6-localhost ip6-loopback
 fe00::0 ip6-localnet
 ff00::0 ip6-mcastprefix
@@ -7,7 +10,6 @@ ff02::2 ip6-allrouters
 127.0.0.1 localhost
 
 192.168.168.2 router gateway googlewifi
-192.168.168.3 nuc01 nuc plex db dsm www
-192.168.168.4 oz
-192.168.168.6 adam
-
+192.168.168.3 nuc01.lanehensley.org nuc01 nuc plex db dsm www
+192.168.168.4 oz.lanehensley.org oz
+192.168.168.6 adam.lanehensley.org adam
