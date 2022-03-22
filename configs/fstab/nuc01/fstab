@@ -1,3 +1,18 @@
+# nuc01:/etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+# / was on /dev/nvme0n1p2 during installation
+UUID=f9f7a349-3004-46b8-b745-70cbe188195c /               ext4    errors=remount-ro 0       1
+# /boot/efi was on /dev/nvme0n1p1 during installation
+UUID=8DC6-A409  /boot/efi       vfat    umask=0077      0       1
+/swapfile                                 none            swap    sw              0       0
+#
+#
+#
 # These are the known peripheral (including internal non-root filesystem drives) mounts
 # as of 3/21/2022
 #
@@ -52,13 +67,13 @@ UUID=4e356144-2e69-4812-8958-d035a9ebc28e /mnt/cloteal ext4 defaults 0 0
 UUID=C6B89CABB89C9B8D /mnt/MyBook3T01 ntfs defaults 0 0
 # nuc01:/mnt/MyBook3T01 /mnt/MyBook3T01 nfs rw
 #
-# # Silver5TB-A (5TB)
-# # UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs defaults 0 0
-# # nuc01:/mnt/SilverTB-A /mnt/SilverTB-A nfs rw
+# Silver5TB-A (5TB)
+# UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs defaults 0 0
+# nuc01:/mnt/SilverTB-A /mnt/SilverTB-A nfs rw
 #
-# # Silver5TB-B (5TB)
-# # UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0
-# # nuc01:/mnt/SilverTB-B /mnt/SilverTB-B nfs rw
+# Silver5TB-B (5TB)
+# UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0
+# nuc01:/mnt/SilverTB-B /mnt/SilverTB-B nfs rw
 #
 ########################################################################################################
 #
@@ -99,9 +114,5 @@ adam:/mnt/3TBB /mnt/3TBB nfs rw
 # adam: 5TBD (5TB) UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85
 # UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/5TBD ext4 defaults 0 0
 adam:/mnt/5TBD /mnt/5TBD nfs rw
-#
-# adam: 5TBF (5TB) UUID=9c311371-fbce-423b-9f44-4301aca9e6e5
-# UUID=C824163824162A48 /mnt/5TBF ntfs defaults 0 0
-adam:/mnt/5TBF /mnt/5TBF ntfs rw
 #
 ########################################################################################################
