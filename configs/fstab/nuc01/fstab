@@ -67,13 +67,13 @@ UUID=4e356144-2e69-4812-8958-d035a9ebc28e /mnt/cloteal ext4 defaults 0 0
 UUID=C6B89CABB89C9B8D /mnt/MyBook3T01 ntfs defaults 0 0
 # nuc01:/mnt/MyBook3T01 /mnt/MyBook3T01 nfs rw
 #
-# Silver5TB-A (5TB)
-# UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs defaults 0 0
-# nuc01:/mnt/SilverTB-A /mnt/SilverTB-A nfs rw
+# # Silver5TB-A (5TB)
+# # UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs defaults 0 0
+# # nuc01:/mnt/SilverTB-A /mnt/SilverTB-A nfs rw
 #
-# Silver5TB-B (5TB)
-# UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0
-# nuc01:/mnt/SilverTB-B /mnt/SilverTB-B nfs rw
+# # Silver5TB-B (5TB)
+# # UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0
+# # nuc01:/mnt/SilverTB-B /mnt/SilverTB-B nfs rw
 #
 ########################################################################################################
 #
@@ -114,5 +114,9 @@ adam:/mnt/3TBB /mnt/3TBB nfs rw
 # adam: 5TBD (5TB) UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85
 # UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/5TBD ext4 defaults 0 0
 adam:/mnt/5TBD /mnt/5TBD nfs rw
+#
+# adam: 5TBF (5TB) UUID=9c311371-fbce-423b-9f44-4301aca9e6e5
+# UUID=C824163824162A48 /mnt/5TBF ntfs defaults 0 0
+adam:/mnt/5TBF /mnt/5TBF ntfs rw
 #
 ########################################################################################################
