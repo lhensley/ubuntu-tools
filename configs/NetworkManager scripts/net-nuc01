@@ -1,0 +1,44 @@
+sudo rm /etc/netplan/*
+#sudo rm /etc/network/interfaces.d/wifi-disable
+#sudo nmcli radio wifi on
+
+sudo rm /etc/NetworkManager/system-connections/Static-Ethernet-Connection*
+sudo nmcli con delete id 'Static-Ethernet-Connection'
+sudo nmcli con delete id 'Static-WiFI-Connection'
+#sudo nmcli con delete id 'Static-Ethernet-Connection-nuc01'
+sudo nmcli connection add type ethernet \
+con-name 'Static-Ethernet-Connection-nuc01' \
+ifname 'eno1' \
+ipv4.method manual \
+ipv4.address '192.168.168.3/24' \
+ipv4.gateway '192.168.168.2' \
+ipv4.dns '192.168.168.2','8.8.8.8','8.8.4.4' \
+ipv4.dns-search 'lanehensley.org','local','lan' \
+ipv6.method auto \
+ipv6.addr-gen-mode eui64 \
+ipv6.token ::3 \
+ipv6.dns-search 'lanehensley.org','local','lan'
+
+sudo rm /etc/NetworkManager/system-connections/Static-WiFi-Connection*
+sudo nmcli con delete id 'Static-WiFi-Connection'
+sudo nmcli con delete id 'Static-WiFi-Connection-nuc01'
+#sudo nmcli connection add type wifi \
+#con-name 'Static-WiFi-Connection-nuc01' \
+#ifname 'wlp58s0' \
+#ipv4.method auto \
+#ipv4.dns '192.168.168.2','8.8.8.8','8.8.4.4' \
+#ipv4.dns-search 'lanehensley.org','local','lan' \
+#ipv6.method manual \
+#ipv6.gateway '2604:2d80:538b:8e00:3c49:43ff:feec:40a1' \
+#ipv6.address '2604:2d80:538b:8e00::2:3/64' \
+#ipv6.dns '2604:2d80:538b:8e00:3c49:43ff:feec:40a1',\
+#'2001:4860:4860::8888',\
+#'2001:4860:4860::8844' \
+#ipv6.dns-search 'lanehensley.org','local','lan' \
+#wifi.mode infrastructure \
+#wifi.ssid 'Hog Heaven DSM' \
+#wifi-sec.key-mgmt 'wpa-psk' \
+#wifi-sec.psk 'fuckitymcfuckface'
+
+sudo nmcli connection reload
+
