@@ -144,6 +144,7 @@ if $is_desktop ; then
     f_install comskip                 # Commercial skipper for videos
     f_install curl
     f_install ddclient
+    f_install dos2unix
     f_install exiftool
     f_install fail2ban
     f_install ffmpeg
