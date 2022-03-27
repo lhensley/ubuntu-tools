@@ -18,7 +18,7 @@
 	f_upd
 
 # This heads off a network manager problem defined at https://askubuntu.com/questions/71159/network-manager-says-device-not-managed
-	touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
+	# touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

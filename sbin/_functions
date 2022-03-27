@@ -488,8 +488,8 @@ function f_git () {
 
 function f_run_apt_updates () {
 	# "update" downloads package information from all configured sources
-	apt-get -y update
-	# "upgrade" is an extraneous subset of "dist-upgrade" below
+	apt-get -y update && apt-get -y upgrade
+	# "upgrade" is an extraneous subset (true? documentation?) of "dist-upgrade" below
 	#    sudo apt-get -y upgrade \
 	# "dist-upgrade" installs available upgrades of all packages
 	# currently installed on the system and intelligently handles
