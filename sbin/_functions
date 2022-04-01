@@ -690,6 +690,7 @@ function f_transcode_file () {
 					mv "$TEMP_FILE" "$TARGET_FILE"
 					rm "$SOURCE_FILE" # Delete source file
 					f_set_plex_media_recursive_permissions
+					chown $ADMIN_USER:$ADMIN_USER "$TARGET_FILE" # Added 4/1/2022
 					f_log_and_echo "Transcoding complete in $(f_timeformat $(( $(date +%s) - TIMESTART )))" false
 					touch "$SUCCESSFUL_TRANSCODE_FLAG"
 					echo
