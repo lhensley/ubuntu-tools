@@ -11,8 +11,8 @@ ipv4.address '192.168.168.4/24' \
 ipv4.gateway '192.168.168.2' \
 ipv4.dns '192.168.168.2','8.8.8.8','8.8.4.4' \
 ipv4.dns-search 'lanehensley.org','local','lan' \
-ipv6.addr-gen-mode eui64 \
-ipv6.token ::4 \
+#ipv6.addr-gen-mode eui64 \
+#ipv6.token ::4 \
 ipv6.method auto \
 ipv6.dns-search 'lanehensley.org','local','lan'
 
