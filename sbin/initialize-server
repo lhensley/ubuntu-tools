@@ -49,8 +49,8 @@ install_zoom=true           # Video conferencing
 
 # Add universe (and multiverse?) repository
 # More into is at https://itsfoss.com/ubuntu-repositories/
-    add-apt-repository universe
-    # add-apt-repository multiverse     # OK to uncomment if needed, but if not, why have it?
+    add-apt-repository -y universe
+    # add-apt-repository -y multiverse     # OK to uncomment if needed, but if not, why have it?
     apt update
 
 # Update packages
@@ -88,7 +88,7 @@ install_zoom=true           # Video conferencing
     git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
     git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
     chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.gitconfig
-    chmod 600 $ROOT_HOME_DIR/.gitconfig
+    chmod 600 /root/.gitconfig
 
 # Wipe out existing git and /usr/local/sbin if they exist
     rm -rf /var/local/git /usr/local/sbin
