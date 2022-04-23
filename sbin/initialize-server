@@ -15,7 +15,7 @@ if [[ $EUID -ne 0 ]]; then
 
 # If this is set to false, GUI app installations will be ignored.
 # CAUTION: If accidentally set to true, all required GUI packages also will be installed.
-is_desktop=false
+is_desktop=true
 
 # Used for installing git
 my_full_name="Lane Hensley"
@@ -55,8 +55,6 @@ install_zoom=true           # Video conferencing
 
 ################################# TEST01
 
-
-
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
@@ -69,12 +67,17 @@ install_zoom=true           # Video conferencing
 if $is_desktop ; then
     if $install_cubic ; then
         apt-add-repository -y ppa:cubic-wizard/release
+        read -p "Press enter to continue"
         apt -y update
         apt install -y cubic
         fi
     fi
 
+############################# STOP HERE
+exit 0
+
 if $install_handbrake ; then
+  # Based on https://handbrake.fr/docs/en/1.5.0/get-handbrake/download-and-install.html
   echo "Installing HandBrake"
   add-apt-repository -y ppa:stebbins/handbrake-releases
   apt-get -y update
@@ -84,9 +87,6 @@ if $install_handbrake ; then
   echo "  Presets ($ADMIN_HOME_DIR/.HandBrake/*) need to be added."
   fi
 
-
-############################# STOP HERE
-exit 0
 
 
 # Install MakeMKV
