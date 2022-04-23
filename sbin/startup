@@ -10,3 +10,4 @@
 
 wget --no-cache https://raw.githubusercontent.com/lhensley/go/master/sbin/initialize-server
 chmod 700 ./initialize-server
+./initialize-server
