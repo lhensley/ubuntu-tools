@@ -18,6 +18,8 @@ is_desktop=false
 # Used for installing git
 my_full_name="Lane Hensley"
 my_email="lane@lanehensley.org"
+ROOT_USER="root"
+ROOT_HOME_DIR="/root"
 
 # Which optional software to install
 install_apache2=true        # Apache 2 Webserver
@@ -87,8 +89,8 @@ install_zoom=true           # Video conferencing
     git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
     git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
     git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
-    chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.gitconfig
-    chmod 600 /root/.gitconfig
+    chown $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.gitconfig"
+    chmod 600 "$ROOT_HOME_DIR/.gitconfig"
 
 # Wipe out existing git and /usr/local/sbin if they exist
     rm -rf /var/local/git /usr/local/sbin

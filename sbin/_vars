@@ -63,16 +63,16 @@ source /etc/os-release
 
 # Admin user info
 # Dependent on section Global
-        ADMIN_USER=lhensley
-        ADMIN_HOME_DIR=$HOME_ROOT/$ADMIN_USER
-        ADMIN_CELL_EMAIL=7608514641@vtext.com
-        ADMIN_EMAIL=lane@lanehensley.org
+        ADMIN_USER="lhensley"
+        ADMIN_HOME_DIR="$HOME_ROOT/$ADMIN_USER"
+        ADMIN_CELL_EMAIL="7608514641@vtext.com"
+        ADMIN_EMAIL="lane@lanehensley.org"
         ADMIN_NAME="Lane Hensley"
 
 # Root user info
-        ROOT_USER=root
-        ROOT_HOME_DIR=/root
-        ROOT_EMAIL=root@$HOSTNAME@$DOMAIN_NAME
+        ROOT_USER="root"
+        ROOT_HOME_DIR="/root"
+        ROOT_EMAIL="root@$HOSTNAME@$DOMAIN_NAME"
         ROOT_NAME="Root at $HOSTNAME@$DOMAIN_NAME"
 
 # Temp file definitions
