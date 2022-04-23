@@ -1,0 +1,12 @@
+#!/bin/bash
+# nuc01.lanehensley.org:/var/www/lanehensley.org/startup
+# 
+# Download this file with 
+#   wget https://lanehensley.org/startup
+# Then issue these commands:
+#   chmod 700 ./startup
+#   ./startup
+#
+
+wget https://raw.githubusercontent.com/lhensley/go/master/sbin/initialize-server
+chmod 700 ./initialize-server
