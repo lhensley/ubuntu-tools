@@ -1,0 +1,62 @@
+# Add universe (and multiverse?) repository
+# More into is at https://itsfoss.com/ubuntu-repositories/
+    add-apt-repository -y universe
+    # add-apt-repository -y multiverse     # OK to uncomment if needed, but if not, why have it?
+    apt -y update
+
+# Update packages
+    # "update" downloads package information from all configured sources
+    apt -y update
+    # "upgrade" is an extraneous subset of "dist-upgrade" below
+    #    sudo apt -y upgrade \
+    # "dist-upgrade" installs available upgrades of all packages
+    # currently installed on the system and intelligently handles
+    # changing dependencies with new versions of packages
+    apt -y dist-upgrade
+    # "clean" clears out the local repository of retrieved package files.
+    apt -y clean
+    # "autoremove" removes those dependencies that were installed with
+    # now-removed applications and that are no longer used
+    # by anything else on the system
+    apt -y autoremove
+
+# Install git and ufw and open the git port
+    DEBIAN_FRONTEND=noninteractive apt-get install -yq git
+    ufw allow git
+
+# Configure git
+    cd
+    git config --global user.name "$my_full_name"
+    git config --global user.email "$my_email"
+    git config --global credential.helper store
+    git config --global credential.helper cache
+    git config --global credential.helper 'cache --timeout=600'
+    # Install git token
+    # To get a new token, go to https://github.com/settings/tokens.
+    # NOTE: this token allows deployment only.
+    MY_GIT_TOKEN=8224e3fbc597bf523d30906d038158977763b2e1
+    git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
+    git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
+    git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
+    chown $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.gitconfig"
+    chmod 600 "$ROOT_HOME_DIR/.gitconfig"
+
+# Wipe out existing git and /usr/local/sbin if they exist
+    rm -rf /var/local/git /usr/local/sbin
+
+# Clone go.git and set restrictive permissions
+    mkdir -p /var/local/git
+    chmod 775 /var/local/git
+    cd /var/local/git
+    git clone https://github.com/lhensley/go.git
+    chown -R root:root /var/local/git
+    chmod -R 400 /var/local/git
+    cd
+
+# Copy scripts into /usr/local/sbin
+    cp -r /var/local/git/go/sbin /usr/local
+    chown -R root:root /usr/local/sbin
+    find /usr/local/sbin -type d -print0 | sudo xargs -0 chmod 750
+    find /usr/local/sbin -type f -print0 | sudo xargs -0 chmod 540
+
+
