@@ -13,38 +13,74 @@ if [[ $EUID -ne 0 ]]; then
         exit 1
     fi
 
+########### CRITICAL: You MUST confirm these values.
+
 # If this is set to false, GUI app installations will be ignored.
 # CAUTION: If accidentally set to true, all required GUI packages also will be installed.
 is_desktop=false
+
+# OPTIONAL software (default to false)
+install_apt_cacher_ng=false     # Caching system for apt software distribution
+install_cubic=false             # Creates custom Ubuntu ISO files. Details at https://github.com/PJ-Singh-001/Cubic
+install_handbrake=false         # HandBrake video rendering
+install_ifupdown=false          # Used for /etc/network/interfaces manual configuration; interferes with Network Manager
+install_lsyncd=false            # Keeps directories in sync using inotify or fsevents. Details at https://lsyncd.github.io/lsyncd/
+install_makemkv=false           # MakeMKV DVD ripper
+install_net-tools=false         # Print network connections, routing tables, interface statistics
+install_plexmediaserver=false   # Media streamer and library manager
+install_proftpd=false           # For scanning to brother@oz
+install_rclone=false            # command-line program to manage files on cloud storage. Details at https://rclone.org/
+install_tautulli=false          # Monitoring tool for Plex Media Server ***** PLEX MEDIA SERVER MUST BE INSTALLED TO INSTALL TAUTULLI *****
+install_xrdp=false              # A Remote Desktop Protocol (RDP) server
+install_uuid=false              # Use uuidgen instead. It's built-in.
+
+# STANDARD software (default to true)
+install_apache2=true            # Apache 2 Webserver
+install_apg=true                # Password generator 
+install_at=true                 # Queue, examine or delete jobs for later execution
+install_bridge-utils=true       # Bridge-utils extensions for the interfaces(5) file format
+install_certbot=true            # Certificate Installer for https
+install_chrome=true             # Google Chrome web browser
+install_comskip=true            # Commercial skipper for videos
+install_cryfs=true              # Encrypted file system
+install_curl=true               # Transfer a URL
+install_ddclient=true           # Update IP addresses at dynamic DNS services
+install_dos2unix=true           # DOS/MAC to UNIX text file format converter
+install_edge=true               # Microsoft Edge
+install_exiftool=true           # Read and write meta information in files
+install_fail2ban=true           # Bans IP that makes too many password failures
+install_ffmpeg=true             # FFmpeg video converter
+install_filezilla=true          # A powerful client for plain FTP, FTP over SSL/TLS (FTPS) and the SSH File Transfer Protocol (SFTP)
+install_ghostscript=true        # Compressing PDF scans
+install_gimp=true               # An image manipulation and paint program
+install_git=true                # The stupid content tracker
+install_gpg=true                # OpenPGP encryption and signing tool
+install_gzip=true               # Compress or expand files
+install_inotify-tools=true      # Do something when a file is created, deleted, or changed
+install_mailutils=true          # mail, Postfix, etc.
+install_mysql_server=true       # Relational Database
+install_openssl=true            # OpenSSL
+install_openvpn=true            # Secure IP tunnel daemon
+install_php=true                # PHP
+install_phpmyadmin=true         # Web tool for managing MySQL
+install_putty-tools=true        # A free SSH and telnet client
+install_resolvconf=true         # Name resolver
+install_ripmime=true            # Process files sent by email
+install_rsync=true              # A fast, versatile, remote (and local) file-copying tool
+install_ssh=true                # Secure Shell
+install_sshfs=true              # Filesystem client based on ssh
+install_sysbench=true           # A modular, cross-platform and multi-threaded benchmark tool.
+install_tasksel=true            # A user interface for installing tasks
+install_unzip=true              # List, test and extract compressed files in a ZIP archive
+install_vim=true                # Vi IMproved, a programmer's text editor
+install_webmin=true             # Web-based system admin tools
+install_zoom=true               # Video conferencing
 
 # Used for installing git
 my_full_name="Lane Hensley"
 my_email="lane@lanehensley.org"
 ROOT_USER="root"
 ROOT_HOME_DIR="/root"
-
-# OPTIONAL software (default to false)
-install_cubic=false             # Creates custom Ubuntu ISO files. Details at https://github.com/PJ-Singh-001/Cubic
-install_handbrake=false         # HandBrake video rendering
-install_lsyncd=false            # Keeps directories in sync using inotify or fsevents. Details at https://lsyncd.github.io/lsyncd/
-install_makemkv=false           # MakeMKV DVD ripper
-install_rclone=false            # command-line program to manage files on cloud storage. Details at https://rclone.org/
-install_mysql_server=false      # Relational Database
-install_phpmyadmin=false        # Web tool for managing MySQL
-install_plexmediaserver=true    # Media streamer and library manager
-install_tautulli=true           # Monitoring tool for Plex Media Server
-install_apt_cacher_ng=false     # Caching system for apt software distribution
-
-
-# STANDARD software (default to true)
-install_apache2=true        # Apache 2 Webserver
-install_certbot=true        # Certificate Installer for https
-install_chrome=true         # Google Chrome web browser
-install_mailutils=true      # mail, Postfix, etc.
-install_openssl=true        # OpenSSL
-install_php=true            # PHP
-install_webmin=true         # Web-based system admin tools
-install_zoom=true           # Video conferencing
 
 # Confirm that this is what the user wants
 	echo -en "\007" # Beep
@@ -59,7 +95,75 @@ install_zoom=true           # Video conferencing
 		exit 1
 		fi
 
-################################# TEST01
+# Add universe (and multiverse?) repository
+# More info is at https://itsfoss.com/ubuntu-repositories/
+    add-apt-repository -y universe
+    # add-apt-repository -y multiverse     # OK to uncomment if needed, but if not, why have it?
+    apt -y update
+
+# Update packages
+    # apt vs apt-get?
+    #   Ref: https://itsfoss.com/apt-vs-apt-get-difference/
+    #   Ref: https://linuxconfig.org/apt-vs-apt-get-advanced-package-tool
+    #   Ref: https://www.google.com/search?q=apt+and+apt-get
+    # "update" downloads package information from all configured sources
+    apt -y update
+    # "upgrade" is an extraneous subset of "dist-upgrade" below; 
+    #    Ref: https://askubuntu.com/questions/194651/why-use-apt-upgrade-instead-of-apt-dist-upgrade#:~:text=apt%2Dget%20upgrade%20will%20not,install%20but%20not%20remove%20packages
+    #    sudo apt -y upgrade \
+    # "dist-upgrade" installs available upgrades of all packages
+    # currently installed on the system and intelligently handles
+    # changing dependencies with new versions of packages
+    time apt -y dist-upgrade
+    # "clean" clears out the local repository of retrieved package files.
+    apt -y clean
+    # "autoremove" removes those dependencies that were installed with
+    # now-removed applications and that are no longer used
+    # by anything else on the system
+    apt -y autoremove
+
+# Install git and ufw and open the git port
+    DEBIAN_FRONTEND=noninteractive apt install -yq git
+    ufw allow git
+
+# Configure git
+    cd
+    git config --global user.name "$my_full_name"
+    git config --global user.email "$my_email"
+    git config --global credential.helper store
+    git config --global credential.helper cache
+    git config --global credential.helper 'cache --timeout=600'
+    # Install git token
+    # To get a new token, go to https://github.com/settings/tokens.
+    # NOTE: this token allows deployment only.
+    MY_GIT_TOKEN=8224e3fbc597bf523d30906d038158977763b2e1
+    git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
+    git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
+    git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
+    chown $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.gitconfig"
+    chmod 600 "$ROOT_HOME_DIR/.gitconfig"
+
+# Wipe out existing git and /usr/local/sbin if they exist
+    rm -rf /var/local/git /usr/local/sbin
+
+# Clone go.git and set restrictive permissions
+    mkdir -p /var/local/git
+    chmod 775 /var/local/git
+    cd /var/local/git
+    git clone https://github.com/lhensley/go.git
+    chown -R root:root /var/local/git
+    chmod -R 400 /var/local/git
+    cd
+
+# Copy scripts into /usr/local/sbin
+    cp -r /var/local/git/go/sbin /usr/local
+    chown -R root:root /usr/local/sbin
+    find /usr/local/sbin -type d -print0 | sudo xargs -0 chmod 750
+    find /usr/local/sbin -type f -print0 | sudo xargs -0 chmod 540
+
+##############################################################
+################# GITHUB FILES NOW ARE FULLY LOADED AND READY.
+##############################################################
 
 # Include script setup file
 	source script-setup
@@ -67,14 +171,319 @@ install_zoom=true           # Video conferencing
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 
-########### Software Installs
+###############################################################
+########### SOFTWARE INSTALLATIONS
+###############################################################
 
 
-############ TEST 2
+# Mandatory installations
+###############################################################
+
+# NVIDIA Driver 390
+# The machine (or at least oz) will brick without these drivers.
+    echo "Installing NVIDIA Driver 390."
+    f_install nvidia-driver-390
+    echo "NVIDIA Driver 390 installed."
+
+# PHP is installed every time.
+  echo "Installing php"
+  PHP_PACKAGES="php libapache2-mod-php php-mysql php-gd php-curl php-imap php-ldap"
+  PHP_PACKAGES+=" libmcrypt-dev php-mbstring php-dev php-pear"
+  PHP_PACKAGES+=" libc-client2007e mlock uw-mailutils"
+  DEBIAN_FRONTEND=noninteractive apt install -y $PHP_PACKAGES
+  phpenmod gd curl imap ldap mbstring
+  systemctl restart apache2
+  echo "php installed."
+
+# ssh
+    echo "Installing ssh."
+    f_install ssh && ufw allow ssh      # Secure shell client
+    echo "ssh installed."
+    fi
 
 
+# Optional installations
+###############################################################
 
+# apache2
+if $install_apache2 ; then
+    echo "Installing apache2"
+    DEBIAN_FRONTEND=noninteractive apt install -y apache2 apache2-doc apache2-suexec-pristine
+    ufw allow 'Apache'
+    ufw allow 'Apache Full'
+    ufw allow http
+    ufw allow https
+    a2enmod ssl rewrite
+    systemctl restart apache2
+    echo "apache2 installed."
+    fi
 
+# apg
+if $install_apg ; then
+    echo "Installing apg."
+    f_install apg                       # Password generator 
+    echo "apg installed."
+    fi
+
+# apt-cacher-ng
+if $install_apt_cacher_ng ; then
+  echo "Installing apt-cacher-ng."
+  # Based on https://www.tecmint.com/apt-cache-server-in-ubuntu/
+  DEBIAN_FRONTEND=noninteractive apt install -y apt-cacher-ng avahi-daemon squid-deb-proxy-client
+  echo "apt-gacher-ng installed."
+  fi
+
+# at
+if $install_at ; then
+    echo "Installing at."
+    f_install at                        # Queue, examine or delete jobs for later execution
+    echo "at installed."
+    fi
+
+# bridge-utils
+if $install_bridge-utils ; then
+    echo "Installing bridge-utils."
+    f_install bridge-utils              # Bridge-utils extensions for the interfaces(5) file format
+    echo "bridge-utils installed."
+    fi
+
+# certbot
+if $install_certbot ; then
+  echo "Installing certbot"
+  apt install -y certbot python3-certbot-apache
+  echo "certbot installed."
+  fi
+
+# comskip
+if $install_comskip ; then
+    echo "Installing comskip."
+    f_install comskip                   # Commercial skipper for videos
+    echo "comskip installed."
+    fi
+
+# cryfs
+if $install_cryfs ; then
+    echo "Installing cryfs."
+    f_install cryfs                     # Encrypted file system
+    echo "cryfs installed."
+    fi
+
+# curl
+if $install_curl ; then
+    echo "Installing curl."
+    f_install curl                      # Transfer a URL
+    echo "curl installed."
+    fi
+
+# ddclient
+if $install_ddclient ; then
+    echo "Installing ddclient."
+    f_install ddclient                  # Update IP addresses at dynamic DNS services
+    echo "ddclient installed."
+    fi
+
+# dos2unix
+if $install_dos2unix ; then
+    echo "Installing dos2unix."
+    f_install dos2unix                  # DOS/MAC to UNIX text file format converter
+    echo "dos2unix installed."
+    fi
+
+# exiftool
+if $install_exiftool ; then
+    echo "Installing exiftool."
+    f_install exiftool                  # Read and write meta information in files
+    echo "exiftool installed."
+    fi
+
+# fail2ban
+if $install_fail2ban ; then
+    echo "Installing fail2ban."
+    f_install fail2ban                  # Bans IP that makes too many password failures
+    echo "fail2ban installed."
+    fi
+
+# ffmpeg
+if $install_ffmpeg ; then
+    echo "Installing ffmpeg."
+    f_install ffmpeg                    # FFmpeg video converter
+    echo "ffmpeg installed."
+    fi
+
+# ghostscript
+if $install_ghostscript ; then
+    echo "Installing ghostscript."
+    f_install ghostscript               # Compressing PDF scans
+    echo "ghostscript installed."
+    fi
+
+# git
+if $install_git ; then
+    echo "Installing git."
+    f_install git && ufw allow git      # The stupid content tracker
+    echo "git installed."
+    fi
+
+# gpg
+if $install_gpg ; then
+    echo "Installing gpg."
+    f_install gpg                       # OpenPGP encryption and signing tool
+    echo "gpg installed."
+    fi
+
+# gzip
+if $install_gzip ; then
+    echo "Installing gzip."
+    f_install gzip                      # Compress or expand files
+    echo "gzip installed."
+    fi
+
+# HandBrake
+if $install_handbrake ; then
+  # Works on Ubuntu 22, but contradicts https://handbrake.fr/docs/en/1.5.0/get-handbrake/download-and-install.html
+  if $install_handbrake ; then
+    echo "Installing HandBrake"
+    DEBIAN_FRONTEND=noninteractive apt install -y handbrake-cli
+    echo "HandBrake installed."
+    fi
+
+# ifupdown
+if $install_ifupdown ; then
+    echo "Installing ifupdown."
+    f_install ifupdown
+    echo "ifupdown installed."
+    fi
+
+# inotify
+if $install_inotify ; then
+    echo "Installing inotify."
+    f_install inotify-tools             # Do something when a file is created, deleted, or changed
+    echo "inotify installed."
+    fi
+
+# lsyncd
+if $install_lsyncd ; then
+  echo "Installing lsyncd"
+  apt install -y lsyncd
+  mkdir -p /etc/lsyncd
+  mkdir -p /var/log/lsyncd
+  systemctl start lsyncd
+  systemctl enable lsyncd
+  echo "lsyncd installed."
+  fi
+
+# mailutils
+if $install_mailutils ; then
+  echo "installing mailutils"
+  debconf-set-selections <<< "postfix postfix/relayhost $RELAYHOST"
+  debconf-set-selections <<< "postfix postfix/mailname string $MAILNAME@$DOMAIN_NAME"
+  debconf-set-selections <<< "postfix postfix/main_mailer_type string $MAIN_MAILER_TYPE"
+  apt install -y mailutils postfix
+  ufw allow mail
+  echo "mailutils installed."
+  fi
+  
+# MakeMKV
+# DON'T USE THE SNAP INSTALLER
+if $install_makemkv ; then
+    echo "Installing MakeMKV"
+    printf '\n\n' | add-apt-repository -y ppa:heyarje/makemkv-beta
+    apt update
+    DEBIAN_FRONTEND=noninteractive apt install -y makemkv-bin makemkv-oss ccextractor
+    # Configure MakeMKV
+        usermod -a -G cdrom $ADMIN_USER
+        # MakeMKV config file
+        if [ -f $GIT_GO_CONFIGS/makemkv/settings.conf ]; then
+	        mkdir -p $ADMIN_HOME_DIR/.MakeMKV
+	        mkdir -p $ROOT_HOME_DIR/.MakeMKV
+	        cp $GIT_GO_CONFIGS/makemkv/settings.conf $ADMIN_HOME_DIR/.MakeMKV/
+	        chmod 600 $ADMIN_HOME_DIR/.MakeMKV/settings.conf
+	        chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.MakeMKV
+	        cp $ADMIN_HOME_DIR/.MakeMKV/settings.conf $ROOT_HOME_DIR/.MakeMKV/
+	        chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.MakeMKV
+	        fi
+    echo "MakeMKV installed."
+    fi
+
+# MySQL Server
+if $install_mysql_server ; then
+  echo "Installing mysql server"
+    ###### EXTREMELY IMPORTANT: Edit /etc/mysql/mysql.conf.d/mysqld.cnf and open up bind-address * ###########
+  MYSQL_PACKAGES="mysql-server openssl libcurl4-openssl-dev libssl-dev php-gmp php-symfony php-imagick php-twig-doc php-symfony-translation"
+  apt install -y $MYSQL_PACKAGES
+  ufw allow mysql
+  mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User=''"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test_%'"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$MYSQL_ADMIN_NAME'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_ADMIN_PASSWORD'"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_ADMIN_NAME'@localhost WITH GRANT OPTION"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES"
+  mkdir -p $MYSQL_CLIENT_CERTS_DIR
+  cp "$MYSQL_SERVER_BIN_DIR/ca.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOSTNAME-MySQL-ca.pem"
+  cp "$MYSQL_SERVER_BIN_DIR/client-cert.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOSTNAME-MySQL-client-cert.pem"
+  cp "$MYSQL_SERVER_BIN_DIR/client-key.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOSTNAME-MySQL-client-key.pem"
+  chown -R $ADMIN_USER:$ADMIN_USER "$MYSQL_CLIENT_CERTS_DIR"
+  # Install .my.cnf in home directory
+    backup-file $ADMIN_HOME_DIR/.my.cnf
+    cp $GIT_GO_CONFIGS/mysql/home_directory_.my.cnf $ADMIN_HOME_DIR/.my.cnf
+    replace-in-file "$ADMIN_HOME_DIR/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
+    replace-in-file "$ADMIN_HOME_DIR/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
+    chown $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.my.cnf"*
+    chmod 600 "$ADMIN_HOME_DIR/.my.cnf"*
+  # Install .my.cnf for root user
+    backup-file $ROOT_HOME_DIR/.my.cnf
+    cp $GIT_GO_CONFIGS/mysql/home_directory_.my.cnf $ROOT_HOME_DIR/.my.cnf
+    replace-in-file "$ROOT_HOME_DIR/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
+    replace-in-file "$ROOT_HOME_DIR/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
+    chown $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.my.cnf"*
+    chmod 600 "$ROOT_HOME_DIR/.my.cnf"*
+  echo "MySQL server installed."
+    # phpMyAdmin
+    # phpMyAdmin should be installed AFTER php and MySQL
+        if $install_phpmyadmin ; then
+          echo "Installing phpMyAdmin"
+          # Based on https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04
+          debconf-set-selections <<< "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2"
+          debconf-set-selections <<< "phpmyadmin phpmyadmin/dbconfig-install boolean true"
+          debconf-set-selections <<< "phpmyadmin phpmyadmin/app-password-confirm password $PHPMYADMIN_APP_PASS"
+          debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/admin-pass password $PHPMYADMIN_ROOT_PASS"
+          debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_APP_DB_PASS"
+          apt install -y phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+          phpenmod mbstring
+          cp $GIT_GO_CONFIGS/phpmyadmin.config.inc.php $PHPMYADMIN_DIR/config.inc.php
+          chown -R www-data:www-data $PHPMYADMIN_DIR
+          chmod 644 $PHPMYADMIN_DIR/config.inc.php
+        #  cp $GIT_GO_CONFIGS/html/.htaccess.html.www.var $THIS_WEB_ROOT/.htaccess
+        #  chown -R www-data:www-data $THIS_WEB_ROOT/.htaccess
+        #  chmod 644 $THIS_WEB_ROOT/.htaccess
+          systemctl restart apache2
+          echo "phpMyAdmin installed."
+          fi
+  fi
+
+# net-tools
+if $install_nettools ; then
+    echo "Installing net-tools."
+    f_install net-tools                 # Print network connections, routing tables, interface statistics
+    echo "net-tools installed."
+    fi
+
+# openssl
+if $install_openssl ; then
+  echo "Installing openssl"
+  apt install -y openssl 
+  echo "openssl installed."
+  fi
+
+# openvpn
+if $install_openvpn ; then
+    echo "Installing openvpn."
+    f_install openvpn                   # Secure IP tunnel daemon
+    echo "openvpn installed."
+    fi
+
+# Plex Medial Server
 if $install_plexmediaserver ; then
     # Tested through Ubuntu 20.04.1
     # Install Plex Media Server
@@ -86,18 +495,6 @@ if $install_plexmediaserver ; then
       wget https://downloads.plex.tv/plex-keys/PlexSign.key
       cat PlexSign.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/PlexSigkey.gpg
       apt -y update
-
-      exit 1
-
-
-
-      echo "# When enabling this repo please remember to add the PlexPublic.Key into the apt setup." > /etc/apt/sources.list.d/plexmediaserver.list
-      echo "# wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
-      echo "#" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
-      echo "deb https://downloads.plex.tv/repo/deb/ public main" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
-      wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -
-      apt-get -y update
-      apt-get install --reinstall -o Dpkg::Options::="--force-confold" plexmediaserver
       f_install plexmediaserver
       ufw allow 32400/tcp # if not already specified
       echo "Plex Media Server installed."
@@ -105,34 +502,181 @@ if $install_plexmediaserver ; then
         # Install Tautulli for https://this-server:8181
         # Ref: https://snapcraft.io/install/tautulli/ubuntu
             echo "Installing Tautulli."
-            apt-get install -y snapd
+            apt install -y snapd
             snap install tautulli
             ufw allow 8181
             echo "Tautulli installed."
         fi
   fi
 
+# proftpd
+if $install_proftpd ; then
+    echo "Installing proftpd."
+    f_install proftpd                 # For scanning to brother@oz
+    echo "proftpd installed."
+    fi
+
+# putty-tools
+if $install_puttytools ; then
+    echo "Installing putty-tools."
+    f_install putty-tools               # A free SSH and telnet client
+    echo "putty-tools installed."
+    fi
+
+# rclone
+if $install_rclone ; then
+    echo "Installing rclone"
+    apt install -y rclone
+    echo "rclone installed."
+    fi
+
+# resolvconf
+if $install_resolvconf ; then
+    echo "Installing resolvconf."
+    f_install resolvconf                # Name resolver
+    echo "resolvconf installed."
+    fi
+
+# ripmime
+if $install_ripmime ; then
+    echo "Installing ripmime."
+    f_install ripmime                   # Process files sent by email
+    echo "ripmime installed."
+    fi
+
+# rsync
+if $install_rsync ; then
+    echo "Installing rsync."
+    f_install rsync                     # A fast, versatile, remote (and local) file-copying tool
+    echo "rsync installed."
+    fi
+
+# sshfs
+if $install_sshfs ; then
+    echo "Installing sshfs."
+    f_install sshfs                     # Filesystem client based on ssh
+    echo "sshfs installed."
+    fi
+
+# sysbench
+if $install_sysbench ; then
+    echo "Installing sysbench."
+    f_install sysbench                  # A modular, cross-platform and multi-threaded benchmark tool.
+    echo "sysbench installed."
+    fi
+
+# tasksel
+if $install_tasksel ; then
+    echo "Installing tasksel."
+    f_install tasksel                   # A user interface for installing tasks
+    echo "tasksel installed."
+    fi
+
+# unzip
+if $install_unzip ; then
+    echo "Installing unzip."
+    f_install unzip                     # List, test and extract compressed files in a ZIP archive
+    echo "unzip installed."
+    fi
+
+# uuid
+if $install_uuid ; then
+    echo "Installing ."
+    # f_install uuid                    # Use uuidgen instead. It's built-in.
+    echo "uuid installed."
+    fi
+
+# vim
+if $install_vim ; then
+    echo "Installing vim."
+    f_install vim                       # Vi IMproved, a programmer's text editor
+    echo "vim installed."
+    fi
+
+# Webmin
+if $install_webmin ; then
+  echo "Installing Webmin"
+  wget http://www.webmin.com/download/deb/webmin-current.deb
+  WEBMIN_PACKAGES="openssl libcurl4-openssl-dev libssl-dev perl"
+  WEBMIN_PACKAGES+=" libnet-ssleay-perl libauthen-pam-perl"
+  WEBMIN_PACKAGES+=" libpam-runtime libio-pty-perl apt-show-versions"
+  WEBMIN_PACKATES+=" python libsocket6-perl libapt-pkg-perl"
+  apt install -y $WEBMIN_PACKAGES
+  dpkg --install ./webmin-current.deb
+  rm -f ./webmin-current.deb
+  ufw allow webmin
+  echo "Webmin installed."
+  fi
+
+# DESKTOP APPS THAT REQUIRE GUI 
+if $is_desktop ; then
+
+    # Cubic
+    if $install_cubic ; then
+        apt-add-repository -y ppa:cubic-wizard/release
+        read -p "Press enter to continue"
+        apt -y update
+        apt install -y cubic
+        echo "Cubic installed."
+        fi
+
+    # filezilla
+    if $install_filezilla ; then
+        echo "Installing filezilla."
+        f_install filezilla             # A powerful client for plain FTP, FTP over SSL/TLS (FTPS) and the SSH File Transfer Protocol (SFTP)
+        echo "filezilla installed."
+        fi
+
+    # gimp
+    if $install_gimp ; then
+        echo "Installing gimp."
+        f_install gimp                  # An image manipulation and paint program
+        echo "gimp installed."
+        fi
+
+    # Google Chrome
+    if $install_chrome ; then
+        echo "Installing Google Chrome."
+        DEBIAN_FRONTEND=noninteractive apt install -y wget gdebi-core
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        gdebi --n google-chrome-stable_current_amd64.deb
+        rm -f ./google-chrome-stable_current_amd64.deb
+        echo "Google Chrome installed."
+        fi
+
+    # Microsoft Edge
+    if $install_edge ; then
+        echo "Installing Microsoft Edge."
+        DEBIAN_FRONTEND=noninteractive apt -y install software-properties-common apt-transport-https curl wget ca-certificates -y
+        wget -O- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/microsoft-edge.gpg
+        echo 'deb [signed-by=/usr/share/keyrings/microsoft-edge.gpg] https://packages.microsoft.com/repos/edge stable main' | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
+        apt -y update
+        DEBIAN_FRONTEND=noninteractive apt install microsoft-edge-stable -y
+        echo "Microsoft Edge installed."
+        fi
+
+    # xrdp 
+    if $install_xrdp ; then
+        echo "Installing ."
+        f_install xrdp                  # A Remote Desktop Protocol (RDP) server
+        echo "xrdp installed."
+        fi
+
+    # Zoom Client
+    if $install_zoom ; then
+        echo "Installing Zoom Client"
+        wget https://zoom.us/client/latest/zoom_amd64.deb
+        apt install -y ./zoom_amd64.deb
+        rm -f ./zoom_amd64.deb
+        echo "Zoom client installed."
+        fi
+
+    fi
 
 
-
-
-
-
-
-
-
-
-
-########################### STOP HERE
-exit
-
-
-
-
-
-
-
-
+#######################################################################################
+#   ADDITIONAL CONFIGURATION
+#######################################################################################
 
 # Ref: https://askubuntu.com/questions/1058750/new-alert-keeps-showing-up-server-returned-error-nxdomain-mitigating-potential
 # This corrects a problem in which you'll get constant syslog errors:
@@ -140,25 +684,6 @@ exit
 # If this causes trouble, you can restore the original link with
 #    sudo ln -sf ../run/resolvconf/resolv.conf /etc/resolv.conf
 ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
-
-####################### DROP THIS SECTION
-# Download for later but don't yet install
-#    apt-get install -y --download-only ssh mysql-server openssl libcurl4-openssl-dev libssl-dev php-gmp php-symfony-service-implementation 
-#    apt-get install -y --download-only php-imagick php-twig-doc php-symfony-translation phpmyadmin php-mbstring php-zip php-gd php-json php-curl
-
-set +x
-
-
-
-
-
-
-
-
-
-
-
-
 
 # Copy git configs to $ADMIN_USER
 if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
@@ -190,35 +715,21 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
 # Remount all using /etc/fstab, as amended above
     mount --all
 
-
-
-
-
-
-# Configure MakeMKV
-  usermod -a -G cdrom $ADMIN_USER
-  # MakeMKV config file
-    if [ -f $GIT_GO_CONFIGS/makemkv/settings.conf ]; then
-	    mkdir -p $ADMIN_HOME_DIR/.MakeMKV
-	    mkdir -p $ROOT_HOME_DIR/.MakeMKV
-	    cp $GIT_GO_CONFIGS/makemkv/settings.conf $ADMIN_HOME_DIR/.MakeMKV/
-	    chmod 600 $ADMIN_HOME_DIR/.MakeMKV/settings.conf
-	    chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.MakeMKV
-	    cp $ADMIN_HOME_DIR/.MakeMKV/settings.conf $ROOT_HOME_DIR/.MakeMKV/
-	    chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.MakeMKV
-	    fi
-
 # Generate passwords
     NUMBER_OF_DESIGNATED_PASSWORDS=7
     TEMP_PASSWORD_INCLUDE="/tmp/passwords"
     echo "" > $TEMP_PASSWORD_INCLUDE
     echo "PASSWORD_ME=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
     # echo "PASSWORD_UBUNTU=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-    echo "MYSQL_ROOT_PASSWORD=\"$(apg -c cl_seed -a 1 -m $MAX_MYSQL_PASSWORD_LENGTH -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-    echo "MYSQL_ADMIN_PASSWORD=\"$(apg -c cl_seed -a 1 -m $MAX_MYSQL_PASSWORD_LENGTH -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-    echo "PHPMYADMIN_APP_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-    echo "PHPMYADMIN_ROOT_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
-    echo "PHPMYADMIN_APP_DB_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
+    if $install_mysql_server ; then
+       echo "MYSQL_ROOT_PASSWORD=\"$(apg -c cl_seed -a 1 -m $MAX_MYSQL_PASSWORD_LENGTH -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
+       echo "MYSQL_ADMIN_PASSWORD=\"$(apg -c cl_seed -a 1 -m $MAX_MYSQL_PASSWORD_LENGTH -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
+       if $install_phpmyadmin ; then
+           echo "PHPMYADMIN_APP_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
+           echo "PHPMYADMIN_ROOT_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
+           echo "PHPMYADMIN_APP_DB_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
+           fi
+       fi
     echo "" >> $TEMP_PASSWORD_INCLUDE
     chown $ROOT_USER:$ROOT_USER $TEMP_PASSWORD_INCLUDE
     chmod 500 $TEMP_PASSWORD_INCLUDE
@@ -230,11 +741,6 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
     echo $HOSTNAME > /etc/hostname
     chmod 644 /etc/hostname
     chown $ROOT_USER:$ROOT_USER /etc/hostname
-
-# Install ssh
-    apt-get update
-    DEBIAN_FRONTEND=noninteractive apt-get install -y ufw ssh
-    ufw allow ssh
 
 # Set up $ADMIN_USER
     # Make $ADMIN_USER a member of group sudo
@@ -257,77 +763,7 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
     ufw app update lane-applications
     echo "Special LANE applications installed to ufw."
 
-# Patch to add automatic updates for Plex Media Server.
-# Not sure what happens if PMS isn't already installed in the first place. Oh well.
-# From https://forums.plex.tv/t/plex-media-server-automatic-update-ubuntu/462840
-    echo deb https://downloads.plex.tv/repo/deb public main | sudo tee /etc/apt/sources.list.d/plexmediaserver.list
-    curl https://downloads.plex.tv/plex-keys/PlexSign.key | sudo apt-key add -
-
-if $install_mysql_server ; then
-  echo "Installing mysql server"
-###### EXTREMELY IMPORTANT: Edit /etc/mysql/mysql.conf.d/mysqld.cnf and open up bind-address * ###########
-  MYSQL_PACKAGES="mysql-server openssl libcurl4-openssl-dev libssl-dev php-gmp php-symfony-service-implementation php-imagick php-twig-doc php-symfony-translation"
-  DEBIAN_FRONTEND=noninteractive apt-get install -y $MYSQL_PACKAGES
-  ufw allow mysql
-  mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
-  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
-  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User=''"
-  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test_%'"
-  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$MYSQL_ADMIN_NAME'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_ADMIN_PASSWORD'"
-  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_ADMIN_NAME'@localhost WITH GRANT OPTION"
-  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES"
-  mkdir -p $MYSQL_CLIENT_CERTS_DIR
-  cp "$MYSQL_SERVER_BIN_DIR/ca.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOSTNAME-MySQL-ca.pem"
-  cp "$MYSQL_SERVER_BIN_DIR/client-cert.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOSTNAME-MySQL-client-cert.pem"
-  cp "$MYSQL_SERVER_BIN_DIR/client-key.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOSTNAME-MySQL-client-key.pem"
-  chown -R $ADMIN_USER:$ADMIN_USER "$MYSQL_CLIENT_CERTS_DIR"
-  # Install .my.cnf in home directory
-    backup-file $ADMIN_HOME_DIR/.my.cnf
-    cp $GIT_GO_CONFIGS/mysql/home_directory_.my.cnf $ADMIN_HOME_DIR/.my.cnf
-    replace-in-file "$ADMIN_HOME_DIR/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
-    replace-in-file "$ADMIN_HOME_DIR/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
-    chown $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.my.cnf"*
-    chmod 600 "$ADMIN_HOME_DIR/.my.cnf"*
-  # Install .my.cnf for root user
-    backup-file $ROOT_HOME_DIR/.my.cnf
-    cp $GIT_GO_CONFIGS/mysql/home_directory_.my.cnf $ROOT_HOME_DIR/.my.cnf
-    replace-in-file "$ROOT_HOME_DIR/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
-    replace-in-file "$ROOT_HOME_DIR/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
-    chown $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.my.cnf"*
-    chmod 600 "$ROOT_HOME_DIR/.my.cnf"*
-  echo "MySQL server installed."
-  fi
-
-if $install_apt_cacher_ng ; then
-  echo "Installing apt-cacher-ng"
-  # Based on https://www.tecmint.com/apt-cache-server-in-ubuntu/
-  apt install apt-cacher-ng avahi-daemon squid-deb-proxy-client
-  echo "apt-gacher-ng installed"
-  fi
-
-# phpMyAdmin should be installed AFTER php and MySQL
-if $install_phpmyadmin ; then
-  echo "Installing phpMyAdmin"
-  # Based on https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04
-  debconf-set-selections <<< "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2"
-  debconf-set-selections <<< "phpmyadmin phpmyadmin/dbconfig-install boolean true"
-  debconf-set-selections <<< "phpmyadmin phpmyadmin/app-password-confirm password $PHPMYADMIN_APP_PASS"
-  debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/admin-pass password $PHPMYADMIN_ROOT_PASS"
-  debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_APP_DB_PASS"
-  apt install -y phpmyadmin php-mbstring php-zip php-gd php-json php-curl
-  phpenmod mbstring
-  cp $GIT_GO_CONFIGS/phpmyadmin.config.inc.php $PHPMYADMIN_DIR/config.inc.php
-  chown -R www-data:www-data $PHPMYADMIN_DIR
-  chmod 644 $PHPMYADMIN_DIR/config.inc.php
-#  cp $GIT_GO_CONFIGS/html/.htaccess.html.www.var $THIS_WEB_ROOT/.htaccess
-#  chown -R www-data:www-data $THIS_WEB_ROOT/.htaccess
-#  chmod 644 $THIS_WEB_ROOT/.htaccess
-  systemctl restart apache2
-  echo "phpMyAdmin installed."
-  fi
-
 # Invoke /usr/local/sbin/_apply-configs
-# chmod 777 $SBIN_DIR/_apply-configsHOME
     $SBIN_DIR/_apply-configs
 
 # Update
@@ -335,13 +771,19 @@ if $install_phpmyadmin ; then
 
 # Report password information
     mkdir -p $(dirname $OS_INSTALL_INFO_PATH)
-    echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD" > $OS_INSTALL_INFO_PATH
-    echo "MYSQL_ADMIN_NAME: $MYSQL_ADMIN_NAME" >> $OS_INSTALL_INFO_PATH
-    echo "MYSQL_ADMIN_PASSWORD: $MYSQL_ADMIN_PASSWORD" >> $OS_INSTALL_INFO_PATH
-    echo "PHPMYADMIN_APP_PASS: $PHPMYADMIN_APP_PASS" >> $OS_INSTALL_INFO_PATH
-    echo "PHPMYADMIN_ROOT_PASS: $PHPMYADMIN_ROOT_PASS" >> $OS_INSTALL_INFO_PATH
-    echo "PHPMYADMIN_APP_DB_PASS: $PHPMYADMIN_APP_DB_PASS" >> $OS_INSTALL_INFO_PATH
-    echo "" >> $OS_INSTALL_INFO_PATH
+    rm -f "$OS_INSTALL_INFO_PATH"
+    touch "$OS_INSTALL_INFO_PATH"
+    if $install_mysql_server ; then
+        echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD" >> $OS_INSTALL_INFO_PATH
+        echo "MYSQL_ADMIN_NAME: $MYSQL_ADMIN_NAME" >> $OS_INSTALL_INFO_PATH
+        echo "MYSQL_ADMIN_PASSWORD: $MYSQL_ADMIN_PASSWORD" >> $OS_INSTALL_INFO_PATH
+        if $install_phpmyadmin ; then
+            echo "PHPMYADMIN_APP_PASS: $PHPMYADMIN_APP_PASS" >> $OS_INSTALL_INFO_PATH
+            echo "PHPMYADMIN_ROOT_PASS: $PHPMYADMIN_ROOT_PASS" >> $OS_INSTALL_INFO_PATH
+            echo "PHPMYADMIN_APP_DB_PASS: $PHPMYADMIN_APP_DB_PASS" >> $OS_INSTALL_INFO_PATH
+            fi
+        echo "" >> $OS_INSTALL_INFO_PATH
+        fi
     echo "# Add to $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys:" >> $OS_INSTALL_INFO_PATH
     echo "" >> $OS_INSTALL_INFO_PATH
     echo "# $SSH_KEY_NAME" >> $OS_INSTALL_INFO_PATH
