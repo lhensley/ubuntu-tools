@@ -26,7 +26,7 @@ install_handbrake=false         # HandBrake video rendering
 install_ifupdown=false          # Used for /etc/network/interfaces manual configuration; interferes with Network Manager
 install_lsyncd=false            # Keeps directories in sync using inotify or fsevents. Details at https://lsyncd.github.io/lsyncd/
 install_makemkv=false           # MakeMKV DVD ripper
-install_net-tools=false         # Print network connections, routing tables, interface statistics
+install_nettools=false          # Print network connections, routing tables, interface statistics
 install_plexmediaserver=false   # Media streamer and library manager
 install_proftpd=false           # For scanning to brother@oz
 install_rclone=false            # command-line program to manage files on cloud storage. Details at https://rclone.org/
@@ -38,7 +38,7 @@ install_uuid=false              # Use uuidgen instead. It's built-in.
 install_apache2=true            # Apache 2 Webserver
 install_apg=true                # Password generator 
 install_at=true                 # Queue, examine or delete jobs for later execution
-install_bridge-utils=true       # Bridge-utils extensions for the interfaces(5) file format
+install_bridgeutils=true        # Bridge-utils extensions for the interfaces(5) file format
 install_certbot=true            # Certificate Installer for https
 install_chrome=true             # Google Chrome web browser
 install_comskip=true            # Commercial skipper for videos
@@ -56,14 +56,14 @@ install_gimp=true               # An image manipulation and paint program
 install_git=true                # The stupid content tracker
 install_gpg=true                # OpenPGP encryption and signing tool
 install_gzip=true               # Compress or expand files
-install_inotify-tools=true      # Do something when a file is created, deleted, or changed
+install_inotify=true            # Do something when a file is created, deleted, or changed
 install_mailutils=true          # mail, Postfix, etc.
 install_mysql_server=true       # Relational Database
 install_openssl=true            # OpenSSL
 install_openvpn=true            # Secure IP tunnel daemon
 install_php=true                # PHP
 install_phpmyadmin=true         # Web tool for managing MySQL
-install_putty-tools=true        # A free SSH and telnet client
+install_puttytools=true         # A free SSH and telnet client
 install_resolvconf=true         # Name resolver
 install_ripmime=true            # Process files sent by email
 install_rsync=true              # A fast, versatile, remote (and local) file-copying tool
@@ -241,7 +241,7 @@ if $install_at ; then
     fi
 
 # bridge-utils
-if $install_bridge-utils ; then
+if $install_bridgeutils ; then
     echo "Installing bridge-utils."
     f_install bridge-utils              # Bridge-utils extensions for the interfaces(5) file format
     echo "bridge-utils installed."
