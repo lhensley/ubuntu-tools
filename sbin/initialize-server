@@ -72,9 +72,13 @@ install_zoom=true           # Video conferencing
 
 ############ TEST 2
 
+
+
+
 if $install_plexmediaserver ; then
     # Tested through Ubuntu 20.04.1
     # Install Plex Media Server
+    # Ref: https://computingforgeeks.com/install-plex-media-server-ubuntu-debian/
       echo "Installing Plex Media Server"
       rm -rf /etc/apt/sources.list.d/plexmediaserver.list
       echo "# When enabling this repo please remember to add the PlexPublic.Key into the apt setup." > /etc/apt/sources.list.d/plexmediaserver.list
@@ -89,18 +93,12 @@ if $install_plexmediaserver ; then
       echo "Plex Media Server installed."
     if $install_tautulli ; then
         # Install Tautulli for https://this-server:8181
-        # Ref: https://tautulli.com/
-            apt-get install -y python python-setuptools tzdata
-            cd /opt
-            git clone https://github.com/Tautulli/Tautulli.git
-            addgroup tautulli && sudo adduser --system --no-create-home tautulli --ingroup tautulli
-            cp /opt/Tautulli/init-scripts/init.systemd /lib/systemd/system/tautulli.service
-            chown tautulli:tautulli -R /opt/Tautulli
-            systemctl daemon-reload
-            systemctl enable tautulli.service
-            systemctl start tautulli.service
+        # Ref: https://snapcraft.io/install/tautulli/ubuntu
+            echo "Installing Tautulli."
+            apt-get install -y snapd
+            snap install tautulli
             ufw allow 8181
-            cd
+            echo "Tautulli installed."
         fi
   fi
 
