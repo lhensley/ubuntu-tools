@@ -199,7 +199,6 @@ ROOT_HOME_DIR="/root"
     echo "Installing ssh."
     f_install ssh && ufw allow ssh      # Secure shell client
     echo "ssh installed."
-    fi
 
 
 # Optional installations

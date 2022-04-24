@@ -15,6 +15,6 @@ echo
 echo "To continue, first select the packages you want to install with"
 echo "     vi ./initialize-server"
 echo "Then run the initialization with"
-echo "     ./initialize-server"
+echo "     sudo ./initialize-server"
 echo "Note: This script runs for a long time."
 echo
