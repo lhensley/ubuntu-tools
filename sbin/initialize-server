@@ -81,6 +81,16 @@ if $install_plexmediaserver ; then
     # Ref: https://computingforgeeks.com/install-plex-media-server-ubuntu-debian/
       echo "Installing Plex Media Server"
       rm -rf /etc/apt/sources.list.d/plexmediaserver.list
+      apt install -y wget curl gpg gnupg2 software-properties-common apt-transport-https lsb-release ca-certificates
+      echo deb https://downloads.plex.tv/repo/deb public main | sudo tee /etc/apt/sources.list.d/plexmediaserver.list
+      wget https://downloads.plex.tv/plex-keys/PlexSign.key
+      cat PlexSign.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/PlexSigkey.gpg
+      apt -y update
+
+      exit 1
+
+
+
       echo "# When enabling this repo please remember to add the PlexPublic.Key into the apt setup." > /etc/apt/sources.list.d/plexmediaserver.list
       echo "# wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
       echo "#" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
