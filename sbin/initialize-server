@@ -15,7 +15,7 @@ if [[ $EUID -ne 0 ]]; then
 
 # If this is set to false, GUI app installations will be ignored.
 # CAUTION: If accidentally set to true, all required GUI packages also will be installed.
-is_desktop=true
+is_desktop=false
 
 # Used for installing git
 my_full_name="Lane Hensley"
@@ -23,18 +23,24 @@ my_email="lane@lanehensley.org"
 ROOT_USER="root"
 ROOT_HOME_DIR="/root"
 
-# GROUP 1 OPTIONAL software (default to false)
-install_cubic=true         # Creates custom Ubuntu ISO files. Details at https://github.com/PJ-Singh-001/Cubic
-install_handbrake=true     # HandBrake video rendering
-install_lsyncd=false        # Keeps directories in sync using inotify or fsevents. Details at https://lsyncd.github.io/lsyncd/
-install_rclone=false        # command-line program to manage files on cloud storage. Details at https://rclone.org/
+# OPTIONAL software (default to false)
+install_cubic=false             # Creates custom Ubuntu ISO files. Details at https://github.com/PJ-Singh-001/Cubic
+install_handbrake=false         # HandBrake video rendering
+install_lsyncd=false            # Keeps directories in sync using inotify or fsevents. Details at https://lsyncd.github.io/lsyncd/
+install_makemkv=false           # MakeMKV DVD ripper
+install_rclone=false            # command-line program to manage files on cloud storage. Details at https://rclone.org/
+install_mysql_server=false      # Relational Database
+install_phpmyadmin=false        # Web tool for managing MySQL
+install_plexmediaserver=true    # Media streamer and library manager
+install_tautulli=true           # Monitoring tool for Plex Media Server
+install_apt_cacher_ng=false     # Caching system for apt software distribution
 
-# Which optional software to install
+
+# STANDARD software (default to true)
 install_apache2=true        # Apache 2 Webserver
 install_certbot=true        # Certificate Installer for https
 install_chrome=true         # Google Chrome web browser
 install_mailutils=true      # mail, Postfix, etc.
-install_makemkv=true        # MakeMKV DVD ripper
 install_openssl=true        # OpenSSL
 install_php=true            # PHP
 install_webmin=true         # Web-based system admin tools
@@ -61,207 +67,64 @@ install_zoom=true           # Video conferencing
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 
-########### GROUP 1 Software Installs (default to false)
+########### Software Installs
 
-# Install cubic
-if $is_desktop ; then
-    if $install_cubic ; then
-        apt-add-repository -y ppa:cubic-wizard/release
-        read -p "Press enter to continue"
-        apt -y update
-        apt install -y cubic
+
+############ TEST 2
+
+if $install_plexmediaserver ; then
+    # Tested through Ubuntu 20.04.1
+    # Install Plex Media Server
+      echo "Installing Plex Media Server"
+      rm -rf /etc/apt/sources.list.d/plexmediaserver.list
+      echo "# When enabling this repo please remember to add the PlexPublic.Key into the apt setup." > /etc/apt/sources.list.d/plexmediaserver.list
+      echo "# wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
+      echo "#" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
+      echo "deb https://downloads.plex.tv/repo/deb/ public main" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
+      wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -
+      apt-get -y update
+      apt-get install --reinstall -o Dpkg::Options::="--force-confold" plexmediaserver
+      f_install plexmediaserver
+      ufw allow 32400/tcp # if not already specified
+      echo "Plex Media Server installed."
+    if $install_tautulli ; then
+        # Install Tautulli for https://this-server:8181
+        # Ref: https://tautulli.com/
+            apt-get install -y python python-setuptools tzdata
+            cd /opt
+            git clone https://github.com/Tautulli/Tautulli.git
+            addgroup tautulli && sudo adduser --system --no-create-home tautulli --ingroup tautulli
+            cp /opt/Tautulli/init-scripts/init.systemd /lib/systemd/system/tautulli.service
+            chown tautulli:tautulli -R /opt/Tautulli
+            systemctl daemon-reload
+            systemctl enable tautulli.service
+            systemctl start tautulli.service
+            ufw allow 8181
+            cd
         fi
-    fi
-
-############################# STOP HERE
-exit 0
-
-if $install_handbrake ; then
-  # Based on https://handbrake.fr/docs/en/1.5.0/get-handbrake/download-and-install.html
-  echo "Installing HandBrake"
-  add-apt-repository -y ppa:stebbins/handbrake-releases
-  apt-get -y update
-  DEBIAN_FRONTEND=noninteractive apt-get install -yq handbrake-gtk handbrake-cli
-  echo "HandBrake installed."
-  echo "GUI version is NOT configured: "
-  echo "  Presets ($ADMIN_HOME_DIR/.HandBrake/*) need to be added."
   fi
 
 
 
-# Install MakeMKV
-# DON'T USE THE SNAP INSTALLER
-if $is_desktop ; then
-    if $install_makemkv ; then
-      echo "Installing MakeMKV"
-      printf '\n\n' | add-apt-repository ppa:heyarje/makemkv-beta
-      apt-get update
-      DEBIAN_FRONTEND=noninteractive apt-get install -yq makemkv-bin makemkv-oss ccextractor
-      echo "MakeMKV installed."
-      fi
-    fi
 
 
 
 
-# The machine (or at least oz) will brick without these drivers.
-# Next time a new ISO is generated, this section should be removed from initialize-server because its also in the configure-installer script.
-if $is_desktop ; then
-    apt-get -y install nvidia-driver-390
-    fi
 
-# Install uncomplicated, no-down-side utilities (review this assumption from time to time)
-    f_install at
-    f_install apg                     # Password generator 
-    f_install cryfs                   # Encrypted file system
-    f_install comskip                 # Commercial skipper for videos
-    f_install curl
-    f_install ddclient
-    f_install dos2unix
-    f_install exiftool
-    f_install fail2ban
-    f_install ffmpeg
-    f_install ghostscript             # Compressing PDF scans
-    f_install git && ufw allow git
-    f_install gpg
-    f_install gzip
-    f_install inotify-tools           # Do something when a file is created, deleted, or changed
-    f_install net-tools
-    f_install openvpn
-    f_install bridge-utils
-    # f_install ifupdown              # Used for /etc/network/interfaces manual configuration; interferes with Network Manager
-    # f_install proftpd                 # For scanning to brother@oz
-    f_install putty-tools
-    f_install resolvconf
-    f_install rsync
-    f_install ripmime                 # Process files sent by email
-    f_install ssh && ufw allow ssh
-    f_install sshfs
-    f_install sysbench
-    f_install tasksel
-    f_install unzip
-    # f_install uuid                  # Use uuidgen instead. It's built-in.
-    f_install vim
-    # f_install wget                    # Unnecesary; already installed with OS.
-    if $is_desktop ; then
-        f_install filezilla
-        f_install gimp
-        f_install xrdp
-        # Microsoft Edge - Based on https://www.linuxcapable.com/how-to-install-microsoft-edge-on-ubuntu-22-04-lts/
-            apt install software-properties-common apt-transport-https curl wget ca-certificates -y
-            wget -O- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /usr/share/keyrings/microsoft-edge.gpg
-            echo 'deb [signed-by=/usr/share/keyrings/microsoft-edge.gpg] https://packages.microsoft.com/repos/edge stable main' | tee /etc/apt/sources.list.d/microsoft-edge.list
-            apt update
-            apt install microsoft-edge-stable -y
-        fi
 
-if $install_apache2 ; then
-  echo "Installing apache2"
-  DEBIAN_FRONTEND=noninteractive apt-get install -yq apache2 apache2-doc apache2-suexec-pristine
-  ufw allow 'Apache'
-  ufw allow 'Apache Full'
-  ufw allow http
-  ufw allow https
-  a2enmod ssl rewrite
-  systemctl restart apache2
-  echo "apache2 installed."
-  fi
 
-# Install Google Chrome
-    if $is_desktop ; then
-        DEBIAN_FRONTEND=noninteractive apt-get install -yq wget gdebi-core
-        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        gdebi --n google-chrome-stable_current_amd64.deb
-        rm ./google-chrome-stable_current_amd64.deb
-        fi
 
-if $install_openssl ; then
-  echo "Installing openssl"
-  OPENSSL_PACKAGES="openssl libcurl4-openssl-dev libssl-dev libcurl4-doc"
-  OPENSSL_PACKAGES+=" libidn11-dev libkrb5-dev libldap2-dev "
-  OPENSSL_PACKAGES+=" librtmp-dev libssh2-1-dev zlib1g-dev libssl-doc"
-  DEBIAN_FRONTEND=noninteractive apt-get install -yq $OPENSSL_PACKAGES 
-  echo "openssl installed."
-  fi
 
-if $install_php ; then
-  echo "Installing php"
-  PHP_PACKAGES="php libapache2-mod-php php-mysql php-gd php-curl php-imap php-ldap"
-  PHP_PACKAGES+=" libmcrypt-dev php-mbstring php-dev php-pear"
-  PHP_PACKAGES+=" libc-client2007e mlock php-curl php-imap uw-mailutils"
-  DEBIAN_FRONTEND=noninteractive apt-get install -yq $PHP_PACKAGES
-  phpenmod gd curl imap ldap mbstring
-  systemctl restart apache2
-  echo "php installed."
-  fi
+########################### STOP HERE
+exit
 
-# Install rclone
-    echo "Installing rclone"
-    DEBIAN_FRONTEND=noninteractive apt-get install -yq curl
-    curl https://rclone.org/install.sh | sudo bash
 
-if $install_certbot ; then
-  echo "Installing certbot"
-  DEBIAN_FRONTEND=noninteractive apt-get install -yq certbot python3-certbot-apache
-  echo "certbot installed."
-  fi
 
-if $install_mailutils ; then
-  echo "installing mailutils"
-  debconf-set-selections <<< "postfix postfix/relayhost $RELAYHOST"
-  debconf-set-selections <<< "postfix postfix/mailname string $MAILNAME@$DOMAIN_NAME"
-  debconf-set-selections <<< "postfix postfix/main_mailer_type string $MAIN_MAILER_TYPE"
-  apt-get install -y mailutils postfix
-  ufw allow mail
-  echo "mailutils installed."
-  fi
-  
-if $install_webmin ; then
-  echo "Installing Webmin"
-  wget http://www.webmin.com/download/deb/webmin-current.deb
-  WEBMIN_PACKAGES="openssl libcurl4-openssl-dev libssl-dev perl libnet-ssleay-perl libauthen-pam-perl"
-  WEBMIN_PACKAGES+=" libnet-ssleay-perl libauthen-pam-perl libpam-runtime"
-  WEBMIN_PACKAGES+=" libio-pty-perl apt-show-versions python libsocket6-perl"
-  DEBIAN_FRONTEND=noninteractive apt-get install -yq $WEBMIN_PACKAGES
-  dpkg --install webmin-current.deb
-  rm webmin-current.deb
-  ufw allow webmin
-  echo "Webmin installed."
-  fi
 
-# Install Zoom Client
-  if $is_desktop ; then
-    if $install_zoom ; then
-      echo "Installing Zoom Client"
-      wget https://zoom.us/client/latest/zoom_amd64.deb
-      DEBIAN_FRONTEND=noninteractive apt-get install -yq ./zoom_amd64.deb
-      rm ./zoom_amd64.deb
-      echo "Zoom Client installed."
-      fi
-    fi
 
-# Install Google Chrome
-  if $is_desktop ; then
-    if $install_chrome ; then
-      echo "Installing Google Chrome"
-      DEBIAN_FRONTEND=noninteractive apt-get install -yq gdebi-core
-      wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-      gdebi --n google-chrome-stable_current_amd64.deb
-      rm ./google-chrome-stable_current_amd64.deb
-      echo "Google Chrome installed."
-      fi
-    fi
 
-# Install lsyncd
-if $install_lsyncd ; then
-  echo "Installing lsyncd"
-  DEBIAN_FRONTEND=noninteractive apt-get install -yq lsyncd
-  mkdir -p /etc/lsyncd
-  mkdir -p /var/log/lsyncd
-  systemctl start lsyncd
-  systemctl enable lsyncd
-  echo "lsyncd installed."
-  fi
+
+
 
 # Ref: https://askubuntu.com/questions/1058750/new-alert-keeps-showing-up-server-returned-error-nxdomain-mitigating-potential
 # This corrects a problem in which you'll get constant syslog errors:
@@ -270,13 +133,13 @@ if $install_lsyncd ; then
 #    sudo ln -sf ../run/resolvconf/resolv.conf /etc/resolv.conf
 ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
 
+####################### DROP THIS SECTION
 # Download for later but don't yet install
-    apt-get install -y --download-only ssh mysql-server openssl libcurl4-openssl-dev libssl-dev php-gmp php-symfony-service-implementation 
-    apt-get install -y --download-only php-imagick php-twig-doc php-symfony-translation phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+#    apt-get install -y --download-only ssh mysql-server openssl libcurl4-openssl-dev libssl-dev php-gmp php-symfony-service-implementation 
+#    apt-get install -y --download-only php-imagick php-twig-doc php-symfony-translation phpmyadmin php-mbstring php-zip php-gd php-json php-curl
 
 set +x
 
-exit 0
 
 
 
@@ -288,28 +151,6 @@ exit 0
 
 
 
-
-
-
-
-
-
-# Include script setup file
-	source script-setup
-	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
-	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
-
-# Require a specific OS environment
-	f_require_ubuntu
-    f_require_minimum_version_number 20
-	f_require_root
-
-install_dos2unix=true
-install_mysql_server=true
-install_phpmyadmin=true
-install_plexmediaserver=true
-install_tautulli=true
-install_apt_cacher_ng=true
 
 # Copy git configs to $ADMIN_USER
 if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
@@ -317,12 +158,6 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
     chown $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.gitconfig
     chmod 600 $ADMIN_HOME_DIR/.gitconfig
     fi
-
-# Do updates
-    upd
-
-# Remote everything in this section after the next installer is configured.
-    f_install sshfs # sshfs, added 2020-10-11
 
 # Add peripherals to /etc/fstab
     for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do 
@@ -347,41 +182,10 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
 # Remount all using /etc/fstab, as amended above
     mount --all
 
-if $install_dos2unix ; then
-    finstall dos2unix
-    fi
 
-if $install_plexmediaserver ; then
-    # Tested through Ubuntu 20.04.1
-    # Install Plex Media Server
-      echo "Installing Plex Media Server"
-      rm -rf /etc/apt/sources.list.d/plexmediaserver.list
-      echo "# When enabling this repo please remember to add the PlexPublic.Key into the apt setup." > /etc/apt/sources.list.d/plexmediaserver.list
-      echo "# wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
-      echo "#" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
-      echo "deb https://downloads.plex.tv/repo/deb/ public main" >> /etc/apt/sources.list.d/plexmediaserver.list >> /etc/apt/sources.list.d/plexmediaserver.list
-      wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -
-      apt-get -y update
-      apt-get install --reinstall -o Dpkg::Options::="--force-confold" plexmediaserver
-      f_install plexmediaserver
-      ufw allow 32400/tcp # if not already specified
-      echo "Plex Media Server installed."
-    if $install_tautulli ; then
-        # Install Tautulli for https://this-server:8181
-        # Ref: https://tautulli.com/
-            DEBIAN_FRONTEND=noninteractive apt-get install -yq python python-setuptools tzdata
-            cd /opt
-            git clone https://github.com/Tautulli/Tautulli.git
-            addgroup tautulli && sudo adduser --system --no-create-home tautulli --ingroup tautulli
-            cp /opt/Tautulli/init-scripts/init.systemd /lib/systemd/system/tautulli.service
-            chown tautulli:tautulli -R /opt/Tautulli
-            systemctl daemon-reload
-            systemctl enable tautulli.service
-            systemctl start tautulli.service
-            ufw allow 8181
-            cd
-        fi
-  fi
+
+
+
 
 # Configure MakeMKV
   usermod -a -G cdrom $ADMIN_USER
@@ -421,7 +225,7 @@ if $install_plexmediaserver ; then
 
 # Install ssh
     apt-get update
-    DEBIAN_FRONTEND=noninteractive apt-get install -yq ufw ssh
+    DEBIAN_FRONTEND=noninteractive apt-get install -y ufw ssh
     ufw allow ssh
 
 # Set up $ADMIN_USER
@@ -455,7 +259,7 @@ if $install_mysql_server ; then
   echo "Installing mysql server"
 ###### EXTREMELY IMPORTANT: Edit /etc/mysql/mysql.conf.d/mysqld.cnf and open up bind-address * ###########
   MYSQL_PACKAGES="mysql-server openssl libcurl4-openssl-dev libssl-dev php-gmp php-symfony-service-implementation php-imagick php-twig-doc php-symfony-translation"
-  DEBIAN_FRONTEND=noninteractive apt-get install -yq $MYSQL_PACKAGES
+  DEBIAN_FRONTEND=noninteractive apt-get install -y $MYSQL_PACKAGES
   ufw allow mysql
   mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
@@ -487,7 +291,7 @@ if $install_mysql_server ; then
   fi
 
 if $install_apt_cacher_ng ; then
-  echo "Installing apt-gacher-ng"
+  echo "Installing apt-cacher-ng"
   # Based on https://www.tecmint.com/apt-cache-server-in-ubuntu/
   apt install apt-cacher-ng avahi-daemon squid-deb-proxy-client
   echo "apt-gacher-ng installed"

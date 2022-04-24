@@ -1,0 +1,172 @@
+# Cubic
+if $is_desktop ; then
+    if $install_cubic ; then
+        apt-add-repository -y ppa:cubic-wizard/release
+        read -p "Press enter to continue"
+        apt -y update
+        apt install -y cubic
+        echo "Cubic installed."
+        fi
+    fi
+
+# HandBrake
+if $install_handbrake ; then
+  # Works on Ubuntu 22, but contradicts https://handbrake.fr/docs/en/1.5.0/get-handbrake/download-and-install.html
+  if $install_handbrake ; then
+    echo "Installing HandBrake"
+    apt-get -y update
+    DEBIAN_FRONTEND=noninteractive apt-get install -y handbrake-cli
+    echo "HandBrake installed."
+    fi
+
+# MakeMKV
+# DON'T USE THE SNAP INSTALLER
+if $is_desktop ; then
+    if $install_makemkv ; then
+      echo "Installing MakeMKV"
+      printf '\n\n' | add-apt-repository -y ppa:heyarje/makemkv-beta
+      apt-get update
+      DEBIAN_FRONTEND=noninteractive apt-get install -y makemkv-bin makemkv-oss ccextractor
+      echo "MakeMKV installed."
+      fi
+    fi
+
+# The machine (or at least oz) will brick without these drivers.
+# Next time a new ISO is generated, this section should be removed from initialize-server because its also in the configure-installer script.
+#if $is_desktop ; then
+    f_install nvidia-driver-390
+#    fi
+
+# Install uncomplicated, no-down-side utilities (review this assumption from time to time)
+    f_install at
+    f_install apg                     # Password generator 
+    f_install cryfs                   # Encrypted file system
+    f_install comskip                 # Commercial skipper for videos
+    f_install curl
+    f_install ddclient
+    f_install dos2unix
+    f_install exiftool
+    f_install fail2ban
+    f_install ffmpeg
+    f_install ghostscript             # Compressing PDF scans
+    f_install git && ufw allow git
+    f_install gpg
+    f_install gzip
+    f_install inotify-tools           # Do something when a file is created, deleted, or changed
+    f_install net-tools
+    f_install openvpn
+    f_install bridge-utils
+    # f_install ifupdown              # Used for /etc/network/interfaces manual configuration; interferes with Network Manager
+    # f_install proftpd                 # For scanning to brother@oz
+    f_install putty-tools
+    f_install resolvconf
+    f_install rsync
+    f_install ripmime                 # Process files sent by email
+    f_install ssh && ufw allow ssh
+    f_install sshfs
+    f_install sysbench
+    f_install tasksel
+    f_install unzip
+    # f_install uuid                  # Use uuidgen instead. It's built-in.
+    f_install vim
+    # f_install wget                    # Unnecesary; already installed with OS.
+    if $is_desktop ; then
+        f_install filezilla
+        f_install gimp
+        f_install xrdp
+        fi
+
+if $install_apache2 ; then
+  echo "Installing apache2"
+  DEBIAN_FRONTEND=noninteractive apt-get install -y apache2 apache2-doc apache2-suexec-pristine
+  ufw allow 'Apache'
+  ufw allow 'Apache Full'
+  ufw allow http
+  ufw allow https
+  a2enmod ssl rewrite
+  systemctl restart apache2
+  echo "apache2 installed."
+  fi
+
+# Install Google Chrome
+    if $is_desktop ; then
+        DEBIAN_FRONTEND=noninteractive apt-get install -y wget gdebi-core
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        gdebi --n google-chrome-stable_current_amd64.deb
+        rm -f ./google-chrome-stable_current_amd64.deb
+        fi
+
+if $install_openssl ; then
+  echo "Installing openssl"
+  apt-get install -y openssl 
+  echo "openssl installed."
+  fi
+
+if $install_php ; then
+  echo "Installing php"
+  PHP_PACKAGES="php libapache2-mod-php php-mysql php-gd php-curl php-imap php-ldap"
+  PHP_PACKAGES+=" libmcrypt-dev php-mbstring php-dev php-pear"
+  PHP_PACKAGES+=" libc-client2007e mlock uw-mailutils"
+  DEBIAN_FRONTEND=noninteractive apt-get install -y $PHP_PACKAGES
+  phpenmod gd curl imap ldap mbstring
+  systemctl restart apache2
+  echo "php installed."
+  fi
+
+# Install rclone
+    echo "Installing rclone"
+    apt-get install -y rclone
+    echo "rclone installed."
+
+if $install_certbot ; then
+  echo "Installing certbot"
+  apt-get install -y certbot python3-certbot-apache
+  echo "certbot installed."
+  fi
+
+if $install_mailutils ; then
+  echo "installing mailutils"
+  debconf-set-selections <<< "postfix postfix/relayhost $RELAYHOST"
+  debconf-set-selections <<< "postfix postfix/mailname string $MAILNAME@$DOMAIN_NAME"
+  debconf-set-selections <<< "postfix postfix/main_mailer_type string $MAIN_MAILER_TYPE"
+  apt-get install -y mailutils postfix
+  ufw allow mail
+  echo "mailutils installed."
+  fi
+  
+if $install_webmin ; then
+  echo "Installing Webmin"
+  wget http://www.webmin.com/download/deb/webmin-current.deb
+  WEBMIN_PACKAGES="openssl libcurl4-openssl-dev libssl-dev perl"
+  WEBMIN_PACKAGES+=" libnet-ssleay-perl libauthen-pam-perl"
+  WEBMIN_PACKAGES+=" libpam-runtime libio-pty-perl apt-show-versions"
+  WEBMIN_PACKATES+=" python libsocket6-perl libapt-pkg-perl"
+  apt-get install -y $WEBMIN_PACKAGES
+  dpkg --install ./webmin-current.deb
+  rm -f ./webmin-current.deb
+  ufw allow webmin
+  echo "Webmin installed."
+  fi
+
+# Install Zoom Client
+  if $is_desktop ; then
+    if $install_zoom ; then
+      echo "Installing Zoom Client"
+      wget https://zoom.us/client/latest/zoom_amd64.deb
+      apt-get install -y ./zoom_amd64.deb
+      rm -f ./zoom_amd64.deb
+      echo "Zoom client installed."
+      fi
+    fi
+
+# Install lsyncd
+if $install_lsyncd ; then
+  echo "Installing lsyncd"
+  apt-get install -y lsyncd
+  mkdir -p /etc/lsyncd
+  mkdir -p /var/log/lsyncd
+  systemctl start lsyncd
+  systemctl enable lsyncd
+  echo "lsyncd installed."
+  fi
+
