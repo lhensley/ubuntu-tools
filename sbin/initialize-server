@@ -338,8 +338,7 @@ if $install_gzip ; then
     fi
 
 # HandBrake
-if $install_handbrake ; then
-  # Works on Ubuntu 22, but contradicts https://handbrake.fr/docs/en/1.5.0/get-handbrake/download-and-install.html
+# Works on Ubuntu 22, but contradicts https://handbrake.fr/docs/en/1.5.0/get-handbrake/download-and-install.html
   if $install_handbrake ; then
     echo "Installing HandBrake"
     DEBIAN_FRONTEND=noninteractive apt install -y handbrake-cli

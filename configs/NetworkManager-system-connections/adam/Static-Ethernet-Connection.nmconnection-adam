@@ -15,9 +15,9 @@ dns-search=lanehensley.org;local;lan;
 method=manual
 
 [ipv6]
-#addr-gen-mode=eui64
+addr-gen-mode=eui64
 dns-search=lanehensley.org;local;lan;
 method=auto
-#token=::6
+token=::6
 
 [proxy]

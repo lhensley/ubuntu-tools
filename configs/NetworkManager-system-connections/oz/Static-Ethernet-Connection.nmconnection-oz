@@ -2,6 +2,7 @@
 id=Static-Ethernet-Connection-oz
 uuid=0a7d158c-adfd-4676-b81c-75469137f732
 type=ethernet
+interface=enp3s0
 permissions=
 
 [ethernet]

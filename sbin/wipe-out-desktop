@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+
+# Require root
+	f_require_root
+
+# snap list
+snap remove canonical-livepatch 
+snap remove fore 
+snap remove firefox 
+snap remove gnome-3-28-1804 
+snap remove gnome-3-34-1804 
+snap remove gnome-3-38-2004 
+snap remove gtk-common-themes 
+snap remove snap-store
+snap remove tautulli
+snap remove ssh-audit
+snap remove core20
+snap remove core18
+snap remove bare
+snap remove snapd
+apt purge libreoffice* thunderbird* gir* libgtk* gtk* apport-gtk* libdbusmenu-gtk* python3-aptdaemon.gtk* qt5-gtk* software-properties-gtk* xdg-user-dirs-gtk x11* xfonts* xin* xserver* yaru* ubuntu-wallpaper* language-pack-gnome* language-selector-gnome* libgnome* fonts* firefox* gnome* ubuntu-desktop* -y
+apt purge snap* -y
+apt-add-repository --remove -y ppa:cubic-wizard/release
+apt auto-remove -y
+systemctl set-default multi-user.target
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+
