@@ -21,15 +21,19 @@ is_desktop=false
 
 # OPTIONAL software (default to false)
 install_apt_cacher_ng=false     # Caching system for apt software distribution
+install_bridgeutils=false       # Bridge-utils extensions for the interfaces(5) file format
 install_cubic=false             # Creates custom Ubuntu ISO files. Details at https://github.com/PJ-Singh-001/Cubic
 install_handbrake=false         # HandBrake video rendering
 install_ifupdown=false          # Used for /etc/network/interfaces manual configuration; interferes with Network Manager
 install_lsyncd=false            # Keeps directories in sync using inotify or fsevents. Details at https://lsyncd.github.io/lsyncd/
 install_makemkv=false           # MakeMKV DVD ripper
 install_nettools=false          # Print network connections, routing tables, interface statistics
+install_openvpn=false           # Secure IP tunnel daemon
 install_plexmediaserver=false   # Media streamer and library manager
 install_proftpd=false           # For scanning to brother@oz
 install_rclone=false            # command-line program to manage files on cloud storage. Details at https://rclone.org/
+install_resolvconf=true         # Name resolver
+install_sysbench=false          # A modular, cross-platform and multi-threaded benchmark tool.
 install_tautulli=false          # Monitoring tool for Plex Media Server ***** PLEX MEDIA SERVER MUST BE INSTALLED TO INSTALL TAUTULLI *****
 install_xrdp=false              # A Remote Desktop Protocol (RDP) server
 install_uuid=false              # Use uuidgen instead. It's built-in.
@@ -38,7 +42,6 @@ install_uuid=false              # Use uuidgen instead. It's built-in.
 install_apache2=true            # Apache 2 Webserver
 install_apg=true                # Password generator 
 install_at=true                 # Queue, examine or delete jobs for later execution
-install_bridgeutils=true        # Bridge-utils extensions for the interfaces(5) file format
 install_certbot=true            # Certificate Installer for https
 install_chrome=true             # Google Chrome web browser
 install_comskip=true            # Commercial skipper for videos
@@ -58,18 +61,15 @@ install_gpg=true                # OpenPGP encryption and signing tool
 install_gzip=true               # Compress or expand files
 install_inotify=true            # Do something when a file is created, deleted, or changed
 install_mailutils=true          # mail, Postfix, etc.
-install_mysql_server=true       # Relational Database
+install_mysql_server=false      # Relational Database
 install_openssl=true            # OpenSSL
-install_openvpn=true            # Secure IP tunnel daemon
 install_php=true                # PHP
-install_phpmyadmin=true         # Web tool for managing MySQL
+install_phpmyadmin=false        # Web tool for managing MySQL
 install_puttytools=true         # A free SSH and telnet client
-install_resolvconf=true         # Name resolver
 install_ripmime=true            # Process files sent by email
 install_rsync=true              # A fast, versatile, remote (and local) file-copying tool
 install_ssh=true                # Secure Shell
 install_sshfs=true              # Filesystem client based on ssh
-install_sysbench=true           # A modular, cross-platform and multi-threaded benchmark tool.
 install_tasksel=true            # A user interface for installing tasks
 install_unzip=true              # List, test and extract compressed files in a ZIP archive
 install_vim=true                # Vi IMproved, a programmer's text editor
@@ -178,6 +178,11 @@ ROOT_HOME_DIR="/root"
 
 # Mandatory installations
 ###############################################################
+
+# Network Manager
+    echo "Installing Network Manager."
+    f_install network-manager
+    echo "Network Manager installed."
 
 # NVIDIA Driver 390
 # The machine (or at least oz) will brick without these drivers.
@@ -681,7 +686,7 @@ if $is_desktop ; then
 #    Server returned error NXDOMAIN, mitigating potential DNS violation DVE-2018-0001, retrying transaction with reduced feature level UDP.
 # If this causes trouble, you can restore the original link with
 #    sudo ln -sf ../run/resolvconf/resolv.conf /etc/resolv.conf
-ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+# ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
 
 # Copy git configs to $ADMIN_USER
 if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
@@ -690,28 +695,25 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
     chmod 600 $ADMIN_HOME_DIR/.gitconfig
     fi
 
-# Add peripherals to /etc/fstab
-    for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do 
-        mkdir -p "$KEY"
-        if [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ] || [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ]; then
-            echo "" >> /etc/fstab
-        fi
-        if [ ! -z "${MOUNT_POINT_DESCRIPTION["$KEY"]}" ]; then
-            echo "# ${MOUNT_POINT_DESCRIPTION["$KEY"]}" >> /etc/fstab
-        fi
-        if [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ]; then
-            echo "${MOUNT_POINT_DEFINITION["$KEY"]}" >> /etc/fstab
-        fi
-        if [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ] || [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ]; then
-            echo "" >> /etc/fstab
-        fi
-    done
+# # Add peripherals to /etc/fstab
+#     for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do 
+#         mkdir -p "$KEY"
+#         if [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ] || [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ]; then
+#             echo "" >> /etc/fstab
+#         fi
+#         if [ ! -z "${MOUNT_POINT_DESCRIPTION["$KEY"]}" ]; then
+#             echo "# ${MOUNT_POINT_DESCRIPTION["$KEY"]}" >> /etc/fstab
+#         fi
+#         if [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ]; then
+#             echo "${MOUNT_POINT_DEFINITION["$KEY"]}" >> /etc/fstab
+#         fi
+#         if [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ] || [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ]; then
+#             echo "" >> /etc/fstab
+#         fi
+#    done
 
 # Unmount peripherals currently mounted under /media/$LOGNAME/*
-    umount "/media/$LOGNAME/"*
-
-# Remount all using /etc/fstab, as amended above
-    mount --all
+   umount "/media/$LOGNAME/"*
 
 # Generate passwords
     NUMBER_OF_DESIGNATED_PASSWORDS=7
@@ -761,12 +763,15 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
     ufw app update lane-applications
     echo "Special LANE applications installed to ufw."
 
-# Invoke /usr/local/sbin/_apply-configs
-    $SBIN_DIR/_apply-configs
-
 # Update
 # THIS IS CRUCIAL. It updates /etc/ftab and /etc/NetworkManager/system-connections
     upd
+
+# Remount all using /etc/fstab, as amended above (upd)
+    mount --all
+
+# Invoke /usr/local/sbin/_apply-configs
+    $SBIN_DIR/_apply-configs
 
 # Report password information
     mkdir -p $(dirname $OS_INSTALL_INFO_PATH)
