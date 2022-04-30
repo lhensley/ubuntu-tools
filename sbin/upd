@@ -18,6 +18,9 @@
 		chmod 664 /etc/fstab
 		fi
 
+# Clear any netplan configuration files
+	rm -f /etc/netplan/*
+
 # Update /etc/NetworkManager/system-connections
 	mkdir -p /etc/NetworkManager/system-connections
 	rm -f /etc/NetworkManager/system-connections/*
