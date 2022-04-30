@@ -765,6 +765,7 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
     $SBIN_DIR/_apply-configs
 
 # Update
+# THIS IS CRUCIAL. It updates /etc/ftab and /etc/NetworkManager/system-connections
     upd
 
 # Report password information
@@ -796,14 +797,15 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
     # echo ""
     rm $TEMP_PASSWORD_INCLUDE
 
-# Cold Restore
-    cold-restore
+# Took this out. It needs to happen manually, if at all. 4/30/2022
+# # Cold Restore
+#    cold-restore
 
 # Last instructions
 	echo
 	echo -en "\007" # Beep
     echo "Reboot using   sudo init 6"
-    # echo "THEN run       sudo cold-restore"
+    echo "THEN run       sudo cold-restore"
     echo "THEN Reboot again."
     echo
 

@@ -117,6 +117,6 @@ adam:/mnt/5TBD /mnt/5TBD nfs rw
 #
 # adam: 5TBF (5TB) UUID=9c311371-fbce-423b-9f44-4301aca9e6e5
 # UUID=C824163824162A48 /mnt/5TBF ntfs defaults 0 0
-adam:/mnt/5TBF /mnt/5TBF ntfs rw
+# adam:/mnt/5TBF /mnt/5TBF ntfs rw
 #
 ########################################################################################################

@@ -11,6 +11,19 @@
 # Update from github.com
 	f_git
 
+# Update /etc/fstab
+	cp -n /etc/fstab /etc/fstab.original.install
+	if f_is_file "$GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"; then
+		cat /etc/fstab.original.install "$GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals" > /etc/fstab
+		chmod 664 /etc/fstab
+		fi
+
+# Update /etc/NetworkManager/system-connections
+	mkdir -p /etc/NetworkManager/system-connections
+	rm -f /etc/NetworkManager/system-connections/*
+	cp "$GIT_GO_CONFIGS/NetworkManager-system-connections/$HOSTNAME"/* /etc/NetworkManager/system-connections/
+	chmod 400 /etc/NetworkManager/system-connections/*
+
 # Update Dynamic DNS
 #	if $(f_is_file "/usr/sbin/ddclient"); then ddclient -daemon 0; fi
 
