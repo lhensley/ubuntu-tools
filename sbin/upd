@@ -9,19 +9,23 @@
 	f_require_root
 
 # Update from github.com
+	echo "Updating local git repository."
 	f_git
 
 # Update /etc/fstab
+	echo "Updating /etc/fstab"
 	cp -n /etc/fstab /etc/fstab.original.install
-	if f_is_file "$GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"; then
+	if f_is_file "$GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals" ; then
 		cat /etc/fstab.original.install "$GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals" > /etc/fstab
 		chmod 664 /etc/fstab
 		fi
 
 # Clear any netplan configuration files
+	echo "Clearing /etc/netplan."
 	rm -f /etc/netplan/*
 
 # Update /etc/NetworkManager/system-connections
+	echo "Updating /etc/NetworkManager/system-connections."
 	mkdir -p /etc/NetworkManager/system-connections
 	rm -f /etc/NetworkManager/system-connections/*
 	cp "$GIT_GO_CONFIGS/NetworkManager-system-connections/$HOSTNAME"/* /etc/NetworkManager/system-connections/
@@ -31,6 +35,7 @@
 #	if $(f_is_file "/usr/sbin/ddclient"); then ddclient -daemon 0; fi
 
 # Other updates
+	echo "Updating local apt packages."
 	f_upd
 
 # This heads off a network manager problem defined at https://askubuntu.com/questions/71159/network-manager-says-device-not-managed
