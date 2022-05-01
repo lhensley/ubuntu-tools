@@ -8,6 +8,14 @@
 # Require root
 	f_require_root
 
+# Clear /etc/NetworkManager/system-connections
+	echo "Clearing /etc/NetworkManager/system-connections"
+	rm -f /etc/netplan/*
+#	mkdir -p /etc/NetworkManager/system-connections
+#	rm -f /etc/NetworkManager/system-connections/*
+#	cp "$GIT_GO_CONFIGS/NetworkManager-system-connections/$HOSTNAME"/* /etc/NetworkManager/system-connections/
+#	chmod -f 400 /etc/NetworkManager/system-connections/*
+
 # Update from github.com
 	echo "Updating local git repository."
 	f_git
@@ -20,20 +28,12 @@
 		chmod 664 /etc/fstab
 		fi
 
-# Clear any netplan configuration files
-	echo "Updating /etc/netplan."
+# Update any netplan configuration files
+	echo "Updating /etc/netplan from $GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml"
 	rm -f /etc/netplan/system-connections/*
 	cp "$GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml" /etc/netplan/
 	chmod -f 400 "$GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml"
 #	rm -f /etc/netplan/*
-
-# Update /etc/NetworkManager/system-connections
-	echo "Clearing /etc/NetworkManager/system-connections."
-	rm -f /etc/netplan/*
-#	mkdir -p /etc/NetworkManager/system-connections
-#	rm -f /etc/NetworkManager/system-connections/*
-#	cp "$GIT_GO_CONFIGS/NetworkManager-system-connections/$HOSTNAME"/* /etc/NetworkManager/system-connections/
-#	chmod -f 400 /etc/NetworkManager/system-connections/*
 
 # Update Dynamic DNS
 #	if $(f_is_file "/usr/sbin/ddclient"); then ddclient -daemon 0; fi
