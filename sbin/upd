@@ -39,7 +39,7 @@
 #	if $(f_is_file "/usr/sbin/ddclient"); then ddclient -daemon 0; fi
 
 # Other updates
-	echo "Updating local apt packages."
+	echo "Updating local apt packages"
 	f_upd
 
 # This heads off a network manager problem defined at https://askubuntu.com/questions/71159/network-manager-says-device-not-managed
