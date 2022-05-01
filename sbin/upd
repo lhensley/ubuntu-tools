@@ -10,7 +10,7 @@
 
 # Clear /etc/NetworkManager/system-connections
 	echo "Clearing /etc/NetworkManager/system-connections"
-	rm -f /etc/netplan/*
+	rm -f /etc/NetworkManager/system-connections/*
 #	mkdir -p /etc/NetworkManager/system-connections
 #	rm -f /etc/NetworkManager/system-connections/*
 #	cp "$GIT_GO_CONFIGS/NetworkManager-system-connections/$HOSTNAME"/* /etc/NetworkManager/system-connections/
