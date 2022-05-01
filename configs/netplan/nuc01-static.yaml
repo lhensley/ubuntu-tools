@@ -1,0 +1,28 @@
+# nuc01-static.yaml
+network:
+    version: 2
+    renderer: NetworkManager
+    ethernets:
+        ethernet0:
+            match:
+                macaddress: 94:c6:91:a3:ac:12
+            set-name: ethernet0
+            dhcp4: false
+            gateway4: 192.168.168.2
+            dhcp6: false
+            gateway6: '2604:2d80:5391:300:60f1:5bff:fe7a:1c3'
+            addresses: 
+                - 192.168.168.3/24
+                - 2604:2d80:5391:300::3/64
+            nameservers:
+                addresses: [192.168.168.2, 8.8.8.8, '2001:4860:4860::8844']
+                search: [lanehensley.org, local, lan]
+    wifis:
+        wifi0:
+            match:
+                macaddress: c0:b6:f9:cd:d0:f7
+            set-name: wifi0
+            access-points:
+                "network_ssid_name":
+                    password: "**********"
+            activation-mode: manual
