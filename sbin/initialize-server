@@ -62,6 +62,7 @@ install_gzip=true               # Compress or expand files
 install_inotify=true            # Do something when a file is created, deleted, or changed
 install_mailutils=true          # mail, Postfix, etc.
 install_mysql_server=false      # Relational Database
+install_nfs=true                # Network File Service
 install_openssl=true            # OpenSSL
 install_php=true                # PHP
 install_phpmyadmin=false        # Web tool for managing MySQL
@@ -470,6 +471,14 @@ if $install_nettools ; then
     echo "Installing net-tools."
     f_install net-tools                 # Print network connections, routing tables, interface statistics
     echo "net-tools installed."
+    fi
+
+# nfs
+if $install_nfs ; then
+    echo "Installing nfs."
+    f_install nfs-common
+    f_install nfs-kernel-server
+    echo "nfs installed."
     fi
 
 # openssl

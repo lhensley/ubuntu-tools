@@ -28,6 +28,21 @@
 		chmod 664 /etc/fstab
 		fi
 
+# Update /etc/hosts
+	echo "Updating /etc/hosts"
+	cp "$GIT_GO_CONFIGS/hosts" "/etc/hosts"
+	chmod -f 644 /etc/hosts
+	echo "Updating /etc/hosts"
+	fi
+
+# Update ~/.ssh/authorized_keys
+	echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys"
+	cp "$GIT_GO_CONFIGS/ssh/authorized_keys" "$ADMIN_HOME_DIR/.ssh/authorized_keys"
+	chmod -f 600 "$ADMIN_HOME_DIR/.ssh/authorized_keys"
+	chmod -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.ssh/authorized_keys"
+	echo "Updating /etc/hosts"
+	fi
+
 # Update any netplan configuration files
 	echo "Updating /etc/netplan from $GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml"
 	rm -f /etc/netplan/system-connections/*
