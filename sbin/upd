@@ -26,6 +26,11 @@
 	chmod -f 600 "$ADMIN_HOME_DIR/.ssh/authorized_keys"
 	chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.ssh/authorized_keys"
 
+# Update /etc/exports
+	echo "Updating /etc/exports from $GIT_GO_CONFIGS/etc/exports.$HOSTNAME"
+	cp "$GIT_GO_CONFIGS/etc/exports.$HOSTNAME" "/etc/exports"
+	chmod -f 644 "/etc/exports"
+
 # Update /etc/fstab
 	echo "Updating /etc/fstab from /etc/fstab.original.install and $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"
 	cp -n /etc/fstab /etc/fstab.original.install
