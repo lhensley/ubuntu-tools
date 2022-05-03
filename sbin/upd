@@ -21,7 +21,7 @@
 	f_git
 
 # Update /etc/fstab
-	echo "Updating /etc/fstab"
+	echo "Updating /etc/fstab from /etc/fstab.original.install and $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"
 	cp -n /etc/fstab /etc/fstab.original.install
 	if $(f_is_file "$GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"); then
 		cat /etc/fstab.original.install "$GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals" > /etc/fstab
@@ -38,7 +38,6 @@
 	cp "$GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys" "$ADMIN_HOME_DIR/.ssh/authorized_keys"
 	chmod -f 600 "$ADMIN_HOME_DIR/.ssh/authorized_keys"
 	chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.ssh/authorized_keys"
-	echo "Updating /etc/hosts"
 
 # Update any netplan configuration files
 	echo "Updating /etc/netplan from $GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml"
