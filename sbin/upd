@@ -32,13 +32,12 @@
 	echo "Updating /etc/hosts from $GIT_GO_CONFIGS/hosts"
 	cp "$GIT_GO_CONFIGS/hosts" "/etc/hosts"
 	chmod -f 644 /etc/hosts
-	echo "Updating /etc/hosts"
 
 # Update ~/.ssh/authorized_keys
 	echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys from $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys"
 	cp "$GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys" "$ADMIN_HOME_DIR/.ssh/authorized_keys"
 	chmod -f 600 "$ADMIN_HOME_DIR/.ssh/authorized_keys"
-	chmod -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.ssh/authorized_keys"
+	chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.ssh/authorized_keys"
 	echo "Updating /etc/hosts"
 
 # Update any netplan configuration files
