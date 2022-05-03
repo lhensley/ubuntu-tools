@@ -39,6 +39,12 @@
 	cp "$GIT_GO_CONFIGS/hosts" "/etc/hosts"
 	chmod -f 644 /etc/hosts
 
+# Update /etc/sshd_config
+	echo "Updating /etc/sshd_config from $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config"
+	cp "$GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config" "/etc/sshd_config"
+	chmod -f 644 "/etc/sshd_config"
+	chown -f $ADMIN_USER:$ADMIN_USER "/etc/sshd_config"
+
 # Update any netplan configuration files
 	echo "Updating /etc/netplan from $GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml"
 	rm -f /etc/netplan/system-connections/*
