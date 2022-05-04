@@ -39,11 +39,12 @@
 		chmod 644 "/etc/fstab"
 		fi
 
-# Update /etc/handbrake
-	echo "Updating /etc/handbrake from $GIT_GO_CONFIGS/etc/handbrake"
-	mkdir -p "/etc/handbrake"
-	cp "$GIT_GO_CONFIGS/etc/handbrake/"* "/etc/handbrake/"
-	chmod -f 644 "/etc/handbrake/"*
+# Update /$ADMIN_HOME_DIR/.HandBrake
+	echo "Updating $ADMIN_HOME_DIR/.HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
+	mkdir -p "$ADMIN_HOME_DIR/.HandBrake"
+	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ADMIN_HOME_DIR/.HandBrake"
+	chmod -fR 600 "$ADMIN_HOME_DIR/.HandBrake"
+	chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.HandBrake"
 
 # Update /etc/hosts
 	echo "Updating /etc/hosts from $GIT_GO_CONFIGS/hosts"
