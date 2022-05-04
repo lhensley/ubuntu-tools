@@ -206,6 +206,11 @@ ROOT_HOME_DIR="/root"
     f_install ssh && ufw allow ssh      # Secure shell client
     echo "ssh installed."
 
+# tzdata
+    echo "Installing tzdata."
+    f_install tzdata
+    echo "tzdata installed."
+
 
 # Optional installations
 ###############################################################
@@ -810,6 +815,9 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
     # echo "# Once you continue, these passwords cannot be recovered."
     # echo ""
     rm $TEMP_PASSWORD_INCLUDE
+
+# Set timezone
+    timedatectl set-timezone $TIMEZONE
 
 # Took this out. It needs to happen manually, if at all. 4/30/2022
 # # Cold Restore

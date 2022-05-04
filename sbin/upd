@@ -8,6 +8,10 @@
 # Require root
 	f_require_root
 
+# Set timezone
+	echo "Setting timezone to $TIMEZONE"
+    timedatectl set-timezone $TIMEZONE
+
 # Clear /etc/NetworkManager/system-connections
 	echo "Clearing /etc/NetworkManager/system-connections"
 	rm -f /etc/NetworkManager/system-connections/*
