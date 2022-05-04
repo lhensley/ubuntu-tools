@@ -34,10 +34,15 @@
 # Update /etc/fstab
 	echo "Updating /etc/fstab from /etc/fstab.original.install and $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"
 	cp -n /etc/fstab /etc/fstab.original.install
-	if $(f_is_file "$GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"); then
-		cat /etc/fstab.original.install "$GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals" > /etc/fstab
-		chmod 664 /etc/fstab
+	if $(f_is_file "$GIT_GO_CONFIGS/fstab/fstab-peripherals.$HOSTNAME"); then
+		cat /etc/fstab.original.install "$GIT_GO_CONFIGS/fstab/fstab-peripherals.$HOSTNAME" > /etc/fstab
+		chmod 644 "/etc/fstab"
 		fi
+
+# Update /etc/handbrake
+	echo "Updating /etc/handbrake from $GIT_GO_CONFIGS/etc/handbrake"
+	cp "$GIT_GO_CONFIGS/etc/handbrake/"* "/etc/handbrake/"
+	chmod -f 644 "/etc/handbrake/"*
 
 # Update /etc/hosts
 	echo "Updating /etc/hosts from $GIT_GO_CONFIGS/hosts"
