@@ -43,8 +43,9 @@
 	echo "Updating $ADMIN_HOME_DIR/.HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
 	mkdir -p "$ADMIN_HOME_DIR/.HandBrake"
 	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ADMIN_HOME_DIR/.HandBrake"
-	chmod -fR 600 "$ADMIN_HOME_DIR/.HandBrake"
-	chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.HandBrake"
+	chmod 700 "$ADMIN_HOME_DIR/.HandBrake"
+	chmod -R 600 "$ADMIN_HOME_DIR/.HandBrake"/*
+	chown -R $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.HandBrake"
 
 # Update /etc/hosts
 	echo "Updating /etc/hosts from $GIT_GO_CONFIGS/hosts"
