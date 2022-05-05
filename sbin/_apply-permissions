@@ -196,65 +196,67 @@ done
 
 	# ddclient
 		if [ -f $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
-			f_require_file "/etc/ddclient.conf"
-			f_require_file "/etc/default/ddclient"
-			chmod 600 /etc/ddclient.conf /etc/default/ddclient # confirmed value
-			chown $ROOT_USER:$ROOT_USER /etc/ddclient.conf /etc/default/ddclient
+			chmod -f 600 /etc/ddclient/ddclient.conf /etc/default/ddclient # confirmed value
+			chown -f $ROOT_USER:$ROOT_USER /etc/ddclient/ddclient.conf /etc/default/ddclient
 			fi
+
+	# /etc/exports
+		chmod -f 600 "/etc/exports"
 
 	# fstab
-		if [ -f $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab ]; then
-			chown $ROOT_USER:$ROOT_USER /etc/fstab*
-			chmod 664 /etc/fstab* # confirmed value
-			fi
+		chmod -f 600 /etc/fstab* # confirmed value
+		chown -f $ROOT_USER:$ROOT_USER /etc/fstab*
 
 	# Git
-		f_require_file "$ROOT_HOME_DIR/.gitconfig"
-		chmod 600 $ROOT_HOME_DIR/.gitconfig
-		chmod 600 $ADMIN_HOME_DIR/.gitconfig
-		chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.gitconfig
-		chown $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.gitconfig
-		chmod -R 400 $GIT_ROOT/*
+		chmod -f 600 $ROOT_HOME_DIR/.gitconfig
+		chmod -f 600 $ADMIN_HOME_DIR/.gitconfig
+		chown -f $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.gitconfig
+		chown -f $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.gitconfig
+		chmod -f -R 400 $GIT_ROOT/*
 
 	# lsyncd
-		if [ -f $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
-			chown $ROOT_USER:$ROOT_USER /etc/lsyncd/lsyncd.conf.lua # NOT confirmed; relevant to system viability?
-			chmod 600 /etc/lsyncd/lsyncd.conf.lua # NOT confirmed; relevant to system viability?
-			fi
+		chown -f $ROOT_USER:$ROOT_USER /etc/lsyncd/lsyncd.conf.lua
+		chmod -f 600 /etc/lsyncd/lsyncd.conf.lua
+
+	# MakeMKV
+		chmod -f 700 "$ADMIN_HOME_DIR/.MakeMKV"
+		chmod -f 700 "$ROOT_HOME_DIR/.MakeMKV"
+		chmod -fR 600 "$ADMIN_HOME_DIR/.MakeMKV"/*
+		chmod -fR 600 "$ROOT_HOME_DIR/.MakeMKV"/*
+		chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.MakeMKV"
+		chown -fR $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.MakeMKV"
 
 	# resolvconf
 		if [ -f $GIT_GO_CONFIGS/resolvconf/head ]; then
 			chown $ROOT_USER:$ROOT_USER /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
 			chmod 644 /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
 			fi
-
-	# .ssh/authorized_keys
-	#	if [ -f $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys ]; then
-			chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh # Confirmed
-			chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh # Confirmed
-			chmod -f 700 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh # Confirmed
-			chmod -f 644 $ADMIN_HOME_DIR/.ssh/id_rsa.pub $ROOT_HOME_DIR/.ssh/id_rsa.pub # Confirmed
-			chmod -f 600 $ADMIN_HOME_DIR/.ssh/id_rsa $ROOT_HOME_DIR/.ssh/id_rsa $ADMIN_HOME_DIR/.ssh/authorized_keys $ROOT_HOME_DIR/.ssh/authorized_keys # Confirmed
-			f_debug
-	#		fi
+	
+	# ~/.ssh
+		chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh
+		chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh
+		chmod -f 700 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh
+		chmod -f 600 $ADMIN_HOME_DIR/.ssh/* $ROOT_HOME_DIR/.ssh/*
+		chmod -f 644 $ADMIN_HOME_DIR/.ssh/id_rsa.pub $ROOT_HOME_DIR/.ssh/id_rsa.pub
 
 	# SSHD config file
-		if [ -f $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
-			chown $ROOT_USER:$ROOT_USER "$SSHD_CONFIG" # Confirmed
-			chmod 644 "$SSHD_CONFIG" # Confirmed
-			fi
+		chown -f $ROOT_USER:$ROOT_USER "$SSHD_CONFIG"
+		chmod -f 600 "$SSHD_CONFIG"
+		fi
 
-	# HandBrake config file
-		chmod -fR 700 $ADMIN_HOME_DIR/.HandBrake
-		chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.HandBrake $ADMIN_HOME_DIR/Videos/*
-		chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.HandBrake/*
+	# HandBrake config files
+		chmod -f 700 "$ADMIN_HOME_DIR/.HandBrake"
+		chmod -f 700 "$ROOT_HOME_DIR/.HandBrake"
+		chmod -f -R 600 "$ADMIN_HOME_DIR/.HandBrake"/*
+		chmod -f -R 600 "$ROOT_HOME_DIR/.HandBrake"/*
+		chown -f -R $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.HandBrake" $ADMIN_HOME_DIR/Videos/*
+		chown -f -R $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.HandBrake"
 
 	# Vim and vi config files
-		if [ -f $GIT_GO_CONFIGS/vim/.vimrc ]; then
-			chmod 600 $ADMIN_HOME_DIR/.vim*
-			chown $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.vim*
-			chown $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.vim*
-			fi
+		chmod -f 600 "$ADMIN_HOME_DIR/.vim*"
+		chmod -f 600 "$ROOT_HOME_DIR/.vim*"
+		chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.vim*"
+		chown -f $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.vim*"
 
 	# Plex Media Server Video Files
 		if $SET_PLEX_FILE_PERMISSIONS; then

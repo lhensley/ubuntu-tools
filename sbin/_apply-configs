@@ -165,10 +165,6 @@ done
 # Clear /etc/NetworkManager/system-connections
 	echo "Clearing /etc/NetworkManager/system-connections"
 	rm -f /etc/NetworkManager/system-connections/*
-#	mkdir -p /etc/NetworkManager/system-connections
-#	rm -f /etc/NetworkManager/system-connections/*
-#	cp "$GIT_GO_CONFIGS/NetworkManager-system-connections/$HOSTNAME"/* /etc/NetworkManager/system-connections/
-#	chmod -f 400 /etc/NetworkManager/system-connections/*
 
 # This heads off a network manager problem defined at https://askubuntu.com/questions/71159/network-manager-says-device-not-managed
 	touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
@@ -179,19 +175,12 @@ done
 # That's why the copying goes from root to admin home directories.
 	echo "Updating $ADMIN_HOME_DIR/.gitconfig from $ROOT_HOME_DIR/.gitconfig"
 	cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
-	chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.gitconfig"
 
 # Update ~/.HandBrake
 	echo "Updating $ADMIN_HOME_DIR/.HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
 	mkdir -p "$ADMIN_HOME_DIR/.HandBrake" "$ROOT_HOME_DIR/.HandBrake"
 	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ADMIN_HOME_DIR/.HandBrake"
 	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ROOT_HOME_DIR/.HandBrake"
-	chmod 700 "$ADMIN_HOME_DIR/.HandBrake"
-	chmod 700 "$ROOT_HOME_DIR/.HandBrake"
-	chmod -R 600 "$ADMIN_HOME_DIR/.HandBrake"/*
-	chmod -R 600 "$ROOT_HOME_DIR/.HandBrake"/*
-	chown -R $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.HandBrake"
-	chown -R $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.HandBrake"
 
 # Update ~/.MakeMKV
     if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf ]; then
@@ -199,37 +188,22 @@ done
 		mkdir -p "$ADMIN_HOME_DIR/.MakeMKV" "$ROOT_HOME_DIR/.MakeMKV"
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ADMIN_HOME_DIR/.MakeMKV/"
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ROOT_HOME_DIR/.MakeMKV/"
-		chmod -f 700 "$ADMIN_HOME_DIR/.MakeMKV"
-		chmod -f 700 "$ROOT_HOME_DIR/.MakeMKV"
-		chmod -fR 600 "$ADMIN_HOME_DIR/.MakeMKV"/*
-		chmod -fR 600 "$ROOT_HOME_DIR/.MakeMKV"/*
-		chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.MakeMKV"
-		chown -fR $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.MakeMKV"
 		fi
 
 # Update ~/.ssh/authorized_keys
 	echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys"
 	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys" "$ADMIN_HOME_DIR/.ssh/authorized_keys"
 	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys" "$ROOT_HOME_DIR/.ssh/authorized_keys"
-	chmod -f 600 "$ADMIN_HOME_DIR/.ssh/authorized_keys"
-	chmod -f 600 "$ROOT_HOME_DIR/.ssh/authorized_keys"
-	chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.ssh/authorized_keys"
-	chown -f $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.ssh/authorized_keys"
 
 # Update Vim and vi config file
 if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
 	cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ADMIN_HOME_DIR/
 	cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ROOT_HOME_DIR/
-	chmod -f 600 "$ADMIN_HOME_DIR/.vim*"
-	chmod -f 600 "$ROOT_HOME_DIR/.vim*"
-	chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.vim*"
-	chown -f $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.vim*"
 	fi
 
 # Update /etc/exports
 	echo "Updating /etc/exports from $GIT_GO_CONFIGS/etc/exports.$HOSTNAME"
 	cp "$GIT_GO_CONFIGS/etc/exports.$HOSTNAME" "/etc/exports"
-	chmod -f 600 "/etc/exports"
 	exportfs -r
 	systemctl restart nfs-*server
 
@@ -239,16 +213,14 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
 	rm -f /etc/fstab.from.git # Existed on old updates.
 	if $(f_is_file "$GIT_GO_CONFIGS/fstab/fstab-peripherals.$HOSTNAME"); then
 		cat /etc/fstab.original.install "$GIT_GO_CONFIGS/fstab/fstab-peripherals.$HOSTNAME" > /etc/fstab
-		chmod 644 "/etc/fstab"
 		mount --all &
 		fi
 
-# Update /etc/ddclient.conf
-	if [ -f $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
+# Update /etc/ddclient/ddclient.conf
+	if [ -f $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf. ]; then
 		echo "Updating /etc/ddclient.conf from $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME"
 		cp $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient.conf
 		cp $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.default /etc/ddclient.conf.default
-		chmod -f 600 /etc/ddclient.*
 		fi
 
 # Update /etc/hosts
@@ -260,7 +232,6 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
 	if [ -f $GIT_GO_CONFIGS/lsyncd/lsyncd.conf.lua.$HOSTNAME ]; then
 		echo "Updating /etc/lsyncd/lsyncd.conf.lua from $GIT_GO_CONFIGS/lsyncd/lsyncd.conf.lua.$HOSTNAME"
 		cp $GIT_GO_CONFIGS/lsyncd/lsyncd.conf.lua.$HOSTNAME /etc/lsyncd/lsyncd.conf.lua
-		chmod -f 600 /etc/lsyncd/lsyncd.conf.lua
 		systemctl restart lsyncd
 		fi
 

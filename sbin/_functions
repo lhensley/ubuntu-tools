@@ -274,6 +274,12 @@ function f_is_file {
     if [ -f "$1" ]; then echo true; else echo false; fi
 	}
 
+function f_is_installed {
+	# Usage: if $(f_is_installed "package_name"); then commands_if_true; else commands_if_false; fi
+	# $1 = "$package_name"
+    if $(dpkg-query -W --showformat='${Status}\n' "$1" | grep -c "install ok installed"); then echo true; else echo false; fi
+	}
+
 function f_require_file {
     # Usage: f_require_file "file_or_path_name" "send_text_alert_true_or_false"
 	if ! $(f_is_file "$1"); then f_die "File not found: $1 at line ${BASH_LINENO[$i]}" true $EXIT_CODE_FILE_NOT_FOUND; fi
