@@ -277,7 +277,7 @@ function f_is_file {
 function f_is_installed {
 	# Usage: if $(f_is_installed "package_name"); then commands_if_true; else commands_if_false; fi
 	# $1 = "$package_name"
-    if $(dpkg-query -W --showformat='${Status}\n' $1 | grep -c "install ok installed"); then echo true; else echo false; fi
+    if [ $(dpkg-query -W --showformat='${Status}\n' $1 | grep -c "install ok installed") -gt 0 ] ; then echo true; else echo false; fi
 	}
 
 function f_require_file {
