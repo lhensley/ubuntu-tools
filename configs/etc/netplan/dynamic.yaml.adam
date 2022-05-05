@@ -11,6 +11,11 @@ network:
             dhcp6: true
             accept-ra: true
             ipv6-address-token: '::6'
+            routes:
+            - to: default
+              via: 2604:2d80:5399:1300:349b:d9ff:fe62:5e6c
+              metric: 100
+              on-link: true
     wifis:
         wifi0:
             match:
