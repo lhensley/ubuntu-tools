@@ -209,6 +209,9 @@ done
 		chmod -f 600 /etc/fstab* # confirmed value
 		chown -f $ROOT_USER:$ROOT_USER /etc/fstab*
 
+	# /etc/hosts
+		chmod -f 644 /etc/hosts
+
 	# Git
 		chmod -f 600 $ROOT_HOME_DIR/.gitconfig
 		chmod -f 600 $ADMIN_HOME_DIR/.gitconfig
@@ -231,6 +234,12 @@ done
 			chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.MakeMKV"
 			chown -fR $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.MakeMKV"
 			fi
+
+	# /etc/mots
+		chmod -f 644 /etc/motd
+
+	# /etc/netplan
+		chmod -f 400 "/etc/netplan/*"
 
 	# resolvconf
 		if $(f_is_installed "resolvconf"); then
@@ -263,6 +272,10 @@ done
 			chown -f -R $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.HandBrake"
 			fi
 
+	# /etc/ufw/applications.d/lane-applications
+		chown -f $ROOT_USER:$ROOT_USER /etc/ufw/applications.d/lane-applications
+		chmod -f 600 /etc/ufw/applications.d/lane-applications
+
 	# Vim and vi config files
 		chmod -f 600 "$ADMIN_HOME_DIR/.vim*"
 		chmod -f 600 "$ROOT_HOME_DIR/.vim*"
@@ -276,6 +289,13 @@ done
 				f_set_plex_media_recursive_permissions > /dev/null
 				fi
 			fi
+
+	# phpmyadmin
+	if $(f_is_installed "phpmyadmin"); then
+		chown -fR www-data:www-data $PHPMYADMIN_DIR
+		chmod -f 600 $PHPMYADMIN_DIR/config.inc.php
+		fi
+
 
 ###################################################
 # Wrap up.
