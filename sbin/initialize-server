@@ -339,7 +339,7 @@ if $install_ghostscript ; then
 
 # git
 if $install_git ; then
-    echo "Installing git."
+    echo "Installing git"
     f_install git && ufw allow git      # The stupid content tracker
     echo "git installed."
     fi

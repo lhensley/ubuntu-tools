@@ -201,7 +201,9 @@ done
 			fi
 
 	# /etc/exports
-		chmod -f 600 "/etc/exports"
+		if $(f_is_installed "nfs-kernel-server"); then
+			chmod -f 600 "/etc/exports"
+			fi
 
 	# fstab
 		chmod -f 600 /etc/fstab* # confirmed value
@@ -215,16 +217,20 @@ done
 		chmod -f -R 400 $GIT_ROOT/*
 
 	# lsyncd
-		chown -f $ROOT_USER:$ROOT_USER /etc/lsyncd/lsyncd.conf.lua
-		chmod -f 600 /etc/lsyncd/lsyncd.conf.lua
+		if $(f_is_installed "lsyncd"); then
+			chown -f $ROOT_USER:$ROOT_USER /etc/lsyncd/lsyncd.conf.lua
+			chmod -f 600 /etc/lsyncd/lsyncd.conf.lua
+			fi
 
 	# MakeMKV
-		chmod -f 700 "$ADMIN_HOME_DIR/.MakeMKV"
-		chmod -f 700 "$ROOT_HOME_DIR/.MakeMKV"
-		chmod -fR 600 "$ADMIN_HOME_DIR/.MakeMKV"/*
-		chmod -fR 600 "$ROOT_HOME_DIR/.MakeMKV"/*
-		chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.MakeMKV"
-		chown -fR $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.MakeMKV"
+		if $(f_is_installed "makemkv-bin"); then
+			chmod -f 700 "$ADMIN_HOME_DIR/.MakeMKV"
+			chmod -f 700 "$ROOT_HOME_DIR/.MakeMKV"
+			chmod -fR 600 "$ADMIN_HOME_DIR/.MakeMKV"/*
+			chmod -fR 600 "$ROOT_HOME_DIR/.MakeMKV"/*
+			chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.MakeMKV"
+			chown -fR $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.MakeMKV"
+			fi
 
 	# resolvconf
 		if $(f_is_installed "resolvconf"); then
@@ -233,23 +239,29 @@ done
 			fi
 	
 	# ~/.ssh
-		chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh
-		chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh
-		chmod -f 700 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh
-		chmod -f 600 $ADMIN_HOME_DIR/.ssh/* $ROOT_HOME_DIR/.ssh/*
-		chmod -f 644 $ADMIN_HOME_DIR/.ssh/id_rsa.pub $ROOT_HOME_DIR/.ssh/id_rsa.pub
+		if $(f_is_installed "ssh"); then
+			chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh
+			chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh
+			chmod -f 700 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh
+			chmod -f 600 $ADMIN_HOME_DIR/.ssh/* $ROOT_HOME_DIR/.ssh/*
+			chmod -f 644 $ADMIN_HOME_DIR/.ssh/id_rsa.pub $ROOT_HOME_DIR/.ssh/id_rsa.pub
+			fi
 
 	# SSHD config file
-		chown -f $ROOT_USER:$ROOT_USER "$SSHD_CONFIG"
-		chmod -f 600 "$SSHD_CONFIG"
+		if $(f_is_installed "ssh"); then
+			chown -f $ROOT_USER:$ROOT_USER "$SSHD_CONFIG"
+			chmod -f 600 "$SSHD_CONFIG"
+			fi
 
 	# HandBrake config files
-		chmod -f 700 "$ADMIN_HOME_DIR/.HandBrake"
-		chmod -f 700 "$ROOT_HOME_DIR/.HandBrake"
-		chmod -f -R 600 "$ADMIN_HOME_DIR/.HandBrake"/*
-		chmod -f -R 600 "$ROOT_HOME_DIR/.HandBrake"/*
-		chown -f -R $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.HandBrake" $ADMIN_HOME_DIR/Videos/*
-		chown -f -R $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.HandBrake"
+		if $(f_is_installed "handbrake-cli"); then
+			chmod -f 700 "$ADMIN_HOME_DIR/.HandBrake"
+			chmod -f 700 "$ROOT_HOME_DIR/.HandBrake"
+			chmod -f -R 600 "$ADMIN_HOME_DIR/.HandBrake"/*
+			chmod -f -R 600 "$ROOT_HOME_DIR/.HandBrake"/*
+			chown -f -R $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.HandBrake" $ADMIN_HOME_DIR/Videos/*
+			chown -f -R $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.HandBrake"
+			fi
 
 	# Vim and vi config files
 		chmod -f 600 "$ADMIN_HOME_DIR/.vim*"
@@ -258,9 +270,11 @@ done
 		chown -f $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.vim*"
 
 	# Plex Media Server Video Files
-		if $SET_PLEX_FILE_PERMISSIONS; then
-			echo Applying Plex permissions ... > $REDIRECT
-			f_set_plex_media_recursive_permissions > /dev/null
+		if $(f_is_installed "plexmediaserver"); then
+			if $SET_PLEX_FILE_PERMISSIONS; then
+				echo Applying Plex permissions ... > $REDIRECT
+				f_set_plex_media_recursive_permissions > /dev/null
+				fi
 			fi
 
 ###################################################

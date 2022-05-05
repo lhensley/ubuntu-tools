@@ -177,13 +177,15 @@ done
 	cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
 
 # Update ~/.HandBrake
-	echo "Updating $ADMIN_HOME_DIR/.HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
-	mkdir -p "$ADMIN_HOME_DIR/.HandBrake" "$ROOT_HOME_DIR/.HandBrake"
-	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ADMIN_HOME_DIR/.HandBrake"
-	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ROOT_HOME_DIR/.HandBrake"
+	if $(f_is_installed "handbrake-cli"); then
+		echo "Updating $ADMIN_HOME_DIR/.HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
+		mkdir -p "$ADMIN_HOME_DIR/.HandBrake" "$ROOT_HOME_DIR/.HandBrake"
+		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ADMIN_HOME_DIR/.HandBrake"
+		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ROOT_HOME_DIR/.HandBrake"
+		fi
 
 # Update ~/.MakeMKV
-    if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf ]; then
+	if $(f_is_installed "makemkv-bin"); then
 		echo "Updating $ADMIN_HOME_DIR/.MakeMKV/settings.conf from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf"
 		mkdir -p "$ADMIN_HOME_DIR/.MakeMKV" "$ROOT_HOME_DIR/.MakeMKV"
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ADMIN_HOME_DIR/.MakeMKV/"
@@ -191,21 +193,25 @@ done
 		fi
 
 # Update ~/.ssh/authorized_keys
-	echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys"
-	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys" "$ADMIN_HOME_DIR/.ssh/authorized_keys"
-	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys" "$ROOT_HOME_DIR/.ssh/authorized_keys"
+	if $(f_is_installed "ssh"); then
+		echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys"
+		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys" "$ADMIN_HOME_DIR/.ssh/authorized_keys"
+		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys" "$ROOT_HOME_DIR/.ssh/authorized_keys"
+		fi
 
 # Update Vim and vi config file
-if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
-	cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ADMIN_HOME_DIR/
-	cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ROOT_HOME_DIR/
-	fi
+	if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
+		cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ADMIN_HOME_DIR/
+		cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ROOT_HOME_DIR/
+		fi
 
 # Update /etc/exports
-	echo "Updating /etc/exports from $GIT_GO_CONFIGS/etc/exports.$HOSTNAME"
-	cp "$GIT_GO_CONFIGS/etc/exports.$HOSTNAME" "/etc/exports"
-	exportfs -r
-	systemctl restart nfs-*server
+	if $(f_is_installed "nfs-kernel-server"); then
+		echo "Updating /etc/exports from $GIT_GO_CONFIGS/etc/exports.$HOSTNAME"
+		cp "$GIT_GO_CONFIGS/etc/exports.$HOSTNAME" "/etc/exports"
+		exportfs -r
+		systemctl restart nfs-*server
+		fi
 
 # Update /etc/fstab
 	echo "Updating /etc/fstab from /etc/fstab.original.install and $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"
@@ -217,7 +223,7 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
 		fi
 
 # Update /etc/ddclient/ddclient.conf
-	if [ -f $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf. ]; then
+	if $(f_is_installed "ddclient"); then
 		echo "Updating /etc/ddclient.conf from $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME"
 		cp $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient.conf
 		cp $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.default /etc/ddclient.conf.default
@@ -229,7 +235,7 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
 	chmod -f 644 /etc/hosts
 
 # Update /etc/lsyncd/*
-	if [ -f $GIT_GO_CONFIGS/lsyncd/lsyncd.conf.lua.$HOSTNAME ]; then
+	if $(f_is_installed "lsyncd"); then
 		echo "Updating /etc/lsyncd/lsyncd.conf.lua from $GIT_GO_CONFIGS/lsyncd/lsyncd.conf.lua.$HOSTNAME"
 		cp $GIT_GO_CONFIGS/lsyncd/lsyncd.conf.lua.$HOSTNAME /etc/lsyncd/lsyncd.conf.lua
 		systemctl restart lsyncd
@@ -248,18 +254,20 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
 	netplan apply &
 
 # Update /etc/resolvconf/resolv.conf.d/head
-	if [ -f $GIT_GO_CONFIGS/resolvconf/resolv.conf.d/head ]; then
+	if $(f_is_installed "resolvconf"); then
 		echo "Updating /etc/resolvconf/resolv.conf.d/head from $GIT_GO_CONFIGS/resolvconf/resolv.conf.d/head"
 		mkdir -p /etc/resolvconf/resolv.conf.d
 		cp $GIT_GO_CONFIGS/resolvconf/resolv.conf.d/head /etc/resolvconf/resolv.conf.d/
 		fi
 
 # Update /etc/sshd_config
-	echo "Updating /etc/ssh/sshd_config from $GIT_GO_CONFIGS/etc/ssh/sshd_config"
-	cp "$GIT_GO_CONFIGS/etc/ssh/sshd_config" "/etc/ssh/sshd_config"
-	chmod -f 600 "/etc/ssh/sshd_config"
-	chown -f $ADMIN_USER:$ADMIN_USER "/etc/ssh/sshd_config"
-	systemctl restart ssh
+	if $(f_is_installed "ssh"); then
+		echo "Updating /etc/ssh/sshd_config from $GIT_GO_CONFIGS/etc/ssh/sshd_config"
+		cp "$GIT_GO_CONFIGS/etc/ssh/sshd_config" "/etc/ssh/sshd_config"
+		chmod -f 600 "/etc/ssh/sshd_config"
+		chown -f $ADMIN_USER:$ADMIN_USER "/etc/ssh/sshd_config"
+		systemctl restart ssh
+		fi
 
 # Update /etc/ufw/applications.d/lane-applications
     echo "Updating /etc/ufw/applications.d/lane-applications from $GIT_GO_CONFIGS/etc/ufw/applications.d/lane-applications"
@@ -269,12 +277,14 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
     ufw app update lane-applications
 
 # Update $PHPMYADMIN_DIR/config.inc.php
-	echo "Updating $PHPMYADMIN_DIR/config.inc.php from $GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php"
-	mkdir -p "$PHPMYADMIN_DIR/config.inc.php"
-	cp "$GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php" "$PHPMYADMIN_DIR/config.inc.php"
-    chown -fR www-data:www-data $PHPMYADMIN_DIR
-    chmod -f 600 $PHPMYADMIN_DIR/config.inc.php
-    systemctl restart apache2 &
+	if $(f_is_installed "phpmyadmin"); then
+		echo "Updating $PHPMYADMIN_DIR/config.inc.php from $GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php"
+		mkdir -p "$PHPMYADMIN_DIR/config.inc.php"
+		cp "$GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php" "$PHPMYADMIN_DIR/config.inc.php"
+		chown -fR www-data:www-data $PHPMYADMIN_DIR
+		chmod -f 600 $PHPMYADMIN_DIR/config.inc.php
+		systemctl restart apache2 &
+		fi
 
 
 ############################################################################################################
