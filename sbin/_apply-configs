@@ -177,7 +177,7 @@ done
 	cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
 
 # Update ~/.HandBrake
-	rm -f "$ADMIN_HOME_DIR/.HandBrake" "$ROOT_HOME_DIR/.HandBrake"
+	rm -f "$ADMIN_HOME_DIR/.HandBrake"/* "$ROOT_HOME_DIR/.HandBrake/"*
 	if $(f_is_installed "handbrake-cli"); then
 		echo "Updating $ADMIN_HOME_DIR/.HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
 		mkdir -p "$ADMIN_HOME_DIR/.HandBrake" "$ROOT_HOME_DIR/.HandBrake"
@@ -227,7 +227,7 @@ done
 
 # Update /etc/ddclient/ddclient.conf
 	rm -f /etc/ddclient/*
-	rm -f /etc/ddclient*
+	rm -f /etc/ddclient.*
 	if $(f_is_installed "ddclient"); then
 		echo "Updating /etc/ddclient.conf from $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME"
 		mkdir -p /etc/ddclient
