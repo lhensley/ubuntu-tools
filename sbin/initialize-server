@@ -82,6 +82,17 @@ my_full_name="Lane Hensley"
 my_email="lane@lanehensley.org"
 ROOT_USER="root"
 ROOT_HOME_DIR="/root"
+GIT_ROOT="/var/local/git" 
+GIT_GO="$GIT_ROOT/go"                                # Formerly system.git.go
+GIT_GO_CONFIGS="$GIT_GO/configs"                       # Formerly system.git.go.configs
+GIT_GO_SBIN="$GIT_GO/sbin"                             # Formerly #system.git.go.sbin
+GIT_GO_SERVICES="$GIT_GO/services"
+GIT_GO_SETUP="$GIT_GO/setup"                           # Formerly system.git.go.setup
+SBIN_DIR="/usr/local/sbin"
+SBIN_PARENT="$(dirname $SBIN_DIR)"
+MY_GIT_TOKEN="8224e3fbc597bf523d30906d038158977763b2e1"
+
+cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
 
 # Confirm that this is what the user wants
 	echo -en "\007" # Beep
@@ -137,7 +148,6 @@ ROOT_HOME_DIR="/root"
     # Install git token
     # To get a new token, go to https://github.com/settings/tokens.
     # NOTE: this token allows deployment only.
-    MY_GIT_TOKEN=8224e3fbc597bf523d30906d038158977763b2e1
     git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
     git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
     git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
@@ -145,22 +155,22 @@ ROOT_HOME_DIR="/root"
     chmod 600 "$ROOT_HOME_DIR/.gitconfig"
 
 # Wipe out existing git and /usr/local/sbin if they exist
-    rm -rf /var/local/git /usr/local/sbin
-
+    rm -rf "$GIT_ROOT" "$SBIN_DIR"
+    
 # Clone go.git and set restrictive permissions
-    mkdir -p /var/local/git
-    chmod 775 /var/local/git
-    cd /var/local/git
+    mkdir -p "$GIT_ROOT"
+    chmod 775 "$GIT_ROOT"
+    cd "$GIT_ROOT"
     git clone https://github.com/lhensley/go.git
-    chown -R root:root /var/local/git
-    chmod -R 400 /var/local/git
+    chown -R $ROOT_USER:$ROOT_USER "$GIT_ROOT"
+    chmod -R 400 "$GIT_ROOT"
     cd
 
 # Copy scripts into /usr/local/sbin
-    cp -r /var/local/git/go/sbin /usr/local
-    chown -R root:root /usr/local/sbin
-    find /usr/local/sbin -type d -print0 | sudo xargs -0 chmod 750
-    find /usr/local/sbin -type f -print0 | sudo xargs -0 chmod 540
+    cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
+    chown -R $ROOT_USER:$ROOT_USER "$SBIN_DIR"
+    find "$SBIN_DIR" -type d -print0 | sudo xargs -0 chmod 750
+    find "$SBIN_DIR" -type f -print0 | sudo xargs -0 chmod 540
 
 ##############################################################
 ################# GITHUB FILES NOW ARE FULLY LOADED AND READY.
@@ -401,16 +411,6 @@ if $install_makemkv ; then
     DEBIAN_FRONTEND=noninteractive apt install -y makemkv-bin makemkv-oss ccextractor
     # Configure MakeMKV
         usermod -a -G cdrom $ADMIN_USER
-        # MakeMKV config file
-        if [ -f $GIT_GO_CONFIGS/makemkv/settings.conf ]; then
-	        mkdir -p $ADMIN_HOME_DIR/.MakeMKV
-	        mkdir -p $ROOT_HOME_DIR/.MakeMKV
-	        cp $GIT_GO_CONFIGS/makemkv/settings.conf $ADMIN_HOME_DIR/.MakeMKV/
-	        chmod 600 $ADMIN_HOME_DIR/.MakeMKV/settings.conf
-	        chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.MakeMKV
-	        cp $ADMIN_HOME_DIR/.MakeMKV/settings.conf $ROOT_HOME_DIR/.MakeMKV/
-	        chown -R $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.MakeMKV
-	        fi
     echo "MakeMKV installed."
     fi
 
@@ -435,14 +435,14 @@ if $install_mysql_server ; then
   chown -R $ADMIN_USER:$ADMIN_USER "$MYSQL_CLIENT_CERTS_DIR"
   # Install .my.cnf in home directory
     backup-file $ADMIN_HOME_DIR/.my.cnf
-    cp $GIT_GO_CONFIGS/mysql/home_directory_.my.cnf $ADMIN_HOME_DIR/.my.cnf
+    cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.my.cnf $ADMIN_HOME_DIR/.my.cnf
     replace-in-file "$ADMIN_HOME_DIR/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
     replace-in-file "$ADMIN_HOME_DIR/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
     chown $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.my.cnf"*
     chmod 600 "$ADMIN_HOME_DIR/.my.cnf"*
   # Install .my.cnf for root user
     backup-file $ROOT_HOME_DIR/.my.cnf
-    cp $GIT_GO_CONFIGS/mysql/home_directory_.my.cnf $ROOT_HOME_DIR/.my.cnf
+    cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.my.cnf $ROOT_HOME_DIR/.my.cnf
     replace-in-file "$ROOT_HOME_DIR/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
     replace-in-file "$ROOT_HOME_DIR/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
     chown $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.my.cnf"*
@@ -769,14 +769,6 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
     # echo "$USER_UBUNTU ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/lane-NOPASSWD-users
     chmod 440 /etc/sudoers.d/lane-NOPASSWD-users
 
-# Add custom application definitions for ufw
-    echo "Adding custom application definitions for ufw"
-    cp $GIT_GO_CONFIGS/lane-applications /etc/ufw/applications.d
-    chown $ROOT_USER:$ROOT_USER /etc/ufw/applications.d/lane-applications
-    chmod 644 /etc/ufw/applications.d/lane-applications
-    ufw app update lane-applications
-    echo "Special LANE applications installed to ufw."
-
 # Update
 # THIS IS CRUCIAL. It updates /etc/ftab and /etc/NetworkManager/system-connections
     upd
@@ -802,7 +794,7 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
             fi
         echo "" >> $OS_INSTALL_INFO_PATH
         fi
-    echo "# Add to $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys:" >> $OS_INSTALL_INFO_PATH
+    echo "# Add to $GIT_GO_CONFIGS/ADMIN_USER_DIR/.ssh/authorized_keys:" >> $OS_INSTALL_INFO_PATH
     echo "" >> $OS_INSTALL_INFO_PATH
     echo "# $SSH_KEY_NAME" >> $OS_INSTALL_INFO_PATH
     cat "$ADMIN_HOME_DIR/.ssh/id_rsa.pub" >> $OS_INSTALL_INFO_PATH
