@@ -253,7 +253,7 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
 
 # Update /etc/hosts
 	echo "Updating /etc/hosts from $GIT_GO_CONFIGS/hosts"
-	cp "$GIT_GO_CONFIGS/hosts" "/etc/hosts"
+	cp "$GIT_GO_CONFIGS/etc/hosts" "/etc/hosts"
 	chmod -f 644 /etc/hosts
 
 # Update /etc/lsyncd/*
@@ -286,7 +286,6 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
 # Update /etc/sshd_config
 	echo "Updating /etc/ssh/sshd_config from $GIT_GO_CONFIGS/etc/ssh/sshd_config"
 	cp "$GIT_GO_CONFIGS/etc/ssh/sshd_config" "/etc/ssh/sshd_config"
-	rm -f "/etc/sshd_config" # Correcting an earlier configuration error. OK to delete this after Ubuntu 22
 	chmod -f 600 "/etc/ssh/sshd_config"
 	chown -f $ADMIN_USER:$ADMIN_USER "/etc/ssh/sshd_config"
 	systemctl restart ssh
@@ -297,6 +296,14 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
     chown $ROOT_USER:$ROOT_USER /etc/ufw/applications.d/lane-applications
     chmod 600 /etc/ufw/applications.d/lane-applications
     ufw app update lane-applications
+
+# Update $PHPMYADMIN_DIR/config.inc.php
+	echo "Updating $PHPMYADMIN_DIR/config.inc.php from $GIT_GO_CONFIGS$PHPMYAMIN_DIR/config.inc.php"
+	mkdir -p "$PHPMYADMIN_DIR/config.inc.php"
+	cp "$GIT_GO_CONFIGS$PHPMYAMIN_DIR/config.inc.php" "$PHPMYADMIN_DIR/config.inc.php"
+    chown -fR www-data:www-data $PHPMYADMIN_DIR
+    chmod -f 600 $PHPMYADMIN_DIR/config.inc.php
+    systemctl restart apache2 &
 
 
 ############################################################################################################

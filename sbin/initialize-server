@@ -444,7 +444,7 @@ if $install_mysql_server ; then
     backup-file $ROOT_HOME_DIR/.my.cnf
     cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.my.cnf $ROOT_HOME_DIR/.my.cnf
     replace-in-file "$ROOT_HOME_DIR/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
-    replace-in-file "$ROOT_HOME_DIR/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
+    replace-in-file "$ROOT_HOME_DIR/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD
     chown $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.my.cnf"*
     chmod 600 "$ROOT_HOME_DIR/.my.cnf"*
   echo "MySQL server installed."
@@ -460,12 +460,9 @@ if $install_mysql_server ; then
           debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_APP_DB_PASS"
           apt install -y phpmyadmin php-mbstring php-zip php-gd php-json php-curl
           phpenmod mbstring
-          cp $GIT_GO_CONFIGS/phpmyadmin.config.inc.php $PHPMYADMIN_DIR/config.inc.php
+          cp $GIT_GO_CONFIGS$PHPMYAMIN_DIR/phpmyadmin.config.inc.php $PHPMYADMIN_DIR/config.inc.php
           chown -R www-data:www-data $PHPMYADMIN_DIR
           chmod 644 $PHPMYADMIN_DIR/config.inc.php
-        #  cp $GIT_GO_CONFIGS/html/.htaccess.html.www.var $THIS_WEB_ROOT/.htaccess
-        #  chown -R www-data:www-data $THIS_WEB_ROOT/.htaccess
-        #  chmod 644 $THIS_WEB_ROOT/.htaccess
           systemctl restart apache2
           echo "phpMyAdmin installed."
           fi
