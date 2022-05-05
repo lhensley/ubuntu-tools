@@ -11,8 +11,8 @@
 	f_require_root
 
 # Do stuff here
-	echo $(f_is_installed ddclient)
-	echo $(f_is_installed ddclientxxx)
+	f_is_installed ddclient
+	f_is_installed ddclientxxx
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
