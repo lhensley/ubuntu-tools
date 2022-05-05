@@ -183,7 +183,7 @@ done
 
 # Update ~/.HandBrake
 	echo "Updating $ADMIN_HOME_DIR/.HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
-	mkdir -p "$ADMIN_HOME_DIR/.HandBrake"
+	mkdir -p "$ADMIN_HOME_DIR/.HandBrake" "$ROOT_HOME_DIR/.HandBrake"
 	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ADMIN_HOME_DIR/.HandBrake"
 	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ROOT_HOME_DIR/.HandBrake"
 	chmod 700 "$ADMIN_HOME_DIR/.HandBrake"
@@ -196,8 +196,8 @@ done
 # Update ~/.MakeMKV
 	echo "Updating $ADMIN_HOME_DIR/.MakeMKV/settings.conf from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf"
 	mkdir -p "$ADMIN_HOME_DIR/.MakeMKV" "$ROOT_HOME_DIR/.MakeMKV"
-	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/"* "$ADMIN_HOME_DIR/.MakeMKV"
-	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/"* "$ROOT_HOME_DIR/.MakeMKV"
+	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ADMIN_HOME_DIR/.MakeMKV/"
+	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ROOT_HOME_DIR/.MakeMKV/"
 	chmod -f 700 "$ADMIN_HOME_DIR/.MakeMKV"
 	chmod -f 700 "$ROOT_HOME_DIR/.MakeMKV"
 	chmod -fR 600 "$ADMIN_HOME_DIR/.MakeMKV"/*
