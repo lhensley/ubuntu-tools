@@ -19,4 +19,6 @@ network:
             access-points:
                 "network_ssid_name":
                     password: "**********"
-            activation-mode: manual
+            accept-ra: true
+            ipv6-address-token: "::2:4"
+#            activation-mode: manual
