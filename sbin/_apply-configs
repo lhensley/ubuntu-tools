@@ -195,15 +195,15 @@ done
 
 # Update ~/.MakeMKV
 	echo "Updating $ADMIN_HOME_DIR/.MakeMKV/settings.conf from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf"
-	mkdir -p "$ADMIN_HOME_DIR/.MakeMKV"
+	mkdir -p "$ADMIN_HOME_DIR/.MakeMKV" "$ROOT_HOME_DIR/.MakeMKV"
 	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/"* "$ADMIN_HOME_DIR/.MakeMKV"
 	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/"* "$ROOT_HOME_DIR/.MakeMKV"
-	chmod 700 "$ADMIN_HOME_DIR/.MakeMKV"
-	chmod 700 "$ROOT_HOME_DIR/.MakeMKV"
-	chmod -R 600 "$ADMIN_HOME_DIR/.MakeMKV"/*
-	chmod -R 600 "$ROOT_HOME_DIR/.MakeMKV"/*
-	chown -R $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.MakeMKV"
-	chown -R $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.MakeMKV"
+	chmod -f 700 "$ADMIN_HOME_DIR/.MakeMKV"
+	chmod -f 700 "$ROOT_HOME_DIR/.MakeMKV"
+	chmod -fR 600 "$ADMIN_HOME_DIR/.MakeMKV"/*
+	chmod -fR 600 "$ROOT_HOME_DIR/.MakeMKV"/*
+	chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.MakeMKV"
+	chown -fR $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.MakeMKV"
 
 # Update ~/.ssh/authorized_keys
 	echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys from $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys"
