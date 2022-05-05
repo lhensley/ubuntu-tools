@@ -298,9 +298,9 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
     ufw app update lane-applications
 
 # Update $PHPMYADMIN_DIR/config.inc.php
-	echo "Updating $PHPMYADMIN_DIR/config.inc.php from $GIT_GO_CONFIGS$PHPMYAMIN_DIR/config.inc.php"
+	echo "Updating $PHPMYADMIN_DIR/config.inc.php from $GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php"
 	mkdir -p "$PHPMYADMIN_DIR/config.inc.php"
-	cp "$GIT_GO_CONFIGS$PHPMYAMIN_DIR/config.inc.php" "$PHPMYADMIN_DIR/config.inc.php"
+	cp "$GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php" "$PHPMYADMIN_DIR/config.inc.php"
     chown -fR www-data:www-data $PHPMYADMIN_DIR
     chmod -f 600 $PHPMYADMIN_DIR/config.inc.php
     systemctl restart apache2 &
