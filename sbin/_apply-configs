@@ -247,6 +247,13 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
 		systemctl restart lsyncd
 		fi
 
+# Update any netplan configuration files
+	echo "Updating /etc/netplan from $GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml"
+	rm -f /etc/netplan/system-connections/*
+	cp "$GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml" /etc/netplan/
+	chmod -f 400 "$GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml"
+#	rm -f /etc/netplan/*
+
 # Update /etc/resolvconf/resolv.conf.d/head
 	if [ -f $GIT_GO_CONFIGS/resolvconf/resolv.conf.d/head ]; then
 		echo "Updating /etc/resolvconf/resolv.conf.d/head from $GIT_GO_CONFIGS/resolvconf/resolv.conf.d/head"
@@ -260,13 +267,6 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
 	chmod -f 600 "/etc/sshd_config"
 	chown -f $ADMIN_USER:$ADMIN_USER "/etc/sshd_config"
 	systemctl restart ssh
-
-# Update any netplan configuration files
-	echo "Updating /etc/netplan from $GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml"
-	rm -f /etc/netplan/system-connections/*
-	cp "$GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml" /etc/netplan/
-	chmod -f 400 "$GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml"
-#	rm -f /etc/netplan/*
 
 
 ############################################################################################################

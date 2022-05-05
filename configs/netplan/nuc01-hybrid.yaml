@@ -9,14 +9,18 @@ network:
             set-name: ethernet0
             dhcp4: true
             dhcp6: true
-#            accept-ra: true
-#            ipv6-address-token: "::3"
+            accept-ra: true
+            ipv6-address-token: "::3"
     wifis:
         wifi0:
             match:
                 macaddress: c0:b6:f9:cd:d0:f7
             set-name: wifi0
             access-points:
-                "network_ssid_name":
-                    password: "**********"
-            activation-mode: manual
+                "Hog Heaven DSM":
+                    password: "fuckitymcfuckface"
+            dhcp4: true
+            dhcp6: true
+            accept-ra: true
+            ipv6-address-token: "::2:3"
+#            activation-mode: manual
