@@ -195,7 +195,7 @@ done
 			# chmod 740 "${PATHNAME[_apply_configs]}"
 
 	# ddclient
-		if [ -f $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
+		if $(f_is_installed "ddclient"); then
 			chmod -f 600 /etc/ddclient/ddclient.conf /etc/default/ddclient # confirmed value
 			chown -f $ROOT_USER:$ROOT_USER /etc/ddclient/ddclient.conf /etc/default/ddclient
 			fi
@@ -227,9 +227,9 @@ done
 		chown -fR $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.MakeMKV"
 
 	# resolvconf
-		if [ -f $GIT_GO_CONFIGS/resolvconf/head ]; then
-			chown $ROOT_USER:$ROOT_USER /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
-			chmod 644 /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
+		if $(f_is_installed "resolvconf"); then
+			chown -f $ROOT_USER:$ROOT_USER /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
+			chmod -f 644 /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
 			fi
 	
 	# ~/.ssh
