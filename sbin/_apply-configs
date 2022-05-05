@@ -193,6 +193,18 @@ done
 	chown -R $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.HandBrake"
 	chown -R $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.HandBrake"
 
+# Update ~/.MakeMKV
+	echo "Updating $ADMIN_HOME_DIR/.MakeMKV/settings.conf from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf"
+	mkdir -p "$ADMIN_HOME_DIR/.MakeMKV"
+	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/"* "$ADMIN_HOME_DIR/.MakeMKV"
+	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/"* "$ROOT_HOME_DIR/.MakeMKV"
+	chmod 700 "$ADMIN_HOME_DIR/.MakeMKV"
+	chmod 700 "$ROOT_HOME_DIR/.MakeMKV"
+	chmod -R 600 "$ADMIN_HOME_DIR/.MakeMKV"/*
+	chmod -R 600 "$ROOT_HOME_DIR/.MakeMKV"/*
+	chown -R $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.MakeMKV"
+	chown -R $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.MakeMKV"
+
 # Update ~/.ssh/authorized_keys
 	echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys from $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys"
 	cp "$GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys" "$ADMIN_HOME_DIR/.ssh/authorized_keys"
@@ -216,6 +228,8 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
 	echo "Updating /etc/exports from $GIT_GO_CONFIGS/etc/exports.$HOSTNAME"
 	cp "$GIT_GO_CONFIGS/etc/exports.$HOSTNAME" "/etc/exports"
 	chmod -f 600 "/etc/exports"
+	exportfs -r
+	systemctl restart nfs-*server
 
 # Update /etc/fstab
 	echo "Updating /etc/fstab from /etc/fstab.original.install and $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"
@@ -224,6 +238,7 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
 	if $(f_is_file "$GIT_GO_CONFIGS/fstab/fstab-peripherals.$HOSTNAME"); then
 		cat /etc/fstab.original.install "$GIT_GO_CONFIGS/fstab/fstab-peripherals.$HOSTNAME" > /etc/fstab
 		chmod 644 "/etc/fstab"
+		mount --all &
 		fi
 
 # Update /etc/ddclient.conf
@@ -247,12 +262,17 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
 		systemctl restart lsyncd
 		fi
 
+# Update /etc/motd
+	echo "Updating /etc/motd from $GIT_GO_CONFIGS/etc/motd.$HOSTNAME"
+	cp "GIT_GO_CONFIGS/etc/motd.$HOSTNAME" "/etc/motd"
+	chmod -f 644 /etc/motd
+
 # Update any netplan configuration files
-	echo "Updating /etc/netplan from $GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml"
-	rm -f /etc/netplan/system-connections/*
-	cp "$GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml" /etc/netplan/
-	chmod -f 400 "$GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml"
-#	rm -f /etc/netplan/*
+	echo "Updating /etc/netplan/current-plan.yaml from $GIT_GO_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME"
+	rm -f /etc/NetworkManager/system-connections/* /etc/netplan/*
+	cp "$GIT_GO_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME" /etc/netplan/current-plan.yaml
+	chmod -f 400 "/etc/netplan/*"
+	netplan apply &
 
 # Update /etc/resolvconf/resolv.conf.d/head
 	if [ -f $GIT_GO_CONFIGS/resolvconf/resolv.conf.d/head ]; then
