@@ -242,7 +242,6 @@ done
 	# SSHD config file
 		chown -f $ROOT_USER:$ROOT_USER "$SSHD_CONFIG"
 		chmod -f 600 "$SSHD_CONFIG"
-		fi
 
 	# HandBrake config files
 		chmod -f 700 "$ADMIN_HOME_DIR/.HandBrake"
