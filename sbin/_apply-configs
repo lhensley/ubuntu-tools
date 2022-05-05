@@ -284,16 +284,16 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
 		fi
 
 # Update /etc/sshd_config
-	echo "Updating /etc/ssh/sshd_config from $GIT_GO_CONFIGS/etc/ssh/etc-ssh-sshd_config"
-	cp "$GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config" "/etc/ssh/sshd_config"
+	echo "Updating /etc/ssh/sshd_config from $GIT_GO_CONFIGS/etc/ssh/sshd_config"
+	cp "$GIT_GO_CONFIGS/etc/ssh/sshd_config" "/etc/ssh/sshd_config"
 	rm -f "/etc/sshd_config" # Correcting an earlier configuration error. OK to delete this after Ubuntu 22
 	chmod -f 600 "/etc/ssh/sshd_config"
 	chown -f $ADMIN_USER:$ADMIN_USER "/etc/ssh/sshd_config"
 	systemctl restart ssh
 
 # Update /etc/ufw/applications.d/lane-applications
-    echo "Updating /etc/ufw/applications.d/lane-applications from $GIT_GO_CONFIGS/ufw/applications.d/lane-applications"
-    cp $GIT_GO_CONFIGS/ufw/applications.d/lane-applications /etc/ufw/applications.d/
+    echo "Updating /etc/ufw/applications.d/lane-applications from $GIT_GO_CONFIGS/etc/ufw/applications.d/lane-applications"
+    cp $GIT_GO_CONFIGS//etc/ufw/applications.d/lane-applications /etc/ufw/applications.d/
     chown $ROOT_USER:$ROOT_USER /etc/ufw/applications.d/lane-applications
     chmod 600 /etc/ufw/applications.d/lane-applications
     ufw app update lane-applications
