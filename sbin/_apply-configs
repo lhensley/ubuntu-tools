@@ -208,7 +208,7 @@ done
 		fi
 
 # Update ~/.ssh/authorized_keys
-	echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys from "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys"
+	echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys"
 	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys" "$ADMIN_HOME_DIR/.ssh/authorized_keys"
 	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys" "$ROOT_HOME_DIR/.ssh/authorized_keys"
 	chmod -f 600 "$ADMIN_HOME_DIR/.ssh/authorized_keys"
