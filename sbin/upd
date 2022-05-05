@@ -8,76 +8,13 @@
 # Require root
 	f_require_root
 
-# Set timezone
-	echo "Setting timezone to $TIMEZONE"
-    timedatectl set-timezone $TIMEZONE
-
-# Clear /etc/NetworkManager/system-connections
-	echo "Clearing /etc/NetworkManager/system-connections"
-	rm -f /etc/NetworkManager/system-connections/*
-#	mkdir -p /etc/NetworkManager/system-connections
-#	rm -f /etc/NetworkManager/system-connections/*
-#	cp "$GIT_GO_CONFIGS/NetworkManager-system-connections/$HOSTNAME"/* /etc/NetworkManager/system-connections/
-#	chmod -f 400 /etc/NetworkManager/system-connections/*
-
 # Update from github.com
 	echo "Updating local git repository."
 	f_git
 
-# Update ~/.ssh/authorized_keys
-	echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys from $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys"
-	cp "$GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys" "$ADMIN_HOME_DIR/.ssh/authorized_keys"
-	chmod -f 600 "$ADMIN_HOME_DIR/.ssh/authorized_keys"
-	chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.ssh/authorized_keys"
-
-# Update /etc/exports
-	echo "Updating /etc/exports from $GIT_GO_CONFIGS/etc/exports.$HOSTNAME"
-	cp "$GIT_GO_CONFIGS/etc/exports.$HOSTNAME" "/etc/exports"
-	chmod -f 644 "/etc/exports"
-
-# Update /etc/fstab
-	echo "Updating /etc/fstab from /etc/fstab.original.install and $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"
-	cp -n /etc/fstab /etc/fstab.original.install
-	if $(f_is_file "$GIT_GO_CONFIGS/fstab/fstab-peripherals.$HOSTNAME"); then
-		cat /etc/fstab.original.install "$GIT_GO_CONFIGS/fstab/fstab-peripherals.$HOSTNAME" > /etc/fstab
-		chmod 644 "/etc/fstab"
-		fi
-
-# Update /$ADMIN_HOME_DIR/.HandBrake
-	echo "Updating $ADMIN_HOME_DIR/.HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
-	mkdir -p "$ADMIN_HOME_DIR/.HandBrake"
-	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ADMIN_HOME_DIR/.HandBrake"
-	chmod 700 "$ADMIN_HOME_DIR/.HandBrake"
-	chmod -R 600 "$ADMIN_HOME_DIR/.HandBrake"/*
-	chown -R $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.HandBrake"
-
-# Update /etc/hosts
-	echo "Updating /etc/hosts from $GIT_GO_CONFIGS/hosts"
-	cp "$GIT_GO_CONFIGS/hosts" "/etc/hosts"
-	chmod -f 644 /etc/hosts
-
-# Update /etc/sshd_config
-	echo "Updating /etc/sshd_config from $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config"
-	cp "$GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config" "/etc/sshd_config"
-	chmod -f 644 "/etc/sshd_config"
-	chown -f $ADMIN_USER:$ADMIN_USER "/etc/sshd_config"
-
-# Update any netplan configuration files
-	echo "Updating /etc/netplan from $GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml"
-	rm -f /etc/netplan/system-connections/*
-	cp "$GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml" /etc/netplan/
-	chmod -f 400 "$GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml"
-#	rm -f /etc/netplan/*
-
-# Update Dynamic DNS
-#	if $(f_is_file "/usr/sbin/ddclient"); then ddclient -daemon 0; fi
-
 # Other updates
 	echo "Updating local apt packages"
 	f_upd
-
-# This heads off a network manager problem defined at https://askubuntu.com/questions/71159/network-manager-says-device-not-managed
-	touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
