@@ -9,8 +9,8 @@ network:
             set-name: ethernet0
             dhcp4: true
             dhcp6: true
-            accept-ra: true
-            ipv6-address-token: "::3"
+#            accept-ra: true
+#            ipv6-address-token: "::3"
     wifis:
         wifi0:
             match:

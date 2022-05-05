@@ -173,20 +173,42 @@ done
 # This heads off a network manager problem defined at https://askubuntu.com/questions/71159/network-manager-says-device-not-managed
 	touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
 
+# Update ~/.gitconfig
+# Note that the original .gitconfig is made during setup/setup-os (original installation)
+# using sudo, so the file is written to user root's home directory.
+# That's why the copying goes from root to admin home directories.
+	echo "Updating $ADMIN_HOME_DIR/.gitconfig from $ROOT_HOME_DIR/.gitconfig"
+	cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
+	chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.gitconfig"
+
 # Update ~/.ssh/authorized_keys
 	echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys from $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys"
 	cp "$GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys" "$ADMIN_HOME_DIR/.ssh/authorized_keys"
+	cp "$GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys" "$ROOT_HOME_DIR/.ssh/authorized_keys"
 	chmod -f 600 "$ADMIN_HOME_DIR/.ssh/authorized_keys"
+	chmod -f 600 "$ROOT_HOME_DIR/.ssh/authorized_keys"
 	chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.ssh/authorized_keys"
+	chown -f $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.ssh/authorized_keys"
+
+# Update Vim and vi config file
+if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
+	cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ADMIN_HOME_DIR/
+	cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ROOT_HOME_DIR/
+	chmod -f 600 "$ADMIN_HOME_DIR/.vim*"
+	chmod -f 600 "$ROOT_HOME_DIR/.vim*"
+	chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.vim*"
+	chown -f $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.vim*"
+	fi
 
 # Update /etc/exports
 	echo "Updating /etc/exports from $GIT_GO_CONFIGS/etc/exports.$HOSTNAME"
 	cp "$GIT_GO_CONFIGS/etc/exports.$HOSTNAME" "/etc/exports"
-	chmod -f 644 "/etc/exports"
+	chmod -f 600 "/etc/exports"
 
 # Update /etc/fstab
 	echo "Updating /etc/fstab from /etc/fstab.original.install and $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"
 	cp -n /etc/fstab /etc/fstab.original.install
+	rm -f /etc/fstab.from.git # Existed on old updates.
 	if $(f_is_file "$GIT_GO_CONFIGS/fstab/fstab-peripherals.$HOSTNAME"); then
 		cat /etc/fstab.original.install "$GIT_GO_CONFIGS/fstab/fstab-peripherals.$HOSTNAME" > /etc/fstab
 		chmod 644 "/etc/fstab"
@@ -196,20 +218,48 @@ done
 	echo "Updating $ADMIN_HOME_DIR/.HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
 	mkdir -p "$ADMIN_HOME_DIR/.HandBrake"
 	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ADMIN_HOME_DIR/.HandBrake"
+	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ROOT_HOME_DIR/.HandBrake"
 	chmod 700 "$ADMIN_HOME_DIR/.HandBrake"
+	chmod 700 "$ROOT_HOME_DIR/.HandBrake"
 	chmod -R 600 "$ADMIN_HOME_DIR/.HandBrake"/*
+	chmod -R 600 "$ROOT_HOME_DIR/.HandBrake"/*
 	chown -R $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.HandBrake"
+	chown -R $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.HandBrake"
+
+# Update /etc/ddclient.conf
+	if [ -f $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
+		echo "Updating /etc/ddclient.conf from $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME"
+		cp $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient.conf
+		cp $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.default /etc/ddclient.conf.default
+		chmod -f 600 /etc/ddclient.*
+		fi
 
 # Update /etc/hosts
 	echo "Updating /etc/hosts from $GIT_GO_CONFIGS/hosts"
 	cp "$GIT_GO_CONFIGS/hosts" "/etc/hosts"
 	chmod -f 644 /etc/hosts
 
+# Update /etc/lsyncd/*
+	if [ -f $GIT_GO_CONFIGS/lsyncd/lsyncd.conf.lua.$HOSTNAME ]; then
+		echo "Updating /etc/lsyncd/lsyncd.conf.lua from $GIT_GO_CONFIGS/lsyncd/lsyncd.conf.lua.$HOSTNAME"
+		cp $GIT_GO_CONFIGS/lsyncd/lsyncd.conf.lua.$HOSTNAME /etc/lsyncd/lsyncd.conf.lua
+		chmod -f 600 /etc/lsyncd/lsyncd.conf.lua
+		systemctl restart lsyncd
+		fi
+
+# Update /etc/resolvconf/resolv.conf.d/head
+	if [ -f $GIT_GO_CONFIGS/resolvconf/resolv.conf.d/head ]; then
+		echo "Updating /etc/resolvconf/resolv.conf.d/head from $GIT_GO_CONFIGS/resolvconf/resolv.conf.d/head"
+		mkdir -p /etc/resolvconf/resolv.conf.d
+		cp $GIT_GO_CONFIGS/resolvconf/resolv.conf.d/head /etc/resolvconf/resolv.conf.d/
+		fi
+
 # Update /etc/sshd_config
 	echo "Updating /etc/sshd_config from $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config"
 	cp "$GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config" "/etc/sshd_config"
-	chmod -f 644 "/etc/sshd_config"
+	chmod -f 600 "/etc/sshd_config"
 	chown -f $ADMIN_USER:$ADMIN_USER "/etc/sshd_config"
+	systemctl restart ssh
 
 # Update any netplan configuration files
 	echo "Updating /etc/netplan from $GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml"
@@ -218,63 +268,11 @@ done
 	chmod -f 400 "$GIT_GO_CONFIGS/netplan/$HOSTNAME-dynamic.yaml"
 #	rm -f /etc/netplan/*
 
-# ddclient
-	if [ -f $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
-		cp $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf /etc/
-		cp $GIT_GO_CONFIGS/ddclient/etc-default-ddclient /etc/default/ddclient
-		fi
-# fstab
-	if [ -f $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab ]; then
-		cp $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab /etc/fstab.from.git
-		fi
-# Git
-# Note that the original .gitconfig is made during setup/setup-os (original installation)
-# using sudo, so the file is written to user root's home directory.
-# That's why the copying goes from root to admin home directories.
-	cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
-# lsyncd
-if [ -f $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
-	cp $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua /etc/lsyncd
-	systemctl restart lsyncd
-	fi
-# resolvconf
-if [ -f $GIT_GO_CONFIGS/resolvconf/head ]; then
-	mkdir -p /etc/resolvconf/resolv.conf.f
-	cp $GIT_GO_CONFIGS/resolvconf/head /etc/resolvconf/resolv.conf.d/
-	fi
-# .ssh/authorized_keys
-if [ -f "$GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys" ]; then
-	mkdir -p $ADMIN_HOME_DIR/.ssh
-	mkdir -p $ROOT_HOME_DIR/.ssh
-	cp $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys $ADMIN_HOME_DIR/.ssh/authorized_keys
-	cp $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys $ROOT_HOME_DIR/.ssh/authorized_keys
-	fi
-# SSHD config file
-if [ -f $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
-	cp $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config $SSHD_CONFIG
-	fi
-# HandBrake config file
-if [ -f "$GIT_GO_CONFIGS/handbrake/Lane 1080p (BluRay).json" ]; then
-	mkdir -p $ADMIN_HOME_DIR/.HandBrake
-	mkdir -p $ROOT_HOME_DIR/.HandBrake
-	cp $GIT_GO_CONFIGS/handbrake/* $ADMIN_HOME_DIR/.HandBrake/
-	cp $GIT_GO_CONFIGS/handbrake/* $ROOT_HOME_DIR/.HandBrake/
-	fi
-# Vim and vi config file
-if [ -f $GIT_GO_CONFIGS/vim/.vimrc ]; then
-	cp $GIT_GO_CONFIGS/vim/.vim* $ADMIN_HOME_DIR/
-	cp $GIT_GO_CONFIGS/vim/.vim* $ROOT_HOME_DIR/
-	fi
+
+############################################################################################################
+
 # Apply permissions
 	_apply-permissions $ARGS
-# lsyncd
-if [ -f $GIT_GO_CONFIGS/lsyncd/$HOSTNAME/lsyncd.conf.lua ]; then
-	systemctl restart lsyncd
-	fi
-# SSHD config file
-if [ -f $GIT_GO_CONFIGS/ssh/etc-ssh-sshd_config ]; then
-	systemctl restart ssh
-	fi
 
 
 ###################################################
