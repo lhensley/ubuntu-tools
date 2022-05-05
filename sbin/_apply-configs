@@ -264,7 +264,7 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
 
 # Update /etc/motd
 	echo "Updating /etc/motd from $GIT_GO_CONFIGS/etc/motd.$HOSTNAME"
-	cp "GIT_GO_CONFIGS/etc/motd.$HOSTNAME" "/etc/motd"
+	cp "$GIT_GO_CONFIGS/etc/motd.$HOSTNAME" "/etc/motd"
 	chmod -f 644 /etc/motd
 
 # Update any netplan configuration files
