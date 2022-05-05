@@ -181,6 +181,18 @@ done
 	cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
 	chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.gitconfig"
 
+# Update ~/.HandBrake
+	echo "Updating $ADMIN_HOME_DIR/.HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
+	mkdir -p "$ADMIN_HOME_DIR/.HandBrake"
+	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ADMIN_HOME_DIR/.HandBrake"
+	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ROOT_HOME_DIR/.HandBrake"
+	chmod 700 "$ADMIN_HOME_DIR/.HandBrake"
+	chmod 700 "$ROOT_HOME_DIR/.HandBrake"
+	chmod -R 600 "$ADMIN_HOME_DIR/.HandBrake"/*
+	chmod -R 600 "$ROOT_HOME_DIR/.HandBrake"/*
+	chown -R $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.HandBrake"
+	chown -R $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.HandBrake"
+
 # Update ~/.ssh/authorized_keys
 	echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys from $GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys"
 	cp "$GIT_GO_CONFIGS/ssh/home-.ssh-authorized_keys" "$ADMIN_HOME_DIR/.ssh/authorized_keys"
@@ -213,18 +225,6 @@ if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
 		cat /etc/fstab.original.install "$GIT_GO_CONFIGS/fstab/fstab-peripherals.$HOSTNAME" > /etc/fstab
 		chmod 644 "/etc/fstab"
 		fi
-
-# Update /$ADMIN_HOME_DIR/.HandBrake
-	echo "Updating $ADMIN_HOME_DIR/.HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
-	mkdir -p "$ADMIN_HOME_DIR/.HandBrake"
-	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ADMIN_HOME_DIR/.HandBrake"
-	cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ROOT_HOME_DIR/.HandBrake"
-	chmod 700 "$ADMIN_HOME_DIR/.HandBrake"
-	chmod 700 "$ROOT_HOME_DIR/.HandBrake"
-	chmod -R 600 "$ADMIN_HOME_DIR/.HandBrake"/*
-	chmod -R 600 "$ROOT_HOME_DIR/.HandBrake"/*
-	chown -R $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.HandBrake"
-	chown -R $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.HandBrake"
 
 # Update /etc/ddclient.conf
 	if [ -f $GIT_GO_CONFIGS/ddclient/$HOSTNAME/ddclient.conf ]; then
