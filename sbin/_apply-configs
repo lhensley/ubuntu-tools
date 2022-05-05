@@ -177,6 +177,7 @@ done
 	cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
 
 # Update ~/.HandBrake
+	rm -f "$ADMIN_HOME_DIR/.HandBrake" "$ROOT_HOME_DIR/.HandBrake"
 	if $(f_is_installed "handbrake-cli"); then
 		echo "Updating $ADMIN_HOME_DIR/.HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
 		mkdir -p "$ADMIN_HOME_DIR/.HandBrake" "$ROOT_HOME_DIR/.HandBrake"
@@ -185,6 +186,7 @@ done
 		fi
 
 # Update ~/.MakeMKV
+	rm -f "$ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ROOT_HOME_DIR/.MakeMKV/settings.conf"
 	if $(f_is_installed "makemkv-bin"); then
 		echo "Updating $ADMIN_HOME_DIR/.MakeMKV/settings.conf from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf"
 		mkdir -p "$ADMIN_HOME_DIR/.MakeMKV" "$ROOT_HOME_DIR/.MakeMKV"
@@ -206,6 +208,7 @@ done
 		fi
 
 # Update /etc/exports
+	rm -f /etc/exports
 	if $(f_is_installed "nfs-kernel-server"); then
 		echo "Updating /etc/exports from $GIT_GO_CONFIGS/etc/exports.$HOSTNAME"
 		cp "$GIT_GO_CONFIGS/etc/exports.$HOSTNAME" "/etc/exports"
@@ -223,6 +226,8 @@ done
 		fi
 
 # Update /etc/ddclient/ddclient.conf
+	rm -f /etc/ddclient/*
+	rm -f /etc/ddclient*
 	if $(f_is_installed "ddclient"); then
 		echo "Updating /etc/ddclient.conf from $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME"
 		mkdir -p /etc/ddclient
@@ -231,10 +236,12 @@ done
 		fi
 
 # Update /etc/hosts
+	rm -f /etc/hosts
 	echo "Updating /etc/hosts from $GIT_GO_CONFIGS/hosts"
 	cp "$GIT_GO_CONFIGS/etc/hosts" "/etc/hosts"
 
 # Update /etc/lsyncd/*
+	rm -f /etc/lyncd/*
 	if $(f_is_installed "lsyncd"); then
 		echo "Updating /etc/lsyncd/lsyncd.conf.lua from $GIT_GO_CONFIGS/lsyncd/lsyncd.conf.lua.$HOSTNAME"
 		cp $GIT_GO_CONFIGS/lsyncd/lsyncd.conf.lua.$HOSTNAME /etc/lsyncd/lsyncd.conf.lua
