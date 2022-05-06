@@ -219,7 +219,7 @@ done
 # Update /etc/fstab
 	echo "Updating /etc/fstab from /etc/fstab.original.install and $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"
 	cp -n /etc/fstab /etc/fstab.original.install
-	if $(f_is_file "$GIT_GO_CONFIGS/fstab/fstab-peripherals.$HOSTNAME"); then
+	if $(f_is_file "$GIT_GO_CONFIGS/etc/fstab-peripherals.$HOSTNAME"); then
 		rm -f /etc/fstab
 		cat /etc/fstab.original.install "$GIT_GO_CONFIGS/etc/fstab-peripherals.$HOSTNAME" > /tmp/fstab
 		mv /tmp/fstab /etc/fstab
