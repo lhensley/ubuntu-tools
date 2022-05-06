@@ -281,7 +281,7 @@ done
 # Update $PHPMYADMIN_DIR/config.inc.php
 	if $(f_is_installed "phpmyadmin"); then
 		echo "Updating $PHPMYADMIN_DIR/config.inc.php from $GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php"
-		mkdir -p "$PHPMYADMIN_DIR/config.inc.php"
+		mkdir -p "$PHPMYADMIN_DIR"
 		cp "$GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php" "$PHPMYADMIN_DIR/config.inc.php"
 		systemctl restart apache2 &
 		fi
