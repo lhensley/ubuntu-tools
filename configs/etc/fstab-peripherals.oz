@@ -78,7 +78,7 @@ UUID=fa9f5c57-94fd-4706-979e-4c30189592a5 /mnt/5TBC ext4 nobootwait 0 0
 # oz:/mnt/5TBC /mnt/5TBC nfs rw,nobootwait
 #
 # 12TBC (12TB) Black 12TB External Seagate
-UUID=64414aac-65cf-4e81-a561-f007cb82418b /mnt/12TBC ext4 nobootwait 0 0
+UUID=64414aac-65cf-4e81-a561-f007cb82418b /mnt/12TBC ext4 default 0 0
 # oz:/mnt/12TBC /mnt/12TBC nfs rw,nobootwait
 #
 # ext10tb01 (10TB); external drive for Plex
