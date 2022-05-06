@@ -17,8 +17,8 @@ network:
                 macaddress: 68:ec:c5:43:62:0f
             set-name: wifi0
             access-points:
-                "network_ssid_name":
-                    password: "**********"
+                "Hog Heaven DSM":
+                    password: "fuckitymcfuckface"
             accept-ra: true
             ipv6-address-token: "::2:4"
 #            activation-mode: manual
