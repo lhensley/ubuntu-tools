@@ -14,6 +14,12 @@
                 f_die "Backup file system cannot be /." true
                 fi
 
+# Update log
+        echo
+        echo Backup started $START_DATEANDTIMESTAMP
+        echo Backup started $START_DATEANDTIMESTAMP >> $COLD_BACKUP_LOG
+        chown $ADMIN_USER $COLD_BACKUP_LOG
+
 # Make the cold backup file system writable
 if ! $(f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM") ; then
         f_die "$COLD_BACKUP_FILE_SYSTEM is not mounted." true
@@ -80,6 +86,20 @@ rsync -aloprtvER --delete $COLD_BACKUP_SOURCES "$TEMP_COLD_BACKUP_DIRECTORY"
 # Start services as needed
 #       systemctl start $COLD_PROTECTED_SERVICES
 
+# Rename files that should not overwrite on restore
+        mv -f $COLD_BACKUP_LOG/etc/apt $COLD_BACKUP_LOG/etc/apt.$START_DATEANDTIMESTAMP
+        mv -f $COLD_BACKUP_LOG/etc/fstab $COLD_BACKUP_LOG/etc/fstab.$START_DATEANDTIMESTAMP
+        mv -f $COLD_BACKUP_LOG/$HOME_ADMIN_USER/.ssh $COLD_BACKUP_LOG/$HOME_ADMIN_USER/.ssh.$START_DATEANDTIMESTAMP
+
+# Update log
+        echo
+        echo Backup completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
+        echo Backup completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') >> $COLD_BACKUP_LOG
+        chown $ADMIN_USER $COLD_BACKUP_LOG
+
+# Copy log
+        cp $COLD_BACKUP_LOG $TEMP_COLD_BACKUP_DIRECTORY/coldstorage.log
+
 # Commented this out December 2020 because the drive itself was removed, causing data to be written into the mount point (need to fix)
 # Archive the cold backup
         # Make the archive directory for this server and set its permissions
@@ -109,12 +129,6 @@ rsync -aloprtvER --delete $COLD_BACKUP_SOURCES "$TEMP_COLD_BACKUP_DIRECTORY"
 # Restore working directory
 cd "$CURRENT_DIRECTORY"
  
-# Update log
-        echo
-        echo Backup completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
-        echo Backup completed $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') >> $COLD_BACKUP_LOG
-        chown $ADMIN_USER $COLD_BACKUP_LOG
-
 # Include script footer file
         f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
         source "${PATHNAME[script_footer]}"

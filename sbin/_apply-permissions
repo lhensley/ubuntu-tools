@@ -194,6 +194,10 @@ done
 			# chmod 740 "${PATHNAME[upd]}"
 			# chmod 740 "${PATHNAME[_apply_configs]}"
 
+	# .coldstorage.log
+		chmod -f 600 $COLD_BACKUP_LOG
+		chown -f $ROOT_USER:$ROOT_USER $COLD_BACKUP_LOG
+
 	# ddclient
 		if $(f_is_installed "ddclient"); then
 			chmod -f 600 /etc/ddclient/ddclient.conf /etc/default/ddclient # confirmed value
