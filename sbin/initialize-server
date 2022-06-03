@@ -497,7 +497,15 @@ if $install_openvpn ; then
     echo "openvpn installed."
     fi
 
-# Plex Medial Server
+# PLEX TRIAL FOR 22.04 5/31/2022
+# https://www.linuxcapable.com/how-to-install-plex-media-server-on-ubuntu-22-04-lts/
+# apt install apt-transport-https curl wget -y
+
+# ATTEMPT 2
+# Visit https://downloads.plex.tv and wget the appropriate DEB file for 64-bit Intel/AMD in my home directory
+# 
+
+# Plex Media Server
 if $install_plexmediaserver ; then
     # Tested through Ubuntu 20.04.1
     # Install Plex Media Server

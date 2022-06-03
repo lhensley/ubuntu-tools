@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# "Run as a service" check
+	if [ "$PPID" != "1" ]; then
+		f_die "This script only runs as a systemd service. Try sudo systemctl start $(basename $0)" false
+		fi
+	SERVICE_FLAG=true;
+
+# Infinite loop
+	while true; do # Repeat forever
+		ping6 -c 1 -I ethernet0 google.com > /dev/null 2> /dev/null # Ping google.com once
+		sleep 10m # sleep for 10 minutes
+		done
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+
