@@ -507,24 +507,26 @@ if $install_openvpn ; then
 
 # Plex Media Server
 if $install_plexmediaserver ; then
-    # Tested through Ubuntu 20.04.1
+    # Tested through Ubuntu 22
     # Install Plex Media Server
-    # Ref: https://computingforgeeks.com/install-plex-media-server-ubuntu-debian/
       echo "Installing Plex Media Server"
-      rm -rf /etc/apt/sources.list.d/plexmediaserver.list
-      apt install -y wget curl gpg gnupg2 software-properties-common apt-transport-https lsb-release ca-certificates
-      echo deb https://downloads.plex.tv/repo/deb public main | sudo tee /etc/apt/sources.list.d/plexmediaserver.list
-      wget https://downloads.plex.tv/plex-keys/PlexSign.key
-      cat PlexSign.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/PlexSigkey.gpg
-      apt -y update
-      f_install plexmediaserver
+      # As of Ubuntu 22:
+          snap install plexmediaserver
+      # Prior to Ubuntu 22:
+          # rm -rf /etc/apt/sources.list.d/plexmediaserver.list
+          # apt install -y wget curl gpg gnupg2 software-properties-common apt-transport-https lsb-release ca-certificates
+          # echo deb https://downloads.plex.tv/repo/deb public main | sudo tee /etc/apt/sources.list.d/plexmediaserver.list
+          # wget https://downloads.plex.tv/plex-keys/PlexSign.key
+          # cat PlexSign.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/PlexSigkey.gpg
+          # apt -y update
+          # f_install plexmediaserver
       ufw allow 32400/tcp # if not already specified
       echo "Plex Media Server installed."
     if $install_tautulli ; then
         # Install Tautulli for https://this-server:8181
         # Ref: https://snapcraft.io/install/tautulli/ubuntu
             echo "Installing Tautulli."
-            apt install -y snapd
+            # apt install -y snapd
             snap install tautulli
             ufw allow 8181
             echo "Tautulli installed."

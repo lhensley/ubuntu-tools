@@ -232,20 +232,20 @@ source /etc/os-release
                 TEMP_ARCHIVE_SUBDIRECTORY="archives"
                 fi
         COLD_BACKUP_DIRECTORY="$COLD_BACKUP_PARENT_DIRECTORY/$COLD_BACKUP_SUBDIRECTORY"
-        COLD_BACKUP_EXCLUDES="--exclude='/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Cache'"
-        COLD_BACKUP_EXCLUDES+=" --exclude=/var/lib/plexmediaserver/Library/store/*"
-        COLD_BACKUP_EXCLUDES+=" --exclude=/var/lib/plexmediaserver/Library/work/*"
+        COLD_BACKUP_EXCLUDES="--exclude='/var/snap/plexmediaserver/common/Library/Application Support/Plex Media Server/Cache'"
+        COLD_BACKUP_EXCLUDES+=" --exclude=/var/snap/plexmediaserver/common/Library/store/*"
+        COLD_BACKUP_EXCLUDES+=" --exclude=/var/snap/plexmediaserver/common/Library/work/*"
         COLD_BACKUP_EXCLUDES+=" --exclude=.cache"
         COLD_BACKUP_EXCLUDES+=" --exclude=Cache"
         COLD_BACKUP_SOURCES="$COLD_BACKUP_EXCLUDES etc home opt root"
         COLD_BACKUP_SOURCES+=" var/www"
-        COLD_BACKUP_SOURCES+=" var/lib/plexmediaserver/Library"
+        COLD_BACKUP_SOURCES+=" var/snap/plexmediaserver/common/Library"
         COLD_RESTORE_EXCLUDES="--exclude=.config/os-install-info.txt"
         COLD_RESTORE_EXCLUDES+=" --exclude=etc/fstab*"
         COLD_RESTORE_EXCLUDES+=" --exclude=etc/systemd/system"
 #       COLD_RESTORE_EXCLUDES+=" --exclude=.cache"
         COLD_RESTORE_EXCLUDES+=" --exclude=etc/mtab"
-#       COLD_RESTORE_EXCLUDES+=" --exclude='/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Cache'"
+#       COLD_RESTORE_EXCLUDES+=" --exclude='/var/snap/plexmediaserver/common/Library/Application Support/Plex Media Server/Cache'"
         COLD_RESTORE_EXCLUDES+=" --exclude=etc/os-release"
         COLD_RESTORE_EXCLUDES+=" --exclude=etc/rc*"
         COLD_RESTORE_EXCLUDES+=" --exclude=etc/udisks2"
@@ -266,11 +266,6 @@ source /etc/os-release
         BACKUP_OPTION[--auto-compress]=true
         BACKUP_OPTION[--preserve-permissions]=true
         BACKUP_OPTION[--file=$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE]=true
-#       BACKUP_OPTION[--exclude --exclude=/mnt/bob/cold-backup/var/lib/plexmediaserver/Library]=true
-#       BACKUP_OPTION[--exclude --exclude=/var/lib/plexmediaserver/Library]=true
-#       BACKUP_OPTION[--exclude='plexmediaserver/Library/Application Support/Cache']=true
-#       BACKUP_OPTION[--exclude=plexmediaserver/Library/work/movies]=true
-#       BACKUP_OPTION[--exclude=plexmediaserver/Library/work/tv]=true
         BACKUP_OPTION[--exclude-vcs]=true
         BACKUP_OPTION[--exclude-caches]=true
         BACKUP_OPTION[--totals]=true
@@ -396,7 +391,7 @@ source /etc/os-release
         VIDEO_STORE_FILE_SYSTEM="/mnt/12TBB"
         VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in"
         VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex-dvr"
-        PLEX_LIVE_APPLICATION_SUPPORT="/var/lib/plexmediaserver/Library"
+        PLEX_LIVE_APPLICATION_SUPPORT="/var/snap/plexmediaserver/common/Library"
         PLEX_BACKUP_FILE_SYSTEM="$THIS_ARCHIVE_FILE_SYSTEM"
         PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
         if [ $HOSTNAME == "nuc01" ]; then 
@@ -408,9 +403,9 @@ source /etc/os-release
                         PLEX_ROOT[/mnt/12TBB/plex-dvr]=true
                         PLEX_ROOT[/mnt/bertha/plex]=true
                         PLEX_ROOT[/mnt/bob/plex]=true
-                        PLEX_ROOT[/var/lib/plexmediaserver/Library/metadata]=true
-                        PLEX_ROOT[/var/lib/plexmediaserver/Library/store]=true
-                        PLEX_ROOT[/var/lib/plexmediaserver/Library/work]=true
+                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/metadata]=true
+                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/store]=true
+                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/work]=true
                 VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
                 VIDEO_STORE_FILE_SYSTEM="/mnt/12TBB"
                 VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in"
@@ -422,9 +417,9 @@ source /etc/os-release
                 # Set them all as true
                 # Example: PLEX_ROOT[/mnt/12TBB/plex]=true
                         declare -A PLEX_ROOT
-                        PLEX_ROOT[/var/lib/plexmediaserver/Library/metadata]=true
-                        PLEX_ROOT[/var/lib/plexmediaserver/Library/store]=true
-                        PLEX_ROOT[/var/lib/plexmediaserver/Library/work]=true
+                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/metadata]=true
+                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/store]=true
+                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/work]=true
                         PLEX_ROOT[/mnt/ssd1tb/plex]=true
                         PLEX_ROOT[/mnt/ext10tb01/plex]=true
                 VIDEO_WORK_FILE_SYSTEM="/mnt/ext10tb01"
