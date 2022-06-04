@@ -494,24 +494,29 @@ function f_git () {
 
 function f_run_apt_updates () {
     # apt vs apt-get?
+	#   Res (defining): https://askubuntu.com/questions/990823/apt-gives-unstable-cli-interface-warning
     #   Res: https://itsfoss.com/apt-vs-apt-get-difference/
     #   Res: https://linuxconfig.org/apt-vs-apt-get-advanced-package-tool
     #   Res: https://www.google.com/search?q=apt+and+apt-get
 	# "update" downloads package information from all configured sources
-	apt -y update
+	echo apt-get -y update
+	apt-get -y update
     # "upgrade" is an extraneous subset of "dist-upgrade" below; 
     #    Ref: https://askubuntu.com/questions/194651/why-use-apt-upgrade-instead-of-apt-dist-upgrade#:~:text=apt%2Dget%20upgrade%20will%20not,install%20but%20not%20remove%20packages
     #    sudo apt -y upgrade \
     # "dist-upgrade" installs available upgrades of all packages
     # currently installed on the system and intelligently handles
     # changing dependencies with new versions of packages
-    time apt -y dist-upgrade
+    echo time apt-get -y dist-upgrade
+    time apt-get -y dist-upgrade
 	# "clean" clears out the local repository of retrieved package files.
-	apt -y clean
+	echo apt-get -y clean
+	apt-get -y clean
 	# "autoremove" removes those dependencies that were installed with
 	# now-removed applications and that are no longer used
 	# by anything else on the system
-	apt -y autoremove
+	echo apt-get -y autoremove
+	apt-get -y autoremove
 	}
 
 function f_upd () {

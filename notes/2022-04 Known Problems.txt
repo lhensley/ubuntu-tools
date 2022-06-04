@@ -1,0 +1,77 @@
+
+
+sudo mv cold-backup cold-backup.2022-04
+
+add ipv6-keep-alive service
+	sudo upd
+	sudo install-service ipv6-keep-alive-service
+
+
+Software not working
+	mysql
+	apache2
+	Tautulli
+
+certbot
+
+Restore other services, crontabs, etc.
+
+
+
+sent 13,456,705,748 bytes  received 1,580,604 bytes  32,785,106.83 bytes/sec
+total size is 13,445,198,978  speedup is 1.00
+rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1333) [sender=3.2.3]
+chown: cannot access '/var/log/mysql': No such file or directory
+chown: cannot access '/var/lib/mysql*': No such file or directory
+
+Restore completed 2022-06-04-07-12-28-CDT
+
+Restore done.
+mysql postfix stopped.
+crontab is NOT restored.
+To restore it:
+  sudo crontab -u root /root/.crontab-archive
+  sudo crontab -u lhensley /home/lhensley/.crontab-archive
+IMMEDIATE reboot VERY STRONGLY recommended.
+To reboot, type: sudo init 6
+
+#######################
+
+sudo snap install plexmediaserver
+sudo snap stop plexmediaserver
+
+sudo rm -r "/var/snap/plexmediaserver/common/Library"/*
+sudo rmdir "/var/snap/plexmediaserver/common/Library"
+
+sudo mv "/var/lib/plexmediaserver/Library" "/var/snap/plexmediaserver/common/Library"
+sudo chown -R root:root "/var/snap/plexmediaserver/common"/*
+
+sudo snap start plexmediaserver
+
+
+
+
+# chmod 600 ~/.ssh/authorized_keys
+# SSH Public Keys
+# Uncomment an ssh- line for it to be recognized
+# https://github.com/lhensley/go.git
+#
+#
+# elie 2022-01-06
+# ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDDl4/6wpAjQxUUdEaEXtRFT63vdPVuV/mE10JXUgUO5Gf2Cd3HjHLQjTtEMPB+kSQoY8AketPWVGA4n6clS/pAdT1e4Z9lIv3TZ5Hre2B6ph9TriSxev1vzG/PGChACID92saGkYXBl8W7E0q1d28UuBxasA4GlVga0IdsdNsBWqzXS4MaexddgJXp2Ho/4PkgADOVoaivmE3K4IpFufACx+HNAsP23dgKkd7UC+rJgDGZBECxcQI97u6Lm5pqqnZj1khU9yMgWXncinUNuHiILboxVQ2jjcZN/37alG4JmBzUWoN9mwyp5g3tQDLw85iIj/S/qrETIssFPFa9qZ61HNKZK1O3bTqhbc9Y3Vikdek5NH8NYtwl9M6sav9xkAk2VbHIWCpxAV62Z+usBNmSqonrkDu0Ht6qfkdjnMX1MfVCeLU2+xvLSi6VdajruvGJy1Iwh3P3kE4bLfNOYABRqxnCzJBIQ6XxEFU2Yvd8OeOJIBUe8U35SyRe4LMiCfE= elie 2022-01-06
+#
+# medijoke 2022-01-06
+# ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCraJDLVkciobLfTDYqxfGgfdEpMwXUSOkd5TRia8k+aDWKR/A34v60AdCLtyFfMHFYhareRcfEVVTANlIO9YGUfr/CR8+qyo7UwifSCW+PDvCx+QtagoBmUAUJFLZowj0UYqTYLUXyyD27awI08G3Kv3TZm8aQXZ6fftKFEo/qxXlvDZPwZRaijA47xA5ibFN268iiTDSsV42gWKRsjUiLrpXC3FMswDIme0Q3wz0MzBNFSZ4bmLDO1CdWAx8+8dZQJHQdFyifptBNz0A2cmVpnNHwKsisnrwwz0P1abxxvxlHY7GKYdtK2HEDxGRKJzbxkSIdiBxtTBeV48t6UbKFQFak6ZxIWpap5V0Yic8C/EBHqcnk0lE4RHroLCTU8JfBZfZvFmNkpM8BauSpMWMA5n8CdrpnT3oDmiuEqrHxNR7R2RWnLkIr45mzqIHtKomJ0oOGshWX2RRc7rHEfB5PTHfUOA7hLH7RcJLVck2sFWo5gV9EEeec4CmdKha3T/k= medijoke 2022-01-06
+#
+# lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKIsdMI0p0HIfBnavKfwC+P3/IQyy3Hzn4dV/oZcKZZD lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519
+#
+# adam-2022-04-30-17-02-59-UTC
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCk5q2xvfQu+xfeBpU/+na628iqRqDQpfnNPjlSKQA3sgCjtM2xFFNE17TZ6ihPheP2Iaa/+aSgBwzfGiYFxKO0RmZ3tDU/l2xEgWVTmGwI2oXRkJIuadbvN/X1NW+VEEVb6KAqANUtNKx1Lqq4//u6twm1F+tssJhSBXMZ83kSUL/ghRAHx/l2yplieH/5yMz3DRnUESM4D9BzgAn0HjSmxLb++yYA+k0AQhjsWevZtHO9OYekWbHHJF9RjFkB0w6gY+VHEYsV6a4pvCGS8ayWpkyJ9sfN7vgcGjEQHcZIcnnRbU4iy7ZIF6G+eMQh5CLp0bGTYWPbGl0y2m4Fl1MAD5t8dnR2FfZLxq7LS4kUgGV/I8dr4lKQKKkJwojlWWE6L/R98nNjiC8ryB6tA6qZzluletdP+yH2VcEqMSSBjn3aRD0SR1kt3N1wto53MOcJHHUMvi4RPGfIMmDnNccAvhAukLfMs0KBu8X6NlkyyAAtrYzTDzIA+VFtLqBo4ME= adam-2022-04-30-17-02-59-UTC
+#
+# nuc01-2022-04-30-16-53-46-UTC
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCkvCbGlZDCeK7hJ7OBVaHzthKw9DZ6DTd/gBnyvAsq3MPov/HmRt07tl5mrVM/u/DXBpYKyir4Hf3DbLjlh6vrOcuaa7rD37lXQrGiwAXD0rKRgojQP46MxRPj06kXquTkz/eHF1rmv3e8brg/J8nZS7JgiyzP232E3U7J4pdO/PFajT0UAasSoU4HwRdLW9JwQJvnD2sPwGOyCcaxuoG2mP5PBolnKjK2ba4Y47s9k9ZR1YCqXGDfzt+3WQciJ5WJrN1/gdUL8MKkeRBzDftcnxHnzztyUnA7F8aKekGKxwVPjycYFpGi8I2vRaKnPGIY/tqYaO23R20BE1dEi7dqY5sNmhJwYFe+uVkWGMz0q3VBXlPiby95zxFVrLiGmRLsaYOWMq0Ao0TKPvlBHg+fdpVIreEldXm5BhNZNqGjDxbg+XGBNq2tJAapUF3IivzdeyTqcharDDPeewu97HWHBM8Cs8pc7onAiVf9zYGt5iUm4WXzhEy0GfROCln4DH8= nuc01-2022-04-30-16-53-46-UTC
+#
+# oz-2022-04-29-23-00-43-UTC
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDbRsINCDCEgecWnskNti3TWO7RqM1jWa/MmYJqZn67R33fqg6RzjhsMdUvJj6G3GIri47+X/scJ4QHSDtEpWw2+6j2nPniILDtk3w30DlTEsquBbE3GZaUapf+ruqEWGY9mXIflOnMdPfyZwT6TQEYZQB2hZP88ZQ0rL6RHSTCqtUiIYnjmOsjRORxQHqS+K4nY5TMnplKsz9bP90h2xe3FDl5yT94k/95gd+QGK3kgwBW1Sh+wNIihq5xSCmD+jOV9OigrQDj5k37QPuk4HH1rPYHK6goiGJSN0sFQ02El4ygfJGel3rdUkowfk9+AiRPdRWCst494hecGt4hpmUGKuen+aieyKVgnw0eL+M8IV8awnm7b6FvNRbSZ0o7x8dhJIew7NY53qSv78QYMtlNHIXbrppPWWpAkfwvcCcLDlVUs4ONOXfDCE3Xe7wFIyvLtc04P9aYFzTpaKsiEvnajWnzwde6DoFMZ01UNwCRRQdfakx+sNKAW/e+4grAI0M= oz-2022-04-29-23-00-43-UTC
+#
