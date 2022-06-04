@@ -9,7 +9,7 @@ After=network.target
 WantedBy=multi-user.target
 
 [Service]
-ExecStart=/bin/bash /usr/local/sbin/ipv6-keep-alive.service
+ExecStart=/bin/bash /usr/local/sbin/ipv6-keep-alive
 # Leave Type=simple unless the process forks. Defaults this way anyway if ExecStart is used.
 # Type=simple
 User=root

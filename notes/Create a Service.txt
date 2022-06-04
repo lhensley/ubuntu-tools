@@ -37,10 +37,13 @@ The needs to run constantly unless there is a critical error or the program is s
 Boilerplate code for that:
 
 	# Do stuff here
-		while true; do # Run this loop constantly
-			echo "This is a line of code."    # Sample program execution
-			sleep 10m                         # This is the amount of time between iterations to keep from killing the CPU
+		while true; do                                   # Repeat forever
+			echo "This is a line of code."               # Sample program execution
+			echo Sleeping at $(date) for 10 minutes      # Announce that you're sleeping
+			sleep 10m                                    # This is the amount of time between iterations to keep from killing the CPU
 			done
+		done
+
 
 Sync to Github and run "sudo upd" to copy it onto a server. Test it.
 
