@@ -4,15 +4,16 @@ sudo mv cold-backup cold-backup.2022-04
 
 add ipv6-keep-alive service
 	sudo upd
-	sudo install-service ipv6-keep-alive-service
-
+	sudo install-service ipv6-keep-alive
+	sudo systemctl enable ipv6-keep-alive
+	sudo systemctl start ipv6-keep-alive
 
 Software not working
 	mysql
 	apache2
+	certbot
 	Tautulli
 
-certbot
 
 Restore other services, crontabs, etc.
 

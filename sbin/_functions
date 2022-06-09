@@ -353,7 +353,7 @@ function f_local_copy() {
 function f_install() {
 	if ! [ -x "$(command -v $1)" ]; then   
 		logger -t "$(basename $0)[$$]" Installing $1
-		DEBIAN_FRONTEND=noninteractive apt install -y $1
+		DEBIAN_FRONTEND=noninteractive apt-get install -y $1
 		logger -t "$(basename $0)[$$]" Installation of $1 done exit code $?
 	fi
 	}
@@ -503,7 +503,7 @@ function f_run_apt_updates () {
 	apt-get -y update
     # "upgrade" is an extraneous subset of "dist-upgrade" below; 
     #    Ref: https://askubuntu.com/questions/194651/why-use-apt-upgrade-instead-of-apt-dist-upgrade#:~:text=apt%2Dget%20upgrade%20will%20not,install%20but%20not%20remove%20packages
-    #    sudo apt -y upgrade \
+    #    sudo apt-get -y upgrade \
     # "dist-upgrade" installs available upgrades of all packages
     # currently installed on the system and intelligently handles
     # changing dependencies with new versions of packages
@@ -806,19 +806,23 @@ f_run_apt_updates () {
 	# See https://itsfoss.com/apt-vs-apt-difference/ for rationale.
 	#
 	# "update" downloads package information from all configured sources
-	apt -y update
+	ecoh apt-get -y update
+	apt-get -y update
 	# "upgrade" is an extraneous subset of "dist-upgrade" below
-	#    sudo apt -y upgrade \
+	#    sudo apt-get -y upgrade \
 	# "dist-upgrade" installs available upgrades of all packages
 	# currently installed on the system and intelligently handles
 	# changing dependencies with new versions of packages
-	apt -y dist-upgrade
+	echo apt-get -y dist-upgrade
+	apt-get -y dist-upgrade
 	# "clean" clears out the local repository of retrieved package files.
-	apt -y clean
+	echo apt-get -y clean
+	apt-get -y clean
 	# "autoremove" removes those dependencies that were installed with
 	# now-removed applications and that are no longer used
 	# by anything else on the system
-	apt -y autoremove
+	echo apt-get -y autoremove
+	apt-get -y autoremove
 	}
 
 #########################################################################################################

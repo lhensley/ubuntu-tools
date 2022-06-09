@@ -109,9 +109,9 @@ cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
 
 # Add universe (and multiverse?) repository
 # More info is at https://itsfoss.com/ubuntu-repositories/
-    add-apt-repository -y universe
-    # add-apt-repository -y multiverse     # OK to uncomment if needed, but if not, why have it?
-    apt -y update
+    add-apt-repository --yes universe
+    # add-apt-repository --yes multiverse     # OK to uncomment if needed, but if not, why have it?
+    apt-get --yes update
 
 # Update packages
     # apt vs apt-get?
@@ -119,23 +119,27 @@ cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
     #   Ref: https://linuxconfig.org/apt-vs-apt-get-advanced-package-tool
     #   Ref: https://www.google.com/search?q=apt+and+apt-get
     # "update" downloads package information from all configured sources
-    apt -y update
+    echo apt-get --yes update
+    apt-get --yes update
     # "upgrade" is an extraneous subset of "dist-upgrade" below; 
     #    Ref: https://askubuntu.com/questions/194651/why-use-apt-upgrade-instead-of-apt-dist-upgrade#:~:text=apt%2Dget%20upgrade%20will%20not,install%20but%20not%20remove%20packages
-    #    sudo apt -y upgrade \
+    #    sudo apt-get --yes upgrade \
     # "dist-upgrade" installs available upgrades of all packages
     # currently installed on the system and intelligently handles
     # changing dependencies with new versions of packages
-    time apt -y dist-upgrade
+    echo time apt-get --yes dist-upgrade
+    time apt-get --yes dist-upgrade
     # "clean" clears out the local repository of retrieved package files.
-    apt -y clean
+    echo apt-get --yes clean
+    apt-get --yes clean
     # "autoremove" removes those dependencies that were installed with
     # now-removed applications and that are no longer used
     # by anything else on the system
-    apt -y autoremove
+    echo apt-get --yes autoremove
+    apt-get --yes autoremove
 
 # Install git and ufw and open the git port
-    DEBIAN_FRONTEND=noninteractive apt install -yq git
+    apt-get install -yq git
     ufw allow git
 
 # Configure git
@@ -190,35 +194,45 @@ cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
 # Mandatory installations
 ###############################################################
 
+# debconf-utils
+    echo "Installing debconf utilities."
+    apt-get install --yes debconf-utils
+    echo "debconf utilities installed."
+
 # Network Manager
     echo "Installing Network Manager."
-    f_install network-manager
+    apt-get install --yes network-manager
     echo "Network Manager installed."
 
 # NVIDIA Driver 390
 # The machine (or at least oz) will brick without these drivers.
     echo "Installing NVIDIA Driver 390."
-    f_install nvidia-driver-390
+    apt-get install --yes nvidia-driver-390
     echo "NVIDIA Driver 390 installed."
 
 # PHP is installed every time.
   echo "Installing php"
-  PHP_PACKAGES="php libapache2-mod-php php-mysql php-gd php-curl php-imap php-ldap"
+  PHP_PACKAGES="php-cli libapache2-mod-php php-mysql php-gd php-curl php-imap php-ldap"
   PHP_PACKAGES+=" libmcrypt-dev php-mbstring php-dev php-pear"
   PHP_PACKAGES+=" libc-client2007e mlock uw-mailutils"
-  DEBIAN_FRONTEND=noninteractive apt install -y $PHP_PACKAGES
+  apt-get install --yes $PHP_PACKAGES
   phpenmod gd curl imap ldap mbstring
   systemctl restart apache2
   echo "php installed."
 
 # ssh
     echo "Installing ssh."
-    f_install ssh && ufw allow ssh      # Secure shell client
+    apt-get install --yes ssh      # Secure shell client
+    ufw allow ssh
     echo "ssh installed."
 
 # tzdata
     echo "Installing tzdata."
-    f_install tzdata
+    apt-get purge --yes tzdata
+#    echo "tzdata  tzdata/Areas    select  US" | debconf-set-selections
+#    echo "tzdata  tzdata/Zones/US select  Central" | debconf-set-selections
+#    echo "tzdata  tzdata/Zones/Etc select  UTC" | debconf-set-selections
+    apt-get install tzdata
     echo "tzdata installed."
 
 
@@ -228,7 +242,7 @@ cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
 # apache2
 if $install_apache2 ; then
     echo "Installing apache2"
-    DEBIAN_FRONTEND=noninteractive apt install -y apache2 apache2-doc apache2-suexec-pristine
+    apt-get install --yes apache2 apache2-doc apache2-suexec-pristine
     ufw allow 'Apache'
     ufw allow 'Apache Full'
     ufw allow http
@@ -241,7 +255,7 @@ if $install_apache2 ; then
 # apg
 if $install_apg ; then
     echo "Installing apg."
-    f_install apg                       # Password generator 
+    apt-get install --yes apg                       # Password generator 
     echo "apg installed."
     fi
 
@@ -249,112 +263,112 @@ if $install_apg ; then
 if $install_apt_cacher_ng ; then
   echo "Installing apt-cacher-ng."
   # Based on https://www.tecmint.com/apt-cache-server-in-ubuntu/
-  DEBIAN_FRONTEND=noninteractive apt install -y apt-cacher-ng avahi-daemon squid-deb-proxy-client
+  apt-get install --yes apt-cacher-ng avahi-daemon squid-deb-proxy-client
   echo "apt-gacher-ng installed."
   fi
 
 # at
 if $install_at ; then
     echo "Installing at."
-    f_install at                        # Queue, examine or delete jobs for later execution
+    apt-get install --yes at                        # Queue, examine or delete jobs for later execution
     echo "at installed."
     fi
 
 # bridge-utils
 if $install_bridgeutils ; then
     echo "Installing bridge-utils."
-    f_install bridge-utils              # Bridge-utils extensions for the interfaces(5) file format
+    apt-get install --yes bridge-utils              # Bridge-utils extensions for the interfaces(5) file format
     echo "bridge-utils installed."
     fi
 
 # certbot
 if $install_certbot ; then
   echo "Installing certbot"
-  apt install -y certbot python3-certbot-apache
+  apt-get install --yes certbot python3-certbot-apache
   echo "certbot installed."
   fi
 
 # comskip
 if $install_comskip ; then
     echo "Installing comskip."
-    f_install comskip                   # Commercial skipper for videos
+    apt-get install --yes comskip                   # Commercial skipper for videos
     echo "comskip installed."
     fi
 
 # cryfs
 if $install_cryfs ; then
     echo "Installing cryfs."
-    f_install cryfs                     # Encrypted file system
+    apt-get install --yes cryfs                     # Encrypted file system
     echo "cryfs installed."
     fi
 
 # curl
 if $install_curl ; then
     echo "Installing curl."
-    f_install curl                      # Transfer a URL
+    apt-get install --yes curl                      # Transfer a URL
     echo "curl installed."
     fi
 
 # ddclient
 if $install_ddclient ; then
     echo "Installing ddclient."
-    f_install ddclient                  # Update IP addresses at dynamic DNS services
+    apt-get install --yes ddclient                  # Update IP addresses at dynamic DNS services
     echo "ddclient installed."
     fi
 
 # dos2unix
 if $install_dos2unix ; then
     echo "Installing dos2unix."
-    f_install dos2unix                  # DOS/MAC to UNIX text file format converter
+    apt-get install --yes dos2unix                  # DOS/MAC to UNIX text file format converter
     echo "dos2unix installed."
     fi
 
 # exiftool
 if $install_exiftool ; then
     echo "Installing exiftool."
-    f_install exiftool                  # Read and write meta information in files
+    apt-get install --yes exiftool                  # Read and write meta information in files
     echo "exiftool installed."
     fi
 
 # fail2ban
 if $install_fail2ban ; then
     echo "Installing fail2ban."
-    f_install fail2ban                  # Bans IP that makes too many password failures
+    apt-get install --yes fail2ban                  # Bans IP that makes too many password failures
     echo "fail2ban installed."
     fi
 
 # ffmpeg
 if $install_ffmpeg ; then
     echo "Installing ffmpeg."
-    f_install ffmpeg                    # FFmpeg video converter
+    apt-get install --yes ffmpeg                    # FFmpeg video converter
     echo "ffmpeg installed."
     fi
 
 # ghostscript
 if $install_ghostscript ; then
     echo "Installing ghostscript."
-    f_install ghostscript               # Compressing PDF scans
+    apt-get install --yes ghostscript               # Compressing PDF scans
     echo "ghostscript installed."
     fi
 
 # git
 if $install_git ; then
     echo "Installing git"
-    f_install git && ufw allow git      # The stupid content tracker
+    apt-get install --yes git && ufw allow git      # The stupid content tracker
     echo "git installed."
     fi
 
 # gpg
 if $install_gpg ; then
     echo "Installing gpg."
-    f_install gpg                       # OpenPGP encryption and signing tool
+    apt-get install --yes gpg                       # OpenPGP encryption and signing tool
     echo "gpg installed."
     fi
 
 # gzip
 if $install_gzip ; then
     echo "Installing gzip."
-    f_install gzip                      # Compress or expand files
+    apt-get install --yes gzip                      # Compress or expand files
     echo "gzip installed."
     fi
 
@@ -362,28 +376,28 @@ if $install_gzip ; then
 # Works on Ubuntu 22, but contradicts https://handbrake.fr/docs/en/1.5.0/get-handbrake/download-and-install.html
   if $install_handbrake ; then
     echo "Installing HandBrake"
-    DEBIAN_FRONTEND=noninteractive apt install -y handbrake-cli
+    apt-get install --yes handbrake-cli libatlas-base-dev nvidia-driver-390
     echo "HandBrake installed."
     fi
 
 # ifupdown
 if $install_ifupdown ; then
     echo "Installing ifupdown."
-    f_install ifupdown
+    apt-get install --yes ifupdown
     echo "ifupdown installed."
     fi
 
 # inotify
 if $install_inotify ; then
     echo "Installing inotify."
-    f_install inotify-tools             # Do something when a file is created, deleted, or changed
+    apt-get install --yes inotify-tools             # Do something when a file is created, deleted, or changed
     echo "inotify installed."
     fi
 
 # lsyncd
 if $install_lsyncd ; then
   echo "Installing lsyncd"
-  apt install -y lsyncd
+  apt-get install --yes lsyncd
   mkdir -p /etc/lsyncd
   mkdir -p /var/log/lsyncd
   systemctl start lsyncd
@@ -397,7 +411,7 @@ if $install_mailutils ; then
   debconf-set-selections <<< "postfix postfix/relayhost $RELAYHOST"
   debconf-set-selections <<< "postfix postfix/mailname string $MAILNAME@$DOMAIN_NAME"
   debconf-set-selections <<< "postfix postfix/main_mailer_type string $MAIN_MAILER_TYPE"
-  apt install -y mailutils postfix
+  apt-get install --yes mailutils postfix
   ufw allow mail
   echo "mailutils installed."
   fi
@@ -406,9 +420,9 @@ if $install_mailutils ; then
 # DON'T USE THE SNAP INSTALLER
 if $install_makemkv ; then
     echo "Installing MakeMKV"
-    printf '\n\n' | add-apt-repository -y ppa:heyarje/makemkv-beta
-    apt update
-    DEBIAN_FRONTEND=noninteractive apt install -y makemkv-bin makemkv-oss ccextractor
+    printf '\n\n' | add-apt-repository --yes ppa:heyarje/makemkv-beta
+    apt-get update
+    apt-get install --yes makemkv-bin makemkv-oss ccextractor
     # Configure MakeMKV
         usermod -a -G cdrom $ADMIN_USER
     echo "MakeMKV installed."
@@ -419,7 +433,7 @@ if $install_mysql_server ; then
   echo "Installing mysql server"
     ###### EXTREMELY IMPORTANT: Edit /etc/mysql/mysql.conf.d/mysqld.cnf and open up bind-address * ###########
   MYSQL_PACKAGES="mysql-server openssl libcurl4-openssl-dev libssl-dev php-gmp php-symfony php-imagick php-twig-doc php-symfony-translation"
-  apt install -y $MYSQL_PACKAGES
+  apt-get install --yes $MYSQL_PACKAGES
   ufw allow mysql
   mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
@@ -458,7 +472,7 @@ if $install_mysql_server ; then
           debconf-set-selections <<< "phpmyadmin phpmyadmin/app-password-confirm password $PHPMYADMIN_APP_PASS"
           debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/admin-pass password $PHPMYADMIN_ROOT_PASS"
           debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_APP_DB_PASS"
-          apt install -y phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+          apt-get install --yes phpmyadmin php-mbstring php-zip php-gd php-json php-curl
           phpenmod mbstring
           cp $GIT_GO_CONFIGS$PHPMYAMIN_DIR/phpmyadmin.config.inc.php $PHPMYADMIN_DIR/config.inc.php
           chown -R www-data:www-data $PHPMYADMIN_DIR
@@ -471,35 +485,35 @@ if $install_mysql_server ; then
 # net-tools
 if $install_nettools ; then
     echo "Installing net-tools."
-    f_install net-tools                 # Print network connections, routing tables, interface statistics
+    apt-get install --yes net-tools                 # Print network connections, routing tables, interface statistics
     echo "net-tools installed."
     fi
 
 # nfs
 if $install_nfs ; then
     echo "Installing nfs."
-    f_install nfs-common
-    f_install nfs-kernel-server
+    apt-get install --yes nfs-common
+    apt-get install --yes nfs-kernel-server
     echo "nfs installed."
     fi
 
 # openssl
 if $install_openssl ; then
   echo "Installing openssl"
-  apt install -y openssl 
+  apt-get install --yes openssl 
   echo "openssl installed."
   fi
 
 # openvpn
 if $install_openvpn ; then
     echo "Installing openvpn."
-    f_install openvpn                   # Secure IP tunnel daemon
+    apt-get install --yes openvpn                   # Secure IP tunnel daemon
     echo "openvpn installed."
     fi
 
 # PLEX TRIAL FOR 22.04 5/31/2022
 # https://www.linuxcapable.com/how-to-install-plex-media-server-on-ubuntu-22-04-lts/
-# apt install apt-transport-https curl wget -y
+# apt-get install apt-transport-https curl wget -y
 
 # ATTEMPT 2
 # Visit https://downloads.plex.tv and wget the appropriate DEB file for 64-bit Intel/AMD in my home directory
@@ -514,19 +528,19 @@ if $install_plexmediaserver ; then
           snap install plexmediaserver
       # Prior to Ubuntu 22:
           # rm -rf /etc/apt/sources.list.d/plexmediaserver.list
-          # apt install -y wget curl gpg gnupg2 software-properties-common apt-transport-https lsb-release ca-certificates
+          # apt-get install --yes wget curl gpg gnupg2 software-properties-common apt-transport-https lsb-release ca-certificates
           # echo deb https://downloads.plex.tv/repo/deb public main | sudo tee /etc/apt/sources.list.d/plexmediaserver.list
           # wget https://downloads.plex.tv/plex-keys/PlexSign.key
           # cat PlexSign.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/PlexSigkey.gpg
-          # apt -y update
-          # f_install plexmediaserver
+          # apt-get --yes update
+          # apt-get install --yes plexmediaserver
       ufw allow 32400/tcp # if not already specified
       echo "Plex Media Server installed."
     if $install_tautulli ; then
         # Install Tautulli for https://this-server:8181
         # Ref: https://snapcraft.io/install/tautulli/ubuntu
             echo "Installing Tautulli."
-            # apt install -y snapd
+            # apt-get install --yes snapd
             snap install tautulli
             ufw allow 8181
             echo "Tautulli installed."
@@ -536,84 +550,84 @@ if $install_plexmediaserver ; then
 # proftpd
 if $install_proftpd ; then
     echo "Installing proftpd."
-    f_install proftpd                 # For scanning to brother@oz
+    apt-get install --yes proftpd                 # For scanning to brother@oz
     echo "proftpd installed."
     fi
 
 # putty-tools
 if $install_puttytools ; then
     echo "Installing putty-tools."
-    f_install putty-tools               # A free SSH and telnet client
+    apt-get install --yes putty-tools               # A free SSH and telnet client
     echo "putty-tools installed."
     fi
 
 # rclone
 if $install_rclone ; then
     echo "Installing rclone"
-    apt install -y rclone
+    apt-get install --yes rclone
     echo "rclone installed."
     fi
 
 # resolvconf
 if $install_resolvconf ; then
     echo "Installing resolvconf."
-    f_install resolvconf                # Name resolver
+    apt-get install --yes resolvconf                # Name resolver
     echo "resolvconf installed."
     fi
 
 # ripmime
 if $install_ripmime ; then
     echo "Installing ripmime."
-    f_install ripmime                   # Process files sent by email
+    apt-get install --yes ripmime                   # Process files sent by email
     echo "ripmime installed."
     fi
 
 # rsync
 if $install_rsync ; then
     echo "Installing rsync."
-    f_install rsync                     # A fast, versatile, remote (and local) file-copying tool
+    apt-get install --yes rsync                     # A fast, versatile, remote (and local) file-copying tool
     echo "rsync installed."
     fi
 
 # sshfs
 if $install_sshfs ; then
     echo "Installing sshfs."
-    f_install sshfs                     # Filesystem client based on ssh
+    apt-get install --yes sshfs                     # Filesystem client based on ssh
     echo "sshfs installed."
     fi
 
 # sysbench
 if $install_sysbench ; then
     echo "Installing sysbench."
-    f_install sysbench                  # A modular, cross-platform and multi-threaded benchmark tool.
+    apt-get install --yes sysbench                  # A modular, cross-platform and multi-threaded benchmark tool.
     echo "sysbench installed."
     fi
 
 # tasksel
 if $install_tasksel ; then
     echo "Installing tasksel."
-    f_install tasksel                   # A user interface for installing tasks
+    apt-get install --yes tasksel                   # A user interface for installing tasks
     echo "tasksel installed."
     fi
 
 # unzip
 if $install_unzip ; then
     echo "Installing unzip."
-    f_install unzip                     # List, test and extract compressed files in a ZIP archive
+    apt-get install --yes unzip                     # List, test and extract compressed files in a ZIP archive
     echo "unzip installed."
     fi
 
 # uuid
 if $install_uuid ; then
     echo "Installing ."
-    # f_install uuid                    # Use uuidgen instead. It's built-in.
+    # apt-get install --yes uuid                    # Use uuidgen instead. It's built-in.
     echo "uuid installed."
     fi
 
 # vim
 if $install_vim ; then
     echo "Installing vim."
-    f_install vim                       # Vi IMproved, a programmer's text editor
+    apt-get install --yes vim                       # Vi IMproved, a programmer's text editor
     echo "vim installed."
     fi
 
@@ -625,7 +639,7 @@ if $install_webmin ; then
   WEBMIN_PACKAGES+=" libnet-ssleay-perl libauthen-pam-perl"
   WEBMIN_PACKAGES+=" libpam-runtime libio-pty-perl apt-show-versions"
   WEBMIN_PACKATES+=" python libsocket6-perl libapt-pkg-perl"
-  apt install -y $WEBMIN_PACKAGES
+  apt-get install --yes $WEBMIN_PACKAGES
   dpkg --install ./webmin-current.deb
   rm -f ./webmin-current.deb
   ufw allow webmin
@@ -637,31 +651,31 @@ if $is_desktop ; then
 
     # Cubic
     if $install_cubic ; then
-        apt-add-repository -y ppa:cubic-wizard/release
+        apt-add-repository --yes ppa:cubic-wizard/release
         read -p "Press enter to continue"
-        apt -y update
-        apt install -y cubic
+        apt-get --yes update
+        apt-get install --yes cubic
         echo "Cubic installed."
         fi
 
     # filezilla
     if $install_filezilla ; then
         echo "Installing filezilla."
-        f_install filezilla             # A powerful client for plain FTP, FTP over SSL/TLS (FTPS) and the SSH File Transfer Protocol (SFTP)
+        apt-get install --yes filezilla             # A powerful client for plain FTP, FTP over SSL/TLS (FTPS) and the SSH File Transfer Protocol (SFTP)
         echo "filezilla installed."
         fi
 
     # gimp
     if $install_gimp ; then
         echo "Installing gimp."
-        f_install gimp                  # An image manipulation and paint program
+        apt-get install --yes gimp                  # An image manipulation and paint program
         echo "gimp installed."
         fi
 
     # Google Chrome
     if $install_chrome ; then
         echo "Installing Google Chrome."
-        DEBIAN_FRONTEND=noninteractive apt install -y wget gdebi-core
+        apt-get install --yes wget gdebi-core
         wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
         gdebi --n google-chrome-stable_current_amd64.deb
         rm -f ./google-chrome-stable_current_amd64.deb
@@ -671,18 +685,18 @@ if $is_desktop ; then
     # Microsoft Edge
     if $install_edge ; then
         echo "Installing Microsoft Edge."
-        DEBIAN_FRONTEND=noninteractive apt -y install software-properties-common apt-transport-https curl wget ca-certificates -y
+        apt-get --yes install software-properties-common apt-transport-https curl wget ca-certificates -y
         wget -O- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/microsoft-edge.gpg
         echo 'deb [signed-by=/usr/share/keyrings/microsoft-edge.gpg] https://packages.microsoft.com/repos/edge stable main' | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
-        apt -y update
-        DEBIAN_FRONTEND=noninteractive apt install microsoft-edge-stable -y
+        apt-get --yes update
+        apt-get install microsoft-edge-stable -y
         echo "Microsoft Edge installed."
         fi
 
     # xrdp 
     if $install_xrdp ; then
         echo "Installing ."
-        f_install xrdp                  # A Remote Desktop Protocol (RDP) server
+        apt-get install --yes xrdp                  # A Remote Desktop Protocol (RDP) server
         echo "xrdp installed."
         fi
 
@@ -690,7 +704,7 @@ if $is_desktop ; then
     if $install_zoom ; then
         echo "Installing Zoom Client"
         wget https://zoom.us/client/latest/zoom_amd64.deb
-        apt install -y ./zoom_amd64.deb
+        apt-get install --yes ./zoom_amd64.deb
         rm -f ./zoom_amd64.deb
         echo "Zoom client installed."
         fi
