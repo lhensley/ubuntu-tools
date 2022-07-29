@@ -806,7 +806,7 @@ f_run_apt_updates () {
 	# See https://itsfoss.com/apt-vs-apt-difference/ for rationale.
 	#
 	# "update" downloads package information from all configured sources
-	ecoh apt-get -y update
+	echo apt-get -y update
 	apt-get -y update
 	# "upgrade" is an extraneous subset of "dist-upgrade" below
 	#    sudo apt-get -y upgrade \

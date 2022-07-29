@@ -1,0 +1,13 @@
+#!/bin/bash
+# get-init
+# PURPOSE: Download the Ubuntu server initialization script.
+
+mkdir ~/DELETE_THIS
+cd ~/DELETE_THIS
+wget https://raw.githubusercontent.com/lhensley/go/master/sbin/initialize-server
+chmod 700 ./initialize-server
+cd ~
+echo
+echo "To execute script:"
+echo "sudo ~/DELETE_THIS/initialize-server"
+exit 0
