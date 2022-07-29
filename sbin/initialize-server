@@ -1,4 +1,4 @@
-#!/bin/bashtime
+#!/bin/bash
 # initialize-server
 # PURPOSE: Installs basic software, initializes, and configures
 # OPTIMIZED for Ubuntu Server 22.04 LTS
