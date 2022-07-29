@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bashtime
 # initialize-server
 # PURPOSE: Installs basic software, initializes, and configures
 # OPTIMIZED for Ubuntu Server 22.04 LTS
@@ -15,82 +15,83 @@ if [[ $EUID -ne 0 ]]; then
 
 ########### CRITICAL: You MUST confirm these values.
 
+# Desktop Software
 # If this is set to false, GUI app installations will be ignored.
 # CAUTION: If accidentally set to true, all required GUI packages also will be installed.
-is_desktop=false
+    is_desktop=false
+    install_chrome=true             # Google Chrome web browser
+    install_cubic=false             # Creates custom Ubuntu ISO files. Details at https://github.com/PJ-Singh-001/Cubic
+    install_edge=true               # Microsoft Edge
+    install_filezilla=true          # A powerful client for plain FTP, FTP over SSL/TLS (FTPS) and the SSH File Transfer Protocol (SFTP)
+    install_gimp=true               # An image manipulation and paint program
+    install_xrdp=false              # A Remote Desktop Protocol (RDP) server
+    install_zoom=true               # Video conferencing
 
 # OPTIONAL software (default to false)
-install_apt_cacher_ng=false     # Caching system for apt software distribution
-install_bridgeutils=false       # Bridge-utils extensions for the interfaces(5) file format
-install_cubic=false             # Creates custom Ubuntu ISO files. Details at https://github.com/PJ-Singh-001/Cubic
-install_handbrake=false         # HandBrake video rendering
-install_ifupdown=false          # Used for /etc/network/interfaces manual configuration; interferes with Network Manager
-install_lsyncd=false            # Keeps directories in sync using inotify or fsevents. Details at https://lsyncd.github.io/lsyncd/
-install_makemkv=false           # MakeMKV DVD ripper
-install_nettools=false          # Print network connections, routing tables, interface statistics
-install_openvpn=false           # Secure IP tunnel daemon
-install_plexmediaserver=false   # Media streamer and library manager
-install_proftpd=false           # For scanning to brother@oz
-install_rclone=false            # command-line program to manage files on cloud storage. Details at https://rclone.org/
-install_resolvconf=false        # Name resolver
-install_sysbench=false          # A modular, cross-platform and multi-threaded benchmark tool.
-install_tautulli=false          # Monitoring tool for Plex Media Server ***** PLEX MEDIA SERVER MUST BE INSTALLED TO INSTALL TAUTULLI *****
-install_xrdp=false              # A Remote Desktop Protocol (RDP) server
-install_uuid=false              # Use uuidgen instead. It's built-in.
+    install_apt_cacher_ng=false     # Caching system for apt software distribution
+    install_bridgeutils=false       # Bridge-utils extensions for the interfaces(5) file format
+    install_handbrake=true          # HandBrake video rendering
+    install_ifupdown=false          # Used for /etc/network/interfaces manual configuration; interferes with Network Manager
+    install_lsyncd=false            # Keeps directories in sync using inotify or fsevents. Details at https://lsyncd.github.io/lsyncd/
+    install_makemkv=true            # MakeMKV DVD ripper
+    install_nettools=false          # Print network connections, routing tables, interface statistics
+    install_openvpn=false           # Secure IP tunnel daemon
+    install_plexmediaserver=true    # Media streamer and library manager
+    install_proftpd=false           # For scanning to brother@oz
+    install_rclone=false            # command-line program to manage files on cloud storage. Details at https://rclone.org/
+    install_resolvconf=false        # Name resolver
+    install_sysbench=false          # A modular, cross-platform and multi-threaded benchmark tool.
+    install_tautulli=true           # Monitoring tool for Plex Media Server ***** PLEX MEDIA SERVER MUST BE INSTALLED TO INSTALL TAUTULLI *****
+    install_uuid=false              # Use uuidgen instead. It's built-in.
 
 # STANDARD software (default to true)
-install_apache2=true            # Apache 2 Webserver
-install_apg=true                # Password generator 
-install_at=true                 # Queue, examine or delete jobs for later execution
-install_certbot=true            # Certificate Installer for https
-install_chrome=true             # Google Chrome web browser
-install_comskip=true            # Commercial skipper for videos
-install_cryfs=true              # Encrypted file system
-install_curl=true               # Transfer a URL
-install_ddclient=true           # Update IP addresses at dynamic DNS services
-install_dos2unix=true           # DOS/MAC to UNIX text file format converter
-install_edge=true               # Microsoft Edge
-install_exiftool=true           # Read and write meta information in files
-install_fail2ban=true           # Bans IP that makes too many password failures
-install_ffmpeg=true             # FFmpeg video converter
-install_filezilla=true          # A powerful client for plain FTP, FTP over SSL/TLS (FTPS) and the SSH File Transfer Protocol (SFTP)
-install_ghostscript=true        # Compressing PDF scans
-install_gimp=true               # An image manipulation and paint program
-install_git=true                # The stupid content tracker
-install_gpg=true                # OpenPGP encryption and signing tool
-install_gzip=true               # Compress or expand files
-install_inotify=true            # Do something when a file is created, deleted, or changed
-install_mailutils=true          # mail, Postfix, etc.
-install_mysql_server=false      # Relational Database
-install_nfs=true                # Network File Service
-install_openssl=true            # OpenSSL
-install_php=true                # PHP
-install_phpmyadmin=false        # Web tool for managing MySQL
-install_puttytools=true         # A free SSH and telnet client
-install_ripmime=true            # Process files sent by email
-install_rsync=true              # A fast, versatile, remote (and local) file-copying tool
-install_ssh=true                # Secure Shell
-install_sshfs=true              # Filesystem client based on ssh
-install_tasksel=true            # A user interface for installing tasks
-install_unzip=true              # List, test and extract compressed files in a ZIP archive
-install_vim=true                # Vi IMproved, a programmer's text editor
-install_webmin=true             # Web-based system admin tools
-install_zoom=true               # Video conferencing
+    install_apache2=true            # Apache 2 Webserver
+    install_apg=true                # Password generator 
+    install_at=true                 # Queue, examine or delete jobs for later execution
+    install_certbot=true            # Certificate Installer for https
+    install_comskip=true            # Commercial skipper for videos
+    install_cryfs=true              # Encrypted file system
+    install_curl=true               # Transfer a URL
+    install_ddclient=true           # Update IP addresses at dynamic DNS services
+    install_dos2unix=true           # DOS/MAC to UNIX text file format converter
+    install_exiftool=true           # Read and write meta information in files
+    install_fail2ban=true           # Bans IP that makes too many password failures
+    install_ffmpeg=true             # FFmpeg video converter
+    install_ghostscript=true        # Compressing PDF scans
+    install_git=true                # The stupid content tracker
+    install_gpg=true                # OpenPGP encryption and signing tool
+    install_gzip=true               # Compress or expand files
+    install_inotify=true            # Do something when a file is created, deleted, or changed
+    install_mailutils=true          # mail, Postfix, etc.
+    install_mysql_server=true       # Relational Database
+    install_nfs=true                # Network File Service
+    install_openssl=true            # OpenSSL
+    install_php=true                # PHP
+    install_phpmyadmin=true         # Web tool for managing MySQL
+    install_puttytools=true         # A free SSH and telnet client
+    install_ripmime=true            # Process files sent by email
+    install_rsync=true              # A fast, versatile, remote (and local) file-copying tool
+    install_ssh=true                # Secure Shell
+    install_sshfs=true              # Filesystem client based on ssh
+    install_tasksel=true            # A user interface for installing tasks
+    install_unzip=true              # List, test and extract compressed files in a ZIP archive
+    install_vim=true                # Vi IMproved, a programmer's text editor
+    install_webmin=true             # Web-based system admin tools
 
 # Used for installing git
-my_full_name="Lane Hensley"
-my_email="lane@lanehensley.org"
-ROOT_USER="root"
-ROOT_HOME_DIR="/root"
-GIT_ROOT="/var/local/git" 
-GIT_GO="$GIT_ROOT/go"                                # Formerly system.git.go
-GIT_GO_CONFIGS="$GIT_GO/configs"                       # Formerly system.git.go.configs
-GIT_GO_SBIN="$GIT_GO/sbin"                             # Formerly #system.git.go.sbin
-GIT_GO_SERVICES="$GIT_GO/services"
-GIT_GO_SETUP="$GIT_GO/setup"                           # Formerly system.git.go.setup
-SBIN_DIR="/usr/local/sbin"
-SBIN_PARENT="$(dirname $SBIN_DIR)"
-MY_GIT_TOKEN="8224e3fbc597bf523d30906d038158977763b2e1"
+    my_full_name="Lane Hensley"
+    my_email="lane@lanehensley.org"
+    ROOT_USER="root"
+    ROOT_HOME_DIR="/root"
+    GIT_ROOT="/var/local/git" 
+    GIT_GO="$GIT_ROOT/go"                                # Formerly system.git.go
+    GIT_GO_CONFIGS="$GIT_GO/configs"                       # Formerly system.git.go.configs
+    GIT_GO_SBIN="$GIT_GO/sbin"                             # Formerly #system.git.go.sbin
+    GIT_GO_SERVICES="$GIT_GO/services"
+    GIT_GO_SETUP="$GIT_GO/setup"                           # Formerly system.git.go.setup
+    SBIN_DIR="/usr/local/sbin"
+    SBIN_PARENT="$(dirname $SBIN_DIR)"
+    # MY_GIT_TOKEN="this-now-is-managed-from-install-keys-script"
 
 cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
 
@@ -107,11 +108,14 @@ cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
 		exit 1
 		fi
 
+# Get us into noninteractive mode
+    export DEBIAN_FRONTEND=noninteractive
+
 # Add universe (and multiverse?) repository
 # More info is at https://itsfoss.com/ubuntu-repositories/
     add-apt-repository --yes universe
-    # add-apt-repository --yes multiverse     # OK to uncomment if needed, but if not, why have it?
-    apt-get --yes update
+    # Not needed because it comes in next section.
+    # echo apt-get --yes update
 
 # Update packages
     # apt vs apt-get?
@@ -127,8 +131,8 @@ cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
     # "dist-upgrade" installs available upgrades of all packages
     # currently installed on the system and intelligently handles
     # changing dependencies with new versions of packages
-    echo time apt-get --yes dist-upgrade
-    time apt-get --yes dist-upgrade
+    echo apt-get --yes dist-upgrade
+    apt-get --yes dist-upgrade
     # "clean" clears out the local repository of retrieved package files.
     echo apt-get --yes clean
     apt-get --yes clean
@@ -139,7 +143,7 @@ cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
     apt-get --yes autoremove
 
 # Install git and ufw and open the git port
-    apt-get install -yq git
+    apt-get install --yes -quiet git
     ufw allow git
 
 # Configure git
@@ -152,9 +156,10 @@ cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
     # Install git token
     # To get a new token, go to https://github.com/settings/tokens.
     # NOTE: this token allows deployment only.
-    git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
-    git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
-    git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
+        # This part now is handled by script install-keys
+        # git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
+        # git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
+        # git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
     chown $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.gitconfig"
     chmod 600 "$ROOT_HOME_DIR/.gitconfig"
 
@@ -171,7 +176,7 @@ cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
     cd
 
 # Copy scripts into /usr/local/sbin
-    cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
+    cp -r "$GIT_GO_SBIN" "$SBIN_PARENT"
     chown -R $ROOT_USER:$ROOT_USER "$SBIN_DIR"
     find "$SBIN_DIR" -type d -print0 | sudo xargs -0 chmod 750
     find "$SBIN_DIR" -type f -print0 | sudo xargs -0 chmod 540
@@ -212,7 +217,7 @@ cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
 
 # PHP is installed every time.
   echo "Installing php"
-  PHP_PACKAGES="php-cli libapache2-mod-php php-mysql php-gd php-curl php-imap php-ldap"
+  PHP_PACKAGES="php php-cli libapache2-mod-php php-mysql php-gd php-curl php-imap php-ldap"
   PHP_PACKAGES+=" libmcrypt-dev php-mbstring php-dev php-pear"
   PHP_PACKAGES+=" libc-client2007e mlock uw-mailutils"
   apt-get install --yes $PHP_PACKAGES
@@ -220,19 +225,18 @@ cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
   systemctl restart apache2
   echo "php installed."
 
-# ssh
-    echo "Installing ssh."
-    apt-get install --yes ssh      # Secure shell client
-    ufw allow ssh
-    echo "ssh installed."
+# Installed at Installation
+# # ssh
+#     echo "Installing ssh."
+#     apt-get install --yes ssh      # Secure shell client
+#     ufw allow ssh
+#     echo "ssh installed."
 
 # tzdata
     echo "Installing tzdata."
     apt-get purge --yes tzdata
-#    echo "tzdata  tzdata/Areas    select  US" | debconf-set-selections
-#    echo "tzdata  tzdata/Zones/US select  Central" | debconf-set-selections
-#    echo "tzdata  tzdata/Zones/Etc select  UTC" | debconf-set-selections
-    apt-get install tzdata
+    ln -fs /usr/share/zoneinfo/"$TIMEZONE" /etc/localtime
+    apt-get install --yes tzdata
     echo "tzdata installed."
 
 
@@ -513,7 +517,7 @@ if $install_openvpn ; then
 
 # PLEX TRIAL FOR 22.04 5/31/2022
 # https://www.linuxcapable.com/how-to-install-plex-media-server-on-ubuntu-22-04-lts/
-# apt-get install apt-transport-https curl wget -y
+# apt-get install apt-transport-https curl wget --yes
 
 # ATTEMPT 2
 # Visit https://downloads.plex.tv and wget the appropriate DEB file for 64-bit Intel/AMD in my home directory
@@ -685,11 +689,11 @@ if $is_desktop ; then
     # Microsoft Edge
     if $install_edge ; then
         echo "Installing Microsoft Edge."
-        apt-get --yes install software-properties-common apt-transport-https curl wget ca-certificates -y
+        apt-get --yes install software-properties-common apt-transport-https curl wget ca-certificates
         wget -O- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/microsoft-edge.gpg
         echo 'deb [signed-by=/usr/share/keyrings/microsoft-edge.gpg] https://packages.microsoft.com/repos/edge stable main' | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
         apt-get --yes update
-        apt-get install microsoft-edge-stable -y
+        apt-get install microsoft-edge-stable --yes
         echo "Microsoft Edge installed."
         fi
 

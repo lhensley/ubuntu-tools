@@ -202,10 +202,11 @@ done
 		fi
 
 # Update Vim and vi config file
-	if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
-		cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ADMIN_HOME_DIR/
-		cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ROOT_HOME_DIR/
-		fi
+# Commented out because defaults in Ubuntu 22 are much better
+#	if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
+#		cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ADMIN_HOME_DIR/
+#		cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ROOT_HOME_DIR/
+#		fi
 
 # Update /etc/exports
 	rm -f /etc/exports
