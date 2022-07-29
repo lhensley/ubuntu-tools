@@ -848,8 +848,5 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
 
-# Remove this script (and the entire "~/DELETE_THIS" directory)
-    rm -R ~/DELETE_THIS
-
 exit 0
 
