@@ -199,21 +199,9 @@ cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
 # Mandatory installations
 ###############################################################
 
-# debconf-utils
-    echo "Installing debconf utilities."
-    apt-get install --yes debconf-utils
-    echo "debconf utilities installed."
-
-# Network Manager
-    echo "Installing Network Manager."
-    apt-get install --yes network-manager
-    echo "Network Manager installed."
-
-# NVIDIA Driver 390
-# The machine (or at least oz) will brick without these drivers.
-    echo "Installing NVIDIA Driver 390."
-    apt-get install --yes nvidia-driver-390
-    echo "NVIDIA Driver 390 installed."
+f_install debconf-utils
+f_install network-manager
+f_install nvidia-driver-390
 
 # PHP is installed every time.
   echo "Installing php"

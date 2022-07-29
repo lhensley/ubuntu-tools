@@ -353,8 +353,8 @@ function f_local_copy() {
 function f_install() {
 	if ! [ -x "$(command -v $1)" ]; then   
 		logger -t "$(basename $0)[$$]" Installing $1
-		DEBIAN_FRONTEND=noninteractive apt-get install -y $1
-		logger -t "$(basename $0)[$$]" Installation of $1 done exit code $?
+		DEBIAN_FRONTEND=noninteractive apt-get install --yes $1
+		logger -t "$(basename $0)[$$]" Installation of $1 ended with exit code $?
 	fi
 	}
 
