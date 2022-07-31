@@ -498,6 +498,8 @@ function f_run_apt_updates () {
     #   Res: https://itsfoss.com/apt-vs-apt-get-difference/
     #   Res: https://linuxconfig.org/apt-vs-apt-get-advanced-package-tool
     #   Res: https://www.google.com/search?q=apt+and+apt-get
+	# Get ready for apg-get
+  	export DEBIAN_FRONTEND=noninteractive
 	# "update" downloads package information from all configured sources
 	echo apt-get -y update
 	apt-get -y update
