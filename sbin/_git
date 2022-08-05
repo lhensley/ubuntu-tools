@@ -163,20 +163,34 @@ done
 	git config --global url."https://api:$GIT_TOKEN@github.com/".insteadOf "https://github.com/" > $REDIRECT
 	git config --global url."https://ssh:$GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/" > $REDIRECT
 	git config --global url."https://git:$GIT_TOKEN@github.com/".insteadOf "git@github.com:" $> $REDIRECT
+    echo
+    echo DIAGNOSTIC CHECK: Stopped processing here. Errors above? The git token shouldn't be stored here ...
+    echo Clear this check by deleting lines 116-169 of _git script.
+    exit 1
 
 # This section re-pulls all go files from github and updates $SBIN_DIR
 	# Change to local repository directory
 		CURRENT_DIRECTORY=$(pwd)
 		cd $GIT_GO
 	# Blow away any local changes not uploaded to github
+        echo
+        echo "Removing any local changes not uploaded to GitHub"
 		git reset --hard > $REDIRECT
 	# Select the designated branch
+        echo
+        echo "Checking out branch $GIT_BRANCH"
 		git checkout $GIT_BRANCH > $REDIRECT
 	# Pull down a copy of the repository
+        echo
+        echo "Pulling the respository from GitHub"
 		git pull > $REDIRECT
 	# Set permissions for git directory
+        echo
+        echo "Tightening permissions in $GIT_ROOT"
 		chmod -R 400 $GIT_ROOT
 	# Copy scripts into $SBIN_DIR
+        echo
+        echo "Copying git SBIN_DIR contents to $SBIN_DIR and services to $SERVICES_DIR"
 		rm -rf $SBIN_DIR
 		cp -r $GIT_GO_SBIN $SBIN_PARENT
         cp -r $GIT_GO_SERVICES/*.service $SERVICES_DIR/
@@ -192,6 +206,12 @@ done
 	chown -R $ROOT_USER:$ROOT_USER $SERVICES_DIR
 	find $SERVICES_DIR -type d -print -exec chmod $SERVICES_DIR_PERMISSIONS {} \; >> /dev/null 2>&1
 	find $SERVICES_DIR -type f -print -exec chmod $SERVICES_FILE_PERMISSIONS {} \; >> /dev/null 2>&1
+
+###################################################
+# DIAGNOSTIC CHECK.
+# Stopping program here to isolate a failure.
+###################################################
+    exit 1
 
 # Apply configs
 	f_apply_configs $ARGS

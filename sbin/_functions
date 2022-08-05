@@ -505,20 +505,26 @@ function f_run_apt_updates () {
     # "dist-upgrade" installs available upgrades of all packages
     # currently installed on the system and intelligently handles
     # changing dependencies with new versions of packages
+		echo
+		echo Updating local host of upgradable packages and upgrading them.
 	    echo DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
 		DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
 	# "clean" clears out the local repository of retrieved package files.
+		echo
+		echo Clearing out the local repository of retrieved package files.
 		echo apt-get -y clean
 		apt-get -y clean
 	# "autoremove" removes those dependencies that were installed with
 	# now-removed applications and that are no longer used
 	# by anything else on the system
+		echo
+		echo "Removing those dependencies that were associated with non-removed applications that no longer are used"
 		echo apt-get -y autoremove
 		apt-get -y autoremove
 	}
 
 function f_upd () {
-	# This is a pass-thru function for. Abstracts out in case there is later
+	# This is a pass-thru function. Abstracts out in case there is later
 	#	more to f_upd than just f_run_apt_updates.
 	f_run_apt_updates
 	}

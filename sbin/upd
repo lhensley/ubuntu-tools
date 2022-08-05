@@ -9,13 +9,17 @@
 	f_require_root
 
 # Apply patches
+	# echo
+	# echo Applying patches.
 	# upd_patch
 
 # Update from github.com
+	echo
 	echo "Updating local git repository."
 	f_git
 
 # Other updates
+	echo
 	echo "Updating local apt packages"
 	f_upd
 

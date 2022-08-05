@@ -1,4 +1,110 @@
 #!/bin/bash
+# bash script to initialize a server with .githubconfig and .ssh codes
+# IMPORTANT: In 1Password, enter edit mode so these headings become comments and line endings are preserved.
+# Copy the entire contents of this file to a file on the new linux server, save it, chmod its permissions to 700, and run it.
+
+# Edit these variables as needed
+USERNAME="ubuntu"
+TIMEZONE="US/Central"
+HOSTNAME="teddy"
+
+TIMESTAMP=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
+
+# Make sure we're root.
+if [[ $EUID -ne 0 ]]; then
+        echo "Use sudo. $0 must be run as root." 1>&2
+        exit 1
+    fi
+
+# Set timezone
+    timedatectl set-timezone $TIMEZONE
+
+# Set hostname
+    hostnamectl hostname $HOSTNAME
+
+# Create .githubconfig
+	BASEFILE=".githubconfig"
+	OUTFILE="/home/$USERNAME/$BASEFILE"
+	ROOTFILE="/root/$BASEFILE"
+	if [ -f "$OUTFILE" ]; then mv "$OUTFILE" "$OUTFILE.$TIMESTAMP"; fi
+	echo '[url "https://api:4b662b7d4431ec1956127aa9d4fdbd8d75ec821a@github.com/"]' >> $OUTFILE
+	echo '        insteadOf = https://github.com/' >> $OUTFILE
+	echo '[url "https://ssh:4b662b7d4431ec1956127aa9d4fdbd8d75ec821a@github.com/"]' >> $OUTFILE
+	echo '        insteadOf = ssh://git@github.com/' >> $OUTFILE
+	echo '[url "https://git:4b662b7d4431ec1956127aa9d4fdbd8d75ec821a@github.com/"]' >> $OUTFILE
+	echo '        insteadOf = git@github.com:' >> $OUTFILE
+	chmod 600 $OUTFILE
+	chown $USERNAME:$USERNAME $OUTFILE
+
+# Copy .githubconfig* to /root
+	cp "$OUTFILE"* /root/
+	chown root:root "$ROOTFILE"*
+
+# Create /home/$USERNAME/.ssh/authorized_keys
+	BASEFILE="authorized_keys"
+	OUTFILE="/home/$USERNAME/.ssh/$BASEFILE"
+	if [ -f "$OUTFILE" ]; then cp "$OUTFILE" "$OUTFILE.$TIMESTAMP"; chown $USERNAME:$USERNAME "$OUTFILE.$TIMESTAMP"; fi
+	echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKIsdMI0p0HIfBnavKfwC+P3/IQyy3Hzn4dV/oZcKZZD lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519' >> $OUTFILE
+	chmod 600 $OUTFILE
+	chown $USERNAME:$USERNAME $OUTFILE
+
+# Create /home/$USERNAME/.ssh/lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519
+	BASEFILE="lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519"
+	OUTFILE="/home/$USERNAME/.ssh/$BASEFILE"
+	if [ -f "$OUTFILE" ]; then mv "$OUTFILE" "$OUTFILE.$TIMESTAMP"; fi
+	echo '-----BEGIN OPENSSH PRIVATE KEY-----' >> $OUTFILE
+	echo 'b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW' >> $OUTFILE
+	echo 'QyNTUxOQAAACCiLHTCNKdByHwZ2ryn8Avj9/yEMstx85+HVf6GXCmWQwAAAMAwkxIRMJMS' >> $OUTFILE
+	echo 'EQAAAAtzc2gtZWQyNTUxOQAAACCiLHTCNKdByHwZ2ryn8Avj9/yEMstx85+HVf6GXCmWQw' >> $OUTFILE
+	echo 'AAAECoYq7jdsbcAX3qerM+wrATpivVYZ5QgPYbngI13YzQ5aIsdMI0p0HIfBnavKfwC+P3' >> $OUTFILE
+	echo '/IQyy3Hzn4dV/oZcKZZDAAAAN2xhbmVAbGFuZWhlbnNsZXkub3JnLTIwMjItMDMtMTktMT' >> $OUTFILE
+	echo 'QtNTEtNDYtQ0RULWlkX2VkMjU1MTkBAgMEBQY=' >> $OUTFILE
+	echo '-----END OPENSSH PRIVATE KEY-----' >> $OUTFILE
+	chmod 600 $OUTFILE
+	chown $USERNAME:$USERNAME $OUTFILE
+	if [ ! -f "$OUTFILE" ]; then cp -p $OUTFILE "/home/$USERNAME/.ssh/id_ed25519"; fi
+
+# Create /home/$USERNAME/.ssh/lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519.pub
+	BASEFILE="lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519.pub"
+	OUTFILE="/home/$USERNAME/.ssh/$BASEFILE"
+	if [ -f "$OUTFILE" ]; then mv "$OUTFILE" "$OUTFILE.$TIMESTAMP"; fi
+	echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKIsdMI0p0HIfBnavKfwC+P3/IQyy3Hzn4dV/oZcKZZD lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519' >> $OUTFILE
+	chmod 644 $OUTFILE
+	chown $USERNAME:$USERNAME $OUTFILE
+	if [ ! -f "$OUTFILE" ]; then cp -p $OUTFILE "/home/$USERNAME/.ssh/id_ed25519.pub"; fi
+
+# Create /home/$USERNAME/.ssh/lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519-Putty-Private.ppk
+	BASEFILE="lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519-Putty-Private.ppk"
+	OUTFILE="/home/$USERNAME/.ssh/$BASEFILE"
+	if [ -f "$OUTFILE" ]; then mv "$OUTFILE" "$OUTFILE.$TIMESTAMP"; fi
+	echo 'PuTTY-User-Key-File-2: ssh-ed25519' >> $OUTFILE
+	echo 'Encryption: none' >> $OUTFILE
+	echo 'Comment: lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519' >> $OUTFILE
+	echo 'Public-Lines: 2' >> $OUTFILE
+	echo 'AAAAC3NzaC1lZDI1NTE5AAAAIKIsdMI0p0HIfBnavKfwC+P3/IQyy3Hzn4dV/oZc' >> $OUTFILE
+	echo 'KZZD' >> $OUTFILE
+	echo 'Private-Lines: 1' >> $OUTFILE
+	echo 'AAAAIKhiruN2xtwBfep6sz7CsBOmK9VhnlCA9hueAjXdjNDl' >> $OUTFILE
+	echo 'Private-MAC: e265620256c19f0211c14abdd420f7677e4a0bc3' >> $OUTFILE
+	chmod 600 $OUTFILE
+	chown $USERNAME:$USERNAME $OUTFILE
+
+# Create /home/$USERNAME/.ssh/lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519-Putty-Public
+	BASEFILE="lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519-Putty-Public"
+	OUTFILE="/home/$USERNAME/.ssh/$BASEFILE"
+	if [ -f "$OUTFILE" ]; then mv "$OUTFILE" "$OUTFILE.$TIMESTAMP"; fi
+	echo '---- BEGIN SSH2 PUBLIC KEY ----' >> $OUTFILE
+	echo 'Comment: "lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519"' >> $OUTFILE
+	echo 'AAAAC3NzaC1lZDI1NTE5AAAAIKIsdMI0p0HIfBnavKfwC+P3/IQyy3Hzn4dV/oZc' >> $OUTFILE
+	echo 'KZZD' >> $OUTFILE
+	echo '---- END SSH2 PUBLIC KEY ----' >> $OUTFILE
+	chmod 644 $OUTFILE
+	chown $USERNAME:$USERNAME $OUTFILE
+
+
+
+
+#!/bin/bash
 # initialize-server
 # PURPOSE: Installs basic software, initializes, and configures
 # OPTIMIZED for Ubuntu Server 22.04 LTS
@@ -709,6 +815,9 @@ if $is_desktop ; then
 
     fi
 
+# DIAGNOSTIC
+    echo "Stopping here for test purposes."
+    exit 0
 
 #######################################################################################
 #   ADDITIONAL CONFIGURATION
