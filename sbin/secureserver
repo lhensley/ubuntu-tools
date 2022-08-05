@@ -8,7 +8,7 @@
 # Require root
 	f_require_root
 
-HOME_DIRECTORY="/home/lhensley"
+HOME_DIRECTORY="/home/$ADMIN_USER"
 
 # Secure webmin
 DIRNAME=/usr/share/webmin

@@ -274,6 +274,7 @@ ssl_key=$DIR/server-key.pem
 EOF
 
 USER_ME="lhensley"
+if [ $HOSTNAME == "teddy" ]; then USER_ME="ubuntu"; fi
 HOME_DIRECTORY="/home/$USER_ME"
 
 MYSQL_SERVER_BIN_DIR="/var/lib/mysql"

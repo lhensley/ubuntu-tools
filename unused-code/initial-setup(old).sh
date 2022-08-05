@@ -15,6 +15,7 @@
 #    If a clone, make some things unique: hostname, address, keys (ssh, ssl, mysql, webmin)
 
 USER_ME=lhensley
+if [ $HOSTNAME == "teddy" ]; then ADMIN_USER="ubuntu"; fi
 USER_UBUNTU=ubuntu
 
 install_apache2=true

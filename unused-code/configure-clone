@@ -40,6 +40,7 @@ MAX_MYSQL_PASSWORD_LENGTH=32
 HOSTNAME=u20b
 MAILNAME=$HOSTNAME
 USER_ME="lhensley"
+if [ $HOSTNAME == "teddy" ]; then ADMIN_USER="ubuntu"; fi
 MYSQL_ADMIN_NAME="kai"
 USER_UBUNTU="ubuntu"
 MAIN_MAILER_TYPE="'Internet with smarthost'"

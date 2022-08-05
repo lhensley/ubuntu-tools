@@ -32,7 +32,7 @@ mysql postfix stopped.
 crontab is NOT restored.
 To restore it:
   sudo crontab -u root /root/.crontab-archive
-  sudo crontab -u lhensley /home/lhensley/.crontab-archive
+  sudo crontab -u $ADMIN_USER /home/$ADMIN_USER/.crontab-archive
 IMMEDIATE reboot VERY STRONGLY recommended.
 To reboot, type: sudo init 6
 
@@ -55,7 +55,7 @@ sudo snap start plexmediaserver
 # chmod 600 ~/.ssh/authorized_keys
 # SSH Public Keys
 # Uncomment an ssh- line for it to be recognized
-# https://github.com/lhensley/go.git
+# https://github.com/$GITHUB_USER/go.git
 #
 #
 # elie 2022-01-06

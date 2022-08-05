@@ -64,6 +64,7 @@ source /etc/os-release
 # Admin user info
 # Dependent on section Global
         ADMIN_USER=lhensley
+        if [ $HOSTNAME == "teddy" ]; then ADMIN_USER="ubuntu"; fi
         ADMIN_HOME_DIR=$HOME_ROOT/$ADMIN_USER
         ADMIN_CELL_EMAIL=7608514641@vtext.com
         ADMIN_EMAIL=lane@lanehensley.org

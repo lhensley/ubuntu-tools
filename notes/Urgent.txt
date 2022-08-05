@@ -45,7 +45,7 @@ Moves
 	Rename: lgh-loop-move-dvd
 	Status: DISABLED
 	PRIORITY 5
-			SOURCE_ROOT_DIR="/home/lhensley/Videos/HandBrake-Completed"
+			SOURCE_ROOT_DIR="/home/$ADMIN_USER/Videos/HandBrake-Completed"
 			TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/cloteal/Plex/uploads"
 	7: lgh-daemon-plex-dvr-move-completed-looper (oz)
 	Rename: lgh-loop-move-plex

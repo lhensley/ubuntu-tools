@@ -16,6 +16,7 @@ PROGRAM_DIRECTORY=$(dirname $0)
 source $PROGRAM_DIRECTORY/../source.sh
 
 USER_ME=lhensley
+if [ $HOSTNAME == "teddy" ]; then ADMIN_USER="ubuntu"; fi
 USER_UBUNTU=ubuntu
 
 install_apache2=true

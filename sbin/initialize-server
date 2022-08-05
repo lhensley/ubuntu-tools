@@ -83,8 +83,9 @@ if [[ $EUID -ne 0 ]]; then
     my_email="lane@lanehensley.org"
     ROOT_USER="root"
     ROOT_HOME_DIR="/root"
+    GITHUB_USER="lhensley"
     GIT_ROOT="/var/local/git" 
-    GIT_GO="$GIT_ROOT/go"                                # Formerly system.git.go
+    GIT_GO="$GIT_ROOT/go"                                  # Formerly system.git.go
     GIT_GO_CONFIGS="$GIT_GO/configs"                       # Formerly system.git.go.configs
     GIT_GO_SBIN="$GIT_GO/sbin"                             # Formerly #system.git.go.sbin
     GIT_GO_SERVICES="$GIT_GO/services"
@@ -170,7 +171,7 @@ cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
     mkdir -p "$GIT_ROOT"
     chmod 775 "$GIT_ROOT"
     cd "$GIT_ROOT"
-    git clone https://github.com/lhensley/go.git
+    git clone https://github.com/$GITHUB_USER/go.git
     chown -R $ROOT_USER:$ROOT_USER "$GIT_ROOT"
     chmod -R 400 "$GIT_ROOT"
     cd

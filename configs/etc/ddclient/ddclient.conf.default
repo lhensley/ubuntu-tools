@@ -1,5 +1,5 @@
 # Configuration for ddclient scripts
-# Copied from github.com/lhensley/go
+# Copied from github.com/$GITHUB_USER/go
 #
 # /etc/default/ddclient
 
