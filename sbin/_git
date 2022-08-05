@@ -198,11 +198,17 @@ done
 		f_log_and_echo "git branch $GIT_BRANCH pulled." false > $REDIRECT
 
 # Set ownership and permissions in $SBIN_DIR (to be overwritten by _apply-configs)
+    echo
+    echo Setting ownership and permissions in $SBIN_DIR
+	echo chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
 	chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
 	find $SBIN_DIR -type d -print -exec chmod $SBIN_PERMISSIONS {} \; >> /dev/null 2>&1
 	find $SBIN_DIR -type f -print -exec chmod $SBIN_PERMISSIONS {} \; >> /dev/null 2>&1
 
 # Set ownership and permissions in $SERVICES_DIR (to be overwritten by _apply-configs)
+    echo
+    echo Setting ownership and permissions in $SERVICES_DIR
+	echo chown -R $ROOT_USER:$ROOT_USER $SERVICES_DIR
 	chown -R $ROOT_USER:$ROOT_USER $SERVICES_DIR
 	find $SERVICES_DIR -type d -print -exec chmod $SERVICES_DIR_PERMISSIONS {} \; >> /dev/null 2>&1
 	find $SERVICES_DIR -type f -print -exec chmod $SERVICES_FILE_PERMISSIONS {} \; >> /dev/null 2>&1
@@ -214,6 +220,8 @@ done
     exit 1
 
 # Apply configs
+    echo
+    echo "Applying configurations"
 	f_apply_configs $ARGS
 
 # # REMOVED THIS COMMAND 12/30/2020: Trying to isolate something that's killing all the systemd services on oz

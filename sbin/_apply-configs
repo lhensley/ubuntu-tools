@@ -160,26 +160,32 @@ done
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
 # Set timezone
+	echo
 	echo "Setting timezone to $TIMEZONE"
     timedatectl set-timezone $TIMEZONE
 
 # Clear /etc/NetworkManager/system-connections
+	echo
 	echo "Clearing /etc/NetworkManager/system-connections"
 	rm -f /etc/NetworkManager/system-connections/*
 
 # This heads off a network manager problem defined at https://askubuntu.com/questions/71159/network-manager-says-device-not-managed
+	echo
+	echo touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
 	touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
 
 # Update ~/.gitconfig
 # Note that the original .gitconfig is made during setup/setup-os (original installation)
 # using sudo, so the file is written to user root's home directory.
 # That's why the copying goes from root to admin home directories.
+	echo
 	echo "Updating $ADMIN_HOME_DIR/.gitconfig from $ROOT_HOME_DIR/.gitconfig"
 	cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
 
 # Update ~/.HandBrake
 	rm -f "$ADMIN_HOME_DIR/.HandBrake"/* "$ROOT_HOME_DIR/.HandBrake/"*
 	if $(f_is_installed "handbrake-cli"); then
+		echo
 		echo "Updating $ADMIN_HOME_DIR/.HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
 		mkdir -p "$ADMIN_HOME_DIR/.HandBrake" "$ROOT_HOME_DIR/.HandBrake"
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ADMIN_HOME_DIR/.HandBrake"
@@ -189,6 +195,7 @@ done
 # Update ~/.MakeMKV
 	rm -f "$ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ROOT_HOME_DIR/.MakeMKV/settings.conf"
 	if $(f_is_installed "makemkv-bin"); then
+		echo
 		echo "Updating $ADMIN_HOME_DIR/.MakeMKV/settings.conf from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf"
 		mkdir -p "$ADMIN_HOME_DIR/.MakeMKV" "$ROOT_HOME_DIR/.MakeMKV"
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ADMIN_HOME_DIR/.MakeMKV/"
@@ -197,6 +204,7 @@ done
 
 # Update ~/.ssh/authorized_keys
 	if $(f_is_installed "ssh"); then
+		echo
 		echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys"
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys" "$ADMIN_HOME_DIR/.ssh/authorized_keys"
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys" "$ROOT_HOME_DIR/.ssh/authorized_keys"
@@ -205,6 +213,8 @@ done
 # Update Vim and vi config file
 # Commented out because defaults in Ubuntu 22 are much better
 #	if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
+#		echo
+#		echo Updating vim and vi config file
 #		cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ADMIN_HOME_DIR/
 #		cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ROOT_HOME_DIR/
 #		fi
@@ -212,6 +222,7 @@ done
 # Update /etc/exports
 	rm -f /etc/exports
 	if $(f_is_installed "nfs-kernel-server"); then
+		echo
 		echo "Updating /etc/exports from $GIT_GO_CONFIGS/etc/exports.$HOSTNAME"
 		cp "$GIT_GO_CONFIGS/etc/exports.$HOSTNAME" "/etc/exports"
 		exportfs -r
@@ -219,9 +230,10 @@ done
 		fi
 
 # Update /etc/fstab
-	echo "Updating /etc/fstab from /etc/fstab.original.install and $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"
 	cp -n /etc/fstab /etc/fstab.original.install
 	if $(f_is_file "$GIT_GO_CONFIGS/etc/fstab-peripherals.$HOSTNAME"); then
+		echo
+		echo "Updating /etc/fstab from /etc/fstab.original.install and $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"
 		rm -f /etc/fstab
 		cat /etc/fstab.original.install "$GIT_GO_CONFIGS/etc/fstab-peripherals.$HOSTNAME" > /tmp/fstab
 		mv /tmp/fstab /etc/fstab
@@ -232,6 +244,7 @@ done
 	rm -f /etc/ddclient/*
 	rm -f /etc/ddclient.*
 	if $(f_is_installed "ddclient"); then
+		echo
 		echo "Updating /etc/ddclient.conf from $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME"
 		mkdir -p /etc/ddclient
 		cp $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient/ddclient.conf
@@ -240,22 +253,26 @@ done
 
 # Update /etc/hosts
 	rm -f /etc/hosts
+	echo
 	echo "Updating /etc/hosts from $GIT_GO_CONFIGS/hosts"
 	cp "$GIT_GO_CONFIGS/etc/hosts" "/etc/hosts"
 
 # Update /etc/lsyncd/*
 	rm -f /etc/lyncd/*
 	if $(f_is_installed "lsyncd"); then
+		echo
 		echo "Updating /etc/lsyncd/lsyncd.conf.lua from $GIT_GO_CONFIGS/lsyncd/lsyncd.conf.lua.$HOSTNAME"
 		cp $GIT_GO_CONFIGS/lsyncd/lsyncd.conf.lua.$HOSTNAME /etc/lsyncd/lsyncd.conf.lua
 		systemctl restart lsyncd
 		fi
 
 # Update /etc/motd
+	echo
 	echo "Updating /etc/motd from $GIT_GO_CONFIGS/etc/motd.$HOSTNAME"
 	cp "$GIT_GO_CONFIGS/etc/motd.$HOSTNAME" "/etc/motd"
 
 # Update any netplan configuration files
+	echo
 	echo "Updating /etc/netplan/current-plan.yaml from $GIT_GO_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME"
 	rm -f /etc/NetworkManager/system-connections/* /etc/netplan/*
 	cp "$GIT_GO_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME" /etc/netplan/current-plan.yaml
@@ -263,6 +280,7 @@ done
 
 # Update /etc/resolvconf/resolv.conf.d/head
 	if $(f_is_installed "resolvconf"); then
+		echo
 		echo "Updating /etc/resolvconf/resolv.conf.d/head from $GIT_GO_CONFIGS/resolvconf/resolv.conf.d/head"
 		mkdir -p /etc/resolvconf/resolv.conf.d
 		cp $GIT_GO_CONFIGS/resolvconf/resolv.conf.d/head /etc/resolvconf/resolv.conf.d/
@@ -270,18 +288,21 @@ done
 
 # Update /etc/sshd_config
 	if $(f_is_installed "ssh"); then
+		echo
 		echo "Updating /etc/ssh/sshd_config from $GIT_GO_CONFIGS/etc/ssh/sshd_config"
 		cp "$GIT_GO_CONFIGS/etc/ssh/sshd_config" "/etc/ssh/sshd_config"
 		systemctl restart ssh
 		fi
 
 # Update /etc/ufw/applications.d/lane-applications
-    echo "Updating /etc/ufw/applications.d/lane-applications from $GIT_GO_CONFIGS/etc/ufw/applications.d/lane-applications"
+    echo
+	echo "Updating /etc/ufw/applications.d/lane-applications from $GIT_GO_CONFIGS/etc/ufw/applications.d/lane-applications"
     cp $GIT_GO_CONFIGS//etc/ufw/applications.d/lane-applications /etc/ufw/applications.d/
     ufw app update lane-applications
 
 # Update $PHPMYADMIN_DIR/config.inc.php
 	if $(f_is_installed "phpmyadmin"); then
+		echo
 		echo "Updating $PHPMYADMIN_DIR/config.inc.php from $GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php"
 		mkdir -p "$PHPMYADMIN_DIR"
 		cp "$GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php" "$PHPMYADMIN_DIR/config.inc.php"
