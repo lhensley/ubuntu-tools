@@ -162,15 +162,21 @@ done
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
 	# Set ownership and permissions in $SBIN_DIR
+		echo
+		echo Updating permissions in $SBIN_DIR
 		chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
 		chmod -R $SBIN_PERMISSIONS $SBIN_DIR
 
 	# Set ownership and permissions in $SERVICES_DIR
+		echo
+		echo Updating permissions in $SERVICES_DIR
 		chown -R $ROOT_USER:$ROOT_USER $SERVICES_DIR
 		find $SERVICES_DIR -type d -print -exec chmod $SERVICES_DIR_PERMISSIONS {} \; >> /dev/null 2>&1
 		find $SERVICES_DIR -type f -print -exec chmod $SERVICES_FILES_PERIOSSIONS {} \; >> /dev/null 2>&1
 		
 	# Exceptions: These can be read or run by anyone
+		echo
+		echo "Adjusting permissions for some required exceptions."
 #		# 2/16/2022: Not sure why it's necessary to confirm existence of these files except to keep chmod from failing below,
 #		# which can be managed with the --silent flag. Added that to all chmods below.
 #		# Confirm that referenced files below exist.
@@ -195,28 +201,40 @@ done
 			# chmod 740 "${PATHNAME[_apply_configs]}"
 
 	# .coldstorage.log
+		echo
+		echo "Updating permissions for $COLD_BACKUP_LOG"
 		chmod -f 600 $COLD_BACKUP_LOG
 		chown -f $ROOT_USER:$ROOT_USER $COLD_BACKUP_LOG
 
 	# ddclient
 		if $(f_is_installed "ddclient"); then
+			echo
+			echo "Updating permissions for ddclient"
 			chmod -f 600 /etc/ddclient/ddclient.conf /etc/default/ddclient # confirmed value
 			chown -f $ROOT_USER:$ROOT_USER /etc/ddclient/ddclient.conf /etc/default/ddclient
 			fi
 
 	# /etc/exports
 		if $(f_is_installed "nfs-kernel-server"); then
+			echo
+			echo "Updating permissions for /etc/exports"
 			chmod -f 600 "/etc/exports"
 			fi
 
 	# fstab
+		echo
+		echo "Updating permissions for /etc/fstab*"
 		chmod -f 600 /etc/fstab* # confirmed value
 		chown -f $ROOT_USER:$ROOT_USER /etc/fstab*
 
 	# /etc/hosts
+		echo
+		echo "Updating permissions for /etc/hosts"
 		chmod -f 644 /etc/hosts
 
 	# Git
+		echo
+		echo "Updating permissions for git"
 		chmod -f 600 $ROOT_HOME_DIR/.gitconfig
 		chmod -f 600 $ADMIN_HOME_DIR/.gitconfig
 		chown -f $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.gitconfig
@@ -225,12 +243,16 @@ done
 
 	# lsyncd
 		if $(f_is_installed "lsyncd"); then
+			echo
+			echo "Updating permissionf for lsyncd"
 			chown -f $ROOT_USER:$ROOT_USER /etc/lsyncd/lsyncd.conf.lua
 			chmod -f 600 /etc/lsyncd/lsyncd.conf.lua
 			fi
 
 	# MakeMKV
 		if $(f_is_installed "makemkv-bin"); then
+			echo
+			echo "Updating permissions for MakeMKV"
 			chmod -f 700 "$ADMIN_HOME_DIR/.MakeMKV"
 			chmod -f 700 "$ROOT_HOME_DIR/.MakeMKV"
 			chmod -fR 600 "$ADMIN_HOME_DIR/.MakeMKV"/*
@@ -239,20 +261,28 @@ done
 			chown -fR $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.MakeMKV"
 			fi
 
-	# /etc/mots
+	# /etc/motd
+		echo
+		echo "Updating permissions for /etc/motd"
 		chmod -f 644 /etc/motd
 
 	# /etc/netplan
+		echo
+		echo "Updating permissions for /etc/netplan/*"
 		chmod -f 400 "/etc/netplan/*"
 
 	# resolvconf
 		if $(f_is_installed "resolvconf"); then
+			echo
+			echo Updating permissions for /etc/resolvconf/resolv.conf.d/head
 			chown -f $ROOT_USER:$ROOT_USER /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
 			chmod -f 644 /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
 			fi
 	
 	# ~/.ssh
 		if $(f_is_installed "ssh"); then
+			echo
+			echo Updating permissions for $ADMIN_HOME_DIR/.ssh and $ROOT_HOME_DIR/.ssh
 			chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh
 			chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh
 			chmod -f 700 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh
@@ -262,12 +292,16 @@ done
 
 	# SSHD config file
 		if $(f_is_installed "ssh"); then
+			echo
+			echo Updating permissions for "$SSHD_CONFIG"
 			chown -f $ROOT_USER:$ROOT_USER "$SSHD_CONFIG"
 			chmod -f 600 "$SSHD_CONFIG"
 			fi
 
 	# HandBrake config files
 		if $(f_is_installed "handbrake-cli"); then
+			echo
+			echo Updating permissions for "$ADMIN_HOME_DIR/.HandBrake" and "$ROOT_HOME_DIR/.HandBrake"
 			chmod -f 700 "$ADMIN_HOME_DIR/.HandBrake"
 			chmod -f 700 "$ROOT_HOME_DIR/.HandBrake"
 			chmod -f -R 600 "$ADMIN_HOME_DIR/.HandBrake"/*
@@ -277,16 +311,22 @@ done
 			fi
 
 	# /etc/ufw/applications.d/lane-applications
+		echo
+		echo Updating permissions for /etc/ufw/applications.d/lane-applications
 		chown -f $ROOT_USER:$ROOT_USER /etc/ufw/applications.d/lane-applications
 		chmod -f 600 /etc/ufw/applications.d/lane-applications
 
 	# Vim and vi config files
+		echo
+		echo Updating permissions for "$ADMIN_HOME_DIR/.vim*" and "$ROOT_HOME_DIR/.vim*"
 		chmod -f 600 "$ADMIN_HOME_DIR/.vim*"
 		chmod -f 600 "$ROOT_HOME_DIR/.vim*"
 		chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.vim*"
 		chown -f $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.vim*"
 
 	# Plex Media Server Video Files
+		echo
+		echo Updating permissions for Plex
 		if $(f_is_installed "plexmediaserver"); then
 			if $SET_PLEX_FILE_PERMISSIONS; then
 				echo Applying Plex permissions ... > $REDIRECT
@@ -296,6 +336,8 @@ done
 
 	# phpmyadmin
 	if $(f_is_installed "phpmyadmin"); then
+		echo
+		echo Updating permissions for $PHPMYADMIN_DIR
 		chown -fR www-data:www-data $PHPMYADMIN_DIR
 		chmod -f 600 $PHPMYADMIN_DIR/config.inc.php
 		fi
