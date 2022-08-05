@@ -63,7 +63,7 @@ if [[ $EUID -ne 0 ]]; then
     install_gzip=true               # Compress or expand files
     install_inotify=true            # Do something when a file is created, deleted, or changed
     install_mailutils=true          # mail, Postfix, etc.
-    install_mysql_server=true       # Relational Database
+    install_mysql_server=false      # Relational Database
     install_nfs=false               # Network File Service
     install_openssl=true            # OpenSSL
     install_php=true                # PHP
@@ -77,6 +77,9 @@ if [[ $EUID -ne 0 ]]; then
     install_unzip=true              # List, test and extract compressed files in a ZIP archive
     install_vim=true                # Vi IMproved, a programmer's text editor
     install_webmin=true             # Web-based system admin tools
+
+# Set timezone
+    timedatectl set-timezone $TIMEZONE
 
 # Used for installing git
     my_full_name="Lane Hensley"
@@ -94,7 +97,8 @@ if [[ $EUID -ne 0 ]]; then
     SBIN_PARENT="$(dirname $SBIN_DIR)"
     # MY_GIT_TOKEN="this-now-is-managed-from-install-keys-script"
 
-cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
+# Why is this here? Typo? There's nothing yet to copy because the repository hasn't been cloned yet.
+    # cp -r "$GIT_GO_SBIN" "$SBIN_PARENT"
 
 # Confirm that this is what the user wants
 	echo -en "\007" # Beep
@@ -821,9 +825,6 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
     # echo "# Once you continue, these passwords cannot be recovered."
     # echo ""
     rm $TEMP_PASSWORD_INCLUDE
-
-# Set timezone
-    timedatectl set-timezone $TIMEZONE
 
 # Took this out. It needs to happen manually, if at all. 4/30/2022
 # # Cold Restore

@@ -498,19 +498,15 @@ function f_run_apt_updates () {
     #   Res: https://itsfoss.com/apt-vs-apt-get-difference/
     #   Res: https://linuxconfig.org/apt-vs-apt-get-advanced-package-tool
     #   Res: https://www.google.com/search?q=apt+and+apt-get
-	# Get ready for apg-get
-  	export DEBIAN_FRONTEND=noninteractive
 	# "update" downloads package information from all configured sources
-	echo apt-get -y update
-	apt-get -y update
     # "upgrade" is an extraneous subset of "dist-upgrade" below; 
     #    Ref: https://askubuntu.com/questions/194651/why-use-apt-upgrade-instead-of-apt-dist-upgrade#:~:text=apt%2Dget%20upgrade%20will%20not,install%20but%20not%20remove%20packages
     #    sudo apt-get -y upgrade \
     # "dist-upgrade" installs available upgrades of all packages
     # currently installed on the system and intelligently handles
     # changing dependencies with new versions of packages
-    echo time apt-get -y dist-upgrade
-    time apt-get -y dist-upgrade
+    echo DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
+    DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
 	# "clean" clears out the local repository of retrieved package files.
 	echo apt-get -y clean
 	apt-get -y clean

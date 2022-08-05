@@ -9,7 +9,7 @@
 	f_require_root
 
 # Apply patches
-	upd_patch
+	# upd_patch
 
 # Update from github.com
 	echo "Updating local git repository."
