@@ -426,6 +426,7 @@ if $install_makemkv ; then
     fi
 
 # MySQL Server
+# AUTOMATION PROBLEM: PROMPTS FOR PASSWORD. See https://askubuntu.com/questions/1350537/automating-un-installing-mysql
 if $install_mysql_server ; then
   echo "Installing mysql server"
     ###### EXTREMELY IMPORTANT: Edit /etc/mysql/mysql.conf.d/mysqld.cnf and open up bind-address * ###########
@@ -779,7 +780,8 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
         usermod -aG sudo $ADMIN_USER
     # Generate SSH keys for $ADMIN_USER
     # Should this occur somewhere else? SSH setup?
-        sudo -u $ADMIN_USER ssh-keygen -C "$SSH_KEY_NAME" -P "" -q -f "$ADMIN_HOME_DIR/.ssh/id_rsa"
+        # Commenting this out 8/5/2022.
+        # sudo -u $ADMIN_USER ssh-keygen -C "$SSH_KEY_NAME" -P "" -q -f "$ADMIN_HOME_DIR/.ssh/id_rsa"
 
 # Configure sudo user(s)
     echo Configure sudo $ADMIN_USER as a sudo user
