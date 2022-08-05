@@ -14,7 +14,7 @@
 	f_run_apt_updates
 
 # Install Easy-RSA
-	apt-get install -y easy-rsa
+	apt-get install --yes easy-rsa
 
 # Preparing a Public Key Infrastructure Directory
 	mkdir ~/easy-rsa

@@ -18,7 +18,7 @@
 # Do stuff here
 	mkdir -f ~/imdb
 	cd ~/imdb
-	sudo apt-get -y install jq
+	sudo apt-get --yes install jq
 	wget "$DOWNLOAD_FILE"
 	gunzip "$TAB_SORTED"
 	echo "{ \"title\": " > "$JSON_FILE"

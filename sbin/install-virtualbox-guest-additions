@@ -9,8 +9,8 @@
 	f_require_root
 
 # Install VirtualBox Guest Additions
-    apt -y update
-    apt install -y build-essential linux-headers-$(uname -r)
+    apt --yes update
+    apt install --yes build-essential linux-headers-$(uname -r)
     mount /dev/cdrom /media
     cd /media
     ./VBoxLinuxAdditions.run

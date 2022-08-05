@@ -26,7 +26,7 @@ snap remove bare
 snap remove snapd
 apt purge libreoffice* thunderbird* gir* libgtk* gtk* apport-gtk* libdbusmenu-gtk* python3-aptdaemon.gtk* qt5-gtk* software-properties-gtk* xdg-user-dirs-gtk x11* xfonts* xin* xserver* yaru* ubuntu-wallpaper* language-pack-gnome* language-selector-gnome* libgnome* fonts* firefox* gnome* ubuntu-desktop* -y
 apt purge snap* -y
-apt-add-repository --remove -y ppa:cubic-wizard/release
+apt-add-repository --remove --yes ppa:cubic-wizard/release
 apt auto-remove -y
 systemctl set-default multi-user.target
 

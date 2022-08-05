@@ -161,9 +161,9 @@ if [ -d "$docroot" ]; then # If docroot already exists
 # Do updates and install needed tools
 f_run_apt_updates
 # For Ubuntu 18
-# apt-get install -y wget apg certbot python python-certbot-apache
+# apt-get install --yes wget apg certbot python python-certbot-apache
 # For Ubuntu 18
-apt-get install -y wget apg certbot python3-certbot-apache
+apt-get install --yes wget apg certbot python3-certbot-apache
 
 # Generate a MySQL password for the Wordpress database
 admin_wp_pwd="$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)"

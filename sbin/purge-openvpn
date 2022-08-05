@@ -15,7 +15,7 @@ systemctl disable openvpn@server.service
 logger Purging OpenVPN
 upd
 apt-get -f install
-apt-get purge -y openvpn
+apt-get purge --yes openvpn
 
 ufw deny 1194
 ufw deny 1900

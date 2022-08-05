@@ -56,14 +56,14 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Do updates
-# apt-get update && apt -y dist-upgrade && apt -y clean && apt -y autoremove
+# apt-get update && apt --yes dist-upgrade && apt --yes clean && apt --yes autoremove
 
 
 # phpMyAdmin should be installed AFTER php and MySQL
 if $install_mysql_server ; then
   MYSQL_ROOT_PASSWORD="(9m+KAB8Q{JKCwEe[Sc-Ao,=s.W^,j4z"
-  apt-get install -y openssl libcurl4-openssl-dev libssl-dev
-  apt-get install -y mysql-server
+  apt-get install --yes openssl libcurl4-openssl-dev libssl-dev
+  apt-get install --yes mysql-server
 # u20a THRU HERE
 # This is interactive and problematic to automate. MUST USE SUDO
 
@@ -101,7 +101,7 @@ PHPMYADMIN_APP_DB_PASS='Wvf7]hu^4{WyX:jSJB3(omG8i-H@9@_@'
   debconf-set-selections <<< "phpmyadmin phpmyadmin/app-password-confirm password $PHPMYADMIN_APP_PASS"
   debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/admin-pass password $PHPMYADMIN_ROOT_PASS"
   debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_APP_DB_PASS"
-  apt install -y phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+  apt install --yes phpmyadmin php-mbstring php-zip php-gd php-json php-curl
   phpenmod mbstring
   systemctl restart apache2
 
@@ -125,8 +125,8 @@ if $install_plexmediaserver ; then
   curl https://downloads.plex.tv/plex-keys/PlexSign.key | apt-key add -
   echo deb https://downloads.plex.tv/repo/deb public main | tee /etc/apt/sources.list.d/plexmediaserver.list
   apt-get update
-  apt-get -y install apt-transport-https plexmediaserver
-  apt-get -y install plexmediaserver
+  apt-get --yes install apt-transport-https plexmediaserver
+  apt-get --yes install plexmediaserver
   ufw allow plexmediaserver
   fi
 

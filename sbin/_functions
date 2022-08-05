@@ -810,23 +810,23 @@ f_run_apt_updates () {
 	# See https://itsfoss.com/apt-vs-apt-difference/ for rationale.
 	#
 	# "update" downloads package information from all configured sources
-	echo apt-get -y update
-	apt-get -y update
+	echo apt-get --yes update
+	apt-get --yes update
 	# "upgrade" is an extraneous subset of "dist-upgrade" below
-	#    sudo apt-get -y upgrade \
+	#    sudo apt-get --yes upgrade \
 	# "dist-upgrade" installs available upgrades of all packages
 	# currently installed on the system and intelligently handles
 	# changing dependencies with new versions of packages
-	echo apt-get -y dist-upgrade
-	apt-get -y dist-upgrade
+	echo apt-get --yes dist-upgrade
+	apt-get --yes dist-upgrade
 	# "clean" clears out the local repository of retrieved package files.
-	echo apt-get -y clean
-	apt-get -y clean
+	echo apt-get --yes clean
+	apt-get --yes clean
 	# "autoremove" removes those dependencies that were installed with
 	# now-removed applications and that are no longer used
 	# by anything else on the system
-	echo apt-get -y autoremove
-	apt-get -y autoremove
+	echo apt-get --yes autoremove
+	apt-get --yes autoremove
 	}
 
 #########################################################################################################

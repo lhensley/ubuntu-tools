@@ -56,7 +56,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Do updates
-apt-get update && apt -y dist-upgrade && apt -y clean && apt -y autoremove
+apt-get update && apt --yes dist-upgrade && apt --yes clean && apt --yes autoremove
 
 # Add custom application definitions for ufw
 cp configs/lane-applications /etc/ufw/applications.d/
@@ -66,40 +66,40 @@ ufw app update lane-applications
 
 # CRITICAL: Install this first.
 if $install_curl ; then
-  apt-get install -y curl
+  apt-get install --yes curl
   fi
 
 # Install this early.
 if $install_unzip ; then
-  apt-get install -y unzip
+  apt-get install --yes unzip
   fi
 
 # Install this early.
 if $install_wget ; then
-  apt-get install -y wget
+  apt-get install --yes wget
   fi
 
 if $install_apache2 ; then
-  apt-get install -y apache2
+  apt-get install --yes apache2
   ufw allow 'Apache' && ufw allow 'Apache Full'
   ufw allow http
   ufw allow https
   fi
 
 if $install_fail2ban ; then
-  apt-get install -y fail2ban
+  apt-get install --yes fail2ban
   fi
 
 # ASKS QUESTIONS! Choose Smart Host: mail.twc.com
 if $install_mailutils ; then
-  apt-get install -y mailutils
+  apt-get install --yes mailutils
   ufw allow mail
   fi
 
 # phpMyAdmin should be installed AFTER php and MySQL
 if $install_mysql_server ; then
-  apt-get install -y openssl
-  apt-get install -y mysql-server
+  apt-get install --yes openssl
+  apt-get install --yes mysql-server
   mysql_secure_installation
   cp /etc/mysql/mysql.conf.d/mysqld.cnf \
   /etc/mysql/mysql.conf.d/mysqld.cnf-$(date '+%Y%m%d%H%M%S')
@@ -116,11 +116,11 @@ if $install_mysql_server ; then
   fi
 
 if $install_net_tools ; then
-  apt-get install -y net-tools
+  apt-get install --yes net-tools
   fi
 
 if $install_openssh_server ; then
-  apt-get install -y openssh-server
+  apt-get install --yes openssh-server
   ufw allow ssh
   ufw limit ssh
   cp /var/local/git/go/ssh/$USER_ME/authorized_keys ~/.ssh
@@ -132,16 +132,16 @@ if $install_openssh_server ; then
   fi
 
 if $install_openssl ; then
-  apt-get install -y openssl
+  apt-get install --yes openssl
   fi
 
 # phpMyAdmin should be installed AFTER php and MySQL Server
 # BUG: mcrypt module missing. Also, what to do as php value changes. TBD
 if $install_php ; then
-  apt-get install -y php libapache2-mod-php
-  apt-get install -y php-mysql php-gd php-curl php-imap php-ldap
-  apt-get install -y libmcrypt-dev php7.2-mbstring
-  apt-get install -y php-dev php-pear
+  apt-get install --yes php libapache2-mod-php
+  apt-get install --yes php-mysql php-gd php-curl php-imap php-ldap
+  apt-get install --yes libmcrypt-dev php7.2-mbstring
+  apt-get install --yes php-dev php-pear
   pecl channel-update pecl.php.net
   pecl install mcrypt-1.0.1
   phpenmod gd curl imap ldap mbstring
@@ -151,7 +151,7 @@ if $install_php ; then
 # phpMyAdmin should be installed AFTER php and MySQL
 # ASKS QUESTIONS!
 if $install_phpmyadmin ; then
-  apt-get install -y phpmyadmin php-mbstring php-gettext
+  apt-get install --yes phpmyadmin php-mbstring php-gettext
   cd /usr/share
   rm -R phpmyadmin
   wget -P /usr/share/ "https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.zip"
@@ -174,28 +174,28 @@ if $install_plexmediaserver ; then
   curl https://downloads.plex.tv/plex-keys/PlexSign.key | apt-key add -
   echo deb https://downloads.plex.tv/repo/deb public main | tee /etc/apt/sources.list.d/plexmediaserver.list
   apt-get update
-  apt-get -y install apt-transport-https plexmediaserver
-  apt-get -y install plexmediaserver
+  apt-get --yes install apt-transport-https plexmediaserver
+  apt-get --yes install plexmediaserver
   ufw allow plexmediaserver
   fi
 
 if $install_sysbench ; then
-  apt-get install -y sysbench
+  apt-get install --yes sysbench
   fi
 
 if $install_tasksel ; then
-  apt-get install -y tasksel
+  apt-get install --yes tasksel
   fi
 
 if $install_xrdp ; then
-  apt-get install -y xrdp
+  apt-get install --yes xrdp
   ufw allow from 192.168.1.0/24 to any port 3389 proto tcp
   fi
 
 # NOTE: Install Webmin last, so it picks up on installed applications.
 if $install_webmin ; then
   wget http://www.webmin.com/download/deb/webmin-current.deb
-  apt-get -y install perl libnet-ssleay-perl openssl libauthen-pam-perl \
+  apt-get --yes install perl libnet-ssleay-perl openssl libauthen-pam-perl \
   libpam-runtime libio-pty-perl apt-show-versions python
   dpkg --install webmin-current.deb
   rm webmin-current.deb
@@ -223,5 +223,5 @@ systemctl restart sshd
 
 if $enable_certbot ; then
   add-apt-repository ppa:certbot/certbot
-  apt install -y python-certbot-apache
+  apt install --yes python-certbot-apache
   fi

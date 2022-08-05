@@ -2,5 +2,5 @@
 Secure remote mount: SSHFS
 Ref: https://www.server-world.info/en/note?os=Ubuntu_20.04&p=ssh&f=8
 Install:
-	apt-get install -y sshfs
+	apt-get install --yes sshfs
 

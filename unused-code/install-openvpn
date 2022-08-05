@@ -24,11 +24,11 @@
 
 # Abandoned code fragment from cyerciti.biz installation tutorial
 # Following https://www.cyberciti.biz/faq/ubuntu-20-04-lts-set-up-openvpn-server-in-5-minutes/
-# apt-get update && apt-get -y install ca-certificates wget net-tools gnupg
+# apt-get update && apt-get --yes install ca-certificates wget net-tools gnupg
 # wget -qO - https://as-repository.openvpn.net/as-repo-public.gpg | apt-key add -
 # echo "deb http://as-repository.openvpn.net/as/debian $UBUNTU_CODENAME main">/etc/apt/sources.list.d/openvpn-as-repo.list
-# apt update && apt -y install openvpn-as
-# apt-get install -y openvpn
+# apt update && apt --yes install openvpn-as
+# apt-get install --yes openvpn
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
