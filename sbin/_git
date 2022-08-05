@@ -158,15 +158,12 @@ done
 #   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
-# Install git token
-# To get a new token, go to https://github.com/settings/tokens.
-	git config --global url."https://api:$GIT_TOKEN@github.com/".insteadOf "https://github.com/" > $REDIRECT
-	git config --global url."https://ssh:$GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/" > $REDIRECT
-	git config --global url."https://git:$GIT_TOKEN@github.com/".insteadOf "git@github.com:" $> $REDIRECT
-    echo
-    echo "DIAGNOSTIC CHECK: Stopped processing here. Errors above? The git token shouldn't be stored here ..."
-    echo "Clear this check by deleting lines 116-169 of _git script."
-    exit 1
+# DROP THIS SECTION. Not storing the token locally.
+# # Install git token
+# # To get a new token, go to https://github.com/settings/tokens.
+# 	git config --global url."https://api:$GIT_TOKEN@github.com/".insteadOf "https://github.com/" > $REDIRECT
+# 	git config --global url."https://ssh:$GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/" > $REDIRECT
+# 	git config --global url."https://git:$GIT_TOKEN@github.com/".insteadOf "git@github.com:" $> $REDIRECT
 
 # This section re-pulls all go files from github and updates $SBIN_DIR
 	# Change to local repository directory
