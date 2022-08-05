@@ -32,19 +32,18 @@ if [[ $EUID -ne 0 ]]; then
     install_bridgeutils=false       # Bridge-utils extensions for the interfaces(5) file format
     install_comskip=false           # Commercial skipper for videos
     install_ffmpeg=false            # FFmpeg video converter
-    install_handbrake=true          # HandBrake video rendering
+    install_handbrake=false         # HandBrake video rendering
     install_ifupdown=false          # Used for /etc/network/interfaces manual configuration; interferes with Network Manager
     install_lsyncd=false            # Keeps directories in sync using inotify or fsevents. Details at https://lsyncd.github.io/lsyncd/
-    install_makemkv=true            # MakeMKV DVD ripper
+    install_makemkv=false            # MakeMKV DVD ripper
     install_nettools=false          # Print network connections, routing tables, interface statistics
     install_openvpn=false           # Secure IP tunnel daemon
-    install_plexmediaserver=true    # Media streamer and library manager
+    install_plexmediaserver=false   # Media streamer and library manager
     install_proftpd=false           # For scanning to brother@oz
     install_rclone=false            # command-line program to manage files on cloud storage. Details at https://rclone.org/
     install_resolvconf=false        # Name resolver
-    install_ssh=false               # Secure Shell
     install_sysbench=false          # A modular, cross-platform and multi-threaded benchmark tool.
-    install_tautulli=true           # Monitoring tool for Plex Media Server ***** PLEX MEDIA SERVER MUST BE INSTALLED TO INSTALL TAUTULLI *****
+    install_tautulli=false          # Monitoring tool for Plex Media Server ***** PLEX MEDIA SERVER MUST BE INSTALLED TO INSTALL TAUTULLI *****
     install_uuid=false              # Use uuidgen instead. It's built-in.
 
 # STANDARD software (default to true)
@@ -54,7 +53,7 @@ if [[ $EUID -ne 0 ]]; then
     install_certbot=true            # Certificate Installer for https
     install_cryfs=true              # Encrypted file system
     install_curl=true               # Transfer a URL
-    install_ddclient=true           # Update IP addresses at dynamic DNS services
+    install_ddclient=false          # Update IP addresses at dynamic DNS services
     install_dos2unix=true           # DOS/MAC to UNIX text file format converter
     install_exiftool=true           # Read and write meta information in files
     install_fail2ban=true           # Bans IP that makes too many password failures
@@ -65,13 +64,14 @@ if [[ $EUID -ne 0 ]]; then
     install_inotify=true            # Do something when a file is created, deleted, or changed
     install_mailutils=true          # mail, Postfix, etc.
     install_mysql_server=true       # Relational Database
-    install_nfs=true                # Network File Service
+    install_nfs=false               # Network File Service
     install_openssl=true            # OpenSSL
     install_php=true                # PHP
     install_phpmyadmin=false        # Web tool for managing MySQL
     install_puttytools=false        # A free SSH and telnet client
     install_ripmime=true            # Process files sent by email
     install_rsync=true              # A fast, versatile, remote (and local) file-copying tool
+    install_ssh=false               # Secure Shell
     install_sshfs=true              # Filesystem client based on ssh
     install_tasksel=false           # A user interface for installing tasks
     install_unzip=true              # List, test and extract compressed files in a ZIP archive
@@ -202,7 +202,7 @@ cp -r "$GIT_GO_SBIN" "SBIN_PARENT"
 
 f_install debconf-utils
 # f_install network-manager
-f_install nvidia-driver-390
+# f_install nvidia-driver-390
 
 # PHP is installed every time.
   echo "Installing php"
