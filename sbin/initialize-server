@@ -78,9 +78,6 @@ if [[ $EUID -ne 0 ]]; then
     install_vim=true                # Vi IMproved, a programmer's text editor
     install_webmin=true             # Web-based system admin tools
 
-# Set timezone
-    timedatectl set-timezone $TIMEZONE
-
 # Used for installing git
     my_full_name="Lane Hensley"
     my_email="lane@lanehensley.org"
@@ -231,6 +228,9 @@ f_install nvidia-driver-390
     ln -fs /usr/share/zoneinfo/"$TIMEZONE" /etc/localtime
     apt-get install --yes tzdata
     echo "tzdata installed."
+
+# Set timezone
+    timedatectl set-timezone $TIMEZONE
 
 
 # Optional installations
