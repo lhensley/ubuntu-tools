@@ -832,6 +832,9 @@ if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
 # # Cold Restore
 #    cold-restore
 
+# Enable ufw
+    ufw enable
+
 # Last instructions
 	echo
 	echo -en "\007" # Beep
