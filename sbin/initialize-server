@@ -92,7 +92,7 @@ if [[ $EUID -ne 0 ]]; then
     GIT_GO_SETUP="$GIT_GO/setup"                           # Formerly system.git.go.setup
     SBIN_DIR="/usr/local/sbin"
     SBIN_PARENT="$(dirname $SBIN_DIR)"
-    # MY_GIT_TOKEN="this-now-is-managed-from-install-keys-script"
+    # MY_GIT_TOKEN="Removed for security"
 
 # Why is this here? Typo? There's nothing yet to copy because the repository hasn't been cloned yet.
     # cp -r "$GIT_GO_SBIN" "$SBIN_PARENT"

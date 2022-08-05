@@ -334,7 +334,8 @@ source /etc/os-release
         GIT_GO_SBIN="$GIT_GO/sbin"                             # Formerly #system.git.go.sbin
         GIT_GO_SERVICES="$GIT_GO/services"
         GIT_GO_SETUP="$GIT_GO/setup"                           # Formerly system.git.go.setup
-        GIT_TOKEN=4b662b7d4431ec1956127aa9d4fdbd8d75ec821a   # Formerly system.git.token
+        # Removed for security
+        # GIT_TOKEN="Removed for security"   # Formerly system.git.token
         SERVICES_DIR="/lib/systemd/system"
 
 # HandBrake
