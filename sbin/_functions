@@ -501,7 +501,7 @@ function f_run_apt_updates () {
 	# "update" downloads package information from all configured sources
     # "upgrade" is an extraneous subset of "dist-upgrade" below; 
     #    Ref: https://askubuntu.com/questions/194651/why-use-apt-upgrade-instead-of-apt-dist-upgrade#:~:text=apt%2Dget%20upgrade%20will%20not,install%20but%20not%20remove%20packages
-    #    sudo apt-get -y upgrade \
+    #    sudo apt-get --yes upgrade \
     # "dist-upgrade" installs available upgrades of all packages
     # currently installed on the system and intelligently handles
     # changing dependencies with new versions of packages
@@ -512,15 +512,15 @@ function f_run_apt_updates () {
 	# "clean" clears out the local repository of retrieved package files.
 		echo
 		echo Clearing out the local repository of retrieved package files.
-		echo apt-get -y clean
-		apt-get -y clean
+		echo apt-get --yes clean
+		apt-get --yes clean
 	# "autoremove" removes those dependencies that were installed with
 	# now-removed applications and that are no longer used
 	# by anything else on the system
 		echo
 		echo "Removing those dependencies that were associated with non-removed applications that no longer are used"
-		echo apt-get -y autoremove
-		apt-get -y autoremove
+		echo apt-get --yes autoremove
+		apt-get --yes autoremove
 	}
 
 function f_upd () {
