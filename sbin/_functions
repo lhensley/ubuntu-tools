@@ -352,37 +352,22 @@ function f_local_copy() {
 
 function f_install() {
 	if ! [ -x "$(command -v $1)" ]; then
-		echo "Test A-"
-		if [ ! f_is_installed $1 ]; then
-			echo "Test A--1"
-			echo ""
-			echo "Test A"
-			echo "Installing $1"
-			echo "Test A2"
-			logger -t "$(basename $0)[$$]" Installing $1
-			echo "Test A3"
-			DEBIAN_FRONTEND=noninteractive apt-get install --yes $1
-			RETURNCODE=$?
-			echo "Test A4"
-			logger -t "$(basename $0)[$$]" Installation of $1 ended with exit code $RETURNCODE
-			echo "Test A5"
-			if [ $RETURNCODE -ne 0 ]; then
-				echo "Test B"
-				echo Installation FAILED
-			echo "Test A6"
-				else echo "Test C" echo "$1 installed"
-			echo "Test A7"
-				fi
-			else
-			echo "Test A8"
-				echo "Test D"
-			echo "Test A9"
-				echo ""
-			echo "Test A10"
+		if (f_is_installed $1); then
+				echo
 				echo $1 already is installed
-			echo "Test A11"
+			else
+				echo
+				echo "Installing $1"
+				logger -t "$(basename $0)[$$]" Installing $1
+				DEBIAN_FRONTEND=noninteractive apt-get install --yes $1
+				RETURNCODE=$?
+				logger -t "$(basename $0)[$$]" Installation of $1 ended with exit code $RETURNCODE
+				if [ $RETURNCODE -ne 0 ]; then
+					echo Installation FAILED
+					else echo "$1 installed"
+					fi
+				else
 			fi
-			echo "Test A12"
 		fi
 	}
 
