@@ -352,6 +352,7 @@ function f_local_copy() {
 
 function f_install() {
 	if ! [ -x "$(command -v $1)" ]; then
+		echo "Test A-"
 		if !(f_is_installed $1); then
 			echo
 			echo "Test A"
