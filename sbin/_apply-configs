@@ -185,7 +185,7 @@ done
 	echo
 	echo "Updating $ADMIN_HOME_DIR/.gitconfig from $ROOT_HOME_DIR/.gitconfig"
 	cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
-
+	
 # Update ~/.HandBrake
 	rm -f "$ADMIN_HOME_DIR/.HandBrake"/* "$ROOT_HOME_DIR/.HandBrake/"*
 	if $(f_is_installed "handbrake-cli"); then
@@ -261,9 +261,11 @@ done
 
 # Update /etc/hosts
 	rm -f /etc/hosts
-	echo
-	echo "Updating /etc/hosts from $GIT_GO_CONFIGS/hosts"
-	cp "$GIT_GO_CONFIGS/etc/hosts" "/etc/hosts"
+	if [ -f $GIT_GO_CONFIGS/hosts ]; then
+		echo
+		echo "Updating /etc/hosts from $GIT_GO_CONFIGS/hosts"
+		cp "$GIT_GO_CONFIGS/etc/hosts" "/etc/hosts"
+		fi
 
 # Update /etc/lsyncd/*
 	rm -f /etc/lyncd/*
@@ -275,9 +277,11 @@ done
 		fi
 
 # Update /etc/motd
-	echo
-	echo "Updating /etc/motd from $GIT_GO_CONFIGS/etc/motd.$HOSTNAME"
-	cp "$GIT_GO_CONFIGS/etc/motd.$HOSTNAME" "/etc/motd"
+	if [ -f $GIT_GO_CONFIGS/etc/motd.$HOSTNAME ]; then
+		echo
+		echo "Updating /etc/motd from $GIT_GO_CONFIGS/etc/motd.$HOSTNAME"
+		cp "$GIT_GO_CONFIGS/etc/motd.$HOSTNAME" "/etc/motd"
+		fi
 
 ################################################################################
 # Diagnostic stop here
