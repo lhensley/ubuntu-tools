@@ -165,14 +165,18 @@ done
     timedatectl set-timezone $TIMEZONE
 
 # Clear /etc/NetworkManager/system-connections
-	echo
-	echo "Clearing /etc/NetworkManager/system-connections"
-	rm -f /etc/NetworkManager/system-connections/*
+	if $(f_is_installed "network-manager"); then 
+		echo
+		echo "Clearing /etc/NetworkManager/system-connections"
+		rm -f /etc/NetworkManager/system-connections/*
+		fi
 
 # This heads off a network manager problem defined at https://askubuntu.com/questions/71159/network-manager-says-device-not-managed
-	echo
-	echo touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
-	touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
+	if $(f_is_installed "network-manager"); then 
+		echo
+		echo touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
+		touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
+		fi
 
 # Update ~/.gitconfig
 # Note that the original .gitconfig is made during setup/setup-os (original installation)
@@ -282,12 +286,13 @@ done
 	exit 1
 
 # Update any netplan configuration files
-# CONSIDER: Should this run if $GIT_GO_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME does not exist? This deletes existing stuff ...
-	echo
-	echo "Updating /etc/netplan/current-plan.yaml from $GIT_GO_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME"
-	rm -f /etc/NetworkManager/system-connections/* /etc/netplan/*
-	cp "$GIT_GO_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME" /etc/netplan/current-plan.yaml
-	netplan apply &
+	if [ -f $GIT_GO_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME ]; then
+		echo
+		echo "Updating /etc/netplan/current-plan.yaml from $GIT_GO_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME"
+		rm -f /etc/NetworkManager/system-connections/* /etc/netplan/*
+		cp "$GIT_GO_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME" /etc/netplan/current-plan.yaml
+		netplan apply &
+		fi
 
 # Update /etc/resolvconf/resolv.conf.d/head
 	if $(f_is_installed "resolvconf"); then
