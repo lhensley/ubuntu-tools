@@ -202,6 +202,12 @@ done
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ROOT_HOME_DIR/.MakeMKV/"
 		fi
 
+################################################################################
+# Diagnostic stop here
+################################################################################
+	echo Diagnostic stop here "(_apply-configs)"
+	exit 1
+
 # Update ~/.ssh/authorized_keys
 	if $(f_is_installed "ssh"); then
 		echo
