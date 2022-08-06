@@ -178,13 +178,14 @@ done
 		touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
 		fi
 
-# Update ~/.gitconfig
-# Note that the original .gitconfig is made during setup/setup-os (original installation)
-# using sudo, so the file is written to user root's home directory.
-# That's why the copying goes from root to admin home directories.
-	echo
-	echo "Updating $ADMIN_HOME_DIR/.gitconfig from $ROOT_HOME_DIR/.gitconfig"
-	cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
+# Don't to this. The .gitconfig file is made on installation and doesn't change.
+# # Update ~/.gitconfig
+# # Note that the original .gitconfig is made during setup/setup-os (original installation)
+# # using sudo, so the file is written to user root's home directory.
+# # That's why the copying goes from root to admin home directories.
+# 	echo
+# 	echo "Updating $ADMIN_HOME_DIR/.gitconfig from $ROOT_HOME_DIR/.gitconfig"
+# 	cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
 	
 # Update ~/.HandBrake
 	rm -f "$ADMIN_HOME_DIR/.HandBrake"/* "$ROOT_HOME_DIR/.HandBrake/"*
