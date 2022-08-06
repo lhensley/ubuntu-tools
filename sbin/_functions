@@ -352,7 +352,7 @@ function f_local_copy() {
 
 function f_install() {
 	if ! [ -x "$(command -v $1)" ]; then
-		if (f_is_installed $1); then
+		if $(f_is_installed $1); then
 				echo
 				echo $1 already is installed
 			else
@@ -366,7 +366,6 @@ function f_install() {
 					echo Installation FAILED
 					else echo "$1 installed"
 					fi
-				else
 			fi
 		fi
 	}
