@@ -804,29 +804,35 @@ f_watch_wait_upload () {
 	}
 
 f_run_apt_updates () {
-	# Changed apt-get to apt 1/31/19.
-	# Changed it back 5/21/21 because apt began reporting: 
-	#	WARNING : apt does not have a stable CLI interface. Use with caution in scripts.
-	# See https://itsfoss.com/apt-vs-apt-difference/ for rationale.
-	#
-	# "update" downloads package information from all configured sources
-	echo apt-get --yes update
-	apt-get --yes update
-	# "upgrade" is an extraneous subset of "dist-upgrade" below
-	#    sudo apt-get --yes upgrade \
-	# "dist-upgrade" installs available upgrades of all packages
-	# currently installed on the system and intelligently handles
-	# changing dependencies with new versions of packages
-	echo apt-get --yes dist-upgrade
-	apt-get --yes dist-upgrade
-	# "clean" clears out the local repository of retrieved package files.
-	echo apt-get --yes clean
-	apt-get --yes clean
-	# "autoremove" removes those dependencies that were installed with
-	# now-removed applications and that are no longer used
-	# by anything else on the system
-	echo apt-get --yes autoremove
-	apt-get --yes autoremove
+    # Update packages
+    # apt vs apt-get?
+    #   Res (defining): https://askubuntu.com/questions/990823/apt-gives-unstable-cli-interface-warning
+    #   Res: https://itsfoss.com/apt-vs-apt-get-difference/
+    #   Res: https://linuxconfig.org/apt-vs-apt-get-advanced-package-tool
+    #   Res: https://www.google.com/search?q=apt+and+apt-get
+    # "update" downloads package information from all configured sources
+    # "upgrade" is an extraneous subset of "dist-upgrade" below;
+    #    Ref: https://askubuntu.com/questions/194651/why-use-apt-upgrade-instead-of-apt-dist-upgrade#:~:text=apt%2Dget%20upgrade%20will%20not,install%20but%20not%20remove%20packages
+    #    sudo apt-get --yes upgrade \
+    # "dist-upgrade" installs available upgrades of all packages
+    # currently installed on the system and intelligently handles
+    # changing dependencies with new versions of packages
+    echo
+    echo Updating local host of upgradable packages and upgrading them.
+      echo DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
+    DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
+    # "clean" clears out the local repository of retrieved package files.
+    echo
+    echo Clearing out the local repository of retrieved package files.
+    echo apt-get --yes clean
+    apt-get --yes clean
+    # "autoremove" removes those dependencies that were installed with
+    # now-removed applications and that are no longer used
+    # by anything else on the system
+    echo
+    echo "Removing those dependencies that were associated with non-removed applications that no longer are used"
+    echo apt-get --yes autoremove
+    apt-get --yes autoremove
 	}
 
 #########################################################################################################
