@@ -315,10 +315,12 @@ done
 		fi
 
 # Update /etc/ufw/applications.d/lane-applications
-    echo
-	echo "Updating /etc/ufw/applications.d/lane-applications from $GIT_GO_CONFIGS/etc/ufw/applications.d/lane-applications"
-    cp $GIT_GO_CONFIGS//etc/ufw/applications.d/lane-applications /etc/ufw/applications.d/
-    ufw app update lane-applications
+	if $(f_is_directory "$GIT_GO_CONFIGS/etc/ufw/applications.d/lane-applications"); then
+		echo
+		echo "Updating /etc/ufw/applications.d/lane-applications from $GIT_GO_CONFIGS/etc/ufw/applications.d/lane-applications"
+		cp $GIT_GO_CONFIGS//etc/ufw/applications.d/lane-applications /etc/ufw/applications.d/
+		ufw app update lane-applications
+		fi
 
 # Update $PHPMYADMIN_DIR/config.inc.php
 	if $(f_is_installed "phpmyadmin"); then
