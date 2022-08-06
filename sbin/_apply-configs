@@ -206,10 +206,6 @@ done
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ROOT_HOME_DIR/.MakeMKV/"
 		fi
 
-################################################################################
-# Diags: Safe through Here.
-################################################################################
-
 # Update ~/.ssh/authorized_keys
 	if $(f_is_installed "ssh"); then
 		echo
@@ -282,12 +278,6 @@ done
 		echo "Updating /etc/motd from $GIT_GO_CONFIGS/etc/motd.$HOSTNAME"
 		cp "$GIT_GO_CONFIGS/etc/motd.$HOSTNAME" "/etc/motd"
 		fi
-
-################################################################################
-# Diagnostic stop here
-################################################################################
-	echo Diagnostic stop here "(_apply-configs)"
-	# exit 1
 
 # Update any netplan configuration files
 	if [ -f $GIT_GO_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME ]; then

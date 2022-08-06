@@ -211,20 +211,10 @@ done
 	find $SERVICES_DIR -type d -print -exec chmod $SERVICES_DIR_PERMISSIONS {} \; >> /dev/null 2>&1
 	find $SERVICES_DIR -type f -print -exec chmod $SERVICES_FILE_PERMISSIONS {} \; >> /dev/null 2>&1
 
-###################################################
-# SAFE THROUGH THIS POINT.
-###################################################
-
 # Apply configs
     echo
     echo "Applying configurations"
 	f_apply_configs $ARGS
-
-###################################################
-# DIAGNOSTIC CHECK.
-###################################################
-    echo "Stopping program here to isolate a failure (_git)"
-    exit 1
 
 # # REMOVED THIS COMMAND 12/30/2020: Trying to isolate something that's killing all the systemd services on oz
 # # Reload systemd manager configuration
