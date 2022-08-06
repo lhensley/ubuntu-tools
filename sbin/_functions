@@ -355,7 +355,7 @@ function f_install() {
 		echo "Test A-"
 		if !(f_is_installed $1); then
 			echo "Test A--1"
-			echo
+			echo ""
 			echo "Test A"
 			echo "Installing $1"
 			echo "Test A2"
@@ -377,7 +377,7 @@ function f_install() {
 			echo "Test A8"
 				echo "Test D"
 			echo "Test A9"
-				echo
+				echo ""
 			echo "Test A10"
 				echo $1 already is installed
 			echo "Test A11"
