@@ -223,7 +223,7 @@ done
 ###################################################
 # DIAGNOSTIC CHECK.
 ###################################################
-    echo "Stopping program here to isolage a failure (_git)"
+    echo "Stopping program here to isolate a failure (_git)"
     exit 1
 
 # # REMOVED THIS COMMAND 12/30/2020: Trying to isolate something that's killing all the systemd services on oz
