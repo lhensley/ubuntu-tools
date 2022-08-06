@@ -354,16 +354,19 @@ function f_install() {
 	if ! [ -x "$(command -v $1)" ]; then
 		if !(f_is_installed $1); then
 			echo
+			echo "Test A"
 			echo "Installing $1"
 			logger -t "$(basename $0)[$$]" Installing $1
 			DEBIAN_FRONTEND=noninteractive apt-get install --yes $1
 			RETURNCODE=$?
 			logger -t "$(basename $0)[$$]" Installation of $1 ended with exit code $RETURNCODE
 			if [ $RETURNCODE -ne 0 ]; then
+				echo "Test B"
 				echo Installation FAILED
-				else echo "$1 installed"
+				else echo "Test C" echo "$1 installed"
 				fi
 			else
+				echo "Test D"
 				echo
 				echo $1 already is installed
 			fi
