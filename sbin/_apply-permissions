@@ -161,14 +161,14 @@ done
 #   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
-	# Set ownership and permissions in $SBIN_DIR
+	# Set ownership and permissions for $SBIN_DIR
 		echo
-		echo Updating permissions in $SBIN_DIR
+		echo Updating permissions for $SBIN_DIR
 		chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
 		chmod -R $SBIN_PERMISSIONS $SBIN_DIR
 
-	# Set ownership and permissions in $SERVICES_DIR
-		echo Updating permissions in $SERVICES_DIR
+	# Set ownership and permissions for $SERVICES_DIR
+		echo Updating permissions for $SERVICES_DIR
 		chown -R $ROOT_USER:$ROOT_USER $SERVICES_DIR
 		find $SERVICES_DIR -type d -print -exec chmod $SERVICES_DIR_PERMISSIONS {} \; >> /dev/null 2>&1
 		find $SERVICES_DIR -type f -print -exec chmod $SERVICES_FILES_PERIOSSIONS {} \; >> /dev/null 2>&1
