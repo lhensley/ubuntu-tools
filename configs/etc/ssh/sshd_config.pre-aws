@@ -1,20 +1,19 @@
+#       $OpenBSD: sshd_config,v 1.101 2017/03/14 07:19:07 djm Exp $
 
 # This is the sshd server system-wide configuration file.  See
 # sshd_config(5) for more information.
 
-# This sshd was compiled with PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+# This sshd was compiled with PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
 # The strategy used for options in the default sshd_config shipped with
 # OpenSSH is to specify options with their default value where
 # possible, but leave them commented.  Uncommented options override the
 # default value.
 
-Include /etc/ssh/sshd_config.d/*.conf
-
 #Port 22
 #AddressFamily any
 #ListenAddress 0.0.0.0
-#ListenAddress ::
+#ListenAddress [::]
 
 #HostKey /etc/ssh/ssh_host_rsa_key
 #HostKey /etc/ssh/ssh_host_ecdsa_key
@@ -59,7 +58,7 @@ PasswordAuthentication no
 
 # Change to yes to enable challenge-response passwords (beware issues with
 # some PAM modules and threads)
-KbdInteractiveAuthentication no
+ChallengeResponseAuthentication no
 
 # Kerberos options
 #KerberosAuthentication no
@@ -75,14 +74,14 @@ KbdInteractiveAuthentication no
 
 # Set this to 'yes' to enable PAM authentication, account processing,
 # and session processing. If this is enabled, PAM authentication will
-# be allowed through the KbdInteractiveAuthentication and
+# be allowed through the ChallengeResponseAuthentication and
 # PasswordAuthentication.  Depending on your PAM configuration,
-# PAM authentication via KbdInteractiveAuthentication may bypass
+# PAM authentication via ChallengeResponseAuthentication may bypass
 # the setting of "PermitRootLogin without-password".
 # If you just want the PAM account and session checks to run without
 # PAM authentication, then enable this but set PasswordAuthentication
-# and KbdInteractiveAuthentication to 'no'.
-UsePAM yes
+# and ChallengeResponseAuthentication to 'no'.
+UsePAM no
 
 #AllowAgentForwarding yes
 #AllowTcpForwarding yes
@@ -91,15 +90,16 @@ X11Forwarding yes
 #X11DisplayOffset 10
 #X11UseLocalhost yes
 #PermitTTY yes
-PrintMotd no
+PrintMotd yes
 #PrintLastLog yes
 #TCPKeepAlive yes
+#UseLogin no
 #PermitUserEnvironment no
 #Compression delayed
 #ClientAliveInterval 0
 #ClientAliveCountMax 3
 #UseDNS no
-#PidFile /run/sshd.pid
+#PidFile /var/run/sshd.pid
 #MaxStartups 10:30:100
 #PermitTunnel no
 #ChrootDirectory none
@@ -120,3 +120,16 @@ Subsystem       sftp    /usr/lib/openssh/sftp-server
 #       AllowTcpForwarding no
 #       PermitTTY no
 #       ForceCommand cvs server
+
+AllowUsers lhensley ubuntu
+GatewayPorts no
+AllowTcpForwarding yes
+LoginGraceTime 20
+KeepAlive yes
+Protocol 2
+IgnoreRhosts yes
+IgnoreUserKnownHosts no
+StrictModes yes
+PubkeyAuthentication yes
+PermitRootLogin no
+PermitEmptyPasswords no
