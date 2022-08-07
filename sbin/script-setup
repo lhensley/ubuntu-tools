@@ -28,13 +28,6 @@ if $LOG_START; then
 # If configured, send a text message to note the start of script processing. Default = "false"
 # if [ "$(f_get-config LANE_script_$(basename $0)_text_start)" == "true" ]; then f_text_alert "$0: Start"; fi
 
-# Backup definitions
-# NOTE: -t flag removed from next line 3/28/19. Generates error.
-RSYNC_NO_DELETE="rsync -aopqrzE -e 'ssh -p $OFFSITE_PORT'"
-RSYNC_SU="$RSYNC_NO_DELETE ${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"
-RSYNC_SU="$RSYNC_SU $OFFSITE_SERVER:$OFFSITE_PATH"
-BACKUPLOG="${LANE_CONFIG[CONFIG_archive_directory_$(hostname -s)]}"/$HOSTNAME-backup.log
-
 # Mail
 # What is this for?
 MAILNAME=$HOSTNAME

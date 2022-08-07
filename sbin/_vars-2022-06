@@ -23,13 +23,14 @@
         HOME_ROOT="/home"
         SBIN_DIR="/usr/local/sbin"
         SBIN_PARENT="$(dirname $SBIN_DIR)"
-        DOMAIN_NAME=lanehensley.org
-        COLOPHON="by Lane Hensley, lane.hensley@alumni.duke.edu, https://lanehensley.org"
+        DOMAIN_NAME="lanehensley.org"
+        COLOPHON="by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
+        TIMEZONE="US/Central"
 
-# /etc/os-release defines a lot of environment variables 
+# /etc/os-release defines a lot of environment variables
 # Sample:
 #    NAME="Ubuntu"
-#    VERSION="18.04.4 LTS (Bionic Beaver)"
+#    VERSION="18.04.4 LTS \(Bionic Beaver\)"
 #    ID=ubuntu
 #    ID_LIKE=debian
 #    PRETTY_NAME="Ubuntu 18.04.4 LTS"
@@ -63,17 +64,16 @@ source /etc/os-release
 
 # Admin user info
 # Dependent on section Global
-        ADMIN_USER=lhensley
-        if [ $HOSTNAME == "teddy" ]; then ADMIN_USER="ubuntu"; fi
-        ADMIN_HOME_DIR=$HOME_ROOT/$ADMIN_USER
-        ADMIN_CELL_EMAIL=7608514641@vtext.com
-        ADMIN_EMAIL=lane@lanehensley.org
+        ADMIN_USER="lhensley"
+        ADMIN_HOME_DIR="$HOME_ROOT/$ADMIN_USER"
+        ADMIN_CELL_EMAIL="7608514641@vtext.com"
+        ADMIN_EMAIL="lane@lanehensley.org"
         ADMIN_NAME="Lane Hensley"
 
 # Root user info
-        ROOT_USER=root
-        ROOT_HOME_DIR=/root
-        ROOT_EMAIL=root@$HOSTNAME@$DOMAIN_NAME
+        ROOT_USER="root"
+        ROOT_HOME_DIR="/root"
+        ROOT_EMAIL="root@$HOSTNAME@$DOMAIN_NAME"
         ROOT_NAME="Root at $HOSTNAME@$DOMAIN_NAME"
 
 # Temp file definitions
@@ -152,22 +152,22 @@ source /etc/os-release
 # DEPENDENT on definition of $HOSTNAME, but that's built-in
         declare -A ARCHIVE_FILE_SYSTEM
                 ARCHIVE_FILE_SYSTEM[default]="/"
-                ARCHIVE_FILE_SYSTEM[eve]="/mnt/3TBB"
                 ARCHIVE_FILE_SYSTEM[nuc01]="/mnt/5TBE"
+                ARCHIVE_FILE_SYSTEM[adam]="/mnt/5TBD"
                 ARCHIVE_FILE_SYSTEM[oz]="/mnt/5TBC"
         declare -A ARCHIVE_DIRECTORY
                 ARCHIVE_DIRECTORY[default]="/var/lib/archives/$HOSTNAME"
-                ARCHIVE_DIRECTORY[eve]=${ARCHIVE_FILE_SYSTEM[eve]}/archives/eve
-                ARCHIVE_DIRECTORY[nuc01]=${ARCHIVE_FILE_SYSTEM[nuc01]}/archives/nuc01
-                ARCHIVE_DIRECTORY[oz]=${ARCHIVE_FILE_SYSTEM[oz]}/archives/oz
+                ARCHIVE_DIRECTORY[nuc01]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
+                ARCHIVE_DIRECTORY[adam]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
+                ARCHIVE_DIRECTORY[oz]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
         THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[default]}"
-                if [ $HOSTNAME == "eve" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[eve]}"; fi
-                if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[nuc01]}"; fi
-                if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[oz]}"; fi
+                if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "adam" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
         THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[default]}"
-                if [ $HOSTNAME == "eve" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[eve]}"; fi
-                if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[nuc01]}"; fi
-                if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[oz]}"; fi
+                if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "adam" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
         ARCHIVE_TAR_FILE="$HOSTNAME-$START_DATESTAMP.gz"
                 ARCHIVE_TAR_FULL="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_FILE"
         ARCHIVE_TAR_WEEKDAY_FILE="$HOSTNAME-weekday-$START_WEEKDAYSTAMP3.gz"
@@ -193,9 +193,9 @@ source /etc/os-release
         TEMP_ARCHIVE_DIRECTORY="/var/tmp/archives"                         # Default
         TEMP_ARCHIVE_PARENT_DIRECTORY="/var/tmp"                               # Default
         TEMP_ARCHIVE_SUBDIRECTORY="archives"                                       # Default
-        # Default COLD_RESTORE_POINT = "/", but "/var/restore-points/START_DATEANDTIMESTAMP/" recommended for trouble-shooting
+        # Default COLD_RESTORE_POINT = "/", but "/var/restore-points/$START_DATEANDTIMESTAMP" recommended for trouble-shooting
                 COLD_RESTORE_POINT="/"
-                # COLD_RESTORE_POINT="/var/restore-points/START_DATEANDTIMESTAMP/"
+                # COLD_RESTORE_POINT="/var/restore-points/$START_DATEANDTIMESTAMP"
         COLD_BACKUP_LOG="$ADMIN_HOME_DIR/.coldstorage.log"
         if [ $HOSTNAME == "nuc01" ]; then
                 COLD_BACKUP_FILE_SYSTEM="/mnt/5TBE"
@@ -208,10 +208,17 @@ source /etc/os-release
                 TEMP_ARCHIVE_PARENT_DIRECTORY="/mnt/bob"
                 TEMP_ARCHIVE_SUBDIRECTORY="archives"
                 fi
-        if [ $HOSTNAME == "red" ]; then
+        if [ $HOSTNAME == "adam" ]; then
                 COLD_BACKUP_FILE_SYSTEM="/mnt/5TBD"
                 COLD_BACKUP_FS_READ_ONLY=false
                 COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
+                # Commenting out all below to keep defaults because only the root file system is an SSD.
+                # TEMP_COLD_BACKUP_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM/cold-backup"
+                # TEMP_COLD_BACKUP_PARENT_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM"
+                # TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"
+                # TEMP_ARCHIVE_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM/archives"
+                # TEMP_ARCHIVE_PARENT_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM"
+                # TEMP_ARCHIVE_SUBDIRECTORY="archives"
                 fi
         if [ $HOSTNAME == "oz" ]; then
                 COLD_BACKUP_FILE_SYSTEM="/mnt/5TBC"
@@ -225,20 +232,20 @@ source /etc/os-release
                 TEMP_ARCHIVE_SUBDIRECTORY="archives"
                 fi
         COLD_BACKUP_DIRECTORY="$COLD_BACKUP_PARENT_DIRECTORY/$COLD_BACKUP_SUBDIRECTORY"
-        COLD_BACKUP_EXCLUDES="--exclude='/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Cache'"
-        COLD_BACKUP_EXCLUDES+=" --exclude=/var/lib/plexmediaserver/Library/store/*"
-        COLD_BACKUP_EXCLUDES+=" --exclude=/var/lib/plexmediaserver/Library/work/*"
+        COLD_BACKUP_EXCLUDES="--exclude='/var/snap/plexmediaserver/common/Library/Application Support/Plex Media Server/Cache'"
+        COLD_BACKUP_EXCLUDES+=" --exclude=/var/snap/plexmediaserver/common/Library/store/*"
+        COLD_BACKUP_EXCLUDES+=" --exclude=/var/snap/plexmediaserver/common/Library/work/*"
         COLD_BACKUP_EXCLUDES+=" --exclude=.cache"
         COLD_BACKUP_EXCLUDES+=" --exclude=Cache"
         COLD_BACKUP_SOURCES="$COLD_BACKUP_EXCLUDES etc home opt root"
         COLD_BACKUP_SOURCES+=" var/www"
-        COLD_BACKUP_SOURCES+=" var/lib/plexmediaserver/Library"
+        COLD_BACKUP_SOURCES+=" var/snap/plexmediaserver/common/Library"
         COLD_RESTORE_EXCLUDES="--exclude=.config/os-install-info.txt"
         COLD_RESTORE_EXCLUDES+=" --exclude=etc/fstab*"
         COLD_RESTORE_EXCLUDES+=" --exclude=etc/systemd/system"
 #       COLD_RESTORE_EXCLUDES+=" --exclude=.cache"
         COLD_RESTORE_EXCLUDES+=" --exclude=etc/mtab"
-#       COLD_RESTORE_EXCLUDES+=" --exclude='/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Cache'"
+#       COLD_RESTORE_EXCLUDES+=" --exclude='/var/snap/plexmediaserver/common/Library/Application Support/Plex Media Server/Cache'"
         COLD_RESTORE_EXCLUDES+=" --exclude=etc/os-release"
         COLD_RESTORE_EXCLUDES+=" --exclude=etc/rc*"
         COLD_RESTORE_EXCLUDES+=" --exclude=etc/udisks2"
@@ -259,11 +266,6 @@ source /etc/os-release
         BACKUP_OPTION[--auto-compress]=true
         BACKUP_OPTION[--preserve-permissions]=true
         BACKUP_OPTION[--file=$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE]=true
-#       BACKUP_OPTION[--exclude --exclude=/mnt/bob/cold-backup/var/lib/plexmediaserver/Library]=true
-#       BACKUP_OPTION[--exclude --exclude=/var/lib/plexmediaserver/Library]=true
-#       BACKUP_OPTION[--exclude='plexmediaserver/Library/Application Support/Cache']=true
-#       BACKUP_OPTION[--exclude=plexmediaserver/Library/work/movies]=true
-#       BACKUP_OPTION[--exclude=plexmediaserver/Library/work/tv]=true
         BACKUP_OPTION[--exclude-vcs]=true
         BACKUP_OPTION[--exclude-caches]=true
         BACKUP_OPTION[--totals]=true
@@ -282,18 +284,15 @@ source /etc/os-release
         # Ref: https://bytefreaks.net/gnulinux/bash/bash-how-to-iterate-over-associative-array-and-print-all-keyvalue-pairs
         BACKUP_SOURCES=""; for KEY in "${!BACKUP_SOURCE[@]}"; do BACKUP_SOURCES+=$KEY" "; done
 
+##################################################################################
+##### IMPORTANT: Update this to draw data from git. This is WAY out of date. #####
+##################################################################################
 # Peripheral File System Mount Points
 # This info is appended to /etc/fstab, and the mount points (key values) are created, at system installation
 # Example: MOUNT_POINT_DESCRIPTION[/mnt/Black4T01]="Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE"
 # Example: MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs defaults 0 0"
         declare -A MOUNT_POINT_DESCRIPTION
         declare -A MOUNT_POINT_DEFINITION
-        if [ $HOSTNAME == "eve" ]; then
-                MOUNT_POINT_DESCRIPTION[/mnt/5TBD]="# Black 5TB External Seagate"
-                        MOUNT_POINT_DEFINITION[/mnt/5TBD]="UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/5TBD ext4 defaults 0 0"
-                MOUNT_POINT_DESCRIPTION[/mnt/3TBB]="# Black 3TB External Drive (formerly attached to pearl)"
-                        MOUNT_POINT_DEFINITION[/mnt/3TBB]="UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/3TBB ext4 ro,defaults 0 0"
-        fi
         if [ $HOSTNAME == "nuc01" ]; then
                 MOUNT_POINT_DESCRIPTION[/mnt/Black4T01]="Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE"
                         MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs noauto 0 0"
@@ -330,12 +329,11 @@ source /etc/os-release
         # GIT_BRANCH="dev"
         GIT_ROOT="/var/local/git"                            # Formerly system.git
         GIT_GO="$GIT_ROOT/go"                                # Formerly system.git.go
-        GIT_GO_CONFIGS=$GIT_GO/configs                       # Formerly system.git.go.configs
-        GIT_GO_SBIN=$GIT_GO/sbin                             # Formerly #system.git.go.sbin
-        GIT_GO_SERVICES=$GIT_GO/services
-        GIT_GO_SETUP=$GIT_GO/setup                           # Formerly system.git.go.setup
-        # Removed for security
-        # GIT_TOKEN="Removed for security"   # Formerly system.git.token
+        GIT_GO_CONFIGS="$GIT_GO/configs"                       # Formerly system.git.go.configs
+        GIT_GO_SBIN="$GIT_GO/sbin"                             # Formerly #system.git.go.sbin
+        GIT_GO_SERVICES="$GIT_GO/services"
+        GIT_GO_SETUP="$GIT_GO/setup"                           # Formerly system.git.go.setup
+        GIT_TOKEN=4b662b7d4431ec1956127aa9d4fdbd8d75ec821a   # Formerly system.git.token
         SERVICES_DIR="/lib/systemd/system"
 
 # HandBrake
@@ -377,7 +375,10 @@ source /etc/os-release
 # phpMyAdmin
         PHPMYADMIN_DIR="/usr/share/phpmyadmin"
 
-# Plex Media Server
+#########################################################################
+##### IMPORTANT: Update this to draw data. This is WAY out of date. #####
+#########################################################################
+# Media Server
 # DEPENDENT on Archives Directories definitions above
 # DEPENDENT on MKMKV above
         PLEX_USER="plex"
@@ -387,26 +388,26 @@ source /etc/os-release
         unset PLEX_ROOT
         d="/"
         VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
-        VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
+        VIDEO_STORE_FILE_SYSTEM="/mnt/12TBB"
         VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in"
         VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex-dvr"
-        PLEX_LIVE_APPLICATION_SUPPORT="/var/lib/plexmediaserver/Library"
+        PLEX_LIVE_APPLICATION_SUPPORT="/var/snap/plexmediaserver/common/Library"
         PLEX_BACKUP_FILE_SYSTEM="$THIS_ARCHIVE_FILE_SYSTEM"
         PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
         if [ $HOSTNAME == "nuc01" ]; then 
                 # Define all Plex data root directories
                 # Set them all as true
-                # Example: PLEX_ROOT[/mnt/cloteal/plex]=true
+                # Example: PLEX_ROOT[/mnt/12TBB/plex]=true
                         declare -A PLEX_ROOT
-                        PLEX_ROOT[/mnt/cloteal/plex]=true
-                        PLEX_ROOT[/mnt/cloteal/plex-dvr]=true
+                        PLEX_ROOT[/mnt/12TBB/plex]=true
+                        PLEX_ROOT[/mnt/12TBB/plex-dvr]=true
                         PLEX_ROOT[/mnt/bertha/plex]=true
                         PLEX_ROOT[/mnt/bob/plex]=true
-                        PLEX_ROOT[/var/lib/plexmediaserver/Library/metadata]=true
-                        PLEX_ROOT[/var/lib/plexmediaserver/Library/store]=true
-                        PLEX_ROOT[/var/lib/plexmediaserver/Library/work]=true
+                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/metadata]=true
+                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/store]=true
+                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/work]=true
                 VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
-                VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
+                VIDEO_STORE_FILE_SYSTEM="/mnt/12TBB"
                 VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in"
                 VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex-dvr"
                 PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
@@ -414,15 +415,15 @@ source /etc/os-release
         if [ $HOSTNAME == "oz" ]; then 
                 # Define all Plex data root directories
                 # Set them all as true
-                # Example: PLEX_ROOT[/mnt/cloteal/plex]=true
+                # Example: PLEX_ROOT[/mnt/12TBB/plex]=true
                         declare -A PLEX_ROOT
-                        PLEX_ROOT[/var/lib/plexmediaserver/Library/metadata]=true
-                        PLEX_ROOT[/var/lib/plexmediaserver/Library/store]=true
-                        PLEX_ROOT[/var/lib/plexmediaserver/Library/work]=true
+                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/metadata]=true
+                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/store]=true
+                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/work]=true
                         PLEX_ROOT[/mnt/ssd1tb/plex]=true
                         PLEX_ROOT[/mnt/ext10tb01/plex]=true
-                VIDEO_WORK_FILE_SYSTEM="/mnt/ssd1tb"
-                VIDEO_WORK_DIRECTORY="/mnt/ssd1tb/plex/dvr-oz"
+                VIDEO_WORK_FILE_SYSTEM="/mnt/ext10tb01"
+                VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr-in"
                 VIDEO_STORE_FILE_SYSTEM="/mnt/ext10tb01"
                 VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex/dvr-oz"
                 PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
@@ -430,14 +431,14 @@ source /etc/os-release
         if [ $HOSTNAME == "adam" ]; then 
                 # Define all Plex data root directories
                 # Set them all as true
-                # Example: PLEX_ROOT[/mnt/cloteal/plex]=true
+                # Example: PLEX_ROOT[/mnt/12TBB/plex]=true
                         declare -A PLEX_ROOT
-                        PLEX_ROOT[/mnt/cloteal/plex]=true
-                        PLEX_ROOT[/mnt/cloteal/plex-dvr]=true
+                        PLEX_ROOT[/mnt/12TBB/plex]=true
+                        PLEX_ROOT[/mnt/12TBB/plex-dvr]=true
                         PLEX_ROOT[/mnt/bertha/plex]=true
                         PLEX_ROOT[/mnt/bob/plex]=true
                 VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
-                VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
+                VIDEO_STORE_FILE_SYSTEM="/mnt/12TBB"
                 VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in"
                 VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex-dvr"
                 PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"

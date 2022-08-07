@@ -204,7 +204,7 @@ done
 		fi
 
 # Update ~/.ssh/authorized_keys
-	if $(f_is_installed "ssh"); then
+	if $(f_is_installed "openssh-server"); then
 		echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys"
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys" "$ADMIN_HOME_DIR/.ssh/authorized_keys"
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys" "$ROOT_HOME_DIR/.ssh/authorized_keys"
@@ -284,7 +284,7 @@ done
 		fi
 
 # Update /etc/sshd_config
-	if $(f_is_installed "ssh"); then
+	if $(f_is_installed "ssh-server"); then
 		echo "Updating /etc/ssh/sshd_config from $GIT_GO_CONFIGS/etc/ssh/sshd_config"
 		cp "$GIT_GO_CONFIGS/etc/ssh/sshd_config" "/etc/ssh/sshd_config"
 		systemctl restart ssh
