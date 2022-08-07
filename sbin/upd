@@ -22,6 +22,7 @@
 	echo
 	echo "Updating local apt packages"
 	f_upd
+	echo
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

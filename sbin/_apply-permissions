@@ -174,7 +174,7 @@ done
 		find $SERVICES_DIR -type f -print -exec chmod $SERVICES_FILES_PERIOSSIONS {} \; >> /dev/null 2>&1
 		
 	# Exceptions: These can be read or run by anyone
-		echo "Adjusting permissions for some required exceptions."
+		echo "Updating permissions for some required exceptions"
 #		# 2/16/2022: Not sure why it's necessary to confirm existence of these files except to keep chmod from failing below,
 #		# which can be managed with the --silent flag. Added that to all chmods below.
 #		# Confirm that referenced files below exist.
