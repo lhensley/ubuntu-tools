@@ -166,14 +166,12 @@ done
 
 # Clear /etc/NetworkManager/system-connections
 	if $(f_is_installed "network-manager"); then 
-		echo
 		echo "Clearing /etc/NetworkManager/system-connections"
 		rm -f /etc/NetworkManager/system-connections/*
 		fi
 
 # This heads off a network manager problem defined at https://askubuntu.com/questions/71159/network-manager-says-device-not-managed
 	if $(f_is_installed "network-manager"); then 
-		echo
 		echo touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
 		touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
 		fi
@@ -190,7 +188,6 @@ done
 # Update ~/.HandBrake
 	rm -f "$ADMIN_HOME_DIR/.HandBrake"/* "$ROOT_HOME_DIR/.HandBrake/"*
 	if $(f_is_installed "handbrake-cli"); then
-		echo
 		echo "Updating $ADMIN_HOME_DIR/.HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
 		mkdir -p "$ADMIN_HOME_DIR/.HandBrake" "$ROOT_HOME_DIR/.HandBrake"
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ADMIN_HOME_DIR/.HandBrake"
@@ -200,7 +197,6 @@ done
 # Update ~/.MakeMKV
 	rm -f "$ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ROOT_HOME_DIR/.MakeMKV/settings.conf"
 	if $(f_is_installed "makemkv-bin"); then
-		echo
 		echo "Updating $ADMIN_HOME_DIR/.MakeMKV/settings.conf from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf"
 		mkdir -p "$ADMIN_HOME_DIR/.MakeMKV" "$ROOT_HOME_DIR/.MakeMKV"
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ADMIN_HOME_DIR/.MakeMKV/"
@@ -209,7 +205,6 @@ done
 
 # Update ~/.ssh/authorized_keys
 	if $(f_is_installed "ssh"); then
-		echo
 		echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys"
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys" "$ADMIN_HOME_DIR/.ssh/authorized_keys"
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys" "$ROOT_HOME_DIR/.ssh/authorized_keys"
@@ -218,7 +213,6 @@ done
 # Update Vim and vi config file
 # Commented out because defaults in Ubuntu 22 are much better
 #	if [ -f $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vimrc ]; then
-#		echo
 #		echo Updating vim and vi config file
 #		cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ADMIN_HOME_DIR/
 #		cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ROOT_HOME_DIR/
@@ -227,7 +221,6 @@ done
 # Update /etc/exports
 	rm -f /etc/exports
 	if $(f_is_installed "nfs-kernel-server"); then
-		echo
 		echo "Updating /etc/exports from $GIT_GO_CONFIGS/etc/exports.$HOSTNAME"
 		cp "$GIT_GO_CONFIGS/etc/exports.$HOSTNAME" "/etc/exports"
 		exportfs -r
@@ -237,7 +230,6 @@ done
 # Update /etc/fstab
 	cp -n /etc/fstab /etc/fstab.original.install
 	if $(f_is_file "$GIT_GO_CONFIGS/etc/fstab-peripherals.$HOSTNAME"); then
-		echo
 		echo "Updating /etc/fstab from /etc/fstab.original.install and $GIT_GO_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"
 		rm -f /etc/fstab
 		cat /etc/fstab.original.install "$GIT_GO_CONFIGS/etc/fstab-peripherals.$HOSTNAME" > /tmp/fstab
@@ -249,7 +241,6 @@ done
 	rm -f /etc/ddclient/*
 	rm -f /etc/ddclient.*
 	if $(f_is_installed "ddclient"); then
-		echo
 		echo "Updating /etc/ddclient.conf from $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME"
 		mkdir -p /etc/ddclient
 		cp $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient/ddclient.conf
@@ -259,7 +250,6 @@ done
 # Update /etc/hosts
 	rm -f /etc/hosts
 	if [ -f $GIT_GO_CONFIGS/hosts ]; then
-		echo
 		echo "Updating /etc/hosts from $GIT_GO_CONFIGS/hosts"
 		cp "$GIT_GO_CONFIGS/etc/hosts" "/etc/hosts"
 		fi
@@ -267,7 +257,6 @@ done
 # Update /etc/lsyncd/*
 	rm -f /etc/lyncd/*
 	if $(f_is_installed "lsyncd"); then
-		echo
 		echo "Updating /etc/lsyncd/lsyncd.conf.lua from $GIT_GO_CONFIGS/lsyncd/lsyncd.conf.lua.$HOSTNAME"
 		cp $GIT_GO_CONFIGS/lsyncd/lsyncd.conf.lua.$HOSTNAME /etc/lsyncd/lsyncd.conf.lua
 		systemctl restart lsyncd
@@ -275,14 +264,12 @@ done
 
 # Update /etc/motd
 	if [ -f $GIT_GO_CONFIGS/etc/motd.$HOSTNAME ]; then
-		echo
 		echo "Updating /etc/motd from $GIT_GO_CONFIGS/etc/motd.$HOSTNAME"
 		cp "$GIT_GO_CONFIGS/etc/motd.$HOSTNAME" "/etc/motd"
 		fi
 
 # Update any netplan configuration files
 	if [ -f $GIT_GO_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME ]; then
-		echo
 		echo "Updating /etc/netplan/current-plan.yaml from $GIT_GO_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME"
 		rm -f /etc/NetworkManager/system-connections/* /etc/netplan/*
 		cp "$GIT_GO_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME" /etc/netplan/current-plan.yaml
@@ -291,7 +278,6 @@ done
 
 # Update /etc/resolvconf/resolv.conf.d/head
 	if $(f_is_installed "resolvconf"); then
-		echo
 		echo "Updating /etc/resolvconf/resolv.conf.d/head from $GIT_GO_CONFIGS/resolvconf/resolv.conf.d/head"
 		mkdir -p /etc/resolvconf/resolv.conf.d
 		cp $GIT_GO_CONFIGS/resolvconf/resolv.conf.d/head /etc/resolvconf/resolv.conf.d/
@@ -299,7 +285,6 @@ done
 
 # Update /etc/sshd_config
 	if $(f_is_installed "ssh"); then
-		echo
 		echo "Updating /etc/ssh/sshd_config from $GIT_GO_CONFIGS/etc/ssh/sshd_config"
 		cp "$GIT_GO_CONFIGS/etc/ssh/sshd_config" "/etc/ssh/sshd_config"
 		systemctl restart ssh
@@ -307,7 +292,6 @@ done
 
 # Update /etc/ufw/applications.d/lane-applications
 	if $(f_is_directory "$GIT_GO_CONFIGS/etc/ufw/applications.d/lane-applications"); then
-		echo
 		echo "Updating /etc/ufw/applications.d/lane-applications from $GIT_GO_CONFIGS/etc/ufw/applications.d/lane-applications"
 		cp $GIT_GO_CONFIGS//etc/ufw/applications.d/lane-applications /etc/ufw/applications.d/
 		ufw app update lane-applications
@@ -315,7 +299,6 @@ done
 
 # Update $PHPMYADMIN_DIR/config.inc.php
 	if $(f_is_installed "phpmyadmin"); then
-		echo
 		echo "Updating $PHPMYADMIN_DIR/config.inc.php from $GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php"
 		mkdir -p "$PHPMYADMIN_DIR"
 		cp "$GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php" "$PHPMYADMIN_DIR/config.inc.php"
