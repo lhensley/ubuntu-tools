@@ -166,8 +166,8 @@ f_run_apt_updates
 apt-get install --yes wget apg certbot python3-certbot-apache
 
 # Generate a MySQL password for the Wordpress database
-admin_wp_pwd="$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)"
-mysql_wp_pwd="$(apg -c cl_seed -a 1 -m $MAX_MYSQL_PASSWORD_LENGTH -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)"
+admin_wp_pwd="$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -M ncl)"
+mysql_wp_pwd="$(apg -c cl_seed -a 1 -m $MAX_MYSQL_PASSWORD_LENGTH -n 1 -M ncl)"
 
 # Move to docroot
 if ! cd "$docroot"; then

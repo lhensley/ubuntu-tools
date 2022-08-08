@@ -357,7 +357,7 @@ source /etc/os-release
 
 # MySQL
         MYSQL_ADMIN_NAME="admin"
-        MYSQL_CLIENT_CERTS_DIR="$ADMIN_HOME_DIR/certs"
+        MYSQL_CLIENT_CERTS_DIR="$ADMIN_HOME_DIR/mysql-client-certificates"
         MYSQL_CONFIGS="/etc/mysql/conf.d"
         MYSQL_DUMP_DIR=$ADMIN_HOME_DIR/mysql-dumps
         MYSQL_SERVER_BIN_DIR="/var/lib/mysql"
