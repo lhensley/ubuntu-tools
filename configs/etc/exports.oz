@@ -9,10 +9,10 @@
 # /srv/nfs4/homes  gss/krb5i(rw,sync,no_subtree_check)
 #
 
-/mnt/5TBC			192.168.168.0/24(no_subtree_check,no_root_squash,rw)
-/mnt/12TBC			192.168.168.0/24(no_subtree_check,no_root_squash,rw)
-/mnt/ext10tb01		192.168.168.0/24(no_subtree_check,no_root_squash,rw)
-/mnt/ssd1tb			192.168.168.0/24(no_subtree_check,no_root_squash,rw)
+/mnt/5TBC			192.168.169.0/24(no_subtree_check,no_root_squash,rw)
+/mnt/12TBC			192.168.169.0/24(no_subtree_check,no_root_squash,rw)
+/mnt/ext10tb01		192.168.169.0/24(no_subtree_check,no_root_squash,rw)
+/mnt/ssd1tb			192.168.169.0/24(no_subtree_check,no_root_squash,rw)
 
 # Use sudo -i to load a root shell before using either of these:
 # To apply revisions after editing this file:     exportfs -r
