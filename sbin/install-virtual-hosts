@@ -58,7 +58,7 @@ function print_usage {
   echo "  -u    MySQL User Name; only needed if WordPress is being installed"
   echo "  -w    Web Admin User's Full Name (default: \"Lane Hensley\")"
   echo "  -W    Install WordPress"
-  echo "  -x    Web Admin User's Email Address (default \"lane.hensley@alumni.duke.edu\")"
+  echo "  -x    Web Admin User's Email Address (default \"admin@lanehensley.org\")"
   echo "  -X    Remove/uninstall the virtual host"
   echo "Example installation with WordPress:     sudo $script_name -W -u MYSQL_USER -p MYSQL_PASSWORD FQDN"
   echo "Example installation without WordPress:  sudo $script_name FQDN"
@@ -162,7 +162,7 @@ if [ -d "$docroot" ]; then # If docroot already exists
 f_run_apt_updates
 # For Ubuntu 18
 # apt-get install --yes wget apg certbot python python-certbot-apache
-# For Ubuntu 18
+# For Ubuntu 18 (still works with Ubuntu 22)
 apt-get install --yes wget apg certbot python3-certbot-apache
 
 # Generate a MySQL password for the Wordpress database

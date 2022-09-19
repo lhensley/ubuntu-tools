@@ -11,11 +11,9 @@ network:
             dhcp6: true
             accept-ra: true
             ipv6-address-token: '::6'
-#            routes:
-#            - to: default
-#              via: 2604:2d80:5399:1300:349b:d9ff:fe62:5e6c
-#              metric: 100
-#              on-link: true
+            nameservers:
+                addresses: [192.168.168.2, 8.8.8.8, '2001:4860:4860::8844']
+                search: [lanehensley.org, local, lan]
     wifis:
         wifi0:
             match:
@@ -24,6 +22,8 @@ network:
             access-points:
                 "Hog Heaven DSM":
                     password: "fuckitymcfuckface"
+            dhcp4: true
+            dhcp6: true
             accept-ra: true
             ipv6-address-token: "::2:6"
 #            activation-mode: manual

@@ -10,9 +10,9 @@ network:
             dhcp4: true
             dhcp6: true
             accept-ra: true
-            ipv6-address-token: "::3"
+            ipv6-address-token: '::3'
             nameservers:
-                addresses: [192.168.169.2, 8.8.8.8, '2001:4860:4860::8844']
+                addresses: [192.168.168.2, 8.8.8.8, '2001:4860:4860::8844']
                 search: [lanehensley.org, local, lan]
     wifis:
         wifi0:

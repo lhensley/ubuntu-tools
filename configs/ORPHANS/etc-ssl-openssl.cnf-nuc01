@@ -154,7 +154,7 @@ commonName_default              = CHANGE-THIS.lane.is-a-geek.org
 
 emailAddress                    = Email Address
 emailAddress_max                = 64
-emailAddress_default            = lane.hensley@alumni.duke.edu
+emailAddress_default            = lane@lanehensley.org
 
 # SET-ex3                       = SET extension number 3
 
