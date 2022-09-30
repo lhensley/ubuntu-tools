@@ -33,6 +33,7 @@
 
 # Apply configs to set permissions within ~/.ssh
 	f_apply_configs
+	f_apply_permissions
 
 # Display the public key
 	echo ""
