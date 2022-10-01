@@ -271,14 +271,14 @@ done
 			fi
 	
 	# ~/.ssh
-		if $(f_is_installed "ssh"); then
+#		if $(f_is_installed "ssh"); then
 			echo Updating permissions for $ADMIN_HOME_DIR/.ssh and $ROOT_HOME_DIR/.ssh
 			chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh
 			chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh
 			chmod -f 700 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh
 			chmod -f 600 $ADMIN_HOME_DIR/.ssh/* $ROOT_HOME_DIR/.ssh/*
 			chmod -f 644 $ADMIN_HOME_DIR/.ssh/id_rsa.pub $ROOT_HOME_DIR/.ssh/id_rsa.pub
-			fi
+#			fi
 
 	# SSHD config file
 		if $(f_is_installed "ssh"); then
