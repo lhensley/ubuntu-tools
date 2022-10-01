@@ -16,8 +16,7 @@
 # Install putty (including puttygen)
 	f_install putty
 
-### CHECK COMMENT BELOW. DOES THIS MAKE USERS OR MAKE ANYONE SUDO? I HOPE NOT ...
-# Make $USER_ME and $USER_UBUNTU users and give them sudo access and ssh access
+# Create ssh keys
 	# ssh-keygen -t ed25519 -C "$SSH_KEY_NAME" -P "" -f "$HOME_ME/.ssh/id_ed25519"
 	SSH_IMPRESS="$ADMIN_EMAIL-$START_DATEANDTIMESTAMP-id_ed25519"
 	SSH_LOCATION="$ADMIN_HOME_DIR/.ssh/$SSH_IMPRESS"
