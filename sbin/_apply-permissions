@@ -277,7 +277,7 @@ done
 			chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh
 			chmod -f 700 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh
 			chmod -f 600 $ADMIN_HOME_DIR/.ssh/* $ROOT_HOME_DIR/.ssh/*
-			chmod -f 644 $ADMIN_HOME_DIR/.ssh/id_rsa.pub $ROOT_HOME_DIR/.ssh/id_rsa.pub
+			chmod -f 644 $ADMIN_HOME_DIR/.ssh/id_rsa.pub $ROOT_HOME_DIR/.ssh/*.pub
 #			fi
 
 	# SSHD config file
