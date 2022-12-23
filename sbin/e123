@@ -6,7 +6,7 @@
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 
-INPUT_STRING="ABC# .1-2;-3akas;idfj8"
+INPUT_STRING="ABC# .1-2;-3akas,idf+j8"
 OUTPUT_STRING=$(echo $INPUT_STRING | sed 's/[^+,;0-9]//g')
 echo $OUTPUT_STRING
 
