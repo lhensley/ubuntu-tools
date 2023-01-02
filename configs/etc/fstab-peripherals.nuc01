@@ -74,20 +74,21 @@ UUID=C6B89CABB89C9B8D /mnt/MyBook3T01 ntfs nofail 0 0
 ########################################################################################################
 #
 # 5TBC (5TB) Black 5TB External Seagate
-# UUID=fa9f5c57-94fd-4706-979e-4c30189592a5 /mnt/5TBC ext4 nofail 0 0
-oz:/mnt/5TBC /mnt/5TBC nfs rw,nofail
+UUID=fa9f5c57-94fd-4706-979e-4c30189592a5 /mnt/5TBC ext4 nofail 0 0
+# oz:/mnt/5TBC /mnt/5TBC nfs rw,nofail
 #
 # 12TBC (12TB) Black 12TB External Seagate
-# UUID=64414aac-65cf-4e81-a561-f007cb82418b /mnt/12TBC ext4 nofail 0 0
-oz:/mnt/12TBC /mnt/12TBC nfs rw,nofail
+UUID=64414aac-65cf-4e81-a561-f007cb82418b /mnt/12TBC ext4 nofail 0 0
+# oz:/mnt/12TBC /mnt/12TBC nfs rw,nofail
 #
 # ext10tb01 (10TB); external drive for Plex
-# UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 rw,nofail 0 0
-oz:/mnt/ext10tb01 /mnt/ext10tb01 nfs rw,nofail
+# Power supply sounds like it's failing. Decommission SOON. 1/2/2023
+UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 rw,nofail 0 0
+# oz:/mnt/ext10tb01 /mnt/ext10tb01 nfs rw,nofail
 #
 # ssd1tb (1TB); internal SSD drive
-# UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb ext4 nofail 0 0
-oz:/mnt/ssd1tb /mnt/ssd1tb nfs rw,nofail
+UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb ext4 nofail 0 0
+# oz:/mnt/ssd1tb /mnt/ssd1tb nfs rw,nofail
 #
 ########################################################################################################
 #
@@ -96,19 +97,19 @@ oz:/mnt/ssd1tb /mnt/ssd1tb nfs rw,nofail
 ########################################################################################################
 #
 # adam: 12TBA (12TB)
-# UUID=901c4177-b514-408a-997c-0cbeee89fa6e /mnt/12TBA ext4 nofail 0 0
-adam:/mnt/12TBA /mnt/12TBA nfs rw,nofail
+UUID=901c4177-b514-408a-997c-0cbeee89fa6e /mnt/12TBA ext4 nofail 0 0
+# adam:/mnt/12TBA /mnt/12TBA nfs rw,nofail
 #
 # adam: 3TBB (3TB)
-# UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/3TBB ext4 nofail 0 0
-adam:/mnt/3TBB /mnt/3TBB nfs rw,nofail
+UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/3TBB ext4 nofail 0 0
+# adam:/mnt/3TBB /mnt/3TBB nfs rw,nofail
 #
 # adam: 5TBD (5TB) UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85
-# UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/5TBD ext4 nofail 0 0
-adam:/mnt/5TBD /mnt/5TBD nfs rw,nofail
+UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/5TBD ext4 nofail 0 0
+# adam:/mnt/5TBD /mnt/5TBD nfs rw,nofail
 #
 # adam: 5TBF (5TB) UUID=9c311371-fbce-423b-9f44-4301aca9e6e5
-# UUID=C824163824162A48 /mnt/5TBF ntfs nofail 0 0
+UUID=C824163824162A48 /mnt/5TBF ntfs nofail 0 0
 # adam:/mnt/5TBF /mnt/5TBF ntfs rw,nofail
 #
 ########################################################################################################
