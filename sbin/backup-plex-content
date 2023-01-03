@@ -13,9 +13,9 @@
 
 # Define variables
 	SOURCE_FILE_SYSTEM="/mnt/12TBB"
-	SOURCE_PLEX_CONTENT_DIR="plex"
+	SOURCE_PLEX_CONTENT_DIR=""
 	TARGET_FILE_SYSTEM="/mnt/12TBA"
-	TARGET_PLEX_CONTENT_DIR="plex"
+	TARGET_PLEX_CONTENT_DIR=""
 
 # Mount source file system
 	if ! $(f_mount_fs_as_rw "$SOURCE_FILE_SYSTEM") ; then
@@ -42,9 +42,9 @@
 
 # Define variables
 	SOURCE_FILE_SYSTEM="/mnt/12TBB"
-	SOURCE_PLEX_CONTENT_DIR="plex"
+	SOURCE_PLEX_CONTENT_DIR=""
 	TARGET_FILE_SYSTEM="/mnt/12TBC"
-	TARGET_PLEX_CONTENT_DIR="plex"
+	TARGET_PLEX_CONTENT_DIR=""
 
 # Mount source file system
 	if ! $(f_mount_fs_as_rw "$SOURCE_FILE_SYSTEM") ; then
