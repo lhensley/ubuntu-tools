@@ -36,7 +36,7 @@
 					TARGET_DIR="$TARGET_PLEX_CONTENT_DIR/$this_directory"
 					# echo
 					# echo Backing up $SOURCE_DIR to $TARGET_DIR
-					rsync -aloprtvE --delete "$SOURCE_DIR/"* "$TARGET_DIR"
+					rsync -aloprtvE --delete "$SOURCE_FILE_SYSTEM/$SOURCE_DIR/"* "$TARGET_FILE_SYSTEM/$TARGET_DIR"
 				done
 		done
 
@@ -65,7 +65,7 @@
 					TARGET_DIR="$TARGET_PLEX_CONTENT_DIR/$this_directory"
 					# echo
 					# echo Backing up $SOURCE_DIR to $TARGET_DIR
-					rsync -aloprtvE --delete "$SOURCE_DIR/"* "$TARGET_DIR"
+					rsync -aloprtvE --delete "$SOURCE_FILE_SYSTEM/$SOURCE_DIR/"* "$TARGET_FILE_SYSTEM/$TARGET_DIR"
 				done
 		done
 
