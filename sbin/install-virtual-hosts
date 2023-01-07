@@ -124,6 +124,9 @@ function backout {
   query="DROP DATABASE IF EXISTS \`wp_$fqdn\`; DROP USER IF EXISTS 'wp_$fqdn'@'localhost'; FLUSH PRIVILEGES;"
 #  mysql -u $mysql_root_user -p$mysql_root_password -e "$query" > /dev/null 2> /dev/null
   mysql -u $mysql_root_user -p$mysql_root_password -e "$query" > /dev/null 2> /dev/null
+  systemctl status apache2.service > ~/apache2failure.log
+  journalctl -xeu apache2.service >> ~/apache2failure.log
+  echo "See ~/apache2failure.log"
   systemctl restart apache2
   systemctl restart mysql
   }
