@@ -87,7 +87,7 @@ UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 rw,nofail 0 0
 # oz:/mnt/ext10tb01 /mnt/ext10tb01 nfs rw,nofail
 #
 # ssd1tb (1TB); internal SSD drive
-UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb ext4 nofail 0 0
+# UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb ext4 nofail 0 0
 # oz:/mnt/ssd1tb /mnt/ssd1tb nfs rw,nofail
 #
 ########################################################################################################
@@ -109,7 +109,7 @@ UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/5TBD ext4 nofail 0 0
 # adam:/mnt/5TBD /mnt/5TBD nfs rw,nofail
 #
 # adam: 5TBF (5TB) UUID=9c311371-fbce-423b-9f44-4301aca9e6e5
-UUID=C824163824162A48 /mnt/5TBF ntfs nofail 0 0
+# UUID=C824163824162A48 /mnt/5TBF ntfs nofail 0 0
 # adam:/mnt/5TBF /mnt/5TBF ntfs rw,nofail
 #
 ########################################################################################################
