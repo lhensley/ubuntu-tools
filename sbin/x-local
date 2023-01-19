@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+
+# POSSIBLE OPTION: USE IF YOU WANT
+# Require root
+	f_require_root
+
+# Do stuff here
+	rm -rf /home/lhensley/a2
+	mkdir -p /home/lhensley/a2/old/etc
+	mkdir -p /home/lhensley/a2/old/var/www
+	mkdir -p /home/lhensley/a2/new/etc
+	mkdir -p /home/lhensley/a2/new/var/www
+	cp -pr /etc/apache2 /home/lhensley/a2/new/etc/
+	cp -pr /etc/letsencrypt /home/lhensley/a2/new/etc/
+	cp -pr /var/www/* /home/lhensley/a2/new/var/www/
+	cp -pr /home/lhensley/cold-backup.2022-04/etc/apache2 /home/lhensley/a2/old/etc/
+	cp -pr /home/lhensley/cold-backup.2022-04/etc/letsencrypt /home/lhensley/a2/old/etc/
+	cp -pr /home/lhensley/cold-backup.2022-04/var/www/* /home/lhensley/a2/old/var/www/
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+
