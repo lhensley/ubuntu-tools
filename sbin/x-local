@@ -24,17 +24,15 @@
 # Do stuff here
 	rm -rf "$X_A2"
 	mkdir -p "$X_OLD_ETC" "$X_NEW_ETC" "$X_OLD_WWW" "$X_NEW_WWW"
-	exit 0
-
-	mkdir -p /home/lhensley/apache2/old/var/www
-	mkdir -p /home/lhensley/apache2/new/etc
-	mkdir -p /home/lhensley/apache2/new/var/www
-	cp -pr /etc/apache2 /home/lhensley/apache2/new/etc/
-	cp -pr /etc/letsencrypt /home/lhensley/apache2/new/etc/
-	cp -pr /var/www/* /home/lhensley/apache2/new/var/www/
-	cp -pr /home/lhensley/cold-backup.2022-04/etc/apache2 /home/lhensley/a2/old/etc/
-	cp -pr /home/lhensley/cold-backup.2022-04/etc/letsencrypt /home/lhensley/a2/old/etc/
-	cp -pr /home/lhensley/cold-backup.2022-04/var/www/* /home/lhensley/a2/old/var/www/
+	chown root:root "$X_OLD_ETC" "$X_NEW_ETC"
+	chown www-data:www-data "$X_OLD_WWW" "$X_NEW_WWW"
+	chmod -R "$X_A2" 750
+	cp -pr /etc/apache2 "$X_NEW_ETC"
+#	cp -pr /etc/letsencrypt /home/lhensley/apache2/new/etc/
+	cp -pr /var/www/* "$X_NEW_WWW/"
+	cp -pr /home/lhensley/cold-backup.2022-04/etc/apache2 "$X_OLD_ETC/"
+#	cp -pr /home/lhensley/cold-backup.2022-04/etc/letsencrypt /home/lhensley/a2/old/etc/
+	cp -pr /home/lhensley/cold-backup.2022-04/var/www/* "$X_OLD_WWW/"
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
