@@ -21,16 +21,11 @@
 	X_OLD_WWW="$X_OLD/www"
 	X_NEW_WWW="$X_NEW/www"
 
-	echo "$X_OLD_ETC"
-	echo "$X_NEW_ETC"
-	echo "$X_OLD_WWW"
-	echo "$X_NEW_WWW"
-
-	exit 0
-
 # Do stuff here
 	rm -rf "$X_A2"
-	mkdir -p /home/lhensley/apache2/old/etc
+	mkdir -p "$X_OLD_ETC" "$X_NEW_ETC" "$X_OLD_WWW" "$X_NEW_WWW"
+	exit 0
+
 	mkdir -p /home/lhensley/apache2/old/var/www
 	mkdir -p /home/lhensley/apache2/new/etc
 	mkdir -p /home/lhensley/apache2/new/var/www
