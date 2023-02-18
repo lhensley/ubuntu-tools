@@ -20,7 +20,6 @@
 	X_NEW_ETC="$X_NEW/etc"
 	X_OLD_WWW="$X_OLD/www"
 	X_NEW_WWW="$X_NEW/www"
-#	set -x
 
 # Do stuff here
 	cd "$X_HOME"
@@ -28,16 +27,10 @@
 	mkdir -p "$X_OLD_ETC" "$X_NEW_ETC" "$X_OLD_WWW" "$X_NEW_WWW"
 	chown root:root "$X_OLD_ETC" "$X_NEW_ETC"
 	chown www-data:www-data "$X_OLD_WWW" "$X_NEW_WWW"
-	chmod -R 750 "$X_A2"
-#	echo A
+	chmod -R 755 "$X_A2"
 	cp -pr /etc/apache2 "$X_NEW_ETC"
-#	cp -pr /etc/letsencrypt /home/lhensley/apache2/new/etc/
-#	echo B
 	cp -pr /var/www/* "$X_NEW_WWW/"
-#	echo C
 	cp -pr /home/lhensley/cold-backup.2022-04/etc/apache2 "$X_OLD_ETC/"
-#	cp -pr /home/lhensley/cold-backup.2022-04/etc/letsencrypt /home/lhensley/a2/old/etc/
-#	echo D
 	cp -pr /home/lhensley/cold-backup.2022-04/var/www/* "$X_OLD_WWW/"
 
 # Include script footer file
