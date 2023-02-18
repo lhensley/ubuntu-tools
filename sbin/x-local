@@ -20,13 +20,14 @@
 	X_NEW_ETC="$X_NEW/etc"
 	X_OLD_WWW="$X_OLD/www"
 	X_NEW_WWW="$X_NEW/www"
+	set -x
 
 # Do stuff here
 	rm -rf "$X_A2"
 	mkdir -p "$X_OLD_ETC" "$X_NEW_ETC" "$X_OLD_WWW" "$X_NEW_WWW"
 	chown root:root "$X_OLD_ETC" "$X_NEW_ETC"
 	chown www-data:www-data "$X_OLD_WWW" "$X_NEW_WWW"
-	chmod -R "$X_A2" 750
+	chmod -R 750 "$X_A2"
 	echo A
 	cp -pr /etc/apache2 "$X_NEW_ETC"
 #	cp -pr /etc/letsencrypt /home/lhensley/apache2/new/etc/
