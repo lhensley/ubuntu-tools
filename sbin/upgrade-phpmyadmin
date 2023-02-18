@@ -1,4 +1,5 @@
 #!/bin/bash
+# upgrade-phpmyadmin
 
 # Include script setup file
 	source script-setup
