@@ -519,8 +519,8 @@ function f_run_apt_updates () {
     # changing dependencies with new versions of packages
 		echo
 		echo Updating local host of upgradable packages and upgrading them.
-	    echo DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
-		DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
+	    echo DEBIAN_FRONTEND=noninteractive apt-get-update-if-needed && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
+		DEBIAN_FRONTEND=noninteractive apt-get-update-if-needed && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
 	# "clean" clears out the local repository of retrieved package files.
 		echo
 		echo Clearing out the local repository of retrieved package files.
@@ -831,8 +831,8 @@ f_run_apt_updates () {
     # changing dependencies with new versions of packages
     echo
     echo Updating local host of upgradable packages and upgrading them.
-      echo DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
-    DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
+      echo DEBIAN_FRONTEND=noninteractive apt-get-update-if-needed && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
+    DEBIAN_FRONTEND=noninteractive apt-get-update-if-needed && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
     # "clean" clears out the local repository of retrieved package files.
     echo
     echo Clearing out the local repository of retrieved package files.

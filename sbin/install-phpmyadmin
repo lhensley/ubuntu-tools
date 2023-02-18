@@ -20,7 +20,7 @@
 	# To restart relevant services automatically without prompting the user
 		sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf
 	# Update existing Debian packages
-		apt update
+		apt-get-update-if-needed
 	# Install PHP prerequisites:
 		apt install php-mbstring php-zip php-gd php-json php-curl
 	# Install apache2 prerequisites

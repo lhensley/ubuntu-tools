@@ -56,7 +56,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Do updates
-apt-get update && apt --yes dist-upgrade && apt --yes clean && apt --yes autoremove
+apt-get-update-if-needed && apt --yes dist-upgrade && apt --yes clean && apt --yes autoremove
 
 # Add custom application definitions for ufw
 cp configs/lane-applications /etc/ufw/applications.d/
@@ -173,7 +173,7 @@ if $install_phpmyadmin ; then
 if $install_plexmediaserver ; then
   curl https://downloads.plex.tv/plex-keys/PlexSign.key | apt-key add -
   echo deb https://downloads.plex.tv/repo/deb public main | tee /etc/apt/sources.list.d/plexmediaserver.list
-  apt-get update
+  apt-get-update-if-needed
   apt-get --yes install apt-transport-https plexmediaserver
   apt-get --yes install plexmediaserver
   ufw allow plexmediaserver

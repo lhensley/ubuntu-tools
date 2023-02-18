@@ -56,7 +56,7 @@ running_directory=$(dirname $0)
 configs_directory="$running_directory/configs"
 
 # Do updates
-apt-get update && apt --yes dist-upgrade && apt --yes clean && apt --yes autoremove
+apt-get-update-if-needed && apt --yes dist-upgrade && apt --yes clean && apt --yes autoremove
 
 if ! [ -x "$(command -v apg)" ]; then
   apt-get install --yes apg
