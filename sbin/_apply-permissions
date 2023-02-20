@@ -251,6 +251,18 @@ done
 			chown -fR $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.MakeMKV"
 			fi
 
+	# MySQL
+		if $(f_is_installed "mysql-server"); then
+			echo "Updating permissions for MySQL"
+			chown -fR $ROOT_USER:$ROOT_USER /etc/mysql
+			chmod -fR 644 /etc/mysql
+			chmod -f 600 /etc/mysql/debian.cnf
+			chmod -f 755 /etc/mysql
+			chmod -f 755 /etc/mysql/conf.d
+			chmod -f 755 /etc/mysql/mysql.conf.d
+			chmod -f 755 /etc/mysql/debian-start
+			fi
+
 	# /etc/motd
 		if [ -f /etc/motd ]; then
 			echo "Updating permissions for /etc/motd"
