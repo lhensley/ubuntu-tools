@@ -254,13 +254,22 @@ done
 	# MySQL
 		if $(f_is_installed "mysql-server"); then
 			echo "Updating permissions for MySQL"
-			chown -fR $ROOT_USER:$ROOT_USER /etc/mysql
-			chmod -fR 644 /etc/mysql
-			chmod -f 600 /etc/mysql/debian.cnf
-			chmod -f 755 /etc/mysql
-			chmod -f 755 /etc/mysql/conf.d
-			chmod -f 755 /etc/mysql/mysql.conf.d
-			chmod -f 755 /etc/mysql/debian-start
+			chown -R $ROOT_USER:$ROOT_USER /etc/mysql
+			chmod 755 /etc/mysql /etc/mysql/conf.d /etc/mysql/mysql.conf.d
+			chmod 600 /etc/mysql/debian.cnf
+			chmod 755 /etc/mysql/debian-start
+			chmod 644 /etc/mysql/my.cnf.fallback /etc/mysql/mysql.cnf
+			chmod 644 /etc/mysql/conf.d/mysql.cnf
+			chmod 644 /etc/mysql/conf.d/mysqldump.cnf
+			chmod 644 /etc/mysql/mysql.conf.d/mysql.cnf
+			chmod 644 /etc/mysql/mysql.conf.d/mysqld.cnf
+#			chown -fR $ROOT_USER:$ROOT_USER /etc/mysql
+#			chmod -fR 644 /etc/mysql
+#			chmod -f 600 /etc/mysql/debian.cnf
+#			chmod -f 755 /etc/mysql
+#			chmod -f 755 /etc/mysql/conf.d
+#			chmod -f 755 /etc/mysql/mysql.conf.d
+#			chmod -f 755 /etc/mysql/debian-start
 			fi
 
 	# /etc/motd
