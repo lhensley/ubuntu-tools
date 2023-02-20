@@ -28,20 +28,22 @@ if $LOG_START; then
 # If configured, send a text message to note the start of script processing. Default = "false"
 # if [ "$(f_get-config LANE_script_$(basename $0)_text_start)" == "true" ]; then f_text_alert "$0: Start"; fi
 
-# Mail
-# What is this for?
-MAILNAME=$HOSTNAME
+# What in the hell is ANY of this for? Looks like very old shit, pre-dating _apply-permissions. 2/19/2023
 
-# Set key file ownerships #############################################
-# This should be moved to the backup script to happen immediately after the files are created.
-/bin/chown root:root $MYSQL_CONFIGS/mysqldump.cnf >> /dev/null 2>&1
-/bin/chown -R root:$USER_NAME $SCRIPTS_DIRECTORY >> /dev/null 2>&1
-/bin/chown -R www-data:www-data $THIS_WEB_ROOT/ >> /dev/null 2>&1
+	#	# Mail
+	#	# What is this for?
+	#	MAILNAME=$HOSTNAME
 
-# Set key file permissions ############################################
-# This should be moved to the backup script to happen immediately after the files are created.
-/bin/chmod 600 $MYSQL_CONFIGS/mysqldump.cnf >> /dev/null 2>&1
-/bin/chmod -R 770 $SCRIPTS_DIRECTORY >> /dev/null 2>&1
+	#	# Set key file ownerships #############################################
+	#	# This should be moved to the backup script to happen immediately after the files are created.
+	#	/bin/chown root:root $MYSQL_CONFIGS/mysqldump.cnf >> /dev/null 2>&1
+	#	/bin/chown -R root:$USER_NAME $SCRIPTS_DIRECTORY >> /dev/null 2>&1
+	#	/bin/chown -R www-data:www-data $THIS_WEB_ROOT/ >> /dev/null 2>&1
+
+	#	# Set key file permissions ############################################
+	#	# This should be moved to the backup script to happen immediately after the files are created.
+	#	/bin/chmod 644 $MYSQL_CONFIGS/mysqldump.cnf >> /dev/null 2>&1
+	#	/bin/chmod -R 770 $SCRIPTS_DIRECTORY >> /dev/null 2>&1
 
 f_debug "script-setup ended"
 
