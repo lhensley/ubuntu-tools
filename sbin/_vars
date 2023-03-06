@@ -76,10 +76,10 @@ source /etc/os-release
 # Admin user info
 # Dependent on section Global
 	ADMIN_USER="lhensley" # DEFAULT
-	if [ "$VM_ENVIRONMENT" == "aws"]; then ADMIN_USER="ubuntu"; fi
-	if [ "$VM_ENVIRONMENT" == "google"]; then ADMIN_USER="lane"; fi
-	if [ "$VM_ENVIRONMENT" == "metal"]; then ADMIN_USER="lhensley"; fi
-	if [ "$VM_ENVIRONMENT" == "virtualhost"]; then ADMIN_USER="lhensley"; fi
+	if [ "$VM_ENVIRONMENT" == "aws" ]; then ADMIN_USER="ubuntu"; fi
+	if [ "$VM_ENVIRONMENT" == "google" ]; then ADMIN_USER="lane"; fi
+	if [ "$VM_ENVIRONMENT" == "metal" ]; then ADMIN_USER="lhensley"; fi
+	if [ "$VM_ENVIRONMENT" == "virtualhost" ]; then ADMIN_USER="lhensley"; fi
 	ADMIN_HOME_DIR="$HOME_ROOT/$ADMIN_USER"
 	ADMIN_CELL_EMAIL="7608514641@vtext.com"
 	ADMIN_EMAIL="lane@lanehensley.org"
