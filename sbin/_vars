@@ -1,3 +1,5 @@
+#!/bin/bash
+# _vars
 # Variable definitions for Lane applications
 
 # Debug Mode
@@ -20,12 +22,21 @@
                 RUN_AS=$USER
 
 # Global
-        HOME_ROOT="/home"
-        SBIN_DIR="/usr/local/sbin"
-        SBIN_PARENT="$(dirname $SBIN_DIR)"
-        DOMAIN_NAME="lanehensley.org"
-        COLOPHON="by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
-        TIMEZONE="US/Central"
+	HOME_ROOT="/home"
+	SBIN_DIR="/usr/local/sbin"
+	SBIN_PARENT="$(dirname $SBIN_DIR)"
+	DOMAIN_NAME="lanehensley.org"
+	COLOPHON="by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
+
+# VM environment
+	VM_ENVIRONMENT="" # DEFAULT
+	# Known options as of 3/5/2023: aws google metal virtualhost vmware
+	if [ $HOSTNAME == "adam" ]; then VM_ENVIRONMENT="metal"; fi
+	if [ $HOSTNAME == "nuc01" ]; then VM_ENVIRONMENT="metal"; fi
+	if [ $HOSTNAME == "oz" ]; then VM_ENVIRONMENT="metal"; fi
+	if [ $HOSTNAME == "teddy" ]; then VM_ENVIRONMENT="aws"; fi
+	if [ $HOSTNAME == "u22" ]; then VM_ENVIRONMENT="virtualhost"; fi
+	if [ $HOSTNAME == "ubuntu-22-04-dev-a" ]; then VM_ENVIRONMENT="google"; fi
 
 # /etc/os-release defines a lot of environment variables
 # Sample:
@@ -45,37 +56,40 @@ source /etc/os-release
 
 # Start timestamps
 # Ref https://www.cyberciti.biz/faq/linux-unix-formatting-dates-for-display/ for date format %codes
-        START_DATEANDTIMESTAMP=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')     # Like 2020-09-07-16-05-23-CDT. Used in naming SSH keys and backing up installed files like fstab
-        START_DATESTAMP=$(/bin/date '+%Y-%m-%d   ')                     # Like 2020-09-07. Used in backup variables below
-        START_DAYSTAMP=$(/bin/date '+%d')                               # Like 07
-        START_MONTHSTAMP=$(/bin/date '+%Y-%m')                          # Like 2020-09
-        START_TIMESTAMP=$(/bin/date)                                    # Like Mon 07 Sep 2020 04:01:23 PM CDT
-        START_WEEKDAYSTAMP=$(/bin/date '+%a')                           # Like Mon. Used in backup variables below
-        START_WEEKDAYSTAMP2=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z-%a')     # Like 2020-09-07-16-05-23-CDT-Mon. Used in backup variables below
-        START_WEEKDAYSTAMP3=$(/bin/date '+%w-%a')                       # Like 0-Sun, 1-Mon, 2-Tue, etc. Used in backup variables below
+	START_DATEANDTIMESTAMP=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')     # Like 2020-09-07-16-05-23-CDT. Used in naming SSH keys and backing up installed files like fstab
+	START_DATESTAMP=$(/bin/date '+%Y-%m-%d   ')                     # Like 2020-09-07. Used in backup variables below
+	START_DAYSTAMP=$(/bin/date '+%d')                               # Like 07
+	START_MONTHSTAMP=$(/bin/date '+%Y-%m')                          # Like 2020-09
+	START_TIMESTAMP=$(/bin/date)                                    # Like Mon 07 Sep 2020 04:01:23 PM CDT
+	START_WEEKDAYSTAMP=$(/bin/date '+%a')                           # Like Mon. Used in backup variables below
+	START_WEEKDAYSTAMP2=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z-%a')     # Like 2020-09-07-16-05-23-CDT-Mon. Used in backup variables below
+	START_WEEKDAYSTAMP3=$(/bin/date '+%w-%a')                       # Like 0-Sun, 1-Mon, 2-Tue, etc. Used in backup variables below
 
 # About This Script (or at least the one sourcing it)
-        PROGRAM_DIRECTORY=$(dirname $0)
-        UUID=$(uuidgen)
+	PROGRAM_DIRECTORY="$(dirname $0)"
+	UUID="$(uuidgen)"
 
 # Current user info
-        CURRENT_USER=$USER
-        CURRENT_HOME_DIR=$HOME
+	CURRENT_USER="$USER"
+	CURRENT_HOME_DIR="$HOME"
 
 # Admin user info
 # Dependent on section Global
-        ADMIN_USER="lhensley"
-        if [ $HOSTNAME == "teddy" ]; then ADMIN_USER="ubuntu"; fi
-        ADMIN_HOME_DIR="$HOME_ROOT/$ADMIN_USER"
-        ADMIN_CELL_EMAIL="7608514641@vtext.com"
-        ADMIN_EMAIL="lane@lanehensley.org"
-        ADMIN_NAME="Lane Hensley"
+	ADMIN_USER="lhensley" # DEFAULT
+	if [ "$VM_ENVIRONMENT" == "aws"]; then ADMIN_USER="ubuntu"; fi
+	if [ "$VM_ENVIRONMENT" == "google"]; then ADMIN_USER="lane"; fi
+	if [ "$VM_ENVIRONMENT" == "metal"]; then ADMIN_USER="lhensley"; fi
+	ADMIN_HOME_DIR="$HOME_ROOT/$ADMIN_USER"
+	ADMIN_CELL_EMAIL="7608514641@vtext.com"
+	ADMIN_EMAIL="lane@lanehensley.org"
+	ADMIN_NAME="Lane Hensley"
 
 # Root user info
-        ROOT_USER="root"
-        ROOT_HOME_DIR="/root"
-        ROOT_EMAIL="root@$HOSTNAME@$DOMAIN_NAME"
-        ROOT_NAME="Root at $HOSTNAME@$DOMAIN_NAME"
+	ROOT_USER="root" # DEFAULT
+	ROOT_HOME_DIR="/root"
+	ADMIN_CELL_EMAIL="7608514641@vtext.com"
+	ROOT_EMAIL="root@$HOSTNAME@$DOMAIN_NAME"
+	ROOT_NAME="Root at $HOSTNAME@$DOMAIN_NAME"
 
 # Temp file definitions
 # DEPENDENT ON ABOUT THIS SCRIPT ABOVE
