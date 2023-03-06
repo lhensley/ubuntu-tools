@@ -27,6 +27,8 @@
 	SBIN_PARENT="$(dirname $SBIN_DIR)"
 	DOMAIN_NAME="lanehensley.org"
 	COLOPHON="by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
+    TIMEZONE="US/Central"
+
 
 # VM environment
 	VM_ENVIRONMENT="" # DEFAULT
