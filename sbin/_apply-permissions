@@ -206,8 +206,8 @@ done
 	# ddclient
 		if $(f_is_installed "ddclient"); then
 			echo "Updating permissions for ddclient"
-			chmod -f 600 /etc/ddclient/ddclient.conf /etc/default/ddclient # confirmed value
-			chown -f $ROOT_USER:$ROOT_USER /etc/ddclient/ddclient.conf /etc/default/ddclient
+			chmod -f 600 /etc/ddclient.conf /etc/ddclient/ddclient.conf /etc/default/ddclient # confirmed value
+			chown -f $ROOT_USER:$ROOT_USER /etc/ddclient.conf /etc/ddclient/ddclient.conf /etc/default/ddclient
 			fi
 
 	# /etc/exports

@@ -237,14 +237,15 @@ done
 		mount --all &
 		fi
 
-# Update /etc/ddclient/ddclient.conf
+# Update /etc/ddclient/
 	rm -f /etc/ddclient/*
 	rm -f /etc/ddclient.*
 	if $(f_is_installed "ddclient"); then
-		echo "Updating /etc/ddclient.conf from $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME"
+		echo "Updating /etc/ from $GIT_GO_CONFIGS/etc/ddclient/.$HOSTNAME"
 		mkdir -p /etc/ddclient
-		cp $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient/ddclient.conf
-		cp $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.default /etc/ddclient.conf.default
+		cp $GIT_GO_CONFIGS/etc/ddclient/.$HOSTNAME /etc/
+		cp $GIT_GO_CONFIGS/etc/ddclient/.$HOSTNAME /etc/ddclient/
+		cp $GIT_GO_CONFIGS/etc/ddclient/.default /etc/.default
 		fi
 
 # Update /etc/hosts
