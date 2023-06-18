@@ -14,31 +14,31 @@ protocol=dyndns2
 use=web
 server=domains.google.com
 ssl=yes
-login='pp0w5vsjww1GxSrQ'
-password='if8n65feWrwgXPHQ'
+login='DZJxrDQpIYim5dm1'
+password='8HKXNgxo1gzAdJXA'
 lanehensley.org
 
-protocol=dyndns2
-use=web
-server=domains.google.com
-ssl=yes
-login='ZTxZ5sTVfRLqROHg'
-password='THLnwnTUDixd66pA'
-nuc01.lanehensley.org
+# protocol=dyndns2
+# use=web
+# server=domains.google.com
+# ssl=yes
+# login='ZTxZ5sTVfRLqROHg'
+# password='THLnwnTUDixd66pA'
+# nuc01.lanehensley.org
 
-protocol=dyndns2
-usev6=web
-server=domains.google.com
-ssl=yes
-login='bi2OZwXRhBsZc6Rs'
-password='YXTaOmGIxj8AkvcQ'
-test.lanehensley.org
+# protocol=dyndns2
+# usev6=web
+# server=domains.google.com
+# ssl=yes
+# login='bi2OZwXRhBsZc6Rs'
+# password='YXTaOmGIxj8AkvcQ'
+# test.lanehensley.org
 
-protocol=dyndns2
-use=web
-server=domains.google.com
-ssl=yes
-login='7cdwe5byN9wzmswI'
-password='RLPaPkua71NuCWjI'
-nuc01.ddns.lanehensley.org
+# protocol=dyndns2
+# use=web
+# server=domains.google.com
+# ssl=yes
+# login='7cdwe5byN9wzmswI'
+# password='RLPaPkua71NuCWjI'
+# nuc01.ddns.lanehensley.org
 
