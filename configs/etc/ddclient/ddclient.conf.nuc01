@@ -14,8 +14,8 @@ protocol=dyndns2
 use=web
 server=domains.google.com
 ssl=yes
-login='DZJxrDQpIYim5dm1'
-password='8HKXNgxo1gzAdJXA'
+login='gRpS3kIXXgLtKFXM'
+password='8yc2rV7SHwXujHHU'
 lanehensley.org
 # 173.19.176.205 as of 6/18/2023
 
