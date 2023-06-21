@@ -201,6 +201,13 @@ function f_users_logged_in () {
 	who | wc -l
 	}
 
+function f_file_exists {
+	# Usage: if $(f_file_exists "file_or_path_name"); then commands_if_true; else commands_if_false; fi
+	# $1 = "$string_to_check"
+	# **** ALIAS FOR f_is_file. Keep this in sync! ****
+    if [ -f "$1" ]; then echo true; else echo false; fi
+	}
+
 function f_file_system_of () {
 	# Returns the file system name when $1 is a file or directory path
 	# Apparently not portable outside Linux, but who cares?
