@@ -16,6 +16,8 @@
 	SOURCE_PLEX_CONTENT_DIR=""
 	TARGET_FILE_SYSTEM="/mnt/12TBA"
 	TARGET_PLEX_CONTENT_DIR=""
+	echo Archiving "$SOURCE_FILE_SYSTEM""$SOURCE_PLEX_CONTENT_DIR" \
+		to "$TARGET_FILE_SYSTEM""$TARGET_PLEX_CONTENT_DIR"
 
 # Mount source file system
 	if ! $(f_mount_fs_as_rw "$SOURCE_FILE_SYSTEM") ; then
@@ -26,6 +28,8 @@
 	if ! $(f_mount_fs_as_rw "$TARGET_FILE_SYSTEM") ; then
 		f_die "$TARGET_FILE_SYSTEM cannot be mounted." true
 		fi
+
+echo Source and target file systems mounted successfully.
 
 # Backup all Plex content directories using rsync
 #	for x in {1..3} # Do it three times to catch anything added while this script is running
