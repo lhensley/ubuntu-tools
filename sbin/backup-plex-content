@@ -36,16 +36,23 @@ echo Source and target file systems mounted successfully.
 #		do
 			for this_directory in "plex"
 				do
+					echo A
 					SOURCE_DIR="$SOURCE_PLEX_CONTENT_DIR/$this_directory"
+					echo B
 					TARGET_DIR="$TARGET_PLEX_CONTENT_DIR/$this_directory"
+					echo C
 					# echo
 					# echo Backing up $SOURCE_DIR to $TARGET_DIR
 					rsync -aloprtvE --delete "$SOURCE_FILE_SYSTEM/$SOURCE_DIR/"* "$TARGET_FILE_SYSTEM/$TARGET_DIR"
+					echo D
 #				done
 #		done
 
 # Include script footer file
+					echo E
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+					echo F
 	source "${PATHNAME[script_footer]}"
+					echo G
 
 exit 0
