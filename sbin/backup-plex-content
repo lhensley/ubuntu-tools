@@ -11,14 +11,6 @@
 # Require server nuc01
 	f_only_on_server "nuc01"
 
-# Define variables
-	SOURCE_FILE_SYSTEM="/mnt/12TBB"
-	SOURCE_PLEX_CONTENT_DIR=""
-	TARGET_FILE_SYSTEM="/mnt/12TBA"
-	TARGET_PLEX_CONTENT_DIR=""
-#	echo Archiving "$SOURCE_FILE_SYSTEM""$SOURCE_PLEX_CONTENT_DIR"
-#	echo "   to" "$TARGET_FILE_SYSTEM""$TARGET_PLEX_CONTENT_DIR"
-
 echo ""
 echo "$0"
 echo ""
@@ -28,11 +20,8 @@ echo "EXAMPLE:" "$0" "\"/mnt/12TBB\"" "\"\"" "\"/mnt/12TBA\"" "\"\""
 echo ""
 
 if [ "$#" -ne 4 ]; then
-    echo "Illegal number of parameters"
-	exit -1
+	f_die "Illegal number of parameters." true
 	fi
-
-exit -1
 
 SOURCE_FILE_SYSTEM="$1"
 SOURCE_PLEX_CONTENT_DIR="$2"
