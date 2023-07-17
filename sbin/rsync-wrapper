@@ -11,22 +11,25 @@
 # Require server nuc01
 	f_only_on_server "nuc01"
 
-echo ""
-echo "$0"
-echo ""
-echo "  USAGE:" "$0" [source file system] [source content directory]
-echo "     [target file system]" [target content directory]
-echo "EXAMPLE:" "$0" "\"/mnt/12TBB\"" "\"\"" "\"/mnt/12TBA\"" "\"\""
-echo ""
+# Show name, usage, and example.
+	echo ""
+	echo "$(basename $0)"
+	echo ""
+	echo "  USAGE:" "$(basename $0)" [source file system] [source content directory]
+	echo "     [target file system]" [target content directory]
+	echo "EXAMPLE:" "$(basename $0)" "\"/mnt/12TBB\"" "\"\"" "\"/mnt/12TBA\"" "\"\""
+	echo ""
 
-if [ "$#" -ne 4 ]; then
-	f_die "Illegal number of parameters." true
-	fi
+# Test for proper number of parameters
+	if [ "$#" -ne 4 ]; then
+		f_die "Illegal number of parameters." true
+		fi
 
-SOURCE_FILE_SYSTEM="$1"
-SOURCE_PLEX_CONTENT_DIR="$2"
-TARGET_FILE_SYSTEM="$3"
-TARGET_PLEX_CONTENT_DIR="$4"
+# Assign variables from program parameters
+	SOURCE_FILE_SYSTEM="$1"
+	SOURCE_PLEX_CONTENT_DIR="$2"
+	TARGET_FILE_SYSTEM="$3"
+	TARGET_PLEX_CONTENT_DIR="$4"
 
 # Mount source file system
 	if ! $(f_mount_fs_as_rw "$SOURCE_FILE_SYSTEM") ; then
@@ -38,7 +41,8 @@ TARGET_PLEX_CONTENT_DIR="$4"
 		f_die "$TARGET_FILE_SYSTEM cannot be mounted." true
 		fi
 
-echo Source and target file systems mounted successfully.
+# Report that the needed file systems are mounted successfully.
+	echo Source and target file systems mounted successfully.
 
 # Backup all Plex content directories using rsync
 #	for x in {1..3} # Do it three times to catch anything added while this script is running
