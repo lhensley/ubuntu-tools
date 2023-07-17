@@ -1,5 +1,10 @@
 #!/bin/bash
 
+####################################################################
+# IMPORTANT: THIS IS NOT THE AUTOMATED VERSION MOST RECENTLY IN USE.
+# FOR THAT, SEE backup-plex-content
+####################################################################
+
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
