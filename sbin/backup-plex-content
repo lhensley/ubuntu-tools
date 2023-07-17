@@ -16,12 +16,12 @@
 	SOURCE_PLEX_CONTENT_DIR=""
 	TARGET_FILE_SYSTEM="/mnt/12TBA"
 	TARGET_PLEX_CONTENT_DIR=""
-	echo Archiving "$SOURCE_FILE_SYSTEM""$SOURCE_PLEX_CONTENT_DIR" \
-		to "$TARGET_FILE_SYSTEM""$TARGET_PLEX_CONTENT_DIR"
+	echo Archiving "$SOURCE_FILE_SYSTEM""$SOURCE_PLEX_CONTENT_DIR"
+	echo "   to" "$TARGET_FILE_SYSTEM""$TARGET_PLEX_CONTENT_DIR"
 
-echo USAGE: $0 [source file system] [source content directory] \
+echo "  USAGE:" "$0" [source file system] [source content directory] \
 	"   "[target file system] [target content directory]
-echo EXAMPLE: $0 "\"/mnt/12TBB\"" "\"\"" "\"/mnt/12TBA\"" "\"\""
+echo "EXAMPLE:" "$0" "\"/mnt/12TBB\"" "\"\"" "\"/mnt/12TBA\"" "\"\""
 exit 0
 
 # Mount source file system
