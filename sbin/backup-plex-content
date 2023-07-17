@@ -21,7 +21,7 @@
 
 echo USAGE: $0 [source file system] [source content directory] \
 	"   "[target file system] [target content directory]
-echo EXAMPLE: $0 "/mnt/12TBB" "" "/mnt/12TBA" ""
+echo EXAMPLE: $0 "\"/mnt/12TBB\"" "\"\"" "\"/mnt/12TBA\"" "\"\""
 exit 0
 
 # Mount source file system
