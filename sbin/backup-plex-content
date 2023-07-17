@@ -45,7 +45,7 @@ echo Source and target file systems mounted successfully.
 					# echo Backing up $SOURCE_DIR to $TARGET_DIR
 					rsync -aloprtvE --delete "$SOURCE_FILE_SYSTEM/$SOURCE_DIR/"* "$TARGET_FILE_SYSTEM/$TARGET_DIR"
 					echo D
-#				done
+				done
 #		done
 
 # Include script footer file
