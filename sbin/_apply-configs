@@ -238,18 +238,13 @@ done
 		fi
 
 # Update /etc/ddclient/
-	rm -f /etc/ddclient/*
 	rm -f /etc/ddclient.*
 	if $(f_is_installed "ddclient"); then
 		echo "Updating /etc/ddclient.conf and /etc/ddclient/ddclient.conf from $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME"
-		mkdir -p /etc/ddclient
-		echo A
-		cp $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient.conf
-		echo B
-		cp $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient/ddclient.conf
-		echo C
+		mkdir -p /etc/ddclient /etc/.default
+		cp -T $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient.conf
+		cp -T $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient/ddclient.conf
 		cp -T $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.default /etc/.default/ddclient.conf
-		echo D
 		fi
 
 # Update /etc/hosts
