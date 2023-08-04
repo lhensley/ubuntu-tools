@@ -248,7 +248,7 @@ done
 		echo B
 		cp $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient/ddclient.conf
 		echo C
-		cp $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.default /etc/.default/ddclient.conf
+		cp -T $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.default /etc/.default/ddclient.conf
 		echo D
 		fi
 
