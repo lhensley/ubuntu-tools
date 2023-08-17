@@ -13,7 +13,8 @@ Lane Services ("unit files")
 	upd script copies them to $SERVICES_DIR ("/lib/systemd/system")
 
 
-Pull up any unit file from the $GIT_GO_SERVICES (services) directory. They're easy to adapt. Things you'll need to specify:
+Pull up any unit file from the $GIT_GO_SERVICES (services) directory. 
+They're easy to adapt. Things you'll need to specify:
 	Description
 	Executable
 	User/Group Running the Executable
