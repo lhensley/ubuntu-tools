@@ -19,6 +19,15 @@ password='8yc2rV7SHwXujHHU'
 lanehensley.org
 # 173.19.176.205 as of 6/18/2023
 
+protocol=dyndns2
+use=web
+server=domains.google.com
+ssl=yes
+login='1PBmz1LFhxrYXxlX'
+password='JuLP3tsV253eoUwI'
+svalcp83.org
+# Added 8/30/2023
+
 # protocol=dyndns2
 # use=web
 # server=domains.google.com

@@ -813,7 +813,7 @@ f_watch_wait_upload () {
 		# Won't rclone create the remote directory if needed?
 		# f_require_directory "$REMOTE_DIRECTORY" true
 	# Watch $WATCH_DIRECTORY for incoming files, and upload them to $REMOTE_NAME:$REMOTE_DIRECTORY
-		rclone move "$WATCH_DIRECTORY" "$REMOTE_NAME:$REMOTE_DIRECTORY"
+		rclone move "$WATCH_DIRECTORY/.pdf" "$REMOTE_NAME:$REMOTE_DIRECTORY"
 		inotifywait -m "$WATCH_DIRECTORY" -e close_write -e moved_to | 
 			while read TEMP_PATH TEMP_ACTION TEMP_FILE; do
 				f_log_and_echo "Moving $TEMP_FILE to $REMOTE_NAME:$REMOTE_DIRECTORY" false
