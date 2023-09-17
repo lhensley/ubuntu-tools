@@ -218,7 +218,7 @@ done
 
 	# fstab
 		echo "Updating permissions for /etc/fstab*"
-		chmod -f 600 /etc/fstab* # confirmed value
+		chmod -f 644 /etc/fstab* # NOT 600. Apps need to read it. Esp k8s 9/17/2023 -LH
 		chown -f $ROOT_USER:$ROOT_USER /etc/fstab*
 
 	# /etc/hosts
