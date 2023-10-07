@@ -11,7 +11,8 @@ daemon=7200
 pid=/var/run/ddclient.pid
 
 protocol=dyndns2
-usev6=if, if=enp0s31f6
+ipv6=yes
+usev6=if, if=eth0
 server=domains.google.com
 ssl=yes
 login='gVPwHZhQC1wMwuug'
