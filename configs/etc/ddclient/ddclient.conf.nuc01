@@ -13,6 +13,7 @@ pid=/var/run/ddclient.pid
 protocol=dyndns2
 ipv6=yes
 usev6=if, if=ethernet0
+if-skip=Scope:Link
 server=domains.google.com
 ssl=yes
 login='gVPwHZhQC1wMwuug'
