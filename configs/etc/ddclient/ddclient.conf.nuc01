@@ -17,6 +17,7 @@ ssl=yes
 login='gVPwHZhQC1wMwuug'
 password='qIHyhBhSQjhjcubg'
 lanehensley.org
+# Not working!
 
 protocol=dyndns2
 use=web
