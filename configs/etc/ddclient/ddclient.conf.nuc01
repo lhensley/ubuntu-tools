@@ -12,31 +12,31 @@ pid=/var/run/ddclient.pid
 
 protocol=dyndns2
 ipv6=yes
-usev6=if, if=eth0
+usev6=if, if=ethernet0
 server=domains.google.com
 ssl=yes
 login='gVPwHZhQC1wMwuug'
 password='qIHyhBhSQjhjcubg'
 lanehensley.org
-# Updated from "use=web" to "usev6=if, if=enp0s31f6" 10/7/2023
+# Updated from "use=web" to "usev6=if, if=ethernet0" 10/7/2023
 
 protocol=dyndns2
-usev6=if, if=enp0s31f6
+usev6=if, if=ethernet0
 server=domains.google.com
 ssl=yes
 login='Jbg23fR0bwZ7Jm5J'
 password='E6acADdbXUv9A6Aj'
 nuc01.lanehensley.org
-# Updated from "use=web" to "usev6=if, if=enp0s31f6" 10/7/2023
+# Updated from "use=web" to "usev6=if, if=ethernet0" 10/7/2023
 
 protocol=dyndns2
-usev6=if, if=enp0s31f6
+usev6=if, if=ethernet0
 server=domains.google.com
 ssl=yes
 login='1PBmz1LFhxrYXxlX'
 password='JuLP3tsV253eoUwI'
 svalcp83.org
-# Updated from "use=web" to "usev6=if, if=enp0s31f6" 10/7/2023
+# Updated from "use=web" to "usev6=if, if=ethernet0" 10/7/2023
 
 # protocol=dyndns2
 # use=web
