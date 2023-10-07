@@ -16,8 +16,7 @@ server=domains.google.com
 ssl=yes
 login='gRpS3kIXXgLtKFXM'
 password='8yc2rV7SHwXujHHU'
-lanehensley.org
-# 173.19.176.205 as of 6/18/2023
+nuc01.lanehensley.org
 
 protocol=dyndns2
 use=web

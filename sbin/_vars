@@ -401,8 +401,10 @@ source /etc/os-release
 # DEPENDENT on Archives Directories definitions above
 # DEPENDENT on MKMKV above
         PLEX_USER="plex"
-        PLEX_VIDEO_FILE_PERMISSIONS=664
-        PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS=775
+        PERMISSIONS_PLEX_VIDEO_FILE=644
+        PLEX_VIDEO_FILE_PERMISSIONS=$PERMISSIONS_PLEX_VIDEO_FILE
+        PERMISSIONS_PLEX_VIDEO_LIBRARY_DIRECTORY=755
+        PLEX_VIDEO_FILE_PERMISSIONS=$PERMISSIONS_PLEX_VIDEO_LIBRARY_DIRECTORY;
         PLEX_FILE_NAME_PATTERN="*.ts"
         unset PLEX_ROOT
         d="/"
@@ -474,21 +476,27 @@ source /etc/os-release
         RESET_FLAG_FILE="/tmp/reset-when-ready"
 
 # SBIN
-        SBIN_PERMISSIONS=755
+        PERMISSIONS_SBIN=755
+        SBIN_PERMISSIONS=$PERMISSIONS_SBIN
 
 # SERVICES
         SERVICES_DIR="/lib/systemd/system"
-        SERVICES_DIR_PERMISSIONS=755
-        SERVICES_FILE_PERMISSIONS=644
+        PERMISSIONS_SERVICES_DIR=755
+        SERVICES_DIR_PERMISSIONS=$PERMISSIONS_SERVICES_DIR
+        PERMISSIONS_SERVICES_FILE=644
+        SERVICES_FILE_PERMISSIONS=$PERMISSIONS_SERVICES_FILE
 
 # System Snapshot File
         SYSTEM_SNAPSHOT_FILE="$ADMIN_HOME_DIR/.system-snapshot-data.csv"
         SYSTEM_SNAPSHOT_JSON_FILE="$ADMIN_HOME_DIR/.system-snapshot-data.json"
-        SYSTEM_SNAPSHOT_FILE_PERMISSIONS=640
+        PERMISSIONS_SYSTEM_SNAPSHOT_FILE=640
+        SYSTEM_SNAPSHOT_FILE_PERMISSIONS=$PERMISSIONS_SYSTEM_SNAPSHOT_FILE
 
 # Video Processing Defaults
-        DEFAULT_VIDEO_FILE_PERMISSIONS=664
-        DEFAULT_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS=775
+        PERMISSIONS_DEFAULT_VIDEO_FILE=664
+        DEFAULT_VIDEO_FILE_PERMISSIONS=$PERMISSIONS_DEFAULT_VIDEO_FILE
+        PERMISSIONS_DEFAULT_VIDEO_LIBRARY_DIRECTORY=775
+        DEFAULT_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS=$PERMISSIONS_DEFAULT_VIDEO_LIBRARY_DIRECTORY
         SOURCE_ROOT="/dev/null"               # For Plex DVR, this is $VIDEO_WORK_DIRECTORY
                                                                           # For DVDs ripped with MakeMKV, this is $MAKEMKV_OUTPUT_DIRECTORY
         unset SOURCE_FILE_NAME_PATTERN        # For Plex DVR, this is "*.ts"
@@ -591,6 +599,15 @@ source /etc/os-release
         PATHNAME[vaultopen]="$SBIN_DIR/vaultopen"
         PATHNAME[vaultsync]="$SBIN_DIR/vaultsync"
         PATHNAME[xfers]="$SBIN_DIR/xfers"
+
+# Script permissions
+        $PERMISSIONS_SCRIPT__functions=755
+        $PERMISSIONS_SCRIPT__vars=755
+        $PERMISSIONS_SCRIPT_makemkvcon=755
+        $PERMISSIONS_SCRIPT_remove_empty_directories=755
+        $PERMISSIONS_SCRIPT_rip=755
+        $PERMISSIONS_SCRIPT_script_footer=755
+        $PERMISSIONS_SCRIPT_script_setup=755
 
 # Require root to run these scripts (default is false or undefined)
 # DEPENDENT ON PATHNAME ARRAY DEFINITION ABOVE

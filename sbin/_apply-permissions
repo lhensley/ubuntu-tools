@@ -165,13 +165,13 @@ done
 		echo
 		echo Updating permissions for $SBIN_DIR
 		chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
-		chmod -R $SBIN_PERMISSIONS $SBIN_DIR
+		chmod -R $PERMISSIONS_SBIN $SBIN_DIR
 
 	# Set ownership and permissions for $SERVICES_DIR
 		echo Updating permissions for $SERVICES_DIR
 		chown -R $ROOT_USER:$ROOT_USER $SERVICES_DIR
-		find $SERVICES_DIR -type d -print -exec chmod $SERVICES_DIR_PERMISSIONS {} \; >> /dev/null 2>&1
-		find $SERVICES_DIR -type f -print -exec chmod $SERVICES_FILES_PERIOSSIONS {} \; >> /dev/null 2>&1
+		find $SERVICES_DIR -type d -print -exec chmod $PERMISSIONS_SERVICES_DIR {} \; >> /dev/null 2>&1
+		find $SERVICES_DIR -type f -print -exec chmod $PERMISSIONS_SERVICES_FILES {} \; >> /dev/null 2>&1
 		
 	# Exceptions: These can be read or run by anyone
 		echo "Updating permissions for some required exceptions"
@@ -187,13 +187,13 @@ done
 #			# f_require_file "${PATHNAME[upd]}"
 #			# f_require_file "${PATHNAME[_apply_configs]}"
 		# These based on functional requirements
-			chmod --silent 755 "${PATHNAME[_functions]}"
-			chmod --silent 755 "${PATHNAME[_vars]}"
-			chmod --silent 755 "${PATHNAME[makemkvcon]}"
-			chmod --silent 755 "${PATHNAME[remove_empty_directories]}"
-			chmod --silent 755 "${PATHNAME[rip]}"
-			chmod --silent 755 "${PATHNAME[script_footer]}" 
-			chmod --silent 755 "${PATHNAME[script_setup]}" 
+			chmod --silent $PERMISSIONS_SCRIPT__functions "${PATHNAME[_functions]}"
+			chmod --silent $PERMISSIONS_SCRIPT__vars "${PATHNAME[_vars]}"
+			chmod --silent $PERMISSIONS_SCRIPT_makemkvcon "${PATHNAME[makemkvcon]}"
+			chmod --silent $PERMISSIONS_SCRIPT_remove_empty_directories "${PATHNAME[remove_empty_directories]}"
+			chmod --silent $PERMISSIONS_SCRIPT_rip "${PATHNAME[rip]}"
+			chmod --silent $PERMISSIONS_SCRIPT_script_footer "${PATHNAME[script_footer]}" 
+			chmod --silent $PERMISSIONS_SCRIPT_script_setup "${PATHNAME[script_setup]}" 
 		# These based on desire. CAUTION: Don't expose anything that has a password or code in it.
 			# chmod 740 "${PATHNAME[upd]}"
 			# chmod 740 "${PATHNAME[_apply_configs]}"
