@@ -601,13 +601,13 @@ source /etc/os-release
         PATHNAME[xfers]="$SBIN_DIR/xfers"
 
 # Script permissions
-        $PERMISSIONS_SCRIPT__functions=755
-        $PERMISSIONS_SCRIPT__vars=755
-        $PERMISSIONS_SCRIPT_makemkvcon=755
-        $PERMISSIONS_SCRIPT_remove_empty_directories=755
-        $PERMISSIONS_SCRIPT_rip=755
-        $PERMISSIONS_SCRIPT_script_footer=755
-        $PERMISSIONS_SCRIPT_script_setup=755
+        PERMISSIONS_SCRIPT__functions=755
+        PERMISSIONS_SCRIPT__vars=755
+        PERMISSIONS_SCRIPT_makemkvcon=755
+        PERMISSIONS_SCRIPT_remove_empty_directories=755
+        PERMISSIONS_SCRIPT_rip=755
+        PERMISSIONS_SCRIPT_script_footer=755
+        PERMISSIONS_SCRIPT_script_setup=755
 
 # Require root to run these scripts (default is false or undefined)
 # DEPENDENT ON PATHNAME ARRAY DEFINITION ABOVE
