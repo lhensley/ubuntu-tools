@@ -14,8 +14,16 @@ protocol=dyndns2
 use=web
 server=domains.google.com
 ssl=yes
-login='gRpS3kIXXgLtKFXM'
-password='8yc2rV7SHwXujHHU'
+login='gVPwHZhQC1wMwuug'
+password='qIHyhBhSQjhjcubg'
+lanehensley.org
+
+protocol=dyndns2
+use=web
+server=domains.google.com
+ssl=yes
+login='Jbg23fR0bwZ7Jm5J'
+password='E6acADdbXUv9A6Aj'
 nuc01.lanehensley.org
 
 protocol=dyndns2
