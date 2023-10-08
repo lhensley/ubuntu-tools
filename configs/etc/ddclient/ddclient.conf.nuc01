@@ -5,7 +5,7 @@
 # root:root 600
 #
 syslog=yes
-mail=lane@lanehensley.org
+#mail=root
 mail-failure=root
 daemon=7200
 pid=/var/run/ddclient.pid
