@@ -187,12 +187,19 @@ done
 #			# f_require_file "${PATHNAME[upd]}"
 #			# f_require_file "${PATHNAME[_apply_configs]}"
 		# These based on functional requirements
-			chmod $PERMISSIONS_SCRIPT__functions "${PATHNAME[_functions]}"
-			chmod $PERMISSIONS_SCRIPT__vars "${PATHNAME[_vars]}"
-			chmod $PERMISSIONS_SCRIPT_makemkvcon "${PATHNAME[makemkvcon]}"
+			echo " " ${PATHNAME[_functions]}
+			chmod --silent $PERMISSIONS_SCRIPT__functions "${PATHNAME[_functions]}"
+			echo " " ${PATHNAME[_vars]}
+			chmod --silent $PERMISSIONS_SCRIPT__vars "${PATHNAME[_vars]}"
+			echo " " ${PATHNAME[makemkvcon]}
+			chmod --silent $PERMISSIONS_SCRIPT_makemkvcon "${PATHNAME[makemkvcon]}"
+			echo " " ${PATHNAME[remove_empty_directories]}
 			chmod --silent $PERMISSIONS_SCRIPT_remove_empty_directories "${PATHNAME[remove_empty_directories]}"
+			echo " " ${PATHNAME[rip]}
 			chmod --silent $PERMISSIONS_SCRIPT_rip "${PATHNAME[rip]}"
+			echo " " ${PATHNAME[script_footer]}
 			chmod --silent $PERMISSIONS_SCRIPT_script_footer "${PATHNAME[script_footer]}" 
+			echo " " ${PATHNAME[script_setup]}
 			chmod --silent $PERMISSIONS_SCRIPT_script_setup "${PATHNAME[script_setup]}" 
 		# These based on desire. CAUTION: Don't expose anything that has a password or code in it.
 			# chmod 740 "${PATHNAME[upd]}"
