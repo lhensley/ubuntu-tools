@@ -11,9 +11,10 @@
 #	f_require_root
 
 # Do stuff here
+TEMP_DB="liturgy"
 mysqldump --host=localhost --port=3306 --default-character-set=utf8 \
     --protocol=tcp --column-statistics=FALSE --routines --events \
-    --databases "liturgy" > $ADMIN_HOME_DIR/$START_DATEANDTIMESTAMP-liturgy.sql
+    --databases $TEMP_DB > $ADMIN_HOME_DIR/$TEMP_DB-$START_WEEKDAYSTAMP.sql
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
