@@ -1,0 +1,4 @@
+[trojan]
+title=Extremely dangerous port used for trojans
+description=Extremely dangerous port used for trojans
+ports=9000
