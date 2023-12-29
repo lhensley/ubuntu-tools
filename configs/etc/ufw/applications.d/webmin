@@ -1,0 +1,4 @@
+[Webmin]
+title=Webmin
+description=System administration tool
+ports=10000/tcp
