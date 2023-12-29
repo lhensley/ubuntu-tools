@@ -3,7 +3,7 @@
 title=Plex Media Server (Standard)
 description=The Plex Media Server
 ports=32400/tcp
-ports=32400/tcp|3005/tcp|5353/udp|8324/tcp|32410:32414/udp
+#ports=32400/tcp|3005/tcp|5353/udp|8324/tcp|32410:32414/udp
 
 #[Plex Media Server DLNA]
 # From https://linuxize.com/post/how-to-install-plex-media-server-on-ubuntu-18-04/
