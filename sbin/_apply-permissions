@@ -326,10 +326,10 @@ done
 			chown -f -R $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.HandBrake"
 			fi
 
-	# /etc/ufw/applications.d/lane-applications
-		echo Updating permissions for /etc/ufw/applications.d/lane-applications
-		chown -f $ROOT_USER:$ROOT_USER /etc/ufw/applications.d/lane-applications
-		chmod -f 600 /etc/ufw/applications.d/lane-applications
+	# /etc/ufw/applications.d
+		echo Updating permissions for /etc/ufw/applications.d
+		chown -f $ROOT_USER:$ROOT_USER /etc/ufw/applications.d
+		chmod -f 644 /etc/ufw/applications.d/*
 
 	# Vim and vi config files
 		echo Updating permissions for "$ADMIN_HOME_DIR/.vim*" and "$ROOT_HOME_DIR/.vim*"
