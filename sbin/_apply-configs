@@ -249,8 +249,8 @@ done
 
 # Update /etc/hosts
 	rm -f /etc/hosts
-	if [ -f $GIT_GO_CONFIGS/hosts.$HOSTNAME ]; then
-		echo "Updating /etc/hosts from $GIT_GO_CONFIGS/hosts.$HOSTNAME"
+	if [ -f $GIT_GO_CONFIGS/etc/hosts.$HOSTNAME ]; then
+		echo "Updating /etc/hosts from $GIT_GO_CONFIGS/etc/hosts.$HOSTNAME"
 		cp "$GIT_GO_CONFIGS/etc/hosts.$HOSTNAME" "/etc/hosts"
 		fi
 
@@ -299,10 +299,10 @@ done
 
 # Update $PHPMYADMIN_DIR/config.inc.php
 	if $(f_is_installed "phpmyadmin"); then
-		if $(f_is_file "$PHPMYADMIN_DIR/config.inc.php"); then
-			echo "Updating $PHPMYADMIN_DIR/config.inc.php from $GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php"
+		if $(f_is_file "$GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php.$HOSTNAME"); then
+			echo "Updating $PHPMYADMIN_DIR/config.inc.php from $GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php.$HOSTNAME"
 			mkdir -p "$PHPMYADMIN_DIR"
-			cp "$GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php" "$PHPMYADMIN_DIR/config.inc.php"
+			cp "$GIT_GO_CONFIGS$PHPMYADMIN_DIR/config.inc.php.$HOSTNAME" "$PHPMYADMIN_DIR/config.inc.php"
 			systemctl restart apache2 &
 			fi
 		fi
