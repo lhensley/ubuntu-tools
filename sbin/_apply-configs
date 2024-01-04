@@ -249,8 +249,8 @@ done
 
 # Update /etc/hosts
 	rm -f /etc/hosts
-	if [ -f $GIT_GO_CONFIGS/hosts ]; then
-		echo "Updating /etc/hosts from $GIT_GO_CONFIGS/hosts"
+	if [ -f $GIT_GO_CONFIGS/hosts.$HOSTNAME ]; then
+		echo "Updating /etc/hosts from $GIT_GO_CONFIGS/hosts.$HOSTNAME"
 		cp "$GIT_GO_CONFIGS/etc/hosts.$HOSTNAME" "/etc/hosts"
 		fi
 
