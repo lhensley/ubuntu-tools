@@ -293,7 +293,7 @@ done
 # Update /etc/ufw/applications.d/lane-applications
 	if $(f_is_directory "$GIT_GO_CONFIGS/etc/ufw/applications.d"); then
 		echo "Updating /etc/ufw/applications.d from $GIT_GO_CONFIGS/etc/ufw/applications.d"
-		rm -f /etc/ufw/applications.d/*
+		rm -fr /etc/ufw/applications.d/*
 		cp $GIT_GO_CONFIGS/etc/ufw/applications.d/* /etc/ufw/applications.d/
 		systemctl restart ufw
 		fi
