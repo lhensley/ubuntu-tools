@@ -1,4 +1,4 @@
 [MySQL]
-title=MySQL
-description=Database Manager
+title="MySQL"
+description="Database Manager"
 ports=3306/tcp
