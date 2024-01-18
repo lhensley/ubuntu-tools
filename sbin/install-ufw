@@ -17,7 +17,7 @@
 		ufw reload
 	# Load configs
 		# HTTP and HTTPS
-			ufw allow Apache_Full
+			ufw allow 'Apache Full'
 		# CUPS (printing) from DSM local devices (IPV4 only)
 			ufw allow from 192.168.168.0 to any app CUPS
 		# MySQL from DSM local devices (IPV4 only)
@@ -31,7 +31,7 @@
 		# OpenVPN
 			ufw allow OpenVPN
 		# Plex Media Server
-			ufw allow Plex_Media_Server_Standard
+			ufw allow 'Plex Media Server'
 		# Samba
 			ufw allow Samba
 		# Webmin
