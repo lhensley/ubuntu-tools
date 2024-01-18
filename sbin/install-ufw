@@ -19,23 +19,23 @@
 		# HTTP and HTTPS
 			ufw allow 'Apache Full'
 		# CUPS (printing) from DSM local devices (IPV4 only)
-			ufw allow from 192.168.168.0 to any app CUPS
+			ufw allow from 192.168.168.0 to any app 'CUPS'
 		# MySQL from DSM local devices (IPV4 only)
-			ufw allow from 192.168.168.0 to any app MySQL
+			ufw allow from 192.168.168.0 to any app 'MySQL'
 		# MySQL from LPM Apartments (IPV4 only)
-			ufw allow from 174.141.193.7 to any app MySQL
+			ufw allow from 174.141.193.7 to any app 'MySQL'
 		# MySQL from OpenVPN connections (IPV4 only)
-			ufw allow from 10.0.0.0 to any app MySQL
+			ufw allow from 10.0.0.0 to any app 'MySQL'
 		# OpenSSH
-			ufw allow OpenSSH
+			ufw allow 'OpenSSH'
 		# OpenVPN
-			ufw allow OpenVPN
+			ufw allow 'OpenVPN'
 		# Plex Media Server
 			ufw allow 'Plex Media Server'
-		# Samba
-			ufw allow Samba
+		# Samba from DSM local devices (IPV4 only)
+			ufw allow from 192.168.168.0 to any app 'Samba'
 		# Webmin
-			ufw allow Webmin
+			ufw allow 'Webmin'
 	# Enable
 		ufw enable
 
