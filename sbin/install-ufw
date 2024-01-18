@@ -14,6 +14,28 @@
 # Install
 	# Install the software (if not already installed)
 		apt-get install ufw
+		ufw reload
+	# Load configs
+		# HTTP and HTTPS
+			ufw allow Apache_Full
+		# CUPS (printing) from DSM local devices (IPV4 only)
+			ufw allow from 192.168.168.0 to any app CUPS
+		# MySQL from DSM local devices (IPV4 only)
+			ufw allow from 192.168.168.0 to any app MySQL
+		# MySQL from LPM Apartments (IPV4 only)
+			ufw allow from 174.141.193.7 to any app MySQL
+		# MySQL from OpenVPN connections (IPV4 only)
+			ufw allow from 10.0.0.0 to any app MySQL
+		# OpenSSH
+			ufw allow OpenSSH
+		# OpenVPN
+			ufw allow OpenVPN
+		# Plex Media Server
+			ufw allow Plex_Media_Server_Standard
+		# Samba
+			ufw allow Samba
+		# Webmin
+			ufw allow Webmin
 	# Enable
 		ufw enable
 
