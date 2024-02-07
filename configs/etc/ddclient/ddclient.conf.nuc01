@@ -21,6 +21,22 @@ login='gVPwHZhQC1wMwuug'
 password='qIHyhBhSQjhjcubg'
 lanehensley.org
 
+# ddclient configuration for Dynu
+#
+# /etc/ddclient.conf
+daemon=60                                                    # Check every 60 seconds.
+syslog=yes                                                   # Log update msgs to syslog.
+mail=root                                                    # Mail all msgs to root.
+mail-failure=root                                            # Mail failed update msgs to root.
+pid=/var/run/ddclient.pid                                    # Record PID in file.
+ssl=yes
+use=web, web=checkip.dynu.com/, web-skip='IP Address'        # Get ip from server.
+server=api.dynu.com                                          # IP update server.
+protocol=dyndns2                        
+login=lanehensley                                            # Your username
+password=ihbJXdoyFUofpyfExTQp                                # Your password or MD5/SHA256 of password
+dyn4.lanehensley.org&alias=ALIAS                             # Update IP address for alias of your domain name
+
 protocol=dyndns2
 use=web
 #ipv6=yes
