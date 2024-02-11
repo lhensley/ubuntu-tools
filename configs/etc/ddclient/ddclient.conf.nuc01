@@ -10,16 +10,18 @@ mail-failure=root
 daemon=7200
 pid=/var/run/ddclient.pid
 
-protocol=dyndns2
-use=web
-#ipv6=yes
-#usev6=if, if=ethernet0
-#if-skip=Scope:Link
-server=domains.google.com
-ssl=yes
-login='gVPwHZhQC1wMwuug'
-password='qIHyhBhSQjhjcubg'
-lanehensley.org
+# Google lanehensley.org
+# SECTION DROPPED 2/11/2024
+# protocol=dyndns2
+# use=web
+# #ipv6=yes
+# #usev6=if, if=ethernet0
+# #if-skip=Scope:Link
+# server=domains.google.com
+# ssl=yes
+# login='gVPwHZhQC1wMwuug'
+# password='qIHyhBhSQjhjcubg'
+# lanehensley.org
 
 # ddclient configuration for Dynu
 #
@@ -37,27 +39,31 @@ login=lanehensley                                            # Your username
 password=aDgD2VjTKNd2J@r6FCqv                                # Your password or MD5/SHA256 of password
 dyn4.lanehensley.org&alias=ALIAS                             # Update IP address for alias of your domain name
 
-protocol=dyndns2
-use=web
-#ipv6=yes
-#usev6=if, if=ethernet0
-#if-skip=Scope:Link
-server=domains.google.com
-ssl=yes
-login='Jbg23fR0bwZ7Jm5J'
-password='E6acADdbXUv9A6Aj'
-nuc01.lanehensley.org
+# Google nuc01.lanehensley.org
+# SECTION DROPPED 2/11/2024
+# protocol=dyndns2
+# use=web
+# #ipv6=yes
+# #usev6=if, if=ethernet0
+# #if-skip=Scope:Link
+# server=domains.google.com
+# ssl=yes
+# login='Jbg23fR0bwZ7Jm5J'
+# password='E6acADdbXUv9A6Aj'
+# nuc01.lanehensley.org
 
-protocol=dyndns2
-use=web
-#ipv6=yes
-#usev6=if, if=ethernet0
-#if-skip=Scope:Link
-server=domains.google.com
-ssl=yes
-login='1PBmz1LFhxrYXxlX'
-password='JuLP3tsV253eoUwI'
-svalcp83.org
+# Google scalcp83.org
+# SECTION DROPPED 2/11/2024
+# protocol=dyndns2
+# use=web
+# #ipv6=yes
+# #usev6=if, if=ethernet0
+# #if-skip=Scope:Link
+# server=domains.google.com
+# ssl=yes
+# login='1PBmz1LFhxrYXxlX'
+# password='JuLP3tsV253eoUwI'
+# svalcp83.org
 
 # protocol=dyndns2
 # use=web
