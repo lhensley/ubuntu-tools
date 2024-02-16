@@ -48,8 +48,8 @@ pid=/var/run/ddclient.pid                                    # Record PID in fil
 use=web, web=checkip.dynu.com/, web-skip='IP Address'        # Get ip from server.
 server=api.dynu.com                                          # IP update server.
 protocol=dyndns2                        
-login=lanehensley                                            # Your username
-password=ihbJXdoyFUofpyfExTQp                   # Your password or MD5/SHA256 of password
+login='lanehensley'                                            # Your username
+password='ihbJXdoyFUofpyfExTQp'                   # Your password or MD5/SHA256 of password
 lanehensley.dynu.com                            # List one or more hostnames one on each line.
 
 # # Dynu lanehensley.dynu.com
