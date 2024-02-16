@@ -49,7 +49,7 @@ use=web, web=checkip.dynu.com/, web-skip='IP Address'        # Get ip from serve
 server=api.dynu.com                                          # IP update server.
 protocol=dyndns2                        
 login='lanehensley'                                            # Your username
-password='ihbJXdoyFUofpyfExTQp'                   # Your password or MD5/SHA256 of password
+password='aDgD2VjTKNd2J@r6FCqv'                   # Your password or MD5/SHA256 of password
 lanehensley.dynu.com                            # List one or more hostnames one on each line.
 
 # # Dynu lanehensley.dynu.com
