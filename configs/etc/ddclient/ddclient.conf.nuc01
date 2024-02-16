@@ -45,8 +45,8 @@ mail=root                                                    # Mail all msgs to 
 mail-failure=root                                            # Mail failed update msgs to root.
 ssl=yes
 pid=/var/run/ddclient.pid                                    # Record PID in file.
-# use=web, web=checkip.dynu.com/, web-skip='IP Address'        # Get ip from server.
-use=if, if=ethernet0
+use=web, web=checkip.dynu.com/, web-skip='IP Address'        # Get ip from server.
+# use=if, if=ethernet0
 server=api.dynu.com                                          # IP update server.
 protocol=dyndns2                        
 login='lanehensley'                                            # Your username
