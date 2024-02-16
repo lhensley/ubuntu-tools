@@ -43,13 +43,13 @@ pid=/var/run/ddclient.pid
 syslog=yes                                                   # Log update msgs to syslog.
 mail=root                                                    # Mail all msgs to root.
 mail-failure=root                                            # Mail failed update msgs to root.
-pid=/var/run/ddclient.pid                                    # Record PID in file.
 ssl=yes
+pid=/var/run/ddclient.pid                                    # Record PID in file.
 use=web, web=checkip.dynu.com/, web-skip='IP Address'        # Get ip from server.
 server=api.dynu.com                                          # IP update server.
 protocol=dyndns2                        
 login=lanehensley                                            # Your username
-password=aDgD2VjTKNd2J@r6FCqv                                # Your password or MD5/SHA256 of password
+password=ihbJXdoyFUofpyfExTQp                   # Your password or MD5/SHA256 of password
 lanehensley.dynu.com                            # List one or more hostnames one on each line.
 
 # # Dynu lanehensley.dynu.com
