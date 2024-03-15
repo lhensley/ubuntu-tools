@@ -518,8 +518,9 @@ function f_run_apt_updates () {
     #   Res: https://linuxconfig.org/apt-vs-apt-get-advanced-package-tool
     #   Res: https://www.google.com/search?q=apt+and+apt-get
 	# "update" downloads package information from all configured sources
-    # "upgrade" is an extraneous subset of "dist-upgrade" below; 
+    # "upgrade" is a subset of "dist-upgrade" below; 
     #    Ref: https://askubuntu.com/questions/194651/why-use-apt-upgrade-instead-of-apt-dist-upgrade#:~:text=apt%2Dget%20upgrade%20will%20not,install%20but%20not%20remove%20packages
+	#    Ref: https://askubuntu.com/questions/601/the-following-packages-have-been-kept-back-why-and-how-do-i-solve-it
     #    sudo apt-get --yes upgrade \
     # "dist-upgrade" installs available upgrades of all packages
     # currently installed on the system and intelligently handles
