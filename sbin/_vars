@@ -34,6 +34,7 @@
 	VM_ENVIRONMENT="" # DEFAULT
 	# Known options as of 3/5/2023: aws google metal virtualhost vmware
 	if [ $HOSTNAME == "adam" ]; then VM_ENVIRONMENT="metal"; fi
+	if [ $HOSTNAME == "go" ]; then VM_ENVIRONMENT="metal"; fi
 	if [ $HOSTNAME == "nuc01" ]; then VM_ENVIRONMENT="metal"; fi
 	if [ $HOSTNAME == "oz" ]; then VM_ENVIRONMENT="metal"; fi
 	if [ $HOSTNAME == "teddy" ]; then VM_ENVIRONMENT="aws"; fi
@@ -173,19 +174,23 @@ source /etc/os-release
                 ARCHIVE_FILE_SYSTEM[nuc01]="/mnt/5TBE"
                 ARCHIVE_FILE_SYSTEM[adam]="/mnt/5TBD"
                 ARCHIVE_FILE_SYSTEM[oz]="/mnt/5TBC"
+                ARCHIVE_FILE_SYSTEM[go]="/mnt/5TBC"
         declare -A ARCHIVE_DIRECTORY
                 ARCHIVE_DIRECTORY[default]="/var/lib/archives/$HOSTNAME"
                 ARCHIVE_DIRECTORY[nuc01]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
                 ARCHIVE_DIRECTORY[adam]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
                 ARCHIVE_DIRECTORY[oz]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
+                ARCHIVE_DIRECTORY[go]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
         THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[default]}"
                 if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
                 if [ $HOSTNAME == "adam" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
                 if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "go" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
         THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[default]}"
                 if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
                 if [ $HOSTNAME == "adam" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
                 if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "go" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
         ARCHIVE_TAR_FILE="$HOSTNAME-$START_DATESTAMP.gz"
                 ARCHIVE_TAR_FULL="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_FILE"
         ARCHIVE_TAR_WEEKDAY_FILE="$HOSTNAME-weekday-$START_WEEKDAYSTAMP3.gz"
@@ -205,18 +210,29 @@ source /etc/os-release
         COLD_BACKUP_FS_READ_ONLY=false                             # Default
         COLD_BACKUP_PARENT_DIRECTORY="/var/local"                  # Default
         COLD_BACKUP_SUBDIRECTORY="cold-backup"                     # Default
-        TEMP_COLD_BACKUP_DIRECTORY="/var/tmp/cold-backup"                  # Default
-        TEMP_COLD_BACKUP_PARENT_DIRECTORY="/var/tmp"                       # Default
+        TEMP_COLD_BACKUP_DIRECTORY="/var/tmp/cold-backup"          # Default
+        TEMP_COLD_BACKUP_PARENT_DIRECTORY="/var/tmp"               # Default
         TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"                # Default
-        TEMP_ARCHIVE_DIRECTORY="/var/tmp/archives"                         # Default
-        TEMP_ARCHIVE_PARENT_DIRECTORY="/var/tmp"                               # Default
-        TEMP_ARCHIVE_SUBDIRECTORY="archives"                                       # Default
+        TEMP_ARCHIVE_DIRECTORY="/var/tmp/archives"                 # Default
+        TEMP_ARCHIVE_PARENT_DIRECTORY="/var/tmp"                   # Default
+        TEMP_ARCHIVE_SUBDIRECTORY="archives"                       # Default
         # Default COLD_RESTORE_POINT = "/", but "/var/restore-points/$START_DATEANDTIMESTAMP" recommended for trouble-shooting
                 COLD_RESTORE_POINT="/"
                 # COLD_RESTORE_POINT="/var/restore-points/$START_DATEANDTIMESTAMP"
         COLD_BACKUP_LOG="$ADMIN_HOME_DIR/.coldstorage.log"
         if [ $HOSTNAME == "nuc01" ]; then
                 COLD_BACKUP_FILE_SYSTEM="/mnt/5TBE"
+                COLD_BACKUP_FS_READ_ONLY=false
+                COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
+                TEMP_COLD_BACKUP_DIRECTORY="/mnt/bob/cold-backup"
+                TEMP_COLD_BACKUP_PARENT_DIRECTORY="/mnt/bob"
+                TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"
+                TEMP_ARCHIVE_DIRECTORY="/mnt/bob/archives"
+                TEMP_ARCHIVE_PARENT_DIRECTORY="/mnt/bob"
+                TEMP_ARCHIVE_SUBDIRECTORY="archives"
+                fi
+        if [ $HOSTNAME == "go" ]; then
+                COLD_BACKUP_FILE_SYSTEM="/mnt/5TBC"
                 COLD_BACKUP_FS_READ_ONLY=false
                 COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
                 TEMP_COLD_BACKUP_DIRECTORY="/mnt/bob/cold-backup"
