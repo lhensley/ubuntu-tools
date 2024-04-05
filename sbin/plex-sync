@@ -21,15 +21,15 @@ TARGET_FILE_SYSTEM="/mnt/12TBA"
 		fi
 	rsync-wrapper "$SOURCE_FILE_SYSTEM" "" "$TARGET_FILE_SYSTEM" "" > /dev/null 2> /dev/null
 	umount -v "$TARGET_FILE_SYSTEM"
-TARGET_FILE_SYSTEM="/mnt/12TBC"
-	SOURCE_FILE_SYSTEM="/mnt/12TBB"
-	mount -v "$TARGET_FILE_SYSTEM"
-	mount -v "$SOURCE_FILE_SYSTEM"
-	if ! [ $(f_is_mounted "$TARGET_FILE_SYSTEM") ]; then
-		f_die "$TARGET_FILE_SYSTEM is not mounted." true
-		fi
-	rsync-wrapper "$SOURCE_FILE_SYSTEM" "" "$TARGET_FILE_SYSTEM" "" > /dev/null 2> /dev/null
-	umount -v "$TARGET_FILE_SYSTEM"
+# TARGET_FILE_SYSTEM="/mnt/12TBC"
+# 	SOURCE_FILE_SYSTEM="/mnt/12TBB"
+# 	mount -v "$TARGET_FILE_SYSTEM"
+# 	mount -v "$SOURCE_FILE_SYSTEM"
+# 	if ! [ $(f_is_mounted "$TARGET_FILE_SYSTEM") ]; then
+# 		f_die "$TARGET_FILE_SYSTEM is not mounted." true
+# 		fi
+# 	rsync-wrapper "$SOURCE_FILE_SYSTEM" "" "$TARGET_FILE_SYSTEM" "" > /dev/null 2> /dev/null
+# 	umount -v "$TARGET_FILE_SYSTEM"
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
