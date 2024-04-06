@@ -17,12 +17,13 @@
 	f_install putty
 
 # Install util-linux (including uuidgen)
-	f_install util-linux
+#	f_install util-linux
 
 # Create ssh keys
 	# ssh-keygen -t ed25519 -C "$SSH_KEY_NAME" -P "" -f "$HOME_ME/.ssh/id_ed25519"
 #	SSH_IMPRESS="$ADMIN_EMAIL-$START_DATEANDTIMESTAMP-id_ed25519"
-	SSH_IMPRESS="$(uuidgen)-$START_DATEANDTIMESTAMP-id_ed25519"
+#	SSH_IMPRESS="$(uuidgen)-$START_DATEANDTIMESTAMP-id_ed25519"
+#	SSH_IMPRESS="$START_DATEANDTIMESTAMP-id_ed25519"
 	SSH_LOCATION="$ADMIN_HOME_DIR/.ssh/$SSH_IMPRESS"
 	rm -f "$SSH_LOCATION"
 	rm -f "$SSH_LOCATION.pub"
@@ -41,11 +42,11 @@
 # Display the public key
 	echo ""
 	echo ""
-	echo "IMPORTANT: Add this public key to git/go/configs/ssh/home-.ssh-authorized_keys"
+	echo "IMPORTANT: Append this public key to git/go/configs/ADMIN_HOME_DIR/.ssh/authorized_keys"
 	echo ""
-	echo "# $SSH_IMPRESS"
+#	echo "# $SSH_IMPRESS"
 	cat "$SSH_LOCATION.pub"
-	echo "#"
+#	echo "#"
 	echo ""
 	echo ""
 
