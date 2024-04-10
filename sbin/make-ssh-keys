@@ -42,11 +42,13 @@
 # Display the public key
 	echo ""
 	echo ""
-	echo "IMPORTANT: Append this public key to git/go/configs/ADMIN_HOME_DIR/.ssh/authorized_keys"
-	echo ""
-#	echo "# $SSH_IMPRESS"
+	echo "IMPORTANT: Follow these steps now to add and begin using the new key.
+	echo "1. Download and add the new key pair to 1Password."
+	echo "2. Add the new key pair to Termius and other SSH clients."
+	echo "3. Append this public key to git/go/configs/ADMIN_HOME_DIR/.ssh/authorized_keys:"
 	cat "$SSH_LOCATION.pub"
-#	echo "#"
+	echo "4. Push the update to Github."
+	echo "5. Run upd on all active hosts to pull the file."
 	echo ""
 	echo ""
 
