@@ -53,8 +53,8 @@ login='lanehensley'                                            # Your username
 # password='aDgD2VjTKNd2J@r6FCqv'                   # Your password or MD5/SHA256 of password
 password='10967f4145ca7ad1a13c845dc574655127b0d1a98d2c32ed5ee98991e1a60b22'
 lanehensley.org                            # List one or more hostnames one on each line.
-nuc01.lanehensley.org
-files.lanehensley.org
+# nuc01.lanehensley.org
+# files.lanehensley.org
 
 # # Dynu lanehensley.dynu.com
 # syslog=yes                                      # Log update msgs to syslog.
