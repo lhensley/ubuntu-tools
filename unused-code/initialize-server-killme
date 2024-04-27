@@ -223,22 +223,8 @@ if [[ $EUID -ne 0 ]]; then
     ufw allow git
 
 # Create .gitconfig
-  	BASEFILE=".gitconfig"
-  	OUTFILE="/$ROOT_DIR/$BASEFILE"
-  	if [ -f "$OUTFILE" ]; then mv "$OUTFILE" "$OUTFILE.$TIMESTAMP"; fi
-  	echo '[url "https://api:4b662b7d4431ec1956127aa9d4fdbd8d75ec821a@github.com/"]' >> $OUTFILE
-  	echo '        insteadOf = https://github.com/' >> $OUTFILE
-  	echo '[url "https://ssh:4b662b7d4431ec1956127aa9d4fdbd8d75ec821a@github.com/"]' >> $OUTFILE
-  	echo '        insteadOf = ssh://git@github.com/' >> $OUTFILE
-  	echo '[url "https://git:4b662b7d4431ec1956127aa9d4fdbd8d75ec821a@github.com/"]' >> $OUTFILE
-  	echo '        insteadOf = git@github.com:' >> $OUTFILE
-    echo '[user]' >> $OUTFILE
-    echo '          name = Lane Hensley' >> $OUTFILE
-    echo '          email = lane@lanehensley.org' >> $OUTFILE
-    echo '[credential]' >> $OUTFILE
-    echo '          helper = cache --timeout=600' >> $OUTFILE
-  	chmod 600 $OUTFILE
-  	chown $ROOT_USER:$ROOT_USER $OUTFILE
+# DELETED THIS SECTION FOR SECURITY REASONS.
+# SEE install-github-keys in 1Password.
 
 # Copy .gitconfig* to $ADMIN_DIR
     ADMIN_FILE="$ADMIN_DIR/$BASEFILE"
