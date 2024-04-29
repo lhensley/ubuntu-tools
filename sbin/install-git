@@ -1,0 +1,125 @@
+#!/bin/bash
+
+########### CRITICAL: You MUST confirm these values.
+
+# Global install variables
+    ADMIN_USER="lhensley"
+    TIMEZONE="US/Central"
+    HOSTNAME="go"
+    ADMIN_DIR="/home/$ADMIN_USER"
+    ROOT_USER="root"
+    ROOT_DIR="/root"
+
+# Used for installing git
+    my_full_name="Lane Hensley"
+    my_email="lane@lanehensley.org"
+    ROOT_USER="root"
+    ROOT_HOME_DIR="/root"
+    GITHUB_USER="lhensley"
+    GIT_ROOT="/var/local/git"
+    GIT_GO="$GIT_ROOT/go"                                  # Formerly system.git.go
+    GIT_GO_CONFIGS="$GIT_GO/configs"                       # Formerly system.git.go.configs
+    GIT_GO_SBIN="$GIT_GO/sbin"                             # Formerly #system.git.go.sbin
+    GIT_GO_SERVICES="$GIT_GO/services"
+    GIT_GO_SETUP="$GIT_GO/setup"                           # Formerly system.git.go.setup
+    SBIN_DIR="/usr/local/sbin"
+    SBIN_PARENT="$(dirname $SBIN_DIR)"
+    # MY_GIT_TOKEN="this-now-is-managed-from-install-keys-script"
+
+# Make sure we're root.
+if [[ $EUID -ne 0 ]]; then
+        echo "Use sudo. $0 must be run as root." 1>&2
+        exit 1
+    fi
+
+# Get timestamp
+    TIMESTAMP=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
+
+# Set timezone
+    timedatectl set-timezone $TIMEZONE
+
+# Get us into noninteractive mode
+    export DEBIAN_FRONTEND=noninteractive
+
+# Add universe (and multiverse?) repository
+# More info is at https://itsfoss.com/ubuntu-repositories/
+    REPOSITORY="universe"
+    grep -h "$REPOSITORY" /etc/apt/sources.list > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+      echo
+      echo "Adding the $REPOSITORY repository"
+      add-apt-repository --yes $REPOSITORY
+      fi
+    # echo
+    # echo "Adding the universe repository"
+    # add-apt-repository --yes universe
+
+    # Update packages
+    # apt vs apt-get?
+    #   Res (defining): https://askubuntu.com/questions/990823/apt-gives-unstable-cli-interface-warning
+    #   Res: https://itsfoss.com/apt-vs-apt-get-difference/
+    #   Res: https://linuxconfig.org/apt-vs-apt-get-advanced-package-tool
+    #   Res: https://www.google.com/search?q=apt+and+apt-get
+    # "update" downloads package information from all configured sources
+    # "upgrade" is an extraneous subset of "dist-upgrade" below;
+    #    Ref: https://askubuntu.com/questions/194651/why-use-apt-upgrade-instead-of-apt-dist-upgrade#:~:text=apt%2Dget%20upgrade%20will%20not,install%20but%20not%20remove%20packages
+    #    sudo apt-get --yes upgrade \
+    # "dist-upgrade" installs available upgrades of all packages
+    # currently installed on the system and intelligently handles
+    # changing dependencies with new versions of packages
+    echo
+    echo Updating local host of upgradable packages and upgrading them.
+      echo DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
+    DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
+    # "clean" clears out the local repository of retrieved package files.
+    echo
+    echo Clearing out the local repository of retrieved package files.
+    echo apt-get --yes clean
+    apt-get --yes clean
+    # "autoremove" removes those dependencies that were installed with
+    # now-removed applications and that are no longer used
+    # by anything else on the system
+    echo
+    echo "Removing those dependencies that were associated with non-removed applications that no longer are used"
+    echo apt-get --yes autoremove
+    apt-get --yes autoremove
+
+# Install git and open the git port
+    echo
+    echo Installing and configuring git
+    apt-get install --yes git
+    ufw allow git
+
+# Copy .gitconfig* to $ADMIN_DIR
+    ADMIN_FILE="$ADMIN_DIR/$BASEFILE"
+  	cp "$OUTFILE"* $ADMIN_DIR/
+  	chown $ADMIN_USER:$ADMIN_USER "$ADMIN_FILE"*
+
+# Wipe out existing git and /usr/local/sbin if they exist
+    echo
+    echo Clearing "$GIT_ROOT" and "$SBIN_DIR"
+    rm -rf "$GIT_ROOT" "$SBIN_DIR"
+
+# Clone go.git and set restrictive permissions
+    echo
+    echo "Cloning go.git and setting permissions"
+    mkdir -p "$GIT_ROOT"
+    chmod 775 "$GIT_ROOT"
+    cd "$GIT_ROOT"
+    git clone https://github.com/$GITHUB_USER/go.git
+    chown -R $ROOT_USER:$ROOT_USER "$GIT_ROOT"
+    chmod -R 400 "$GIT_ROOT"
+    cd
+
+# Copy scripts into /usr/local/sbin
+    echo
+    echo "Copying scripts into /usr/local/sbin"
+    cp -r "$GIT_GO_SBIN" "$SBIN_PARENT"
+    chown -R $ROOT_USER:$ROOT_USER "$SBIN_DIR"
+    find "$SBIN_DIR" -type d -print0 | sudo xargs -0 chmod 750
+    find "$SBIN_DIR" -type f -print0 | sudo xargs -0 chmod 540
+
+
+##############################################################
+################# GITHUB FILES NOW ARE FULLY LOADED AND READY.
+##############################################################
