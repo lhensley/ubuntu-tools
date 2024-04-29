@@ -4,7 +4,7 @@
 
 # Global install variables
     ADMIN_USER="lhensley"
-    TIMEZONE="US/Central"
+    TIMEZONE="America/Chicago"
     HOSTNAME="go"
     ADMIN_DIR="/home/$ADMIN_USER"
     ROOT_USER="root"

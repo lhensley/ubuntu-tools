@@ -12,7 +12,7 @@
 
 # Global install variables
     ADMIN_USER="ubuntu"
-    TIMEZONE="US/Central"
+    TIMEZONE="America/Chicago"
     HOSTNAME="teddy"
     ADMIN_DIR="/home/$ADMIN_USER"
     ROOT_USER="root"
