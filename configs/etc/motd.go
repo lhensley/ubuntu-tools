@@ -1,9 +1,5 @@
 
 
-
-
-
-
     ggggggggg   ggggg   ooooooooooo   
    g:::::::::ggg::::g oo:::::::::::oo 
   g:::::::::::::::::go:::::::::::::::o
