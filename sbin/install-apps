@@ -169,14 +169,6 @@ f_install "debconf-utils"
     echo "php installed."
     fi;
 
-##############
-##############
-##############
-exit 0
-##############
-##############
-##############
-
 # ssh is installed with the OS.
 
 # tzdata
@@ -193,6 +185,8 @@ exit 0
     echo
     echo Setting timezone to $TIMEZONE
     timedatectl set-timezone $TIMEZONE
+
+exit 0
 
 # Optional installations
 ###############################################################
