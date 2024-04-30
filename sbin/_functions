@@ -838,6 +838,7 @@ f_run_apt_updates () {
     # currently installed on the system and intelligently handles
     # changing dependencies with new versions of packages
     echo
+	echo TEMPORARY DIAGNOSTIC MARKER A in f_fun_apt_updates() in _functions.
     echo Updating local host of upgradable packages and upgrading them.
       echo DEBIAN_FRONTEND=noninteractive apt-get-update-if-needed && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
     DEBIAN_FRONTEND=noninteractive apt-get-update-if-needed && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
@@ -846,6 +847,7 @@ f_run_apt_updates () {
     echo Clearing out the local repository of retrieved package files.
     echo apt-get --yes clean
     apt-get --yes clean
+	echo TEMPORARY DIAGNOSTIC MARKER B in f_fun_apt_updates() in _functions.
     # "autoremove" removes those dependencies that were installed with
     # now-removed applications and that are no longer used
     # by anything else on the system
@@ -853,6 +855,7 @@ f_run_apt_updates () {
     echo "Removing those dependencies that were associated with non-removed applications that no longer are used"
     echo apt-get --yes autoremove
     apt-get --yes autoremove
+	echo TEMPORARY DIAGNOSTIC MARKER C in f_fun_apt_updates() in _functions.
 	}
 
 #########################################################################################################
