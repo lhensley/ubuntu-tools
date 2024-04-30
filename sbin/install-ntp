@@ -2,6 +2,8 @@
 # install-ntp
 # Assumes Ubuntu 22.04
 
+# IMPORTANT: You don't need this. Ubuntu uses timesyncd to keep time updated.
+
 
 # Include script setup file
 	source script-setup
