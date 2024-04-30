@@ -81,6 +81,11 @@
     install_vim=true                # Vi IMproved, a programmer's text editor
     install_webmin=true             # Web-based system admin tools
 
+# Define the pause function
+function pause(){
+  read -s -n 1 -p "Press any key to continue . . ."
+}
+
 # Make sure we're root.
 if [[ $EUID -ne 0 ]]; then
         echo "Use sudo. $0 must be run as root." 1>&2
@@ -186,8 +191,6 @@ f_install "debconf-utils"
     echo Setting timezone to $TIMEZONE
     timedatectl set-timezone $TIMEZONE
 
-exit 0
-
 # Optional installations
 ###############################################################
 
@@ -207,7 +210,11 @@ if $install_apache2 ; then
     fi
   fi
 
+pause
+
 if $install_apg ; then f_install apg; fi
+
+pause
 
 # apt-cacher-ng
 if $install_apt_cacher_ng ; then
@@ -220,20 +227,50 @@ if $install_apt_cacher_ng ; then
   fi
 fi
 
+pause
+
 if $install_at ; then f_install at; fi
+pause
+
 if $install_bridgeutils ; then f_install bridgeutils; fi
+pause
+
 if $install_certbot ; then f_install certbot; fi
+pause
+
 if $install_comskip ; then f_install comskip; fi
+pause
+
 if $install_cryfs ; then f_install cryfs; fi
+pause
+
 if $install_curl ; then f_install curl; fi
+pause
+
 if $install_ddclient ; then f_install ddclient; fi
+pause
+
 if $install_dos2unix ; then f_install dos2unix; fi
+pause
+
 if $install_exiftool ; then f_install exiftool; fi
+pause
+
 if $install_fail2ban ; then f_install fail2ban; fi
+pause
+
 if $install_ffmpeg ; then f_install ffmpeg; fi
+pause
+
 if $install_ghostscript ; then f_install ghostscript ; fi
+pause
+
 if $install_git ; then f_install git && ufw allow git; fi
+pause
+
 if $install_gpg ; then f_install gpg; fi
+pause
+
 if $install_gzip ; then f_install gzip; fi
 
 # HandBrake
@@ -250,6 +287,8 @@ if $install_gzip ; then f_install gzip; fi
 if $install_ifupdown ; then f_install ifupdown; fi
 if $install_inotify_tools ; then f_install "inotify-tools"; fi
 
+pause
+
 # lsyncd
 if $install_lsyncd ; then
   if ! $(f_is_installed lsyncd); then
@@ -263,6 +302,8 @@ if $install_lsyncd ; then
   echo "lsyncd installed."
   fi
 fi
+
+pause
 
 # mailutils
 if $install_mailutils ; then
@@ -278,6 +319,8 @@ if $install_mailutils ; then
   fi
 fi
 
+pause
+
 # MakeMKV
 # DON'T USE THE SNAP INSTALLER
 if $install_makemkv ; then
@@ -292,6 +335,8 @@ if $install_makemkv ; then
     echo "MakeMKV installed."
     fi
   fi
+
+pause
 
 # MySQL Server
 # AUTOMATION PROBLEM: PROMPTS FOR PASSWORD. See https://askubuntu.com/questions/1350537/automating-un-installing-mysql
@@ -383,6 +428,8 @@ if $install_mysql_server ; then
   fi
 fi
 
+pause
+
 if $install_net_tools ; then f_install "net-tools"; fi
 
 # nfs
@@ -396,6 +443,8 @@ if $install_nfs ; then
     fi
   fi
 
+pause
+
 # openssl
 if $install_openssl ; then
   if ! $(f_is_installed openssl); then
@@ -406,6 +455,8 @@ if $install_openssl ; then
   fi
 fi
 
+pause
+
 # openvpn
 if $install_openvpn ; then
   if ! $(f_is_installed openvpn); then
@@ -415,6 +466,8 @@ if $install_openvpn ; then
     echo "openvpn installed."
     fi
   fi
+
+pause
 
 # PLEX TRIAL FOR 22.04 5/31/2022
 # https://www.linuxcapable.com/how-to-install-plex-media-server-on-ubuntu-22-04-lts/
@@ -456,17 +509,41 @@ if $install_plexmediaserver ; then
   fi
 fi
 
+pause
+
 if $install_proftpd ; then f_install proftpd; fi
+pause
+
 if $install_putty_tools ; then f_install "putty-tools"; fi
+pause
+
 if $install_rclone ; then f_install rclone; fi
+pause
+
 if $install_resolvconf ; then f_install resolvconf; fi
+pause
+
 if $install_ripmime ; then f_install ripmime; fi
+pause
+
 if $install_rsync ; then f_install rsync; fi
+pause
+
 if $install_sshfs ; then f_install sshfs; fi
+pause
+
 if $install_sysbench ; then f_install sysbench; fi
+pause
+
 if $install_tasksel ; then f_install tasksel; fi
+pause
+
 if $install_unzip ; then f_install unzip; fi
+pause
+
 if $install_vim ; then f_install vim; fi
+pause
+
 
 # Webmin
 if $install_webmin ; then
@@ -486,6 +563,8 @@ if $install_webmin ; then
         fi
     fi
 
+pause
+
 # DESKTOP APPS THAT REQUIRE GUI
 if $is_desktop ; then
 
@@ -500,6 +579,8 @@ if $is_desktop ; then
         echo "Cubic installed."
         fi
 
+pause
+
     # filezilla
     if $install_filezilla ; then
         echo
@@ -508,6 +589,8 @@ if $is_desktop ; then
         echo "filezilla installed."
         fi
 
+pause
+
     # gimp
     if $install_gimp ; then
         echo
@@ -515,6 +598,8 @@ if $is_desktop ; then
         apt-get install --yes gimp                  # An image manipulation and paint program
         echo "gimp installed."
         fi
+
+pause
 
     # Google Chrome
     if $install_chrome ; then
@@ -526,6 +611,8 @@ if $is_desktop ; then
         rm -f ./google-chrome-stable_current_amd64.deb
         echo "Google Chrome installed."
         fi
+
+pause
 
     # Microsoft Edge
     if $install_edge ; then
@@ -539,6 +626,8 @@ if $is_desktop ; then
         echo "Microsoft Edge installed."
         fi
 
+pause
+
     # xrdp
     if $install_xrdp ; then
         echo
@@ -546,6 +635,8 @@ if $is_desktop ; then
         apt-get install --yes xrdp                  # A Remote Desktop Protocol (RDP) server
         echo "xrdp installed."
         fi
+
+pause
 
     # Zoom Client
     if $install_zoom ; then
@@ -559,6 +650,7 @@ if $is_desktop ; then
 
     fi
 
+exit 0
 
 #######################################################################################
 #   ADDITIONAL CONFIGURATION
