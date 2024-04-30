@@ -1,9 +1,3 @@
-
-
-
-
-
-
    ooooooooooo   zzzzzzzzzzzzzzzzz
  oo:::::::::::oo z:::::::::::::::z
 o:::::::::::::::oz::::::::::::::z
