@@ -13,10 +13,19 @@ TEMP_DIR="$ADMIN_HOME_DIR/seeds-$START_DATEANDTIMESTAMP"
 
 echo "Making directory '$TEMP_DIR'"
 if ! $(mkdir "$TEMP_DIR"); then f_die "Failed making directory '$TEMP_DIR'" false $?; fi
-echo "Setting owner for '$TEMP_DIR'"
-if $(chown $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
-	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed making directory '$TEMP_DIR'" false $?; fi
-	f_die "Failed making directory '$TEMP_DIR'" false $?;
+echo "Setting ownership for '$TEMP_DIR'"
+if ! $(chown $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
+	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
+	f_die "Failed setting ownership for '$TEMP_DIR'" false $?;
+	fi
+
+if ! $(cp "$ADMIN_HOME_DIR/.git"* "$TEMP_DIR/"); then
+	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
+	f_die "Failed copying git configs" false $?;
+	fi
+if ! $(cp -r "$ADMIN_HOME_DIR/.ssh" "$TEMP_DIR/"); then
+	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
+	f_die "Failed copying ~/.ssh directory" false $?;
 	fi
 
 # Include script footer file
