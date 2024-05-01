@@ -478,6 +478,10 @@ function f_only_on_server () {
 	if [ $HOSTNAME != "$1" ]; then f_die "This script runs only on $1." false $EXIT_CODE_SPECIFIC_SERVER_REQUIRED; fi
 	}
 
+function f_pause () {
+  read -s -n 1 -p "Press any key to continue . . .\n"
+}
+
 function f_move_one_plex_file () {
 	SOURCE_FILE="$1"
 	TARGET_FILE="$2"
@@ -546,7 +550,9 @@ function f_run_apt_updates () {
 function f_upd () {
 	# This is a pass-thru function. Abstracts out in case there is later
 	#	more to f_upd than just f_run_apt_updates.
+	echo TEMPORARY DIAGNOSTIC MARKER A in f_upd in _functions.
 	f_run_apt_updates
+	echo TEMPORARY DIAGNOSTIC MARKER B in f_upd in _functions.
 	}
 
 function f_apply_configs () {
@@ -838,16 +844,17 @@ f_run_apt_updates () {
     # currently installed on the system and intelligently handles
     # changing dependencies with new versions of packages
     echo
-	echo TEMPORARY DIAGNOSTIC MARKER A in f_fun_apt_updates in _functions.
     echo Updating local host of upgradable packages and upgrading them.
       echo DEBIAN_FRONTEND=noninteractive apt-get-update-if-needed && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
+	echo TEMPORARY DIAGNOSTIC MARKER A1 in f_run_apt_updates in _functions.
     DEBIAN_FRONTEND=noninteractive apt-get-update-if-needed && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
+	echo TEMPORARY DIAGNOSTIC MARKER A2 in f_run_apt_updates in _functions.
     # "clean" clears out the local repository of retrieved package files.
     echo
     echo Clearing out the local repository of retrieved package files.
     echo apt-get --yes clean
     apt-get --yes clean
-	echo TEMPORARY DIAGNOSTIC MARKER B in f_fun_apt_updates in _functions.
+	echo TEMPORARY DIAGNOSTIC MARKER B in f_run_apt_updates in _functions.
     # "autoremove" removes those dependencies that were installed with
     # now-removed applications and that are no longer used
     # by anything else on the system
@@ -855,7 +862,7 @@ f_run_apt_updates () {
     echo "Removing those dependencies that were associated with non-removed applications that no longer are used"
     echo apt-get --yes autoremove
     apt-get --yes autoremove
-	echo TEMPORARY DIAGNOSTIC MARKER C in f_fun_apt_updates in _functions.
+	echo TEMPORARY DIAGNOSTIC MARKER C in f_run_apt_updates in _functions.
 	}
 
 #########################################################################################################

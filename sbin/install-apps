@@ -43,7 +43,7 @@
     install_nettools=false          # Print network connections, routing tables, interface statistics
     install_nfs=false               # Network File Service
     install_openvpn=false           # Secure IP tunnel daemon
-    install_plexmediaserver=false   # Media streamer and library manager
+    install_plexmediaserver=true   # Media streamer and library manager
     install_proftpd=false           # For scanning to brother@oz
     install_rclone=false            # command-line program to manage files on cloud storage. Details at https://rclone.org/
     install_resolvconf=false        # Name resolver
@@ -53,38 +53,34 @@
     install_uuid=false              # Use uuidgen instead. It's built-in.
 
 # STANDARD software (default to true)
-    install_apache2=true            # Apache 2 Webserver
-    install_apg=true                # Password generator
-    install_at=true                 # Queue, examine or delete jobs for later execution
-    install_certbot=true            # Certificate Installer for https
-    install_cryfs=true              # Encrypted file system
-    install_curl=true               # Transfer a URL
-    install_ddclient=true           # Update IP addresses at dynamic DNS services
-    install_dos2unix=true           # DOS/MAC to UNIX text file format converter
-    install_fail2ban=true           # Bans IP that makes too many password failures
-    install_ghostscript=true        # Compressing PDF scans
-    install_git=true                # The stupid content tracker
-    install_gpg=true                # OpenPGP encryption and signing tool
-    install_gzip=true               # Compress or expand files
-    install_inotify=true            # Do something when a file is created, deleted, or changed
-    install_mailutils=true          # mail, Postfix, etc.
-    install_mysql_server=true       # Relational Database
-    install_openssl=true            # OpenSSL
-    install_php=true                # PHP
-    install_phpmyadmin=true         # Web tool for managing MySQL
-    install_puttytools=true         # A free SSH and telnet client
-    install_ripmime=true            # Process files sent by email
-    install_rsync=true              # A fast, versatile, remote (and local) file-copying tool
-    install_sshfs=true              # Filesystem client based on ssh
-    install_tasksel=true            # A user interface for installing tasks
-    install_unzip=true              # List, test and extract compressed files in a ZIP archive
-    install_vim=true                # Vi IMproved, a programmer's text editor
-    install_webmin=true             # Web-based system admin tools
-
-# Define the pause function
-function pause(){
-  read -s -n 1 -p "Press any key to continue . . ."
-}
+    install_apache2=false            # Apache 2 Webserver
+    install_apg=false                # Password generator
+    install_at=false                 # Queue, examine or delete jobs for later execution
+    install_certbot=false            # Certificate Installer for https
+    install_cryfs=false              # Encrypted file system
+    install_curl=false               # Transfer a URL
+    install_ddclient=false           # Update IP addresses at dynamic DNS services
+    install_dos2unix=false           # DOS/MAC to UNIX text file format converter
+    install_fail2ban=false           # Bans IP that makes too many password failures
+    install_ghostscript=false        # Compressing PDF scans
+    install_git=false                # The stupid content tracker
+    install_gpg=false                # OpenPGP encryption and signing tool
+    install_gzip=false               # Compress or expand files
+    install_inotify=false            # Do something when a file is created, deleted, or changed
+    install_mailutils=false          # mail, Postfix, etc.
+    install_mysql_server=false       # Relational Database
+    install_openssl=false            # OpenSSL
+    install_php=false                # PHP
+    install_phpmyadmin=false         # Web tool for managing MySQL
+                                      #CAUTION: Needs to be update using install-phpmyadmin
+    install_puttytools=false         # A free SSH and telnet client
+    install_ripmime=false            # Process files sent by email
+    install_rsync=false              # A fast, versatile, remote (and local) file-copying tool
+    install_sshfs=false              # Filesystem client based on ssh
+    install_tasksel=false            # A user interface for installing tasks
+    install_unzip=false              # List, test and extract compressed files in a ZIP archive
+    install_vim=false                # Vi IMproved, a programmer's text editor
+    install_webmin=false             # Web-based system admin tools
 
 # Make sure we're root.
 if [[ $EUID -ne 0 ]]; then
@@ -209,12 +205,10 @@ if $install_apache2 ; then
     echo "apache2 installed."
     fi
   fi
-
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_apg ; then f_install apg; fi
-
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 # apt-cacher-ng
 if $install_apt_cacher_ng ; then
@@ -226,50 +220,49 @@ if $install_apt_cacher_ng ; then
   echo "apt-gacher-ng installed."
   fi
 fi
-
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_at ; then f_install at; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_bridgeutils ; then f_install bridgeutils; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_certbot ; then f_install certbot; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_comskip ; then f_install comskip; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_cryfs ; then f_install cryfs; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_curl ; then f_install curl; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_ddclient ; then f_install ddclient; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_dos2unix ; then f_install dos2unix; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_exiftool ; then f_install exiftool; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_fail2ban ; then f_install fail2ban; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_ffmpeg ; then f_install ffmpeg; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_ghostscript ; then f_install ghostscript ; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_git ; then f_install git && ufw allow git; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_gpg ; then f_install gpg; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_gzip ; then f_install gzip; fi
 
@@ -287,7 +280,7 @@ if $install_gzip ; then f_install gzip; fi
 if $install_ifupdown ; then f_install ifupdown; fi
 if $install_inotify_tools ; then f_install "inotify-tools"; fi
 
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 # lsyncd
 if $install_lsyncd ; then
@@ -303,7 +296,7 @@ if $install_lsyncd ; then
   fi
 fi
 
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 # mailutils
 if $install_mailutils ; then
@@ -319,7 +312,7 @@ if $install_mailutils ; then
   fi
 fi
 
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 # MakeMKV
 # DON'T USE THE SNAP INSTALLER
@@ -336,7 +329,7 @@ if $install_makemkv ; then
     fi
   fi
 
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 # MySQL Server
 # AUTOMATION PROBLEM: PROMPTS FOR PASSWORD. See https://askubuntu.com/questions/1350537/automating-un-installing-mysql
@@ -428,7 +421,7 @@ if $install_mysql_server ; then
   fi
 fi
 
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_net_tools ; then f_install "net-tools"; fi
 
@@ -443,7 +436,7 @@ if $install_nfs ; then
     fi
   fi
 
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 # openssl
 if $install_openssl ; then
@@ -455,7 +448,7 @@ if $install_openssl ; then
   fi
 fi
 
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 # openvpn
 if $install_openvpn ; then
@@ -467,7 +460,7 @@ if $install_openvpn ; then
     fi
   fi
 
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 # PLEX TRIAL FOR 22.04 5/31/2022
 # https://www.linuxcapable.com/how-to-install-plex-media-server-on-ubuntu-22-04-lts/
@@ -509,40 +502,40 @@ if $install_plexmediaserver ; then
   fi
 fi
 
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_proftpd ; then f_install proftpd; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_putty_tools ; then f_install "putty-tools"; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_rclone ; then f_install rclone; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_resolvconf ; then f_install resolvconf; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_ripmime ; then f_install ripmime; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_rsync ; then f_install rsync; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_sshfs ; then f_install sshfs; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_sysbench ; then f_install sysbench; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_tasksel ; then f_install tasksel; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_unzip ; then f_install unzip; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_vim ; then f_install vim; fi
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 
 # Webmin
@@ -563,7 +556,7 @@ if $install_webmin ; then
         fi
     fi
 
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 # DESKTOP APPS THAT REQUIRE GUI
 if $is_desktop ; then
@@ -579,7 +572,7 @@ if $is_desktop ; then
         echo "Cubic installed."
         fi
 
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
     # filezilla
     if $install_filezilla ; then
@@ -589,7 +582,7 @@ pause
         echo "filezilla installed."
         fi
 
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
     # gimp
     if $install_gimp ; then
@@ -599,7 +592,7 @@ pause
         echo "gimp installed."
         fi
 
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
     # Google Chrome
     if $install_chrome ; then
@@ -612,7 +605,7 @@ pause
         echo "Google Chrome installed."
         fi
 
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
     # Microsoft Edge
     if $install_edge ; then
@@ -626,7 +619,7 @@ pause
         echo "Microsoft Edge installed."
         fi
 
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
     # xrdp
     if $install_xrdp ; then
@@ -636,7 +629,7 @@ pause
         echo "xrdp installed."
         fi
 
-pause
+: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
     # Zoom Client
     if $install_zoom ; then

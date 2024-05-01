@@ -11,7 +11,9 @@
 
 # Do stuff here
 # Algorhithm at https://unix.stackexchange.com/questions/271000/update-apt-get-cache-only-if-its-older-than-certain-time
+	echo TEMPORARY DIAGNOSTIC MARKER A in apt-get-update-if-needed.
 	if [ -z "$(find /var/cache/apt/pkgcache.bin -mmin -60)" ]; then
+		echo TEMPORARY DIAGNOSTIC MARKER B in apt-get-update-if-needed.
 		apt-get update
 		fi
 
