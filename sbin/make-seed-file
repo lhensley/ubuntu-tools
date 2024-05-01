@@ -9,10 +9,10 @@
 # Require root
 	f_require_root
 
-TEMP_DIR="$HOME/seeds-$START_DATEANDTIMESTAMP"
+TEMP_DIR="$ADMIN_HOME_DIR/seeds-$START_DATEANDTIMESTAMP"
 
-echo "Making directory $TEMP_DIR '$TEMP_DIR'"
-mkdir "$TEMP_DIR"
+echo "Making directory '$TEMP_DIR'"
+# mkdir "$TEMP_DIR"
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
