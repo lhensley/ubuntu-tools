@@ -10,6 +10,8 @@
 	f_require_root
 
 TEMP_DIR="$ADMIN_HOME_DIR/seeds-$START_DATEANDTIMESTAMP"
+SEED_TAR_FILE="$ADMIN_HOME_DIR/seeds-$START_DATEANDTIMESTAMP.tar.gz"
+SEED_GPG_FILE="$ADMIN_HOME_DIR/seeds-$START_DATEANDTIMESTAMP.tar.gz.gpg"
 
 echo "Making directory '$TEMP_DIR'"
 if ! $(mkdir "$TEMP_DIR"); then f_die "Failed making directory '$TEMP_DIR'" false $?; fi
@@ -33,6 +35,17 @@ if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
 	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
 	fi
+echo "Creating '$SEED_GPG_FILE'"
+if ! $(tar -cvzf - "$SEED_GPG_FILE"); then
+	echo "Deleting $SEED_GPG_FILE"
+	rm $SEED_GPG_FILE
+	echo "Deleting $TEMP_DIR"
+	rm -r "$TEMP_DIR
+	f_die "Failed creating '$SEED_GPG_FILE'" false $?;
+	fi
+echo "Deleting $TEMP_DIR"
+rm -r "$TEMP_DIR
+echo "Success creating '$SEED_GPG_FILE'"
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
