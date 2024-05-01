@@ -39,7 +39,7 @@ if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
 	fi
 # tar -cvzf /home/lhensley/testdir.tar.gz -C /home/lhensley testdir
 echo "Compressing '$TEMP_DIR' to '$SEED_TAR_FILE'"
-if ! $(tar -cvzf "$TEMP_DIR" -C "$TEMP_DIR" *); then
+if ! $(tar -cvzf "$SEED_TAR_FILE" -C "$TEMP_DIR" *); then
 	echo "Deleting $TEMP_DIR"
 	rm -r "$TEMP_DIR"
 	f_die "Failed creating '$SEED_GPG_FILE'" false $?;
@@ -49,7 +49,7 @@ if ! $(gpg -c "$SEED_TAR_FILE"); then
 	echo "Deleting '$TEMP_DIR'"
 	rm -r "$TEMP_DIR"
 	echo "Deleting '$SEED_TAR_FILE'"
-	rm "$TEMP_DIR"
+	rm "$SEED_TAR_FILE"
 	f_die "Failed creating '$SEED_GPG_FILE'" false $?;
 	fi
 echo "Deleting '$TEMP_DIR'"
