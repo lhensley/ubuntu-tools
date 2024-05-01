@@ -18,20 +18,21 @@ if ! $(chown $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
 	f_die "Failed setting ownership for '$TEMP_DIR'" false $?;
 	fi
-
+echo "Copying git configs"
 if ! $(cp "$ADMIN_HOME_DIR/.git"* "$TEMP_DIR/"); then
 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
 	f_die "Failed copying git configs" false $?;
 	fi
+echo "Copying ~/.ssh directory"
 if ! $(cp -r "$ADMIN_HOME_DIR/.ssh" "$TEMP_DIR/"); then
 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
 	f_die "Failed copying ~/.ssh directory" false $?;
 	fi
+echo "Setting ownership for contents of '$TEMP_DIR'"
 if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
 	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
 	fi
-
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
