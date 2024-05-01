@@ -13,6 +13,8 @@ TEMP_DIR="$ADMIN_HOME_DIR/seeds-$START_DATEANDTIMESTAMP"
 SEED_TAR_FILE="$ADMIN_HOME_DIR/seeds-$START_DATEANDTIMESTAMP.tar.gz"
 SEED_GPG_FILE="$ADMIN_HOME_DIR/seeds-$START_DATEANDTIMESTAMP.tar.gz.gpg"
 
+echo "Making sure gpg is installed"
+apt-get -y install gpg
 echo "Making directory '$TEMP_DIR'"
 if ! $(mkdir "$TEMP_DIR"); then f_die "Failed making directory '$TEMP_DIR'" false $?; fi
 echo "Setting ownership for '$TEMP_DIR'"
