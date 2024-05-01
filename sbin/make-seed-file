@@ -11,8 +11,8 @@
 
 TEMP_DIR="$HOME/seeds-$START_DATEANDTIMESTAMP"
 
+echo "Making directory $TEMP_DIR '$TEMP_DIR'"
 mkdir "$TEMP_DIR"
-
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
