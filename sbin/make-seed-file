@@ -12,7 +12,12 @@
 TEMP_DIR="$ADMIN_HOME_DIR/seeds-$START_DATEANDTIMESTAMP"
 
 echo "Making directory '$TEMP_DIR'"
-# mkdir "$TEMP_DIR"
+if $(mkdir "$TEMP_DIR"); then f_die "Failed making directory '$TEMP_DIR'" false $?; fi
+echo "Setting owner for '$TEMP_DIR'"
+if $(chown $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
+	if $(rm -r "$TEMP_DIR"); then f_die "Failed making directory '$TEMP_DIR'" false $?; fi
+	f_die "Failed making directory '$TEMP_DIR'" false $?;
+	fi
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

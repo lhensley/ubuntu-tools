@@ -239,6 +239,7 @@ function f_program_instances () {
 
 function f_die () {
 	# Usage: f_die "$MESSAGE_TO_STDERR_AND_LOG" "SEND_TEXT_ALERT_TRUE_OR_FALSE" "EXIT_CODE"
+	# Example: f_die "This script works only on Ubuntu." false $EXIT_CODE_UBUNTU_REQUIRED
 	# Note: No need to include $0
 		f_balk "FATAL: $1" "$2"   # report and log the objection
 		EXIT_CODE=$EXIT_CODE_INTERNAL_ERROR

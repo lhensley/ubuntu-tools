@@ -114,6 +114,7 @@ source /etc/os-release
         LOG_END=false
 
 # Exit codes
+# To see a full list of system defined codes, use: errno -ls
         EXIT_CODE_SUCCESS=0
         EXIT_CODE_INTERNAL_ERROR=61
         EXIT_CODE_INVALID_OPTIONS=62
