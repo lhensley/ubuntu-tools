@@ -36,7 +36,7 @@ if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
 	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
 	fi
 echo "Creating '$SEED_GPG_FILE'"
-if ! $(tar -cvzf - "$SEED_GPG_FILE"); then
+if ! $(tar -cvzf - $TEMP_DIR | gpg -c > $SEED_GPG_FILE"); then
 	echo "Deleting $SEED_GPG_FILE"
 	rm $SEED_GPG_FILE
 	echo "Deleting $TEMP_DIR"
