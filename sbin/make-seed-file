@@ -39,7 +39,7 @@ if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
 	fi
 echo "Compressing '$TEMP_DIR' to '$SEED_TAR_FILE'"
 # if ! $(tar -cvzf "$SEED_TAR_FILE" -C "$TEMP_DIR" .); then
-if ! $(tar -cvzf "$SEED_TAR_FILE" -C "$ADMIN_HOME_DIR" "seeds-$START_DATEANDTIMESTAMP"); then
+if ! $(tar -cvzf "$SEED_TAR_FILE" --directory="$TEMP_DIR" *); then
 	echo "Deleting $TEMP_DIR"
 	rm -r "$TEMP_DIR"
 	f_die "Failed creating '$SEED_GPG_FILE'" false $?;
