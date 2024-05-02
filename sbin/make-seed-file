@@ -41,6 +41,8 @@ if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
 	fi
 echo "Compressing '$TEMP_DIR' to '$SEED_TAR_FILE'"
 echo tar -cvzf "$SEED_TAR_FILE" -C "$TEMP_DIR" .git* .ssh
+tar -cvzf "$SEED_TAR_FILE" -C "$TEMP_DIR" .git* .ssh
+exit 0
 if ! $(tar -cvzf "$SEED_TAR_FILE" -C "$TEMP_DIR" .git* .ssh); then
 	echo "Deleting '$TEMP_DIR'"
 	rm -r "$TEMP_DIR"
