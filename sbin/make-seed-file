@@ -28,11 +28,13 @@ if ! $(cp "$ADMIN_HOME_DIR/.git"* "$TEMP_DIR/"); then
 	f_die "Failed copying git configs" false $?;
 	fi
 echo "Copying ~/.ssh directory"
+# DON'T FORGET TO ADD THIS TO THE tar COMMAND BELOW!
 if ! $(cp -r "$ADMIN_HOME_DIR/.ssh" "$TEMP_DIR/"); then
 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
 	f_die "Failed copying ~/.ssh directory" false $?;
 	fi
 echo "Setting ownership for contents of '$TEMP_DIR'"
+# DON'T FORGET TO ADD THIS TO THE tar COMMAND BELOW!
 if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
 	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
