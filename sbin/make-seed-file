@@ -28,22 +28,17 @@ if ! $(cp "$ADMIN_HOME_DIR/.git"* "$TEMP_DIR/"); then
 	f_die "Failed copying git configs" false $?;
 	fi
 echo "Copying ~/.ssh directory"
-# DON'T FORGET TO ADD THIS TO THE tar COMMAND BELOW!
 if ! $(cp -r "$ADMIN_HOME_DIR/.ssh" "$TEMP_DIR/"); then
 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
 	f_die "Failed copying ~/.ssh directory" false $?;
 	fi
 echo "Setting ownership for contents of '$TEMP_DIR'"
-# DON'T FORGET TO ADD THIS TO THE tar COMMAND BELOW!
 if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
 	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
 	fi
 echo "Compressing '$TEMP_DIR' to '$SEED_TAR_FILE'"
 echo tar -czf "$SEED_TAR_FILE" -C "$TEMP_DIR" .
-# tar -czf "$SEED_TAR_FILE" -C "$TEMP_DIR" .
-# echo Exit Code $?
-# exit 0
 if ! $(tar -czf "$SEED_TAR_FILE" -C "$TEMP_DIR" .); then
 	echo "Deleting '$TEMP_DIR'"
 	rm -r "$TEMP_DIR"
@@ -58,7 +53,6 @@ if ! $(gpg -c "$SEED_TAR_FILE"); then
 	f_die "Failed creating '$SEED_GPG_FILE'" false $?;
 	fi
 echo "Setting ownership for contents of '$SEED_GPG_FILE'"
-# DON'T FORGET TO ADD THIS TO THE tar COMMAND BELOW!
 if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$SEED_GPG_FILE"); then
 	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
 	fi
