@@ -57,6 +57,11 @@ if ! $(gpg -c "$SEED_TAR_FILE"); then
 	rm "$SEED_TAR_FILE"
 	f_die "Failed creating '$SEED_GPG_FILE'" false $?;
 	fi
+echo "Setting ownership for contents of '$SEED_GPG_FILE'"
+# DON'T FORGET TO ADD THIS TO THE tar COMMAND BELOW!
+if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$SEED_GPG_FILE"); then
+	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
+	fi
 echo "Deleting '$TEMP_DIR'"
 rm -r "$TEMP_DIR"
 echo "Deleting '$SEED_TAR_FILE'"
@@ -68,5 +73,3 @@ echo "Success creating '$SEED_GPG_FILE'"
 	source "${PATHNAME[script_footer]}"
 
 exit 0
-
-
