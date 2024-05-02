@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# READ THIS BEFORE RUNNING!
+# This should be EDITED and run ONLY on a newly-installed OS,
+# and NOT an existing or upgraded system.
+# Run _setup1 BEFORE this one.
+# This script installs git,
+# and uses the keys installed in _setup1
+# to clone the lhensley/go repository on this machine.
+# It also sets the timezone and loads the 'universe' Ubuntu repository.
+# Once this script is done, 
+# you can move to EDIT and run _setup3 to set up applications.
+
 ########### CRITICAL: You MUST confirm these values.
 
 # Global install variables

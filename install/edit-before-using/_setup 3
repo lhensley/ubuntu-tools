@@ -1,5 +1,4 @@
 #!/bin/bash
-# initialize-server
 # PURPOSE: Installs basic software, initializes, and configures
 # OPTIMIZED for Ubuntu Server 22.04 LTS
 # IMPORTANT: Check variables at the top of the script before running it!
@@ -117,59 +116,6 @@ if [[ $EUID -ne 0 ]]; then
 	chmod 600 $OUTFILE
 	chown $ADMIN_USER:$ADMIN_USER $OUTFILE
 
-# Create /home/$ADMIN_USER/.ssh/lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519
-	BASEFILE="lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519"
-	OUTFILE="/home/$ADMIN_USER/.ssh/$BASEFILE"
-	if [ -f "$OUTFILE" ]; then mv "$OUTFILE" "$OUTFILE.$TIMESTAMP"; fi
-	echo '-----BEGIN OPENSSH PRIVATE KEY-----' >> $OUTFILE
-	echo 'b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW' >> $OUTFILE
-	echo 'QyNTUxOQAAACCiLHTCNKdByHwZ2ryn8Avj9/yEMstx85+HVf6GXCmWQwAAAMAwkxIRMJMS' >> $OUTFILE
-	echo 'EQAAAAtzc2gtZWQyNTUxOQAAACCiLHTCNKdByHwZ2ryn8Avj9/yEMstx85+HVf6GXCmWQw' >> $OUTFILE
-	echo 'AAAECoYq7jdsbcAX3qerM+wrATpivVYZ5QgPYbngI13YzQ5aIsdMI0p0HIfBnavKfwC+P3' >> $OUTFILE
-	echo '/IQyy3Hzn4dV/oZcKZZDAAAAN2xhbmVAbGFuZWhlbnNsZXkub3JnLTIwMjItMDMtMTktMT' >> $OUTFILE
-	echo 'QtNTEtNDYtQ0RULWlkX2VkMjU1MTkBAgMEBQY=' >> $OUTFILE
-	echo '-----END OPENSSH PRIVATE KEY-----' >> $OUTFILE
-	chmod 600 $OUTFILE
-	chown $ADMIN_USER:$ADMIN_USER $OUTFILE
-	if [ ! -f "$OUTFILE" ]; then cp -p $OUTFILE "/home/$ADMIN_USER/.ssh/id_ed25519"; fi
-
-# Create /home/$ADMIN_USER/.ssh/lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519.pub
-	BASEFILE="lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519.pub"
-	OUTFILE="/home/$ADMIN_USER/.ssh/$BASEFILE"
-	if [ -f "$OUTFILE" ]; then mv "$OUTFILE" "$OUTFILE.$TIMESTAMP"; fi
-	echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKIsdMI0p0HIfBnavKfwC+P3/IQyy3Hzn4dV/oZcKZZD lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519' >> $OUTFILE
-	chmod 644 $OUTFILE
-	chown $ADMIN_USER:$ADMIN_USER $OUTFILE
-	if [ ! -f "$OUTFILE" ]; then cp -p $OUTFILE "/home/$ADMIN_USER/.ssh/id_ed25519.pub"; fi
-
-# Create /home/$ADMIN_USER/.ssh/lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519-Putty-Private.ppk
-	BASEFILE="lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519-Putty-Private.ppk"
-	OUTFILE="/home/$ADMIN_USER/.ssh/$BASEFILE"
-	if [ -f "$OUTFILE" ]; then mv "$OUTFILE" "$OUTFILE.$TIMESTAMP"; fi
-	echo 'PuTTY-User-Key-File-2: ssh-ed25519' >> $OUTFILE
-	echo 'Encryption: none' >> $OUTFILE
-	echo 'Comment: lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519' >> $OUTFILE
-	echo 'Public-Lines: 2' >> $OUTFILE
-	echo 'AAAAC3NzaC1lZDI1NTE5AAAAIKIsdMI0p0HIfBnavKfwC+P3/IQyy3Hzn4dV/oZc' >> $OUTFILE
-	echo 'KZZD' >> $OUTFILE
-	echo 'Private-Lines: 1' >> $OUTFILE
-	echo 'AAAAIKhiruN2xtwBfep6sz7CsBOmK9VhnlCA9hueAjXdjNDl' >> $OUTFILE
-	echo 'Private-MAC: e265620256c19f0211c14abdd420f7677e4a0bc3' >> $OUTFILE
-	chmod 600 $OUTFILE
-	chown $ADMIN_USER:$ADMIN_USER $OUTFILE
-
-# Create /home/$ADMIN_USER/.ssh/lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519-Putty-Public
-	BASEFILE="lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519-Putty-Public"
-	OUTFILE="/home/$ADMIN_USER/.ssh/$BASEFILE"
-	if [ -f "$OUTFILE" ]; then mv "$OUTFILE" "$OUTFILE.$TIMESTAMP"; fi
-	echo '---- BEGIN SSH2 PUBLIC KEY ----' >> $OUTFILE
-	echo 'Comment: "lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519"' >> $OUTFILE
-	echo 'AAAAC3NzaC1lZDI1NTE5AAAAIKIsdMI0p0HIfBnavKfwC+P3/IQyy3Hzn4dV/oZc' >> $OUTFILE
-	echo 'KZZD' >> $OUTFILE
-	echo '---- END SSH2 PUBLIC KEY ----' >> $OUTFILE
-	chmod 644 $OUTFILE
-	chown $ADMIN_USER:$ADMIN_USER $OUTFILE
-
 # Get us into noninteractive mode
     export DEBIAN_FRONTEND=noninteractive
 
@@ -230,24 +176,6 @@ if [[ $EUID -ne 0 ]]; then
     ADMIN_FILE="$ADMIN_DIR/$BASEFILE"
   	cp "$OUTFILE"* $ADMIN_DIR/
   	chown $ADMIN_USER:$ADMIN_USER "$ADMIN_FILE"*
-
-# Don't go this. Built into the .gitconfig file defined above.
-# # Configure git
-#     cd
-#     git config --global user.name "$my_full_name"
-#     git config --global user.email "$my_email"
-#     git config --global credential.helper store
-#     git config --global credential.helper cache
-#     git config --global credential.helper 'cache --timeout=600'
-#     # Install git token
-#     # To get a new token, go to https://github.com/settings/tokens.
-#     # NOTE: this token allows deployment only.
-#         # This part now is handled by script install-keys
-#         # git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
-#         # git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
-#         # git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
-#     chown $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.gitconfig"
-#     chmod 600 "$ROOT_HOME_DIR/.gitconfig"
 
 # Wipe out existing git and /usr/local/sbin if they exist
     echo
