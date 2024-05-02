@@ -38,8 +38,8 @@ if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
 	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
 	fi
 echo "Compressing '$TEMP_DIR' to '$SEED_TAR_FILE'"
-echo tar -cvzf "$SEED_TAR_FILE" -C "$TEMP_DIR" .
-if ! $(tar -cvzf "$SEED_TAR_FILE" -C "$TEMP_DIR" --exclude="./" .); then
+echo tar -cvzf "$SEED_TAR_FILE" -C "$TEMP_DIR" .git* .ssh
+if ! $(tar -cvzf "$SEED_TAR_FILE" -C "$TEMP_DIR" .git* .ssh); then
 	echo "Deleting '$TEMP_DIR'"
 	rm -r "$TEMP_DIR"
 	f_die "Failed creating '$SEED_TAR_FILE'" false $?;
