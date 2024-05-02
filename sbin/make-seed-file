@@ -37,6 +37,9 @@ if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
 	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
 	fi
+
+exit 0
+
 echo "Compressing '$TEMP_DIR' to '$SEED_TAR_FILE'"
 echo tar -cvz --file=\"$SEED_TAR_FILE\" --directory=\"$TEMP_DIR/\" *
 if ! $(tar -cvz --file="$SEED_TAR_FILE" --directory="$TEMP_DIR/" *); then
