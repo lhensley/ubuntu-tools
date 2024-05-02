@@ -38,8 +38,8 @@ if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
 	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
 	fi
 echo "Compressing '$TEMP_DIR' to '$SEED_TAR_FILE'"
-echo tar -cvz --file="$SEED_TAR_FILE" --directory="$TEMP_DIR" *
-if ! $(tar -cvz --file="$SEED_TAR_FILE" --directory="$TEMP_DIR" *); then
+echo tar -cvz --file=\"$SEED_TAR_FILE\" --directory=\"$TEMP_DIR\" ./*
+if ! $(tar -cvz --file="$SEED_TAR_FILE" --directory="$TEMP_DIR" ./*); then
 	echo "Deleting $TEMP_DIR"
 	rm -r "$TEMP_DIR"
 	f_die "Failed creating '$SEED_GPG_FILE'" false $?;
