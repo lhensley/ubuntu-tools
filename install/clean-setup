@@ -49,9 +49,13 @@
     ROOT_USER="root"
     ROOT_DIR="/root"
 
-if $(true); then   # Set to X
+if ! $(false); then   # Set to X
     echo
-    echo Condition Met
+    echo -en "\007" # Beep
+    echo "FAILED!"
+    echo "You MUST edit the global install variables"
+    echo "and remove the Failsafe section before running."
+    echo "(Dumbass.)"
     echo
     fi
 exit 0
