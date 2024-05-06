@@ -6,7 +6,7 @@
 #
 # EVERY TIME THE SSH KEYS OR SEED FILE PASSWORD ARE UPDATED:
 #   • Install the new ssh keys on a stable server.
-#   • Make sure that _setup1 and make-seed-file are current and error-free.
+#   • Make sure that clean-setup and make-seed-file are current and error-free.
 #   • Run 'cd && sudo make-seed-file'
 #       (The password for encrypting the file can be found in 1Password.)
 #   • Copy the seed file to the YUMI/Installation USB flash drive
@@ -33,7 +33,7 @@
 #       • sudo apt-get install gpg
 #       • gpg -d -g seed.tar.gz seed.tar.gz.gpg
 #       • tar -xzf ~/SETUP/tar.gz.gpg -C ~/SETUP
-#       • chmod 700 ~/SETUP/_setup1 && ~/SETUP/_setup1
+#       • chmod 700 ~/SETUP/clean-setup && ~/SETUP/clean-setup
 #
 #
 ###################################################
@@ -49,14 +49,23 @@
     ROOT_USER="root"
     ROOT_DIR="/root"
 
-# Failsafe
-	echo
-	echo -en "\007" # Beep
-    echo "FAILED!"
-    echo "You MUST edit the global install variables"
-    echo "and remove the Failsafe section before running."
-    echo "(Dumbass.)"
+if TRUE; then   # Set to X
     echo
+    echo Condition Met
+    echo
+    fi
+exit 0
+
+# Failsafe
+    if ! $(chown $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
+        echo
+        echo -en "\007" # Beep
+        echo "FAILED!"
+        echo "You MUST edit the global install variables"
+        echo "and remove the Failsafe section before running."
+        echo "(Dumbass.)"
+        echo
+        fi
 
 # Used for installing git
     my_full_name="Lane Hensley"
@@ -142,7 +151,7 @@ if [[ $EUID -ne 0 ]]; then
 #     cp "$OUTFILE"* $ADMIN_DIR/
 #     chown $ADMIN_USER:$ADMIN_USER "$ADMIN_FILE"*
 
-# Copy .ssh, .git*, and _setup* files and set permissions
+# Copy .ssh, .git*, and clean-setup files and set permissions
     echo
     echo cd $ADMIN_DIR/SETUP
 	cd $ADMIN_DIR/SETUP
@@ -164,14 +173,14 @@ if [[ $EUID -ne 0 ]]; then
     chmod 644 $ADMIN_DIR/.ssh/id_ed25519.pub
     #############
     echo
-    echo cp $ADMIN_DIR/SETUP/.git* $ADMIN_DIR/SETUP/_setup1 $ADMIN_DIR/.
-    cp $ADMIN_DIR/SETUP/.git* $ADMIN_DIR/SETUP/_setup1 $ADMIN_DIR/.
+    echo cp $ADMIN_DIR/SETUP/.git* $ADMIN_DIR/SETUP/clean-setup $ADMIN_DIR/.
+    cp $ADMIN_DIR/SETUP/.git* $ADMIN_DIR/SETUP/clean-setup $ADMIN_DIR/.
     echo
-    echo chown $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/_setup1
-    chown $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/_setup1
+    echo chown $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/clean-setup
+    chown $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/clean-setup
     echo
-    echo chmod 600 $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/_setup1
-    chmod 600 $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/_setup1
+    echo chmod 600 $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/clean-setup
+    chmod 600 $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/clean-setup
 
 # Wipe out existing git and /usr/local/sbin if they exist
     echo
