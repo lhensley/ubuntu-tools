@@ -49,7 +49,7 @@
     ROOT_USER="root"
     ROOT_DIR="/root"
 
-if TRUE; then   # Set to X
+if $(true); then   # Set to X
     echo
     echo Condition Met
     echo
