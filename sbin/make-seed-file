@@ -32,6 +32,11 @@ if ! $(cp -r "$ADMIN_HOME_DIR/.ssh" "$TEMP_DIR/"); then
 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
 	f_die "Failed copying ~/.ssh directory" false $?;
 	fi
+echo "Copying /usr/local/sbin/_setup1"
+if ! $(cp /usr/local/sbin/_setup1" "$TEMP_DIR/"); then
+	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
+	f_die "Failed copying /usr/local/sbin/_setup1" false $?;
+	fi
 echo "Setting ownership for contents of '$TEMP_DIR'"
 if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
@@ -56,6 +61,7 @@ echo "Setting ownership for contents of '$SEED_GPG_FILE'"
 if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$SEED_GPG_FILE"); then
 	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
 	fi
+
 echo "Deleting '$TEMP_DIR'"
 rm -r "$TEMP_DIR"
 echo "Deleting '$SEED_TAR_FILE'"

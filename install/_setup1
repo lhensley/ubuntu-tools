@@ -3,32 +3,60 @@
 # READ THIS BEFORE RUNNING!
 # This should be EDITED and run ONLY on a newly-installed OS,
 # and NOT an existing or upgraded system.
-# It should be copied to a USB flash drive
-# along with the current seed file and transferred
-# to the newly-installed system with this:
-#    Plug the USB flash drive into a USB port on the server.
-#    The OS should mount it automatically.
-#    Install gpg: sudo apt-get -y install gpg
-#    Use the df command to find the name of the mount point.
-#    Create a subdirectory of your home directory called SETUP
-#    cd to the SETUP directory and copy these files to '.'
-#        seed*
-#        _setup1     # (This file.)
-  
-
-
-
-
-
-########### CRITICAL: You MUST confirm these values.
+#
+# EVERY TIME THE SSH KEYS OR SEED FILE PASSWORD ARE UPDATED:
+#   • Install the new ssh keys on a stable server.
+#   • Make sure that _setup1 and make-seed-file are current and error-free.
+#   • Run 'cd && sudo make-seed-file'
+#       (The password for encrypting the file can be found in 1Password.)
+#   • Copy the seed file to the YUMI/Installation USB flash drive
+#     • Plug the USB flash drive into a USB port on the server.
+#     • The OS should mount it automatically.
+#     • Use the df command to find the name of the mount point.
+#     • Issue this command: sudo ~/seed* [mount_point]/
+#   • Unmount the USB flash drive: sudo umount [mount_point]/
+# 
+# TO INSTALL FROM THE USB FLASH DRIVE
+#   • Follow the instructions from "Installing Ubuntu" on OneNote
+#     to install a clean Ubuntu operating system.
+#   • Boot the new system and get to the command line.
+#   • Re-insert the USB flash drive
+#     • Plug the USB flash drive into a USB port on the server.
+#     • The OS should mount it automatically.
+#     • Use the df command to find the name of the mount point.
+#     • Issue this command: 
+#       • mkdir ~/SETUP && cp [mount_point]/seed* ~/SETUP/ && cd ~/SETUP && ls ./seed*
+#     • Make a note of which seed file is most current and viable.
+#     • Issue these commands: 
+#       • cp ./[current_seed_file] ./seed.tar.gz.gpg
+#       • sudo apt-get update && sudo apt-get dist-upgrade
+#       • sudo apt-get install gpg
+#       • gpg -d -g seed.tar.gz seed.tar.gz.gpg
+#       • tar -xzf ~/SETUP/tar.gz.gpg -C ~/SETUP
+#       • chmod 700 ~/SETUP/_setup1 && ~/SETUP/_setup1
+#
+#
+###################################################
+########### CRITICAL: You MUST confirm these values
+########### and remove the Failsafe section below.
+###################################################
 
 # Global install variables
     ADMIN_USER="lhensley"
-    TIMEZONE="America/Chicago"
+    TIMEZONE="America/Chicago" # Don't use US/*. Not recognized in Ubuntu 24.04
     HOSTNAME="go"
     ADMIN_DIR="/home/$ADMIN_USER"
     ROOT_USER="root"
     ROOT_DIR="/root"
+
+# Failsafe
+	echo
+	echo -en "\007" # Beep
+    echo "FAILED!"
+    echo "You MUST edit the global install variables"
+    echo "and remove the Failsafe section before running."
+    echo "(Dumbass.)"
+    echo
 
 # Used for installing git
     my_full_name="Lane Hensley"
@@ -44,7 +72,6 @@
     GIT_GO_SETUP="$GIT_GO/setup"                           # Formerly system.git.go.setup
     SBIN_DIR="/usr/local/sbin"
     SBIN_PARENT="$(dirname $SBIN_DIR)"
-    # MY_GIT_TOKEN="this-now-is-managed-from-install-keys-script"
 
 # Make sure we're root.
 if [[ $EUID -ne 0 ]]; then
@@ -89,7 +116,7 @@ if [[ $EUID -ne 0 ]]; then
     # changing dependencies with new versions of packages
     echo
     echo Updating local host of upgradable packages and upgrading them.
-      echo DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
+    echo DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
     DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
     # "clean" clears out the local repository of retrieved package files.
     echo
@@ -104,16 +131,47 @@ if [[ $EUID -ne 0 ]]; then
     echo apt-get --yes autoremove
     apt-get --yes autoremove
 
-# Install git and open the git port
-    echo
-    echo Installing and configuring git
-    apt-get install --yes git
-    ufw allow git
+# # Install git and open the git port
+#     echo
+#     echo Installing and configuring git
+#     apt-get install --yes git
+#     ufw allow git
 
 # Copy .gitconfig* to $ADMIN_DIR
-    ADMIN_FILE="$ADMIN_DIR/$BASEFILE"
-  	cp "$OUTFILE"* $ADMIN_DIR/
-  	chown $ADMIN_USER:$ADMIN_USER "$ADMIN_FILE"*
+#     ADMIN_FILE="$ADMIN_DIR/$BASEFILE"
+#     cp "$OUTFILE"* $ADMIN_DIR/
+#     chown $ADMIN_USER:$ADMIN_USER "$ADMIN_FILE"*
+
+# Copy .ssh, .git*, and _setup* files and set permissions
+    echo
+    echo cd $ADMIN_DIR/SETUP
+	cd $ADMIN_DIR/SETUP
+    #############
+    echo
+    echo cp -r $ADMIN_DIR/SETUP/.ssh $ADMIN_DIR/.
+    cp -r $ADMIN_DIR/SETUP/.ssh $ADMIN_DIR/.
+    echo
+    echo chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.ssh
+    chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.ssh
+    echo
+    echo chmod 700 $ADMIN_DIR/.ssh
+    chmod 700 $ADMIN_DIR/.ssh
+    echo
+    echo chmod 600 $ADMIN_DIR/.ssh/*
+    chmod 600 $ADMIN_DIR/.ssh/*
+    echo
+    echo chmod 644 $ADMIN_DIR/.ssh/id_ed25519.pub
+    chmod 644 $ADMIN_DIR/.ssh/id_ed25519.pub
+    #############
+    echo
+    echo cp $ADMIN_DIR/SETUP/.git* $ADMIN_DIR/SETUP/_setup1 $ADMIN_DIR/.
+    cp $ADMIN_DIR/SETUP/.git* $ADMIN_DIR/SETUP/_setup1 $ADMIN_DIR/.
+    echo
+    echo chown $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/_setup1
+    chown $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/_setup1
+    echo
+    echo chmod 600 $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/_setup1
+    chmod 600 $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/_setup1
 
 # Wipe out existing git and /usr/local/sbin if they exist
     echo
@@ -139,6 +197,10 @@ if [[ $EUID -ne 0 ]]; then
     find "$SBIN_DIR" -type d -print0 | sudo xargs -0 chmod 750
     find "$SBIN_DIR" -type f -print0 | sudo xargs -0 chmod 540
 
+# Hand off to newly-downlaoded _setup2
+    echo
+    echo "Handing off to _setup2"
+    /usr/local/sbin/_setup2
 
 ##############################################################
 ################# GITHUB FILES NOW ARE FULLY LOADED AND READY.

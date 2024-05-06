@@ -1,14 +1,17 @@
 #!/bin/bash
-# install-apps
 # PURPOSE: Installs basic software, initializes, and configures
-# OPTIMIZED for Ubuntu Server 24.04 LTS
+# OPTIMIZED for Ubuntu Server 22.04 LTS
 # IMPORTANT: Check variables at the top of the script before running it!
 # Instructions for creating a custom ISO installation are at https://linuxhint.com/customize_ubuntu_iso_create_spin/
 # PARTICULAR CONCERN FOR UPDATING THESE VERSIONS WHEN UBUNTU VERSION CHANGES:
 #   PHP, Python
 # Copy the entire contents of this file to a file on the new linux server, save it, chmod its permissions to 700, and run it.
-
-########### CRITICAL: You MUST confirm these values.
+#
+#
+###################################################
+########### CRITICAL: You MUST confirm these values
+########### and remove the Failsafe section below.
+###################################################
 
 # Global install variables
     ADMIN_USER="lhensley"
@@ -21,66 +24,81 @@
 # Desktop Software
 # If this is set to false, GUI app installations will be ignored.
 # CAUTION: If accidentally set to true, all required GUI packages also will be installed.
-    is_desktop=true
+    is_desktop=false
     install_chrome=true             # Google Chrome web browser
     install_cubic=false             # Creates custom Ubuntu ISO files. Details at https://github.com/PJ-Singh-001/Cubic
     install_edge=true               # Microsoft Edge
     install_filezilla=true          # A powerful client for plain FTP, FTP over SSL/TLS (FTPS) and the SSH File Transfer Protocol (SFTP)
     install_gimp=true               # An image manipulation and paint program
     install_xrdp=false              # A Remote Desktop Protocol (RDP) server
-    install_zoom=false              # Video conferencing
+    install_zoom=true               # Video conferencing
 
 # OPTIONAL software (default to false)
     install_apt_cacher_ng=false     # Caching system for apt software distribution
     install_bridgeutils=false       # Bridge-utils extensions for the interfaces(5) file format
     install_comskip=false           # Commercial skipper for videos
-    install_exiftool=false          # Read and write meta information in files
     install_ffmpeg=false            # FFmpeg video converter
     install_handbrake=false         # HandBrake video rendering
     install_ifupdown=false          # Used for /etc/network/interfaces manual configuration; interferes with Network Manager
     install_lsyncd=false            # Keeps directories in sync using inotify or fsevents. Details at https://lsyncd.github.io/lsyncd/
     install_makemkv=false           # MakeMKV DVD ripper
     install_nettools=false          # Print network connections, routing tables, interface statistics
-    install_nfs=false               # Network File Service
     install_openvpn=false           # Secure IP tunnel daemon
-    install_plexmediaserver=true   # Media streamer and library manager
+    install_plexmediaserver=false   # Media streamer and library manager
     install_proftpd=false           # For scanning to brother@oz
     install_rclone=false            # command-line program to manage files on cloud storage. Details at https://rclone.org/
     install_resolvconf=false        # Name resolver
-    install_ssh=false               # Secure Shell
     install_sysbench=false          # A modular, cross-platform and multi-threaded benchmark tool.
     install_tautulli=false          # Monitoring tool for Plex Media Server ***** PLEX MEDIA SERVER MUST BE INSTALLED TO INSTALL TAUTULLI *****
     install_uuid=false              # Use uuidgen instead. It's built-in.
 
 # STANDARD software (default to true)
-    install_apache2=false            # Apache 2 Webserver
-    install_apg=false                # Password generator
-    install_at=false                 # Queue, examine or delete jobs for later execution
-    install_certbot=false            # Certificate Installer for https
-    install_cryfs=false              # Encrypted file system
-    install_curl=false               # Transfer a URL
-    install_ddclient=false           # Update IP addresses at dynamic DNS services
-    install_dos2unix=false           # DOS/MAC to UNIX text file format converter
-    install_fail2ban=false           # Bans IP that makes too many password failures
-    install_ghostscript=false        # Compressing PDF scans
-    install_git=false                # The stupid content tracker
-    install_gpg=false                # OpenPGP encryption and signing tool
-    install_gzip=false               # Compress or expand files
-    install_inotify=false            # Do something when a file is created, deleted, or changed
-    install_mailutils=false          # mail, Postfix, etc.
-    install_mysql_server=false       # Relational Database
-    install_openssl=false            # OpenSSL
-    install_php=false                # PHP
-    install_phpmyadmin=false         # Web tool for managing MySQL
-                                      #CAUTION: Needs to be update using install-phpmyadmin
-    install_puttytools=false         # A free SSH and telnet client
-    install_ripmime=false            # Process files sent by email
-    install_rsync=false              # A fast, versatile, remote (and local) file-copying tool
-    install_sshfs=false              # Filesystem client based on ssh
-    install_tasksel=false            # A user interface for installing tasks
-    install_unzip=false              # List, test and extract compressed files in a ZIP archive
-    install_vim=false                # Vi IMproved, a programmer's text editor
-    install_webmin=false             # Web-based system admin tools
+    install_apache2=true            # Apache 2 Webserver
+    install_apg=true                # Password generator
+    install_at=true                 # Queue, examine or delete jobs for later execution
+    install_certbot=true            # Certificate Installer for https
+    install_cryfs=true              # Encrypted file system
+    install_curl=true               # Transfer a URL
+    install_ddclient=false          # Update IP addresses at dynamic DNS services
+    install_dos2unix=true           # DOS/MAC to UNIX text file format converter
+    install_exiftool=true           # Read and write meta information in files
+    install_fail2ban=true           # Bans IP that makes too many password failures
+    install_ghostscript=true        # Compressing PDF scans
+    install_git=true                # The stupid content tracker
+    install_gpg=true                # OpenPGP encryption and signing tool
+    install_gzip=true               # Compress or expand files
+    install_inotify=true            # Do something when a file is created, deleted, or changed
+    install_mailutils=true          # mail, Postfix, etc.
+    install_mysql_server=true       # Relational Database
+    install_nfs=false               # Network File Service
+    install_openssl=true            # OpenSSL
+    install_php=true                # PHP
+    install_phpmyadmin=true         # Web tool for managing MySQL
+    install_puttytools=false        # A free SSH and telnet client
+    install_ripmime=true            # Process files sent by email
+    install_rsync=true              # A fast, versatile, remote (and local) file-copying tool
+    install_ssh=false               # Secure Shell
+    install_sshfs=true              # Filesystem client based on ssh
+    install_tasksel=false           # A user interface for installing tasks
+    install_unzip=true              # List, test and extract compressed files in a ZIP archive
+    install_vim=true                # Vi IMproved, a programmer's text editor
+    install_webmin=true             # Web-based system admin tools
+
+# Used for installing git
+    my_full_name="Lane Hensley"
+    my_email="lane@lanehensley.org"
+    ROOT_USER="root"
+    ROOT_HOME_DIR="/root"
+    GITHUB_USER="lhensley"
+    GIT_ROOT="/var/local/git"
+    GIT_GO="$GIT_ROOT/go"                                  # Formerly system.git.go
+    GIT_GO_CONFIGS="$GIT_GO/configs"                       # Formerly system.git.go.configs
+    GIT_GO_SBIN="$GIT_GO/sbin"                             # Formerly #system.git.go.sbin
+    GIT_GO_SERVICES="$GIT_GO/services"
+    GIT_GO_SETUP="$GIT_GO/setup"                           # Formerly system.git.go.setup
+    SBIN_DIR="/usr/local/sbin"
+    SBIN_PARENT="$(dirname $SBIN_DIR)"
+    # MY_GIT_TOKEN="this-now-is-managed-from-install-keys-script"
 
 # Make sure we're root.
 if [[ $EUID -ne 0 ]]; then
@@ -93,6 +111,14 @@ if [[ $EUID -ne 0 ]]; then
 
 # Set timezone
     timedatectl set-timezone $TIMEZONE
+
+# Create /home/$ADMIN_USER/.ssh/authorized_keys
+	BASEFILE="authorized_keys"
+	OUTFILE="/home/$ADMIN_USER/.ssh/$BASEFILE"
+	if [ -f "$OUTFILE" ]; then cp "$OUTFILE" "$OUTFILE.$TIMESTAMP"; chown $ADMIN_USER:$ADMIN_USER "$OUTFILE.$TIMESTAMP"; fi
+	echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKIsdMI0p0HIfBnavKfwC+P3/IQyy3Hzn4dV/oZcKZZD lane@lanehensley.org-2022-03-19-14-51-46-CDT-id_ed25519' >> $OUTFILE
+	chmod 600 $OUTFILE
+	chown $ADMIN_USER:$ADMIN_USER $OUTFILE
 
 # Get us into noninteractive mode
     export DEBIAN_FRONTEND=noninteractive
@@ -140,6 +166,50 @@ if [[ $EUID -ne 0 ]]; then
     echo apt-get --yes autoremove
     apt-get --yes autoremove
 
+# Install git and open the git port
+    echo
+    echo Installing and configuring git
+    apt-get install --yes -quiet git
+    ufw allow Git
+
+# Create .gitconfig
+# DELETED THIS SECTION FOR SECURITY REASONS.
+# SEE install-github-keys in 1Password.
+
+# Copy .gitconfig* to $ADMIN_DIR
+    ADMIN_FILE="$ADMIN_DIR/$BASEFILE"
+  	cp "$OUTFILE"* $ADMIN_DIR/
+  	chown $ADMIN_USER:$ADMIN_USER "$ADMIN_FILE"*
+
+# Wipe out existing git and /usr/local/sbin if they exist
+    echo
+    echo Clearing "$GIT_ROOT" and "$SBIN_DIR"
+    rm -rf "$GIT_ROOT" "$SBIN_DIR"
+
+# Clone go.git and set restrictive permissions
+    echo
+    echo "Cloning go.git and setting permissions"
+    mkdir -p "$GIT_ROOT"
+    chmod 775 "$GIT_ROOT"
+    cd "$GIT_ROOT"
+    git clone https://github.com/$GITHUB_USER/go.git
+    chown -R $ROOT_USER:$ROOT_USER "$GIT_ROOT"
+    chmod -R 400 "$GIT_ROOT"
+    cd
+
+# Copy scripts into /usr/local/sbin
+    echo
+    echo "Copying scripts into /usr/local/sbin"
+    cp -r "$GIT_GO_SBIN" "$SBIN_PARENT"
+    chown -R $ROOT_USER:$ROOT_USER "$SBIN_DIR"
+    find "$SBIN_DIR" -type d -print0 | sudo xargs -0 chmod 750
+    find "$SBIN_DIR" -type f -print0 | sudo xargs -0 chmod 540
+
+
+##############################################################
+################# GITHUB FILES NOW ARE FULLY LOADED AND READY.
+##############################################################
+
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
@@ -154,6 +224,7 @@ if [[ $EUID -ne 0 ]]; then
 ###############################################################
 
 f_install "debconf-utils"
+f_install "moreutils"
 # f_install network-manager
 # f_install nvidia-driver-390
 
@@ -196,19 +267,17 @@ if $install_apache2 ; then
     echo
     echo "Installing apache2"
     apt-get install --yes apache2 apache2-doc apache2-suexec-pristine
-    ufw allow 'Apache'
-    ufw allow 'Apache Full'
-    ufw allow http
-    ufw allow https
+    # ufw allow 'Apache' # http only
+    ufw allow 'Apache Full' # http AND https
+    # ufw allow http
+    # ufw allow https
     a2enmod ssl rewrite
     systemctl restart apache2
     echo "apache2 installed."
     fi
   fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_apg ; then f_install apg; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 # apt-cacher-ng
 if $install_apt_cacher_ng ; then
@@ -220,50 +289,21 @@ if $install_apt_cacher_ng ; then
   echo "apt-gacher-ng installed."
   fi
 fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 if $install_at ; then f_install at; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_bridgeutils ; then f_install bridgeutils; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_certbot ; then f_install certbot; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_comskip ; then f_install comskip; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_cryfs ; then f_install cryfs; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_curl ; then f_install curl; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_ddclient ; then f_install ddclient; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_dos2unix ; then f_install dos2unix; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_exiftool ; then f_install exiftool; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_fail2ban ; then f_install fail2ban; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_ffmpeg ; then f_install ffmpeg; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_ghostscript ; then f_install ghostscript ; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
-if $install_git ; then f_install git && ufw allow git; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
+if $install_git ; then f_install git && ufw allow Git; fi
 if $install_gpg ; then f_install gpg; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_gzip ; then f_install gzip; fi
 
 # HandBrake
@@ -280,8 +320,6 @@ if $install_gzip ; then f_install gzip; fi
 if $install_ifupdown ; then f_install ifupdown; fi
 if $install_inotify_tools ; then f_install "inotify-tools"; fi
 
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 # lsyncd
 if $install_lsyncd ; then
   if ! $(f_is_installed lsyncd); then
@@ -296,8 +334,6 @@ if $install_lsyncd ; then
   fi
 fi
 
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 # mailutils
 if $install_mailutils ; then
   if ! $(f_is_installed mailutils); then
@@ -307,12 +343,10 @@ if $install_mailutils ; then
   debconf-set-selections <<< "postfix postfix/mailname string $MAILNAME@$DOMAIN_NAME"
   debconf-set-selections <<< "postfix postfix/main_mailer_type string $MAIN_MAILER_TYPE"
   apt-get install --yes mailutils postfix
-  ufw allow mail
+  ufw allow SMTP
   echo "mailutils installed."
   fi
 fi
-
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 # MakeMKV
 # DON'T USE THE SNAP INSTALLER
@@ -328,8 +362,6 @@ if $install_makemkv ; then
     echo "MakeMKV installed."
     fi
   fi
-
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 # MySQL Server
 # AUTOMATION PROBLEM: PROMPTS FOR PASSWORD. See https://askubuntu.com/questions/1350537/automating-un-installing-mysql
@@ -363,7 +395,7 @@ if $install_mysql_server ; then
         # END Generate passwords
   MYSQL_PACKAGES="mysql-server openssl libcurl4-openssl-dev libssl-dev php-gmp php-symfony php-imagick php-twig-doc php-symfony-translation"
   apt-get install --yes $MYSQL_PACKAGES
-  ufw allow mysql
+  ufw allow MySQL
   mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User=''"
@@ -421,8 +453,6 @@ if $install_mysql_server ; then
   fi
 fi
 
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_net_tools ; then f_install "net-tools"; fi
 
 # nfs
@@ -436,8 +466,6 @@ if $install_nfs ; then
     fi
   fi
 
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 # openssl
 if $install_openssl ; then
   if ! $(f_is_installed openssl); then
@@ -448,8 +476,6 @@ if $install_openssl ; then
   fi
 fi
 
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 # openvpn
 if $install_openvpn ; then
   if ! $(f_is_installed openvpn); then
@@ -459,8 +485,6 @@ if $install_openvpn ; then
     echo "openvpn installed."
     fi
   fi
-
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 # PLEX TRIAL FOR 22.04 5/31/2022
 # https://www.linuxcapable.com/how-to-install-plex-media-server-on-ubuntu-22-04-lts/
@@ -487,7 +511,7 @@ if $install_plexmediaserver ; then
           # cat PlexSign.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/PlexSigkey.gpg
           # apt-get --yes update
           # apt-get install --yes plexmediaserver
-      ufw allow 32400/tcp # if not already specified
+      ufw allow 'Plex Media Server' # if not already specified
       echo "Plex Media Server installed."
     if $install_tautulli ; then
         # Install Tautulli for https://this-server:8181
@@ -496,47 +520,23 @@ if $install_plexmediaserver ; then
             echo "Installing Tautulli."
             # apt-get install --yes snapd
             snap install tautulli
-            ufw allow 8181
+            ufw allow Tautulli
             echo "Tautulli installed."
         fi
   fi
 fi
 
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_proftpd ; then f_install proftpd; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_putty_tools ; then f_install "putty-tools"; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_rclone ; then f_install rclone; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_resolvconf ; then f_install resolvconf; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_ripmime ; then f_install ripmime; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_rsync ; then f_install rsync; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_sshfs ; then f_install sshfs; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_sysbench ; then f_install sysbench; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_tasksel ; then f_install tasksel; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_unzip ; then f_install unzip; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 if $install_vim ; then f_install vim; fi
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
 
 # Webmin
 if $install_webmin ; then
@@ -551,12 +551,10 @@ if $install_webmin ; then
         apt-get install --yes $WEBMIN_PACKAGES
         dpkg --install ./webmin-current.deb
         rm -f ./webmin-current.deb
-        ufw allow webmin
+        ufw allow Webmin
         echo "Webmin installed."
         fi
     fi
-
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
 # DESKTOP APPS THAT REQUIRE GUI
 if $is_desktop ; then
@@ -572,8 +570,6 @@ if $is_desktop ; then
         echo "Cubic installed."
         fi
 
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
     # filezilla
     if $install_filezilla ; then
         echo
@@ -582,8 +578,6 @@ if $is_desktop ; then
         echo "filezilla installed."
         fi
 
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
     # gimp
     if $install_gimp ; then
         echo
@@ -591,8 +585,6 @@ if $is_desktop ; then
         apt-get install --yes gimp                  # An image manipulation and paint program
         echo "gimp installed."
         fi
-
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
     # Google Chrome
     if $install_chrome ; then
@@ -604,8 +596,6 @@ if $is_desktop ; then
         rm -f ./google-chrome-stable_current_amd64.deb
         echo "Google Chrome installed."
         fi
-
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
     # Microsoft Edge
     if $install_edge ; then
@@ -619,8 +609,6 @@ if $is_desktop ; then
         echo "Microsoft Edge installed."
         fi
 
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
-
     # xrdp
     if $install_xrdp ; then
         echo
@@ -628,8 +616,6 @@ if $is_desktop ; then
         apt-get install --yes xrdp                  # A Remote Desktop Protocol (RDP) server
         echo "xrdp installed."
         fi
-
-: # Do nothing. This is a placeholder for f_pause or other diagnostics.
 
     # Zoom Client
     if $install_zoom ; then
@@ -643,7 +629,6 @@ if $is_desktop ; then
 
     fi
 
-exit 0
 
 #######################################################################################
 #   ADDITIONAL CONFIGURATION
@@ -778,14 +763,14 @@ exit 0
 # Enable ufw
     echo
     echo Enabling ufw
-    ufw allow ssh
+    ufw allow SSH
     echo y | sudo ufw enable
 
 # Last instructions
 	echo
 	echo -en "\007" # Beep
     echo "Reboot using   sudo init 6"
-    echo "THEN run       sudo cold-restore"
+    echo "THEN run       sudo cold-restore (optional)"
     echo "THEN Reboot again."
     echo
 
@@ -798,5 +783,5 @@ exit 0
 ##################################################################################
 # Diagnostic: Stop here
 ##################################################################################
-    echo "Stopping here (initialize-server)"
+    echo "Stopping here ($0)"
     exit 1

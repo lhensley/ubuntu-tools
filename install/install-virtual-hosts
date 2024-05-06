@@ -316,8 +316,8 @@ if ! systemctl status apache2 > /dev/null ; then
   fi
 
 # Open the firewall for apache2
-ufw allow 'Apache' > /dev/null 2> /dev/null
-ufw allow 'Apache Full' > /dev/null 2> /dev/null
+# ufw allow 'Apache' > /dev/null 2> /dev/null # http ONLY
+ufw allow 'Apache Full' > /dev/null 2> /dev/null # http AND https
 
 # Append to .htaccess to increase max upload size
 if $install_wordpress ; then
