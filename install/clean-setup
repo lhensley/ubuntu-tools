@@ -49,19 +49,10 @@
     ROOT_USER="root"
     ROOT_DIR="/root"
 
-if ! $(false); then   # Set to X
-    echo
-    echo -en "\007" # Beep
-    echo "FAILED!"
-    echo "You MUST edit the global install variables"
-    echo "and remove the Failsafe section before running."
-    echo "(Dumbass.)"
-    echo
-    fi
-exit 0
-
 # Failsafe
-    if ! $(chown $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
+    # If you have edited the variables in 'variables',
+    # change the value between the parentheses to true.
+    if ! $(false); then
         echo
         echo -en "\007" # Beep
         echo "FAILED!"
@@ -69,6 +60,7 @@ exit 0
         echo "and remove the Failsafe section before running."
         echo "(Dumbass.)"
         echo
+        exit 1
         fi
 
 # Used for installing git

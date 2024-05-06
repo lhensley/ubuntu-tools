@@ -1,0 +1,15 @@
+#!/bin/bash
+# Used for clean-setup and related scripts.
+
+# Global install variables
+    ADMIN_USER="lhensley"
+    TIMEZONE="America/Chicago" # Don't use US/*. Not recognized in Ubuntu 24.04
+    HOSTNAME="go"
+    ADMIN_DIR="/home/$ADMIN_USER"
+    ADMIN_HOME_DIR=$ADMIN_DIR
+    ROOT_USER="root"
+    ROOT_DIR="/root"
+
+    VARIABLES_LOADED=true
+
+# All done.
