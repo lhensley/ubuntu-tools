@@ -62,8 +62,6 @@ if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$SEED_GPG_FILE"); then
 	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
 	fi
 
-exit 1
-
 echo "Deleting '$TEMP_DIR'"
 rm -r "$TEMP_DIR"
 echo "Deleting '$SEED_TAR_FILE'"
