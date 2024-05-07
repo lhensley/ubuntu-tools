@@ -11,9 +11,6 @@
                 LOG_LEVEL=2
                 TEXT_LEVEL=2
 
-# Set a flag to confirm that the variables are not yet defined
-        VARIABLES_ARE_DEFINED=false
-
 # Built-in (at command line, use env to show more)
         # HOME (Home directory)
         # HOSTNAME (this host, not FQDN)

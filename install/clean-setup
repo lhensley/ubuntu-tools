@@ -1,12 +1,15 @@
 #!/bin/bash
 
 # READ THIS BEFORE RUNNING!
-# This should be EDITED and run ONLY on a newly-installed OS,
+# The ./variables file MUST be EDITED and run ONLY on a newly-installed OS,
 # and NOT an existing or upgraded system.
 #
 # EVERY TIME THE SSH KEYS OR SEED FILE PASSWORD ARE UPDATED:
 #   • Install the new ssh keys on a stable server.
-#   • Make sure that clean-setup and make-seed-file are current and error-free.
+#   • Make sure that these files are current and error-free
+#       clean-setup
+#       make-seed-file
+#       variables
 #   • Run 'cd && sudo make-seed-file'
 #       (The password for encrypting the file can be found in 1Password.)
 #   • Copy the seed file to the YUMI/Installation USB flash drive
@@ -35,48 +38,6 @@
 #       • tar -xzf ~/SETUP/tar.gz.gpg -C ~/SETUP
 #       • chmod 700 ~/SETUP/clean-setup && ~/SETUP/clean-setup
 #
-#
-###################################################
-########### CRITICAL: You MUST confirm these values
-########### and remove the Failsafe section below.
-###################################################
-
-# Global install variables
-    ADMIN_USER="lhensley"
-    TIMEZONE="America/Chicago" # Don't use US/*. Not recognized in Ubuntu 24.04
-    HOSTNAME="go"
-    ADMIN_DIR="/home/$ADMIN_USER"
-    ROOT_USER="root"
-    ROOT_DIR="/root"
-
-# Failsafe
-    # If you have edited the variables in 'variables',
-    # change the value between the parentheses to true.
-    if ! $(false); then
-        echo
-        echo -en "\007" # Beep
-        echo "FAILED!"
-        echo "You MUST edit the global install variables"
-        echo "and remove the Failsafe section before running."
-        echo "(Dumbass.)"
-        echo
-        exit 1
-        fi
-
-# Used for installing git
-    my_full_name="Lane Hensley"
-    my_email="lane@lanehensley.org"
-    ROOT_USER="root"
-    ROOT_HOME_DIR="/root"
-    GITHUB_USER="lhensley"
-    GIT_ROOT="/var/local/git"
-    GIT_GO="$GIT_ROOT/go"                                  # Formerly system.git.go
-    GIT_GO_CONFIGS="$GIT_GO/configs"                       # Formerly system.git.go.configs
-    GIT_GO_SBIN="$GIT_GO/sbin"                             # Formerly #system.git.go.sbin
-    GIT_GO_SERVICES="$GIT_GO/services"
-    GIT_GO_SETUP="$GIT_GO/setup"                           # Formerly system.git.go.setup
-    SBIN_DIR="/usr/local/sbin"
-    SBIN_PARENT="$(dirname $SBIN_DIR)"
 
 # Make sure we're root.
 if [[ $EUID -ne 0 ]]; then
@@ -84,10 +45,32 @@ if [[ $EUID -ne 0 ]]; then
         exit 1
     fi
 
+# Set a flag to confirm that the variables are not yet defined
+VARIABLES_ARE_DEFINED=false
+source ./variables
+
+# Confirm that the variables have been updated.
+    echo
+    echo -en "\007" # Beep
+    echo "STOP!"
+    echo "Have you updated the './variables' file? It's critical that you do."
+    echo "You MUST type the word CONFIRMED and press RETURN/ENTER to continue."
+    read USER_INPUT
+    if [ "X$USER_INPUT" != "XCONFIRMED" ] ; then
+        echo 
+        echo "Confirmation FAILED."
+        echo
+        exit 1
+        fi
+    echo
+    echo "Confirmed."
+    echo
+
 # Get timestamp
     TIMESTAMP=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
 
 # Set timezone
+    echo timedatectl set-timezone $TIMEZONE
     timedatectl set-timezone $TIMEZONE
 
 # Get us into noninteractive mode
@@ -147,7 +130,7 @@ if [[ $EUID -ne 0 ]]; then
 #     cp "$OUTFILE"* $ADMIN_DIR/
 #     chown $ADMIN_USER:$ADMIN_USER "$ADMIN_FILE"*
 
-# Copy .ssh, .git*, and clean-setup files and set permissions
+# Copy .ssh, .git*, clean-setup, and variable files and set permissions
     echo
     echo cd $ADMIN_DIR/SETUP
 	cd $ADMIN_DIR/SETUP

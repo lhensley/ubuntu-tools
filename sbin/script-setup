@@ -1,6 +1,9 @@
 #!/bin/bash
 # /usr/local/sbin/script-setup
 
+# Set a flag to confirm that the variables are not yet defined
+VARIABLES_ARE_DEFINED=false
+
 # Load global variables
 source "_vars"
 

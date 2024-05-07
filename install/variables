@@ -10,6 +10,23 @@
     ROOT_USER="root"
     ROOT_DIR="/root"
 
-    VARIABLES_LOADED=true
+# Used for installing git
+    my_full_name="Lane Hensley"
+    my_email="lane@lanehensley.org"
+    ROOT_USER="root"
+    ROOT_HOME_DIR="/root"
+    GITHUB_USER="lhensley"
+    GIT_ROOT="/var/local/git"
+    GIT_GO="$GIT_ROOT/go"                                  # Formerly system.git.go
+    GIT_GO_CONFIGS="$GIT_GO/configs"                       # Formerly system.git.go.configs
+    GIT_GO_SBIN="$GIT_GO/sbin"                             # Formerly #system.git.go.sbin
+    GIT_GO_SERVICES="$GIT_GO/services"
+    GIT_GO_SETUP="$GIT_GO/setup"                           # Formerly system.git.go.setup
+    SBIN_DIR="/usr/local/sbin"
+    SBIN_PARENT="$(dirname $SBIN_DIR)"
+    # MY_GIT_TOKEN="this-now-is-managed-from-install-keys-script"
+
+# Set a flag to confirm that the variables are defined
+    VARIABLES_ARE_DEFINED=true
 
 # All done.
