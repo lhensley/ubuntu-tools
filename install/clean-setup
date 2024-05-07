@@ -15,8 +15,9 @@
 #   • Copy the seed file to the YUMI/Installation USB flash drive
 #     • Plug the USB flash drive into a USB port on the server.
 #     • The OS should mount it automatically.
-#     • Use the df command to find the name of the mount point.
-#     • Issue this command: sudo ~/seed* [mount_point]/
+#     • Use the df command to find the name of the mount point. 
+#       'mount-point' probably = /dev/sda1
+#     • Issue this command: sudo cp ~/seed* [mount_point]/
 #   • Unmount the USB flash drive: sudo umount [mount_point]/
 # 
 # TO INSTALL FROM THE USB FLASH DRIVE
@@ -118,6 +119,8 @@ source ./variables
     echo "Removing those dependencies that were associated with non-removed applications that no longer are used"
     echo apt-get --yes autoremove
     apt-get --yes autoremove
+
+    exit 1
 
 # # Install git and open the git port
 #     echo
