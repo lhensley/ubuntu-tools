@@ -120,8 +120,6 @@ source ./variables
     echo apt-get --yes autoremove
     apt-get --yes autoremove
 
-    exit 1
-
 # # Install git and open the git port
 #     echo
 #     echo Installing and configuring git
@@ -148,21 +146,31 @@ source ./variables
     echo chmod 700 $ADMIN_DIR/.ssh
     chmod 700 $ADMIN_DIR/.ssh
     echo
-    echo chmod 600 $ADMIN_DIR/.ssh/*
-    chmod 600 $ADMIN_DIR/.ssh/*
+    echo chmod -R 600 $ADMIN_DIR/.ssh/*
+    chmod -R 600 $ADMIN_DIR/.ssh/*
     echo
     echo chmod 644 $ADMIN_DIR/.ssh/id_ed25519.pub
     chmod 644 $ADMIN_DIR/.ssh/id_ed25519.pub
     #############
     echo
-    echo cp $ADMIN_DIR/SETUP/.git* $ADMIN_DIR/SETUP/clean-setup $ADMIN_DIR/.
-    cp $ADMIN_DIR/SETUP/.git* $ADMIN_DIR/SETUP/clean-setup $ADMIN_DIR/.
+    echo cp $ADMIN_DIR/SETUP/.git* $ADMIN_DIR/.
+    cp $ADMIN_DIR/SETUP/.git* $ADMIN_DIR/.
     echo
-    echo chown $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/clean-setup
-    chown $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/clean-setup
+    echo chown $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/clean-setup $ADMIN_DIR/SETUP/variables
+    chown $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/clean-setup $ADMIN_DIR/SETUP/variables
     echo
-    echo chmod 600 $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/clean-setup
-    chmod 600 $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/clean-setup
+    echo chmod 600 $ADMIN_DIR/.git*
+    chmod 600 $ADMIN_DIR/.git*
+    echo
+    echo chmod 700 $ADMIN_DIR/SETUP/clean-setup $ADMIN_DIR/SETUP/variables
+    chmod 700 $ADMIN_DIR/SETUP/clean-setup $ADMIN_DIR/SETUP/variables
+    # echo
+    # echo rm -r $ADMIN_DIR/SETUP
+    # rm -r $ADMIN_DIR/SETUP
+
+###############################################################################################################
+exit 1
+###############################################################################################################
 
 # Wipe out existing git and /usr/local/sbin if they exist
     echo
