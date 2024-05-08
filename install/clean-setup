@@ -12,6 +12,9 @@
 #       variables
 #   • Run 'cd && sudo make-seed-file'
 #       (The password for encrypting the file can be found in 1Password.)
+#   • Copy the seed file to into the go repository at configs/seeds/.
+#     • Delete configs/seeds/seed.tar.gz.gpg.
+#     • Copy the desired seed file to configs/seeds/seed.tar.gz.gpg.
 #   • Copy the seed file to the YUMI/Installation USB flash drive
 #     • Plug the USB flash drive into a USB port on the server.
 #     • The OS should mount it automatically.
@@ -24,6 +27,17 @@
 #   • Follow the instructions from "Installing Ubuntu" on OneNote
 #     to install a clean Ubuntu operating system.
 #   • Boot the new system and get to the command line.
+#   • Download the seed file with these commands.
+#     • mkdir ~/SETUP && cd ~/SETUP
+#     • wget https://github.com/lhensley/go/raw/master/configs/seeds/seed.tar.gz.gpg
+	# wget https://github.com/lhensley/go/raw/master/install/jumpstart
+#     • chmod 700 *
+#     • sudo apt-get update && sudo apt-get dist-upgrade # Probably unnecessary.
+#     • sudo apt-get install gpg                         # Probably unnecessary.
+#     • gpg -d -o seed.tar.gz seed.tar.gz.gpg # Password in 1Password; search "seed"
+#     • sudo chmod 600 seed.tar.gz
+#     • tar -xvzf ./seed.tar.gz
+#     • chmod 700 ./clean-setup && sudo ./clean-setup
 #   • Re-insert the USB flash drive
 #     • Plug the USB flash drive into a USB port on the server.
 #     • The OS should mount it automatically.
