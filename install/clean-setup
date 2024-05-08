@@ -35,9 +35,10 @@
 #       • cp ./[current_seed_file] ./seed.tar.gz.gpg
 #       • sudo apt-get update && sudo apt-get dist-upgrade
 #       • sudo apt-get install gpg
-#       • gpg -d -g seed.tar.gz seed.tar.gz.gpg
-#       • tar -xzf ~/SETUP/tar.gz.gpg -C ~/SETUP
-#       • chmod 700 ~/SETUP/clean-setup && ~/SETUP/clean-setup
+#       • gpg -d -o seed.tar.gz seed.tar.gz.gpg
+#       • sudo chmod 600 seed.tar.gz
+#       • tar -xvzf ./seed.tar.gz
+#       • chmod 700 ./clean-setup && sudo ./clean-setup
 #
 
 # Make sure we're root.
@@ -168,10 +169,6 @@ source ./variables
     # echo rm -r $ADMIN_DIR/SETUP
     # rm -r $ADMIN_DIR/SETUP
 
-###############################################################################################################
-exit 1
-###############################################################################################################
-
 # Wipe out existing git and /usr/local/sbin if they exist
     echo
     echo Clearing "$GIT_ROOT" and "$SBIN_DIR"
@@ -196,7 +193,16 @@ exit 1
     find "$SBIN_DIR" -type d -print0 | sudo xargs -0 chmod 750
     find "$SBIN_DIR" -type f -print0 | sudo xargs -0 chmod 540
 
-# Hand off to newly-downlaoded _setup2
+# Run upd
+    echo
+    echo upd
+    upd
+
+###############################################################################################################
+exit 1
+###############################################################################################################
+
+# Hand off to newly-downloaded _setup2
     echo
     echo "Handing off to _setup2"
     /usr/local/sbin/_setup2
