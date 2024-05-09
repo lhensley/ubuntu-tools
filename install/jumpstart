@@ -1,12 +1,33 @@
 #!/bin/bash
 
-sudo apt-get update && sudo apt-get dist-upgrade # Probably unnecessary.
+echo
+echo sudo apt-get update && sudo apt-get dist-upgrade
+sudo apt-get update && sudo apt-get dist-upgrade
+
+echo
+echo sudo apt-get -y install coreutils git gpg moreutils '\'
+echo "   " openssh-client openssh-server ufw util-linux
 sudo apt-get -y install coreutils git gpg moreutils \
 	openssh-client openssh-server ufw util-linux
+
+echo
+echo wget --no-cache https://github.com/lhensley/go/raw/master/install/seeds.tar.gz.gpg
 wget --no-cache https://github.com/lhensley/go/raw/master/install/seeds.tar.gz.gpg
-gpg -d -o seed.tar.gz seed.tar.gz.gpg # Password in 1Password; search "seed"
-sudo chmod 600 seed.tar.gz
-tar -xvzf ./seed.tar.gz
+
+echo
+echo gpg -d -o seeds.tar.gz seeds.tar.gz.gpg "# Password in 1Password; search \"seed\""
+gpg -d -o seeds.tar.gz seeds.tar.gz.gpg # Password in 1Password; search "seed"
+
+echo
+echo sudo chmod 600 seeds.tar.gz
+sudo chmod 600 seeds.tar.gz
+
+echo
+echo tar -xvzf ./seeds.tar.gz
+tar -xvzf ./seeds.tar.gz
+
+echo
+echo chmod 700 ./clean-setup && sudo ./clean-setup
 chmod 700 ./clean-setup && sudo ./clean-setup
 
 exit 0
