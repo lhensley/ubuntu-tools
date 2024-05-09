@@ -61,12 +61,17 @@ echo "Setting ownership for contents of '$SEED_GPG_FILE'"
 if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$SEED_GPG_FILE"); then
 	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
 	fi
+echo "Copying '$SEED_GPG_FILE' to ''."
+if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$SEED_GPG_FILE" to seeds.tar.gz.gpg); then
+	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
+	fi
 
 echo "Deleting '$TEMP_DIR'"
 rm -r "$TEMP_DIR"
 echo "Deleting '$SEED_TAR_FILE'"
 rm "$SEED_TAR_FILE"
 echo "Success creating '$SEED_GPG_FILE'"
+echo "Download seeds.tar.gz.gpg and add to repository go//install"
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
