@@ -18,10 +18,10 @@ apt-get -y install gpg
 echo "Making directory '$TEMP_DIR'"
 if ! $(mkdir "$TEMP_DIR"); then f_die "Failed making directory '$TEMP_DIR'" false $?; fi
 echo "Setting ownership for '$TEMP_DIR'"
-if ! $(chown $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
-	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
-	f_die "Failed setting ownership for '$TEMP_DIR'" false $?;
-	fi
+# if ! $(chown $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
+# 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
+# 	f_die "Failed setting ownership for '$TEMP_DIR'" false $?;
+# 	fi
 echo "Copying git configs"
 if ! $(cp "$ADMIN_HOME_DIR/.git"* "$TEMP_DIR/"); then
 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
@@ -57,10 +57,6 @@ if ! $(gpg -c "$SEED_TAR_FILE"); then
 	rm "$SEED_TAR_FILE"
 	f_die "Failed creating '$SEED_GPG_FILE'" false $?;
 	fi
-echo "Setting ownership for contents of '$SEED_GPG_FILE'"
-if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$SEED_GPG_FILE"); then
-	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
-	fi
 echo "Copying '$SEED_GPG_FILE' to 'seeds.tar.gz.gpg'."
 if ! $(cp "$SEED_GPG_FILE" seeds.tar.gz.gpg); then
 	f_die "Failed copying '$SEED_GPG_FILE' to 'seeds.tar.gz.gpg'." false $?;
@@ -70,8 +66,11 @@ echo "Deleting '$TEMP_DIR'"
 rm -r "$TEMP_DIR"
 echo "Deleting '$SEED_TAR_FILE'"
 rm "$SEED_TAR_FILE"
-echo "Success creating '$SEED_GPG_FILE'"
-echo "Download seeds.tar.gz.gpg and add to repository go//install"
+echo "Updating ownerships in $(pwd)"
+chown -R $SUDO_USER:$SUDO_USER $(pwd)/*
+rm "$SEED_TAR_FILE"
+echo "Success creating 'seeds.tar.gz.gpg'"
+echo "Download seeds.tar.gz.gpg and add to repository go/install/"
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
