@@ -1,14 +1,13 @@
 #!/bin/bash
 
-# Do stuff here
-	sudo apt-get update && sudo apt-get dist-upgrade # Probably unnecessary.
-	sudo apt-get -y install coreutils git gpg moreutils \
-		openssh-client openssh-server ufw util-linux
-	wget --no-cache git.com/
-	gpg -d -o seed.tar.gz seed.tar.gz.gpg # Password in 1Password; search "seed"
-	sudo chmod 600 seed.tar.gz
-	tar -xvzf ./seed.tar.gz
-	chmod 700 ./clean-setup && sudo ./clean-setup
+sudo apt-get update && sudo apt-get dist-upgrade # Probably unnecessary.
+sudo apt-get -y install coreutils git gpg moreutils \
+	openssh-client openssh-server ufw util-linux
+wget --no-cache https://github.com/lhensley/go/raw/master/install/seeds.tar.gz.gpg
+gpg -d -o seed.tar.gz seed.tar.gz.gpg # Password in 1Password; search "seed"
+sudo chmod 600 seed.tar.gz
+tar -xvzf ./seed.tar.gz
+chmod 700 ./clean-setup && sudo ./clean-setup
 
 exit 0
 
