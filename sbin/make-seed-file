@@ -61,9 +61,9 @@ echo "Setting ownership for contents of '$SEED_GPG_FILE'"
 if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$SEED_GPG_FILE"); then
 	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
 	fi
-echo "Copying '$SEED_GPG_FILE' to ''."
-if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$SEED_GPG_FILE" to seeds.tar.gz.gpg); then
-	f_die "Failed setting ownership for contents of '$TEMP_DIR'" false $?;
+echo "Copying '$SEED_GPG_FILE' to 'seeds.tar.gz.gpg'."
+if ! $(cp "$SEED_GPG_FILE" seeds.tar.gz.gpg); then
+	f_die "Failed copying '$SEED_GPG_FILE' to 'seeds.tar.gz.gpg'." false $?;
 	fi
 
 echo "Deleting '$TEMP_DIR'"
