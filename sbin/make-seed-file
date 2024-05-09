@@ -32,11 +32,11 @@ if ! $(cp -r "$ADMIN_HOME_DIR/.ssh" "$TEMP_DIR/"); then
 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
 	f_die "Failed copying ~/.ssh directory" false $?;
 	fi
-echo "Copying /var/local/git/go/install/clean-setup and /var/local/git/go/install/variables"
-if ! $(cp "/var/local/git/go/install/clean-setup" "/var/local/git/go/install/variables" "$TEMP_DIR/"); then
-	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
-	f_die "Failed copying /var/local/git/go/install files" false $?;
-	fi
+# echo "Copying /var/local/git/go/install/clean-setup and /var/local/git/go/install/variables"
+# if ! $(cp "/var/local/git/go/install/clean-setup" "/var/local/git/go/install/variables" "$TEMP_DIR/"); then
+# 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
+# 	f_die "Failed copying /var/local/git/go/install files" false $?;
+# 	fi
 echo "Setting ownership for contents of '$TEMP_DIR'"
 if ! $(chown -R $ADMIN_USER:$ADMIN_USER "$TEMP_DIR"); then
 	if ! $(rm -r "$TEMP_DIR"); then f_die "Failed removing directory '$TEMP_DIR'" false $?; fi
