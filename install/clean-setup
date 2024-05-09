@@ -28,31 +28,8 @@
 #     to install a clean Ubuntu operating system.
 #   • Boot the new system and get to the command line.
 #   • Download the seed file with these commands.
-#     • mkdir ~/SETUP && cd ~/SETUP
-#     • wget https://github.com/lhensley/go/raw/master/configs/seeds/seed.tar.gz.gpg
-	# wget https://github.com/lhensley/go/raw/master/install/jumpstart
-#     • chmod 700 *
-#     • sudo apt-get update && sudo apt-get dist-upgrade # Probably unnecessary.
-#     • sudo apt-get install gpg                         # Probably unnecessary.
-#     • gpg -d -o seed.tar.gz seed.tar.gz.gpg # Password in 1Password; search "seed"
-#     • sudo chmod 600 seed.tar.gz
-#     • tar -xvzf ./seed.tar.gz
-#     • chmod 700 ./clean-setup && sudo ./clean-setup
-#   • Re-insert the USB flash drive
-#     • Plug the USB flash drive into a USB port on the server.
-#     • The OS should mount it automatically.
-#     • Use the df command to find the name of the mount point.
-#     • Issue this command: 
-#       • mkdir ~/SETUP && cp [mount_point]/seed* ~/SETUP/ && cd ~/SETUP && ls ./seed*
-#     • Make a note of which seed file is most current and viable.
-#     • Issue these commands: 
-#       • cp ./[current_seed_file] ./seed.tar.gz.gpg
-#       • sudo apt-get update && sudo apt-get dist-upgrade
-#       • sudo apt-get install gpg
-#       • gpg -d -o seed.tar.gz seed.tar.gz.gpg
-#       • sudo chmod 600 seed.tar.gz
-#       • tar -xvzf ./seed.tar.gz
-#       • chmod 700 ./clean-setup && sudo ./clean-setup
+#     • wget --no-cache --output-file ./jumpstart bit.ly/4dy0JlZ && chmod 700 ./jumpstart
+#     • ./jumpstart
 #
 
 # Make sure we're root.
