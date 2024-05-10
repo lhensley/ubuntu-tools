@@ -1,0 +1,43 @@
+#!/bin/bash
+# get-config
+# Usage: get-config <config-name> <primary-config-file> [<alternate-config-file>]
+# Ref: https://unix.stackexchange.com/questions/505258/parse-config-file-and-pass-parameters-to-another-script
+# Exit codes:
+EXIT_SUCCESS=0
+CONFIG_NAME_NOT_FOUND=1
+CONFIG_FILES_NOT_FOUND=2
+
+CONFIG_NAME="$1"
+INPUT="$2"
+
+# Ref: https://linuxize.com/post/bash-check-if-file-exists/
+if [ -f "$2" ]; then
+	INPUT="$2"
+else	
+	if [ -f "$3" ]; then
+		INPUT="$3"
+	else
+		exit $CONFIG_FILES_NOT_FOUND
+	fi
+fi
+
+OLDIFS=$IFS
+IFS=$'[ \t]*=[ \t]*'
+# IFS="="
+declare -A CONFIG
+while read -r NAME VALUE
+do	
+	if [ "$NAME" != "" ] && [[ "$NAME" != "#"* ]]; then # Line is not blank and is not a comment
+	 	CONFIG[$NAME]="$VALUE"
+		# echo "#$NAME#$VALUE#"
+		# echo "<next>"
+	fi
+done < "$INPUT"
+IFS=$OLDIFS
+
+# Ref https://stackoverflow.com/questions/3601515/how-to-check-if-a-variable-is-set-in-bash
+if [ -z ${CONFIG[$CONFIG_NAME]+x} ]; then # The requested config is undefined
+	exit $CONFIG_NAME_NOT_FOUND
+	fi
+echo ${CONFIG[$CONFIG_NAME]}
+exit $EXIT_SUCCESS

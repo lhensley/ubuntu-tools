@@ -1,0 +1,21 @@
+#
+# See https://www.freedesktop.org/software/systemd/man/systemd.service.html for help.
+
+[Unit]
+Description=Service to Transcode Raw .mp4 Files from Zoom to .m4v x265 HEVC Using HandBrake
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+ExecStart=/bin/bash /usr/local/sbin/transcode-zoom-mp4-files
+# Leave Type=simple unless the process forks. Defaults this way anyway if ExecStart is used.
+# Type=simple
+User=root
+Group=root
+# PermissionsStartOnly is deprecated.
+# PermissionsStartOnly=true
+# On TimeoutSec, try default and add a value here only if necessary.
+# TimeoutSec=600
+Restart=on-failure

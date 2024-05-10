@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Require root
+	f_require_root
+
+# Run only on nuc01
+	f_require_host nuc01
+
+ROUTER_IP_ADDRESS="182.168.168.2"
+ERROR_TOKEN="/var/tmp/error_pinging_router"
+
+ping -c1 192.168.169.2 &>/dev/null
+if [ $? -eq 0 ]; then
+	if $(f_is_file "$ERROR_TOKEN"); then f_balk "Router ping restored." TRUE | mail textalerts; rm "$ERROR_TOKEN"; fi	
+else
+	if $(f_is_file "$ERROR_TOKEN"); then true; else f_balk "Error pinging router." TRUE | mail textalerts; touch "$ERROR_TOKEN"; fi	
+fi
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0

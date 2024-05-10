@@ -1,0 +1,25 @@
+#!/bin/bash
+# install-webmin
+# Based on https://webmin.com/download/
+# Assumes Ubuntu 22.04
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Require root
+	# f_require_root
+
+# Do it
+	# If/when you flesh this out, uncomment r_require_root above.
+	echo
+	echo "See instructions at https://webmin.com/download/"
+	echo
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+

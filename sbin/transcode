@@ -1,0 +1,328 @@
+#!/bin/bash
+
+
+###################################################
+# Notes
+#
+# "getopts" is built into shell, which makes it run faster then "getopt", which is an external command
+# But "getopts" does not support long command line arguments (e.g., shellscriptname --argument=value)
+# STRONG RECOMMENDATION: Use getopt and not getopts
+# Following tutorial at https://www.shellscript.sh/tips/getopt/
+# man page for getopt is at https://man7.org/linux/man-pages/man1/getopt.1.html
+# Defining terms
+#    argument: any text appended to a command (syn.: parameter)
+#    parameter: synonym for argument
+#    option: a command argument preceded by a single or double hyphen (e.g., -o, or --option)
+#       An option may have an argument of its own (an "option argument", e.g., -o value-o, or --option value-o, or --option=value-o)
+#       All options are arguments, but not all arguments are options.
+#    short option: an option consisting of single hyphen and letter, with or without an option argument specified (e.g., -a value-a -b)
+#    long option: an option consisting of a double hyphen and word, with or without an option argument specified (e.g., --arga value-a --argb=value-b --argc)
+#    switch: a short or long option, with no option argument specified (e.g., -a --argb)
+#       All switches are options, but not all options are switches.
+#    remaining arguments: command line arguments that are neither options nor option arguments
+
+
+###################################################
+# Basic Setup
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 61; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 61; fi
+# Uncomment requirements for script execution
+	# f_require_root
+    # f_require_ubuntu
+    # f_deprecated
+    # f_require_minimum_version_number "version-number"
+    # f_require_maximum_version_number "version-number"
+    # f_only_on_server "hostname"
+    # f_require_confirmation "This text is displayed, requesting confirmation word." "ConfirmationWord"
+    # set -x # For debugging
+
+
+###################################################
+# Functions
+
+function f_print_usage {
+  echo
+  # Print usage. Break lines as needed below.
+  echo Usage: $(basename "$0") [OPTION...]
+  # Include version number.
+  echo "Version $VERSION_NUMBER"
+  echo "$COLOPHON"
+  # Describe what the program does. Optionally: display version number, author, etc. EXAMPLE:
+  echo Invokes HandBrakeCLI to transcode --source-file using specified options.
+  echo The options also determine the name and location of the target file.
+  # Describe any requirements for running the script (e.g., root, specific server, OS minimum). EXAMPLE:
+  # echo THIS COMMAND IS DEPRECATED.
+  # echo Requires root or sudo.
+  # echo Runs only on Ubuntu.
+  # echo Runs only on OS version XXX and higher.
+  # echo Runs only on OS version XXX and lower.
+  # echo Runs only on server XXX.
+  # echo Requires manual user confirmation to run.
+  echo
+  echo "OPTIONS"
+  echo " -d, --use-parent-directory-name    use the source file parent"
+  echo "                                    directory name as target filename"
+  echo " -f, --flatten-target-directory     store target files directly"
+  echo "                                    in the --target-root directory"
+  echo " -h, --handbrake-presets-file       HandBrake JSON file to use"
+  echo "                                    for running HandBrakeCLI"
+  echo "                                    if not specified, the variable"
+  echo "                                    \$HANDBRAKE_PRESETS defined in"
+  echo "                                    $SBIN_DIR/_vars"
+  echo "                                    is used"
+  echo " -i, --append-source-info           append the hostname"
+  echo "                                    of the source file and its mtime"
+  echo " -n, --nice-value=INTEGER           nice value to use when running"
+  echo "                                    HandBrakeCLI; see nice(1);"
+  echo "                                    if not specified, the environment"
+  echo "                                    variable \$NICE_VALUE is"
+  echo "                                    recognized if it exists;"
+  echo "                                    ignored if out of range (-20 to 19)"
+  echo " -p, --prepend-parent-directory     prepend the source file parent"
+  echo "                                    directory name to the target filename"
+  echo " -r, --target-root=DIRECTORY        container directory in which target"
+  echo "                                    file are created, normally in a"
+  echo "                                    subdirectory. If not specified,"
+  echo "                                    the variable \$TARGET_ROOT defined in"
+  echo "                                    $SBIN_DIR/_vars"
+  echo "                                    is used"
+  echo " -s, --source-file=FILE             file to be transcoded; mandatory,"
+  echo "                                    but if not specified, the environment"
+  echo "                                    variable \$SOURCE_FILE will be used"
+  echo "                                    if defined"
+  echo " -t, --test, --dry-run              run the program without executing"
+  echo "                                    HandBrakeCLI; --verbose recommended"
+  echo " -u, --append-uuid-to-target-file   generates and appends a random UUID"
+  echo "                                    to the target filename"
+  echo " -x, --target-file-extension        filename extension for the target file;"
+  echo '                                    include the dot (e.g., ".m4v");'
+  echo "                                    if not specified, the environment"
+  echo "                                    variable \$TARGET_FILE_EXTENSION"
+  echo "                                    defined in $SBIN_DIR/_vars"
+  echo "                                    is used"
+  echo
+  echo " -q, --quiet                        print and log with mimimal detail"
+  echo " -v, --verbose                      print and log with great detail"
+  echo " -?, --help                         give this help list and exit"
+  echo "     --version                      print program version and exit"
+  echo
+  # Describe any exit codes returned. For examples below, comment out any unused values. EXAMPLE:
+  echo RETURN VALUES:
+  echo "   " $EXIT_CODE_SUCCESS on success,
+  echo "   " $EXIT_CODE_CANCELLED if HandBrakeCLI is cancelled,
+  echo "   " $EXIT_CODE_INVALID_INPUT if HandBrakeCLI aborts because --source-file is corrupted
+  echo "   " $EXIT_CODE_INITIALIZATION_ERROR if HandBrakeCLI fails to initialize,
+  echo "   " $EXIT_CODE_UNKNOWN_HANDBRAKE_ERROR if HandBrakeCLI returns an unknown error,
+  echo "  " $EXIT_CODE_INTERNAL_ERROR on internal error,
+  echo "  " $EXIT_CODE_INVALID_OPTIONS if invalid options specified,
+#  echo "  " $EXIT_CODE_ROOT_REQUIRED if root required,
+#  echo "  " $EXIT_CODE_UBUNTU_REQUIRED if Ubuntu required,
+#  echo "  " $EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED if minimum OS version required,
+#  echo "  " $EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED if maximum OS version required,
+#  echo "  " $EXIT_CODE_SPECIFIC_SERVER_REQUIRED if specific server required,
+  echo "  " $EXIT_CODE_FILE_NOT_FOUND if file not found,
+  echo "  " $EXIT_CODE_DIRECTORY_NOT_FOUND if directory not found,
+  echo "  " $EXIT_CODE_FILE_IN_USE if file in use,
+  echo "  " $EXIT_CODE_USER_ABORT on user abort,
+  echo " " $EXIT_CODE_SEGMENTATION_ERROR on segmentation error
+  echo
+  echo ""
+}
+
+
+###################################################
+# Set default variable values
+VERSION_NUMBER="0.1.x"
+QUIET_MODE=false
+VERBOSE_MODE=false
+TEST_MODE=false
+ARGS="" # Add arguments to primary function called as needed
+REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode
+USE_PARENT_DIR_AS_BASENAME=false
+FLATTEN_TARGET_DIRECTORY=false
+PREPEND_PARENT_DIR_TO_BASENAME=false
+APPEND_UUID_TO_TARGET_FILE=false
+APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE=false
+EXIT_CODE_CANCELLED=1
+EXIT_CODE_INVALID_INPUT=2
+EXIT_CODE_INITIALIZATION_ERROR=3
+EXIT_CODE_UNKNOWN_HANDBRAKE_ERROR=4
+# Option arguments can remain undefined.
+
+
+###################################################
+# Parse options and arguments with getopt
+
+# Note about the following call to getopt
+#   Options used here with the getopt command itself
+#       --name : Script name, used for reporting errors
+#       --options : Definition of short options
+#       --longoptions (--long) : Definition of long options
+#   Options used used with the getopt command itself
+#       --alternative : Allow long options to start with a single '-'.
+#       --help : Display help text and exit.  No other output is generated.
+#       --quiet, --test, --unquoted, --version
+#   Colon after an option means an argument is required. 
+#       In this example, options A, B, and C are switches; a, b, and c expect arguments
+#       Similarly for long options, options optionA, optionB, and optionC are switches; optiona, optionb, and optionc expect arguments
+#   The '-- "$@"' at the end means that all other command arguments are "remaining arguments".
+LONG_OPTIONS="use-parent-directory-name,flatten-target-directory,handbrake-presets-file:,"
+LONG_OPTIONS+="append-source-info,nice-value:,prepend-parent-directory,target-root:,test,dry-run,"
+LONG_OPTIONS+="source-file:,target-file-extension:,append-uuid-to-target-file,quiet,verbose,version,help"
+PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options dfh:in:pr:s:tux:vq? \
+    --long $LONG_OPTIONS -- "$@")
+VALID_ARGUMENTS=$?
+if [ "$VALID_ARGUMENTS" != "0" ]; then f_print_usage; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
+# Note about next command: 
+# By reading that set of standardised arguments into the shell's input arguments 
+#   the shell script now thinks that it was called with these simpler, standardised set of arguments.
+eval set -- "$PARSED_ARGUMENTS"
+
+while : ; do
+    case "$1" in
+      --help ) # Optional
+           f_print_usage
+           exit $EXIT_CODE_SUCCESS
+           ;;
+      --version )  # Version number - Optional
+           echo $VERSION_NUMBER
+           exit $EXIT_CODE_SUCCESS
+           ;;
+      -q | --quiet )  # Quiet mode - Optional
+           QUIET_MODE=true
+           REDIRECT="/dev/null"
+           ARGS+=" --quiet"
+           shift # Only one (default) shift for a switch, i.e., no argument
+           ;;
+      -v | --verbose )  # Verbose mode - Optional
+           VERBOSE_MODE=true
+           shift # Only one (default) shift for a switch, i.e., no argument
+           ;;
+      -d | --use-parent-directory-name )  # - Optional
+           USE_PARENT_DIR_AS_BASENAME=true
+           shift # Only one (default) shift for a switch, i.e., no argument
+           ;;
+      -f | --flatten-target-directory )  # - Optional
+           FLATTEN_TARGET_DIRECTORY=true
+           shift # Only one (default) shift for a switch, i.e., no argument
+           ;;
+      -h | --handbrake-presets-file )  # - Optional
+           HANDBRAKE_PRESETS="$2"
+           shift 2 # Two shifts because the option takes an argument
+           ;;
+      -i | --append-source-info )  # - Optional
+           APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE=true
+           shift # Only one (default) shift for a switch, i.e., no argument
+           ;;
+      -n | --nice-value )  # - Optional
+           NICE_VALUE="$2"
+           shift 2 # Two shifts because the option takes an argument
+           ;;
+      -p | --prepend-parent-directory )  # - Optional
+           PREPEND_PARENT_DIR_TO_BASENAME=true
+           shift # Only one (default) shift for a switch, i.e., no argument
+           ;;
+      -r | --target-root )  # - Optional
+           TARGET_ROOT="$2"
+           shift 2 # Two shifts because the option takes an argument
+           ;;
+      -s | --source-file )  # - Optional
+           SOURCE_FILE="$2"
+           shift 2 # Two shifts because the option takes an argument
+           ;;
+      -t | --test | --dry-run ) # - Optional
+           TEST_MODE=true
+           shift # Only one (default) shift for a switch, i.e., no argument
+           ;;
+      -u | --append-uuid-to-target-file )  # - Optional
+           APPEND_UUID_TO_TARGET_FILE=true
+           shift # Only one (default) shift for a switch, i.e., no argument
+           ;;
+      -x | --target-file-extension )  # - Optional
+           TARGET_FILE_EXTENSION="$2"
+           shift 2 # Two shifts because the option takes an argument
+           ;;
+      --) # -- means the end of the arguments; drop this, and break out of the while loop
+           shift
+           break 
+           ;;
+      *) f_die "Unexpected option: $1 - Script programming error. Valid option has no handler." false $EXIT_CODE_INTERNAL_ERROR
+           ;;
+  esac
+done
+
+
+###################################################
+# Do the work.
+# IMPORTANT NOTES: 
+#   Don't forget that you still can read and use environment variables!
+#       Best practice: Required values should be required on and read from the command line, not environment variables.
+#           Environment variables are fine for optional values.
+#   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
+#   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
+
+# Test existence of files and directories
+	if ! $(f_is_file "$HANDBRAKE_CLI");     then f_die "HandBrakeCLI not found: $HANDBRAKE_CLI" false $EXIT_CODE_FILE_NOT_FOUND;          return; fi 
+	if ! $(f_is_file "$HANDBRAKE_PRESETS"); then f_die "HandBrake presets file not found: $HANDBRAKE_PRESETS" false $EXIT_CODE_FILE_NOT_FOUND;      return; fi 
+	if ! $(f_is_file "$SOURCE_FILE");       then f_die "Source file not found: $SOURCE_FILE" false $EXIT_CODE_FILE_NOT_FOUND;            return; fi 
+
+# Calculate definition of $TARGET_FILE
+	TARGET_FILE=$TARGET_ROOT/$(f_target_relative_path_and_filename_no_ext)$TARGET_FILE_EXTENSION
+	TARGET_DIR=$(dirname "$TARGET_FILE")
+
+if ! $(f_variable_has_content "$TARGET_FILE"); then f_die "Target file undefined" true $EXIT_CODE_FILE_NOT_FOUND; fi
+
+# Do the transcoding
+	TIMESTART=$(date +%s)
+	SOURCE_FILE_BASE=$(basename "$SOURCE_FILE")
+	if ! $QUIET_MODE; then f_log_and_echo "Transcoding $SOURCE_FILE to $TARGET_FILE" false; fi
+    if $VERBOSE_MODE; then 
+            HANDBRAKE_OUTPUT="/dev/stdout"
+            f_log_and_echo "$COLOPHON"
+            f_log_and_echo "Version: $VERSION_NUMBER"
+            f_log_and_echo "Source file: $SOURCE_FILE"
+            f_log_and_echo "Target file: $TARGET_FILE"
+            f_log_and_echo "HandBrakeCLI path: $HANDBRAKE_CLI"
+            f_log_and_echo "HandBrake presets: $HANDBRAKE_PRESETS"
+            f_log_and_echo "Quiet Mode: $QUIET_MODE"
+            f_log_and_echo "Verbose Mode: $VERBOSE_MODE"
+            f_log_and_echo "Test Mode: $TEST_MODE"
+            f_log_and_echo "Use parent directory as basename: $USE_PARENT_DIR_AS_BASENAME"
+            f_log_and_echo "Flatten target directory: $FLATTEN_TARGET_DIRECTORY"
+            f_log_and_echo "Prepend parent directory to target filename: $PREPEND_PARENT_DIR_TO_BASENAME"
+            f_log_and_echo "Append UUID to target filename: $APPEND_UUID_TO_TARGET_FILE"
+            f_log_and_echo "Append current server and source file mtime to target file: $APPEND_CURRENT_SERVER_AND_ORIGINAL_RIP_INFO_TO_TARGET_FILE"
+        else
+            HANDBRAKE_OUTPUT="/dev/null"
+        fi
+    HANDBRAKE_COMMAND="$HANDBRAKE_CLI --preset-import-file \"$HANDBRAKE_PRESETS\" -i \"$SOURCE_FILE\" -o \"$TARGET_FILE\""
+    if $TEST_MODE; then
+            f_die "Test Mode: Would have run: $HANDBRAKE_COMMAND" false $EXIT_CODE_SUCCESS
+        else
+            	mkdir -p "$TARGET_DIR"
+	        if ! $(f_is_directory "$TARGET_DIR"); then 
+                f_die "Target transcode directory not found: $TARGET_DIR" true $EXIT_CODE_DIRECTORY_NOT_FOUND;
+                fi
+    		    "$HANDBRAKE_CLI" --preset-import-file "$HANDBRAKE_PRESETS" -i "$SOURCE_FILE" -o "$TARGET_FILE" > $HANDBRAKE_OUTPUT 2>&1
+		fi
+	exit_status=$? # 0 = No Error, 1 = Cancelled, 2 = Invalid Input, 3 = Initialization error, 4 = Unknown Error
+		# Exit code 139 seems to correspond to a "segmentation fault" that will cause a core dump and repeat every time the same source file is used for transcoding.
+	if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
+			f_die "HandBrakeCLI: FAILED with error #$exit_status for $SOURCE_FILE" false $exit_status
+			if [ $exit_status -eq 2 || $exit_status -eq 139]; then sudo -u plex rm "$SOURCE_FILE"; f_balk "Deleting corrupted file $SOURCE_FILE" false; fi
+		else
+			rm "$SOURCE_FILE" # Delete source file
+			if ! $QUIET_MODE; then f_log_and_echo "Transcoding complete in $(f_timeformat $(( $(date +%s) - TIMESTART )))" false; fi
+			echo
+		fi # End of check for transcoding failure
+
+
+###################################################
+# Wrap up.
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"

@@ -1,0 +1,4 @@
+#
+# This file is used to shut off a directory (and its subdirectories) from being served by apache web server.
+#
+Deny from all

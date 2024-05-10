@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Require root
+	f_require_root
+
+letsencrypt_live_directory="/etc/letsencrypt/live"
+
+for d in $letsencrypt_live_directory/*
+	do
+		if [ -d $d ]; then
+			cd $d
+			for x in cert chain fullchain privkey
+				do
+					f_log_and_echo "Working with $d/$x.pem" false
+					openssl pkcs12 -export -inkey privkey.pem -in $x.pem -out $x.p12
+				done
+		fi
+done
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0

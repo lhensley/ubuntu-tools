@@ -1,0 +1,60 @@
+
+Regular transcodes
+	1: lgh-daemon-dvd-rip-transcode-looper (oz)
+	Rename: lgh-loop-xcode-dvd
+	Status: DISABLED
+	PRIORITY 6
+		oz
+			VIDEO_WORK_FILE_SYSTEM="/mnt/ssd1tb"
+			VIDEO_STORE_FILE_SYSTEM="/mnt/ext10tb01"
+			VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex"
+			VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex"
+	2: lgh-daemon-plex-dvr-transcode-looper (nuc01, oz)
+	Rename: lgh-loop-xcode-plex
+	PRIORITY 1: Status: Running fine; need to monitor
+	Still to fix: loop keeps breaking.
+		nuc01
+			VIDEO_WORK_FILE_SYSTEM="/"
+			VIDEO_STORE_FILE_SYSTEM="/mnt/cloteal"
+			VIDEO_WORK_DIRECTORY="/var/lib/plexmediaserver/Library/work"
+			VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/Plex/Pool06-1TB/TV-Shows/TV-Shows-DVR"
+	3: lgh-daemon-zoom-transcode-looper (oz)
+	Rename: lgh-loop-xcode-zoom
+	Status: DISABLED
+	PRIORITY 7
+			ZOOM_RAW_FILES="$ADMIN_HOME_DIR/zoom/raw"
+			ZOOM_TRANSCODED_FILES="$ADMIN_HOME_DIR/zoom/transcoded"
+			ZOOM_FILE_NAME_PATTERN="*.mp4"
+
+Other transcodes
+	4: lgh-daemon-nuc01-bulk-transcode-looper (nuc01)
+		Rename: lgh-loop-xcode-nuc01-[misplaced]
+		Status: Testing. The code that's specific to this script is file. All the rest is shared with lgh-loop-xcode-plex (priority 1),
+			so once that testing and upgrading is accomplished, this will inherit those changes.
+		PRIORITY 3
+	5: lgh-daemon-oz-bulk-transcode-looper (oz)
+		Rename: lgh-loop-xcode-oz-temp
+		Status: Testing. The code that's specific to this script is file. All the rest is shared with lgh-loop-xcode-plex (priority 1),
+			so once that testing and upgrading is accomplished, this will inherit those changes.
+		PRIORITY 2
+				SOURCE_ROOT="/mnt/ext10tb01/TV-Austin-2020-09-20-Uncompressed-TS-Files"
+		 		TARGET_ROOT="$VIDEO_STORE_DIRECTORY"
+
+Moves
+	6: lgh-daemon-dvd-rip-move-completed-looper (oz)
+	Rename: lgh-loop-move-dvd
+	Status: DISABLED
+	PRIORITY 5
+			SOURCE_ROOT_DIR="/home/$ADMIN_USER/Videos/HandBrake-Completed"
+			TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/cloteal/Plex/uploads"
+	7: lgh-daemon-plex-dvr-move-completed-looper (oz)
+	Rename: lgh-loop-move-plex
+	Status: Running. One issue: When container directories are created on target, they have overly-restrictive permissions
+	PRIORITY 4
+			SOURCE_ROOT_DIR="/mnt/ext10tb01/plex"
+			TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Shows-DVR"
+			SOURCE_ROOT="/mnt/ext10tb01/TV-Austin-2020-09-20-Uncompressed-TS-Files"
+ 			TARGET_ROOT="$VIDEO_STORE_DIRECTORY"
+
+Additioal Moves
+
