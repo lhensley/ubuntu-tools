@@ -1,6 +1,0 @@
-
-
-
-echo "ping6 -i 600 -I ethernet0 google.com" | at now 2> /dev/null
-
-
