@@ -34,7 +34,7 @@ gpg -d -o seeds.tar.gz seeds.tar.gz.gpg # Password in 1Password; search "seed"
 
 echo
 echo chmod 600 seeds.tar.gz
-chmod 600 seeds.tar.gzw
+chmod 600 seeds.tar.gz
 
 echo
 echo chmod 600 seeds.tar.gz
