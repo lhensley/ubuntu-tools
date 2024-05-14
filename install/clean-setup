@@ -31,8 +31,8 @@ if [[ $EUID -ne 0 ]]; then
     fi
 
 # Set a flag to confirm that the variables are not yet defined
-VARIABLES_ARE_DEFINED=false
-source ./variables
+    VARIABLES_ARE_DEFINED=false
+    source ./variables
 
 # Confirm that the variables have been updated.
     echo
@@ -181,15 +181,566 @@ source ./variables
     echo upd
     upd
 
-###############################################################################################################
-exit 1
-###############################################################################################################
-
-# Hand off to newly-downloaded _setup2
-    echo
-    echo "Handing off to _setup2"
-    /usr/local/sbin/_setup2
-
 ##############################################################
 ################# GITHUB FILES NOW ARE FULLY LOADED AND READY.
 ##############################################################
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+###############################################################
+########### SOFTWARE INSTALLATIONS
+###############################################################
+
+
+# Mandatory installations
+###############################################################
+
+f_install "debconf-utils"
+f_install "moreutils"
+# f_install network-manager
+# f_install nvidia-driver-390
+
+# PHP is installed every time.
+  if ! $(f_is_installed php); then
+    echo
+    echo "Installing php"
+    PHP_PACKAGES="php php-cli libapache2-mod-php php-mysql php-gd php-curl php-imap php-ldap"
+    PHP_PACKAGES+=" libmcrypt-dev php-mbstring php-dev php-pear"
+    PHP_PACKAGES+=" libc-client2007e mlock uw-mailutils"
+    apt-get install --yes $PHP_PACKAGES
+    phpenmod gd curl imap ldap mbstring
+    systemctl restart apache2
+    echo "php installed."
+    fi;
+
+# ssh is installed with the OS.
+    ufw allow SSH
+
+# tzdata
+    if ! $(f_is_installed tzdata); then
+        echo
+        echo "Installing tzdata."
+        apt-get purge --yes tzdata
+        ln -fs /usr/share/zoneinfo/"$TIMEZONE" /etc/localtime
+        apt-get install --yes tzdata
+        echo "tzdata installed."
+        fi
+
+# Optional installations
+###############################################################
+
+# apache2
+if $install_apache2 ; then
+  if ! $(f_is_installed apache2); then
+    echo
+    echo "Installing apache2"
+    apt-get install --yes apache2 apache2-doc apache2-suexec-pristine
+    # ufw allow 'Apache' # http only
+    ufw allow 'Apache Full' # http AND https
+    # ufw allow http
+    # ufw allow https
+    a2enmod ssl rewrite
+    systemctl restart apache2
+    echo "apache2 installed."
+    fi
+  fi
+
+if $install_apg ; then f_install apg; fi
+
+# apt-cacher-ng
+if $install_apt_cacher_ng ; then
+  if ! $(f_is_installed "apt-cacher-ng"); then
+  echo
+  echo "Installing apt-cacher-ng."
+  # Based on https://www.tecmint.com/apt-cache-server-in-ubuntu/
+  apt-get install --yes apt-cacher-ng avahi-daemon squid-deb-proxy-client
+  echo "apt-gacher-ng installed."
+  fi
+fi
+
+if $install_at ; then f_install at; fi
+if $install_bridgeutils ; then f_install bridgeutils; fi
+if $install_certbot ; then f_install certbot; fi
+if $install_comskip ; then f_install comskip; fi
+if $install_cryfs ; then f_install cryfs; fi
+if $install_curl ; then f_install curl; fi
+if $install_ddclient ; then f_install ddclient; fi
+if $install_dos2unix ; then f_install dos2unix; fi
+if $install_exiftool ; then f_install exiftool; fi
+if $install_fail2ban ; then f_install fail2ban; fi
+if $install_ffmpeg ; then f_install ffmpeg; fi
+if $install_ghostscript ; then f_install ghostscript ; fi
+if $install_git ; then f_install git && ufw allow Git; fi
+if $install_gpg ; then f_install gpg; fi
+if $install_gzip ; then f_install gzip; fi
+
+# HandBrake
+# Works on Ubuntu 22, but contradicts https://handbrake.fr/docs/en/1.5.0/get-handbrake/download-and-install.html
+  if $install_handbrake ; then
+    if ! $(f_is_installed "handbrake-cli"); then
+    echo
+    echo "Installing HandBrake"
+    apt-get install --yes handbrake-cli libatlas-base-dev nvidia-driver-390
+    echo "HandBrake installed."
+    fi
+  fi
+
+if $install_ifupdown ; then f_install ifupdown; fi
+if $install_inotify_tools ; then f_install "inotify-tools"; fi
+
+# lsyncd
+if $install_lsyncd ; then
+  if ! $(f_is_installed lsyncd); then
+  echo
+  echo "Installing lsyncd"
+  apt-get install --yes lsyncd
+  mkdir -p /etc/lsyncd
+  mkdir -p /var/log/lsyncd
+  systemctl start lsyncd
+  systemctl enable lsyncd
+  echo "lsyncd installed."
+  fi
+fi
+
+# mailutils
+if $install_mailutils ; then
+  if ! $(f_is_installed mailutils); then
+  echo
+  echo "Installing mailutils"
+  debconf-set-selections <<< "postfix postfix/relayhost $RELAYHOST"
+  debconf-set-selections <<< "postfix postfix/mailname string $MAILNAME@$DOMAIN_NAME"
+  debconf-set-selections <<< "postfix postfix/main_mailer_type string $MAIN_MAILER_TYPE"
+  apt-get install --yes mailutils postfix
+  ufw allow SMTP
+  echo "mailutils installed."
+  fi
+fi
+
+# MakeMKV
+# DON'T USE THE SNAP INSTALLER
+if $install_makemkv ; then
+  if ! $(f_is_installed "makemkv-bin"); then
+    echo
+    echo "Installing MakeMKV"
+    printf '\n\n' | add-apt-repository --yes ppa:heyarje/makemkv-beta
+    apt-get update
+    apt-get install --yes makemkv-bin makemkv-oss ccextractor
+    # Configure MakeMKV
+        usermod -a -G cdrom $ADMIN_USER
+    echo "MakeMKV installed."
+    fi
+  fi
+
+# MySQL Server
+# AUTOMATION PROBLEM: PROMPTS FOR PASSWORD. See https://askubuntu.com/questions/1350537/automating-un-installing-mysql
+if $install_mysql_server ; then
+  if ! $(f_is_installed "mysql-server"); then
+  echo
+  echo "Installing MySQL Server"
+    ###### EXTREMELY IMPORTANT: Edit /etc/mysql/mysql.conf.d/mysqld.cnf and open up bind-address * ###########
+    # Generate passwords
+        echo
+        echo "Generating passwords for MySQL and phpMyAdmin."
+        apt-get install --yes apg
+        NUMBER_OF_DESIGNATED_PASSWORDS=7
+        TEMP_PASSWORD_INCLUDE="/tmp/passwords"
+        echo "" > $TEMP_PASSWORD_INCLUDE
+        echo "PASSWORD_ME=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
+        # echo "PASSWORD_UBUNTU=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
+        if $install_mysql_server ; then
+           echo "MYSQL_ROOT_PASSWORD=\"$(apg -c cl_seed -a 1 -m $MAX_MYSQL_PASSWORD_LENGTH -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
+           echo "MYSQL_ADMIN_PASSWORD=\"$(apg -c cl_seed -a 1 -m $MAX_MYSQL_PASSWORD_LENGTH -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
+           if $install_phpmyadmin ; then
+               echo "PHPMYADMIN_APP_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
+               echo "PHPMYADMIN_ROOT_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
+               echo "PHPMYADMIN_APP_DB_PASS=\"$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -E $EXCLUDED_PASSWORD_CHARACTERS)\"" >> $TEMP_PASSWORD_INCLUDE
+               fi
+           fi
+        echo "" >> $TEMP_PASSWORD_INCLUDE
+        chown $ROOT_USER:$ROOT_USER $TEMP_PASSWORD_INCLUDE
+        chmod 500 $TEMP_PASSWORD_INCLUDE
+        source $TEMP_PASSWORD_INCLUDE
+        # END Generate passwords
+  MYSQL_PACKAGES="mysql-server openssl libcurl4-openssl-dev libssl-dev php-gmp php-symfony php-imagick php-twig-doc php-symfony-translation"
+  apt-get install --yes $MYSQL_PACKAGES
+  ufw allow MySQL
+  mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User=''"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test_%'"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$MYSQL_ADMIN_NAME'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_ADMIN_PASSWORD'"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_ADMIN_NAME'@localhost WITH GRANT OPTION"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES"
+  mkdir -p $MYSQL_CLIENT_CERTS_DIR
+  cp "$MYSQL_SERVER_BIN_DIR/ca.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOSTNAME-MySQL-ca.pem"
+  cp "$MYSQL_SERVER_BIN_DIR/client-cert.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOSTNAME-MySQL-client-cert.pem"
+  cp "$MYSQL_SERVER_BIN_DIR/client-key.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOSTNAME-MySQL-client-key.pem"
+  chown -R $ADMIN_USER:$ADMIN_USER "$MYSQL_CLIENT_CERTS_DIR"
+  # Adjust permissions
+  # IMPORTANT: This seems like a major security problem.
+  # Default permissions are 600,
+  # and 644 allows anyone to see things like the password.
+  # As of this writing (8/7/2022),
+  # that's OK because no passwords are stored there.
+    chmod 644 /etc/mysql/conf.d/mysqldump.cnf
+  # Install .my.cnf in home directory
+    backup-file $ADMIN_HOME_DIR/.my.cnf
+    cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.my.cnf $ADMIN_HOME_DIR/.my.cnf
+    replace-in-file "$ADMIN_HOME_DIR/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
+    replace-in-file "$ADMIN_HOME_DIR/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
+    chown $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.my.cnf"*
+    chmod 600 "$ADMIN_HOME_DIR/.my.cnf"*
+  # Install .my.cnf for root user
+    backup-file $ROOT_HOME_DIR/.my.cnf
+    cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.my.cnf $ROOT_HOME_DIR/.my.cnf
+    replace-in-file "$ROOT_HOME_DIR/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
+    replace-in-file "$ROOT_HOME_DIR/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
+    chown $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.my.cnf"*
+    chmod 600 "$ROOT_HOME_DIR/.my.cnf"*
+  echo "MySQL server installed."
+    # phpMyAdmin
+    # phpMyAdmin should be installed AFTER php and MySQL
+        if $install_phpmyadmin ; then
+          echo
+          echo "Installing phpMyAdmin"
+          # Based on https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04
+          # UPDATED TO: https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-22-04
+          debconf-set-selections <<< "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2"
+          debconf-set-selections <<< "phpmyadmin phpmyadmin/dbconfig-install boolean true"
+          debconf-set-selections <<< "phpmyadmin phpmyadmin/app-password-confirm password $PHPMYADMIN_APP_PASS"
+          debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/admin-pass password $PHPMYADMIN_ROOT_PASS"
+          debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_APP_DB_PASS"
+          apt-get install --yes phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+          phpenmod mbstring
+          cp $GIT_GO_CONFIGS$PHPMYAMIN_DIR/phpmyadmin.config.inc.php $PHPMYADMIN_DIR/config.inc.php
+          chown -R www-data:www-data $PHPMYADMIN_DIR
+          chmod 644 $PHPMYADMIN_DIR/config.inc.php
+          systemctl restart apache2
+          echo "phpMyAdmin installed."
+          fi
+  fi
+fi
+
+if $install_net_tools ; then f_install "net-tools"; fi
+
+# nfs
+if $install_nfs ; then
+  if ! $(f_is_installed "nfs-common"); then
+    echo
+    echo "Installing nfs."
+    apt-get install --yes nfs-common
+    apt-get install --yes nfs-kernel-server
+    echo "nfs installed."
+    fi
+  fi
+
+# openssl
+if $install_openssl ; then
+  if ! $(f_is_installed openssl); then
+  echo
+  echo "Installing openssl"
+  apt-get install --yes openssl
+  echo "openssl installed."
+  fi
+fi
+
+# openvpn
+if $install_openvpn ; then
+  if ! $(f_is_installed openvpn); then
+    echo
+    echo "Installing openvpn."
+    apt-get install --yes openvpn                   # Secure IP tunnel daemon
+    upw allow OpenVPN
+    echo "openvpn installed."
+    fi
+  fi
+
+# Plex Media Server
+if $install_plexmediaserver ; then
+  if ! $(f_is_installed plexmediaserver); then
+    # Tested through Ubuntu 22
+    # Install Plex Media Server
+      echo
+      echo "Installing Plex Media Server"
+      # As of Ubuntu 22:
+          snap install plexmediaserver
+      # Prior to Ubuntu 22:
+          # rm -rf /etc/apt/sources.list.d/plexmediaserver.list
+          # apt-get install --yes wget curl gpg gnupg2 software-properties-common apt-transport-https lsb-release ca-certificates
+          # echo deb https://downloads.plex.tv/repo/deb public main | sudo tee /etc/apt/sources.list.d/plexmediaserver.list
+          # wget https://downloads.plex.tv/plex-keys/PlexSign.key
+          # cat PlexSign.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/PlexSigkey.gpg
+          # apt-get --yes update
+          # apt-get install --yes plexmediaserver
+      ufw allow 'Plex Media Server' # if not already specified
+      echo "Plex Media Server installed."
+    if $install_tautulli ; then
+        # Install Tautulli for https://this-server:8181
+        # Ref: https://snapcraft.io/install/tautulli/ubuntu
+            echo
+            echo "Installing Tautulli."
+            # apt-get install --yes snapd
+            snap install tautulli
+            ufw allow Tautulli
+            echo "Tautulli installed."
+        fi
+  fi
+fi
+
+if $install_proftpd ; then f_install proftpd; fi
+if $install_putty_tools ; then f_install "putty-tools"; fi
+if $install_rclone ; then f_install rclone; fi
+if $install_resolvconf ; then f_install resolvconf; fi
+if $install_ripmime ; then f_install ripmime; fi
+if $install_rsync ; then f_install rsync; fi
+if $install_sshfs ; then f_install sshfs; fi
+if $install_sysbench ; then f_install sysbench; fi
+if $install_tasksel ; then f_install tasksel; fi
+if $install_unzip ; then f_install unzip; fi
+if $install_vim ; then f_install vim; fi
+
+# Webmin
+if $install_webmin ; then
+    if ! $(f_is_installed webmin); then
+        echo
+        echo "Installing Webmin"
+        wget http://www.webmin.com/download/deb/webmin-current.deb
+        WEBMIN_PACKAGES="openssl libcurl4-openssl-dev libssl-dev perl"
+        WEBMIN_PACKAGES+=" libnet-ssleay-perl libauthen-pam-perl"
+        WEBMIN_PACKAGES+=" libpam-runtime libio-pty-perl apt-show-versions"
+        WEBMIN_PACKATES+=" python libsocket6-perl libapt-pkg-perl"
+        apt-get install --yes $WEBMIN_PACKAGES
+        dpkg --install ./webmin-current.deb
+        rm -f ./webmin-current.deb
+        ufw allow Webmin
+        echo "Webmin installed."
+        fi
+    fi
+
+# DESKTOP APPS THAT REQUIRE GUI
+if $is_desktop ; then
+
+    # Cubic
+    if $install_cubic ; then
+        echo
+        echo Installing Cubic
+        apt-add-repository --yes ppa:cubic-wizard/release
+        # read -p "Press enter to continue"
+        apt-get --yes update
+        apt-get install --yes cubic
+        echo "Cubic installed."
+        fi
+
+    # filezilla
+    if $install_filezilla ; then
+        echo
+        echo "Installing filezilla."
+        apt-get install --yes filezilla             # A powerful client for plain FTP, FTP over SSL/TLS (FTPS) and the SSH File Transfer Protocol (SFTP)
+        echo "filezilla installed."
+        fi
+
+    # gimp
+    if $install_gimp ; then
+        echo
+        echo "Installing gimp."
+        apt-get install --yes gimp                  # An image manipulation and paint program
+        echo "gimp installed."
+        fi
+
+    # Google Chrome
+    if $install_chrome ; then
+        echo
+        echo "Installing Google Chrome."
+        apt-get install --yes wget gdebi-core
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        gdebi --n google-chrome-stable_current_amd64.deb
+        rm -f ./google-chrome-stable_current_amd64.deb
+        echo "Google Chrome installed."
+        fi
+
+    # Microsoft Edge
+    if $install_edge ; then
+        echo
+        echo "Installing Microsoft Edge."
+        apt-get --yes install software-properties-common apt-transport-https curl wget ca-certificates
+        wget -O- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/microsoft-edge.gpg
+        echo 'deb [signed-by=/usr/share/keyrings/microsoft-edge.gpg] https://packages.microsoft.com/repos/edge stable main' | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
+        apt-get --yes update
+        apt-get install microsoft-edge-stable --yes
+        echo "Microsoft Edge installed."
+        fi
+
+    # xrdp
+    if $install_xrdp ; then
+        echo
+        echo "Installing xrdp"
+        apt-get install --yes xrdp                  # A Remote Desktop Protocol (RDP) server
+        echo "xrdp installed."
+        fi
+
+    # Zoom Client
+    if $install_zoom ; then
+        echo
+        echo "Installing Zoom Client"
+        wget https://zoom.us/client/latest/zoom_amd64.deb
+        apt-get install --yes ./zoom_amd64.deb
+        rm -f ./zoom_amd64.deb
+        echo "Zoom client installed."
+        fi
+
+    fi
+
+
+#######################################################################################
+#   ADDITIONAL CONFIGURATION
+#######################################################################################
+
+# Ref: https://askubuntu.com/questions/1058750/new-alert-keeps-showing-up-server-returned-error-nxdomain-mitigating-potential
+# This corrects a problem in which you'll get constant syslog errors:
+#    Server returned error NXDOMAIN, mitigating potential DNS violation DVE-2018-0001, retrying transaction with reduced feature level UDP.
+# If this causes trouble, you can restore the original link with
+#    sudo ln -sf ../run/resolvconf/resolv.conf /etc/resolv.conf
+# ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+
+# 8/5/2022: Drop this section?
+# # Copy git configs to $ADMIN_USER
+# if [ -f "$ROOT_HOME_DIR/.gitconfig" ]; then
+#     echo
+#     echo Setting permissions for $ADMIN_HOME_DIR/.gitconfig
+#     cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
+#     chown $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.gitconfig
+#     chmod 600 $ADMIN_HOME_DIR/.gitconfig
+#     fi
+
+# # Add peripherals to /etc/fstab
+#     for KEY in "${!MOUNT_POINT_DEFINITION[@]}"; do
+#         mkdir -p "$KEY"
+#         if [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ] || [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ]; then
+#             echo "" >> /etc/fstab
+#         fi
+#         if [ ! -z "${MOUNT_POINT_DESCRIPTION["$KEY"]}" ]; then
+#             echo "# ${MOUNT_POINT_DESCRIPTION["$KEY"]}" >> /etc/fstab
+#         fi
+#         if [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ]; then
+#             echo "${MOUNT_POINT_DEFINITION["$KEY"]}" >> /etc/fstab
+#         fi
+#         if [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ] || [ ! -z "${MOUNT_POINT_DEFINITION["$KEY"]}" ]; then
+#             echo "" >> /etc/fstab
+#         fi
+#    done
+
+# Unmount peripherals currently mounted under /media/$LOGNAME/*
+    echo
+    echo "Unmounting everything mounted in /media/$LOGNAME/"
+    umount -q "/media/$LOGNAME/"*
+
+# Update hostname
+    echo
+    echo "Updating hostname to $HOSTNAME"
+    echo hostnamectl set-hostname $HOSTNAME
+    hostnamectl set-hostname $HOSTNAME
+    echo $HOSTNAME > /etc/hostname
+    chmod 644 /etc/hostname
+    chown $ROOT_USER:$ROOT_USER /etc/hostname
+
+# Set up $ADMIN_USER
+    echo
+    echo Making $ADMIN_USER a member of group sudo
+    # Make $ADMIN_USER a member of group sudo
+        usermod -aG sudo $ADMIN_USER
+    # Generate SSH keys for $ADMIN_USER
+    # Should this occur somewhere else? SSH setup?
+        # Commenting this out 8/5/2022.
+        # sudo -u $ADMIN_USER ssh-keygen -t ed25519 -C "$SSH_KEY_NAME" -P "" -q -f "$ADMIN_HOME_DIR/.ssh/id_ed25519"
+
+# Configure sudo user(s)
+    echo
+    echo Configuring $ADMIN_USER as a sudo user
+    echo "$ADMIN_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/lane-NOPASSWD-users
+    # echo "$USER_UBUNTU ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/lane-NOPASSWD-users
+    chmod 440 /etc/sudoers.d/lane-NOPASSWD-users
+
+# THIS IS CRUCIAL. It updates /etc/ftab and /etc/NetworkManager/system-connections
+# Update
+    echo
+    echo "Running upd"
+    upd
+
+# Remount all using /etc/fstab, as amended above (upd)
+    echo
+    echo Mounting all known peripherals
+    mount --all
+
+# Invoke /usr/local/sbin/_apply-configs
+    echo
+    echo Applying configuration
+    $SBIN_DIR/_apply-configs
+
+##################################################################################
+# DIAGNOSTIC MARKER: Made it this far without bricking the server 8/5/2022 1:34PM
+# Problem seems to be with upd, so working that angle.
+##################################################################################
+
+# Report password information
+    echo
+    echo "Writing password information to $OS_INSTALL_INFO_PATH"
+    mkdir -p $(dirname $OS_INSTALL_INFO_PATH)
+    rm -f "$OS_INSTALL_INFO_PATH"
+    touch "$OS_INSTALL_INFO_PATH"
+    if $install_mysql_server ; then
+        echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD" >> $OS_INSTALL_INFO_PATH
+        echo "MYSQL_ADMIN_NAME: $MYSQL_ADMIN_NAME" >> $OS_INSTALL_INFO_PATH
+        echo "MYSQL_ADMIN_PASSWORD: $MYSQL_ADMIN_PASSWORD" >> $OS_INSTALL_INFO_PATH
+        if $install_phpmyadmin ; then
+            echo "PHPMYADMIN_APP_PASS: $PHPMYADMIN_APP_PASS" >> $OS_INSTALL_INFO_PATH
+            echo "PHPMYADMIN_ROOT_PASS: $PHPMYADMIN_ROOT_PASS" >> $OS_INSTALL_INFO_PATH
+            echo "PHPMYADMIN_APP_DB_PASS: $PHPMYADMIN_APP_DB_PASS" >> $OS_INSTALL_INFO_PATH
+            fi
+        echo "" >> $OS_INSTALL_INFO_PATH
+        fi
+    echo "# Add to $GIT_GO_CONFIGS/ADMIN_USER_DIR/.ssh/authorized_keys:" >> $OS_INSTALL_INFO_PATH
+    echo "" >> $OS_INSTALL_INFO_PATH
+    echo "# $SSH_KEY_NAME" >> $OS_INSTALL_INFO_PATH
+    if [ -f $ADMIN_HOME_DIR/.ssh/id_rsa.pub ]; then
+      cat "$ADMIN_HOME_DIR/.ssh/id_rsa.pub" >> $OS_INSTALL_INFO_PATH
+      fi
+    if [ -f $ADMIN_HOME_DIR/.ssh/id_ed25519.pub ]; then
+      cat "$ADMIN_HOME_DIR/.ssh/id_ed25519.pub" >> $OS_INSTALL_INFO_PATH
+      fi
+    echo "#" >> $OS_INSTALL_INFO_PATH
+    chmod 400 $OS_INSTALL_INFO_PATH
+    chown $ROOT_USER:$ROOT_USER $OS_INSTALL_INFO_PATH
+    echo ""
+    # echo "# IMPORTANT: Move the contents of $OS_INSTALL_INFO_PATH"
+    # echo "#    into 1Password NOW, delete it, and reboot."
+    # echo "# Once you continue, these passwords cannot be recovered."
+    # echo ""
+    rm $TEMP_PASSWORD_INCLUDE
+
+# Took this out. It needs to happen manually, if at all. 4/30/2022
+# # Cold Restore
+#    cold-restore
+
+# Enable ufw
+    echo
+    echo Enabling ufw
+    ufw allow SSH
+    echo y | sudo ufw enable
+
+# Last instructions
+	echo
+	echo -en "\007" # Beep
+    echo "Reboot using   sudo init 6"
+    echo "THEN run       sudo cold-restore (optional)"
+    echo "THEN Reboot again."
+    echo
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+
