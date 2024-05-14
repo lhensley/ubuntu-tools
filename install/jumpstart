@@ -37,16 +37,12 @@ echo chmod 600 seeds.tar.gz
 chmod 600 seeds.tar.gz
 
 echo
-echo chmod 600 seeds.tar.gz
-chmod 600 seeds.tar.gz
-
-echo
 echo tar -xvzf ./seeds.tar.gz
 tar -xvzf ./seeds.tar.gz
 
 echo
-echo chmod 700 ./clean-setup && sudo ./clean-setup
-chmod 700 ./clean-setup && sudo ./clean-setup
+echo "chmod 700 ./clean-setup"
+chmod 700 ./clean-setup
 
 echo
 echo chown -R $SUDO_USER:$SUDO_USER ./*
