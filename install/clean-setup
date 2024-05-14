@@ -216,6 +216,8 @@ f_install "moreutils"
     echo "php installed."
     fi;
 
+f_pause
+
 # ssh is installed with the OS.
     ufw allow SSH
 
@@ -247,6 +249,8 @@ if $install_apache2 ; then
     echo "apache2 installed."
     fi
   fi
+
+f_pause
 
 if $install_apg ; then f_install apg; fi
 
@@ -288,6 +292,8 @@ if $install_gzip ; then f_install gzip; fi
     fi
   fi
 
+f_pause
+
 if $install_ifupdown ; then f_install ifupdown; fi
 if $install_inotify_tools ; then f_install "inotify-tools"; fi
 
@@ -318,6 +324,8 @@ if $install_mailutils ; then
   echo "mailutils installed."
   fi
 fi
+
+f_pause
 
 # MakeMKV
 # DON'T USE THE SNAP INSTALLER
@@ -424,6 +432,8 @@ if $install_mysql_server ; then
   fi
 fi
 
+f_pause
+
 if $install_net_tools ; then f_install "net-tools"; fi
 
 # nfs
@@ -477,6 +487,8 @@ if $install_plexmediaserver ; then
           # apt-get install --yes plexmediaserver
       ufw allow 'Plex Media Server' # if not already specified
       echo "Plex Media Server installed."
+f_pause
+
     if $install_tautulli ; then
         # Install Tautulli for https://this-server:8181
         # Ref: https://snapcraft.io/install/tautulli/ubuntu
@@ -489,6 +501,8 @@ if $install_plexmediaserver ; then
         fi
   fi
 fi
+
+f_pause
 
 if $install_proftpd ; then f_install proftpd; fi
 if $install_putty_tools ; then f_install "putty-tools"; fi
@@ -519,6 +533,8 @@ if $install_webmin ; then
         echo "Webmin installed."
         fi
     fi
+
+f_pause
 
 # DESKTOP APPS THAT REQUIRE GUI
 if $is_desktop ; then
@@ -656,12 +672,16 @@ if $is_desktop ; then
         # Commenting this out 8/5/2022.
         # sudo -u $ADMIN_USER ssh-keygen -t ed25519 -C "$SSH_KEY_NAME" -P "" -q -f "$ADMIN_HOME_DIR/.ssh/id_ed25519"
 
+f_pause
+
 # Configure sudo user(s)
     echo
     echo Configuring $ADMIN_USER as a sudo user
     echo "$ADMIN_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/lane-NOPASSWD-users
     # echo "$USER_UBUNTU ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/lane-NOPASSWD-users
     chmod 440 /etc/sudoers.d/lane-NOPASSWD-users
+
+f_pause
 
 # THIS IS CRUCIAL. It updates /etc/ftab and /etc/NetworkManager/system-connections
 # Update
@@ -673,6 +693,8 @@ if $is_desktop ; then
     echo
     echo Mounting all known peripherals
     mount --all
+
+f_pause
 
 # Invoke /usr/local/sbin/_apply-configs
     echo
@@ -719,6 +741,8 @@ if $is_desktop ; then
     # echo "# Once you continue, these passwords cannot be recovered."
     # echo ""
     rm $TEMP_PASSWORD_INCLUDE
+
+f_pause
 
 # Took this out. It needs to happen manually, if at all. 4/30/2022
 # # Cold Restore
