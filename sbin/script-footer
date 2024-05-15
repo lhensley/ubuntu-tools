@@ -1,9 +1,0 @@
-#!/bin/bash
-# $SBIN_DIR/script-footer
-
-# Set to false 11/25/2020. Do it manually if you want it.
-if $LOG_END; then
-	logger -t "$(basename $0)" End
-	fi
-
-exit $EXIT_STATUS_SUCCESS

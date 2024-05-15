@@ -1,6 +1,0 @@
-#!/bin/bash
-
-# As of 11/21/2020, no other command calls this one.
-
-echo $(date +%s)
-exit 0

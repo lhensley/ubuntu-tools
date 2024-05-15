@@ -1,4 +1,0 @@
-[OpenVPN]
-title="OpenVPN"
-description="Virtual Private Network"
-ports=1194/udp

@@ -1,4 +1,0 @@
-[SMTP]
-title="SMTP"
-description="Distributed version control system"
-ports=25/tcp|587/tcp
