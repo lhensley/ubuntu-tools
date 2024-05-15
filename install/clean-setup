@@ -34,6 +34,9 @@ if [[ $EUID -ne 0 ]]; then
     VARIABLES_ARE_DEFINED=false
     source ./variables
 
+# Change to SETUP directory
+    cd "$ADMIN_DIR/SETUP"
+
 # Confirm that the variables have been updated.
     echo
     echo -en "\007" # Beep
@@ -194,6 +197,9 @@ if [[ $EUID -ne 0 ]]; then
 ########### SOFTWARE INSTALLATIONS
 ###############################################################
 
+# Change to HOME directory and delete SETUP.
+    cd "$ADMIN_DIR"
+    rm -r "$ADMIN_DIR/SETUP"
 
 # Mandatory installations
 ###############################################################
@@ -215,8 +221,6 @@ f_install "moreutils"
     systemctl restart apache2
     echo "php installed."
     fi;
-
-f_pause
 
 # ssh is installed with the OS.
     ufw allow SSH
@@ -250,8 +254,6 @@ if $install_apache2 ; then
     fi
   fi
 
-f_pause
-
 if $install_apg ; then f_install apg; fi
 
 # apt-cacher-ng
@@ -277,7 +279,7 @@ if $install_exiftool ; then f_install exiftool; fi
 if $install_fail2ban ; then f_install fail2ban; fi
 if $install_ffmpeg ; then f_install ffmpeg; fi
 if $install_ghostscript ; then f_install ghostscript ; fi
-if $install_git ; then f_install git && ufw allow Git; fi
+if $install_git ; then f_install git; fi
 if $install_gpg ; then f_install gpg; fi
 if $install_gzip ; then f_install gzip; fi
 
@@ -291,8 +293,6 @@ if $install_gzip ; then f_install gzip; fi
     echo "HandBrake installed."
     fi
   fi
-
-f_pause
 
 if $install_ifupdown ; then f_install ifupdown; fi
 if $install_inotify_tools ; then f_install "inotify-tools"; fi
@@ -324,8 +324,6 @@ if $install_mailutils ; then
   echo "mailutils installed."
   fi
 fi
-
-f_pause
 
 # MakeMKV
 # DON'T USE THE SNAP INSTALLER
@@ -432,8 +430,6 @@ if $install_mysql_server ; then
   fi
 fi
 
-f_pause
-
 if $install_net_tools ; then f_install "net-tools"; fi
 
 # nfs
@@ -487,8 +483,6 @@ if $install_plexmediaserver ; then
           # apt-get install --yes plexmediaserver
       ufw allow 'Plex Media Server' # if not already specified
       echo "Plex Media Server installed."
-f_pause
-
     if $install_tautulli ; then
         # Install Tautulli for https://this-server:8181
         # Ref: https://snapcraft.io/install/tautulli/ubuntu
@@ -501,8 +495,6 @@ f_pause
         fi
   fi
 fi
-
-f_pause
 
 if $install_proftpd ; then f_install proftpd; fi
 if $install_putty_tools ; then f_install "putty-tools"; fi
@@ -533,8 +525,6 @@ if $install_webmin ; then
         echo "Webmin installed."
         fi
     fi
-
-f_pause
 
 # DESKTOP APPS THAT REQUIRE GUI
 if $is_desktop ; then
@@ -672,16 +662,12 @@ if $is_desktop ; then
         # Commenting this out 8/5/2022.
         # sudo -u $ADMIN_USER ssh-keygen -t ed25519 -C "$SSH_KEY_NAME" -P "" -q -f "$ADMIN_HOME_DIR/.ssh/id_ed25519"
 
-f_pause
-
 # Configure sudo user(s)
     echo
     echo Configuring $ADMIN_USER as a sudo user
     echo "$ADMIN_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/lane-NOPASSWD-users
     # echo "$USER_UBUNTU ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/lane-NOPASSWD-users
     chmod 440 /etc/sudoers.d/lane-NOPASSWD-users
-
-f_pause
 
 # THIS IS CRUCIAL. It updates /etc/ftab and /etc/NetworkManager/system-connections
 # Update
@@ -693,8 +679,6 @@ f_pause
     echo
     echo Mounting all known peripherals
     mount --all
-
-f_pause
 
 # Invoke /usr/local/sbin/_apply-configs
     echo
@@ -741,8 +725,6 @@ f_pause
     # echo "# Once you continue, these passwords cannot be recovered."
     # echo ""
     rm $TEMP_PASSWORD_INCLUDE
-
-f_pause
 
 # Took this out. It needs to happen manually, if at all. 4/30/2022
 # # Cold Restore

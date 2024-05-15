@@ -57,7 +57,8 @@
     install_rclone=false            # command-line program to manage files on cloud storage. Details at https://rclone.org/
     install_resolvconf=false        # Name resolver
     install_sysbench=false          # A modular, cross-platform and multi-threaded benchmark tool.
-    install_tautulli=false          # Monitoring tool for Plex Media Server ***** PLEX MEDIA SERVER MUST BE INSTALLED TO INSTALL TAUTULLI *****
+    ###########   PLEX IS TO BE INSTALLED!   #############
+    install_tautulli=true           # Monitoring tool for Plex Media Server ***** PLEX MEDIA SERVER MUST BE INSTALLED TO INSTALL TAUTULLI *****
     install_uuid=false              # Use uuidgen instead. It's built-in.
 
 # STANDARD software (default to true)
