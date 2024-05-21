@@ -176,8 +176,9 @@ if [[ $EUID -ne 0 ]]; then
     echo "Copying scripts into /usr/local/sbin"
     cp -r "$GIT_GO_SBIN" "$SBIN_PARENT"
     chown -R $ROOT_USER:$ROOT_USER "$SBIN_DIR"
-    find "$SBIN_DIR" -type d -print0 | sudo xargs -0 chmod 750
-    find "$SBIN_DIR" -type f -print0 | sudo xargs -0 chmod 540
+    chmod -R 750 "$SBIN_DIR"
+    # find "$SBIN_DIR" -type d -print0 | sudo xargs -0 chmod 750
+    # find "$SBIN_DIR" -type f -print0 | sudo xargs -0 chmod 540
 
 # Run upd
     echo

@@ -50,6 +50,8 @@ if ! $(tar -czf "$SEED_TAR_FILE" -C "$TEMP_DIR" .); then
 	f_die "Failed creating '$SEED_TAR_FILE'" false $?;
 	fi
 echo "Encrypting '$SEED_TAR_FILE' to '$SEED_GPG_FILE'"
+echo Password is in 1Password at '"'Seed File for Ubuntu Installation'"'.
+f_pause
 if ! $(gpg -c "$SEED_TAR_FILE"); then
 	echo "Deleting '$TEMP_DIR'"
 	rm -r "$TEMP_DIR"

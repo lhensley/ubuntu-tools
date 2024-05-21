@@ -94,4 +94,8 @@
 # Set a flag to confirm that the variables are defined
     VARIABLES_ARE_DEFINED=true
 
+function f_pause () {
+  read -s -n 1 -p "Press any key to continue . . .\n"
+}
+
 # All done.

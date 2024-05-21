@@ -6,6 +6,10 @@ if [[ $EUID -ne 0 ]]; then
 	exit 1
 	fi
 
+function f_pause () {
+  read -s -n 1 -p "Press any key to continue . . .\n"
+}
+
 echo
 echo apt-get update && sudo apt-get dist-upgrade
 apt-get update && sudo apt-get dist-upgrade
@@ -15,6 +19,7 @@ echo apt-get -y install coreutils git gpg moreutils '\'
 echo "   " openssh-client openssh-server ufw util-linux
 apt-get -y install coreutils git gpg moreutils \
 	openssh-client openssh-server ufw util-linux
+systemctl enable –now ssh
 
 echo
 echo wget --no-cache -O seeds.tar.gz.gpg https://github.com/lhensley/go/raw/master/install/seeds.tar.gz.gpg
@@ -29,7 +34,9 @@ echo wget --no-cache -O variables https://github.com/lhensley/go/raw/master/inst
 wget --no-cache -O variables https://github.com/lhensley/go/raw/master/install/variables
 
 echo
-echo gpg -d -o seeds.tar.gz seeds.tar.gz.gpg "# Password in 1Password; search \"seed\""
+echo gpg -d -o seeds.tar.gz seeds.tar.gz.gpg
+echo Password is in 1Password at '"'Seed File for Ubuntu Installation'"'.
+f_pause
 gpg -d -o seeds.tar.gz seeds.tar.gz.gpg # Password in 1Password; search "seed"
 
 echo
