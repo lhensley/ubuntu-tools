@@ -1,0 +1,30 @@
+#!/bin/bash
+
+####################################################################
+# IMPORTANT: THIS IS NOT THE AUTOMATED VERSION MOST RECENTLY IN USE.
+# FOR THAT, SEE backup-plex-content
+####################################################################
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Require root
+	f_require_root
+
+# Run only on nuc01
+	f_require_host nuc01
+
+rsync -av --delete /mnt/12TBB/plex/* /mnt/Silver5TB-A/archives/plex
+rsync -av --delete /mnt/12TBB/plex-tv/* /mnt/Silver5TB-A/archives/plex-tv
+
+rsync -av --delete /mnt/12TBB/plex-dvr/* /mnt/Silver5TB-B/archives/plex-dvr
+rsync -av --delete /mnt/12TBB/plex-other/* /mnt/Silver5TB-B/archives/plex-other
+rsync -av --delete /mnt/12TBB/plex-videos/* /mnt/Silver5TB-B/archives/plex-videos
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0

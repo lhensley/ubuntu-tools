@@ -1,0 +1,19 @@
+#!/bin/bash
+# plex-config-restore
+
+# Include script setup file
+source $(dirname $0)/script-setup
+
+f_require_config "plex.backup.app.support"
+f_require_config "plex.live.app.support"
+f_require_directory "${LANE_CONFIG[plex.backup.app.support]}"
+f_require_directory "${LANE_CONFIG[plex.live.app.support]}"
+
+systemctl stop plexmediaserver
+cp -R "${LANE_CONFIG[plex.backup.app.support]}"/* "${LANE_CONFIG[plex.live.app.support]}"/
+chown -R plex:plex "${LANE_CONFIG[plex.live.app.support]}"
+systemctl start plexmediaserver
+
+# Include script footer file
+f_debug_variable "script.script-footer.pathname" "${LANE_CONFIG[script.script-footer.pathname]}"
+source ${LANE_CONFIG[script.script-footer.pathname]}

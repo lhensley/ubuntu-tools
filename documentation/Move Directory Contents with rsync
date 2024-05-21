@@ -1,0 +1,4 @@
+
+
+sudo rsync --remove-source-files -aloprtv SOURCE TARGET
+

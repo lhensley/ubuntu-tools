@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# "Run as a service" check
+#	if [ "$PPID" != "1" ]; then
+#		f_die "This script only runs as a systemd service. Try sudo systemctl start $(basename $0)" false
+#		fi
+#	SERVICE_FLAG=true;
+
+# Only allow this to run on server adam.
+	f_only_on_server "adam"
+
+# Do the looping work
+	THIS_SCRIPT=$(basename "$0")
+	while true; do
+		# Define file locations
+			SOURCE_SERVER="n6"
+			SOURCE_ROOT_DIR="/var/lib/plexmediaserver/Library/work"
+			TARGET_ROOT_DIR="/mnt/12TBA/plex-conversion/ts"
+			WAIT_AFTER_SOURCE_SCAN="1h"
+			MOVE_MASK="*.ts"
+			EXCLUDE_MASK1="*.m4v"
+			EXCLUDE_MASK2=".grab/"
+		# See https://github.com/$GITHUB_USER/documentation/rsync%20options.md
+#       sudo -u $ADMIN_USER \
+			rsync --remove-source-files --include "$MOVE_MASK" \
+			--exclude "$EXCLUDE_MASK1" --exclude "$EXCLUDE_MASK2" -aloprtv \
+			"$SOURCE_SERVER:$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR" \
+			| logger -t "$THIS_SCRIPT"
+		f_log_and_echo "Sleeping $WAIT_AFTER_SOURCE_SCAN." false
+		sleep "$WAIT_AFTER_SOURCE_SCAN"
+        done
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0

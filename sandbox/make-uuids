@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for i in {1..33554432}
+	do 
+		uuidgen >> /var/tmp/uuid.csv 
+	done
+

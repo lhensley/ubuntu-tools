@@ -1,0 +1,33 @@
+#!/bin/bash
+# move-m4v-to-storage
+# Takes no arguments
+
+production_mode=true
+debug_mode=false
+# debug_mode=true
+if $debug_mode ; then
+  set -x
+  fi
+
+# Make sure only root can run our script
+if [[ $EUID -ne 0 ]]; then
+  echo "This script must be run as root."
+  exit 1
+fi
+
+# Confirm that this host is oz
+if [[ $(hostname -s) != "oz" ]]; then
+  echo "This script can ony be run on server oz."
+  exit 1
+fi
+
+WORK_ROOT="/mnt/ssd1tb/plex"
+STORE_ROOT="/mnt/rerun/plex"
+
+if [[ ! -d "$STORE_ROOT" ]]; then
+	mount --all
+fi
+
+find "$WORK_ROOT" -type f -name "*.m4v" -print -exec move-one-file {} "WORK_ROOT" "STORE_ROOT" \;
+
+exit 0

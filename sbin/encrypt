@@ -1,0 +1,9 @@
+#!/bin/bash
+# encrypt
+# Simple symmetric encription using gpg and AES256
+
+if ! [ -x gpg ]; then
+	sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq gpg
+fi
+
+gpg --symmetric --cipher-algo AES256 $1

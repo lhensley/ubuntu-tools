@@ -1,0 +1,40 @@
+#!/bin/bash
+# install-phpmyadmin
+# Based on https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-22-04
+# Assumes Ubuntu 22.04
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Require root
+	f_require_root
+
+# Some error checking that would help:
+	# Confirm that debconf-set-selections with
+		# sudo dpkg-query -S /usr/bin/debconf-set-selections
+
+# Install
+	# To restart relevant services automatically without prompting the user
+		sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf
+	# Update existing Debian packages
+		apt-get-update-if-needed
+	# Install PHP prerequisites:
+		apt install php-mbstring php-zip php-gd php-json php-curl
+	# Install apache2 prerequisites
+		phpenmod mbstring
+		systemctl restart apache2
+	# Insert new values into the debconf database.
+		debconf-set-selections <<< "phpmyadmin phpmyadmin/dbconfig-install boolean true"
+		debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/app-pass \"''\""
+		debconf-set-selections <<< "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2"
+	# Install main package
+		apt install phpmyadmin
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+

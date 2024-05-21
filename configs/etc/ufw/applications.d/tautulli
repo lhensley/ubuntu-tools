@@ -1,0 +1,4 @@
+[Tautulli]
+title="Tautulli"
+description="Statistics for Plex Media Server"
+ports=8181/tcp

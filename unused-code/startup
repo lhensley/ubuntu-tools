@@ -1,0 +1,20 @@
+#!/bin/bash
+# nuc01.lanehensley.org:/var/www/lanehensley.org/startup
+# 
+# Download this file with 
+#   wget https://lanehensley.org/startup
+# Then issue these commands:
+#   chmod 700 ./startup
+#   ./startup
+#
+
+wget --no-cache https://raw.githubusercontent.com/$GITHUB_USER/go/master/sbin/initialize-server
+chmod 700 ./initialize-server
+#./initialize-server
+echo
+echo "To continue, first select the packages you want to install with"
+echo "     vi ./initialize-server"
+echo "Then run the initialization with"
+echo "     sudo ./initialize-server"
+echo "Note: This script runs for a long time."
+echo

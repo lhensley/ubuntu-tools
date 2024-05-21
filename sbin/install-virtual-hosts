@@ -1,0 +1,357 @@
+#!/bin/bash
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Require root
+	f_require_root
+
+# DEFINE THESE VARIABLES BEFORE RUNNING THE SCRIPT!
+    # fqdn='domain.tld'
+    web_admin_user=$ADMIN_NAME
+    web_admin_email=$ADMIN_EMAIL
+    remove=false
+    mysql_root_user=''
+    mysql_root_password=''
+    script_name=$0
+    current_directory=$(pwd)
+    docroot_base="/var/www"
+    apache2_configs="/etc/apache2"
+    error_log="/var/log/apache2/error.log"
+    custom_log="/var/log/apache2/access.log"
+    certificate_conf_dir="/etc/letsencrypt"
+    certificate_live_dir="live"
+    install_wordpress=false
+
+    debug_mode=false
+    #debug_mode=true
+    if $debug_mode ; then
+      set -x
+      fi
+
+# Abort and exit
+function abort_and_exit {
+  cd $current_directory
+  echo "Aborted."
+  exit 1
+  }
+
+# Clean exit
+function clean_exit {
+  cd $current_directory
+  exit 0
+  }
+
+function print_usage {
+  echo "Usage: $script_name [options] fully-qualified-domain-name"
+  echo "Options:"
+  echo "  -a    Apache2 Configs Directory (default: /etc/apache2)"
+  echo "  -c    Certificate Config Directory (default: /etc/letsencrypt)"
+  echo "  -d    Document Root Container Directory (default: /var/www)"
+  echo "  -e    Error log file (default: /var/log/apache2/error.log)"
+  echo "  -f    Custom log file (default: /var/log/apache2/access.log)"
+  echo "  -h    Display this help message"
+  echo "  -l    Live Certificate Config Directory (default: \"live\" in directory specified with -c)"
+  echo "  -p    MySQL Password; only needed if WordPress is being installed"
+  echo "  -u    MySQL User Name; only needed if WordPress is being installed"
+  echo "  -w    Web Admin User's Full Name (default: \"Lane Hensley\")"
+  echo "  -W    Install WordPress"
+  echo "  -x    Web Admin User's Email Address (default \"admin@lanehensley.org\")"
+  echo "  -X    Remove/uninstall the virtual host"
+  echo "Example installation with WordPress:     sudo $script_name -W -u MYSQL_USER -p MYSQL_PASSWORD FQDN"
+  echo "Example installation without WordPress:  sudo $script_name FQDN"
+  echo "Example removal including WordPress:     sudo $script_name -X -W FQDN"
+  echo "Example removal without WordPress:       sudo $script_name -X FQDN"
+}
+
+# Following tutorial at https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/
+while getopts ":a:c:d:e:f:hl:p:u:w:Wx:X" opt; do
+    case ${opt} in
+      a )  apache2_configs=$OPTARG
+           ;;
+      c )  certificate_conf_dir=$OPTARG
+           ;;
+      d )  docroot_base=$OPTARG
+           ;;
+      e )  error_log=$OPTARG
+           ;;
+      f )  custom_log=$OPTARG
+           ;;
+      h )  print_usage
+           clean_exit
+           ;;
+      l )  certificate_live_dir=$OPTARG
+           ;;
+      p )  mysql_root_password=$OPTARG
+           ;;
+      u )  mysql_root_user=$OPTARG
+           ;;
+      w )  web_admin_user=$OPTARG
+           ;;
+      W )  install_wordpress=true
+           ;;
+      x )  web_admin_email=$OPTARG
+           ;;
+      X )  remove=true
+           ;;
+      \? ) print_usage
+           ;;
+      : )  echo "Invalid option: $OPTARG requires an argument" 1>&2
+           ;;
+  esac
+done
+shift $((OPTIND -1))
+fqdn=$1
+
+certificate_live_dir="$certificate_conf_dir/$certificate_live_dir"
+docroot=$docroot_base/$fqdn
+site_conf=$apache2_configs/sites-available/$fqdn.conf
+site_enabled=$apache2_configs/sites-enabled/$fqdn.conf
+
+# Backout the installation
+function backout {
+  echo "Backing out the installation."
+  if $install_wordpress ; then
+      echo "WordPress admin password tried: $admin_wp_pwd"
+      echo "MySQL password for WordPress database on user 'wp_$fqdn'@'localhost' tried: $admin_wp_pwd"
+    fi
+  cd $current_directory
+  rm -f -r $docroot
+  rm -f $site_enabled
+  rm -f $site_conf
+  query="DROP DATABASE IF EXISTS \`wp_$fqdn\`; DROP USER IF EXISTS 'wp_$fqdn'@'localhost'; FLUSH PRIVILEGES;"
+#  mysql -u $mysql_root_user -p$mysql_root_password -e "$query" > /dev/null 2> /dev/null
+  mysql -u $mysql_root_user -p$mysql_root_password -e "$query" > /dev/null 2> /dev/null
+  systemctl status apache2.service > ~/apache2failure.log
+  journalctl -xeu apache2.service >> ~/apache2failure.log
+  echo "See ~/apache2failure.log"
+  systemctl restart apache2
+  systemctl restart mysql
+  }
+
+# Check that $fqdn exists and is well-formed
+result=`echo $fqdn | grep -P '(?=^.{1,254}$)(^(?>(?!\d+\.)[a-zA-Z0-9_\-]{1,63}\.?)+(?:[a-zA-Z]{2,})$)'`
+if [[ "$result" == "" ]]
+then
+    echo "Fully qualified domain name is not given."
+    abort_and_exit
+fi
+if [[ -z "$result" ]]
+then
+    echo "$fqdn is NOT a fully qualified domain name."
+    abort_and_exit
+fi
+
+# Check for removal option
+if $remove ; then
+  backout
+  echo "$fqdn virtual server removed."
+  clean_exit
+  fi
+
+# Check that target directory does not contain files; create it if needed.
+if [ -d "$docroot" ]; then # If docroot already exists
+  if ! [ -z "$(ls -A $docroot)" ]; then # If docroot is not empty
+    echo "$docroot is not empty."
+    abort_and_exit
+    fi
+  else
+    mkdir $docroot
+  fi
+
+# Do updates and install needed tools
+f_run_apt_updates
+# For Ubuntu 18
+# apt-get install --yes wget apg certbot python python-certbot-apache
+# For Ubuntu 18 (still works with Ubuntu 22)
+apt-get install --yes wget apg certbot python3-certbot-apache
+
+# Generate a MySQL password for the Wordpress database
+admin_wp_pwd="$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -M ncl)"
+mysql_wp_pwd="$(apg -c cl_seed -a 1 -m $MAX_MYSQL_PASSWORD_LENGTH -n 1 -M ncl)"
+
+# Move to docroot
+if ! cd "$docroot"; then
+  backout
+  echo "Could not change directory to $docroot."
+  abort_and_exit
+  fi
+
+# Add MySQL database and user for WordPress
+if $install_wordpress ; then
+    query="DROP USER IF EXISTS 'wp_$fqdn'@'localhost'; FLUSH PRIVILEGES; CREATE USER 'wp_$fqdn'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$mysql_wp_pwd';GRANT USAGE ON *.* TO 'wp_$fqdn'@'localhost';ALTER USER 'wp_$fqdn'@'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;CREATE DATABASE IF NOT EXISTS \`wp_$fqdn\`;GRANT ALL PRIVILEGES ON \`wp_$fqdn\`.* TO 'wp_$fqdn'@'localhost';"
+    # if ! mysql -u $mysql_root_user -p'$mysql_root_password' -e "$query" > /dev/null 2> /dev/null; then
+    if ! mysql -u $mysql_root_user -p$mysql_root_password -e "$query"; then
+      backout
+      echo "Could not add MySQL database and user."
+      abort_and_exit
+      fi
+    fi
+
+# Install wordpress
+if $install_wordpress ; then
+    if ! wget https://wordpress.org/latest.tar.gz; then
+      backout
+      echo "Could not download Wordpress."
+      abort_and_exit
+      fi
+    if ! tar xzf latest.tar.gz; then
+      backout
+      echo "Could not unpack latest.tar.gz in $docroot."
+      abort_and_exit
+      fi
+    if ! mv wordpress/* .; then
+      backout
+      echo "Could not move wordpress directory contents into $docroot."
+      abort_and_exit
+      fi
+  fi
+
+# Clean up
+rmdir -p --ignore-fail-on-non-empty wordpress
+rm -f latest.tar.gz
+chown -R www-data:www-data .
+
+# Append to wp-includes/functions.php to increase max upload size
+if $install_wordpress ; then
+    if ! echo "@ini_set( 'upload_max_size' , '2G' );" >> $docroot/wp-includes/functions.php; then
+      backout
+      echo "Could not append to $docroot/wp-includes/functions.php."
+      abort_and_exit
+      fi
+    if ! echo "@ini_set( 'post_max_size', '2G' );" >> $docroot/wp-includes/functions.php; then
+      backout
+      echo "Could not append to $docroot/wp-includes/functions.php."
+      abort_and_exit
+      fi
+    if ! echo "@ini_set( 'max_execution_time', '300' );" >> $docroot/wp-includes/functions.php; then
+      backout
+      echo "Could not append to $docroot/wp-includes/functions.php."
+      abort_and_exit
+      fi
+  fi
+
+# Create php.ini in docroot
+if $install_wordpress ; then
+    if ! echo "upload_max_filesize = 2G" > $docroot/php.ini; then
+      backout
+      echo "Could not create $docroot/php.ini."
+      abort_and_exit
+      fi
+    echo "post_max_size = 2G" >> $docroot/php.ini
+    echo "max_execution_time = 300" >> $docroot/php.ini
+    if ! chown www-data:www-data $docroot/php.ini; then
+      backout
+      echo "Could not set ownership for $docroot/php.ini."
+      abort_and_exit
+      fi
+  fi
+
+# Install SSL certificate.
+echo "If prompted, do NOT choose to redirect"
+certificate_successfully_installed="is"
+if ! certbot certonly --apache -d $fqdn; then
+  certificate_successfully_installed="is not"
+  fi
+
+# Define virtual host in apache2
+if ! echo "<VirtualHost *:443>" > $site_conf; then
+  backout
+  echo "Could not create $site_conf."
+  abort_and_exit
+  fi
+echo "ServerName $fqdn" >> $site_conf
+echo "DocumentRoot $docroot" >> $site_conf
+echo "" >> $site_conf
+echo "<Directory $docroot>" >> $site_conf
+echo "    Options FollowSymLinks" >> $site_conf
+echo "    AllowOverride Limit Options FileInfo" >> $site_conf
+echo "    DirectoryIndex index.php" >> $site_conf
+echo "    Order allow,deny" >> $site_conf
+echo "    Allow from all" >> $site_conf
+echo "</Directory>" >> $site_conf
+echo "" >> $site_conf
+if $install_wordpress ; then
+    echo "<Directory $docroot/wp-content>" >> $site_conf
+    echo "    Options FollowSymLinks" >> $site_conf
+    echo "    Order allow,deny" >> $site_conf
+    echo "    Allow from all" >> $site_conf
+    echo "</Directory>" >> $site_conf
+    echo "" >> $site_conf
+    fi
+echo "SSLEngine on" >> $site_conf
+echo "SSLProtocol +TLSv1.2" >> $site_conf
+echo "Include $certificate_conf_dir/options-ssl-apache.conf" >> $site_conf
+echo "SSLCertificateFile \"$certificate_live_dir/$fqdn/fullchain.pem\"" >> $site_conf
+echo "SSLCertificateKeyFile \"$certificate_live_dir/$fqdn/privkey.pem\"" >> $site_conf
+echo "</VirtualHost>" >> $site_conf
+chown root:root $site_conf
+chmod 644 $site_conf
+if ! ln -s $site_conf $site_enabled; then
+  backout
+  echo "Could not enable virtual host $fqdn."
+  abort_and_exit
+  fi
+chown root:root $site_enabled
+
+# Restart apache2
+systemctl restart apache2
+if ! systemctl status apache2 > /dev/null ; then
+  echo "Error Code $?"
+  rm $site_enabled
+  rm $site_conf
+  if ! systemctl restart apache2; then
+    backout
+    echo "Error restarting apache2."
+    abort_and_exit
+  else
+    backout
+    echo "Apache2 will not start with virtual host $fqdn defined."
+    echo "Virtual host $fqdn has been deleted."
+    echo "Apache2 is running."
+    abort_and_exit
+    fi
+  fi
+
+# Open the firewall for apache2
+# ufw allow 'Apache' > /dev/null 2> /dev/null # http ONLY
+ufw allow 'Apache Full' > /dev/null 2> /dev/null # http AND https
+
+# Append to .htaccess to increase max upload size
+if $install_wordpress ; then
+    echo "php_value upload_max_filesize 2G" >> $docroot/.htaccess
+    echo "php_value post_max_size 2G" >> $docroot/.htaccess
+    echo "php_value memory_limit 256M" >> $docroot/.htaccess
+    echo "php_value max_execution_time 300" >> $docroot/.htaccess
+    echo "php_value max_input_time 300" >> $docroot/.htaccess
+  fi
+
+# Apply proper permissions to .htaccess
+if $install_wordpress ; then
+    chown www-data:www-data $docroot/.htaccess
+    chmod 644 $docroot/.htaccess
+  fi
+
+# Report results to end user
+if $install_wordpress ; then
+    echo "IMPORTANT: COPY THIS INFORMATION NOW."
+    echo "  Virtual host URL: https://$fqdn"
+    echo "  MySQL database name: wp_$fqdn"
+    echo "  MySQL user name: wp_$fqdn"
+    echo "  MySQL password for $fqdn database: $mysql_wp_pwd"
+    echo "  WordPress administrator user name: $web_admin_user"
+    echo "  WordPress administrator password: $admin_wp_pwd"
+    echo "  WordPress administrator email: $web_admin_email"
+  fi
+
+# All done.
+echo "  SSL certificate for $fqdn $certificate_successfully_installed installed."
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+

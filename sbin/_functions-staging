@@ -1,0 +1,25 @@
+#!/bin/bash
+# _functions
+# Bash functions for Lane applications
+
+# Check to ensure that variables are defined
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Set a flag to confirm that the functions are not yet defined
+	STAGING_FUNCTIONS_ARE_DEFINED=false
+
+#########################################################################################################
+
+
+
+
+#########################################################################################################
+
+# Set a flag to confirm that the functions are defined
+	STAGING_FUNCTIONS_ARE_DEFINED=true
+
+# Log the completion
+if [ ! $DEBUG_MODE ]; then
+	logger $0: Functions loaded from _functions
+	fi
+
