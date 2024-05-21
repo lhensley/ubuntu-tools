@@ -1,0 +1,78 @@
+#!/usr/bin/vi
+
+Daemons vs Services
+Ref: https://askubuntu.com/questions/192058/what-is-technical-difference-between-daemon-service-and-process#:~:text=The%20word%20daemon%20for%20denoting,is%20what%20a%20server%20provides.
+Simple Example & Overview: https://medium.com/@benmorel/creating-a-linux-service-with-systemd-611b5c8b91d6
+	.service files go in /etc/systemd/system directory (or /lib/systemd/system ?)
+Detailed: https://linuxconfig.org/how-to-create-systemd-service-unit-in-linux
+Best: https://www.linode.com/docs/quick-answers/linux/start-service-at-boot/
+
+
+Lane Services ("unit files")
+	Developed and stored in $GIT_GO_SERVICES
+	upd script copies them to $SERVICES_DIR ("/lib/systemd/system")
+
+
+Pull up any unit file from the $GIT_GO_SERVICES (services) directory. 
+They're easy to adapt. Things you'll need to specify:
+	Description
+	Executable
+	User/Group Running the Executable
+
+	Start and test
+		sudo systemctl start SERVICE_NAME
+		sudo systemctl status SERVICE_NAME
+
+	Enable (have it automatically start on bootup) (Creates a symlink to the .service file in /etc/systemd/system/multi-user.target.wants)
+		sudo systemctl enable SERVICE_NAME
+
+
+#####################
+
+To Create a Service
+
+#####################
+
+Create a script in the sbin directory. 
+The needs to run constantly unless there is a critical error or the program is stopped with systemctl.
+Boilerplate code for that:
+
+	# Do stuff here
+		while true; do                                   # Repeat forever
+			echo "This is a line of code."               # Sample program execution
+			echo Sleeping at $(date) for 10 minutes      # Announce that you're sleeping
+			sleep 10m                                    # This is the amount of time between iterations to keep from killing the CPU
+			done
+		done
+
+
+Sync to Github and run "sudo upd" to copy it onto a server. Test it.
+
+Once the testing is completed, do these things:
+
+Add this code to the script prior to the "Do stuff here" section:
+
+	# "Run as a service" check
+		if [ "$PPID" != "1" ]; then
+			f_die "This script only runs as a systemd service. Try sudo systemctl start $(basename $0)" false
+			fi
+		SERVICE_FLAG=true;
+
+Copy one of the files in the services directory so it has the same name as the script you wrote, with a ".service" suffix.
+
+Edit that file to adapt it to the new program.
+
+Sync to Github and run "sudo upd" to copy it onto a server.
+
+To run the program as a service on a given server, use
+	sudo install-service [service-name]
+
+To start the service on the server, use
+	sudo systemctl start [service-name]
+
+To check the status of the service, use
+	sudo systemctl status [service-name]
+
+To remove the program as a service on a given server, use
+	sudo remove-service [service-name]
+

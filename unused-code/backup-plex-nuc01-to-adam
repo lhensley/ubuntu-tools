@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Require root
+	f_require_root
+
+# Require server adam
+	f_only_on_server "adam"
+
+# Define variables
+	SOURCE_FILE_SYSTEM="nuc01:/mnt/12TBB"
+	SOURCE_PLEX_CONTENT_DIR="$SOURCE_FILE_SYSTEM"
+#	SOURCE_PLEX_DVR_TS_CONTAINER_DIR="/var/lib/plexmediaserver/Library/work/tv"
+	TARGET_FILE_SYSTEM="/mnt/12TBA"
+	TARGET_PLEX_CONTENT_DIR="$TARGET_FILE_SYSTEM/archives/nuc01/plexcontent"
+#	TARGET_PLEX_DVR_TS_CONTAINER_DIR="$TARGET_PLEX_CONTENT_DIR/plex-dvr-in"
+
+# Mount source file system
+	if ! $(f_mount_fs_as_rw "$SOURCE_FILE_SYSTEM") ; then
+		f_die "$SOURCE_FILE_SYSTEM cannot be mounted." true
+		fi
+
+# Mount target file system
+	if ! $(f_mount_fs_as_rw "$TARGET_FILE_SYSTEM") ; then
+		f_die "$TARGET_FILE_SYSTEM cannot be mounted." true
+		fi
+
+# Backup all Plex content directories using rsync
+	for x in {1..3} # Do it three times to catch anything added while this script is running
+		do
+			for this_directory in "plex" "plex-dvr" "plexlinks" "plex-other" "plex-tv" "plex-videos"
+				do
+					SOURCE_DIR="$SOURCE_PLEX_CONTENT_DIR/$this_directory"
+					TARGET_DIR="$TARGET_PLEX_CONTENT_DIR/$this_directory"
+					# echo
+					# echo Backing up $SOURCE_DIR to $TARGET_DIR
+					rsync -aloprtvE --delete "$SOURCE_DIR/"* "$TARGET_DIR"
+				done
+		done
+
+# # Move (removing source) all recorded Plex DVR TS files for conversion to M4V
+# 	echo
+# 	echo Moving all recorded Plex DVR TS files for conversion to M4V
+# 	rsync --archive --links --owner --perms --recursive --times \
+# 		--verbose --executability --remove-source-files \
+# 		"$SOURCE_PLEX_DVR_TS_CONTAINER_DIR/"* "$TARGET_PLEX_DVR_TS_CONTAINER_DIR"
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0

@@ -1,0 +1,7 @@
+
+debconf database
+preconfiguring options for apt-get installations
+
+https://manpages.ubuntu.com/manpages/xenial/man1/debconf.1.html
+https://manpages.ubuntu.com/manpages/xenial/man7/debconf.7.html
+

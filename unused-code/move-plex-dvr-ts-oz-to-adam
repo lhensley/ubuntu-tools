@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Require root
+	f_require_root
+
+# Only allow this to run on server oz.
+	f_only_on_server "oz"
+
+# Define variables
+	THIS_SCRIPT=$(basename "$0")
+	EXCLUDE_MASK2=".grab/"
+
+# Do the work
+	SOURCE_ROOT_DIR="/mnt/ext10tb01/plex/dvr-in"
+	TARGET_ROOT_DIR="/mnt/12TBA/plexcontent/dvr"
+	rsync --remove-source-files \
+		--exclude "$EXCLUDE_MASK2" -aloprtv \
+	"$SOURCE_ROOT_DIR"/* "$TARGET_ROOT_DIR"
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0

@@ -1,0 +1,5 @@
+	• Install VirtualBox on your machine from Downloads – Oracle VM VirtualBox.
+	• Download VirtualBox x.x.xx Oracle VM VirtualBox Extension Pack from the same link.
+		a. Open Virtualbox VM Manager
+		b. In File->Preferences, Select Extension
+Now add extension by browsing to download location

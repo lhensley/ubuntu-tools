@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# POSSIBLE OPTION: USE IF YOU WANT
+# Require root
+	f_require_root
+
+# Do stuff here
+# Algorhithm at https://unix.stackexchange.com/questions/271000/update-apt-get-cache-only-if-its-older-than-certain-time
+	echo TEMPORARY DIAGNOSTIC MARKER A in apt-get-update-if-needed.
+	if [ -z "$(find /var/cache/apt/pkgcache.bin -mmin -60)" ]; then
+		echo TEMPORARY DIAGNOSTIC MARKER B in apt-get-update-if-needed.
+		apt-get update
+		fi
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0

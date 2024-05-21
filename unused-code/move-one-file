@@ -1,0 +1,73 @@
+#!/bin/bash
+# move-one-file
+# Usage: move-one-file <input_file> <root_in_path> <root_out_path>
+# No final / on either path. For system root, use ""
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+IN_FILE="$1"
+ROOT_IN_PATH="$2"
+ROOT_OUT_PATH="$3"
+
+ROOT_IN_PATH_LENGTH=${#ROOT_IN_PATH}
+
+RELATIVE_FILE_LENGTH=$[IN_FILE_LENGTH-ROOT_IN_PATH_LENGTH-1]
+RELATIVE_FILE="${IN_FILE: -$RELATIVE_FILE_LENGTH}" # Remove ROOT_IN_PATH
+
+OUT_FILE="$ROOT_OUT_PATH/$RELATIVE_FILE"
+NEW_DIRECTORY="$(dirname "$OUT_FILE")"
+
+# So here are useful variables defined ...
+# $IN_FILE
+# $OUT_FILE
+# $ROOT_IN_PATH
+# $ROOT_OUT_PATH
+# $RELATIVE_FILE
+
+f_file_not_in_use "$IN_FILE"
+
+# Only if the STORE file system is read-only
+# f_mount_ro_fs_as_rw "$COLD_BACKUP_FILE_SYSTEM"
+
+# Make the directory for out file
+if [ ! -d "$NEW_DIRECTORY" ]; then
+  mkdir -p "$NEW_DIRECTORY" # Create the directory for the out file
+  exit_status=$?
+  chown plex:plex "$NEW_DIRECTORY"
+  chmod 664 "$NEW_DIRECTORY"
+  if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
+      logger "$0: FAILED to make $NEW_DIRECTORY"
+      echo "$(date) $0: FAILED to make $NEW_DIRECTORY" | mail -r move-one-file text_alerts
+      sleep 1
+      echo "$NEW_DIRECTORY" | mail -r move-one-file text_alerts
+      exit $exit_status
+    fi
+fi
+
+# Move $IN_FILE to $OUT_FILE
+mv "$IN_FILE" "$OUT_FILE"
+exit_status=$?
+if [ $exit_status -ne 0 ]; then # If the transcoding failed ...
+    logger "$0: FAILED to move $IN_FILE to $NEW_DIRECTORY"
+    echo "$(date) $0: Failed to move file" | mail -r move-one-file text_alerts
+    sleep 1
+    echo "Infile $IN_FILE" | mail -r move-one-file text_alerts
+    echo "Outfile $OUT_FILE" | mail -r move-one-file text_alerts
+    exit $exit_status
+  else
+    chown plex:plex "$OUT_FILE"
+    chmod 664 "$OUT_FILE"
+    logger $0: moved $(basename "$IN_FILE")
+  fi
+
+# Only if the STORE file system is read-only
+# f_mount_ro_fs_as_ro "$COLD_BACKUP_FILE_SYSTEM" $COLD_BACKUP_FS_READ_ONLY
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0

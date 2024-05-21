@@ -1,0 +1,11 @@
+# 
+# /etc/resolvconf/resolv.conf.d/head
+# From git/$GITHUB_USER/go/configs/resolvconf/head
+# 644 root:root
+#
+# nameserver 127.0.0.53
+# nameserver 2001:4860:4860::8844
+# nameserver 2001:4860:4860::8888
+# nameserver 8.8.4.4
+# nameserver 8.8.8.8
+search lanehensley.org local lan

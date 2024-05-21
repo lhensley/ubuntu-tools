@@ -1,0 +1,124 @@
+#!/bin/bash
+# upgrade-phpmyadmin
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Require root
+	f_require_root
+
+# Must provide a version number.
+if [ $# -ne 1 ]; then f_die "Usage: upgrade-phpmyadmin VERSION (e.g., upgrade-phpmyadmin 5.1.0)" false; fi
+
+# Set variables
+VERSION=$1
+PARENT_DIR='/usr/share'
+LIVE_DIR='phpmyadmin'
+OLD_DIR=$LIVE_DIR.backup.$(date "+%Y.%m.%d-%H.%M.%S.%Z")
+TMP='/tmp'
+DOWNLOAD_FILE="https://files.phpmyadmin.net/phpMyAdmin/$1/phpMyAdmin-$1-all-languages.tar.gz"
+EXTRACT_FOLDER="phpMyAdmin-$1-all-languages"
+TARFILE="$EXTRACT_FOLDER.tar.gz"
+CURRENT_DIRECTORY=$(pwd)
+CONFIG_FILE="config.inc.php"
+CONFIG_PATH="$PARENT_DIR/$LIVE_DIR/$CONFIG_FILE"
+CONFIG_PATH_OLD="$PARENT_DIR/$OLD_DIR/$CONFIG_FILE"
+ETC_CONFIG_PATH="/etc/phpmyadmin/$CONFIG_FILE"
+
+# Download the application
+echo "Downloading the application."
+cd $TMP
+wget "$DOWNLOAD_FILE"
+exit_code=$?
+if [ $exit_code -ne 0 ]; then f_die "Can't download $DOWNLOAD_FILE."; fi
+
+# Move existing application directory.
+echo "Moving existing application directory."
+mv "$PARENT_DIR/$LIVE_DIR" "$PARENT_DIR/$OLD_DIR"
+exit_code=$?
+if [ $exit_code -ne 0 ]; then f_die "Can't move $PARENT_DIR/$LIVE_DIR."; fi
+
+# Create the new directory
+echo "Creating the new directory."
+mkdir "$PARENT_DIR/$LIVE_DIR"
+exit_code=$?
+if [ $exit_code -ne 0 ]; then f_die "Can't create $PARENT_DIR/$LIVE_DIR."; fi
+
+# Create a tmp directory
+echo "Creating the new directory."
+mkdir "$PARENT_DIR/$LIVE_DIR/tmp"
+exit_code=$?
+if [ $exit_code -ne 0 ]; then f_die "Can't create $PARENT_DIR/$LIVE_DIR/tmp."; fi
+
+# Copy the config file from the old directory to the new one.
+echo "Copying the config file from the old directory to the new one."
+cp "$CONFIG_PATH_OLD" "$PARENT_DIR/$LIVE_DIR/"
+exit_code=$?
+if [ $exit_code -ne 0 ]; then CONFIG_PATH="$ETC_CONFIG_PATH."; fi
+
+# Move the downloaded file into the new directory
+echo "Moving the downloaded file into the new directory."
+mv "$TMP/$TARFILE" "$PARENT_DIR/$LIVE_DIR/"
+exit_code=$?
+if [ $exit_code -ne 0 ]; then f_die "Can't move $TMP/$TARFILE to $PARENT_DIR/$LIVE_DIR."; fi
+
+# Change to the new directory
+echo "Changing to the new directory."
+cd "$PARENT_DIR/$LIVE_DIR"
+exit_code=$?
+if [ $exit_code -ne 0 ]; then f_die "Can't change to $PARENT_DIR/$LIVE_DIR."; fi
+
+# Extract the tar file
+echo "Extracting the tar file."
+tar xzf $TARFILE
+exit_code=$?
+if [ $exit_code -ne 0 ]; then f_die "Can't extract $TARFILE."; fi
+
+# Move the extracted files into the new directory
+echo "Moving the extracted files into the new directory."
+mv "$PARENT_DIR/$LIVE_DIR/$EXTRACT_FOLDER/"* .
+exit_code=$?
+if [ $exit_code -ne 0 ]; then f_die "Can't move extracted files into $PARENT_DIR/$LIVE_DIR."; fi
+
+# Remove the tar file
+echo "Removing the tar file."
+rm $TARFILE
+exit_code=$?
+if [ $exit_code -ne 0 ]; then f_die "Can't remove $PARENT_DIR/$LIVE_DIR/$TARFILE."; fi
+
+# Remove the extraction directory
+echo "Removing the extraction directory."
+rmdir $EXTRACT_FOLDER
+exit_code=$?
+if [ $exit_code -ne 0 ]; then f_die "Can't remove directory $PARENT_DIR/$LIVE_DIR/$EXTRACT_FOLDER."; fi
+
+# Set ownership to root
+echo "Setting ownership to root."
+chown -R root:root "$PARENT_DIR/$LIVE_DIR"
+exit_code=$?
+if [ $exit_code -ne 0 ]; then f_die "Can't set root as owner of the new installation."; fi
+
+# Set ownership of temp directory to www-data
+echo "Setting ownership of temp directory to www-data."
+chown -R www-data:www-data "$PARENT_DIR/$LIVE_DIR/tmp"
+exit_code=$?
+if [ $exit_code -ne 0 ]; then f_die "Can't set root as owner of the temp directory."; fi
+
+# Change back to previous directory
+echo "Changing directory back to $CURRENT_DIRECTORY."
+cd "$CURRENT_DIRECTORY"
+exit_code=$?
+if [ $exit_code -ne 0 ]; then f_die "Can't change to $CURRENT_DIRECTORY."; fi
+
+echo "Upgrade complete."
+echo "See https://docs.phpmyadmin.net/en/latest/setup.html#upgrading-from-an-older-version"
+echo "    to see if you need to make changes to $CONFIG_PATH"
+echo "    and for additional information."
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0

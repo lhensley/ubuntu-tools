@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ];         then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting;         exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ];         then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting;         exit 1; fi
+
+# Set the variables
+    SOURCE_FILE_NAME_PATTERN="$PLEX_FILE_NAME_PATTERN"	   # For Plex DVR,                 this is "$PLEX_FILE_NAME_PATTERN"              (defined in _vars)
+                                                           # For DVDs ripped with MakeMKV, this is "$MAKEMKV_FILE_NAME_PATTERN"           (defined in _vars)
+                                                           # For Zoom meeting recordings,  this is "$ZOOM_FILE_NAME_PATTERN"              (defined in _vars)
+    SOURCE_ROOT="$VIDEO_STORE_DIRECTORY"		               # For Plex DVR, this is "$VIDEO_WORK_DIRECTORY"                                (defined in _vars)
+	  	     					                           # For DVDs ripped with MakeMKV, this is "$MAKEMKV_OUTPUT_DIRECTORY"            (defined in _vars)
+	  	     					                           # For Zoom meeting recordings, this is "$ZOOM_RAW_FILES"                       (defined in _vars)
+
+# Display the queue
+    f_xcode_queue
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+

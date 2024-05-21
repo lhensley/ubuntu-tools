@@ -1,0 +1,41 @@
+#!/bin/bash
+# TEMPORARY script. OK to delete.
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+
+# POSSIBLE OPTION: USE IF YOU WANT
+# Require root
+	f_require_root
+
+# Set variables
+	X_HOME="/home/lhensley"
+	X_A2="$X_HOME/apache2"
+	X_OLD="$X_A2/old"
+	X_NEW="$X_A2/new"
+	X_OLD_ETC="$X_OLD/etc"
+	X_NEW_ETC="$X_NEW/etc"
+	X_OLD_WWW="$X_OLD/www"
+	X_NEW_WWW="$X_NEW/www"
+
+# Do stuff here
+	cd "$X_HOME"
+	rm -rf "$X_A2"
+	mkdir -p "$X_OLD_ETC" "$X_NEW_ETC" "$X_OLD_WWW" "$X_NEW_WWW"
+	chown root:root "$X_OLD_ETC" "$X_NEW_ETC"
+	chown www-data:www-data "$X_OLD_WWW" "$X_NEW_WWW"
+	chmod -R 755 "$X_A2"
+	cp -pr /etc/apache2 "$X_NEW_ETC"
+	cp -pr /var/www/* "$X_NEW_WWW/"
+	cp -pr /home/lhensley/cold-backup.2022-04/etc/apache2 "$X_OLD_ETC/"
+	cp -pr /home/lhensley/cold-backup.2022-04/var/www/* "$X_OLD_WWW/"
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+

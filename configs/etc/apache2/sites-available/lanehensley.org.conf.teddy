@@ -1,0 +1,31 @@
+# lanehensley.org.conf
+
+# sudo chown -R root:root /etc/apache2/*
+# sudo chmod -R 644 /etc/apache2/*
+# sudo chmod 755 /etc/apache2/conf-*
+# sudo chmod 755 /etc/apache2/mods-*
+# sudo chmod 755 /etc/apache2/sites-*
+
+Define ServerName lanehensley.org
+Define DocumentRoot /var/www/${ServerName}
+<VirtualHost *:*>
+    ServerName ${ServerName}
+    DocumentRoot /var/www/${ServerName}
+    <Directory ${DocumentRoot}>
+        Options FollowSymLinks
+        AllowOverride Limit Options FileInfo
+        DirectoryIndex index.php
+        Order allow,deny
+        Allow from all
+    </Directory>
+    <Directory ${DocumentRoot}/wp-content>
+        Options FollowSymLinks
+        Order allow,deny
+        Allow from all
+    </Directory>
+    SSLEngine on
+    SSLProtocol -all +TLSv1.2 +TLSv1.3
+    Include /etc/letsencrypt/options-ssl-apache.conf
+    SSLCertificateFile /etc/letsencrypt/live/${ServerName}/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/${ServerName}/privkey.pem
+</VirtualHost>

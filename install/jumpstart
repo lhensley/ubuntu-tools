@@ -1,0 +1,57 @@
+#!/bin/bash
+
+if [[ $EUID -ne 0 ]]; then
+	# echo "You are not using root credentials."
+	echo "Root privileges required."
+	exit 1
+	fi
+
+echo
+echo apt-get update && sudo apt-get dist-upgrade
+apt-get update && sudo apt-get dist-upgrade
+
+echo
+echo apt-get -y install coreutils git gpg moreutils '\'
+echo "   " openssh-client openssh-server ufw util-linux
+apt-get -y install coreutils git gpg moreutils \
+	openssh-client openssh-server ufw util-linux
+
+echo
+echo wget --no-cache -O seeds.tar.gz.gpg https://github.com/lhensley/go/raw/master/install/seeds.tar.gz.gpg
+wget --no-cache -O seeds.tar.gz.gpg https://github.com/lhensley/go/raw/master/install/seeds.tar.gz.gpg
+
+echo
+echo wget --no-cache -O clean-setup https://github.com/lhensley/go/raw/master/install/clean-setup
+wget --no-cache -O clean-setup https://github.com/lhensley/go/raw/master/install/clean-setup
+
+echo
+echo wget --no-cache -O variables https://github.com/lhensley/go/raw/master/install/variables
+wget --no-cache -O variables https://github.com/lhensley/go/raw/master/install/variables
+
+echo
+echo gpg -d -o seeds.tar.gz seeds.tar.gz.gpg "# Password in 1Password; search \"seed\""
+gpg -d -o seeds.tar.gz seeds.tar.gz.gpg # Password in 1Password; search "seed"
+
+echo
+echo chmod 600 seeds.tar.gz
+chmod 600 seeds.tar.gz
+
+echo
+echo tar -xvzf ./seeds.tar.gz
+tar -xvzf ./seeds.tar.gz
+
+echo
+echo "chmod 700 ./clean-setup"
+chmod 700 ./clean-setup
+
+echo
+echo chown -R $SUDO_USER:$SUDO_USER ./*
+chown -R $SUDO_USER:$SUDO_USER ./*
+
+echo
+echo Next step: run sudo ./clean-setup
+echo '('I would do it for you, but you may not want me to.')'
+echo
+
+exit 0
+
