@@ -277,7 +277,11 @@ if $install_curl ; then f_install curl; fi
 if $install_ddclient ; then f_install ddclient; fi
 if $install_dos2unix ; then f_install dos2unix; fi
 if $install_exiftool ; then f_install exiftool; fi
-if $install_fail2ban ; then f_install fail2ban; fi
+if $install_fail2ban ; then 
+    f_install fail2ban
+    systemctl enable fail2ban
+    systemctl start fail2ban
+    fi
 if $install_ffmpeg ; then f_install ffmpeg; fi
 if $install_ghostscript ; then f_install ghostscript ; fi
 if $install_git ; then f_install git; fi
