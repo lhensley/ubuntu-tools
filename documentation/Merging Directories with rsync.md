@@ -18,3 +18,6 @@ sudo chown -R plex:plex "$TARGET_DIR"
 sudo find "$TARGET_DIR" -type d -print -exec chmod 775 {} \;
 sudo find "$TARGET_DIR" -type f -print -exec chmod 664 {} \;
 ```
+
+SYNTAX FOR MAKING A TARGET PATH CONFORM TO A SOURCE PATH:
+rsync -aloprtvER --delete [source_username@source_host:]/source_path/* [target_username@target_host:]/target_path

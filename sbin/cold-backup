@@ -72,6 +72,8 @@ rsync -aloprtvER --delete $COLD_BACKUP_SOURCES "$TEMP_COLD_BACKUP_DIRECTORY"
         chmod 700 "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/mysql"
         chown root:root "$TEMP_COLD_BACKUP_DIRECTORY/var/lib/mysql"
         rsync -aloprtvER --delete /var/lib/mysql/* "$TEMP_COLD_BACKUP_DIRECTORY"
+        # SYNTAX FOR MAKING A TARGET PATH CONFORM TO A SOURCE PATH:
+        # rsync -aloprtvER --delete [source_username@source_host:]/source_path/* [target_username@target_host:]/target_path
         systemctl start mysql
 # Back up Postfix
         f_log_and_echo "Backing up Postfix" false
