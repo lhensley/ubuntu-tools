@@ -551,9 +551,9 @@ function f_run_apt_updates () {
 function f_upd () {
 	# This is a pass-thru function. Abstracts out in case there is later
 	#	more to f_upd than just f_run_apt_updates.
-	echo TEMPORARY DIAGNOSTIC MARKER A in f_upd in _functions.
+	# echo TEMPORARY DIAGNOSTIC MARKER A in f_upd in _functions.
 	f_run_apt_updates
-	echo TEMPORARY DIAGNOSTIC MARKER B in f_upd in _functions.
+	# echo TEMPORARY DIAGNOSTIC MARKER B in f_upd in _functions.
 	}
 
 function f_apply_configs () {
@@ -847,15 +847,15 @@ f_run_apt_updates () {
     echo
     echo Updating local host of upgradable packages and upgrading them.
       echo DEBIAN_FRONTEND=noninteractive apt-get-update-if-needed && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
-	echo TEMPORARY DIAGNOSTIC MARKER A1 in f_run_apt_updates in _functions.
+	# echo TEMPORARY DIAGNOSTIC MARKER A1 in f_run_apt_updates in _functions.
     DEBIAN_FRONTEND=noninteractive apt-get-update-if-needed && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
-	echo TEMPORARY DIAGNOSTIC MARKER A2 in f_run_apt_updates in _functions.
+	# echo TEMPORARY DIAGNOSTIC MARKER A2 in f_run_apt_updates in _functions.
     # "clean" clears out the local repository of retrieved package files.
     echo
     echo Clearing out the local repository of retrieved package files.
     echo apt-get --yes clean
     apt-get --yes clean
-	echo TEMPORARY DIAGNOSTIC MARKER B in f_run_apt_updates in _functions.
+	# echo TEMPORARY DIAGNOSTIC MARKER B in f_run_apt_updates in _functions.
     # "autoremove" removes those dependencies that were installed with
     # now-removed applications and that are no longer used
     # by anything else on the system
@@ -863,7 +863,7 @@ f_run_apt_updates () {
     echo "Removing those dependencies that were associated with non-removed applications that no longer are used"
     echo apt-get --yes autoremove
     apt-get --yes autoremove
-	echo TEMPORARY DIAGNOSTIC MARKER C in f_run_apt_updates in _functions.
+	# echo TEMPORARY DIAGNOSTIC MARKER C in f_run_apt_updates in _functions.
 	}
 
 #########################################################################################################
