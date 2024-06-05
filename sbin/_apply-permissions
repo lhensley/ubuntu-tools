@@ -308,6 +308,10 @@ done
 			chmod -f 644 $ADMIN_HOME_DIR/.ssh/*.pub $ROOT_HOME_DIR/.ssh/*.pub
 #			fi
 
+	# /etc/ssl
+			echo "Updating permissions for /etc/ssl/*.cnf"
+			chmod -f 644 /etc/ssl/*.cnf
+
 	# SSHD config file
 		if $(f_is_installed "ssh"); then
 			echo Updating permissions for "$SSHD_CONFIG"
