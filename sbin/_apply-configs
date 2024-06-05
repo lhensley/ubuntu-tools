@@ -276,6 +276,10 @@ done
 		netplan apply &
 		fi
 
+# Update /etc/ssl
+		echo "Updating /etc/ssl from $GIT_GO_CONFIGS/etc/ssl"
+		cp "$GIT_GO_CONFIGS/etc/ssl/*" "/etc/ssl/"
+
 # Update /etc/resolvconf/resolv.conf.d/head
 	if $(f_is_installed "resolvconf"); then
 		echo "Updating /etc/resolvconf/resolv.conf.d/head from $GIT_GO_CONFIGS/resolvconf/resolv.conf.d/head"
