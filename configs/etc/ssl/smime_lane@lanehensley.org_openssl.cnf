@@ -6,7 +6,7 @@
 #
 # Edited 6/5/2024 per https://community.anaplan.com/discussion/156624
 # To create a certificate request WITHOUT a passphrase, enter this command:
-# openssl req -nodes -config /etc/ssl/lane_hensley_openssl.cnf -new -out lane_hensley_csr.pem -keyout lane_hensley_private-key.pem
+# openssl req -nodes -config /etc/ssl/smime_lane@lanehensley.org_openssl.cnf -new -out smime_lane@lanehensley.org_csr.pem -keyout smime_lane@lanehensley.org_private-key.pem
 #
 
 # This is mostly being used for generation of certificate requests,
