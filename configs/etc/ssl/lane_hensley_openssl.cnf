@@ -6,7 +6,7 @@
 #
 # Edited 6/5/2024 per https://community.anaplan.com/discussion/156624
 # To create a certificate request WITHOUT a passphrase, enter this command:
-# openssl req -nodes -config lane_hensley_openssl.cnf -new -out lane_hensley_csr.pem -keyout lane_hensley_private-key.pem
+# openssl req -nodes -config /etc/ssl/lane_hensley_openssl.cnf -new -out lane_hensley_csr.pem -keyout lane_hensley_private-key.pem
 #
 
 # This is mostly being used for generation of certificate requests,
@@ -178,31 +178,23 @@ string_mask = utf8only
 req_extensions = v3_user_req
 
 [ req_distinguished_name ]
-# Edited 6/5/2024 per https://community.anaplan.com/discussion/156624
-# countryName			= Country Name (2 letter code)
-countryName = US
+countryName			= Country Name (2 letter code)
 # Edited 6/5/2024 per https://community.anaplan.com/discussion/156624
 # countryName_default		= AU
 countryName_default = US
 countryName_min			= 2
 countryName_max			= 2
 
-# Edited 6/5/2024 per https://community.anaplan.com/discussion/156624
-# stateOrProvinceName		= State or Province Name (full name)
-stateOrProvinceName = Iowa
+stateOrProvinceName		= State or Province Name (full name)
 # Edited 6/5/2024 per https://community.anaplan.com/discussion/156624
 # stateOrProvinceName_default	= Some-State
 stateOrProvinceName_default = Iowa
 
-# Edited 6/5/2024 per https://community.anaplan.com/discussion/156624
-# localityName			= Locality Name (eg, city)
-localityName = Des Moines
+localityName			= Locality Name (eg, city)
 # Added 6/5/2024 per https://community.anaplan.com/discussion/156624
 localityName_default = Des Moines
 
-# Edited 6/5/2024 per https://community.anaplan.com/discussion/156624
-# 0.organizationName		= Organization Name (eg, company)
-0.organizationName		= lanehensley.org
+0.organizationName		= Organization Name (eg, company)
 # Edited 6/5/2024 per https://community.anaplan.com/discussion/156624
 # 0.organizationName_default	= Internet Widgits Pty Ltd
 0.organizationName_default	= lanehensley.org
@@ -211,35 +203,30 @@ localityName_default = Des Moines
 #1.organizationName		= Second Organization Name (eg, company)
 #1.organizationName_default	= World Wide Web Pty Ltd
 
-# Edited 6/5/2024 per https://community.anaplan.com/discussion/156624
-# organizationalUnitName		= Organizational Unit Name (eg, section)
-organizationalUnitName = Department of Nerdiness
+organizationalUnitName		= Organizational Unit Name (eg, section)
 # Edited 6/5/2024 per https://community.anaplan.com/discussion/156624
 # organizationalUnitName_default	=
 organizationalUnitName_default = Department of Nerdiness
 
-# Edited 6/5/2024 per https://community.anaplan.com/discussion/156624
 commonName			= Common Name (e.g. server FQDN or YOUR name)
-commonName = Lane Hensley
 # Added 6/5/2024 per https://community.anaplan.com/discussion/156624
 commonName_default = Lane Hensley
 commonName_max			= 64
 
-# Edited 6/5/2024 per https://community.anaplan.com/discussion/156624
-# emailAddress			= Email Address
-emailAddress = lane@lanehensley.org
+emailAddress			= Email Address
 # Added 6/5/2024 per https://community.anaplan.com/discussion/156624
 emailAddress_default = lane@lanehensley.org
 emailAddress_max		= 64
 
 # SET-ex3			= SET extension number 3
 
+# Commented all these out 6/5/2024. Not needed/desired. May be a big mistake.
 [ req_attributes ]
-challengePassword		= A challenge password
-challengePassword_min		= 4
-challengePassword_max		= 20
+# challengePassword		= A challenge password
+# challengePassword_min		= 4
+# challengePassword_max		= 20
 
-unstructuredName		= An optional company name
+# unstructuredName		= An optional company name
 
 [ usr_cert ]
 
