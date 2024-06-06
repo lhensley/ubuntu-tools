@@ -210,7 +210,7 @@ organizationalUnitName_default = Department of Nerdiness
 
 commonName			= Common Name (e.g. server FQDN or YOUR name)
 # Added 6/5/2024 per https://community.anaplan.com/discussion/156624
-commonName_default = Lane Hensley
+commonName_default = lanehensley.org
 commonName_max			= 64
 
 emailAddress			= Email Address
