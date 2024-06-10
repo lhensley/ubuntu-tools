@@ -470,7 +470,7 @@ function f_set_plex_media_recursive_permissions () {
 		chown -R $PLEX_USER:$PLEX_USER "$VIDEO_STORE_DIRECTORY"/*
 		echo $PLEX_USER
 		echo $PERMISSIONS_PLEX_VIDEO_LIBRARY_DIRECTORY
-		echo $PERMISSIONS_PLEX_VIDEO_LIBRARY_FILE
+		echo $PERMISSIONS_PLEX_VIDEO_FILE
 #		echo find "$VIDEO_WORK_DIRECTORY" -type d -print -exec chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS {} \;
 		find "$VIDEO_WORK_DIRECTORY" -type d -exec chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS {} \;
 #		echo find "$VIDEO_WORK_DIRECTORY" -type f -print -exec chmod $PLEX_VIDEO_FILE_PERMISSIONS {} \;

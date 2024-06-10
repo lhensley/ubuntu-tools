@@ -449,26 +449,26 @@ source /etc/os-release
                         PLEX_ROOT[/var/snap/plexmediaserver/common/Library/work]=true
                 VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
                 VIDEO_STORE_FILE_SYSTEM="/mnt/12TBB"
-                VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in"
+                VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex"
                 VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex"
                 PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
                 fi
-        if [ $HOSTNAME == "oz" ]; then 
-                # Define all Plex data root directories
-                # Set them all as true
-                # Example: PLEX_ROOT[/mnt/12TBB/plex]=true
-                        declare -A PLEX_ROOT
-                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/metadata]=true
-                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/store]=true
-                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/work]=true
-                        PLEX_ROOT[/mnt/ssd1tb/plex]=true
-                        PLEX_ROOT[/mnt/ext10tb01/plex]=true
-                VIDEO_WORK_FILE_SYSTEM="/mnt/ext10tb01"
-                VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr-in"
-                VIDEO_STORE_FILE_SYSTEM="/mnt/ext10tb01"
-                VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex/dvr-oz"
-                PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
-                fi
+#        if [ $HOSTNAME == "oz" ]; then 
+#                # Define all Plex data root directories
+#                # Set them all as true
+#                # Example: PLEX_ROOT[/mnt/12TBB/plex]=true
+#                        declare -A PLEX_ROOT
+#                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/metadata]=true
+#                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/store]=true
+#                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/work]=true
+#                        PLEX_ROOT[/mnt/ssd1tb/plex]=true
+#                        PLEX_ROOT[/mnt/ext10tb01/plex]=true
+#                VIDEO_WORK_FILE_SYSTEM="/mnt/ext10tb01"
+#                VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr-in"
+#                VIDEO_STORE_FILE_SYSTEM="/mnt/ext10tb01"
+#                VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex/dvr-oz"
+#                PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
+#                fi
 
 # Postfix Setup
         MAILNAME=$HOSTNAME
