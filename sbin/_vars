@@ -429,7 +429,7 @@ source /etc/os-release
         d="/"
         VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
         VIDEO_STORE_FILE_SYSTEM="/mnt/12TBB"
-        VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr/in"
+        VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr"
         # VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex-dvr"
         VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex"
         PLEX_LIVE_APPLICATION_SUPPORT="/var/snap/plexmediaserver/common/Library"
