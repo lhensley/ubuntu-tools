@@ -502,11 +502,11 @@ source /etc/os-release
         DEFAULT_VIDEO_FILE_PERMISSIONS=$PERMISSIONS_DEFAULT_VIDEO_FILE
         PERMISSIONS_DEFAULT_VIDEO_LIBRARY_DIRECTORY=775
         DEFAULT_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS=$PERMISSIONS_DEFAULT_VIDEO_LIBRARY_DIRECTORY
-        SOURCE_ROOT="/dev/null"               # For Plex DVR, this is $VIDEO_WORK_DIRECTORY
+        SOURCE_ROOT="/mnt/12TBB/plex/test"               # For Plex DVR, this is $VIDEO_WORK_DIRECTORY
                                                                           # For DVDs ripped with MakeMKV, this is $MAKEMKV_OUTPUT_DIRECTORY
         unset SOURCE_FILE_NAME_PATTERN        # For Plex DVR, this is "*.ts"
                                               # For DVDs ripped with MakeMKV, this is "*.mkv"
-        TARGET_ROOT="/dev/null"               # For Plex DVR, this is $VIDEO_STORE_DIRECTORY
+        TARGET_ROOT="/mnt/12TBB/plex/test"               # For Plex DVR, this is $VIDEO_STORE_DIRECTORY
         unset TARGET_FILE_EXTENSION           # Normally this is ".m4v"
         SET_PLEX_PERMISSIONS=false            # If the output file is part of a Plex Library, this is true; otherwise (default) false
         USE_TV_FILTERS=false                  # Should only be true when converting Plex DVR files. Default is false
