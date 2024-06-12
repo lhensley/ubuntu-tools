@@ -32,8 +32,8 @@ while ( -f $PVFlockFile )
 exit -1
 
 #Mark and cut commercials
-echo "cut from '$origFile'" | tee -a $dvrPostLog
-$ComCutFile --lockfile='ComchaplockFile' --comskip-ini=/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/comskip.ini "$origFile"
+echo "cut from '$origFile'" | # tee -a $dvrPostLog
+# $ComCutFile --lockfile='ComchaplockFile' --comskip-ini=/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/comskip.ini "$origFile"
 
 
 
