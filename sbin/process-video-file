@@ -12,16 +12,16 @@
 
 # PATH is unnecessary since it's already there, but it doesn't hurt anything.
 set PATH = "$PATH:/usr/local/bin"
-set ComChapPath = '/usr/local/bin/compath'
-set ComChapFile = '$ComChapPath/compath'
-set ComCutFile = '$ComChapPath/comcut'
-set PVFlockFile = '/tmp/process-video-file.lock'
-set ComchaplockFile = '/tmp/comchap.lock'
+set ComChapPath = "/usr/local/bin/compath"
+set ComChapFile = "$ComChapPath/compath"
+set ComCutFile = "$ComChapPath/comcut"
+set PVFlockFile = "/tmp/process-video-file.lock"
+set ComchaplockFile = "/tmp/comchap.lock"
 set origFile = "$1"
 set tmpFile = "/tmp/$1.tmp"
 set tmpEncode = "/tmp/$1.mkv"
 set tmpSrt = "/tmp/$1.srt"
-set dvrPostLog = '/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/dvrProcessing.log'
+set dvrPostLog = "/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/dvrProcessing.log"
 
 #Wait if post processing is already running
 while ( -f $PVFlockFile )
@@ -33,7 +33,7 @@ exit -1
 
 #Mark and cut commercials
 echo "cut from '$origFile'" | tee -a $dvrPostLog
-'$ComCutFile' --lockfile='ComchaplockFile' --comskip-ini=/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/comskip.ini "$origFile"
+$ComCutFile --lockfile='ComchaplockFile' --comskip-ini=/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/comskip.ini "$origFile"
 
 
 
