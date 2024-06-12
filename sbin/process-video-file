@@ -51,55 +51,57 @@ exit 0
 ############################################################################################
 
 exit -1
-Original script below:
-
-
-#!/bin/csh
-
-set path = ($path /usr/local/bin)
-set lockFile = '/tmp/dvrProcessing.lock'
-set origFile = "$1"
-set tmpFile = "$1.tmp"
-set tmpEncode = "$1.mkv"
-set tmpSrt = "$1.srt"
-set dvrPostLog = '/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/dvrProcessing.log'
-
-#Wait if post processing is already running
-while ( -f $lockFile )
-    echo "'$lockFile' exists, sleeping processing of '$origFile'" | tee $dvrPostLog
-    sleep 10
-end
-
-#Create lock file to prevent other post-processing from running simultaneously
-echo "Creating lock file for processing '$origFile'" | tee -a $dvrPostLog
-touch $lockFile
-
-#Mark and cut commercials
-echo "cut from '$origFile'" | tee -a $dvrPostLog
-/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/comchap/comcut --lockfile=/tmp/ComchaplockFile --comskip-ini=/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/comskip.ini "$origFile"
-
-#Pull CC from file to SRT file
-echo "Pulling Closed captions from '$origFile' to SRT file" | tee -a $dvrPostLog
-ccextractor "$origFile" -o "$tmpSrt"
-
-#Encode file to H.264 with mkv container using ffmpeg and mux in CC srt
-echo "Re-encoding '$origFile' to MKV file while adding cc data" | tee -a $dvrPostLog
-/usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 -deinterlace "$tmpEncode"
-
-#Remove SRT file
-echo "Remove SRT file" | tee -a $dvrPostLog
-rm -f "$tmpSrt"
-
-#Rename first transcoded file to temp file in case no subtitles
-echo "Rename transcoded file to tmp file" | tee -a $dvrPostLog
-mv -f "$tmpEncode" "$tmpFile"
-
-#Overwrite original ts file with the transcoded file
-echo "Removing '$origFile'" | tee -a $dvrPostLog
-mv -f "$tmpFile" "$origFile"
-
-#Remove lock file
-echo "Done processing '$origFile' removing lock" | tee -a $dvrPostLog
-rm $lockFile
-
-exit 0
+# Original script below:
+# 
+# 
+# #!/bin/csh
+# 
+# set path = ($path /usr/local/bin)
+# set lockFile = '/tmp/dvrProcessing.lock'
+# set origFile = "$1"
+# set tmpFile = "$1.tmp"
+# set tmpEncode = "$1.mkv"
+# set tmpSrt = "$1.srt"
+# set dvrPostLog = '/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/dvrProcessing.log'
+# 
+# #Wait if post processing is already running
+# while ( -f $lockFile )
+#     echo "'$lockFile' exists, sleeping processing of '$origFile'" | tee $dvrPostLog
+#     sleep 10
+# end
+# 
+# #Create lock file to prevent other post-processing from running simultaneously
+# echo "Creating lock file for processing '$origFile'" | tee -a $dvrPostLog
+# touch $lockFile
+# 
+# #Mark and cut commercials
+# echo "cut from '$origFile'" | tee -a $dvrPostLog
+# /media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/comchap/comcut --lockfile=/tmp/ComchaplockFile --comskip-ini=/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/comskip.ini "$origFile"
+# 
+# #Pull CC from file to SRT file
+# echo "Pulling Closed captions from '$origFile' to SRT file" | tee -a $dvrPostLog
+# ccextractor "$origFile" -o "$tmpSrt"
+# 
+# #Encode file to H.264 with mkv container using ffmpeg and mux in CC srt
+# echo "Re-encoding '$origFile' to MKV file while adding cc data" | tee -a $dvrPostLog
+# /usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 -deinterlace "$tmpEncode"
+# 
+# #Remove SRT file
+# echo "Remove SRT file" | tee -a $dvrPostLog
+# rm -f "$tmpSrt"
+# 
+# #Rename first transcoded file to temp file in case no subtitles
+# echo "Rename transcoded file to tmp file" | tee -a $dvrPostLog
+# mv -f "$tmpEncode" "$tmpFile"
+# 
+# #Overwrite original ts file with the transcoded file
+# echo "Removing '$origFile'" | tee -a $dvrPostLog
+# mv -f "$tmpFile" "$origFile"
+# 
+# #Remove lock file
+# echo "Done processing '$origFile' removing lock" | tee -a $dvrPostLog
+# rm $lockFile
+# 
+# exit 0
+# 
+# 
