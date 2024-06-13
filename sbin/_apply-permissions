@@ -161,58 +161,12 @@ done
 #   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
-	# Set ownership and permissions for $SBIN_DIR
-		echo
-		echo Updating permissions for $SBIN_DIR
-		chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
-		chmod -R $PERMISSIONS_SBIN $SBIN_DIR
+	echo Applying permissions
+	echo
 
-	# Set ownership and permissions for $SERVICES_DIR
-		echo Updating permissions for $SERVICES_DIR
-		chown -R $ROOT_USER:$ROOT_USER $SERVICES_DIR
-		find $SERVICES_DIR -type d -print -exec chmod $PERMISSIONS_SERVICES_DIR {} \; >> /dev/null 2>&1
-		find $SERVICES_DIR -type f -print -exec chmod $PERMISSIONS_SERVICES_FILES {} \; >> /dev/null 2>&1
-		
-	# Exceptions: These can be read or run by anyone
-		echo "Updating permissions for some required exceptions"
-#		# 2/16/2022: Not sure why it's necessary to confirm existence of these files except to keep chmod from failing below,
-#		# which can be managed with the --silent flag. Added that to all chmods below.
-#		# Confirm that referenced files below exist.
-#			f_require_file "${PATHNAME[_functions]}" 
-#			f_require_file "${PATHNAME[_vars]}"
-#			f_require_file "${PATHNAME[makemkvcon]}"
-#			f_require_file "${PATHNAME[rip]}"
-#			f_require_file "${PATHNAME[script_footer]}"
-#			f_require_file "${PATHNAME[script_setup]}"
-#			# f_require_file "${PATHNAME[upd]}"
-#			# f_require_file "${PATHNAME[_apply_configs]}"
-		# These based on functional requirements
-			echo " " ${PATHNAME[makemkvcon]}
-			chmod --silent $PERMISSIONS_SCRIPT_makemkvcon "${PATHNAME[makemkvcon]}"
-			echo " " ${PATHNAME[_functions]}
-			chmod --silent $PERMISSIONS_SCRIPT__functions "${PATHNAME[_functions]}"
-			echo " " ${PATHNAME[_vars]}
-			chmod --silent $PERMISSIONS_SCRIPT__vars "${PATHNAME[_vars]}"
-			echo " " ${PATHNAME[remove_empty_directories]}
-			chmod --silent $PERMISSIONS_SCRIPT_remove_empty_directories "${PATHNAME[remove_empty_directories]}"
-			echo " " ${PATHNAME[rip]}
-			chmod --silent $PERMISSIONS_SCRIPT_rip "${PATHNAME[rip]}"
-			echo " " ${PATHNAME[script_footer]}
-			chmod --silent $PERMISSIONS_SCRIPT_script_footer "${PATHNAME[script_footer]}" 
-			echo " " ${PATHNAME[script_setup]}
-			chmod --silent $PERMISSIONS_SCRIPT_script_setup "${PATHNAME[script_setup]}" 
-		# These based on desire. CAUTION: Don't expose anything that has a password or code in it.
-			# chmod 740 "${PATHNAME[upd]}"
-			# chmod 740 "${PATHNAME[_apply_configs]}"
-
-	# .coldstorage.log
-		echo "Updating permissions for $COLD_BACKUP_LOG"
-		chmod -f 600 $COLD_BACKUP_LOG
-		chown -f $ROOT_USER:$ROOT_USER $COLD_BACKUP_LOG
-
-	# ddclient
+	# Set /etc/ddclient
 		if $(f_is_installed "ddclient"); then
-			echo "Updating permissions for ddclient"
+			echo "Updating permissions for /etc/ddclient"
 			chmod -f 600 /etc/ddclient.conf /etc/ddclient/ddclient.conf /etc/default/ddclient # confirmed value
 			chown -f $ROOT_USER:$ROOT_USER /etc/ddclient.conf /etc/ddclient/ddclient.conf /etc/default/ddclient
 			fi
@@ -223,7 +177,7 @@ done
 			chmod -f 600 "/etc/exports"
 			fi
 
-	# fstab
+	# /etc/fstab
 		echo "Updating permissions for /etc/fstab*"
 		chmod -f 644 /etc/fstab* # NOT 600. Apps need to read it. Esp k8s 9/17/2023 -LH
 		chown -f $ROOT_USER:$ROOT_USER /etc/fstab*
@@ -231,6 +185,13 @@ done
 	# /etc/hosts
 		echo "Updating permissions for /etc/hosts"
 		chmod -f 644 /etc/hosts
+
+	# /etc/lsyncd
+		if $(f_is_installed "lsyncd"); then
+			echo "Updating permissionf for lsyncd"
+			chown -f $ROOT_USER:$ROOT_USER /etc/lsyncd/lsyncd.conf.lua
+			chmod -f 600 /etc/lsyncd/lsyncd.conf.lua
+			fi
 
 	# Git
 		echo "Updating permissions for git"
@@ -240,24 +201,17 @@ done
 		chown -f $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.gitconfig
 		chmod -f -R 400 $GIT_ROOT/*
 
-	# lsyncd
-		if $(f_is_installed "lsyncd"); then
-			echo "Updating permissionf for lsyncd"
-			chown -f $ROOT_USER:$ROOT_USER /etc/lsyncd/lsyncd.conf.lua
-			chmod -f 600 /etc/lsyncd/lsyncd.conf.lua
-			fi
+	# Set /home/lhensley/.coldstorage.log
+		echo "Updating permissions for $COLD_BACKUP_LOG"
+		chmod -f 600 $COLD_BACKUP_LOG
+		chown -f $ROOT_USER:$ROOT_USER $COLD_BACKUP_LOG
 
-	# MakeMKV
-		if $(f_is_installed "makemkv-bin"); then
-			echo "Updating permissions for MakeMKV"
-			chmod -f 700 "$ADMIN_HOME_DIR/.MakeMKV"
-			chmod -f 700 "$ROOT_HOME_DIR/.MakeMKV"
-			chmod -fR 600 "$ADMIN_HOME_DIR/.MakeMKV"/*
-			chmod -fR 600 "$ROOT_HOME_DIR/.MakeMKV"/*
-			chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.MakeMKV"
-			chown -fR $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.MakeMKV"
-			fi
-
+	# Set /lib/systemd/system ownership and permissions for $SERVICES_DIR
+		echo Updating permissions for $SERVICES_DIR
+		chown -R $ROOT_USER:$ROOT_USER $SERVICES_DIR
+		find $SERVICES_DIR -type d -print -exec chmod $PERMISSIONS_SERVICES_DIR {} \; >> /dev/null 2>&1
+		find $SERVICES_DIR -type f -print -exec chmod $PERMISSIONS_SERVICES_FILES {} \; >> /dev/null 2>&1
+		
 	# MySQL
 		if $(f_is_installed "mysql-server"); then
 			echo "Updating permissions for MySQL"
@@ -277,6 +231,17 @@ done
 #			chmod -f 755 /etc/mysql/conf.d
 #			chmod -f 755 /etc/mysql/mysql.conf.d
 #			chmod -f 755 /etc/mysql/debian-start
+			fi
+
+	# MakeMKV
+		if $(f_is_installed "makemkv-bin"); then
+			echo "Updating permissions for MakeMKV"
+			chmod -f 700 "$ADMIN_HOME_DIR/.MakeMKV"
+			chmod -f 700 "$ROOT_HOME_DIR/.MakeMKV"
+			chmod -fR 600 "$ADMIN_HOME_DIR/.MakeMKV"/*
+			chmod -fR 600 "$ROOT_HOME_DIR/.MakeMKV"/*
+			chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.MakeMKV"
+			chown -fR $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.MakeMKV"
 			fi
 
 	# ~/.ssh
@@ -362,6 +327,43 @@ done
 			chmod -f 644 $PHPMYADMIN_DIR/config.inc.php
 			fi
 
+	# Set /usr/local/sbin ownership and permissions for $SBIN_DIR
+		echo
+		echo Updating permissions for $SBIN_DIR
+		chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
+		chmod -R $PERMISSIONS_SBIN $SBIN_DIR
+
+	# Exceptions: These can be read or run by anyone
+		echo "Updating permissions for some required exceptions"
+#		# 2/16/2022: Not sure why it's necessary to confirm existence of these files except to keep chmod from failing below,
+#		# which can be managed with the --silent flag. Added that to all chmods below.
+#		# Confirm that referenced files below exist.
+#			f_require_file "${PATHNAME[_functions]}" 
+#			f_require_file "${PATHNAME[_vars]}"
+#			f_require_file "${PATHNAME[makemkvcon]}"
+#			f_require_file "${PATHNAME[rip]}"
+#			f_require_file "${PATHNAME[script_footer]}"
+#			f_require_file "${PATHNAME[script_setup]}"
+#			# f_require_file "${PATHNAME[upd]}"
+#			# f_require_file "${PATHNAME[_apply_configs]}"
+		# These based on functional requirements
+			echo " " ${PATHNAME[makemkvcon]}
+			chmod --silent $PERMISSIONS_SCRIPT_makemkvcon "${PATHNAME[makemkvcon]}"
+			echo " " ${PATHNAME[_functions]}
+			chmod --silent $PERMISSIONS_SCRIPT__functions "${PATHNAME[_functions]}"
+			echo " " ${PATHNAME[_vars]}
+			chmod --silent $PERMISSIONS_SCRIPT__vars "${PATHNAME[_vars]}"
+			echo " " ${PATHNAME[remove_empty_directories]}
+			chmod --silent $PERMISSIONS_SCRIPT_remove_empty_directories "${PATHNAME[remove_empty_directories]}"
+			echo " " ${PATHNAME[rip]}
+			chmod --silent $PERMISSIONS_SCRIPT_rip "${PATHNAME[rip]}"
+			echo " " ${PATHNAME[script_footer]}
+			chmod --silent $PERMISSIONS_SCRIPT_script_footer "${PATHNAME[script_footer]}" 
+			echo " " ${PATHNAME[script_setup]}
+			chmod --silent $PERMISSIONS_SCRIPT_script_setup "${PATHNAME[script_setup]}" 
+		# These based on desire. CAUTION: Don't expose anything that has a password or code in it.
+			# chmod 740 "${PATHNAME[upd]}"
+			# chmod 740 "${PATHNAME[_apply_configs]}"
 
 ###################################################
 # Wrap up.
