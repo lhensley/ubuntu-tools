@@ -166,7 +166,8 @@ done
 
 	# /etc/comskip
 			echo "Updating permissions for /etc/comskip"
-			chmod -f 644 /etc/comskip/*
+			chmod -fR 644 /etc/comskip
+			chmod 755 /etc/comskip
 
 	# Set /etc/ddclient
 		if $(f_is_installed "ddclient"); then
