@@ -335,6 +335,10 @@ done
 		chown -f $ROOT_USER:$ROOT_USER /etc/ufw/applications.d
 		chmod -f 644 /etc/ufw/applications.d/*
 
+	# /etc/comskip
+			echo "Updating permissions for /etc/comskip"
+			chmod -f 644 /etc/comskip/*
+
 	# Vim and vi config files
 		echo Updating permissions for "$ADMIN_HOME_DIR/.vim*" and "$ROOT_HOME_DIR/.vim*"
 		chmod -f 600 "$ADMIN_HOME_DIR/.vim*"

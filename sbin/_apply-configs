@@ -218,6 +218,11 @@ done
 #		cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.vim* $ROOT_HOME_DIR/
 #		fi
 
+# Update /etc/comskips
+	rm -f /etc/comskip
+	echo "Updating /etc/comskip from $GIT_GO_CONFIGS/etc/comskip"
+	cp -r "$GIT_GO_CONFIGS/etc/comskip" "/etc/comskip"
+
 # Update /etc/exports
 	rm -f /etc/exports
 	if $(f_is_installed "nfs-kernel-server"); then

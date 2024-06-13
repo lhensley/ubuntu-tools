@@ -32,6 +32,21 @@ if (( $# < 1 )); then
 	exit -1
 	fi
 
+echo Gets to A---.
+
+# Make sure comskip is installed
+if !$(f_is_installed "comskip"); then apt-get -y install comskip; fi
+
+echo Gets to A--.
+
+# Make sure ccextractor is installed
+if !$(f_is_installed "ccextractor"); then apt-get -y install ccextractor; fi
+
+echo Gets to A-.
+
+# Make sure ffmpeg is installed
+if !$(f_is_installed "ffmpeg"); then apt-get -y install ffmpeg; fi
+
 # Wait if post processing is already running
 while [ -f $PVFlockFile ] ; do
     echo "'$PVFlockFile' exists, sleeping processing of '$origFile'" # | tee $dvrPostLog
@@ -49,7 +64,6 @@ echo Gets to B.
 # Mark and cut commercials
 echo "cut from '$origFile'" # | tee -a $dvrPostLog
 echo $ComCutFile --lockfile='ComchaplockFile' "$origFile"
-# comcut --lockfile='ComchaplockFile' --comskip-ini=/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/comskip.ini "$origFile"
 comcut --lockfile='ComchaplockFile' --comskip-ini="$ComSkipINI" $origFile"
 
 echo Gets to C.
