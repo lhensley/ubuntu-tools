@@ -219,7 +219,7 @@ done
 #		fi
 
 # Update /etc/comskips
-	rm -f /etc/comskip
+	rm -rf /etc/comskip
 	echo "Updating /etc/comskip from $GIT_GO_CONFIGS/etc/comskip"
 	cp -r "$GIT_GO_CONFIGS/etc/comskip" "/etc/comskip"
 
