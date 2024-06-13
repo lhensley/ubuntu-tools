@@ -16,6 +16,7 @@
 
 # PATH is unnecessary since it's already there, but it doesn't hurt anything.
 ComChapPath="/usr/local/bin"
+ComSkipINI="/etc/comskip/comskip-DEFAULT.ini"
 PATH="$PATH:$ComChapPath"
 PVFlockFile="/tmp/process-video-file.lock"
 ComchaplockFile="/tmp/comchap.lock"
@@ -23,7 +24,7 @@ origFile="$1"
 tmpFile="/tmp/$1.tmp"
 tmpEncode="/tmp/$1.mkv"
 tmpSrt="/tmp/$1.srt"
-dvrPostLog="/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/dvrProcessing.log"
+# dvrPostLog="/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/dvrProcessing.log"
 
 # Check for input file
 if (( $# < 1 )); then
@@ -37,19 +38,19 @@ while [ -f $PVFlockFile ] ; do
     sleep 10
 	done
 
-# echo Gets to A.
+echo Gets to A.
 
 # Create lock file to prevent other post-processing from running simultaneously
 echo "Creating lock file for processing '$origFile'" # | tee -a $dvrPostLog
 touch "$PVFlockFile"
  
-# echo Gets to B.
+echo Gets to B.
 
 # Mark and cut commercials
 echo "cut from '$origFile'" # | tee -a $dvrPostLog
 echo $ComCutFile --lockfile='ComchaplockFile' "$origFile"
 # comcut --lockfile='ComchaplockFile' --comskip-ini=/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/comskip.ini "$origFile"
-comcut --lockfile='ComchaplockFile' "$origFile"
+comcut --lockfile='ComchaplockFile' --comskip-ini="$ComSkipINI" $origFile"
 
 echo Gets to C.
 
@@ -57,37 +58,29 @@ echo Gets to C.
 echo "Pulling Closed captions from '$origFile' to SRT file" # | tee -a $dvrPostLog
 ccextractor "$origFile" -o "$tmpSrt"
 
-echo Gets to D.
+echo Gets to D. WATCH FOR ERROR ABOUT NO CC FILE.
 
-# #Encode file to H.264 with mkv container using ffmpeg and mux in CC srt
-# echo "Re-encoding '$origFile' to MKV file while adding cc data" | tee -a $dvrPostLog
-# /usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 -deinterlace "$tmpEncode"
-# 
+# Encode file to H.264 with mkv container using ffmpeg and mux in CC srt
+echo "Re-encoding '$origFile' to MKV file while adding cc data" # | tee -a $dvrPostLog
+/usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 -deinterlace "$tmpEncode"
 
 echo Gets to E.
 
-# #Remove SRT file
-# echo "Remove SRT file" | tee -a $dvrPostLog
-# rm -f "$tmpSrt"
-# 
+# Remove SRT file
+echo "Remove SRT file" # | tee -a $dvrPostLog
+rm -f "$tmpSrt"
 
 echo Gets to F.
 
-# #Rename first transcoded file to temp file in case no subtitles
-# echo "Rename transcoded file to tmp file" | tee -a $dvrPostLog
-# mv -f "$tmpEncode" "$tmpFile"
-# 
+# Rename first transcoded file to temp file in case no subtitles
+echo "Rename transcoded file to tmp file" # | tee -a $dvrPostLog
+mv -f "$tmpEncode" "$tmpFile"
 
 echo Gets to G.
 
-# #Overwrite original ts file with the transcoded file
-# echo "Removing '$origFile'" | tee -a $dvrPostLog
-# mv -f "$tmpFile" "$origFile"
-#
-
-
-
-
+# Overwrite original ts file with the transcoded file
+echo "Removing '$origFile'" # | tee -a $dvrPostLog
+mv -f "$tmpFile" "$origFile"
 
 echo Gets to Y.
 
