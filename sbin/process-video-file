@@ -78,7 +78,9 @@ echo Gets to D. WATCH FOR ERROR ABOUT NO CC FILE.
 
 # Encode file to H.264 with mkv container using ffmpeg and mux in CC srt
 echo "Re-encoding '$origFile' to MKV file while adding cc data" # | tee -a $dvrPostLog
-/usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 -filter:v bwdif=mode=send_field:parity=auto:deint=all "$tmpEncode"
+# The -deinterlacing option is deprecated and gone. Google it if yu get crappy video.
+# /usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 -deinterlacing "$tmpEncode"
+/usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 "$tmpEncode"
 
 echo Gets to E.
 
@@ -90,12 +92,16 @@ echo Gets to F.
 
 # Rename first transcoded file to temp file in case no subtitles
 echo "Rename transcoded file to tmp file" # | tee -a $dvrPostLog
+echo tmpEncode $tmpEncode
+echo tmpFile $tmpFile
 mv -f "$tmpEncode" "$tmpFile"
 
 echo Gets to G.
 
 # Overwrite original ts file with the transcoded file
 echo "Removing '$origFile'" # | tee -a $dvrPostLog
+echo tmpFile $tmpFile
+echo origFile $origFile
 mv -f "$tmpFile" "$origFile"
 
 echo Gets to Y.
