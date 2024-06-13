@@ -23,8 +23,6 @@ set tmpEncode = "/tmp/$1.mkv"
 set tmpSrt = "/tmp/$1.srt"
 set dvrPostLog = "/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/dvrProcessing.log"
 
-exit 1
-
 #Wait if post processing is already running
 while ( -f $PVFlockFile )
     echo "'$PVFlockFile' exists, sleeping processing of '$origFile'" # | tee $dvrPostLog
