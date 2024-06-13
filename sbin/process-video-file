@@ -35,17 +35,17 @@ if (( $# < 1 )); then
 echo Gets to A---.
 
 # Make sure comskip is installed
-if !$(f_is_installed "comskip"); then apt-get -y install comskip; fi
+if $(f_is_installed "comskip"); then ; else apt-get -y install comskip; fi
 
 echo Gets to A--.
 
 # Make sure ccextractor is installed
-if !$(f_is_installed "ccextractor"); then apt-get -y install ccextractor; fi
+if $(f_is_installed "ccextractor"); then ; else apt-get -y install ccextractor; fi
 
 echo Gets to A-.
 
 # Make sure ffmpeg is installed
-if !$(f_is_installed "ffmpeg"); then apt-get -y install ffmpeg; fi
+if $(f_is_installed "ffmpeg"); then ; else apt-get -y install ffmpeg; fi
 
 # Wait if post processing is already running
 while [ -f $PVFlockFile ] ; do
@@ -56,15 +56,15 @@ while [ -f $PVFlockFile ] ; do
 echo Gets to A.
 
 # Create lock file to prevent other post-processing from running simultaneously
-echo "Creating lock file for processing '$origFile'" # | tee -a $dvrPostLog
+echo "Creating lock file '$PVFlockFile' for processing '$origFile'" # | tee -a $dvrPostLog
 touch "$PVFlockFile"
  
 echo Gets to B.
 
 # Mark and cut commercials
 echo "cut from '$origFile'" # | tee -a $dvrPostLog
-echo $ComCutFile --lockfile='ComchaplockFile' "$origFile"
-comcut --lockfile='ComchaplockFile' --comskip-ini="$ComSkipINI" $origFile"
+echo comcut --lockfile='ComchaplockFile' "$origFile"
+comcut --lockfile='ComchaplockFile' --comskip-ini="$ComSkipINI" "$origFile"
 
 echo Gets to C.
 
