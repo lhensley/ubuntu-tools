@@ -32,22 +32,22 @@ if (( $# < 1 )); then
 	exit -1
 	fi
 
-echo Gets to A---.
+# echo Gets to A---.
 
 # Make sure comskip is installed
 if $(f_is_installed "comskip"); then true ; else apt-get -y install comskip; fi
 
-echo Gets to A--.
+# echo Gets to A--.
 
 # Make sure ccextractor is installed
 if $(f_is_installed "ccextractor"); then true ; else apt-get -y install ccextractor; fi
 
-echo Gets to A-.
+# echo Gets to A-.
 
 # Make sure ffmpeg is installed
 if $(f_is_installed "ffmpeg"); then true ; else apt-get -y install ffmpeg; fi
 
-echo Gets to A-2.
+# echo Gets to A-2.
 
 # Wait if post processing is already running
 while [ -f $PVFlockFile ] ; do
@@ -55,29 +55,29 @@ while [ -f $PVFlockFile ] ; do
     sleep 10
 	done
 
-echo Gets to A.
+# echo Gets to A.
 
 # Create lock file to prevent other post-processing from running simultaneously
-echo "Creating lock file '$PVFlockFile' for processing '$origFile'" # | tee -a $dvrPostLog
+echo && echo "Creating lock file '$PVFlockFile' for processing '$origFile'" # | tee -a $dvrPostLog
 touch "$PVFlockFile"
  
-echo Gets to B.
+# echo Gets to B.
 
 # Mark and cut commercials
-echo "cut from '$origFile'" # | tee -a $dvrPostLog
-echo comcut --lockfile='ComchaplockFile' "$origFile"
+echo && echo "cut from '$origFile'" # | tee -a $dvrPostLog
+# echo comcut --lockfile='ComchaplockFile' "$origFile"
 comcut --lockfile='ComchaplockFile' --comskip-ini="$ComSkipINI" "$origFile"
 
 echo Gets to C.
 
 # Pull CC from file to SRT file
-echo "Pulling Closed captions from '$origFile' to SRT file" # | tee -a $dvrPostLog
+echo && echo "Pulling Closed captions from '$origFile' to SRT file" # | tee -a $dvrPostLog
 ccextractor "$origFile" -o "$tmpSrt"
 
 echo Gets to D. WATCH FOR ERROR ABOUT NO CC FILE.
 
 # Encode file to H.264 with mkv container using ffmpeg and mux in CC srt
-echo "Re-encoding '$origFile' to MKV file while adding cc data" # | tee -a $dvrPostLog
+echo && echo "Re-encoding '$origFile' to MKV file while adding cc data" # | tee -a $dvrPostLog
 # The -deinterlacing option is deprecated and gone. Google it if yu get crappy video.
 # /usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 -deinterlacing "$tmpEncode"
 /usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 "$tmpEncode"
@@ -85,13 +85,13 @@ echo "Re-encoding '$origFile' to MKV file while adding cc data" # | tee -a $dvrP
 echo Gets to E.
 
 # Remove SRT file
-echo "Remove SRT file" # | tee -a $dvrPostLog
+echo && echo "Remove SRT file" # | tee -a $dvrPostLog
 rm -f "$tmpSrt"
 
 echo Gets to F.
 
 # Rename first transcoded file to temp file in case no subtitles
-echo "Rename transcoded file to tmp file" # | tee -a $dvrPostLog
+echo && echo "Rename transcoded file to tmp file" # | tee -a $dvrPostLog
 echo tmpEncode $tmpEncode
 echo tmpFile $tmpFile
 mv -f "$tmpEncode" "$tmpFile"
@@ -99,18 +99,18 @@ mv -f "$tmpEncode" "$tmpFile"
 echo Gets to G.
 
 # Overwrite original ts file with the transcoded file
-echo "Removing '$origFile'" # | tee -a $dvrPostLog
+echo && echo "Removing '$origFile'" # | tee -a $dvrPostLog
 echo tmpFile $tmpFile
 echo origFile $origFile
 mv -f "$tmpFile" "$origFile"
 
-echo Gets to Y.
+# echo Gets to Y.
 
 # Remove lock file
-echo "Done processing '$origFile' removing lock" # | tee -a $dvrPostLog
+echo && echo "Done processing '$origFile' removing lock" # | tee -a $dvrPostLog
 rm $PVFlockFile
 
-echo Gets to Z.
+# echo Gets to Z.
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
