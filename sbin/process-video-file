@@ -10,8 +10,6 @@
 # Require root
 #	f_require_root
 
-exit 1
-
 # PATH is unnecessary since it's already there, but it doesn't hurt anything.
 set PATH = "$PATH:/usr/local/bin"
 set ComChapPath = "/usr/local/bin/compath"
@@ -24,6 +22,8 @@ set tmpFile = "/tmp/$1.tmp"
 set tmpEncode = "/tmp/$1.mkv"
 set tmpSrt = "/tmp/$1.srt"
 set dvrPostLog = "/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/dvrProcessing.log"
+
+exit 1
 
 #Wait if post processing is already running
 while ( -f $PVFlockFile )
