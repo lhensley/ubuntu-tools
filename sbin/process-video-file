@@ -78,7 +78,7 @@ echo Gets to D. WATCH FOR ERROR ABOUT NO CC FILE.
 
 # Encode file to H.264 with mkv container using ffmpeg and mux in CC srt
 echo "Re-encoding '$origFile' to MKV file while adding cc data" # | tee -a $dvrPostLog
-/usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 -deinterlace "$tmpEncode"
+/usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 -filter:v bwdif=mode=send_field:parity=auto:deint=all "$tmpEncode"
 
 echo Gets to E.
 
