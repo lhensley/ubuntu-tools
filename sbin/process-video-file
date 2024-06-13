@@ -24,10 +24,10 @@ set tmpSrt = "/tmp/$1.srt"
 set dvrPostLog = "/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/dvrProcessing.log"
 
 #Wait if post processing is already running
-while ( -f $PVFlockFile )
+while [ -f $PVFlockFile ] do
     echo "'$PVFlockFile' exists, sleeping processing of '$origFile'" # | tee $dvrPostLog
     sleep 10
-	end
+	done
 
 exit -1
 
