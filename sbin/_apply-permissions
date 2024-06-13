@@ -279,6 +279,16 @@ done
 #			chmod -f 755 /etc/mysql/debian-start
 			fi
 
+	# ~/.ssh
+#		if $(f_is_installed "ssh"); then
+			echo Updating permissions for $ADMIN_HOME_DIR/.ssh and $ROOT_HOME_DIR/.ssh
+			chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh
+			chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh
+			chmod -f 700 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh
+			chmod -f 600 $ADMIN_HOME_DIR/.ssh/* $ROOT_HOME_DIR/.ssh/*
+			chmod -f 644 $ADMIN_HOME_DIR/.ssh/*.pub $ROOT_HOME_DIR/.ssh/*.pub
+#			fi
+
 	# /etc/motd
 		if [ -f /etc/motd ]; then
 			echo "Updating permissions for /etc/motd"
@@ -291,23 +301,13 @@ done
 			chmod -f 400 "/etc/netplan/*"
 			fi
 
-	# resolvconf
+	# /etc/resolvconf
 		if $(f_is_installed "resolvconf"); then
 			echo Updating permissions for /etc/resolvconf/resolv.conf.d/head
 			chown -f $ROOT_USER:$ROOT_USER /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
 			chmod -f 644 /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
 			fi
 	
-	# ~/.ssh
-#		if $(f_is_installed "ssh"); then
-			echo Updating permissions for $ADMIN_HOME_DIR/.ssh and $ROOT_HOME_DIR/.ssh
-			chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh
-			chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh
-			chmod -f 700 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh
-			chmod -f 600 $ADMIN_HOME_DIR/.ssh/* $ROOT_HOME_DIR/.ssh/*
-			chmod -f 644 $ADMIN_HOME_DIR/.ssh/*.pub $ROOT_HOME_DIR/.ssh/*.pub
-#			fi
-
 	# /etc/ssl
 			echo "Updating permissions for /etc/ssl/*.cnf"
 			chmod -f 644 /etc/ssl/*.cnf
