@@ -1,6 +1,10 @@
 #!/bin/bash
 # Based on https://www.reddit.com/r/PleX/comments/6gcfok/comskip_ffmpeg_script/
 
+# TO DO
+# Install with apt-git: comskip ffmpeg ccextractor
+# Install with git script: comchap
+
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
@@ -55,34 +59,31 @@ ccextractor "$origFile" -o "$tmpSrt"
 
 echo Gets to D.
 
-
-
-
-
-# #Pull CC from file to SRT file
-# echo "Pulling Closed captions from '$origFile' to SRT file" | tee -a $dvrPostLog
-# ccextractor "$origFile" -o "$tmpSrt"
-# 
 # #Encode file to H.264 with mkv container using ffmpeg and mux in CC srt
 # echo "Re-encoding '$origFile' to MKV file while adding cc data" | tee -a $dvrPostLog
 # /usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 -deinterlace "$tmpEncode"
 # 
+
+echo Gets to E.
+
 # #Remove SRT file
 # echo "Remove SRT file" | tee -a $dvrPostLog
 # rm -f "$tmpSrt"
 # 
+
+echo Gets to F.
+
 # #Rename first transcoded file to temp file in case no subtitles
 # echo "Rename transcoded file to tmp file" | tee -a $dvrPostLog
 # mv -f "$tmpEncode" "$tmpFile"
 # 
+
+echo Gets to G.
+
 # #Overwrite original ts file with the transcoded file
 # echo "Removing '$origFile'" | tee -a $dvrPostLog
 # mv -f "$tmpFile" "$origFile"
-# 
-
-
-
-
+#
 
 
 
