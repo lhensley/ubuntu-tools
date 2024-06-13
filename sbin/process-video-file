@@ -10,6 +10,8 @@
 # Require root
 #	f_require_root
 
+exit 1
+
 # PATH is unnecessary since it's already there, but it doesn't hurt anything.
 set PATH = "$PATH:/usr/local/bin"
 set ComChapPath = "/usr/local/bin/compath"
