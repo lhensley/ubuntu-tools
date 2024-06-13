@@ -323,6 +323,7 @@ done
 # Apply permissions
 	_apply-permissions $ARGS
 
+echo
 
 ###################################################
 # Wrap up.
