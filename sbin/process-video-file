@@ -35,17 +35,19 @@ if (( $# < 1 )); then
 echo Gets to A---.
 
 # Make sure comskip is installed
-if $(f_is_installed "comskip"); then ; else apt-get -y install comskip; fi
+if $(f_is_installed "comskip"); then true ; else apt-get -y install comskip; fi
 
 echo Gets to A--.
 
 # Make sure ccextractor is installed
-if $(f_is_installed "ccextractor"); then ; else apt-get -y install ccextractor; fi
+if $(f_is_installed "ccextractor"); then true ; else apt-get -y install ccextractor; fi
 
 echo Gets to A-.
 
 # Make sure ffmpeg is installed
-if $(f_is_installed "ffmpeg"); then ; else apt-get -y install ffmpeg; fi
+if $(f_is_installed "ffmpeg"); then true ; else apt-get -y install ffmpeg; fi
+
+echo Gets to A-2.
 
 # Wait if post processing is already running
 while [ -f $PVFlockFile ] ; do
