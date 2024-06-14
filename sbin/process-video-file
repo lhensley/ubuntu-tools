@@ -1,9 +1,8 @@
 #!/bin/bash
 # Based on https://www.reddit.com/r/PleX/comments/6gcfok/comskip_ffmpeg_script/
-
-# TO DO
-# Install with apt-git: comskip ffmpeg ccextractor
-# Install with git script: comchap
+# Dependencies
+# 	From apt-get: comskip ffmpeg ccextractor
+#	From Github: https://github.com/BrettSheleski/comchap
 
 # Include script setup file
 	source script-setup
@@ -16,14 +15,14 @@
 
 # PATH is unnecessary since it's already there, but it doesn't hurt anything.
 ComChapPath="/usr/local/bin"
-ComSkipINI="/etc/comskip/comskip-DEFAULT.ini"
 PATH="$PATH:$ComChapPath"
+ComSkipINI="/etc/comskip/comskip-DEFAULT.ini"
 PVFlockFile="/tmp/process-video-file.lock"
 ComchaplockFile="/tmp/comchap.lock"
 origFile="$1"
-tmpFile="/tmp/$1.tmp"
-tmpEncode="/tmp/$1.mkv"
-tmpSrt="/tmp/$1.srt"
+#tmpFile="/tmp/$1.tmp"
+#tmpEncode="/tmp/$1.mkv"
+#tmpSrt="/tmp/$1.srt"
 # dvrPostLog="/media/8eeb64f5-b001-47d0-a261-bbee8a83d11d/plexdvr/dvrProcessing.log"
 
 # Check for input file
@@ -40,20 +39,20 @@ if $(f_is_installed "comskip"); then true ; else apt-get -y install comskip; fi
 # echo Gets to A--.
 
 # Make sure ccextractor is installed
-if $(f_is_installed "ccextractor"); then true ; else apt-get -y install ccextractor; fi
+# if $(f_is_installed "ccextractor"); then true ; else apt-get -y install ccextractor; fi
 
 # echo Gets to A-.
 
 # Make sure ffmpeg is installed
-if $(f_is_installed "ffmpeg"); then true ; else apt-get -y install ffmpeg; fi
+# if $(f_is_installed "ffmpeg"); then true ; else apt-get -y install ffmpeg; fi
 
 # echo Gets to A-2.
 
 # Wait if post processing is already running
-while [ -f $PVFlockFile ] ; do
-    echo "'$PVFlockFile' exists, sleeping processing of '$origFile'" # | tee $dvrPostLog
-    sleep 10
-	done
+#while [ -f $PVFlockFile ] ; do
+#    echo "'$PVFlockFile' exists, sleeping processing of '$origFile'" # | tee $dvrPostLog
+#    sleep 10
+#	done
 
 # echo Gets to A.
 
@@ -66,47 +65,47 @@ touch "$PVFlockFile"
 # Mark and cut commercials
 echo && echo "cut from '$origFile'" # | tee -a $dvrPostLog
 # echo comcut --lockfile='ComchaplockFile' "$origFile"
-comcut --lockfile='ComchaplockFile' --comskip-ini="$ComSkipINI" "$origFile"
+comcut --lockfile='ComchaplockFile' --comskip-ini="$ComSkipINI" "$origFile" "$2"
 
 echo Gets to C.
 
 # Pull CC from file to SRT file
-echo && echo "Pulling Closed captions from '$origFile' to SRT file" # | tee -a $dvrPostLog
-ccextractor "$origFile" -o "$tmpSrt"
+#echo && echo "Pulling Closed captions from '$origFile' to SRT file" # | tee -a $dvrPostLog
+#ccextractor "$origFile" -o "$tmpSrt"
 
-echo Gets to D. WATCH FOR ERROR ABOUT NO CC FILE.
+#echo Gets to D. WATCH FOR ERROR ABOUT NO CC FILE.
 
 # Encode file to H.264 with mkv container using ffmpeg and mux in CC srt
-echo && echo "Re-encoding '$origFile' to MKV file while adding cc data" # | tee -a $dvrPostLog
+#echo && echo "Re-encoding '$origFile' to MKV file while adding cc data" # | tee -a $dvrPostLog
 # The -deinterlacing option is deprecated and gone. Google it if yu get crappy video.
 # /usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 -deinterlacing "$tmpEncode"
-if [ -s diff.txt ]; then
-		/usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 "$tmpEncode"
-	else
-		/usr/bin/ffmpeg -i "$origFile" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 "$tmpEncode"
-	fi
+#if [ -s diff.txt ]; then
+#		/usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 "$tmpEncode"
+#	else
+#		/usr/bin/ffmpeg -i "$origFile" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 "$tmpEncode"
+#	fi
 
 echo Gets to E.
 
 # Remove SRT file
-echo && echo "Remove SRT file" # | tee -a $dvrPostLog
-rm -f "$tmpSrt"
+#echo && echo "Remove SRT file" # | tee -a $dvrPostLog
+#rm -f "$tmpSrt"
 
 echo Gets to F.
 
 # Rename first transcoded file to temp file in case no subtitles
-echo && echo "Rename transcoded file to tmp file" # | tee -a $dvrPostLog
-echo tmpEncode $tmpEncode
-echo tmpFile $tmpFile
-mv -f "$tmpEncode" "$tmpFile"
+#echo && echo "Rename transcoded file to tmp file" # | tee -a $dvrPostLog
+#echo tmpEncode $tmpEncode
+#echo tmpFile $tmpFile
+#mv -f "$tmpEncode" "$tmpFile"
 
 echo Gets to G.
 
 # Overwrite original ts file with the transcoded file
-echo && echo "Removing '$origFile'" # | tee -a $dvrPostLog
-echo tmpFile $tmpFile
-echo origFile $origFile
-mv -f "$tmpFile" "$origFile"
+#echo && echo "Removing '$origFile'" # | tee -a $dvrPostLog
+#echo tmpFile $tmpFile
+#echo origFile $origFile
+#mv -f "$tmpFile" "$origFile"
 
 # echo Gets to Y.
 
