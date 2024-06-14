@@ -68,19 +68,22 @@ echo && echo "cut from '$origFile'" # | tee -a $dvrPostLog
 # echo comcut --lockfile='ComchaplockFile' "$origFile"
 comcut --lockfile='ComchaplockFile' --comskip-ini="$ComSkipINI" "$origFile"
 
-# echo Gets to C.
+echo Gets to C.
 
 # Pull CC from file to SRT file
 echo && echo "Pulling Closed captions from '$origFile' to SRT file" # | tee -a $dvrPostLog
 ccextractor "$origFile" -o "$tmpSrt"
 
-# echo Gets to D. WATCH FOR ERROR ABOUT NO CC FILE.
+echo Gets to D. WATCH FOR ERROR ABOUT NO CC FILE.
 
 # Encode file to H.264 with mkv container using ffmpeg and mux in CC srt
 echo && echo "Re-encoding '$origFile' to MKV file while adding cc data" # | tee -a $dvrPostLog
 # The -deinterlacing option is deprecated and gone. Google it if yu get crappy video.
 # /usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 -deinterlacing "$tmpEncode"
 /usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 "$tmpEncode"
+echo origFile $origFile
+echo tmpSrt $tmpSrt
+echo tmpEncode $tmpEncode
 
 echo Gets to E.
 
