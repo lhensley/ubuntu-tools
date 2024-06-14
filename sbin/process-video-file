@@ -65,7 +65,7 @@ touch "$PVFlockFile"
 # Mark and cut commercials
 echo && echo "cut from '$origFile'" # | tee -a $dvrPostLog
 # echo comcut --lockfile='ComchaplockFile' "$origFile"
-comcut --lockfile='ComchaplockFile' --comskip-ini="$ComSkipINI" "$origFile" "$2"
+comcut --lockfile='ComchaplockFile' --comskip-ini="$ComSkipINI" "$origFile"
 
 echo Gets to C.
 
@@ -110,8 +110,18 @@ echo Gets to G.
 # echo Gets to Y.
 
 Remaster to HEVC
-"$HANDBRAKE_CLI --preset-import-file \"$HANDBRAKE_PRESETS\" -i \"$SOURCE_FILE\" -o \"$TARGET_FILE\""
-HandBrakeCLI --preset-import-file "$HANDBRAKE_PRESETS"
+echo "     Start High Speed" $(date) >> timestamps
+HandBrakeCLI --preset-import-file "~/.HandBrake/Lane High Speed.json" -i "$origFile" -o "HighSpeedHEVC.mp4"
+echo "       End High Speed" $(date) >> timestamps
+echo "     Start Good Speed" $(date) >> timestamps
+HandBrakeCLI --preset-import-file "~/.HandBrake/Lane Good Speed.json" -i "$origFile" -o "GoodSpeedHEVC.mp4"
+echo "       End Good Speed" $(date) >> timestamps
+echo "   Start Good Quality" $(date) >> timestamps
+HandBrakeCLI --preset-import-file "~/.HandBrake/Lane Good Quality.json" -i "$origFile" -o "GoodQualityHEVC.mp4"
+echo "     End Good Quality" $(date) >> timestamps
+echo "Start Highest Quality" $(date) >> timestamps
+HandBrakeCLI --preset-import-file "~/.HandBrake/Lane Highest Quality.json" -i "$origFile" -o "HighestQualityHEVC.mp4"
+echo "  End Highest Quality" $(date) >> timestamps
 
 # Remove lock file
 echo && echo "Done processing '$origFile' removing lock" # | tee -a $dvrPostLog
