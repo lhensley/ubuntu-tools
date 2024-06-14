@@ -68,13 +68,13 @@ echo && echo "cut from '$origFile'" # | tee -a $dvrPostLog
 # echo comcut --lockfile='ComchaplockFile' "$origFile"
 comcut --lockfile='ComchaplockFile' --comskip-ini="$ComSkipINI" "$origFile"
 
-echo Gets to C.
+# echo Gets to C.
 
 # Pull CC from file to SRT file
 echo && echo "Pulling Closed captions from '$origFile' to SRT file" # | tee -a $dvrPostLog
 ccextractor "$origFile" -o "$tmpSrt"
 
-echo Gets to D. WATCH FOR ERROR ABOUT NO CC FILE.
+# echo Gets to D. WATCH FOR ERROR ABOUT NO CC FILE.
 
 # Encode file to H.264 with mkv container using ffmpeg and mux in CC srt
 echo && echo "Re-encoding '$origFile' to MKV file while adding cc data" # | tee -a $dvrPostLog
@@ -86,7 +86,7 @@ echo Gets to E.
 
 # Remove SRT file
 echo && echo "Remove SRT file" # | tee -a $dvrPostLog
-rm -f "$tmpSrt"
+####### rm -f "$tmpSrt"
 
 echo Gets to F.
 
