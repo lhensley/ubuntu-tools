@@ -188,7 +188,7 @@ done
 		chown -f $ROOT_USER:$ROOT_USER /etc/fstab*
 
 	# /etc/HandBrake
-			echo "Updating permissions for HandBrake"
+			echo "Updating permissions for /etc/HandBrake"
 			chmod -fR 644 /etc/HandBrake
 			chmod 755 /etc/HandBrake
 

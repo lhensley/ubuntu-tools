@@ -20,6 +20,8 @@ ComSkipINI="/etc/comskip/comskip-DEFAULT.ini"
 PVFlockFile="/tmp/process-video-file.lock"
 ComchaplockFile="/tmp/comchap.lock"
 origFile="$1"
+HandbrakePreset="/etc/HandBrake/Lane Highest Quality.json"
+tmpHEVC="/tmp/tmpHEVC"
 #tmpFile="/tmp/$1.tmp"
 #tmpEncode="/tmp/$1.mkv"
 #tmpSrt="/tmp/$1.srt"
@@ -31,104 +33,31 @@ if (( $# < 1 )); then
 	exit -1
 	fi
 
-# echo Gets to A---.
-
 # Make sure comskip is installed
 if $(f_is_installed "comskip"); then true ; else apt-get -y install comskip; fi
-
-# echo Gets to A--.
-
-# Make sure ccextractor is installed
-# if $(f_is_installed "ccextractor"); then true ; else apt-get -y install ccextractor; fi
-
-# echo Gets to A-.
-
-# Make sure ffmpeg is installed
-# if $(f_is_installed "ffmpeg"); then true ; else apt-get -y install ffmpeg; fi
-
-# echo Gets to A-2.
-
-# Wait if post processing is already running
-#while [ -f $PVFlockFile ] ; do
-#    echo "'$PVFlockFile' exists, sleeping processing of '$origFile'" # | tee $dvrPostLog
-#    sleep 10
-#	done
-
-# echo Gets to A.
 
 # Create lock file to prevent other post-processing from running simultaneously
 echo && echo "Creating lock file '$PVFlockFile' for processing '$origFile'" # | tee -a $dvrPostLog
 touch "$PVFlockFile"
  
-# echo Gets to B.
-
 # Mark and cut commercials
 echo && echo "cut from '$origFile'" # | tee -a $dvrPostLog
-echo "      Starting comcut" $(date) >> timestamps
 comcut --lockfile='ComchaplockFile' --comskip-ini="$ComSkipINI" "$origFile"
-echo "        Ending comcut" $(date) >> timestamps
 
-echo Gets to C.
+echo && echo "Render the HEVC version"
+HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$origFile" -o "$tmpHEVC"
 
-# Pull CC from file to SRT file
-#echo && echo "Pulling Closed captions from '$origFile' to SRT file" # | tee -a $dvrPostLog
-#ccextractor "$origFile" -o "$tmpSrt"
-
-#echo Gets to D. WATCH FOR ERROR ABOUT NO CC FILE.
-
-# Encode file to H.264 with mkv container using ffmpeg and mux in CC srt
-#echo && echo "Re-encoding '$origFile' to MKV file while adding cc data" # | tee -a $dvrPostLog
-# The -deinterlacing option is deprecated and gone. Google it if yu get crappy video.
-# /usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 -deinterlacing "$tmpEncode"
-#if [ -s diff.txt ]; then
-#		/usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 "$tmpEncode"
-#	else
-#		/usr/bin/ffmpeg -i "$origFile" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 "$tmpEncode"
-#	fi
-
-echo Gets to E.
-
-# Remove SRT file
-#echo && echo "Remove SRT file" # | tee -a $dvrPostLog
-#rm -f "$tmpSrt"
-
-echo Gets to F.
-
-# Rename first transcoded file to temp file in case no subtitles
-#echo && echo "Rename transcoded file to tmp file" # | tee -a $dvrPostLog
-#echo tmpEncode $tmpEncode
-#echo tmpFile $tmpFile
-#mv -f "$tmpEncode" "$tmpFile"
-
-echo Gets to G.
-
-# Overwrite original ts file with the transcoded file
-#echo && echo "Removing '$origFile'" # | tee -a $dvrPostLog
-#echo tmpFile $tmpFile
-#echo origFile $origFile
-#mv -f "$tmpFile" "$origFile"
-
-# echo Gets to Y.
-
-Remaster to HEVC
-echo "     Start High Speed" $(date) >> timestamps
-HandBrakeCLI --preset-import-file "~/.HandBrake/Lane High Speed.json" -i "$origFile" -o "HighSpeedHEVC.mp4"
-echo "       End High Speed" $(date) >> timestamps
-echo "     Start Good Speed" $(date) >> timestamps
-HandBrakeCLI --preset-import-file "~/.HandBrake/Lane Good Speed.json" -i "$origFile" -o "GoodSpeedHEVC.mp4"
-echo "       End Good Speed" $(date) >> timestamps
-echo "   Start Good Quality" $(date) >> timestamps
-HandBrakeCLI --preset-import-file "~/.HandBrake/Lane Good Quality.json" -i "$origFile" -o "GoodQualityHEVC.mp4"
-echo "     End Good Quality" $(date) >> timestamps
-echo "Start Highest Quality" $(date) >> timestamps
-HandBrakeCLI --preset-import-file "~/.HandBrake/Lane Highest Quality.json" -i "$origFile" -o "HighestQualityHEVC.mp4"
-echo "  End Highest Quality" $(date) >> timestamps
+echo && echo "Replace the $origFile"
+DIR="$(dirname "${origFile}")"
+filename=$(basename -- "$origFile")
+extension="${filename##*.}"
+filename="${filename%.*}"
+rm -f "$origFile"
+mv "$tmpHEVC" "$DIR/$filename - HEVC.mp4"
 
 # Remove lock file
 echo && echo "Done processing '$origFile' removing lock" # | tee -a $dvrPostLog
 rm $PVFlockFile
-
-# echo Gets to Z.
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
