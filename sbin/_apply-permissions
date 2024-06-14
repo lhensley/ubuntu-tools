@@ -190,7 +190,7 @@ done
 	# /etc/HandBrake
 			echo "Updating permissions for HandBrake"
 			chmod -fR 644 /etc/HandBrake
-			chmod 755 /HandBrake
+			chmod 755 /etc/HandBrake
 
 	# /etc/hosts
 		echo "Updating permissions for /etc/hosts"

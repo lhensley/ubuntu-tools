@@ -194,14 +194,6 @@ done
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ROOT_HOME_DIR/.HandBrake"
 		fi
 
-# Update /etc/HandBrake
-	rm -rf "/etc/HandBrake"
-	if $(f_is_installed "handbrake-cli"); then
-		echo "Updating /etc/HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
-		mkdir -p "/etc/HandBrake"
-		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "/etc/HandBrake"
-		fi
-
 # Update ~/.MakeMKV
 	rm -f "$ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ROOT_HOME_DIR/.MakeMKV/settings.conf"
 	if $(f_is_installed "makemkv-bin"); then
@@ -266,13 +258,6 @@ done
 		echo "Updating /etc/HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
 		mkdir -p "/etc/HandBrake"
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "/etc/HandBrake/"
-		fi
-
-# Update /etc/hosts
-	rm -f /etc/hosts
-	if [ -f $GIT_GO_CONFIGS/etc/hosts.$HOSTNAME ]; then
-		echo "Updating /etc/hosts from $GIT_GO_CONFIGS/etc/hosts.$HOSTNAME"
-		cp "$GIT_GO_CONFIGS/etc/hosts.$HOSTNAME" "/etc/hosts"
 		fi
 
 # Update /etc/lsyncd/*
