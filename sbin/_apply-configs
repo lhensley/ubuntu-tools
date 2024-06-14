@@ -194,6 +194,14 @@ done
 		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "$ROOT_HOME_DIR/.HandBrake"
 		fi
 
+# Update /etc/HandBrake
+	rm -rf "/etc/HandBrake"
+	if $(f_is_installed "handbrake-cli"); then
+		echo "Updating /etc/HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
+		mkdir -p "/etc/HandBrake"
+		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "/etc/HandBrake"
+		fi
+
 # Update ~/.MakeMKV
 	rm -f "$ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ROOT_HOME_DIR/.MakeMKV/settings.conf"
 	if $(f_is_installed "makemkv-bin"); then
@@ -250,6 +258,14 @@ done
 		cp -T $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient.conf
 		cp -T $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient/ddclient.conf
 		cp -T $GIT_GO_CONFIGS/etc/ddclient/ddclient.conf.default /etc/.default/ddclient.conf
+		fi
+
+# Update /etc/HandBrake
+	rm -rf "/etc/HandBrake"
+	if $(f_is_installed "handbrake-cli"); then
+		echo "Updating /etc/HandBrake from $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
+		mkdir -p "/etc/HandBrake"
+		cp "$GIT_GO_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "/etc/HandBrake/"
 		fi
 
 # Update /etc/hosts

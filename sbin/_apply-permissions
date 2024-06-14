@@ -187,6 +187,11 @@ done
 		chmod -f 644 /etc/fstab* # NOT 600. Apps need to read it. Esp k8s 9/17/2023 -LH
 		chown -f $ROOT_USER:$ROOT_USER /etc/fstab*
 
+	# /etc/HandBrake
+			echo "Updating permissions for HandBrake"
+			chmod -fR 644 /etc/HandBrake
+			chmod 755 /HandBrake
+
 	# /etc/hosts
 		echo "Updating permissions for /etc/hosts"
 		chmod -f 644 /etc/hosts
