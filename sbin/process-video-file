@@ -80,7 +80,7 @@ echo Gets to D. WATCH FOR ERROR ABOUT NO CC FILE.
 echo && echo "Re-encoding '$origFile' to MKV file while adding cc data" # | tee -a $dvrPostLog
 # The -deinterlacing option is deprecated and gone. Google it if yu get crappy video.
 # /usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 -deinterlacing "$tmpEncode"
-if [ -s diff.txt ]; then true; else
+if [ -s diff.txt ]; then
 		/usr/bin/ffmpeg -i "$origFile" -i "$tmpSrt" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 "$tmpEncode"
 	else
 		/usr/bin/ffmpeg -i "$origFile" -map 0 -map 1 -acodec copy -scodec copy -c:v libx264 -preset medium -profile:v high -level 4.0 "$tmpEncode"
