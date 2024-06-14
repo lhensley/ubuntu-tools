@@ -64,8 +64,9 @@ touch "$PVFlockFile"
 
 # Mark and cut commercials
 echo && echo "cut from '$origFile'" # | tee -a $dvrPostLog
-# echo comcut --lockfile='ComchaplockFile' "$origFile"
+echo "      Starting comcut" $(date) >> timestamps
 comcut --lockfile='ComchaplockFile' --comskip-ini="$ComSkipINI" "$origFile"
+echo "        Ending comcut" $(date) >> timestamps
 
 echo Gets to C.
 
