@@ -109,6 +109,10 @@ echo Gets to G.
 
 # echo Gets to Y.
 
+Remaster to HEVC
+"$HANDBRAKE_CLI --preset-import-file \"$HANDBRAKE_PRESETS\" -i \"$SOURCE_FILE\" -o \"$TARGET_FILE\""
+HandBrakeCLI --preset-import-file "$HANDBRAKE_PRESETS"
+
 # Remove lock file
 echo && echo "Done processing '$origFile' removing lock" # | tee -a $dvrPostLog
 rm $PVFlockFile
