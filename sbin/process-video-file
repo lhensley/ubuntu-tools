@@ -9,6 +9,20 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
+# If you want to iterate through a directory tree, do this:
+#   find DIRECTORY -type f > LISTFILE
+#   while read f ; do process-video-file $f ; done < LISTFILE
+# Example: 
+#	find '/mnt/12TBB/plex/TV Shows/Regular/DVR' -type f > ~/video-list)
+#   while read f ; do process-video-file $f ; done < ~/video-list
+# This could take a very long time. If the process is interrupted:
+#   1. Check ~/last-video-processed to see the last video processed without error.
+#   2. Edit the LISTFILE and remove everything from start to last video processed without error.
+#   3. Re-start the process:
+#        while read f ; do process-video-file $f ; done < LISTFILE
+# 	   Example: 
+#        while read f ; do process-video-file $f ; done < ~/video-list
+
 # POSSIBLE OPTION: USE IF YOU WANT
 # Require root
 #	f_require_root
@@ -33,9 +47,16 @@ if (( $# < 1 )); then
     echo "No input file specified."
 	exit -1
 	fi
+if ! exiftool -s3 -MIMEType "$1" | grep video > /dev/null ; then 
+    echo "Not a video file: $1"
+	exit -1
+	fi
 
 # Make sure comskip is installed
 if $(f_is_installed "comskip"); then true ; else apt-get -y install comskip; fi
+
+# Make sure exiftool is installed
+if $(f_is_installed "exiftool"); then true ; else apt-get -y install exiftool; fi
 
 # Create lock file to prevent other post-processing from running simultaneously
 echo && echo "Creating lock file '$PVFlockFile' for processing '$origFile'" # | tee -a $dvrPostLog
@@ -48,13 +69,18 @@ comcut --lockfile='ComchaplockFile' --comskip-ini="$ComSkipINI" "$origFile"
 echo && echo "Render the HEVC version"
 HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$origFile" -o "$tmpHEVC"
 
-echo && echo "Replace the $origFile"
+echo && echo "Replace and tag the $origFile"
 DIR="$(dirname "${origFile}")"
 filename=$(basename -- "$origFile")
 extension="${filename##*.}"
 filename="${filename%.*}"
-rm -f "$origFile"
-mv "$tmpHEVC" "$DIR/$filename - HEVC.mp4"
+# rm -f "$origFile"
+# mv "$tmpHEVC" "$DIR/$filename.mp4"
+exiftool -overwrite_original -Information="comskip/comcut applied $(date -u)" "$tmpHEVC"
+mv "$tmpHEVC" "$DIR/$filename.mp4"
+
+# Leave status in the user's home directory
+echo "$(date) $origFile" > ~/last-video-processed
 
 # Remove lock file
 echo && echo "Done processing '$origFile' removing lock" # | tee -a $dvrPostLog
