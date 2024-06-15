@@ -22,6 +22,7 @@ ComchaplockFile="/tmp/comchap.lock"
 origFile="$1"
 HandbrakePreset="/etc/HandBrake/Lane Highest Quality.json"
 tmpHEVC="/tmp/tmpHEVC"
+uuid=$(uuidgen)
 #tmpFile="/tmp/$1.tmp"
 #tmpEncode="/tmp/$1.mkv"
 #tmpSrt="/tmp/$1.srt"

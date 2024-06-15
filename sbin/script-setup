@@ -6,6 +6,7 @@ VARIABLES_ARE_DEFINED=false
 
 # Load global variables
 source "_vars"
+THIS_UUID=$(uuidgen)
 
 # Load global functions
 source "_functions"		# NOTE: _vars must be sourced first, or this will fail.
