@@ -52,22 +52,32 @@ if ! exiftool -s3 -MIMEType "$1" | grep video > /dev/null ; then
 	exit -1
 	fi
 
+echo A
+
 # Make sure comskip is installed
-if $(f_is_installed "comskip"); then true ; else apt-get -y install comskip; fi
+# if $(f_is_installed "comskip"); then true ; else apt-get -y install comskip; fi
 
 # Make sure exiftool is installed
-if $(f_is_installed "exiftool"); then true ; else apt-get -y install exiftool; fi
+# if $(f_is_installed "exiftool"); then true ; else apt-get -y install exiftool; fi
+
+echo B
 
 # Create lock file to prevent other post-processing from running simultaneously
 echo && echo "Creating lock file '$PVFlockFile' for processing '$origFile'" # | tee -a $dvrPostLog
 touch "$PVFlockFile"
  
+echo C
+
 # Mark and cut commercials
 echo && echo "cut from '$origFile'" # | tee -a $dvrPostLog
 comcut --lockfile='ComchaplockFile' --comskip-ini="$ComSkipINI" "$origFile"
 
+echo D
+
 echo && echo "Render the HEVC version"
 HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$origFile" -o "$tmpHEVC"
+
+echo E
 
 echo && echo "Replace and tag the $origFile"
 DIR="$(dirname "${origFile}")"
@@ -79,18 +89,26 @@ filename="${filename%.*}"
 exiftool -overwrite_original -Information="comskip/comcut applied $(date -u)" "$tmpHEVC"
 mv "$tmpHEVC" "$DIR/$filename.mp4"
 
+echo F
+
 # Leave status in the user's home directory
 echo "$(date) $origFile" > ~/last-video-processed
+
+echo G
 
 # Remove lock file
 echo && echo "Done processing '$origFile' removing lock" # | tee -a $dvrPostLog
 rm $PVFlockFile
+
+echo H
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
 
 exit 0
+
+echo I
 
 ############################################################################################
 
