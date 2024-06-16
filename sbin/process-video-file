@@ -60,6 +60,9 @@ echo A
 # Make sure exiftool is installed
 # if $(f_is_installed "exiftool"); then true ; else apt-get -y install exiftool; fi
 
+# Make sure mediainfo is installed
+# if $(f_is_installed "mediainfo"); then true ; else apt-get -y install mediainfo; fi
+
 echo B
 
 # Create lock file to prevent other post-processing from running simultaneously
