@@ -10,18 +10,17 @@
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 # If you want to iterate through a directory tree, do this:
-#   find DIRECTORY -type f > LISTFILE
-#   while read f ; do process-video-file $f ; done < LISTFILE
+#   find DIRECTORY -type f -printf 'process-video-file "%p"\n' > BATCHFILE
+#   chmod 700 BATCHFILE
+#   BATCHFILE
 # Example: 
-#	find '/mnt/12TBB/plex/TV Shows/Regular/DVR' -type f > ~/video-list
-#   while read f ; do process-video-file "$f" ; done < ~/video-list
+#   find '/mnt/12TBB/plex/TV Shows/Regular/DVR' -type f -printf 'process-video-file "%p"\n' > ~/video-batch
+#   chmod 700 ~/video-batch
+#   ~/video-batch
 # This could take a very long time. If the process is interrupted:
 #   1. Check ~/last-video-processed to see the last video processed without error.
-#   2. Edit the LISTFILE and remove everything from start to last video processed without error.
-#   3. Re-start the process:
-#        while read f ; do process-video-file $f ; done < LISTFILE
-# 	   Example: 
-#        while read f ; do process-video-file $f ; done < ~/video-list
+#   2. Edit the BATCHFILE and remove everything from start to last video processed without error.
+#   3. Re-start the script.
 
 # POSSIBLE OPTION: USE IF YOU WANT
 # Require root
