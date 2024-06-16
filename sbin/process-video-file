@@ -52,6 +52,13 @@ if ! exiftool -s3 -MIMEType "$1" | grep video > /dev/null ; then
 	exit -1
 	fi
 
+function f_remove_locks () {
+# Usage f_remove_locks
+	# Remove lock file
+	echo && echo "Done processing '$origFile' removing lock" # | tee -a $dvrPostLog
+	rm $PVFlockFile
+	}
+
 echo A
 
 # Make sure comskip is installed
@@ -69,16 +76,16 @@ echo B
 echo && echo "Creating lock file '$PVFlockFile' for processing '$origFile'" # | tee -a $dvrPostLog
 touch "$PVFlockFile"
  
-echo C
-
-# Mark and cut commercials
-echo && echo "cut from '$origFile'" # | tee -a $dvrPostLog
-comcut --lockfile='ComchaplockFile' --comskip-ini="$ComSkipINI" "$origFile"
-
 echo D
 
 echo && echo "Render the HEVC version"
 HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$origFile" -o "$tmpHEVC"
+
+echo C
+
+# Mark and cut commercials
+echo && echo "cut from '$origFile'" # | tee -a $dvrPostLog
+comcut --lockfile='$ComchaplockFile' --comskip-ini="$ComSkipINI" "$tmpHEVC"
 
 echo E
 
@@ -87,8 +94,7 @@ DIR="$(dirname "${origFile}")"
 filename=$(basename -- "$origFile")
 extension="${filename##*.}"
 filename="${filename%.*}"
-# rm -f "$origFile"
-# mv "$tmpHEVC" "$DIR/$filename.mp4"
+rm -f "$origFile"
 exiftool -overwrite_original -Information="comskip/comcut applied $(date -u)" "$tmpHEVC"
 mv "$tmpHEVC" "$DIR/$filename.mp4"
 
@@ -100,8 +106,7 @@ echo "$(date) $origFile" > ~/last-video-processed
 echo G
 
 # Remove lock file
-echo && echo "Done processing '$origFile' removing lock" # | tee -a $dvrPostLog
-rm $PVFlockFile
+f_remove_locks
 
 echo H
 
