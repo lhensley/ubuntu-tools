@@ -59,8 +59,6 @@ function f_remove_locks () {
 	rm $PVFlockFile
 	}
 
-echo A
-
 # Make sure comskip is installed
 # if $(f_is_installed "comskip"); then true ; else apt-get -y install comskip; fi
 
@@ -70,53 +68,39 @@ echo A
 # Make sure mediainfo is installed
 # if $(f_is_installed "mediainfo"); then true ; else apt-get -y install mediainfo; fi
 
-echo B
-
 # Create lock file to prevent other post-processing from running simultaneously
 echo && echo "Creating lock file '$PVFlockFile' for processing '$origFile'" # | tee -a $dvrPostLog
 touch "$PVFlockFile"
  
-echo D
-
 echo && echo "Render the HEVC version"
-HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$origFile" -o "$tmpHEVC"
-
-echo C
-
-# Mark and cut commercials
-echo && echo "cut from '$origFile'" # | tee -a $dvrPostLog
-comcut --lockfile='$ComchaplockFile' --comskip-ini="$ComSkipINI" "$tmpHEVC"
-
-echo E
-
-echo && echo "Replace and tag the $origFile"
 DIR="$(dirname "${origFile}")"
 filename=$(basename -- "$origFile")
 extension="${filename##*.}"
 filename="${filename%.*}"
+tmpHEVC="/tmp/$filename.mp4"
+HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$origFile" -o "$tmpHEVC"
+
+# Mark and cut commercials
+echo && echo "cut from '$tmpHEVC'" # | tee -a $dvrPostLog
+comcut --lockfile='$ComchaplockFile' --comskip-ini="$ComSkipINI" "$tmpHEVC"
+
+# Tag the temp file and replace $origFile
+echo && echo "Replace and tag the $origFile"
 rm -f "$origFile"
 exiftool -overwrite_original -Information="comskip/comcut applied $(date -u)" "$tmpHEVC"
-mv "$tmpHEVC" "$DIR/$filename.mp4"
-
-echo F
+mv "$tmpHEVC" "$DIR/"
 
 # Leave status in the user's home directory
 echo "$(date) $origFile" > ~/last-video-processed
 
-echo G
-
 # Remove lock file
 f_remove_locks
-
-echo H
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
 
 exit 0
-
-echo I
 
 ############################################################################################
 
