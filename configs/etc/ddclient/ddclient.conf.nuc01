@@ -2,35 +2,34 @@
 
 # Dynu nuc01.dynu.com
 # Check every 60 seconds.
-# daemon=7200 # 90 minutes between refresh                # Leave out
+# daemon=7200 # 90 minutes between refresh
 daemon=0
 # Log update msgs to syslog.
-syslog=yes                                              # -syslog
+syslog=yes
 # Mail all msgs to root.
-mail=lane@lanehensley.org                                         # Leave out
+mail=lane@lanehensley.org
 # Mail failed update msgs to root.
-mail-failure=lane@lanehensley.org                                 # -mail-failure 'root@nuc01'
+mail-failure=lane@lanehensley.org
 # Use ssl
-ssl=yes                                                 # -ssl
+ssl=yes
 # Record PID in file.
-pid=/var/run/ddclient.pid                               # -pid '/var/run/ddclient.pid'
+pid=/var/run/ddclient.pid
 # Get ip from server.
-# use=web, web=checkip.dynu.com/, web-skip='IP Address'   # -ip 'ADDRESS'
-# use=ip, ip='75.219.158.140'
-# usev6=ip, ip='2600:1014:a110:90fd::3c'
-# use=cmd, cmd='curl -s4 ifconfig.me/ip 2> /dev/null'
-usev6=cmd, cmd='echo 2600:1014:a110:90fd::3c'
+# WORKS! use=ip, ip='75.219.158.140'
+use=cmd, cmd='curl -s4 ifconfig.me/ip 2> /dev/null'
+# use=web, web=checkip.dynu.com/, web-skip='IP Address'
+# use=ip, ip='2600:1014:a110:90fd::3c'
 # IP update server.
-server=api.dynu.com                                     # -server 'api.dynu.com'
+server=api.dynu.com
 # Use dyndns2 protocol
-protocol=dyndns2                                        # -protocol 'dyndns2'
+protocol=dyndns2
 # Your username
-login='lanehensley'                                     # -login 'lanehensley'
+login='lanehensley'
 # Your password or MD5/SHA256 of account password or New IP Update Password
-password='ihbJXdoyFUofpyfExTQp'
-#password='aDgD2VjTKNd2J@r6FCqv'                         # -password 'aDgD2VjTKNd2J@r6FCqv'
+# password='ihbJXdoyFUofpyfExTQp'
+password='aDgD2VjTKNd2J@r6FCqv'
 # List one or more hostnames one on each line.
-lanehensley.org                                         # -host 'lanehensley.org'
+lanehensley.org
 
 ##########################################################################
 ### END ##################################################################
