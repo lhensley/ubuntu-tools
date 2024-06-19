@@ -11,10 +11,14 @@
 	f_require_root
 
 # Do stuff here
-v4=$(curl -s4 ifconfig.me/ip)
-v6=$(curl -s6 ifconfig.me/ip)
-echo $v4
-echo $v6
+v4_On_File=$(cat /etc/public-ipv4 2> /dev/null)
+v6_On_File=$(cat /etc/public-ipv6 2> /dev/null)
+v4_Now=$(curl -s4 ifconfig.me/ip 2> /dev/null)
+v6_Now=$(curl -s6 ifconfig.me/ip 2> /dev/null)
+echo v4 on file: $v4_On_File
+echo v6 on file: $v6_On_File
+echo v4 now: $v4_Now
+echo v6 now: $v6_Now
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
