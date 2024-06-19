@@ -14,11 +14,10 @@ mail-failure=lane@lanehensley.org
 ssl=yes
 # Record PID in file.
 pid=/var/run/ddclient.pid
-# Get ip from server.
-# WORKS! use=ip, ip='75.219.158.140'
+# Get ip from server. Others commented below also work, but differently
 use=cmd, cmd='curl -s4 ifconfig.me/ip 2> /dev/null'
+# use=ip, ip='75.219.158.140'
 # use=web, web=checkip.dynu.com/, web-skip='IP Address'
-# use=ip, ip='2600:1014:a110:90fd::3c'
 # IP update server.
 server=api.dynu.com
 # Use dyndns2 protocol

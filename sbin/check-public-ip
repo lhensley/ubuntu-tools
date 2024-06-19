@@ -24,15 +24,16 @@ v6_Now=$(curl -s6 ifconfig.me/ip 2> /dev/null)
 
 if [ "$v4_On_File" != "$v4_Now" ] ; then
 	if [ "$v4_Now" != "" ] ; then
-		message="IPv4 address on $HOSTNAME has changed to $v4_Now."
+		message="IPv4 address on $HOSTNAME has changed to $v4_Now. Updaging DDNS"
 		echo $message
 		echo $message | mail -s"$HOSTNAME update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
+		ddclient -force
 		fi
 	fi
 
 if [ "$v6_On_File" != "$v6_Now" ] ; then
 	if [ "$v6_Now" != "" ] ; then
-		message="IPv6 address on $HOSTNAME has changed to $v6_Now."
+		message="IPv6 address on $HOSTNAME has changed to $v6_Now (No DDNS update)."
 		echo $message
 		echo $message | mail -s"$HOSTNAME update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
 		fi
