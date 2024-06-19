@@ -22,21 +22,29 @@ v6_Now=$(curl -s6 ifconfig.me/ip 2> /dev/null)
 # echo v4 now: $v4_Now
 # echo v6 now: $v6_Now
 
+DYNU_LOGIN='lanehensley'
+DYNU_PWD='aDgD2VjTKNd2J@r6FCqv'
+
+#curl "https://api.dynu.com/nic/update?username=myname&password=somepass&hostname=example.com&myip=1.2.3.4&myipv6=2602:1234::3"
+curl "https://api.dynu.com/nic/update?username=\"$DYNU_LOGIN\"&password=\"$DYNU_PWD\"&hostname=\"$HOSTNAME\"&myip=\"$v4_Now\"&myipv6=\"$v6_Now\""
+
+
 if [ "$v4_On_File" != "$v4_Now" ] ; then
 	if [ "$v4_Now" != "" ] ; then
-		message="IPv4 address on $HOSTNAME has changed to $v4_Now. Updaging DDNS"
+		message="IPv4 address on $HOSTNAME has changed to $v4_Now. Updating DDNS."
 		echo $message
 		echo $message | mail -s"$HOSTNAME update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
-		ddclient -force
+		curl "https://api.dynu.com/nic/update?username=\"$DYNU_LOGIN\"&password=\"$DYNU_PWD\"&hostname=\"$HOSTNAME\"&myip=\"$v4_Now\""
 		echo "$v4_Now" > /etc/public-ipv4
 		fi
 	fi
 
 if [ "$v6_On_File" != "$v6_Now" ] ; then
 	if [ "$v6_Now" != "" ] ; then
-		message="IPv6 address on $HOSTNAME has changed to $v6_Now (No DDNS update)."
+		message="IPv6 address on $HOSTNAME has changed to $v6_Now. Updating DDNS."
 		echo $message
 		echo $message | mail -s"$HOSTNAME update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
+		curl "https://api.dynu.com/nic/update?username=\"$DYNU_LOGIN\"&password=\"$DYNU_PWD\"&hostname=\"$HOSTNAME\"&myipv6=\"$v6_Now\""
 		echo "$v6_Now" > /etc/public-ipv6
 		fi
 	fi
