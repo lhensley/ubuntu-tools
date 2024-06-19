@@ -22,10 +22,15 @@ echo v4 now: $v4_Now
 echo v6 now: $v6_Now
 
 if [ $v4_On_File != $v4_Now ] ; then
-	echo "IPv4 address on $HOST has changed to $v4_Now." | tee mail $ADMIN_CELL_EMAIL $ADMIN_EMAIL
+	message="IPv4 address on $HOSTNAME has changed to $v4_Now."
+	echo $message
+	echo $message | mail $ADMIN_CELL_EMAIL $ADMIN_EMAIL
 	fi
+	
 if [ $v6_On_File != $v6_Now ] ; then
-	echo "IPv6 address on $HOST has changed to $v6_Now." | tee mail $ADMIN_CELL_EMAIL $ADMIN_EMAIL
+	message="IPv6 address on $HOSTNAME has changed to $v6_Now."
+	echo $message
+	echo $message | mail $ADMIN_CELL_EMAIL $ADMIN_EMAIL
 	fi
 
 # Include script footer file
