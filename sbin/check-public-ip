@@ -17,13 +17,8 @@ v6_On_File=$(cat /etc/public-ipv6 2> /dev/null)
 v4_Now=''
 v6_Now=$(curl -s6 ifconfig.me/ip 2> /dev/null)
 
-# echo v4 on file: $v4_On_File
-# echo v6 on file: $v6_On_File
-# echo v4 now: $v4_Now
-# echo v6 now: $v6_Now
-
-DYNU_LOGIN='lanehensley'
-DYNU_PWD='aDgD2VjTKNd2J@r6FCqv'
+# get DYNU_LOGIN and DYNU_PWD definitions
+	source $ADMIN_HOME_DIR/.dynu.com
 
 if [ "$v4_On_File" != "$v4_Now" ] ; then
 	if [ "$v4_Now" != "" ] ; then

@@ -23,7 +23,7 @@
 	SBIN_DIR="/usr/local/sbin"
 	SBIN_PARENT="$(dirname $SBIN_DIR)"
 	DOMAIN_NAME="lanehensley.org"
-    HOST_FQDN=$HOSTNAME.$DOMAIN_NAME
+        HOST_FQDN=$HOSTNAME.$DOMAIN_NAME
 	COLOPHON="by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
         TIMEZONE="America/Chicago"
 
