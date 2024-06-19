@@ -59,3 +59,40 @@ ddclient -host 'lanehensley.org' -ip '2600:1014:a110:90fd::3b' \
 -mail-failure 'lane@lanehensley.org' -pid '/var/run/ddclient.pid' \
 -protocol 'dyndns2' -syslog -ssl -ipv6
 
+
+
+
+# Dynu nuc01.dynu.com
+# Check every 60 seconds.
+# daemon=7200 # 90 minutes between refresh                # Leave out
+daemon=0
+# Log update msgs to syslog.
+syslog=yes                                              # -syslog
+# Mail all msgs to root.
+mail=lane@lanehensley.org                                         # Leave out
+# Mail failed update msgs to root.
+mail-failure=lane@lanehensley.org                                 # -mail-failure 'root@nuc01'
+# Use ssl
+ssl=yes                                                 # -ssl
+# Record PID in file.
+pid=/var/run/ddclient.pid                               # -pid '/var/run/ddclient.pid'
+# Get ip from server.
+# use=web, web=checkip.dynu.com/, web-skip='IP Address'   # -ip 'ADDRESS'
+# use=cmd, cmd='curl -s4 ifconfig.me/ip 2> /dev/null'
+usev6=ip, ip='2600:1014:a110:90fd::3c'
+# usev6=cmd, cmd='curl -s6 ifconfig.me/ip 2> /dev/null'
+# IP update server.
+server=api.dynu.com                                     # -server 'api.dynu.com'
+# Use dyndns2 protocol
+protocol=dyndns2                                        # -protocol 'dyndns2'
+# Your username
+login='lanehensley'                                     # -login 'lanehensley'
+# Your password or MD5/SHA256 of account password or New IP Update Password
+password='ihbJXdoyFUofpyfExTQp'
+#password='aDgD2VjTKNd2J@r6FCqv'                         # -password 'aDgD2VjTKNd2J@r6FCqv'
+# List one or more hostnames one on each line.
+ipv6=yes
+lanehensley.org                                         # -host 'lanehensley.org'
+
+
+
