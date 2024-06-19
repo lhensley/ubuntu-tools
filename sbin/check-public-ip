@@ -28,6 +28,7 @@ if [ "$v4_On_File" != "$v4_Now" ] ; then
 		echo $message
 		echo $message | mail -s"$HOSTNAME update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
 		ddclient -force
+		echo "$v4_Now" > /etc/public-ipv4
 		fi
 	fi
 
@@ -36,6 +37,7 @@ if [ "$v6_On_File" != "$v6_Now" ] ; then
 		message="IPv6 address on $HOSTNAME has changed to $v6_Now (No DDNS update)."
 		echo $message
 		echo $message | mail -s"$HOSTNAME update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
+		echo "$v6_Now" > /etc/public-ipv6
 		fi
 	fi
 
