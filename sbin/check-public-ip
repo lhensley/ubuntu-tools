@@ -15,10 +15,18 @@ v4_On_File=$(cat /etc/public-ipv4 2> /dev/null)
 v6_On_File=$(cat /etc/public-ipv6 2> /dev/null)
 v4_Now=$(curl -s4 ifconfig.me/ip 2> /dev/null)
 v6_Now=$(curl -s6 ifconfig.me/ip 2> /dev/null)
+
 echo v4 on file: $v4_On_File
 echo v6 on file: $v6_On_File
 echo v4 now: $v4_Now
 echo v6 now: $v6_Now
+
+if [ $v4_On_File 1= $v4_Now ] ; then
+	echo "IPv4 address on $HOST has changed to $v4_Now." | tee mail $ADMIN_CELL_EMAIL $ADMIN_EMAIL
+	fi
+if [ $v6_On_File 1= $v6_Now ] ; then
+	echo "IPv6 address on $HOST has changed to $v6_Now." | tee mail $ADMIN_CELL_EMAIL $ADMIN_EMAIL
+	fi
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
