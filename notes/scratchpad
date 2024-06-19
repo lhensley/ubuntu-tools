@@ -1,0 +1,61 @@
+
+
+
+# command line arguments only:
+# ddclient -host 'lanehensley.org' -ip 'ADDRESS' \
+# -login 'lanehensley' -password 'aDgD2VjTKNd2J@r6FCqv' \
+# -server 'api.dynu.com' -mail-failure 'lane@lanehensley.org' \
+# -pid '/var/run/ddclient.pid' -protocol 'dyndns2' -syslog -ssl -ipv6
+
+# -use '75.219.158.138' -usev6 '2600:1014:a110:90fd::3b' \
+
+sudo \
+ddclient -host 'lanehensley.org' \
+-ip '75.219.158.138' -ipv6 '2600:1014:a110:90fd::3b' \
+-login 'lanehensley' -password 'aDgD2VjTKNd2J@r6FCqv' -server 'api.dynu.com' \
+-mail 'lane@lanehensley.org' -mail-failure 'lane@lanehensley.org' \
+-pid '/var/run/ddclient.pid' -protocol 'dyndns2' -syslog -ssl \
+-file '/etc/ddclient.conf' -daemon 0 -foreground \
+-verbose -force -noexec -debug
+
+sudo \
+ddclient -host 'lanehensley.org' \
+-ip '2600:1014:a110:90fd::3b' -usev6 ip \
+-login 'lanehensley' -password 'aDgD2VjTKNd2J@r6FCqv' -server 'api.dynu.com' \
+-mail 'lane@lanehensley.org' -mail-failure 'lane@lanehensley.org' \
+-pid '/var/run/ddclient.pid' -protocol 'dyndns2' -syslog -ssl \
+-file '/etc/ddclient.conf' -daemon 0 -foreground \
+-verbose -force -noexec -debug -ipv6
+
+
+sudo \
+ddclient -host 'lanehensley.org' \
+-ip '75.219.158.138' \
+-login 'lanehensley' -password 'aDgD2VjTKNd2J@r6FCqv' -server 'api.dynu.com' \
+-mail 'lane@lanehensley.org' -mail-failure 'lane@lanehensley.org' \
+-pid '/var/run/ddclient.pid' -protocol 'dyndns2' -syslog -ssl \
+-file '/etc/ddclient.conf' -daemon 0 -foreground \
+-verbose -force
+
+
+sudo \
+ddclient -host 'lanehensley.org' \
+-ip '2600:1014:a110:90fd::3b' -usev6 ip \
+-login 'lanehensley' -password 'aDgD2VjTKNd2J@r6FCqv' -server 'api.dynu.com' \
+-mail 'lane@lanehensley.org' -mail-failure 'lane@lanehensley.org' \
+-pid '/var/run/ddclient.pid' -protocol 'dyndns2' -syslog -ssl \
+-file '/etc/ddclient.conf' -daemon 0 -foreground \
+-verbose -force -ipv6
+
+
+
+
+
+
+
+sudo \
+ddclient -host 'lanehensley.org' -ip '2600:1014:a110:90fd::3b' \
+-login 'lanehensley' -password 'aDgD2VjTKNd2J@r6FCqv' -server 'api.dynu.com' \
+-mail-failure 'lane@lanehensley.org' -pid '/var/run/ddclient.pid' \
+-protocol 'dyndns2' -syslog -ssl -ipv6
+
