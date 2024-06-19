@@ -24,7 +24,8 @@ protocol=dyndns2                                        # -protocol 'dyndns2'
 # Your username
 login='lanehensley'                                     # -login 'lanehensley'
 # Your password or MD5/SHA256 of account password or New IP Update Password
-password='aDgD2VjTKNd2J@r6FCqv'                         # -password 'aDgD2VjTKNd2J@r6FCqv'
+password='ihbJXdoyFUofpyfExTQp'
+#password='aDgD2VjTKNd2J@r6FCqv'                         # -password 'aDgD2VjTKNd2J@r6FCqv'
 # List one or more hostnames one on each line.
 lanehensley.org                                         # -host 'lanehensley.org'
 
