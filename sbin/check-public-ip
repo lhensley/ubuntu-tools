@@ -22,7 +22,7 @@ v6_Now=$(curl -s6 ifconfig.me/ip 2> /dev/null)
 # echo v4 now: $v4_Now
 # echo v6 now: $v6_Now
 
-if [ ( $v4_On_File != $v4_Now ) && ( $v4_Now !='' ) ] ; then
+if [ $v4_On_File != $v4_Now -a && ( $v4_Now !='' ] ; then
 	message="IPv4 address on $HOSTNAME has changed to $v4_Now."
 	echo $message
 	echo $message | mail -s"$HOSTNAME update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
