@@ -16,7 +16,8 @@ ssl=yes                                                 # -ssl
 pid=/var/run/ddclient.pid                               # -pid '/var/run/ddclient.pid'
 # Get ip from server.
 # use=web, web=checkip.dynu.com/, web-skip='IP Address'   # -ip 'ADDRESS'
-use=ip, ip=75.219.158.138
+use=cmd, cmd='curl -s4 ifconfig.me/ip 2> /dev/null'
+usev6='curl -s6 ifconfig.me/ip 2> /dev/null'
 # IP update server.
 server=api.dynu.com                                     # -server 'api.dynu.com'
 # Use dyndns2 protocol
@@ -27,6 +28,7 @@ login='lanehensley'                                     # -login 'lanehensley'
 password='ihbJXdoyFUofpyfExTQp'
 #password='aDgD2VjTKNd2J@r6FCqv'                         # -password 'aDgD2VjTKNd2J@r6FCqv'
 # List one or more hostnames one on each line.
+ipv6=yes
 lanehensley.org                                         # -host 'lanehensley.org'
 
 
