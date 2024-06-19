@@ -10,18 +10,19 @@
 # Require root
 	f_require_root
 
-# Do stuff here
+touch /etc/public-ipv4 /etc/public-ipv6
 v4_On_File=$(cat /etc/public-ipv4 2> /dev/null)
 v6_On_File=$(cat /etc/public-ipv6 2> /dev/null)
-v4_Now=$(curl -s4 ifconfig.me/ip 2> /dev/null)
+# v4_Now=$(curl -s4 ifconfig.me/ip 2> /dev/null)
+v4_Now=''
 v6_Now=$(curl -s6 ifconfig.me/ip 2> /dev/null)
 
-echo v4 on file: $v4_On_File
-echo v6 on file: $v6_On_File
-echo v4 now: $v4_Now
-echo v6 now: $v6_Now
+# echo v4 on file: $v4_On_File
+# echo v6 on file: $v6_On_File
+# echo v4 now: $v4_Now
+# echo v6 now: $v6_Now
 
-if [ $v4_On_File != $v4_Now ] ; then
+if [ ( $v4_On_File != $v4_Now ) && ( $v4_Now !='' ) ] ; then
 	message="IPv4 address on $HOSTNAME has changed to $v4_Now."
 	echo $message
 	echo $message | mail -s"$HOSTNAME update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
