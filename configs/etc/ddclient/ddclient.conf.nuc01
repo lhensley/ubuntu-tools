@@ -18,7 +18,6 @@ pid=/var/run/ddclient.pid                               # -pid '/var/run/ddclien
 # use=web, web=checkip.dynu.com/, web-skip='IP Address'   # -ip 'ADDRESS'
 # use=ip, ip='75.219.158.140'
 usev6=ip, ip='2600:1014:a110:90fd::3c'
-ipv6
 # use=cmd, cmd='curl -s4 ifconfig.me/ip 2> /dev/null'
 # usev6=cmd, cmd='curl -s6 ifconfig.me/ip 2> /dev/null'
 # IP update server.
