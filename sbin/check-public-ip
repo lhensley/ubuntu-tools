@@ -24,13 +24,13 @@ echo v6 now: $v6_Now
 if [ $v4_On_File != $v4_Now ] ; then
 	message="IPv4 address on $HOSTNAME has changed to $v4_Now."
 	echo $message
-	echo $message | mail $ADMIN_CELL_EMAIL $ADMIN_EMAIL
+	echo $message | mail -s"$HOSTNAME update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
 	fi
-	
+
 if [ $v6_On_File != $v6_Now ] ; then
 	message="IPv6 address on $HOSTNAME has changed to $v6_Now."
 	echo $message
-	echo $message | mail $ADMIN_CELL_EMAIL $ADMIN_EMAIL
+	echo $message | mail -s"$HOSTNAME update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
 	fi
 
 # Include script footer file
