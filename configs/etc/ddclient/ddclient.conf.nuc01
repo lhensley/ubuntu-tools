@@ -16,7 +16,7 @@ ssl=yes                                                 # -ssl
 pid=/var/run/ddclient.pid                               # -pid '/var/run/ddclient.pid'
 # Get ip from server.
 # use=web, web=checkip.dynu.com/, web-skip='IP Address'   # -ip 'ADDRESS'
-use=ip, ip='75.219.158.140'
+use=ip, ip='75.219.158.140' 
 # use=cmd, cmd='curl -s4 ifconfig.me/ip 2> /dev/null'
 # usev6=cmd, cmd='curl -s6 ifconfig.me/ip 2> /dev/null'
 # IP update server.
