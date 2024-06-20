@@ -38,7 +38,7 @@ if [ "$v4_On_File" != "$v4_Now" ] ; then
 			# Updating IPv4 address on dynu.com
 			echo curl "https://api.dynu.com/nic/update?username=$DYNU_LOGIN&password=$DYNU_PWD&hostname=$HOST_FQDN&myip=$v4_Now"
 			curl "https://api.dynu.com/nic/update?username=$DYNU_LOGIN&password=$DYNU_PWD&hostname=$HOST_FQDN&myip=$v4_Now"
-			if $? ; then
+			if [ $? -ne 0 ] ; then
 					message="IPv4 address update on $HOST_FQDN FAILED."
 					echo $message
 					echo $message | mail -s"$HOST_FQDN update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
@@ -58,7 +58,7 @@ if [ "$v6_On_File" != "$v6_Now" ] ; then
 		# Updating IPv6 address on dynu.com
 		echo curl "https://api.dynu.com/nic/update?password=$DYNU_PWD&hostname=$HOST_FQDN&myipv6=$v6_Now"
 		curl "https://api.dynu.com/nic/update?username=$DYNU_LOGIN&password=$DYNU_PWD&hostname=$HOST_FQDN&myipv6=$v6_Now"
-		if $? ; then
+		if [ $? -ne 0 ] ; then
 				message="IPv6 address update on $HOST_FQDN FAILED."
 				echo $message
 				echo $message | mail -s"$HOST_FQDN update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
