@@ -5,7 +5,12 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
+ufw deny from 15.204.52.61 to any
+ufw deny from 87.236.176.87 to any
+ufw deny from 184.105.247.223 to any
 ufw deny from 199.19.72.125 to any
+ufw deny from 199.45.154.114 to any
+ufw deny from 206.168.34.37 to any
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
