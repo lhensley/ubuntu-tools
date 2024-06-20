@@ -176,6 +176,12 @@ done
 			chown -f $ROOT_USER:$ROOT_USER /etc/ddclient.conf /etc/ddclient/ddclient.conf /etc/default/ddclient
 			fi
 
+	# /etc/.dynu.com
+		if [ -f /etc/.dynu.com ]; then
+			echo "Updating permissions for /etc/.dynu.com"
+			chmod -f 700 /etc/.dynu.com
+			fi
+
 	# /etc/exports
 		if $(f_is_installed "nfs-kernel-server"); then
 			echo "Updating permissions for /etc/exports"
