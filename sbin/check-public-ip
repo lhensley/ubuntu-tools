@@ -19,6 +19,15 @@ v6_Now=$(curl -s6 ifconfig.me/ip 2> /dev/null)
 # get DYNU_LOGIN and DYNU_PWD definitions
 	source $ADMIN_HOME_DIR/.dynu.com
 
+echo DYNU_LOGIN $DYNU_LOGIN
+echo DYNU_PWD $DYNU_PWD
+echo v4_On_File $v4_On_File
+echo v6_On_File $v6_On_File
+echo v4_Now $v4_Now
+echo v6_Now $v6_Now
+echo curl "https://api.dynu.com/nic/update?username=$DYNU_LOGIN&password=$DYNU_PWD&hostname=$HOSTNAME&myip=$v4_Now"
+echo curl "https://api.dynu.com/nic/update?username=$DYNU_LOGIN&password=$DYNU_PWD&hostname=$HOSTNAME&myipv6=$v6_Now"
+
 if [ "$v4_On_File" != "$v4_Now" ] ; then
 	if [ "$v4_Now" != "" ] ; then
 #		if [ "$DMZ_HOST" == "$HOSTNAME" ] ; then
