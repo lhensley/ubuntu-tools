@@ -25,6 +25,8 @@ if [ "$v4_On_File" != "$v4_Now" ] ; then
 			message="IPv4 address on $HOST_FQDN has changed to $v4_Now. Manual update to A record required at https://www.dynu.com/en-US/ControlPanel/DDNSRecord."
 			echo && echo && echo $message
 			echo $message | mail -s"$HOST_FQDN update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
+			echo "$v4_Now" > /etc/public-ipv4
+			chmod 600 /etc/public-ipv4
 			fi
 		fi
 	fi
@@ -34,6 +36,8 @@ if [ "$v6_On_File" != "$v6_Now" ] ; then
 		message="IPv6 address on $HOST_FQDN has changed to $v6_Now. Manual update to AAAA record required at https://www.dynu.com/en-US/ControlPanel/DDNSRecord."
 		echo $message
 		echo $message | mail -s"$HOST_FQDN update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
+		echo "$v6_Now" > /etc/public-ipv6
+		chmod 600 /etc/public-ipv6
 		fi
 	fi
 
