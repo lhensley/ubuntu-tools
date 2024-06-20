@@ -26,7 +26,7 @@ if [ "$v4_On_File" != "$v4_Now" ] ; then
 			echo && echo && echo $message
 			echo $message | mail -s"$HOST_FQDN update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
 			echo "$v4_Now" > /etc/public-ipv4
-			chmod 600 /etc/public-ipv4
+			chmod 644 /etc/public-ipv4
 			fi
 		fi
 	fi
@@ -37,7 +37,7 @@ if [ "$v6_On_File" != "$v6_Now" ] ; then
 		echo $message
 		echo $message | mail -s"$HOST_FQDN update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
 		echo "$v6_Now" > /etc/public-ipv6
-		chmod 600 /etc/public-ipv6
+		chmod 644 /etc/public-ipv6
 		fi
 	fi
 
