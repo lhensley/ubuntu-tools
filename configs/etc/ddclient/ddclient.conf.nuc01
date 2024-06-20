@@ -1,7 +1,6 @@
 ### Basic HTTPS configuration file for ddclient
 
 # Dynu nuc01.dynu.com
-# Check every 60 seconds.
 # daemon=7200 # 90 minutes between refresh
 daemon=0
 # Log update msgs to syslog.
@@ -14,10 +13,8 @@ mail-failure=lane@lanehensley.org
 ssl=yes
 # Record PID in file.
 pid=/var/run/ddclient.pid
-# Get ip from server. Others commented below also work, but differently
+# Get ip from server.
 use=cmd, cmd='curl -s4 ifconfig.me/ip 2> /dev/null'
-# use=ip, ip='75.219.158.140'
-# use=web, web=checkip.dynu.com/, web-skip='IP Address'
 # IP update server.
 server=api.dynu.com
 # Use dyndns2 protocol

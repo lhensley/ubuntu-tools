@@ -21,12 +21,14 @@ v6_Now=$(curl -s6 ifconfig.me/ip 2> /dev/null)
 
 if [ "$v4_On_File" != "$v4_Now" ] ; then
 	if [ "$v4_Now" != "" ] ; then
-		message="IPv4 address on $HOSTNAME has changed to $v4_Now. Updating DDNS."
-		echo $message
-		echo $message | mail -s"$HOSTNAME update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
-		# Updating IPv4 address on dynu.com
-		curl "https://api.dynu.com/nic/update?username=$DYNU_LOGIN&password=$DYNU_PWD&hostname=$HOSTNAME&myip=$v4_Now"
-		echo "$v4_Now" > /etc/public-ipv4
+		if [ "$DMZ_HOST" != "$HOSTNAME" ] ; then
+			message="IPv4 address on $HOSTNAME has changed to $v4_Now. Updating DDNS."
+			echo $message
+			echo $message | mail -s"$HOSTNAME update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
+			# Updating IPv4 address on dynu.com
+			curl "https://api.dynu.com/nic/update?username=$DYNU_LOGIN&password=$DYNU_PWD&hostname=$HOSTNAME&myip=$v4_Now"
+			echo "$v4_Now" > /etc/public-ipv4
+			fi
 		fi
 	fi
 

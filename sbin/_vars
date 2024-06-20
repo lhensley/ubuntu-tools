@@ -24,6 +24,7 @@
 	SBIN_PARENT="$(dirname $SBIN_DIR)"
 	DOMAIN_NAME="lanehensley.org"
         HOST_FQDN=$HOSTNAME.$DOMAIN_NAME
+        DMZ_HOST="nuc01"
 	COLOPHON="by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
         TIMEZONE="America/Chicago"
 
