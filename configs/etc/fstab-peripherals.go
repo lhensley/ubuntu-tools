@@ -35,5 +35,9 @@
 # Good condition; reliable
 UUID=901c4177-b514-408a-997c-0cbeee89fa6e /mnt/12TBA ext4 auto,nofail 0 0
 #
+# 12TBC (12TB) Black 12TB External Seagate
+# Good condition; reliable
+UUID=64414aac-65cf-4e81-a561-f007cb82418b /mnt/12TBC ext4 nofail 0 0
+#
 ########################################################################################################
 #
