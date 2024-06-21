@@ -22,7 +22,7 @@ v6_Now=$(curl -s6 ifconfig.me/ip 2> /dev/null)
 if [ "$v4_On_File" != "$v4_Now" ] ; then
 	if [ "$v4_Now" != "" ] ; then
 		if [ "$DMZ_HOST" == "$HOSTNAME" ] ; then
-			message="IPv4 address on $HOST_FQDN has changed to $v4_Now. Manual update to A record required at https://www.dynu.com/en-US/ControlPanel/DDNSRecord. $(date)"
+			message="IPv4 on $HOST_FQDN: \'$v4_On_File\' to \'$v4_Now\'. Manual update to A record required at https://www.dynu.com/en-US/ControlPanel/DDNSRecord. $(date)"
 			echo && echo && echo $message
 			echo $message | mail -s"$HOST_FQDN update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
 			echo "$v4_Now" > /etc/public-ipv4
@@ -33,7 +33,7 @@ if [ "$v4_On_File" != "$v4_Now" ] ; then
 
 if [ "$v6_On_File" != "$v6_Now" ] ; then
 	if [ "$v6_Now" != "" ] ; then
-		message="IPv6 address on $HOST_FQDN has changed to $v6_Now. Manual update to AAAA record required at https://www.dynu.com/en-US/ControlPanel/DDNSRecord. $(date)"
+		message="IPv6 on $HOST_FQDN: \'$v6_On_File\' to \'$v6_Now\'. Manual update to AAAA record required at https://www.dynu.com/en-US/ControlPanel/DDNSRecord. $(date)"
 		echo $message
 		echo $message | mail -s"$HOST_FQDN update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
 		echo "$v6_Now" > /etc/public-ipv6
