@@ -13,32 +13,29 @@
 touch /etc/public-ipv4 /etc/public-ipv6
 v4_On_File=$(cat /etc/public-ipv4 2> /dev/null)
 v6_On_File=$(cat /etc/public-ipv6 2> /dev/null)
-v4_Now=$(curl -s4 ifconfig.me/ip 2> /dev/null)
-v6_Now=$(curl -s6 ifconfig.me/ip 2> /dev/null)
+v4_Now=$(curl -s4 ifconfig.me/ip 2> /dev/null) ; EN4=$?
+v6_Now=$(curl -s6 ifconfig.me/ip 2> /dev/null) ; EN6=$?
 
 # get DYNU_LOGIN and DYNU_PWD definitions
 	source $ADMIN_HOME_DIR/.dynu.com
 
-if [ "$v4_On_File" != "$v4_Now" ] ; then
-	if [ "$v4_Now" != "" ] ; then
-		if [ "$DMZ_HOST" == "$HOSTNAME" ] ; then
-			message="IPv4 on $HOST_FQDN: \'$v4_On_File\' to \'$v4_Now\'. Manual update to A record required at https://www.dynu.com/en-US/ControlPanel/DDNSRecord. $(date)"
-			echo && echo && echo $message
-			echo $message | mail -s"$HOST_FQDN update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
-			echo "$v4_Now" > /etc/public-ipv4
-			chmod 644 /etc/public-ipv4
-			fi
-		fi
-	fi
-
-if [ "$v6_On_File" != "$v6_Now" ] ; then
-	if [ "$v6_Now" != "" ] ; then
-		message="IPv6 on $HOST_FQDN: \'$v6_On_File\' to \'$v6_Now\'. Manual update to AAAA record required at https://www.dynu.com/en-US/ControlPanel/DDNSRecord. $(date)"
-		echo $message
+if [ "$v4_On_File" != "$v4_Now" ] && [ "$v4_Now" != "" ] 
+	&& [ "$DMZ_HOST" == "$HOSTNAME" ] && [ $EN4 -eq 0 ] ; then
+		message="IPv4 on $HOST_FQDN: '$v4_On_File' to '$v4_Now'. "
+		message="$message Manual update to A record required. $(date)"
+		echo && echo && echo $message
 		echo $message | mail -s"$HOST_FQDN update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
-		echo "$v6_Now" > /etc/public-ipv6
-		chmod 644 /etc/public-ipv6
+		echo "$v4_Now" > /etc/public-ipv4
+		chmod 644 /etc/public-ipv4
 		fi
+
+if [ "$v6_On_File" != "$v6_Now" ] && [ "$v6_Now" != "" ] && [ $EN6 -eq 0 ] ; then
+	message="IPv6 on $HOST_FQDN: '$v6_On_File' to '$v6_Now'. "
+	message="$message Manual update to AAAA record required. $(date)"
+	echo $message
+	echo $message | mail -s"$HOST_FQDN update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
+	echo "$v6_Now" > /etc/public-ipv6
+	chmod 644 /etc/public-ipv6
 	fi
 
 # Include script footer file
