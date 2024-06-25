@@ -1,0 +1,12 @@
+#!/bin/bash
+# Based on https://superuser.com/questions/1001973/bash-find-string-index-position-of-substring
+
+SEARCHSTRING="$1"
+FULLSTRING="$2"
+
+REMAINDER=${FULLSTRING#*$SEARCHSTRING}
+echo $(( ${#FULLSTRING} - ${#REMAINDER} - ${#SEARCHSTRING} ))
+echo "$REMAINDER"
+
+exit 0
+
