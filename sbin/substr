@@ -25,7 +25,7 @@ if [ "$FULLSTRING" = "" ] ; then
 
 REMAINDER=${FULLSTRING#*$SEARCHSTRING}
 OFFSET=$(( ${#FULLSTRING} - ${#REMAINDER} - ${#SEARCHSTRING} ))
-if $? ; then echo "Not found. Exit code is -1." ; exit -1 ; fi
-echo "Found at offset $OFFSET, and that is the exit code."
+if $? ; then ; echo "Not found. Exit code is -1." ; exit -1 ; fi
+echo "Found. The exit code is the offset, ($OFFSET)."
 # echo "Remainder: "'$REMAINDER'"
 exit $OFFSET
