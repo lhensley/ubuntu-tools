@@ -90,7 +90,8 @@ exiftool -overwrite_original -Information="comskip/comcut applied $(date -u)" "$
 mv "$tmpHEVC" "$DIR/"
 
 # Leave status in the user's home directory
-echo "$(date) $origFile" >> ~/last-video-processed
+echo "$(date) $origFile" >> "$ADMIN_HOME_DIR/last-video-processed"
+chmod -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/last-video-processed"
 
 # Remove lock file
 f_remove_locks
