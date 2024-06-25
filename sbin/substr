@@ -16,10 +16,10 @@ if [ "$FULLSTRING" = "" ] ; then
 	echo "$COMMANDNAME v$VERSION"
 	echo "by $COLOPHON"
 	echo
-	echo "Usage: $0 STRING_SEARCHED_FOR STRING_SEARCHED"
-	echo "If the search fails, $COMMANDNAME returns -1."
-	echo "If the search succeeds, $COMMANDNAME returns the offset within STRING_SEARCHED " \
+	echo "Usage: $COMMANDNAME STRING_SEARCHED_FOR STRING_SEARCHED"
+	echo "If the search succeeds, $COMMANDNAME returns the offset within STRING_SEARCHED "
 	echo "  where STRING_SEARCHED_FOR is found."
+	echo "If the search fails, $COMMANDNAME returns -1."
 	exit -1
 	fi
 

@@ -17,11 +17,13 @@ function f_log_and_echo () {
 	}
 
 function f_backup_file () {
+	# $@ means "pass along all arguments"
 	for f in "$@"; do if f_is_file "$f"; then mkdir -p $(dirname $f); cp $f $f.backup.$(date "+%Y.%m.%d-%H.%M.%S.%Z"); fi; done > /dev/null 2>&1
 	}
 
 function f_deprecated () {
 	# Usage: f_deprecated FUNCTION-TO-CALL-INSTEAD
+	# Alerts the user that a script/program is deprecated.
 	f_balk "DEPRECATED. Source _functions and call $1. For now, running it anyway." false
 	}
 
@@ -515,6 +517,8 @@ function f_relocate_files () {
 	}
 
 function f_git () {
+	# Called by upd
+	# $@ means "pass along all arguments"
 	_git $@
 	}
 
@@ -551,6 +555,8 @@ function f_run_apt_updates () {
 	}
 
 function f_upd () {
+	# Called by upd
+	# Called by _upd
 	# This is a pass-thru function. Abstracts out in case there is later
 	#	more to f_upd than just f_run_apt_updates.
 	# echo TEMPORARY DIAGNOSTIC MARKER A in f_upd in _functions.
@@ -559,6 +565,7 @@ function f_upd () {
 	}
 
 function f_apply_configs () {
+	# $@ means "pass along all arguments"
 	_apply-configs $@
 	}
 
@@ -570,6 +577,7 @@ function f_interval_in_seconds () {
 	}
 
 function f_apply_permissions () {
+	# $@ means "pass along all arguments"
 	_apply-permissions "$@"
 	}
 
@@ -833,6 +841,7 @@ f_watch_wait_upload () {
 	}
 
 f_run_apt_updates () {
+	# Called by upd -> f_upd
     # Update packages
     # apt vs apt-get?
     #   Res (defining): https://askubuntu.com/questions/990823/apt-gives-unstable-cli-interface-warning

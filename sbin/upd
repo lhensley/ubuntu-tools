@@ -14,9 +14,10 @@
 	# upd_patch
 
 # Update from github.com
-	echo
-	echo "Updating local git repository."
-	f_git
+# Commented this part out 25 June 2024; want to break git activity.
+#	echo
+#	echo "Updating local git repository."
+#	f_git
 
 # Other updates
 	echo
