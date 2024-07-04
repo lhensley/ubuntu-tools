@@ -905,6 +905,79 @@ f_run_apt_updates () {
 	# echo TEMPORARY DIAGNOSTIC MARKER C in f_run_apt_updates in _functions.
 	}
 
+# The function validation::ipv6 below is from bash-utility by Labbots
+# https://github.com/labbots/bash-utility
+#
+# @description Validate whether a given input is a valid IP V6 address.
+#
+# @example
+#   ips='
+#        2001:db8:85a3:8d3:1319:8a2e:370:7348
+#        fe80::1ff:fe23:4567:890a
+#        fe80::1ff:fe23:4567:890a%eth2
+#        2001:0db8:85a3:0000:0000:8a2e:0370:7334:foo:bar
+#        fezy::1ff:fe23:4567:890a
+#        ::
+#        2001:db8::
+#        '
+#   for ip in $ips; do
+#     if validation::ipv6 $ip; then stat='good'; else stat='bad'; fi
+#     printf "%-50s= %s\n" "$ip" "$stat"
+#   done
+#   #Output
+#   2001:db8:85a3:8d3:1319:8a2e:370:7348              = good
+#   fe80::1ff:fe23:4567:890a                          = good
+#   fe80::1ff:fe23:4567:890a%eth2                     = good
+#   2001:0db8:85a3:0000:0000:8a2e:0370:7334:foo:bar   = bad
+#   fezy::1ff:fe23:4567:890a                          = bad
+#   ::                                                = good
+#   2001:db8::                                        = good
+#
+# @arg $1 string input IPv6 address.
+#
+# @exitcode 0  If provided input is a valid IPv6.
+# @exitcode 1  If provided input is not a valid IPv6.
+# @exitcode 2 Function missing arguments.
+#
+# MIT License
+# 
+# Copyright (c) 2020 labbots
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+# 
+validation::ipv6() {
+    [[ $# = 0 ]] && printf "%s: Missing arguments\n" "${FUNCNAME[0]}" && return 2
+
+    declare ip="${1}"
+    declare re="^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|\
+([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|\
+([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|\
+([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|\
+:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|\
+::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|\
+(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|\
+(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$"
+
+    [[ "${ip}" =~ $re ]] && return 0 || return 1
+}
+
+
 #########################################################################################################
 
 # Set a flag to confirm that the functions are defined
