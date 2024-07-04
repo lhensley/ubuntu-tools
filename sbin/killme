@@ -11,8 +11,10 @@
 	f_require_root
 
 # Do stuff here
-	if $(f_is_valid_ipv4_address "149.79.1.1") ; then echo $? ; fi
-	if $(f_is_valid_ipv4_address "invalid") ; then echo $? ; fi
+	if $(f_is_valid_ipv4_address "149.79.1.1") ; then echo $? A ; fi
+	if $(f_is_valid_ipv4_address "invalid") ; then echo $? B ; fi
+	if ! $(f_is_valid_ipv4_address "149.79.1.1") ; then echo $? C ; fi
+	if ! $(f_is_valid_ipv4_address "invalid") ; then echo $? D ; fi
 	echo Done
 
 # Include script footer file
