@@ -13,6 +13,7 @@
 # Do stuff here
 	f_is_valid_ipv4_address "149.79.1.1"
 	f_is_valid_ipv4_address "invalid"
+	echo Done
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
