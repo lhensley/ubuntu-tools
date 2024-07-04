@@ -19,7 +19,7 @@ v6_Now=$(curl -s6 ifconfig.me/ip 2> /dev/null) ; EN6=$?
 # get DYNU_LOGIN and DYNU_PWD definitions
 	source $ADMIN_HOME_DIR/.dynu.com
 
-if [ "$v4_On_File" != "$v4_Now" ] && f_is_valid_ipv4_address "$v4_Now" && \\
+if [ "$v4_On_File" != "$v4_Now" ] && ! $(f_is_valid_ipv4_address "$v4_Now") && \\
 	[ "$DMZ_HOST" == "$HOSTNAME" ] && [ $EN4 -eq 0 ] ; then
 		message="IPv4 on $HOST_FQDN: '$v4_On_File' to '$v4_Now'. "
 		message="$message Manual update to A record required. $(date)"
