@@ -289,6 +289,34 @@ function f_is_installed {
     if [ $(dpkg -s $1 2>/dev/null | grep -c "install ok installed") -gt 0 ] ; then echo true; else echo false; fi
 	}
 
+# Test an IP address for validity:
+# by Mitch Frazier https://www.linuxjournal.com/users/mitch-frazier
+# Published June 26, 2008 
+# at https://www.linuxjournal.com/content/validating-ip-address-bash-script
+# (original function name valid_ip)
+# Usage:
+#      f_is_valid_ipv4_address IP_ADDRESS
+#      if [[ $? -eq 0 ]]; then echo good; else echo bad; fi
+#   OR
+#      if f_is_valid_ipv4_address IP_ADDRESS; then echo good; else echo bad; fi
+#
+function f_is_valid_ipv4_address()
+{
+    local  ip=$1
+    local  stat=1
+
+    if [[ $ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+        OIFS=$IFS
+        IFS='.'
+        ip=($ip)
+        IFS=$OIFS
+        [[ ${ip[0]} -le 255 && ${ip[1]} -le 255 \
+            && ${ip[2]} -le 255 && ${ip[3]} -le 255 ]]
+        stat=$?
+    fi
+    return $stat
+}
+
 function f_require_file {
     # Usage: f_require_file "file_or_path_name" "send_text_alert_true_or_false"
 	if ! $(f_is_file "$1"); then f_die "File not found: $1 at line ${BASH_LINENO[$i]}" true $EXIT_CODE_FILE_NOT_FOUND; fi
