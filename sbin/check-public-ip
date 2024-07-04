@@ -29,7 +29,7 @@ if [ "$v4_On_File" != "$v4_Now" ] && $(f_is_valid_ipv4_address "$v4_Now") && \\
 		chmod 644 /etc/public-ipv4
 		fi
 
-if [ "$v6_On_File" != "$v6_Now" ] && [ "$v6_Now" != "" ] && [ $EN6 -eq 0 ] ; then
+if [ "$v6_On_File" != "$v6_Now" ] && validation::ipv6 "$v6_Now" && [ $EN6 -eq 0 ] ; then
 	message="IPv6 on $HOST_FQDN: '$v6_On_File' to '$v6_Now'. "
 	message="$message Manual update to AAAA record required. $(date)"
 	echo $message
