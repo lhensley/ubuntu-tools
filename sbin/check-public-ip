@@ -13,7 +13,7 @@
 touch /etc/public-ipv4 /etc/public-ipv6
 v4_On_File=$(cat /etc/public-ipv4 2> /dev/null)
 v6_On_File=$(cat /etc/public-ipv6 2> /dev/null)
-v4_Now=$(curl -s4 ifconfig.me.noexist/ip 2> /dev/null) ; EN4=$?
+v4_Now=$(curl -s4 ifconfig.me/ip 2> /dev/null) ; EN4=$?
 v6_Now=$(curl -s6 ifconfig.me/ip 2> /dev/null) ; EN6=$?
 
 # get DYNU_LOGIN and DYNU_PWD definitions
