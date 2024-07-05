@@ -36,7 +36,7 @@ if $(f_is_valid_ipv4_address "$v4_Now") ; then
 	echo "Reported address good" ; else
 	echo "Reported address bad" ; fi
 
-if [ "$v4_On_File" != "$v4_Now" ] && [ $(f_is_valid_ipv4_address "$v4_Now") ] && \\
+if [ "$v4_On_File" != "$v4_Now" ] && $(f_is_valid_ipv4_address "$v4_Now") && \\
 	[ "$DMZ_HOST" == "$HOSTNAME" ] && [ $EN4 -eq 0 ] ; then
 		message="IPv4 on $HOST_FQDN: '$v4_On_File' to '$v4_Now'. "
 		message="$message Manual update to A record required. $(date)"
