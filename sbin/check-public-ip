@@ -19,22 +19,22 @@ v6_Now=$(curl -s6 ifconfig.me/ip 2> /dev/null) ; EN6=$?
 # get DYNU_LOGIN and DYNU_PWD definitions
 	source $ADMIN_HOME_DIR/.dynu.com
 
-echo "v4_On_File = $v4_On_File"
-echo "v4_Now     = $v4_Now"
-echo "EN4        = $EN4"
-echo "v6_On_File = $v6_On_File"
-echo "v6_Now     = $v6_Now"
-echo "EN6        = $EN6"
-echo "DMZ_HOST   = $DMZ_HOST"
-echo "HOSTNAME   = $HOSTNAME"
+# echo "v4_On_File = $v4_On_File"
+# echo "v4_Now     = $v4_Now"
+# echo "EN4        = $EN4"
+# echo "v6_On_File = $v6_On_File"
+# echo "v6_Now     = $v6_Now"
+# echo "EN6        = $EN6"
+# echo "DMZ_HOST   = $DMZ_HOST"
+# echo "HOSTNAME   = $HOSTNAME"
 
-if [ "$v4_On_File" != "$v4_Now" ] ; then
-	echo "Match bad" ; else
-	echo "Match good" ; fi
+# if [ "$v4_On_File" != "$v4_Now" ] ; then
+# 	echo "Match bad" ; else
+# 	echo "Match good" ; fi
 
-if $(f_is_valid_ipv4_address "$v4_Now") ; then
-	echo "Reported address good" ; else
-	echo "Reported address bad" ; fi
+# if $(f_is_valid_ipv4_address "$v4_Now") ; then
+# 	echo "Reported address good" ; else
+# 	echo "Reported address bad" ; fi
 
 if [ "$v4_On_File" != "$v4_Now" ] && $(f_is_valid_ipv4_address "$v4_Now") ; then
 	if [ "$DMZ_HOST" == "$HOSTNAME" ] && [ $EN4 -eq 0 ] ; then
