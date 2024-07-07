@@ -1,4 +1,4 @@
-# nuc01-static.yaml
+# pd1-static.yaml
 network:
     version: 2
     renderer: NetworkManager

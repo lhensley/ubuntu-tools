@@ -17,4 +17,3 @@
    gg:::::::::::::g  https://onlineasciitools.com/convert-text-to-ascii-art
      ggg::::::ggg                     
         gggggg                        
-

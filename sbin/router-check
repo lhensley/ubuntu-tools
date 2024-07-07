@@ -8,8 +8,8 @@
 # Require root
 	f_require_root
 
-# Run only on nuc01
-	f_require_host nuc01
+# Run only on pd1
+	f_require_host pd1
 
 ROUTER_IP_ADDRESS="182.168.168.2"
 ERROR_TOKEN="/var/tmp/error_pinging_router"

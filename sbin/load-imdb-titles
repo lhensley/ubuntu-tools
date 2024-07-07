@@ -7,7 +7,7 @@
 
 
 # Require host
-	f_require_host "nuc01"
+	f_require_host "pd1"
 
 # Define variables
 	DOWNLOAD_FILE="https://datasets.imdbws.com/title.basics.tsv.gz"

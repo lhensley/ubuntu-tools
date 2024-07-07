@@ -62,7 +62,7 @@ ddclient -host 'lanehensley.org' -ip '2600:1014:a110:90fd::3b' \
 
 
 
-# Dynu nuc01.dynu.com
+# Dynu pd1.dynu.com
 # Check every 60 seconds.
 # daemon=7200 # 90 minutes between refresh                # Leave out
 daemon=0
@@ -71,7 +71,7 @@ syslog=yes                                              # -syslog
 # Mail all msgs to root.
 mail=lane@lanehensley.org                                         # Leave out
 # Mail failed update msgs to root.
-mail-failure=lane@lanehensley.org                                 # -mail-failure 'root@nuc01'
+mail-failure=lane@lanehensley.org                                 # -mail-failure 'root@pd1'
 # Use ssl
 ssl=yes                                                 # -ssl
 # Record PID in file.

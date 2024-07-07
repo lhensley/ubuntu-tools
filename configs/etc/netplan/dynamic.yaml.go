@@ -1,4 +1,4 @@
-# go-dynamic.yaml
+# dsm1-dynamic.yaml
 network:
     version: 2
     renderer: NetworkManager

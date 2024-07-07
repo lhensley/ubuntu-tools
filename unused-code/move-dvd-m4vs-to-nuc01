@@ -13,8 +13,8 @@
 
 # Define file locations
 	SOURCE_ROOT_DIR="/home/$ADMIN_USER/Videos/HandBrake-Completed"
-	TARGET_ROOT_DIR="nuc01.lanehensley.org:/mnt/12TBB/Plex/uploads"
-	TARGET_SERVER="nuc01.lanehensley.org"
+	TARGET_ROOT_DIR="pd1.lanehensley.org:/mnt/12TBB/Plex/uploads"
+	TARGET_SERVER="pd1.lanehensley.org"
 	WAIT_AFTER_SOURCE_SCAN="6h"
 	MOVE_MASK="*.m4v"
 
@@ -22,7 +22,7 @@
 	THIS_SCRIPT=$(basename "$0")
 	while true; do
 #        sudo -u $ADMIN_USER \
-#			See https://github.com/$GITHUB_USER/go/blob/master/documentation/rsync%20options.md
+#			See https://github.com/$GITHUB_USER/ubuntu-tools/blob/master/documentation/rsync%20options.md
 			rsync --remove-source-files --include $MOVE_MASK -aloprtv \
 			"$SOURCE_ROOT_DIR"/* "$TARGET_SERVER:$TARGET_ROOT_DIR" \
 			| logger -t "$THIS_SCRIPT"

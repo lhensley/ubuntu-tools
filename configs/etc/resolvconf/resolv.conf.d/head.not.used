@@ -1,6 +1,6 @@
 # 
 # /etc/resolvconf/resolv.conf.d/head
-# From git/$GITHUB_USER/go/configs/resolvconf/head
+# From git/$GITHUB_USER/ubuntu-tools/configs/resolvconf/head
 # 644 root:root
 #
 # nameserver 127.0.0.53

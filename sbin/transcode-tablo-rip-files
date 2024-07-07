@@ -5,8 +5,8 @@
 	if [ ! $FUNCTIONS_ARE_DEFINED ];         then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting;         exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ];         then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting;         exit 1; fi
 
-# Require server nuc01
-	f_only_on_server nuc01
+# Require server pd1
+	f_only_on_server pd1
     
 # "Run as a service" check
 	if [ "$PPID" != "1" ]; then

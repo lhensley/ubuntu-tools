@@ -9,8 +9,8 @@
 # Require root
 	f_require_root
 
-# Only allow this to run on server nuc01.
-	f_only_on_server "nuc01"
+# Only allow this to run on server pd1.
+	f_only_on_server "pd1"
 
 # Go
 	ssh-keygen -t rsa -q -N "" -f $1
@@ -19,8 +19,8 @@
 	mv $1 /home/$1/.ssh/id_rsa
 	mv $1.pub /home/$1/.ssh/id_rsa.pub
 	chown -R $1:nogroup /home/$1/.ssh
-	echo "In Microsoft Visual Studio / go / configs / ssh / etc-ssh-sshd_config, add $1 after AllowUsers."
-	echo "In Microsoft Visual Studio / go / configs / ssh / home-.ssh-authorized_keys, append this:"
+	echo "In Microsoft Visual Studio / ubuntu-tools / configs / ssh / etc-ssh-sshd_config, add $1 after AllowUsers."
+	echo "In Microsoft Visual Studio / ubuntu-tools / configs / ssh / home-.ssh-authorized_keys, append this:"
 	cat /home/$1/.ssh/id_rsa.pub
 
 # Include script footer file

@@ -2,7 +2,7 @@
 # push-utilities
 
 # This should go BEFORE header so nothing runs on the wrong server.
-ONLY_SERVER="nuc01"
+ONLY_SERVER="pd1"
 if [[ $(/bin/hostname -s) != $ONLY_SERVER ]]; then
     echo "$0 runs ONLY on server $ONLY_SERVER."
     exit

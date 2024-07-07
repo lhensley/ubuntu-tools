@@ -1,5 +1,5 @@
 #!/bin/bash
-# nuc01.lanehensley.org:/var/www/lanehensley.org/startup
+# pd1.lanehensley.org:/var/www/lanehensley.org/startup
 # 
 # Download this file with 
 #   wget https://lanehensley.org/startup
@@ -8,7 +8,7 @@
 #   ./startup
 #
 
-wget --no-cache https://raw.githubusercontent.com/$GITHUB_USER/go/master/sbin/initialize-server
+wget --no-cache https://raw.githubusercontent.com/$GITHUB_USER/ubuntu-tools/master/sbin/initialize-server
 chmod 700 ./initialize-server
 #./initialize-server
 echo

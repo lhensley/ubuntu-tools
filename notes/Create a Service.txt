@@ -9,11 +9,11 @@ Best: https://www.linode.com/docs/quick-answers/linux/start-service-at-boot/
 
 
 Lane Services ("unit files")
-	Developed and stored in $GIT_GO_SERVICES
+	Developed and stored in $GIT_UBUNTU_TOOLS_SERVICES
 	upd script copies them to $SERVICES_DIR ("/lib/systemd/system")
 
 
-Pull up any unit file from the $GIT_GO_SERVICES (services) directory. 
+Pull up any unit file from the $GIT_UBUNTU_TOOLS_SERVICES (services) directory. 
 They're easy to adapt. Things you'll need to specify:
 	Description
 	Executable

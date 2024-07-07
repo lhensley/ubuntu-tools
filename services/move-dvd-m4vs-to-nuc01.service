@@ -2,14 +2,14 @@
 # See https://www.freedesktop.org/software/systemd/man/systemd.service.html for help.
 
 [Unit]
-Description=Service to Move Transcoded DVD Files to nuc01
+Description=Service to Move Transcoded DVD Files to pd1
 After=network.target
 
 [Install]
 WantedBy=multi-user.target
 
 [Service]
-ExecStart=/bin/bash /usr/local/sbin/move-dvd-m4vs-to-nuc01
+ExecStart=/bin/bash /usr/local/sbin/move-dvd-m4vs-to-pd1
 # Leave Type=simple unless the process forks. Defaults this way anyway if ExecStart is used.
 # Type=simple
 User=lhensley

@@ -1,5 +1,5 @@
 #
-# Defined for nuc01 running Ubuntu 18
+# Defined for pd1 running Ubuntu 18
 #
 # OpenSSL example configuration file.
 # This is mostly being used for generation of certificate requests.

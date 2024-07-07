@@ -172,7 +172,7 @@ done
 # This section re-pulls all go files from github and updates $SBIN_DIR
 	# Change to local repository directory
 		CURRENT_DIRECTORY=$(pwd)
-		cd $GIT_GO
+		cd $GIT_UBUNTU_TOOLS
 	# Blow away any local changes not uploaded to github
         echo
         echo "Removing any local changes not uploaded to GitHub"
@@ -193,8 +193,8 @@ done
         echo
         echo "Copying git SBIN_DIR contents to $SBIN_DIR and services to $SERVICES_DIR"
 		rm -rf $SBIN_DIR
-		cp -r $GIT_GO_SBIN $SBIN_PARENT
-        cp -r $GIT_GO_SERVICES/*.service $SERVICES_DIR/
+		cp -r $GIT_UBUNTU_TOOLS_SBIN $SBIN_PARENT
+        cp -r $GIT_UBUNTU_TOOLS_SERVICES/*.service $SERVICES_DIR/
 		cd "$CURRENT_DIRECTORY"
 		f_log_and_echo "git branch $GIT_BRANCH pulled." false > $REDIRECT
 

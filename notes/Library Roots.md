@@ -15,7 +15,7 @@ oz
   /mnt/ext10tb01/plex/TV-Shows/TV-Shows-DVR/TV-DSM (empty)
   /mnt/ext10tb01/Zoom
   /mnt/ext10tb01/ZoomTranscoded (flat)
-nuc01
+pd1
   /mnt/cloteal/Plex/Pool01-1TB/TV-Shows/TV-Shows-Regular [TV Shows Library]
   /mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Austin [TV Shows Library]
   /mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Austin-2020-09-20-Uncompressed-TS-Files [TV Shows Library]
@@ -27,20 +27,20 @@ nuc01
 
 Changes
 
-nuc01
+pd1
   Merge  /mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Austin-2020-09-20-Uncompressed-TS-Files [TV Shows Library]
     into /mnt/ext10tb01/plex/TV-Shows/Uncompressed on oz
   Create /mnt/cloteal/Plex/Pool06-1TB/TV-Shows/DVR (add to TV Shows Library)
   Merge  /mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Austin [TV Shows Library]
-    into /mnt/cloteal/Plex/Pool06-1TB/dvr-nuc01/tv
+    into /mnt/cloteal/Plex/Pool06-1TB/dvr-pd1/tv
   Merge  /mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Shows-DVR/mnt/ssd1tb/plex/TV-Austin
-    into /mnt/cloteal/Plex/Pool06-1TB/dvr-nuc01/tv
+    into /mnt/cloteal/Plex/Pool06-1TB/dvr-pd1/tv
   Merge  /mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Shows-DVR/TV-Austin
-    into /mnt/cloteal/Plex/Pool06-1TB/dvr-nuc01/tv
+    into /mnt/cloteal/Plex/Pool06-1TB/dvr-pd1/tv
   Merge  /mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Shows-DVR/TV-DSM
-    into /mnt/cloteal/Plex/Pool06-1TB/dvr-nuc01/tv
+    into /mnt/cloteal/Plex/Pool06-1TB/dvr-pd1/tv
   Merge  /mnt/cloteal/Plex/Pool06-1TB/TV-Shows/TV-Shows-DVR [TV Shows Library]
-    into /mnt/cloteal/Plex/Pool06-1TB/dvr-nuc01/tv
+    into /mnt/cloteal/Plex/Pool06-1TB/dvr-pd1/tv
 oz
   Rename  /mnt/ssd1tb/plex/TV-Austin [TV Austin Library] (rename dvr-oz): pre-transcode
   Rename  /mnt/ext10tb01/TV-Austin-2020-09-20-Uncompressed-TS-Files
@@ -66,11 +66,11 @@ oz
   /mnt/ext10tb01/plex/dvr-oz/tv
   /mnt/ext10tb01/Zoom
   /mnt/ext10tb01/ZoomTranscoded (flat)
-nuc01
-  /var/lib/plexmediaserver/Library/dvr-nuc01/movies
-  /var/lib/plexmediaserver/Library/dvr-nuc01/tv
-  /mnt/cloteal/Plex/Pool06-1TB/dvr-nuc01/movies
-  /mnt/cloteal/Plex/Pool06-1TB/dvr-nuc01/movies-ts
-  /mnt/cloteal/Plex/Pool06-1TB/dvr-nuc01/tv
-  /mnt/cloteal/Plex/Pool06-1TB/dvr-nuc01/tv-ts
+pd1
+  /var/lib/plexmediaserver/Library/dvr-pd1/movies
+  /var/lib/plexmediaserver/Library/dvr-pd1/tv
+  /mnt/cloteal/Plex/Pool06-1TB/dvr-pd1/movies
+  /mnt/cloteal/Plex/Pool06-1TB/dvr-pd1/movies-ts
+  /mnt/cloteal/Plex/Pool06-1TB/dvr-pd1/tv
+  /mnt/cloteal/Plex/Pool06-1TB/dvr-pd1/tv-ts
 

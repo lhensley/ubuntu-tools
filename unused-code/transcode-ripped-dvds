@@ -12,7 +12,7 @@ MKV_BASE_PATH="/home/$ADMIN_USER/Videos/MakeMKV-Completed"
 M4V_PATH="/home/$ADMIN_USER/Videos/HandBrake-Completed"
 PRESET="/home/$ADMIN_USER/.HandBrake/Lane 1080p (BluRay).json"
 MAKEMKV_PROCESS=makemkvcon
-RSYNC_TARGET="lhensley@nuc01.lanehensley.org:/mnt/cloteal/Plex/uploads"
+RSYNC_TARGET="lhensley@pd1.lanehensley.org:/mnt/cloteal/Plex/uploads"
     
 mkdir -p "$M4V_PATH"
 
@@ -67,7 +67,7 @@ while [ $(lh_has_subdirectories "$MKV_BASE_PATH") == "true" ] \
 
 if $PRODUCTIVE; then
    chown plex:plex $M4V_PATH/*
-   echo "$0: Uploading to nuc01" | mail lanecell
+   echo "$0: Uploading to pd1" | mail lanecell
    sudo -u $ADMIN_USER rsync -rvE $M4V_PATH/ $RSYNC_TARGET
         #   Options:   r=recursive   v=verbose   E=preserve executability
    exit_status=$?

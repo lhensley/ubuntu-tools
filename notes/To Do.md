@@ -1,5 +1,5 @@
 # To Do
-* Run fsck on nuc01
+* Run fsck on pd1
 * Fix domain name; not defined, can't refer by short name
 * Scripts to Write
   * Delete old newscasts & late night talk shows
@@ -11,10 +11,10 @@
   * Probably best to specify credentials before creating a new instance so they can be re-created.
 * Fix the MakeMKV install "press RETURN to continue" issue.
 * Fix Plex install prompting for config info
-* Figure out why oz won't resolve nuc01 without FQDN
+* Figure out why oz won't resolve pd1 without FQDN
 * Pick up missed m4v files from work and move to store
 * Backup tiers: Incrementals to external drive, then zip the contents weekly?
-* Update backup script for oz and nuc01
+* Update backup script for oz and pd1
 * Backup ~/.ssh and /root/.ssh
 * Amend config lookup so it checks the variable and not the file
  

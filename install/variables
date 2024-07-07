@@ -4,7 +4,7 @@
 # Global install variables
     ADMIN_USER="lhensley"
     TIMEZONE="America/Chicago" # Don't use US/*. Not recognized in Ubuntu 24.04
-    HOSTNAME="go"
+    HOSTNAME="dsm1"
     ADMIN_DIR="/home/$ADMIN_USER"
     ADMIN_HOME_DIR=$ADMIN_DIR
     ROOT_USER="root"
@@ -17,11 +17,11 @@
     ROOT_HOME_DIR="/root"
     GITHUB_USER="lhensley"
     GIT_ROOT="/var/local/git"
-    GIT_GO="$GIT_ROOT/go"                                  # Formerly system.git.go
-    GIT_GO_CONFIGS="$GIT_GO/configs"                       # Formerly system.git.go.configs
-    GIT_GO_SBIN="$GIT_GO/sbin"                             # Formerly #system.git.go.sbin
-    GIT_GO_SERVICES="$GIT_GO/services"
-    GIT_GO_SETUP="$GIT_GO/setup"                           # Formerly system.git.go.setup
+    GIT_UBUNTU_TOOLS="$GIT_ROOT/ubuntu-tools"                                  # Formerly system.git.go
+    GIT_UBUNTU_TOOLS_CONFIGS="$GIT_UBUNTU_TOOLS/configs"                       # Formerly system.git.go.configs
+    GIT_UBUNTU_TOOLS_SBIN="$GIT_UBUNTU_TOOLS/sbin"                             # Formerly #system.git.go.sbin
+    GIT_UBUNTU_TOOLS_SERVICES="$GIT_UBUNTU_TOOLS/services"
+    GIT_UBUNTU_TOOLS_SETUP="$GIT_UBUNTU_TOOLS/setup"                           # Formerly system.git.go.setup
     SBIN_DIR="/usr/local/sbin"
     SBIN_PARENT="$(dirname $SBIN_DIR)"
     # MY_GIT_TOKEN="this-now-is-managed-from-install-keys-script"

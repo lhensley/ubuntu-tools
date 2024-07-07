@@ -1,4 +1,4 @@
-# go-static.yaml
+# dsm1-static.yaml
 network:
     version: 2
     renderer: NetworkManager

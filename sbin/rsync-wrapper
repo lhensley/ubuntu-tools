@@ -8,8 +8,8 @@
 # Require root
 	f_require_root
 
-# Require server nuc01
-	f_only_on_server "nuc01"
+# Require server pd1
+	f_only_on_server "pd1"
 
 # Show name, usage, and example.
 	echo ""

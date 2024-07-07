@@ -1,6 +1,6 @@
 ### Basic HTTPS configuration file for ddclient
 
-# Dynu go.dynu.com
+# Dynu pd1.dynu.com
 # daemon=7200 # 90 minutes between refresh
 daemon=0
 # Log update msgs to syslog.
@@ -25,7 +25,7 @@ login='lanehensley'
 # password='ihbJXdoyFUofpyfExTQp'
 password='aDgD2VjTKNd2J@r6FCqv'
 # List one or more hostnames one on each line.
-go.lanehensley.org
+lanehensley.org
 
 ##########################################################################
 ### END ##################################################################

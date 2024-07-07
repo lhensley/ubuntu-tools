@@ -1,4 +1,4 @@
-# nuc01-dynamic.yaml
+# pd1-dynamic.yaml
 network:
     version: 2
     renderer: NetworkManager

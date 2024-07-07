@@ -40,7 +40,7 @@
 	chown -R $USER:$USER ~/easy-rsa
 
 # Display ca.crt location
-	sftp nuc01.lanehensley.org <<EOF
+	sftp pd1.lanehensley.org <<EOF
 	echo "Done. Now copy ONLY ~/easy-rsa/pki/ca.crt to clients and servers."
 
 # Include script footer file

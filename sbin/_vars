@@ -24,7 +24,7 @@
 	SBIN_PARENT="$(dirname $SBIN_DIR)"
 	DOMAIN_NAME="lanehensley.org"
         HOST_FQDN=$HOSTNAME.$DOMAIN_NAME
-        DMZ_HOST="nuc01"
+        DMZ_HOST="pd1"
 	COLOPHON="by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
         TIMEZONE="America/Chicago"
 
@@ -33,8 +33,8 @@
 	VM_ENVIRONMENT="" # DEFAULT
 	# Known options as of 3/5/2023: aws google metal virtualhost vmware
 	if [ $HOSTNAME == "adam" ]; then VM_ENVIRONMENT="metal"; fi
-	if [ $HOSTNAME == "go" ]; then VM_ENVIRONMENT="metal"; fi
-	if [ $HOSTNAME == "nuc01" ]; then VM_ENVIRONMENT="metal"; fi
+	if [ $HOSTNAME == "dsm1" ]; then VM_ENVIRONMENT="metal"; fi
+	if [ $HOSTNAME == "pd1" ]; then VM_ENVIRONMENT="metal"; fi
 	if [ $HOSTNAME == "oz" ]; then VM_ENVIRONMENT="metal"; fi
 	if [ $HOSTNAME == "teddy" ]; then VM_ENVIRONMENT="aws"; fi
 	if [ $HOSTNAME == "u22" ]; then VM_ENVIRONMENT="virtualhost"; fi
@@ -459,26 +459,26 @@ source /etc/os-release
 # DEPENDENT on definition of $HOSTNAME, but that's built-in
         declare -A ARCHIVE_FILE_SYSTEM
                 ARCHIVE_FILE_SYSTEM[default]="/"
-                ARCHIVE_FILE_SYSTEM[nuc01]="/mnt/5TBE"
+                ARCHIVE_FILE_SYSTEM[pd1]="/mnt/5TBE"
                 ARCHIVE_FILE_SYSTEM[adam]="/mnt/5TBD"
                 ARCHIVE_FILE_SYSTEM[oz]="/mnt/5TBC"
-                ARCHIVE_FILE_SYSTEM[go]="/mnt/5TBC"
+                ARCHIVE_FILE_SYSTEM[dsm1]="/mnt/5TBC"
         declare -A ARCHIVE_DIRECTORY
                 ARCHIVE_DIRECTORY[default]="/var/lib/archives/$HOSTNAME"
-                ARCHIVE_DIRECTORY[nuc01]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
+                ARCHIVE_DIRECTORY[pd1]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
                 ARCHIVE_DIRECTORY[adam]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
                 ARCHIVE_DIRECTORY[oz]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
-                ARCHIVE_DIRECTORY[go]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
+                ARCHIVE_DIRECTORY[dsm1]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
         THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[default]}"
-                if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "pd1" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
                 if [ $HOSTNAME == "adam" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
                 if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
-                if [ $HOSTNAME == "go" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "dsm1" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
         THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[default]}"
-                if [ $HOSTNAME == "nuc01" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "pd1" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
                 if [ $HOSTNAME == "adam" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
                 if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
-                if [ $HOSTNAME == "go" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "dsm1" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
         ARCHIVE_TAR_FILE="$HOSTNAME-$START_DATESTAMP.gz"
                 ARCHIVE_TAR_FULL="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_FILE"
         ARCHIVE_TAR_WEEKDAY_FILE="$HOSTNAME-weekday-$START_WEEKDAYSTAMP3.gz"
@@ -508,7 +508,7 @@ source /etc/os-release
                 COLD_RESTORE_POINT="/"
                 # COLD_RESTORE_POINT="/var/restore-points/$START_DATEANDTIMESTAMP"
         COLD_BACKUP_LOG="$ADMIN_HOME_DIR/.coldstorage.log"
-        if [ $HOSTNAME == "nuc01" ]; then
+        if [ $HOSTNAME == "pd1" ]; then
                 COLD_BACKUP_FILE_SYSTEM="/mnt/5TBE"
                 COLD_BACKUP_FS_READ_ONLY=false
                 COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
@@ -519,7 +519,7 @@ source /etc/os-release
                 TEMP_ARCHIVE_PARENT_DIRECTORY="/mnt/bob"
                 TEMP_ARCHIVE_SUBDIRECTORY="archives"
                 fi
-        if [ $HOSTNAME == "go" ]; then
+        if [ $HOSTNAME == "dsm1" ]; then
                 COLD_BACKUP_FILE_SYSTEM="/mnt/5TBC"
                 COLD_BACKUP_FS_READ_ONLY=false
                 COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
@@ -616,7 +616,7 @@ source /etc/os-release
 # Example: MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs defaults 0 0"
         declare -A MOUNT_POINT_DESCRIPTION
         declare -A MOUNT_POINT_DEFINITION
-        if [ $HOSTNAME == "nuc01" ]; then
+        if [ $HOSTNAME == "pd1" ]; then
                 MOUNT_POINT_DESCRIPTION[/mnt/Black4T01]="Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE"
                         MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs noauto 0 0"
                 MOUNT_POINT_DESCRIPTION[/mnt/bertha]="bertha (3TB) UUID=d28256f9-c258-451e-b299-d4849cf19e0b"
@@ -649,15 +649,15 @@ source /etc/os-release
 
 # Git
 # CRITICAL: If you ever edit this section, 
-#   copy changes into the go/install/variables script, too.
+#   copy changes into the ubuntu-tools/install/variables script, too.
         GIT_BRANCH="master"
         # GIT_BRANCH="dev"
-        GIT_ROOT="/var/local/git"            # Formerly system.git
-        GIT_GO="$GIT_ROOT/go"                # Formerly system.git.go
-        GIT_GO_CONFIGS="$GIT_GO/configs"     # Formerly system.git.go.configs
-        GIT_GO_SBIN="$GIT_GO/sbin"           # Formerly #system.git.go.sbin
-        GIT_GO_SERVICES="$GIT_GO/services"
-        GIT_GO_SETUP="$GIT_GO/setup"         # Formerly system.git.go.setup
+        GIT_ROOT="$ADMIN_HOME_DIR/git"            # Formerly system.git
+        GIT_UBUNTU_TOOLS="$GIT_ROOT/ubuntu-tools"                # Formerly system.git.go
+        GIT_UBUNTU_TOOLS_CONFIGS="$GIT_UBUNTU_TOOLS/configs"     # Formerly system.git.go.configs
+        GIT_UBUNTU_TOOLS_SBIN="$GIT_UBUNTU_TOOLS/sbin"           # Formerly #system.git.go.sbin
+        GIT_UBUNTU_TOOLS_SERVICES="$GIT_UBUNTU_TOOLS/services"
+        GIT_UBUNTU_TOOLS_SETUP="$GIT_UBUNTU_TOOLS/setup"         # Formerly system.git.go.setup
         # GIT_TOKEN="Removed for security"   # Formerly system.git.token
         SERVICES_DIR="/lib/systemd/system"
 
@@ -725,7 +725,7 @@ source /etc/os-release
         PLEX_LIVE_APPLICATION_SUPPORT="/var/snap/plexmediaserver/common/Library"
         PLEX_BACKUP_FILE_SYSTEM="$THIS_ARCHIVE_FILE_SYSTEM"
         PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
-        if [ $HOSTNAME == "nuc01" ]; then 
+        if [ $HOSTNAME == "pd1" ]; then 
                 # Define all Plex data root directories
                 # Set them all as true
                 # Example: PLEX_ROOT[/mnt/12TBB/plex]=true
@@ -764,7 +764,7 @@ source /etc/os-release
         MAILNAME=$HOSTNAME
         MAIN_MAILER_TYPE="'Internet with smarthost'"
         RELAYHOST="mail.twc.com"                                          # Spectrum Internet (DEFAULT for Austin)
-        if [ $HOSTNAME == "nuc01" ]; then RELAYHOST="mail.mchsi.com"; fi  # Mediacom Cable Internet
+        if [ $HOSTNAME == "pd1" ]; then RELAYHOST="mail.mchsi.com"; fi  # Mediacom Cable Internet
         if [ $HOSTNAME == "red" ]; then RELAYHOST="mail.mchsi.com"; fi    # Mediacom Cable Internet
 
 # reset-when-ready

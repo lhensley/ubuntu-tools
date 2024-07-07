@@ -1,7 +1,7 @@
 
 ########################################################################################################
 #
-# nuc01
+# pd1
 #
 ########################################################################################################
 #
@@ -33,7 +33,7 @@
 #
 # bob (1TB SSD internal, Samsung EVO 960)
 # Empty
-# Internal SSD drive in nuc01. Not great, but good condition
+# Internal SSD drive in pd1. Not great, but good condition
 UUID=d8f30f08-2698-411c-a3ea-32b9748e9ba9 /mnt/bob ext4 nofail 0 0
 #
 # 5TBF (5TB) UUID=9c311371-fbce-423b-9f44-4301aca9e6e5
@@ -75,7 +75,7 @@ UUID=27cf148b-4b43-4747-8a4f-e7013639b989 /mnt/12TBB ext4 nofail 0 0
 # Empty
 UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/5TBB ext4 nofail,noauto 0 0
 #
-# PHYSICALLY REMOVED 4/5/2024 to install on go.lanehensley.org for Ubuntu 24
+# PHYSICALLY REMOVED 4/5/2024 to install on dsm1.lanehensley.org for Ubuntu 24
 # 5TBC (5TB) Black 5TB External Seagate
 # Contains /mnt/5TBC/cold-backup.2022-04 (copy on /mnt/5TBD)
 # UUID=fa9f5c57-94fd-4706-979e-4c30189592a5 /mnt/5TBC ext4 nofail,noauto 0 0
@@ -89,14 +89,14 @@ UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/5TBD ext4 nofail,noauto 0 0
 # /mnt/5TBE/cold-backup is use. Confirm and document how/where (e.g., crontab?)
 UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 nofail,noauto 0 0
 #
-# PHYSICALLY REMOVED 5/22/2024 to install on go.lanehensley.org for Ubuntu 24
+# PHYSICALLY REMOVED 5/22/2024 to install on dsm1.lanehensley.org for Ubuntu 24
 # 12TBA (12TB) Black 12TB External Seagate
 # Fallback to 12TBB
 # NOT IN SYNC
 # Good condition; reliable
 # UUID=901c4177-b514-408a-997c-0cbeee89fa6e /mnt/12TBA ext4 noauto,nofail 0 0
 #
-# PHYSICALLY REMOVED 4/5/2024 to install on go.lanehensley.org for Ubuntu 24
+# PHYSICALLY REMOVED 4/5/2024 to install on dsm1.lanehensley.org for Ubuntu 24
 # 12TBC (12TB) Black 12TB External Seagate
 # Fallback to 12TBB
 # NOT IN SYNC

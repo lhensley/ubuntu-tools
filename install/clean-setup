@@ -160,13 +160,13 @@ if [[ $EUID -ne 0 ]]; then
     echo Clearing "$GIT_ROOT" and "$SBIN_DIR"
     rm -rf "$GIT_ROOT" "$SBIN_DIR"
 
-# Clone go.git and set restrictive permissions
+# Clone ubuntu-tools.git and set restrictive permissions
     echo
-    echo "Cloning go.git and setting permissions"
+    echo "Cloning ubuntu-tools.git and setting permissions"
     mkdir -p "$GIT_ROOT"
     chmod 775 "$GIT_ROOT"
     cd "$GIT_ROOT"
-    git clone https://github.com/$GITHUB_USER/go.git
+    git clone https://github.com/$GITHUB_USER/ubuntu-tools.git
     chown -R $ROOT_USER:$ROOT_USER "$GIT_ROOT"
     chmod -R 400 "$GIT_ROOT"
     cd
@@ -174,7 +174,7 @@ if [[ $EUID -ne 0 ]]; then
 # Copy scripts into /usr/local/sbin
     echo
     echo "Copying scripts into /usr/local/sbin"
-    cp -r "$GIT_GO_SBIN" "$SBIN_PARENT"
+    cp -r "$GIT_UBUNTU_TOOLS_SBIN" "$SBIN_PARENT"
     chown -R $ROOT_USER:$ROOT_USER "$SBIN_DIR"
     chmod -R 750 "$SBIN_DIR"
     # find "$SBIN_DIR" -type d -print0 | sudo xargs -0 chmod 750
@@ -399,14 +399,14 @@ if $install_mysql_server ; then
     chmod 644 /etc/mysql/conf.d/mysqldump.cnf
   # Install .my.cnf in home directory
     backup-file $ADMIN_HOME_DIR/.my.cnf
-    cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.my.cnf $ADMIN_HOME_DIR/.my.cnf
+    cp $GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.my.cnf $ADMIN_HOME_DIR/.my.cnf
     replace-in-file "$ADMIN_HOME_DIR/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
     replace-in-file "$ADMIN_HOME_DIR/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
     chown $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.my.cnf"*
     chmod 600 "$ADMIN_HOME_DIR/.my.cnf"*
   # Install .my.cnf for root user
     backup-file $ROOT_HOME_DIR/.my.cnf
-    cp $GIT_GO_CONFIGS/ADMIN_HOME_DIR/.my.cnf $ROOT_HOME_DIR/.my.cnf
+    cp $GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.my.cnf $ROOT_HOME_DIR/.my.cnf
     replace-in-file "$ROOT_HOME_DIR/.my.cnf" "UserValue" "$MYSQL_ADMIN_NAME"
     replace-in-file "$ROOT_HOME_DIR/.my.cnf" "PasswordValue" "$MYSQL_ADMIN_PASSWORD"
     chown $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.my.cnf"*
@@ -426,7 +426,7 @@ if $install_mysql_server ; then
           debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_APP_DB_PASS"
           apt-get install --yes phpmyadmin php-mbstring php-zip php-gd php-json php-curl
           phpenmod mbstring
-          cp $GIT_GO_CONFIGS$PHPMYAMIN_DIR/phpmyadmin.config.inc.php $PHPMYADMIN_DIR/config.inc.php
+          cp $GIT_UBUNTU_TOOLS_CONFIGS$PHPMYAMIN_DIR/phpmyadmin.config.inc.php $PHPMYADMIN_DIR/config.inc.php
           chown -R www-data:www-data $PHPMYADMIN_DIR
           chmod 644 $PHPMYADMIN_DIR/config.inc.php
           systemctl restart apache2
@@ -712,7 +712,7 @@ if $is_desktop ; then
             fi
         echo "" >> $OS_INSTALL_INFO_PATH
         fi
-    echo "# Add to $GIT_GO_CONFIGS/ADMIN_USER_DIR/.ssh/authorized_keys:" >> $OS_INSTALL_INFO_PATH
+    echo "# Add to $GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_USER_DIR/.ssh/authorized_keys:" >> $OS_INSTALL_INFO_PATH
     echo "" >> $OS_INSTALL_INFO_PATH
     echo "# $SSH_KEY_NAME" >> $OS_INSTALL_INFO_PATH
     if [ -f $ADMIN_HOME_DIR/.ssh/id_rsa.pub ]; then

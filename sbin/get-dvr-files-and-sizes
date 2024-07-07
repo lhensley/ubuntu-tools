@@ -10,8 +10,8 @@
 # Require root
 	f_require_root
 
-# Runs only on nuc01
-	f_require_host "nuc01"
+# Runs only on pd1
+	f_require_host "pd1"
 
 # Do stuff here
 	TEMPFILE="/tmp/files-in-plex-dvr-directory-$(uuidgen)"

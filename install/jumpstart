@@ -19,19 +19,19 @@ echo apt-get -y install coreutils git gpg moreutils '\'
 echo "   " openssh-client openssh-server ufw util-linux
 apt-get -y install coreutils git gpg moreutils \
 	openssh-client openssh-server ufw util-linux
-systemctl enable –now ssh
+systemctl enable ï¿½now ssh
 
 echo
-echo wget --no-cache -O seeds.tar.gz.gpg https://github.com/lhensley/go/raw/master/install/seeds.tar.gz.gpg
-wget --no-cache -O seeds.tar.gz.gpg https://github.com/lhensley/go/raw/master/install/seeds.tar.gz.gpg
+echo wget --no-cache -O seeds.tar.gz.gpg https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar.gz.gpg
+wget --no-cache -O seeds.tar.gz.gpg https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar.gz.gpg
 
 echo
-echo wget --no-cache -O clean-setup https://github.com/lhensley/go/raw/master/install/clean-setup
-wget --no-cache -O clean-setup https://github.com/lhensley/go/raw/master/install/clean-setup
+echo wget --no-cache -O clean-setup https://github.com/lhensley/ubuntu-tools/raw/master/install/clean-setup
+wget --no-cache -O clean-setup https://github.com/lhensley/ubuntu-tools/raw/master/install/clean-setup
 
 echo
-echo wget --no-cache -O variables https://github.com/lhensley/go/raw/master/install/variables
-wget --no-cache -O variables https://github.com/lhensley/go/raw/master/install/variables
+echo wget --no-cache -O variables https://github.com/lhensley/ubuntu-tools/raw/master/install/variables
+wget --no-cache -O variables https://github.com/lhensley/ubuntu-tools/raw/master/install/variables
 
 echo
 echo gpg -d -o seeds.tar.gz seeds.tar.gz.gpg

@@ -1,0 +1,8 @@
+127.0.0.1 localhost
+# 192.168.168.3 pd1.hogheavendsm.local pd1.lan pd1.local pd1.lanehensley.org lanehensley.org pd1 pd1-wired
+192.168.168.8 dsm1
+192.168.168.1 router
+# 192.168.168.70 pd1-wifi
+# 192.168.168.251 dsm1-wifi
+
+::1 localhost

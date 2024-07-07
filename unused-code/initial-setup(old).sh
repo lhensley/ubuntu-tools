@@ -123,8 +123,8 @@ if $install_openssh_server ; then
   apt-get install --yes openssh-server
   ufw allow ssh
   ufw limit ssh
-  cp /var/local/git/go/ssh/$USER_ME/authorized_keys ~/.ssh
-  cp /var/local/git/go/ssh/$USER_UBUNTU/authorized_keys ~/.ssh
+  cp /var/local/git/ubuntu-tools/ssh/$USER_ME/authorized_keys ~/.ssh
+  cp /var/local/git/ubuntu-tools/ssh/$USER_UBUNTU/authorized_keys ~/.ssh
   chown $USER_ME:$USER_ME ~/.ssh/authorized_keys
   chown $USER_UBUNTU:$USER_UBUNTU /home/$USER_UBUNTU/.ssh/authorized_keys
   chmod 644 ~/.ssh/authorized_keys

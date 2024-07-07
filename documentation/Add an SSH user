@@ -3,7 +3,7 @@
 Generate an SSH key pair for the new user. See Generate an SSH Key Pair.
 	Browse to https://webmin.lanehensley.org, and choose Cluster / Cluster Users and Groups.
 		Add a user. Most recent user ID was 1012, medijoke. Pick up with 1013.
-		ssh to nuc01 and do this:
+		ssh to pd1 and do this:
 			sudo make-ssh-keys-for-new-user [new-user-name]
 		Add to Microsoft Visual Studio as directed from make-ssh-keys-for-new-user
 
