@@ -242,7 +242,8 @@ done
 		fi
 
 # Update /etc/fstab
-	cp --update /etc/fstab /etc/fstab.original.install
+	# Horrible error below. Do this ONLY at installation. 2024-07-07
+	# cp --update /etc/fstab /etc/fstab.original.install
 	if $(f_is_file "$GIT_UBUNTU_TOOLS_CONFIGS/etc/fstab-peripherals.$HOSTNAME"); then
 		echo "Updating /etc/fstab from /etc/fstab.original.install and $GIT_UBUNTU_TOOLS_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"
 		rm -f /etc/fstab

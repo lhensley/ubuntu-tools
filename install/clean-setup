@@ -659,6 +659,9 @@ if $is_desktop ; then
 #         fi
 #    done
 
+# Save the original / and /boot file systems. 2024-07-07
+	cp --update /etc/fstab /etc/fstab.original.install
+
 # Unmount peripherals currently mounted under /media/$LOGNAME/*
     echo
     echo "Unmounting everything mounted in /media/$LOGNAME/"
