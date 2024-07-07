@@ -71,11 +71,16 @@ rm "$SEED_TAR_FILE"
 echo "Updating ownerships in $(pwd)"
 chown -R $SUDO_USER:$SUDO_USER $(pwd)
 rm "$SEED_TAR_FILE"
-echo "Success creating 'seeds.tar.gz.gpg'."
-echo "Attempting to email it to $ADMIN_EMAIL."
-echo "Here is your seed file:" | mail -A ./seeds.tar.gz.gpg -s "Seed file from $HOST_FQDN" lane@lanehensley.org
-echo "If the email doesn't reach you, download seeds.tar.gz.gpg with sftp."
-echo "  and add it to repository ubuntu-tools/install/"
+mv 'seeds.tar.gz.gpg' "ADMIN_USER/"
+echo "Success creating $ADMIN_DIR/seeds.tar.gz.gpg."
+echo "It has NOT been moved to the install directory of the master branch of ubuntu-tools.
+echo "It has NOT been committed with git, or pushed to GitHub."
+echo "That's essential, and it's up to you."
+# echo "Attempting to email it to $ADMIN_EMAIL."
+# echo "If the email doesn't reach you, download seeds.tar.gz.gpg with sftp."
+# echo "  and add it to repository ubuntu-tools/install/"
+# echo "Here is your seed file:" | mail -A ./seeds.tar.gz.gpg -s "Seed file from $HOST_FQDN" lane@lanehensley.org
+# echo "Mail attempted."
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

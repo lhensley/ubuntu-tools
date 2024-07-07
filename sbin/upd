@@ -19,6 +19,11 @@
 #	echo "Updating local git repository."
 #	f_git
 
+# Apply configs
+	echo
+	echo "Applying configurations and permissions."
+	f_apply_configs
+
 # Other updates
 	echo
 	echo "Updating local apt packages"

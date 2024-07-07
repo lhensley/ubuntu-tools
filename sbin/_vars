@@ -580,6 +580,9 @@ source /etc/os-release
 # ddclient
         DDCLIENT_INTERVAL=7200
 
+# dynu
+        PERMISSIONS_DYNU=400
+        
 # File System Backups
 # DEPENDENT on Archive Directories AND Start Timestamps above
         BACKUP_ROOT="/"                                                                          # Formerly "DIRECTORY_FROM"
@@ -786,6 +789,9 @@ source /etc/os-release
         SYSTEM_SNAPSHOT_JSON_FILE="$ADMIN_HOME_DIR/.system-snapshot-data.json"
         PERMISSIONS_SYSTEM_SNAPSHOT_FILE=640
         SYSTEM_SNAPSHOT_FILE_PERMISSIONS=$PERMISSIONS_SYSTEM_SNAPSHOT_FILE
+
+# umask
+        UMASK=077
 
 # Video Processing Defaults
         PERMISSIONS_DEFAULT_VIDEO_FILE=664

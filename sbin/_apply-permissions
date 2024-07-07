@@ -179,7 +179,12 @@ done
 	# /etc/.dynu.com
 		if [ -f /etc/.dynu.com ]; then
 			echo "Updating permissions for /etc/.dynu.com"
-			chmod -f 700 /etc/.dynu.com
+			chown -f $ROOT_USER:$ROOT_USER /etc/.dynu.com
+			chmod -f $PERMISSIONS_DYNU /etc/.dynu.com
+			chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.dynu.com"
+			chmod -f $PERMISSIONS_DYNU "$ADMIN_HOME_DIR/.dynu.com"
+			chown -f $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.dynu.com"
+			chmod -f $PERMISSIONS_DYNU "$ROOT_HOME_DIR/.dynu.com"
 			fi
 
 	# /etc/exports
@@ -245,10 +250,10 @@ done
 		chown -f $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.gitconfig
 		chmod -f -R 400 $GIT_ROOT/*
 
-	# Set /home/lhensley/.coldstorage.log
+	# Set $ADMIN_DIR/.coldstorage.log
 		echo "Updating permissions for $COLD_BACKUP_LOG"
 		chmod -f 600 $COLD_BACKUP_LOG
-		chown -f $ROOT_USER:$ROOT_USER $COLD_BACKUP_LOG
+		chown -f $ADMIN_USER:$ADMIN_USER $COLD_BACKUP_LOG
 
 	# /home/lhensley/vim Vim and vi config files
 		echo Updating permissions for "$ADMIN_HOME_DIR/.vim*" and "$ROOT_HOME_DIR/.vim*"

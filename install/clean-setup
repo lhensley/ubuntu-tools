@@ -34,6 +34,9 @@ if [[ $EUID -ne 0 ]]; then
     VARIABLES_ARE_DEFINED=false
     source ./variables
 
+# Set umask
+    umask $UMASK
+
 # Change to SETUP directory
     cd "$ADMIN_DIR/SETUP"
 
@@ -108,12 +111,14 @@ if [[ $EUID -ne 0 ]]; then
     apt-get --yes autoremove
 
 # # Install git and open the git port
+# REMOVED FOR SECURITY
 #     echo
 #     echo Installing and configuring git
 #     apt-get install --yes git
 #     ufw allow git
 
 # Copy .gitconfig* to $ADMIN_DIR
+# REMOVED FOR SECURITY
 #     ADMIN_FILE="$ADMIN_DIR/$BASEFILE"
 #     cp "$OUTFILE"* $ADMIN_DIR/
 #     chown $ADMIN_USER:$ADMIN_USER "$ADMIN_FILE"*
@@ -136,8 +141,9 @@ if [[ $EUID -ne 0 ]]; then
     echo chmod -R 600 $ADMIN_DIR/.ssh/*
     chmod -R 600 $ADMIN_DIR/.ssh/*
     echo
-    echo chmod 644 $ADMIN_DIR/.ssh/id_ed25519.pub
-    chmod 644 $ADMIN_DIR/.ssh/id_ed25519.pub
+    # Two lines below used to show 644. Why? 2024-07-07
+    echo chmod 600 $ADMIN_DIR/.ssh/id_ed25519.pub
+    chmod 600 $ADMIN_DIR/.ssh/id_ed25519.pub
     #############
     echo
     echo cp $ADMIN_DIR/SETUP/.git* $ADMIN_DIR/.
@@ -164,21 +170,21 @@ if [[ $EUID -ne 0 ]]; then
     echo
     echo "Cloning ubuntu-tools.git and setting permissions"
     mkdir -p "$GIT_ROOT"
-    chmod 775 "$GIT_ROOT"
+    # Previously 775. Stupid! 2024-07-07
+    chmod 700 "$GIT_ROOT"
     cd "$GIT_ROOT"
     git clone https://github.com/$GITHUB_USER/ubuntu-tools.git
-    chown -R $ROOT_USER:$ROOT_USER "$GIT_ROOT"
+    chown -R $ADMIN_USER:$ADMIN_USER "$GIT_ROOT"
     chmod -R 400 "$GIT_ROOT"
+    chmod -R 700 "GIT_UBUNTU_TOOLS_SBIN"
     cd
 
 # Copy scripts into /usr/local/sbin
     echo
-    echo "Copying scripts into /usr/local/sbin"
-    cp -r "$GIT_UBUNTU_TOOLS_SBIN" "$SBIN_PARENT"
-    chown -R $ROOT_USER:$ROOT_USER "$SBIN_DIR"
-    chmod -R 750 "$SBIN_DIR"
-    # find "$SBIN_DIR" -type d -print0 | sudo xargs -0 chmod 750
-    # find "$SBIN_DIR" -type f -print0 | sudo xargs -0 chmod 540
+    echo "Linking scripts into /usr/local/sbin"
+    ln -s "$GIT_UBUNTU_TOOLS_SBIN" "$SBIN_PARENT"
+    chown -R $ADMIN_USER:$ADMIN_USER "$GIT_UBUNTU_TOOLS_SBIN"
+    chmod -R 700 "$GIT_UBUNTU_TOOLS_SBIN"
 
 # Run upd
     echo
@@ -464,7 +470,7 @@ if $install_openvpn ; then
     echo
     echo "Installing openvpn."
     apt-get install --yes openvpn                   # Secure IP tunnel daemon
-    upw allow OpenVPN
+    ufw allow OpenVPN
     echo "openvpn installed."
     fi
   fi
@@ -509,6 +515,16 @@ if $install_ripmime ; then f_install ripmime; fi
 if $install_rsync ; then f_install rsync; fi
 if $install_sshfs ; then f_install sshfs; fi
 if $install_sysbench ; then f_install sysbench; fi
+
+# Todoist
+if $install_todoist ; then
+  echo
+  echo "Installing Todoist."
+  snap install todoist
+  snap set core experimental.refresh-app-awareness=true
+  echo "Todoist installed."
+  fi
+
 if $install_tasksel ; then f_install tasksel; fi
 if $install_unzip ; then f_install unzip; fi
 if $install_vim ; then f_install vim; fi

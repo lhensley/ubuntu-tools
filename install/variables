@@ -9,6 +9,7 @@
     ADMIN_HOME_DIR=$ADMIN_DIR
     ROOT_USER="root"
     ROOT_DIR="/root"
+    UMASK=077
 
 # Used for installing git
     my_full_name="Lane Hensley"
@@ -16,7 +17,7 @@
     ROOT_USER="root"
     ROOT_HOME_DIR="/root"
     GITHUB_USER="lhensley"
-    GIT_ROOT="/var/local/git"
+    GIT_ROOT="$ADMIN_DIR/git"
     GIT_UBUNTU_TOOLS="$GIT_ROOT/ubuntu-tools"                                  # Formerly system.git.go
     GIT_UBUNTU_TOOLS_CONFIGS="$GIT_UBUNTU_TOOLS/configs"                       # Formerly system.git.go.configs
     GIT_UBUNTU_TOOLS_SBIN="$GIT_UBUNTU_TOOLS/sbin"                             # Formerly #system.git.go.sbin
@@ -29,36 +30,31 @@
 # Desktop Software
 # If this is set to false, GUI app installations will be ignored.
 # CAUTION: If accidentally set to true, all required GUI packages also will be installed.
-    is_desktop=false
+    is_desktop=true
     install_chrome=true             # Google Chrome web browser
-    install_cubic=false             # Creates custom Ubuntu ISO files. Details at https://github.com/PJ-Singh-001/Cubic
+    install_cubic=true              # Creates custom Ubuntu ISO files. Details at https://github.com/PJ-Singh-001/Cubic
     install_edge=true               # Microsoft Edge
     install_filezilla=true          # A powerful client for plain FTP, FTP over SSL/TLS (FTPS) and the SSH File Transfer Protocol (SFTP)
     install_gimp=true               # An image manipulation and paint program
-    install_xrdp=false              # A Remote Desktop Protocol (RDP) server
+    install_todoist=true            # Todoist task manager
+    install_xrdp=true               # A Remote Desktop Protocol (RDP) server
     install_zoom=true               # Video conferencing
 
 # OPTIONAL software (default to false)
     install_apt_cacher_ng=false     # Caching system for apt software distribution
     install_bridgeutils=false       # Bridge-utils extensions for the interfaces(5) file format
     install_comskip=false           # Commercial skipper for videos
-    install_ffmpeg=false            # FFmpeg video converter
-    install_handbrake=false         # HandBrake video rendering
     install_ifupdown=false          # Used for /etc/network/interfaces manual configuration; interferes with Network Manager
     install_lsyncd=false            # Keeps directories in sync using inotify or fsevents. Details at https://lsyncd.github.io/lsyncd/
     install_makemkv=false           # MakeMKV DVD ripper
     install_nettools=false          # Print network connections, routing tables, interface statistics
     install_nfs=false               # Network File Service
-    install_openvpn=false           # Secure IP tunnel daemon
-    ###########   PLEX IS TO BE INSTALLED!   #############
-    install_plexmediaserver=true    # Media streamer and library manager
     install_proftpd=false           # For scanning to brother@oz
     install_puttytools=false        # A free SSH and telnet client
     install_rclone=false            # command-line program to manage files on cloud storage. Details at https://rclone.org/
     install_resolvconf=false        # Name resolver
+    install_ssh=false               # Secure Shell (already installed)
     install_sysbench=false          # A modular, cross-platform and multi-threaded benchmark tool.
-    ###########   PLEX IS TO BE INSTALLED!   #############
-    install_tautulli=true           # Monitoring tool for Plex Media Server ***** PLEX MEDIA SERVER MUST BE INSTALLED TO INSTALL TAUTULLI *****
     install_uuid=false              # Use uuidgen instead. It's built-in.
 
 # STANDARD software (default to true)
@@ -72,21 +68,25 @@
     install_dos2unix=true           # DOS/MAC to UNIX text file format converter
     install_exiftool=true           # Read and write meta information in files
     install_fail2ban=true           # Bans IP that makes too many password failures
+    install_ffmpeg=true             # FFmpeg video converter
     install_ghostscript=true        # Compressing PDF scans
     install_git=true                # The stupid content tracker
     install_gpg=true                # OpenPGP encryption and signing tool
     install_gzip=true               # Compress or expand files
+    install_handbrake=true          # HandBrake video rendering
     install_inotify=true            # Do something when a file is created, deleted, or changed
     install_mailutils=true          # mail, Postfix, etc.
     install_mysql_server=true       # Relational Database
     install_openssl=true            # OpenSSL
+    install_openvpn=true            # Secure IP tunnel daemon
     install_php=true                # PHP
     install_phpmyadmin=true         # Web tool for managing MySQL
+    install_plexmediaserver=true    # Media streamer and library manager
     install_ripmime=true            # Process files sent by email
     install_rsync=true              # A fast, versatile, remote (and local) file-copying tool
-    install_ssh=false               # Secure Shell
     install_sshfs=true              # Filesystem client based on ssh
     install_tasksel=true            # A user interface for installing tasks
+    install_tautulli=true           # Monitoring tool for Plex Media Server ***** PLEX MEDIA SERVER MUST BE INSTALLED TO INSTALL TAUTULLI *****
     install_unzip=true              # List, test and extract compressed files in a ZIP archive
     install_vim=true                # Vi IMproved, a programmer's text editor
     install_webmin=true             # Web-based system admin tools

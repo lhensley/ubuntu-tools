@@ -176,7 +176,7 @@ done
 		touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
 		fi
 
-# Don't to this. The .gitconfig file is made on installation and doesn't change.
+# Don't do this. The .gitconfig file is made on installation and doesn't change.
 # # Update ~/.gitconfig
 # # Note that the original .gitconfig is made during setup/setup-os (original installation)
 # # using sudo, so the file is written to user root's home directory.
@@ -188,9 +188,10 @@ done
 # Update ~/.dynu.com
 	rm -f "$ADMIN_HOME_DIR/.dynu.com" "$ROOT_HOME_DIR/.dynu.com"
 	if $(f_is_installed "ddclient"); then
-		echo "Updating $ADMIN_HOME_DIR/.dynu.com from $GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.dynu.com"
-		cp "$GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.dynu.com" "$ADMIN_HOME_DIR/"
-		cp "$GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.dynu.com" "$ROOT_HOME_DIR/"
+		echo "Updating $ADMIN_HOME_DIR/.dynu.com"
+		cp "$GIT_UBUNTU_TOOLS_CONFIGS/.dynu.com" "$ADMIN_HOME_DIR/"
+		cp "$GIT_UBUNTU_TOOLS_CONFIGS/.dynu.com" "$ROOT_HOME_DIR/"
+		# Note sure this is right. What about /etc/.dynu.com? Does it matter? 2024-07-07
 		fi
 
 # Update ~/.HandBrake
@@ -237,7 +238,7 @@ done
 		echo "Updating /etc/exports from $GIT_UBUNTU_TOOLS_CONFIGS/etc/exports.$HOSTNAME"
 		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/exports.$HOSTNAME" "/etc/exports"
 		exportfs -r
-		systemctl restart nfs-*server
+		systemctl restart nfs-server
 		fi
 
 # Update /etc/fstab
