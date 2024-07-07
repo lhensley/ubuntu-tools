@@ -250,7 +250,8 @@ done
 		chown -f $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.gitconfig
 		find "$GIT_ROOT" -type d -print -exec chmod 700 {} \; >> /dev/null 2>&1
 		find "$GIT_ROOT" -type f -print -exec chmod 600 {} \; >> /dev/null 2>&1
-		find "$GIT_UBUNTU_TOOLS_SBIN" -type f -print -exec chmod 700 {} \; >> /dev/null 2>&1
+		# find "$GIT_UBUNTU_TOOLS_SBIN" -type f -print -exec chmod 700 {} \; >> /dev/null 2>&1
+		find "$GIT_UBUNTU_TOOLS_SBIN" -type f -print -exec chmod 700 {} \;
 
 	# Set $ADMIN_DIR/.coldstorage.log
 		echo "Updating permissions for $COLD_BACKUP_LOG"
