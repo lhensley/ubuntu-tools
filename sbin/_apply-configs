@@ -172,7 +172,7 @@ done
 
 # This heads off a network manager problem defined at https://askubuntu.com/questions/71159/network-manager-says-device-not-managed
 	if $(f_is_installed "network-manager"); then 
-		echo touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
+		# echo touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
 		touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
 		fi
 
@@ -330,7 +330,7 @@ done
 
 ############################################################################################################
 
-echo -e "Done\n"
+# echo -e "Done\n"
 
 # Apply permissions
 	_apply-permissions $ARGS
