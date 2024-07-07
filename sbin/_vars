@@ -774,7 +774,7 @@ source /etc/os-release
         RESET_FLAG_FILE="/tmp/reset-when-ready"
 
 # SBIN
-        PERMISSIONS_SBIN=755
+        PERMISSIONS_SBIN=700
         SBIN_PERMISSIONS=$PERMISSIONS_SBIN
 
 # SERVICES

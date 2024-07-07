@@ -347,9 +347,9 @@ done
 			fi
 
 	# Set /usr/local/sbin ownership and permissions for $SBIN_DIR
-		echo Updating permissions for $SBIN_DIR
-		chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
-		chmod -R $PERMISSIONS_SBIN $SBIN_DIR
+	#	echo Updating permissions for $SBIN_DIR
+	#	chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
+	#	chmod -R $PERMISSIONS_SBIN $SBIN_DIR
 
 	# Exceptions: These can be read or run by anyone
 		echo "Updating permissions for some required exceptions"
