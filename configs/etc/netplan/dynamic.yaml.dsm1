@@ -8,7 +8,11 @@ network:
                 macaddress: 38:f7:cd:c7:17:36
             set-name: ethernet0
             dhcp4: true
+            dhcp4-overrides: # This section added 2024-07-08
+                route-metric:1500 # lower numbers have highest priority
             dhcp6: true
+            dhcp6-overrides: # This section added 2024-07-08
+                route-metric:1000 # lower numbers have highest priority
             accept-ra: true
             ipv6-address-token: '::8'
             nameservers:
@@ -23,7 +27,11 @@ network:
                 "Hog Heaven DSM":
                     password: "fuckitymcfuckface"
             dhcp4: true
+            dhcp4-overrides: # This section added 2024-07-08
+                route-metric:2500 # lower numbers have highest priority
             dhcp6: true
+            dhcp6-overrides: # This section added 2024-07-08
+                route-metric:2000 # lower numbers have highest priority
             accept-ra: true
             ipv6-address-token: "::2:8"
 #            activation-mode: manual
