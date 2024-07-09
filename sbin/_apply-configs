@@ -232,26 +232,6 @@ done
 	echo "Updating /etc/comskip from $GIT_UBUNTU_TOOLS_CONFIGS/etc/comskip"
 	cp -r "$GIT_UBUNTU_TOOLS_CONFIGS/etc/comskip" "/etc/comskip"
 
-# Update /etc/exports
-	rm -f /etc/exports
-	if $(f_is_installed "nfs-kernel-server"); then
-		echo "Updating /etc/exports from $GIT_UBUNTU_TOOLS_CONFIGS/etc/exports.$HOSTNAME"
-		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/exports.$HOSTNAME" "/etc/exports"
-		exportfs -r
-		systemctl restart nfs-server
-		fi
-
-# Update /etc/fstab
-	# Horrible error below. Do this ONLY at installation. 2024-07-07
-	# cp --update /etc/fstab /etc/fstab.original.install
-	if $(f_is_file "$GIT_UBUNTU_TOOLS_CONFIGS/etc/fstab-peripherals.$HOSTNAME"); then
-		echo "Updating /etc/fstab from /etc/fstab.original.install and $GIT_UBUNTU_TOOLS_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"
-		rm -f /etc/fstab
-		cat /etc/fstab.original.install "$GIT_UBUNTU_TOOLS_CONFIGS/etc/fstab-peripherals.$HOSTNAME" > /tmp/fstab
-		mv /tmp/fstab /etc/fstab
-		mount --all &
-		fi
-
 # Update /etc/ddclient/
 	rm -f /etc/ddclient.*
 	if $(f_is_installed "ddclient"); then
@@ -262,12 +242,37 @@ done
 		cp -T $GIT_UBUNTU_TOOLS_CONFIGS/etc/ddclient/ddclient.conf.default /etc/.default/ddclient.conf
 		fi
 
+# Update /etc/exports
+	rm -f /etc/exports
+	if $(f_is_installed "nfs-kernel-server"); then
+		echo "Updating /etc/exports from $GIT_UBUNTU_TOOLS_CONFIGS/etc/exports.$HOSTNAME"
+		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/exports.$HOSTNAME" "/etc/exports"
+		exportfs -r
+		systemctl restart nfs-server
+		fi
+
 # Update /etc/HandBrake
 	rm -rf "/etc/HandBrake"
 	if $(f_is_installed "handbrake-cli"); then
 		echo "Updating /etc/HandBrake from $GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.HandBrake"
 		mkdir -p "/etc/HandBrake"
 		cp "$GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.HandBrake/"* "/etc/HandBrake/"
+		fi
+
+# Update /etc/hosts
+	rm -f /etc/hosts
+		echo "Updating /etc/hosts from $GIT_UBUNTU_TOOLS_CONFIGS/etc/hosts.$HOSTNAME"
+		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/hosts.$HOSTNAME" "/etc/hosts"
+
+# Update /etc/fstab
+	# Horrible error below. Do this ONLY at installation. 2024-07-07
+	# cp --update /etc/fstab /etc/fstab.original.install
+	if $(f_is_file "$GIT_UBUNTU_TOOLS_CONFIGS/etc/fstab-peripherals.$HOSTNAME"); then
+		echo "Updating /etc/fstab from /etc/fstab.original.install and $GIT_UBUNTU_TOOLS_CONFIGS/fstab/$HOSTNAME/fstab-peripherals"
+		rm -f /etc/fstab
+		cat /etc/fstab.original.install "$GIT_UBUNTU_TOOLS_CONFIGS/etc/fstab-peripherals.$HOSTNAME" > /tmp/fstab
+		mv /tmp/fstab /etc/fstab
+		mount --all &
 		fi
 
 # Update /etc/lsyncd/*
