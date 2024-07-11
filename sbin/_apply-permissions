@@ -176,16 +176,17 @@ done
 			chown -f $ROOT_USER:$ROOT_USER /etc/ddclient.conf /etc/ddclient/ddclient.conf /etc/default/ddclient
 			fi
 
-	# /etc/.dynu.com
-		if [ -f /etc/.dynu.com ]; then
-			echo "Updating permissions for /etc/.dynu.com"
-			chown -f $ROOT_USER:$ROOT_USER /etc/.dynu.com
-			chmod -f $PERMISSIONS_DYNU /etc/.dynu.com
-			chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.dynu.com"
-			chmod -f $PERMISSIONS_DYNU "$ADMIN_HOME_DIR/.dynu.com"
-			chown -f $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.dynu.com"
-			chmod -f $PERMISSIONS_DYNU "$ROOT_HOME_DIR/.dynu.com"
-			fi
+#	# /etc/.dynu.com
+#		if [ -f /etc/.dynu.com ]; then
+#			echo "Updating permissions for /etc/.dynu.com"
+#			chown -f $ROOT_USER:$ROOT_USER /etc/.dynu.com
+#			chmod -f $PERMISSIONS_DYNU /etc/.dynu.com
+#			echo chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.dynu.com"
+#			chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.dynu.com"
+#			chmod -f $PERMISSIONS_DYNU "$ADMIN_HOME_DIR/.dynu.com"
+#			chown -f $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.dynu.com"
+#			chmod -f $PERMISSIONS_DYNU "$ROOT_HOME_DIR/.dynu.com"
+#			fi
 
 	# /etc/exports
 		if $(f_is_installed "nfs-kernel-server"); then

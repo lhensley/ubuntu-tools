@@ -186,13 +186,13 @@ done
 # 	cp $ROOT_HOME_DIR/.gitconfig $ADMIN_HOME_DIR/.gitconfig
 	
 # Update ~/.dynu.com
-	rm -f "$ADMIN_HOME_DIR/.dynu.com" "$ROOT_HOME_DIR/.dynu.com"
-	if $(f_is_installed "ddclient"); then
-		echo "Updating $ADMIN_HOME_DIR/ADMIN_HOME_DIR/.dynu.com"
-		cp "$GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.dynu.com" "$ADMIN_HOME_DIR/"
-		cp "$GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.dynu.com" "$ROOT_HOME_DIR/"
-		# Note sure this is right. What about /etc/.dynu.com? Does it matter? 2024-07-07
-		fi
+#	rm -f "$ADMIN_HOME_DIR/.dynu.com" "$ROOT_HOME_DIR/.dynu.com"
+#	if $(f_is_installed "ddclient"); then
+#		echo "Updating $ADMIN_HOME_DIR/ADMIN_HOME_DIR/.dynu.com"
+#		cp "$GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.dynu.com" "$ADMIN_HOME_DIR/"
+#		cp "$GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.dynu.com" "$ROOT_HOME_DIR/"
+#		# Not sure this is right. What about /etc/.dynu.com? Does it matter? 2024-07-07
+#		fi
 
 # Update ~/.HandBrake
 	rm -f "$ADMIN_HOME_DIR/.HandBrake"/* "$ROOT_HOME_DIR/.HandBrake/"*

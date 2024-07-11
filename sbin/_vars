@@ -90,7 +90,6 @@ source /etc/os-release
 # Root user info
 	ROOT_USER="root" # DEFAULT
 	ROOT_HOME_DIR="/root"
-	ADMIN_CELL_EMAIL="7608514641@vtext.com"
 	ROOT_EMAIL="root@$HOSTNAME@$DOMAIN_NAME"
 	ROOT_NAME="Root at $HOSTNAME@$DOMAIN_NAME"
 
