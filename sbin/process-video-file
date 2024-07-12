@@ -4,6 +4,9 @@
 # 	From apt-get: comskip ffmpeg ccextractor
 #	From Github: https://github.com/BrettSheleski/comchap
 
+# Revised 2024-07-12 to comment out all the comskip stuff. Horrible.
+# The tag # DUMP-COMSKIP flags all the updates.
+
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
@@ -27,13 +30,18 @@
 #	f_require_root
 
 # PATH is unnecessary since it's already there, but it doesn't hurt anything.
-ComChapPath="/usr/local/bin"
-PATH="$PATH:$ComChapPath"
-ComSkipINI="/etc/comskip/comskip-DEFAULT.ini"
+# DUMP-COMSKIP
+# ComChapPath="/usr/local/bin"
+# DUMP-COMSKIP
+# PATH="$PATH:$ComChapPath"
+# DUMP-COMSKIP
+# ComSkipINI="/etc/comskip/comskip-DEFAULT.ini"
 PVFlockFile="/tmp/process-video-file.lock"
-ComchaplockFile="/tmp/comchap.lock"
+# DUMP-COMSKIP
+# ComchaplockFile="/tmp/comchap.lock"
 origFile="$1"
-HandbrakePreset="/etc/HandBrake/Lane Highest Quality.json"
+# Updated Preset below 2024-07-12; thought I already had!
+HandbrakePreset="/etc/HandBrake/default.json"
 tmpHEVC="/tmp/tmpHEVC"
 uuid=$(uuidgen)
 #tmpFile="/tmp/$1.tmp"
@@ -80,18 +88,22 @@ tmpHEVC="/tmp/$filename.mp4"
 HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$origFile" -o "$tmpHEVC"
 
 # Mark and cut commercials
-echo && echo "cut from '$tmpHEVC'" # | tee -a $dvrPostLog
-comcut --lockfile='$ComchaplockFile' --comskip-ini="$ComSkipINI" "$tmpHEVC"
+# DUMP-COMSKIP
+# echo && echo "cut from '$tmpHEVC'" # | tee -a $dvrPostLog
+# DUMP-COMSKIP
+# comcut --lockfile='$ComchaplockFile' --comskip-ini="$ComSkipINI" "$tmpHEVC"
 
 # Tag the temp file and replace $origFile
-echo && echo "Replace and tag the $origFile"
+# DUMP-COMSKIP
+# echo && echo "Replace and tag the $origFile"
 rm -f "$origFile"
-exiftool -overwrite_original -Information="comskip/comcut applied $(date -u)" "$tmpHEVC"
+# DUMP-COMSKIP
+# exiftool -overwrite_original -Information="comskip/comcut applied $(date -u)" "$tmpHEVC"
 mv "$tmpHEVC" "$DIR/"
 
 # Leave status in the user's home directory
 echo "$(date) $origFile" >> "$ADMIN_HOME_DIR/last-video-processed"
-chmod -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/last-video-processed"
+chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/last-video-processed"
 
 # Remove lock file
 f_remove_locks
