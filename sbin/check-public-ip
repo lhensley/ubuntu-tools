@@ -47,14 +47,14 @@ if [ "$v4_On_File" != "$v4_Now" ] && $(f_is_valid_ipv4_address "$v4_Now") ; then
 		fi
 	fi
 
-if [ "$v6_On_File" != "$v6_Now" ] && validation::ipv6 "$v6_Now" && [ $EN6 -eq 0 ] ; then
-	message="IPv6 on $HOST_FQDN: '$v6_On_File' to '$v6_Now'. "
-	message="$message Manual update to AAAA record required. $(date)"
-	echo $message
-	echo $message | mail -s"$HOST_FQDN update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
-	echo "$v6_Now" > /etc/public-ipv6
-	chmod 644 /etc/public-ipv6
-	fi
+# if [ "$v6_On_File" != "$v6_Now" ] && validation::ipv6 "$v6_Now" && [ $EN6 -eq 0 ] ; then
+# 	message="IPv6 on $HOST_FQDN: '$v6_On_File' to '$v6_Now'. "
+# 	message="$message Manual update to AAAA record required. $(date)"
+# 	echo $message
+# 	echo $message | mail -s"$HOST_FQDN update" $ADMIN_CELL_EMAIL $ADMIN_EMAIL
+# 	echo "$v6_Now" > /etc/public-ipv6
+# 	chmod 644 /etc/public-ipv6
+# 	fi
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
