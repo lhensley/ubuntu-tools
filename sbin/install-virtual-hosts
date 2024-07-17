@@ -161,12 +161,11 @@ if [ -d "$docroot" ]; then # If docroot already exists
     mkdir $docroot
   fi
 
-# Do updates and install needed tools
-f_run_apt_updates
-# For Ubuntu 18
-# apt-get install --yes wget apg certbot python python-certbot-apache
-# For Ubuntu 18 (still works with Ubuntu 22)
-apt-get install --yes wget apg certbot python3-certbot-apache
+# Make sure certbox is installed
+if ! snap info certbot > /dev/null 2> /dev/null ; then 
+  snap install --classic certbot
+  ln -s /snap/bin/certbot /usr/bin/certbot
+  fi
 
 # Generate a MySQL password for the Wordpress database
 admin_wp_pwd="$(apg -c cl_seed -a 1 -m $LENGTH_OF_PASSWORDS -n 1 -M ncl)"

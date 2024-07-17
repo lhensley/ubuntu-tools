@@ -276,7 +276,14 @@ fi
 
 if $install_at ; then f_install at; fi
 if $install_bridgeutils ; then f_install bridgeutils; fi
-if $install_certbot ; then f_install certbot; fi
+
+if $install_certbot ; then 
+  if ! snap info certbot > /dev/null 2> /dev/null ; then 
+    snap install --classic certbot
+    ln -s /snap/bin/certbot /usr/bin/certbot
+    fi
+  fi
+
 if $install_comskip ; then f_install comskip; fi
 if $install_cryfs ; then f_install cryfs; fi
 if $install_curl ; then f_install curl; fi
