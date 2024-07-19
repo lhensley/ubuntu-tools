@@ -4,9 +4,9 @@
 #
 127.0.0.1 localhost.local localhost
 192.168.168.1 router.local router
-192.168.168.3 pd1.local pd1
+192.168.168.3 pd1.local pd1 nuc01.local nuc01
 192.168.168.7 TabloDSM.local TabloDSM
-192.168.168.8 dsm1.local dsm1
+192.168.168.8 dsm1.local dsm1 go.local go
 192.168.168.70 pd1-wifi.local pd1-wifi
 192.168.168.251 dsm1-wifi.local dsm1-wifi
 192.168.168.253 homerun-01.local homerun-01
