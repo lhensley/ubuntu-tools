@@ -161,7 +161,7 @@ if [ -d "$docroot" ]; then # If docroot already exists
     mkdir $docroot
   fi
 
-# Make sure certbox is installed
+# Make sure certbot is installed
 if ! snap info certbot > /dev/null 2> /dev/null ; then 
   snap install --classic certbot
   ln -s /snap/bin/certbot /usr/bin/certbot
