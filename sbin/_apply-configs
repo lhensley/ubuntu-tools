@@ -318,8 +318,11 @@ done
 # Update /etc/ufw/applications.d/lane-applications
 	if $(f_is_directory "$GIT_UBUNTU_TOOLS_CONFIGS/etc/ufw/applications.d"); then
 		echo "Updating /etc/ufw/applications.d from $GIT_UBUNTU_TOOLS_CONFIGS/etc/ufw/applications.d"
+		echo "    ${LINENO} A"
 		rm -fr /etc/ufw/applications.d/*
+		echo "    B"
 		cp $GIT_UBUNTU_TOOLS_CONFIGS/etc/ufw/applications.d/* /etc/ufw/applications.d/
+		echo "    C"
 		# Unclear why restarting systemd-networkd is necessary. 
 		# But on dsm1, restarting ufw was generating errors:
 		#   systemd-networkd is not running, output might be incomplete.
@@ -327,8 +330,10 @@ done
 		# TBD. 2024-07-21
 		echo "  Restarting systemd-networkd"
 		systemctl restart systemd-networkd
+		echo "    D"
 		echo "  Restarting ufw"
 		systemctl restart ufw
+		echo "    E"
 		fi
 
 # Update $PHPMYADMIN_DIR/config.inc.php
