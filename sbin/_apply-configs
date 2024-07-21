@@ -315,6 +315,8 @@ done
 		systemctl restart ssh
 		fi
 
+echo "    ${LINENO} A-2"
+
 # Update /etc/ufw/applications.d/lane-applications
 	if $(f_is_directory "$GIT_UBUNTU_TOOLS_CONFIGS/etc/ufw/applications.d"); then
 		echo "    ${LINENO} A-1"
