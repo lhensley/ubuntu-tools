@@ -320,6 +320,14 @@ done
 		echo "Updating /etc/ufw/applications.d from $GIT_UBUNTU_TOOLS_CONFIGS/etc/ufw/applications.d"
 		rm -fr /etc/ufw/applications.d/*
 		cp $GIT_UBUNTU_TOOLS_CONFIGS/etc/ufw/applications.d/* /etc/ufw/applications.d/
+		# Unclear why restarting systemd-networkd is necessary. 
+		# But on dsm1, restarting ufw was generating errors:
+		#   systemd-networkd is not running, output might be incomplete.
+		#	Failed to reload network settings: Unit dbus-org.freedesktop.network1.service not found.
+		# TBD. 2024-07-21
+		echo "  Restarting systemd-networkd"
+		systemctl restart systemd-networkd
+		echo "  Restarting ufw"
 		systemctl restart ufw
 		fi
 
