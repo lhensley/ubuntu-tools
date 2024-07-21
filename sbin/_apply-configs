@@ -317,6 +317,7 @@ done
 
 # Update /etc/ufw/applications.d/lane-applications
 	if $(f_is_directory "$GIT_UBUNTU_TOOLS_CONFIGS/etc/ufw/applications.d"); then
+		echo "    ${LINENO} A-1"
 		echo "Updating /etc/ufw/applications.d from $GIT_UBUNTU_TOOLS_CONFIGS/etc/ufw/applications.d"
 		echo "    ${LINENO} A"
 		rm -fr /etc/ufw/applications.d/*
