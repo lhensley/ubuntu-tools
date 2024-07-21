@@ -31,13 +31,91 @@
 #
 ########################################################################################################
 #
+# 5TBB (5TB)
+# Empty
+UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/5TBB ext4 nofail 0 0
+#
+# PHYSICALLY REMOVED 4/5/2024 to install on dsm1.lanehensley.org for Ubuntu 24
+# 5TBC (5TB) Black 5TB External Seagate
+# Contains /mnt/5TBC/cold-backup.2022-04 (copy on /mnt/5TBD)
+UUID=fa9f5c57-94fd-4706-979e-4c30189592a5 /mnt/5TBC ext4 nofail 0 0
+#
+# 5TBD (5TB) UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85
+# Contains /mnt/5TBD/cold-backup.2022-04 (copy on /mnt/5TBC)
+UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/5TBD ext4 nofail 0 0
+#
+# 5TBE (5TB) Black 5TB External Seagate
+# ACTIVE BACKUP DRIVE
+# /mnt/5TBE/cold-backup is use. Confirm and document how/where (e.g., crontab?)
+UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 nofail 0 0
+#
+# 5TBF (5TB) UUID=9c311371-fbce-423b-9f44-4301aca9e6e5
+# Not sure this exists ...
+# nofail allows the boot sequence to continue even if the drive fails to mount
+UUID=C824163824162A48 /mnt/5TBF ntfs nofail 0 0
+#
 # 12TBA (12TB) Black 12TB External Seagate
 # Good condition; reliable
 UUID=901c4177-b514-408a-997c-0cbeee89fa6e /mnt/12TBA ext4 auto,nofail 0 0
 #
+# 12TBB (12TB)
+# Plex data files (primary) at /mnt/12TBB/plex
+# Good condition; reliable
+UUID=27cf148b-4b43-4747-8a4f-e7013639b989 /mnt/12TBB ext4 nofail 0 0
+#
 # 12TBC (12TB) Black 12TB External Seagate
 # Good condition; reliable
 UUID=64414aac-65cf-4e81-a561-f007cb82418b /mnt/12TBC ext4 nofail 0 0
+#
+# ssd1tb (1TB); internal SSD drive on oz
+# UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb ext4 nofail 0 0
+# /mnt/ssd1tb /mnt/ssd1tb nfs rw,nofail
+#
+# # Silver5TB-A (5TB)
+# # UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs nofail 0 0
+#
+# # Silver5TB-B (5TB)
+# # UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs nofail 0 0
+#
+# (Flash Drive for Scanner)
+# UUID=F049-1057 /mnt/flash vfat noauto 0 0
+# sudo mount UUID=F049-1057 /mnt/flash
+#
+# (Tablo Disk) (1TB)
+# Formerly Silver[something] (Has a black counterpart)
+# Aging but still works just fine
+# UUID=03fa5e8f-95ca-4d21-a42c-6218bd08b00c /mnt/tablo ext4 noauto 0 0
+# sudo mount UUID=03fa5e8f-95ca-4d21-a42c-6218bd08b00c /mnt/tablo
+#
+#######################################################################################################
+#
+# unused
+#
+########################################################################################################
+#
+# ext10tb01 (10TB); external drive for Plex from oz
+# Power supply sounds like it's failing. Decommission SOON. 1/2/2023
+# Various archives. OK to wipe it out.
+# FAILED 1/4/2024
+# UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 rw,nofail 0 0
+#
+# MyBook3T01 (3TB)
+# NEEDS TO BE CATALOGUED CAREFULLY
+# AGING AND RISKY
+# RETIRED 1/4/2024
+# UUID=C6B89CABB89C9B8D /mnt/MyBook3T01 ntfs nofail 0 0
+#
+# bertha (3TB)
+# Empty
+# AGING AND RISKY
+# RETIRED 1/4/2024
+# UUID=d28256f9-c258-451e-b299-d4849cf19e0b /mnt/bertha ext4 nofail 0 0
+#
+# cloteal (10TB)
+# archives/video contains files and should be checked to see if there are duplicates
+# AGING AND RISKY
+# RETIRED 1/4/2024
+# UUID=4e356144-2e69-4812-8958-d035a9ebc28e /mnt/cloteal ext4 nofail 0 0
 #
 ########################################################################################################
 #
