@@ -1,0 +1,53 @@
+#!/bin/bash
+# /usr/local/sbin/script-setup
+
+# Set a flag to confirm that the variables are not yet defined
+VARIABLES_ARE_DEFINED=false
+
+# Load global variables
+source "_vars"
+THIS_UUID=$(uuidgen)
+
+# Load global functions
+source "_functions"		# NOTE: _vars must be sourced first, or this will fail.
+
+# Set user privileges to use for running tasks
+# By default, $RUN_AS is the user who runs the program. If run with sudo, that has to be updated from root.
+if [ ! -z $SUDO_USER ]; then
+	RUN_AS=$SUDO_USER
+	fi
+
+# If configured, make sure only root can run our script. Default = "false"
+# if [ "$(f_get-config CONFIG_script_$(basename $0)_require_root)" == "true" ] && [[ $EUID -ne 0 ]]; then
+#         f_balk "Use sudo. $(basename $0) must be run as root." 1>&2
+#         exit 1
+#     fi
+
+# f_debug "script-setup started"
+
+if $LOG_START; then
+	logger -t "$(basename $0)" Start
+	fi
+
+# If configured, send a text message to note the start of script processing. Default = "false"
+# if [ "$(f_get-config LANE_script_$(basename $0)_text_start)" == "true" ]; then f_text_alert "$0: Start"; fi
+
+# What in the hell is ANY of this for? Looks like very old shit, pre-dating _apply-permissions. 2/19/2023
+
+	#	# Mail
+	#	# What is this for?
+	#	MAILNAME=$HOSTNAME
+
+	#	# Set key file ownerships #############################################
+	#	# This should be moved to the backup script to happen immediately after the files are created.
+	#	/bin/chown root:root $MYSQL_CONFIGS/mysqldump.cnf >> /dev/null 2>&1
+	#	/bin/chown -R root:$USER_NAME $SCRIPTS_DIRECTORY >> /dev/null 2>&1
+	#	/bin/chown -R www-data:www-data $THIS_WEB_ROOT/ >> /dev/null 2>&1
+
+	#	# Set key file permissions ############################################
+	#	# This should be moved to the backup script to happen immediately after the files are created.
+	#	/bin/chmod 644 $MYSQL_CONFIGS/mysqldump.cnf >> /dev/null 2>&1
+	#	/bin/chmod -R 770 $SCRIPTS_DIRECTORY >> /dev/null 2>&1
+
+f_debug "script-setup ended"
+

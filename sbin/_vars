@@ -1,0 +1,954 @@
+#!/bin/bash
+# _vars
+# Variable definitions for Lane applications
+
+# Debug Mode
+# Leave near the top so it can be toggled on and off easily.
+        # Default=false
+                DEBUG_MODE=false
+        # Alert levels: 0=none 1=light 2=normal 3=heavy 5=everything
+                #CONFIG_system_log_level
+                LOG_LEVEL=2
+                TEXT_LEVEL=2
+
+# Built-in (at command line, use env to show more)
+        # HOME (Home directory)
+        # HOSTNAME (this host, not FQDN)
+        # SHELL
+        # USER (Current user)
+                RUN_AS=$USER
+
+# Global
+	HOME_ROOT="/home"
+	SBIN_DIR="/usr/local/sbin"
+	SBIN_PARENT="$(dirname $SBIN_DIR)"
+	DOMAIN_NAME="lanehensley.org"
+        HOST_FQDN=$HOSTNAME.$DOMAIN_NAME
+        DMZ_HOST="pd1"
+	COLOPHON="by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
+        TIMEZONE="America/Chicago"
+
+
+# VM environment
+	VM_ENVIRONMENT="" # DEFAULT
+	# Known options as of 3/5/2023: aws google metal virtualhost vmware
+	if [ $HOSTNAME == "adam" ]; then VM_ENVIRONMENT="metal"; fi
+	if [ $HOSTNAME == "dsm1" ]; then VM_ENVIRONMENT="metal"; fi
+	if [ $HOSTNAME == "pd1" ]; then VM_ENVIRONMENT="metal"; fi
+	if [ $HOSTNAME == "oz" ]; then VM_ENVIRONMENT="metal"; fi
+	if [ $HOSTNAME == "teddy" ]; then VM_ENVIRONMENT="aws"; fi
+	if [ $HOSTNAME == "u22" ]; then VM_ENVIRONMENT="virtualhost"; fi
+	if [ $HOSTNAME == "ubuntu-22-04-dev-a" ]; then VM_ENVIRONMENT="google"; fi
+
+# /etc/os-release defines a lot of environment variables
+# Sample:
+#    NAME="Ubuntu"
+#    VERSION="18.04.4 LTS \(Bionic Beaver\)"
+#    ID=ubuntu
+#    ID_LIKE=debian
+#    PRETTY_NAME="Ubuntu 18.04.4 LTS"
+#    VERSION_ID="18.04"
+#    HOME_URL="https://www.ubuntu.com/"
+#    SUPPORT_URL="https://help.ubuntu.com/"
+#    BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+#    PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+#    VERSION_CODENAME=bionic
+#    UBUNTU_CODENAME=bionic
+source /etc/os-release
+
+# Start timestamps
+# Ref https://www.cyberciti.biz/faq/linux-unix-formatting-dates-for-display/ for date format %codes
+	START_DATEANDTIMESTAMP=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')     # Like 2020-09-07-16-05-23-CDT. Used in naming SSH keys and backing up installed files like fstab
+	START_DATESTAMP=$(/bin/date '+%Y-%m-%d   ')                     # Like 2020-09-07. Used in backup variables below
+	START_DAYSTAMP=$(/bin/date '+%d')                               # Like 07
+	START_MONTHSTAMP=$(/bin/date '+%Y-%m')                          # Like 2020-09
+	START_TIMESTAMP=$(/bin/date)                                    # Like Mon 07 Sep 2020 04:01:23 PM CDT
+	START_WEEKDAYSTAMP=$(/bin/date '+%a')                           # Like Mon. Used in backup variables below
+	START_WEEKDAYSTAMP2=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z-%a')     # Like 2020-09-07-16-05-23-CDT-Mon. Used in backup variables below
+	START_WEEKDAYSTAMP3=$(/bin/date '+%w-%a')                       # Like 0-Sun, 1-Mon, 2-Tue, etc. Used in backup variables below
+
+# About This Script (or at least the one sourcing it)
+	PROGRAM_DIRECTORY="$(dirname $0)"
+	UUID="$(uuidgen)"
+
+# Current user info
+	CURRENT_USER="$USER"
+	CURRENT_HOME_DIR="$HOME"
+
+# Admin user info
+# Dependent on section Global
+	ADMIN_USER="lhensley" # DEFAULT
+	if [ "$VM_ENVIRONMENT" == "aws" ]; then ADMIN_USER="ubuntu"; fi
+	if [ "$VM_ENVIRONMENT" == "google" ]; then ADMIN_USER="lane"; fi
+	if [ "$VM_ENVIRONMENT" == "metal" ]; then ADMIN_USER="lhensley"; fi
+	if [ "$VM_ENVIRONMENT" == "virtualhost" ]; then ADMIN_USER="lhensley"; fi
+	ADMIN_HOME_DIR="$HOME_ROOT/$ADMIN_USER"
+	ADMIN_CELL_EMAIL="7608514641@vtext.com"
+	ADMIN_EMAIL="lane@lanehensley.org"
+	ADMIN_NAME="Lane Hensley"
+
+# Root user info
+	ROOT_USER="root" # DEFAULT
+	ROOT_HOME_DIR="/root"
+	ROOT_EMAIL="root@$HOSTNAME@$DOMAIN_NAME"
+	ROOT_NAME="Root at $HOSTNAME@$DOMAIN_NAME"
+
+# Temp file definitions
+# DEPENDENT ON ABOUT THIS SCRIPT ABOVE
+        TEMP_CRON="/tmp/cron-$UUID.tmp"
+        TEMP_SOCKETS_BACKUP="/tmp/sockets-$UUID.tmp"         # Formerly $SOCKETS_TEMP_FILE
+        TEMP_DATABASES="/tmp/databases-$UUID.tmp"
+        TEMP_PASSWORD_INCLUDE="/tmp/passwords"
+        TEMP_INCLUDES="/tmp/includes-$UUID.tmp"
+        TEMP_LOG="/tmp/log-$UUID.tmp"
+
+# Logging:  system.log-level: 0=none 1=light 2=normal 3=heavy 5=everything
+        #CONFIG_system_log_level
+        LOG_LEVEL=2
+        TEXT_LEVEL=2
+        # Set to false 11/25/2020. Do it manually if you want it.
+        LOG_START=false
+        # Set to false 11/25/2020. Do it manually if you want it.
+        LOG_END=false
+
+# Exit codes
+# To see a full list of system defined codes, use: errno -ls
+        EXIT_CODE_SUCCESS=0
+        EXIT_CODE_EPERM=1 # Operation not permitted
+        EXIT_CODE_ENOENT=2 # No such file or directory
+        EXIT_CODE_ESRCH=3 # No such process
+        EXIT_CODE_EINTR=4 # Interrupted system call
+        EXIT_CODE_EIO=5 # Input/output error
+        EXIT_CODE_ENXIO=6 # No such device or address
+        EXIT_CODE_E2BIG=7 # Argument list too long
+        EXIT_CODE_ENOEXEC=8 # Exec format error
+        EXIT_CODE_EBADF=9 # Bad file descriptor
+        EXIT_CODE_ECHILD=10 # No child processes
+        EXIT_CODE_EAGAIN=11 # Resource temporarily unavailable
+        EXIT_CODE_EWOULDBLOCK=11 # Resource temporarily unavailable
+        EXIT_CODE_ENOMEM=12 # Cannot allocate memory
+        EXIT_CODE_EACCES=13 # Permission denied
+        EXIT_CODE_EFAULT=14 # Bad address
+        EXIT_CODE_ENOTBLK=15 # Block device required
+        EXIT_CODE_EBUSY=16 # Device or resource busy
+        EXIT_CODE_EEXIST=17 # File exists
+        EXIT_CODE_EXDEV=18 # Invalid cross-device link
+        EXIT_CODE_ENODEV=19 # No such device
+        EXIT_CODE_ENOTDIR=20 # Not a directory
+        EXIT_CODE_EISDIR=21 # Is a directory
+        EXIT_CODE_EINVAL=22 # Invalid argument
+        EXIT_CODE_ENFILE=23 # Too many open files in system
+        EXIT_CODE_EMFILE=24 # Too many open files
+        EXIT_CODE_ENOTTY=25 # Inappropriate ioctl for device
+        EXIT_CODE_ETXTBSY=26 # Text file busy
+        EXIT_CODE_EFBIG=27 # File too large
+        EXIT_CODE_ENOSPC=28 # No space left on device
+        EXIT_CODE_ESPIPE=29 # Illegal seek
+        EXIT_CODE_EROFS=30 # Read-only file system
+        EXIT_CODE_EMLINK=31 # Too many links
+        EXIT_CODE_EPIPE=32 # Broken pipe
+        EXIT_CODE_EDOM=33 # Numerical argument out of domain
+        EXIT_CODE_ERANGE=34 # Numerical result out of range
+        EXIT_CODE_EDEADLK=35 # Resource deadlock avoided
+        EXIT_CODE_EDEADLOCK=35 # Resource deadlock avoided
+        EXIT_CODE_ENAMETOOLONG=36 # File name too long
+        EXIT_CODE_ENOLCK=37 # No locks available
+        EXIT_CODE_ENOSYS=38 # Function not implemented
+        EXIT_CODE_ENOTEMPTY=39 # Directory not empty
+        EXIT_CODE_ELOOP=40 # Too many levels of symbolic links
+        EXIT_CODE_ENOMSG=42 # No message of desired type
+        EXIT_CODE_EIDRM=43 # Identifier removed
+        EXIT_CODE_ECHRNG=44 # Channel number out of range
+        EXIT_CODE_EL2NSYNC=45 # Level 2 not synchronized
+        EXIT_CODE_EL3HLT=46 # Level 3 halted
+        EXIT_CODE_EL3RST=47 # Level 3 reset
+        EXIT_CODE_ELNRNG=48 # Link number out of range
+        EXIT_CODE_EUNATCH=49 # Protocol driver not attached
+        EXIT_CODE_ENOCSI=50 # No CSI structure available
+        EXIT_CODE_EL2HLT=51 # Level 2 halted
+        EXIT_CODE_EBADE=52 # Invalid exchange
+        EXIT_CODE_EBADR=53 # Invalid request descriptor
+        EXIT_CODE_EXFULL=54 # Exchange full
+        EXIT_CODE_ENOANO=55 # No anode
+        EXIT_CODE_EBADRQC=56 # Invalid request code
+        EXIT_CODE_EBADSLT=57 # Invalid slot
+        EXIT_CODE_EBFONT=59 # Bad font file format
+        EXIT_CODE_ENOSTR=60 # Device not a stream
+        EXIT_CODE_ENODATA=61 # No data available
+        EXIT_CODE_ETIME=62 # Timer expired
+        EXIT_CODE_ENOSR=63 # Out of streams resources
+        EXIT_CODE_ENONET=64 # Machine is not on the network
+        EXIT_CODE_ENOPKG=65 # Package not installed
+        EXIT_CODE_EREMOTE=66 # Object is remote
+        EXIT_CODE_ENOLINK=67 # Link has been severed
+        EXIT_CODE_EADV=68 # Advertise error
+        EXIT_CODE_ESRMNT=69 # Srmount error
+        EXIT_CODE_ECOMM=70 # Communication error on send
+        EXIT_CODE_EPROTO=71 # Protocol error
+        EXIT_CODE_EMULTIHOP=72 # Multihop attempted
+        EXIT_CODE_EDOTDOT=73 # RFS specific error
+        EXIT_CODE_EBADMSG=74 # Bad message
+        EXIT_CODE_EOVERFLOW=75 # Value too large for defined data type
+        EXIT_CODE_ENOTUNIQ=76 # Name not unique on network
+        EXIT_CODE_EBADFD=77 # File descriptor in bad state
+        EXIT_CODE_EREMCHG=78 # Remote address changed
+        EXIT_CODE_ELIBACC=79 # Can not access a needed shared library
+        EXIT_CODE_ELIBBAD=80 # Accessing a corrupted shared library
+        EXIT_CODE_ELIBSCN=81 # .lib section in a.out corrupted
+        EXIT_CODE_ELIBMAX=82 # Attempting to link in too many shared libraries
+        EXIT_CODE_ELIBEXEC=83 # Cannot exec a shared library directly
+        EXIT_CODE_EILSEQ=84 # Invalid or incomplete multibyte or wide character
+        EXIT_CODE_ERESTART=85 # Interrupted system call should be restarted
+        EXIT_CODE_ESTRPIPE=86 # Streams pipe error
+        EXIT_CODE_EUSERS=87 # Too many users
+        EXIT_CODE_ENOTSOCK=88 # Socket operation on non-socket
+        EXIT_CODE_EDESTADDRREQ=89 # Destination address required
+        EXIT_CODE_EMSGSIZE=90 # Message too long
+        EXIT_CODE_EPROTOTYPE=91 # Protocol wrong type for socket
+        EXIT_CODE_ENOPROTOOPT=92 # Protocol not available
+        EXIT_CODE_EPROTONOSUPPORT=93 # Protocol not supported
+        EXIT_CODE_ESOCKTNOSUPPORT=94 # Socket type not supported
+        EXIT_CODE_ENOTSUP=95 # Operation not supported
+        EXIT_CODE_EOPNOTSUPP=95 # Operation not supported
+        EXIT_CODE_EPFNOSUPPORT=96 # Protocol family not supported
+        EXIT_CODE_EAFNOSUPPORT=97 # Address family not supported by protocol
+        EXIT_CODE_EADDRINUSE=98 # Address already in use
+        EXIT_CODE_EADDRNOTAVAIL=99 # Cannot assign requested address
+        EXIT_CODE_ENETDOWN=100 # Network is down
+        EXIT_CODE_ENETUNREACH=101 # Network is unreachable
+        EXIT_CODE_ENETRESET=102 # Network dropped connection on reset
+        EXIT_CODE_ECONNABORTED=103 # Software caused connection abort
+        EXIT_CODE_ECONNRESET=104 # Connection reset by peer
+        EXIT_CODE_ENOBUFS=105 # No buffer space available
+        EXIT_CODE_EISCONN=106 # Transport endpoint is already connected
+        EXIT_CODE_ENOTCONN=107 # Transport endpoint is not connected
+        EXIT_CODE_ESHUTDOWN=108 # Cannot send after transport endpoint shutdown
+        EXIT_CODE_ETOOMANYREFS=109 # Too many references: cannot splice
+        EXIT_CODE_ETIMEDOUT=110 # Connection timed out
+        EXIT_CODE_ECONNREFUSED=111 # Connection refused
+        EXIT_CODE_EHOSTDOWN=112 # Host is down
+        EXIT_CODE_EHOSTUNREACH=113 # No route to host
+        EXIT_CODE_EALREADY=114 # Operation already in progress
+        EXIT_CODE_EINPROGRESS=115 # Operation now in progress
+        EXIT_CODE_ESTALE=116 # Stale file handle
+        EXIT_CODE_EUCLEAN=117 # Structure needs cleaning
+        EXIT_CODE_ENOTNAM=118 # Not a XENIX named type file
+        EXIT_CODE_ENAVAIL=119 # No XENIX semaphores available
+        EXIT_CODE_EISNAM=120 # Is a named type file
+        EXIT_CODE_EREMOTEIO=121 # Remote I/O error
+        EXIT_CODE_EDQUOT=122 # Disk quota exceeded
+        EXIT_CODE_ENOMEDIUM=123 # No medium found
+        EXIT_CODE_EMEDIUMTYPE=124 # Wrong medium type
+        EXIT_CODE_ECANCELED=125 # Operation canceled
+        EXIT_CODE_ENOKEY=126 # Required key not available
+        EXIT_CODE_EKEYEXPIRED=127 # Key has expired
+        EXIT_CODE_EKEYREVOKED=128 # Key has been revoked
+        EXIT_CODE_EKEYREJECTED=129 # Key was rejected by service
+        EXIT_CODE_EOWNERDEAD=130 # Owner died
+        EXIT_CODE_ENOTRECOVERABLE=131 # State not recoverable
+        EXIT_CODE_ERFKILL=132 # Operation not possible due to RF-kill
+        EXIT_CODE_EHWPOISON=133 # Memory page has hardware error
+        # Not "official" but observed.
+        EXIT_CODE_SEGMENTATION_ERROR=139 # Returned by HandBrakeCLI
+        # The following codes were made up by Lane
+        EXIT_CODE_INTERNAL_ERROR=161
+        EXIT_CODE_INVALID_OPTIONS=162
+        EXIT_CODE_ROOT_REQUIRED=163
+        EXIT_CODE_UBUNTU_REQUIRED=164
+        EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED=165
+        EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED=166
+        EXIT_CODE_SPECIFIC_SERVER_REQUIRED=167
+        EXIT_CODE_USER_ABORT=168
+        EXIT_CODE_FILE_NOT_FOUND=169
+        EXIT_CODE_DIRECTORY_NOT_FOUND=170
+        EXIT_CODE_FILE_IN_USE=171
+        EXIT_CODE_WRONG_HOST=172
+
+# Exit code descriptions
+# To see a full list of system defined codes, use: errno -ls
+        EXIT_CODE_DESC_EPERM='Operation not permitted' # 1
+        EXIT_CODE_DESC_ENOENT='No such file or directory' # 2
+        EXIT_CODE_DESC_ESRCH='No such process' # 3
+        EXIT_CODE_DESC_EINTR='Interrupted system call' # 4
+        EXIT_CODE_DESC_EIO='Input/output error' # 5
+        EXIT_CODE_DESC_ENXIO='No such device or address' # 6
+        EXIT_CODE_DESC_E2BIG='Argument list too long' # 7
+        EXIT_CODE_DESC_ENOEXEC='Exec format error' # 8
+        EXIT_CODE_DESC_EBADF='Bad file descriptor' # 9
+        EXIT_CODE_DESC_ECHILD='No child processes' # 10
+        EXIT_CODE_DESC_EAGAIN='Resource temporarily unavailable' # 11
+        EXIT_CODE_DESC_EWOULDBLOCK='Resource temporarily unavailable' # 11
+        EXIT_CODE_DESC_ENOMEM='Cannot allocate memory' # 12
+        EXIT_CODE_DESC_EACCES='Permission denied' # 13
+        EXIT_CODE_DESC_EFAULT='Bad address' # 14
+        EXIT_CODE_DESC_ENOTBLK='Block device required' # 15
+        EXIT_CODE_DESC_EBUSY='Device or resource busy' # 16
+        EXIT_CODE_DESC_EEXIST='File exists' # 17
+        EXIT_CODE_DESC_EXDEV='Invalid cross-device link' # 18
+        EXIT_CODE_DESC_ENODEV='No such device' # 19
+        EXIT_CODE_DESC_ENOTDIR='Not a directory' # 20
+        EXIT_CODE_DESC_EISDIR='Is a directory' # 21
+        EXIT_CODE_DESC_EINVAL='Invalid argument' # 22
+        EXIT_CODE_DESC_ENFILE='Too many open files in system' # 23
+        EXIT_CODE_DESC_EMFILE='Too many open files' # 24
+        EXIT_CODE_DESC_ENOTTY='Inappropriate ioctl for device' # 25
+        EXIT_CODE_DESC_ETXTBSY='Text file busy' # 26
+        EXIT_CODE_DESC_EFBIG='File too large' # 27
+        EXIT_CODE_DESC_ENOSPC='No space left on device' # 28
+        EXIT_CODE_DESC_ESPIPE='Illegal seek' # 29
+        EXIT_CODE_DESC_EROFS='Read-only file system' # 30
+        EXIT_CODE_DESC_EMLINK='Too many links' # 31
+        EXIT_CODE_DESC_EPIPE='Broken pipe' # 32
+        EXIT_CODE_DESC_EDOM='Numerical argument out of domain' # 33
+        EXIT_CODE_DESC_ERANGE='Numerical result out of range' # 34
+        EXIT_CODE_DESC_EDEADLK='Resource deadlock avoided' # 35
+        EXIT_CODE_DESC_EDEADLOCK='Resource deadlock avoided' # 35
+        EXIT_CODE_DESC_ENAMETOOLONG='File name too long' # 36
+        EXIT_CODE_DESC_ENOLCK='No locks available' # 37
+        EXIT_CODE_DESC_ENOSYS='Function not implemented' # 38
+        EXIT_CODE_DESC_ENOTEMPTY='Directory not empty' # 39
+        EXIT_CODE_DESC_ELOOP='Too many levels of symbolic links' # 40
+        EXIT_CODE_DESC_ENOMSG='No message of desired type' # 42
+        EXIT_CODE_DESC_EIDRM='Identifier removed' # 43
+        EXIT_CODE_DESC_ECHRNG='Channel number out of range' # 44
+        EXIT_CODE_DESC_EL2NSYNC='Level 2 not synchronized' # 45
+        EXIT_CODE_DESC_EL3HLT='Level 3 halted' # 46
+        EXIT_CODE_DESC_EL3RST='Level 3 reset' # 47
+        EXIT_CODE_DESC_ELNRNG='Link number out of range' # 48
+        EXIT_CODE_DESC_EUNATCH='Protocol driver not attached' # 49
+        EXIT_CODE_DESC_ENOCSI='No CSI structure available' # 50
+        EXIT_CODE_DESC_EL2HLT='Level 2 halted' # 51
+        EXIT_CODE_DESC_EBADE='Invalid exchange' # 52
+        EXIT_CODE_DESC_EBADR='Invalid request descriptor' # 53
+        EXIT_CODE_DESC_EXFULL='Exchange full' # 54
+        EXIT_CODE_DESC_ENOANO='No anode' # 55
+        EXIT_CODE_DESC_EBADRQC='Invalid request code' # 56
+        EXIT_CODE_DESC_EBADSLT='Invalid slot' # 57
+        EXIT_CODE_DESC_EBFONT='Bad font file format' # 59
+        EXIT_CODE_DESC_ENOSTR='Device not a stream' # 60
+        EXIT_CODE_DESC_ENODATA='No data available' # 61
+        EXIT_CODE_DESC_ETIME='Timer expired' # 62
+        EXIT_CODE_DESC_ENOSR='Out of streams resources' # 63
+        EXIT_CODE_DESC_ENONET='Machine is not on the network' # 64
+        EXIT_CODE_DESC_ENOPKG='Package not installed' # 65
+        EXIT_CODE_DESC_EREMOTE='Object is remote' # 66
+        EXIT_CODE_DESC_ENOLINK='Link has been severed' # 67
+        EXIT_CODE_DESC_EADV='Advertise error' # 68
+        EXIT_CODE_DESC_ESRMNT='Srmount error' # 69
+        EXIT_CODE_DESC_ECOMM='Communication error on send' # 70
+        EXIT_CODE_DESC_EPROTO='Protocol error' # 71
+        EXIT_CODE_DESC_EMULTIHOP='Multihop attempted' # 72
+        EXIT_CODE_DESC_EDOTDOT='RFS specific error' # 73
+        EXIT_CODE_DESC_EBADMSG='Bad message' # 74
+        EXIT_CODE_DESC_EOVERFLOW='Value too large for defined data type' # 75
+        EXIT_CODE_DESC_ENOTUNIQ='Name not unique on network' # 76
+        EXIT_CODE_DESC_EBADFD='File descriptor in bad state' # 77
+        EXIT_CODE_DESC_EREMCHG='Remote address changed' # 78
+        EXIT_CODE_DESC_ELIBACC='Can not access a needed shared library' # 79
+        EXIT_CODE_DESC_ELIBBAD='Accessing a corrupted shared library' # 80
+        EXIT_CODE_DESC_ELIBSCN='.lib section in a.out corrupted' # 81
+        EXIT_CODE_DESC_ELIBMAX='Attempting to link in too many shared libraries' # 82
+        EXIT_CODE_DESC_ELIBEXEC='Cannot exec a shared library directly' # 83
+        EXIT_CODE_DESC_EILSEQ='Invalid or incomplete multibyte or wide character' # 84
+        EXIT_CODE_DESC_ERESTART='Interrupted system call should be restarted' # 85
+        EXIT_CODE_DESC_ESTRPIPE='Streams pipe error' # 86
+        EXIT_CODE_DESC_EUSERS='Too many users' # 87
+        EXIT_CODE_DESC_ENOTSOCK='Socket operation on non-socket' # 88
+        EXIT_CODE_DESC_EDESTADDRREQ='Destination address required' # 89
+        EXIT_CODE_DESC_EMSGSIZE='Message too long' # 90
+        EXIT_CODE_DESC_EPROTOTYPE='Protocol wrong type for socket' # 91
+        EXIT_CODE_DESC_ENOPROTOOPT='Protocol not available' # 92
+        EXIT_CODE_DESC_EPROTONOSUPPORT='Protocol not supported' # 93
+        EXIT_CODE_DESC_ESOCKTNOSUPPORT='Socket type not supported' # 94
+        EXIT_CODE_DESC_ENOTSUP='Operation not supported' # 95
+        EXIT_CODE_DESC_EOPNOTSUPP='Operation not supported' # 95
+        EXIT_CODE_DESC_EPFNOSUPPORT='Protocol family not supported' # 96
+        EXIT_CODE_DESC_EAFNOSUPPORT='Address family not supported by protocol' # 97
+        EXIT_CODE_DESC_EADDRINUSE='Address already in use' # 98
+        EXIT_CODE_DESC_EADDRNOTAVAIL='Cannot assign requested address' # 99
+        EXIT_CODE_DESC_ENETDOWN='Network is down' # 100
+        EXIT_CODE_DESC_ENETUNREACH='Network is unreachable' # 101
+        EXIT_CODE_DESC_ENETRESET='Network dropped connection on reset' # 102
+        EXIT_CODE_DESC_ECONNABORTED='Software caused connection abort' # 103
+        EXIT_CODE_DESC_ECONNRESET='Connection reset by peer' # 104
+        EXIT_CODE_DESC_ENOBUFS='No buffer space available' # 105
+        EXIT_CODE_DESC_EISCONN='Transport endpoint is already connected' # 106
+        EXIT_CODE_DESC_ENOTCONN='Transport endpoint is not connected' # 107
+        EXIT_CODE_DESC_ESHUTDOWN='Cannot send after transport endpoint shutdown' # 108
+        EXIT_CODE_DESC_ETOOMANYREFS='Too many references: cannot splice' # 109
+        EXIT_CODE_DESC_ETIMEDOUT='Connection timed out' # 110
+        EXIT_CODE_DESC_ECONNREFUSED='Connection refused' # 111
+        EXIT_CODE_DESC_EHOSTDOWN='Host is down' # 112
+        EXIT_CODE_DESC_EHOSTUNREACH='No route to host' # 113
+        EXIT_CODE_DESC_EALREADY='Operation already in progress' # 114
+        EXIT_CODE_DESC_EINPROGRESS='Operation now in progress' # 115
+        EXIT_CODE_DESC_ESTALE='Stale file handle' # 116
+        EXIT_CODE_DESC_EUCLEAN='Structure needs cleaning' # 117
+        EXIT_CODE_DESC_ENOTNAM='Not a XENIX named type file' # 118
+        EXIT_CODE_DESC_ENAVAIL='No XENIX semaphores available' # 119
+        EXIT_CODE_DESC_EISNAM='Is a named type file' # 120
+        EXIT_CODE_DESC_EREMOTEIO='Remote I/O error' # 121
+        EXIT_CODE_DESC_EDQUOT='Disk quota exceeded' # 122
+        EXIT_CODE_DESC_ENOMEDIUM='No medium found' # 123
+        EXIT_CODE_DESC_EMEDIUMTYPE='Wrong medium type' # 124
+        EXIT_CODE_DESC_ECANCELED='Operation canceled' # 125
+        EXIT_CODE_DESC_ENOKEY='Required key not available' # 126
+        EXIT_CODE_DESC_EKEYEXPIRED='Key has expired' # 127
+        EXIT_CODE_DESC_EKEYREVOKED='Key has been revoked' # 128
+        EXIT_CODE_DESC_EKEYREJECTED='Key was rejected by service' # 129
+        EXIT_CODE_DESC_EOWNERDEAD='Owner died' # 130
+        EXIT_CODE_DESC_ENOTRECOVERABLE='State not recoverable' # 131
+        EXIT_CODE_DESC_ERFKILL='Operation not possible due to RF-kill' # 132
+        EXIT_CODE_DESC_EHWPOISON='Memory page has hardware error' # 133
+        # Not "official" but observed.
+        EXIT_CODE_DESC_SEGMENTATION_ERROR='Segmentation error' # 139 # Returned by HandBrakeCLI
+        # The following codes were made up by Lane
+        EXIT_CODE_DESC_INTERNAL_ERROR='Internal error' # 161
+        EXIT_CODE_DESC_INVALID_OPTIONS='Invalid options' # 162
+        EXIT_CODE_DESC_ROOT_REQUIRED='Superuser privilege required' # 163
+        EXIT_CODE_DESC_UBUNTU_REQUIRED='Ubuntu required' # 164
+        EXIT_CODE_DESC_MINIMUM_OS_VERSION_REQUIRED='Minimum OS version required' # 165
+        EXIT_CODE_DESC_MAXIMUM_OS_VERSION_REQUIRED='Maximum OS version required' # 166
+        EXIT_CODE_DESC_SPECIFIC_SERVER_REQUIRED='Specific server required' # 167
+        EXIT_CODE_DESC_USER_ABORT='User aborted' # 168
+        EXIT_CODE_DESC_FILE_NOT_FOUND='File not found' # 169
+        EXIT_CODE_DESC_DIRECTORY_NOT_FOUND='Directory not found' # 170
+        EXIT_CODE_DESC_FILE_IN_USE='File in use' # 171
+        EXIT_CODE_DESC_WRONG_HOST='Wrong host' # 172
+
+# Text Alerts
+# DEPENDENT on user definitions above
+# Set as many as desired. Must be email addresses that forward to SMS
+# Example: TEXT_ALERT[becky]=7608515830@vtext.com
+        declare -A TEXT_ALERT
+        TEXT_ALERT[admin]=$ADMIN_CELL_EMAIL
+        TEXT_ALERTS=""
+        for KEY in "${!TEXT_ALERT[@]}"; do TEXT_ALERTS+="${TEXT_ALERT[$KEY]} "; done
+
+# Text Markup Codes
+#       BOLD=$(tput bold)
+#       NORMAL=$(tput sgr0)
+#       UNDERLINE=$(tput smul)
+#       DIM=$(tput dim)
+#       REVERSE=$(tput rev)
+#       STANDOUT=$(tput smso)
+#       BLACK=$(tput setf 0)
+#       BLUE=$(tput setf 1)
+#       GREEN=$(tput setf 2)
+#       CYAN=$(tput setf 3)
+#       RED=$(tput setf 4)
+#       MAGENTA=$(tput setf 5)
+#       YELLOW=$(tput setf 6)
+#       WHITE=$(tput setf 7)
+
+# Email Alerts
+# DEPENDENT on user definitions above
+# Set as many as desired.
+# Example: EMAIL_ALERT[becky]=rkh@georgetown.edu
+        declare -A EMAIL_ALERT
+        EMAIL_ALERT[admin]=$ADMIN_EMAIL
+        EMAIL_ALERTS=""
+        for KEY in "${!EMAIL_ALERT[@]}"; do EMAIL_ALERTS+="${EMAIL_ALERT[$KEY]} "; done
+
+# Apache2
+        WEB_ROOTS="/var/www"
+        THIS_WEB_ROOT="$WEB_ROOTS/html"
+
+# Archive Directories, Files, and Paths
+# DEPENDENT on definition of $HOSTNAME, but that's built-in
+        declare -A ARCHIVE_FILE_SYSTEM
+                ARCHIVE_FILE_SYSTEM[default]="/"
+                ARCHIVE_FILE_SYSTEM[pd1]="/mnt/5TBE"
+                ARCHIVE_FILE_SYSTEM[adam]="/mnt/5TBD"
+                ARCHIVE_FILE_SYSTEM[oz]="/mnt/5TBC"
+                ARCHIVE_FILE_SYSTEM[dsm1]="/mnt/5TBC"
+        declare -A ARCHIVE_DIRECTORY
+                ARCHIVE_DIRECTORY[default]="/var/lib/archives/$HOSTNAME"
+                ARCHIVE_DIRECTORY[pd1]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
+                ARCHIVE_DIRECTORY[adam]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
+                ARCHIVE_DIRECTORY[oz]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
+                ARCHIVE_DIRECTORY[dsm1]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
+        THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[default]}"
+                if [ $HOSTNAME == "pd1" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "adam" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "dsm1" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
+        THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[default]}"
+                if [ $HOSTNAME == "pd1" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "adam" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
+                if [ $HOSTNAME == "dsm1" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
+        ARCHIVE_TAR_FILE="$HOSTNAME-$START_DATESTAMP.gz"
+                ARCHIVE_TAR_FULL="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_FILE"
+        ARCHIVE_TAR_WEEKDAY_FILE="$HOSTNAME-weekday-$START_WEEKDAYSTAMP3.gz"
+                ARCHIVE_TAR_FULL_WEEKDAY="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE"
+        ARCHIVE_TAR_DAY_FILE="$HOSTNAME-day-$START_DAYSTAMP.gz"
+                ARCHIVE_TAR_FULL_DAY="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_DAY_FILE"
+        ARCHIVE_TAR_MONTH_FILE="$HOSTNAME-month-$START_MONTHSTAMP.gz"
+                ARCHIVE_TAR_FULL_MONTH="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_MONTH_FILE"
+
+# Backup COLD # cold backup
+# DEPENDENT on definition of $HOSTNAME, but that's built-in
+        # Adjusted 12/30/2020 because none of these services were coming back.
+        # COLD_PROTECTED_SERVICES="apache2 cron ddclient fail2ban lsyncd mysql plexmediaserver postfix proftpd tautulli webmin"
+        COLD_PROTECTED_SERVICES="mysql postfix"
+                # Previously incuded gdm3, but that turns off the console.
+        COLD_BACKUP_FILE_SYSTEM="/"                                # Default
+        COLD_BACKUP_FS_READ_ONLY=false                             # Default
+        COLD_BACKUP_PARENT_DIRECTORY="/var/local"                  # Default
+        COLD_BACKUP_SUBDIRECTORY="cold-backup"                     # Default
+        TEMP_COLD_BACKUP_DIRECTORY="/var/tmp/cold-backup"          # Default
+        TEMP_COLD_BACKUP_PARENT_DIRECTORY="/var/tmp"               # Default
+        TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"                # Default
+        TEMP_ARCHIVE_DIRECTORY="/var/tmp/archives"                 # Default
+        TEMP_ARCHIVE_PARENT_DIRECTORY="/var/tmp"                   # Default
+        TEMP_ARCHIVE_SUBDIRECTORY="archives"                       # Default
+        # Default COLD_RESTORE_POINT = "/", but "/var/restore-points/$START_DATEANDTIMESTAMP" recommended for trouble-shooting
+                COLD_RESTORE_POINT="/"
+                # COLD_RESTORE_POINT="/var/restore-points/$START_DATEANDTIMESTAMP"
+        COLD_BACKUP_LOG="$ADMIN_HOME_DIR/.coldstorage.log"
+        if [ $HOSTNAME == "pd1" ]; then
+                COLD_BACKUP_FILE_SYSTEM="/mnt/5TBE"
+                COLD_BACKUP_FS_READ_ONLY=false
+                COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
+                TEMP_COLD_BACKUP_DIRECTORY="/mnt/bob/cold-backup"
+                TEMP_COLD_BACKUP_PARENT_DIRECTORY="/mnt/bob"
+                TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"
+                TEMP_ARCHIVE_DIRECTORY="/mnt/bob/archives"
+                TEMP_ARCHIVE_PARENT_DIRECTORY="/mnt/bob"
+                TEMP_ARCHIVE_SUBDIRECTORY="archives"
+                fi
+        if [ $HOSTNAME == "dsm1" ]; then
+                COLD_BACKUP_FILE_SYSTEM="/mnt/5TBC"
+                COLD_BACKUP_FS_READ_ONLY=false
+                COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
+                # Commenting out all below to keep defaults because only the root file system is an SSD.
+                # TEMP_COLD_BACKUP_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM/cold-backup"
+                # TEMP_COLD_BACKUP_PARENT_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM"
+                # TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"
+                # TEMP_ARCHIVE_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM/archives"
+                # TEMP_ARCHIVE_PARENT_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM"
+                # TEMP_ARCHIVE_SUBDIRECTORY="archives"
+                fi
+        if [ $HOSTNAME == "adam" ]; then
+                COLD_BACKUP_FILE_SYSTEM="/mnt/5TBD"
+                COLD_BACKUP_FS_READ_ONLY=false
+                COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
+                # Commenting out all below to keep defaults because only the root file system is an SSD.
+                # TEMP_COLD_BACKUP_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM/cold-backup"
+                # TEMP_COLD_BACKUP_PARENT_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM"
+                # TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"
+                # TEMP_ARCHIVE_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM/archives"
+                # TEMP_ARCHIVE_PARENT_DIRECTORY="$COLD_BACKUP_FILE_SYSTEM"
+                # TEMP_ARCHIVE_SUBDIRECTORY="archives"
+                fi
+        if [ $HOSTNAME == "oz" ]; then
+                COLD_BACKUP_FILE_SYSTEM="/mnt/5TBC"
+                COLD_BACKUP_FS_READ_ONLY=false
+                COLD_BACKUP_PARENT_DIRECTORY=$COLD_BACKUP_FILE_SYSTEM
+                TEMP_COLD_BACKUP_DIRECTORY="/mnt/ssd1tb/cold-backup"
+                TEMP_COLD_BACKUP_PARENT_DIRECTORY="/mnt/ssd1tb"
+                TEMP_COLD_BACKUP_SUBDIRECTORY="cold-backup"
+                TEMP_ARCHIVE_DIRECTORY="/mnt/ssd1tb/archives"
+                TEMP_ARCHIVE_PARENT_DIRECTORY="/mnt/ssd1tb"
+                TEMP_ARCHIVE_SUBDIRECTORY="archives"
+                fi
+        COLD_BACKUP_DIRECTORY="$COLD_BACKUP_PARENT_DIRECTORY/$COLD_BACKUP_SUBDIRECTORY"
+        COLD_BACKUP_EXCLUDES="--exclude='/var/snap/plexmediaserver/common/Library/Application Support/Plex Media Server/Cache'"
+        COLD_BACKUP_EXCLUDES+=" --exclude=/var/snap/plexmediaserver/common/Library/store/*"
+        COLD_BACKUP_EXCLUDES+=" --exclude=/var/snap/plexmediaserver/common/Library/work/*"
+        COLD_BACKUP_EXCLUDES+=" --exclude=.cache"
+        COLD_BACKUP_EXCLUDES+=" --exclude=Cache"
+        COLD_BACKUP_SOURCES="$COLD_BACKUP_EXCLUDES etc home opt root"
+        COLD_BACKUP_SOURCES+=" var/www"
+        COLD_BACKUP_SOURCES+=" var/snap/plexmediaserver/common/Library"
+        COLD_RESTORE_EXCLUDES="--exclude=.config/os-install-info.txt"
+        COLD_RESTORE_EXCLUDES+=" --exclude=etc/fstab*"
+        COLD_RESTORE_EXCLUDES+=" --exclude=etc/systemd/system"
+#       COLD_RESTORE_EXCLUDES+=" --exclude=.cache"
+        COLD_RESTORE_EXCLUDES+=" --exclude=etc/mtab"
+#       COLD_RESTORE_EXCLUDES+=" --exclude='/var/snap/plexmediaserver/common/Library/Application Support/Plex Media Server/Cache'"
+        COLD_RESTORE_EXCLUDES+=" --exclude=etc/os-release"
+        COLD_RESTORE_EXCLUDES+=" --exclude=etc/rc*"
+        COLD_RESTORE_EXCLUDES+=" --exclude=etc/udisks2"
+        COLD_RESTORE_EXCLUDES+=" --exclude=etc/whoopsie"
+
+# crontab backups & restores
+        CRONTAB_BACKUP_USERS="$ROOT_USER $ADMIN_USER"
+
+# ddclient
+        DDCLIENT_INTERVAL=7200
+
+# dynu
+        PERMISSIONS_DYNU=400
+        
+# File System Backups
+# DEPENDENT on Archive Directories AND Start Timestamps above
+        BACKUP_ROOT="/"                                                                          # Formerly "DIRECTORY_FROM"
+        declare -A BACKUP_OPTION
+        BACKUP_OPTION[--create]=true
+        BACKUP_OPTION[--gzip]=true 
+        BACKUP_OPTION[--auto-compress]=true
+        BACKUP_OPTION[--preserve-permissions]=true
+        BACKUP_OPTION[--file=$TEMP_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_WEEKDAY_FILE]=true
+        BACKUP_OPTION[--exclude-vcs]=true
+        BACKUP_OPTION[--exclude-caches]=true
+        BACKUP_OPTION[--totals]=true
+        BACKUP_OPTION[--verbose]=true
+        # BACKUP_OPTION[--exclude-from=$TEMP_SOCKETS_BACKUP]=true
+        # Ref: https://bytefreaks.net/gnulinux/bash/bash-how-to-iterate-over-associative-array-and-print-all-keyvalue-pairs
+        BACKUP_OPTIONS=""; 
+        for KEY in "${!BACKUP_OPTION[@]}"; do BACKUP_OPTIONS+=$KEY" "; done
+        declare -A BACKUP_SOURCE
+        BACKUP_SOURCE[/etc]=true
+        BACKUP_SOURCE[/home]=true
+        BACKUP_SOURCE[/root]=true
+        BACKUP_SOURCE[/usr/local/sbin]=true
+        BACKUP_SOURCE[/var/www]=true
+        # BACKUP_SOURCE[/var/local/archives/*.sql]=true
+        # Ref: https://bytefreaks.net/gnulinux/bash/bash-how-to-iterate-over-associative-array-and-print-all-keyvalue-pairs
+        BACKUP_SOURCES=""; for KEY in "${!BACKUP_SOURCE[@]}"; do BACKUP_SOURCES+=$KEY" "; done
+
+##################################################################################
+##### IMPORTANT: Update this to draw data from git. This is WAY out of date. #####
+##################################################################################
+# Peripheral File System Mount Points
+# This info is appended to /etc/fstab, and the mount points (key values) are created, at system installation
+# Example: MOUNT_POINT_DESCRIPTION[/mnt/Black4T01]="Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE"
+# Example: MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs defaults 0 0"
+        declare -A MOUNT_POINT_DESCRIPTION
+        declare -A MOUNT_POINT_DEFINITION
+        if [ $HOSTNAME == "pd1" ]; then
+                MOUNT_POINT_DESCRIPTION[/mnt/Black4T01]="Black4T01 (4TB) UUID=48B4AD5BB4AD4BEE"
+                        MOUNT_POINT_DEFINITION[/mnt/Black4T01]="UUID=48B4AD5BB4AD4BEE /mnt/Black4T01 ntfs noauto 0 0"
+                MOUNT_POINT_DESCRIPTION[/mnt/bertha]="bertha (3TB) UUID=d28256f9-c258-451e-b299-d4849cf19e0b"
+                        MOUNT_POINT_DEFINITION[/mnt/bertha]="UUID=d28256f9-c258-451e-b299-d4849cf19e0b /mnt/bertha ext4 defaults 0 0"
+                MOUNT_POINT_DESCRIPTION[/mnt/cloteal]="cloteal (10TB) UUID=4e356144-2e69-4812-8958-d035a9ebc28e"
+                        MOUNT_POINT_DEFINITION[/mnt/cloteal]="UUID=4e356144-2e69-4812-8958-d035a9ebc28e /mnt/cloteal ext4 defaults 0 0"
+                MOUNT_POINT_DESCRIPTION[/mnt/MyBook3T01]="MyBook3T01 (3TB) UUID=C6B89CABB89C9B8D"
+                        MOUNT_POINT_DEFINITION[/mnt/MyBook3T01]="UUID=C6B89CABB89C9B8D /mnt/MyBook3T01 ntfs defaults 0 0"
+                MOUNT_POINT_DESCRIPTION[/mnt/Silver5TB-A]="Silver5TB-A (5TB) UUID=0A538B3244DE3676"
+                        MOUNT_POINT_DEFINITION[/mnt/Silver5TB-A]="UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs defaults 0 0"
+                MOUNT_POINT_DESCRIPTION[/mnt/Silver5TB-B]="Silver5TB-B (5TB) UUID 634B5E207BE18E54"
+                        MOUNT_POINT_DEFINITION[/mnt/Silver5TB-B]="UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs defaults 0 0"
+                MOUNT_POINT_DESCRIPTION[/mnt/5TBE]="# Black 5TB External Seagate"
+                        MOUNT_POINT_DEFINITION[/mnt/5TBE]="UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 defaults 0 0"
+                MOUNT_POINT_DESCRIPTION[/home/plex-swap/uploads]="Bind mount"
+                        MOUNT_POINT_DEFINITION[/home/plex-swap/uploads]="#/mnt/cloteal/PlexUploads /home/plex-swap/uploads none bind 0 0"
+                MOUNT_POINT_DESCRIPTION[/home/plex-swap/downloads]="Bind mount"
+                        MOUNT_POINT_DEFINITION[/home/plex-swap/downloads]="#/mnt/cloteal/Plex /home/plex-swap/downloads none bind 0 0"
+        fi
+        if [ $HOSTNAME == "oz" ]; then
+                MOUNT_POINT_DESCRIPTION[/mnt/ssd1tb]="Internal SSD drive, 1T"
+                        MOUNT_POINT_DEFINITION[/mnt/ssd1tb]="UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb ext4 defaults 0 0"
+                MOUNT_POINT_DESCRIPTION[/mnt/ext10tb01]="External Hard Drive for Plex, 10TB (rerun)"
+                        MOUNT_POINT_DEFINITION[/mnt/ext10tb01]="UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 rw,defaults 0 0"
+                MOUNT_POINT_DESCRIPTION[/mnt/Black1TB]="# Black 1TB"
+                        MOUNT_POINT_DEFINITION[/mnt/Black1TB]="# UUID=c359e0c7-c6a1-4a49-b7eb-82fe3e5f0f25 /mnt/Black1TB ext4 noauto 0 0"
+                MOUNT_POINT_DESCRIPTION[/mnt/5TBC]="# Black 5TB (C) External Seagate"
+                        MOUNT_POINT_DEFINITION[/mnt/5TBC]="UUID=fa9f5c57-94fd-4706-979e-4c30189592a5 /mnt/5TBC ext4 default 0 0"
+        fi
+
+# Git
+# CRITICAL: If you ever edit this section, 
+#   copy changes into the ubuntu-tools/install/variables script, too.
+        GIT_BRANCH="master"
+        # GIT_BRANCH="dev"
+        GIT_ROOT="$ADMIN_HOME_DIR/git"            # Formerly system.git
+        GIT_UBUNTU_TOOLS="$GIT_ROOT/ubuntu-tools"                # Formerly system.git.go
+        GIT_UBUNTU_TOOLS_CONFIGS="$GIT_UBUNTU_TOOLS/configs"     # Formerly system.git.go.configs
+        GIT_UBUNTU_TOOLS_SBIN="$GIT_UBUNTU_TOOLS/sbin"           # Formerly #system.git.go.sbin
+        GIT_UBUNTU_TOOLS_SERVICES="$GIT_UBUNTU_TOOLS/services"
+        GIT_UBUNTU_TOOLS_SETUP="$GIT_UBUNTU_TOOLS/setup"         # Formerly system.git.go.setup
+        # GIT_TOKEN="Removed for security"   # Formerly system.git.token
+        SERVICES_DIR="/lib/systemd/system"
+
+# HandBrake
+# DEPENDENT ON $ADMIN_HOME_DIR DEFINITION ABOVE
+        HANDBRAKE_CLI="/usr/bin/HandBrakeCLI"
+        HANDBRAKE_PRESETS="$ADMIN_HOME_DIR/.HandBrake/Lane 1080p (BluRay, All Languages).json"
+
+# Incoming Scans
+        INCOMING_SCANS="$ADMIN_HOME_DIR/Scans"
+
+# Installation
+        OS_INSTALL_INFO_FILE=.config/os-install-info.txt
+        OS_INSTALL_INFO_PATH=$ROOT_HOME_DIR/$OS_INSTALL_INFO_FILE
+
+# MakeMKV
+        MAKEMKV_OUTPUT_DIRECTORY="$ADMIN_HOME_DIR/Videos/MakeMKV-Completed"
+        MAKEMKV_TRANSCODED_FILES_DIRECTORY="$ADMIN_HOME_DIR/Videos/HandBrake-Completed"
+        MAKEMKV_FILE_NAME_PATTERN="*.mkv"
+
+# MySQL
+        MYSQL_ADMIN_NAME="admin"
+        MYSQL_CLIENT_CERTS_DIR="$ADMIN_HOME_DIR/mysql-client-certificates"
+        MYSQL_CONFIGS="/etc/mysql/conf.d"
+        MYSQL_DUMP_DIR=$ADMIN_HOME_DIR/mysql-dumps
+        MYSQL_SERVER_BIN_DIR="/var/lib/mysql"
+
+# MySQL Backups
+# DEPENDENT on Archive Directories AND Start Timestamps above
+        ARCHIVE_MYSQL_FILE="$HOSTNAME-$START_DATESTAMP.sql"
+        ARCHIVE_MYSQL_FULL="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_MYSQL_FILE"
+        ARCHIVE_MYSQL_LITURGY="$THIS_ARCHIVE_DIRECTORY/$HOSTNAME-liturgy.sql"
+        ARCHIVE_MYSQL_DB="$THIS_ARCHIVE_DIRECTORY/$HOSTNAME-$START_DATESTAMP-"
+
+# Passwords
+        LENGTH_OF_PASSWORDS=60
+        MAX_MYSQL_PASSWORD_LENGTH=30
+        EXCLUDED_PASSWORD_CHARACTERS=" \$\'\"\\\#\|\<\>\;\*\&\~\!\I\l\1\O\0\`\/\?"
+
+# phpMyAdmin
+        PHPMYADMIN_DIR="/usr/share/phpmyadmin"
+
+#########################################################################
+##### IMPORTANT: Update this to draw data. This is WAY out of date. #####
+#########################################################################
+# Media Server
+# DEPENDENT on Archives Directories definitions above
+# DEPENDENT on MKMKV above
+        # PLEX_USER="plex"
+        PLEX_USER="$ADMIN_USER"
+        PERMISSIONS_PLEX_VIDEO_FILE=644
+        PLEX_VIDEO_FILE_PERMISSIONS=$PERMISSIONS_PLEX_VIDEO_FILE
+        PLEX_VIDEO_LIBRARY_FILE_PERMISSIONS=$PLEX_VIDEO_FILE_PERMISSIONS
+        PERMISSIONS_PLEX_VIDEO_LIBRARY_DIRECTORY=755
+        PLEX_VIDEO_DIRECTORY_PERMISSIONS=$PERMISSIONS_PLEX_VIDEO_LIBRARY_DIRECTORY;
+        PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS=$PLEX_VIDEO_DIRECTORY_PERMISSIONS
+        PLEX_FILE_NAME_PATTERN="*.ts"
+        unset PLEX_ROOT
+        d="/"
+        VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
+        VIDEO_STORE_FILE_SYSTEM="/mnt/12TBB"
+        VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr"
+        # VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex-dvr"
+        VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex"
+        PLEX_LIVE_APPLICATION_SUPPORT="/var/snap/plexmediaserver/common/Library"
+        PLEX_BACKUP_FILE_SYSTEM="$THIS_ARCHIVE_FILE_SYSTEM"
+        PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
+        if [ $HOSTNAME == "pd1" ]; then 
+                # Define all Plex data root directories
+                # Set them all as true
+                # Example: PLEX_ROOT[/mnt/12TBB/plex]=true
+                        declare -A PLEX_ROOT
+                        PLEX_ROOT[/mnt/12TBB/plex]=true
+                        PLEX_ROOT[/mnt/12TBB/plex-dvr]=true
+                        PLEX_ROOT[/mnt/bertha/plex]=true
+                        PLEX_ROOT[/mnt/bob/plex]=true
+                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/metadata]=true
+                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/store]=true
+                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/work]=true
+                VIDEO_WORK_FILE_SYSTEM="/mnt/bob"
+                VIDEO_STORE_FILE_SYSTEM="/mnt/12TBB"
+                VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex"
+                VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex"
+                PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
+                fi
+#        if [ $HOSTNAME == "oz" ]; then 
+#                # Define all Plex data root directories
+#                # Set them all as true
+#                # Example: PLEX_ROOT[/mnt/12TBB/plex]=true
+#                        declare -A PLEX_ROOT
+#                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/metadata]=true
+#                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/store]=true
+#                        PLEX_ROOT[/var/snap/plexmediaserver/common/Library/work]=true
+#                        PLEX_ROOT[/mnt/ssd1tb/plex]=true
+#                        PLEX_ROOT[/mnt/ext10tb01/plex]=true
+#                VIDEO_WORK_FILE_SYSTEM="/mnt/ext10tb01"
+#                VIDEO_WORK_DIRECTORY="$VIDEO_WORK_FILE_SYSTEM/plex/dvr-in"
+#                VIDEO_STORE_FILE_SYSTEM="/mnt/ext10tb01"
+#                VIDEO_STORE_DIRECTORY="$VIDEO_STORE_FILE_SYSTEM/plex/dvr-oz"
+#                PLEX_BACKUP_APPLICATION_SUPPORT="$THIS_ARCHIVE_DIRECTORY/plex/Application Support"
+#                fi
+
+# Postfix Setup
+        MAILNAME=$HOSTNAME
+        MAIN_MAILER_TYPE="'Internet with smarthost'"
+        RELAYHOST="mail.twc.com"                                          # Spectrum Internet (DEFAULT for Austin)
+        if [ $HOSTNAME == "pd1" ]; then RELAYHOST="mail.mchsi.com"; fi  # Mediacom Cable Internet
+        if [ $HOSTNAME == "red" ]; then RELAYHOST="mail.mchsi.com"; fi    # Mediacom Cable Internet
+
+# reset-when-ready
+        RESET_FLAG_FILE="/tmp/reset-when-ready"
+
+# SBIN
+        PERMISSIONS_SBIN=755
+        SBIN_PERMISSIONS=$PERMISSIONS_SBIN
+
+# SERVICES
+        SERVICES_DIR="/lib/systemd/system"
+        PERMISSIONS_SERVICES_DIR=755
+        SERVICES_DIR_PERMISSIONS=$PERMISSIONS_SERVICES_DIR
+        PERMISSIONS_SERVICES_FILE=644
+        SERVICES_FILE_PERMISSIONS=$PERMISSIONS_SERVICES_FILE
+
+# System Snapshot File
+        SYSTEM_SNAPSHOT_FILE="$ADMIN_HOME_DIR/.system-snapshot-data.csv"
+        SYSTEM_SNAPSHOT_JSON_FILE="$ADMIN_HOME_DIR/.system-snapshot-data.json"
+        PERMISSIONS_SYSTEM_SNAPSHOT_FILE=640
+        SYSTEM_SNAPSHOT_FILE_PERMISSIONS=$PERMISSIONS_SYSTEM_SNAPSHOT_FILE
+
+# umask
+        UMASK=077
+
+# Video Processing Defaults
+        PERMISSIONS_DEFAULT_VIDEO_FILE=664
+        DEFAULT_VIDEO_FILE_PERMISSIONS=$PERMISSIONS_DEFAULT_VIDEO_FILE
+        PERMISSIONS_DEFAULT_VIDEO_LIBRARY_DIRECTORY=775
+        DEFAULT_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS=$PERMISSIONS_DEFAULT_VIDEO_LIBRARY_DIRECTORY
+        SOURCE_ROOT="/mnt/12TBB/plex/test"               # For Plex DVR, this is $VIDEO_WORK_DIRECTORY
+                                                                          # For DVDs ripped with MakeMKV, this is $MAKEMKV_OUTPUT_DIRECTORY
+        unset SOURCE_FILE_NAME_PATTERN        # For Plex DVR, this is "*.ts"
+                                              # For DVDs ripped with MakeMKV, this is "*.mkv"
+        TARGET_ROOT="/mnt/12TBB/plex/test"               # For Plex DVR, this is $VIDEO_STORE_DIRECTORY
+        unset TARGET_FILE_EXTENSION           # Normally this is ".m4v"
+        SET_PLEX_PERMISSIONS=false            # If the output file is part of a Plex Library, this is true; otherwise (default) false
+        USE_TV_FILTERS=false                  # Should only be true when converting Plex DVR files. Default is false
+        FLATTEN_TARGET_DIRECTORY=false        # Helpful for processing Zoom files or DVD rips. Default is false
+        USE_PARENT_DIR_AS_BASENAME=false      # Can be helpful when $FLATTEN_TARGET_DIRECTORY is true
+        PREPEND_PARENT_DIR_TO_BASENAME=false  # Can be helpful for processing Zoom files or DVD rips. Default is false
+        APPEND_UUID_TO_TARGET_FILE=false              # Helps create uniqueness so you can have multiple versions of a single DVR episode
+        unset TARGET_DIR_OWNER                # Will be used only if defined
+        unset TARGET_DIR_PERMISSIONS          # Will be used only if defined
+        unset TARGET_FILE_OWNER               # Will be used only if defined
+        unset TARGET_FILE_PERMISSIONS         # Will be used only if defined
+
+# ssh
+# DEPENENT on timestamps above
+        SSHD_CONFIG="/etc/ssh/sshd_config"
+        SSH_KEY_NAME="$HOSTNAME-$START_DATEANDTIMESTAMP"
+
+# Zoom Transcoding
+        ZOOM_RAW_FILES="$ADMIN_HOME_DIR/zoom/raw"
+        ZOOM_TRANSCODED_FILES="$ADMIN_HOME_DIR/zoom/transcoded"
+        ZOOM_FILE_NAME_PATTERN="*.mp4"
+
+# Filter TV shows that should be skipped by process_ts
+# Set them all as true
+# Example: IGNORE_TV_SHOW[CBS This Morning]=true
+# It doesn't matter what the value is set to, as long as the key is defined
+# A match is found if any part of the test string matches. 
+#      For example, "IGNORE_TV_SHOW[CBS This Morning]=true" is defined, 
+#      "CBS This Morning Saturday" matches
+        declare -A IGNORE_TV_SHOW
+        IGNORE_TV_SHOW[.grab]=true
+#       IGNORE_TV_SHOW[ABC World News Tonight]=true
+#       IGNORE_TV_SHOW[BBC World News]=true
+#       IGNORE_TV_SHOW[CBS Evening News]=true
+#       IGNORE_TV_SHOW[CBS Morning News]=true
+#       IGNORE_TV_SHOW[CBS This Morning]=true
+#       IGNORE_TV_SHOW[CBS Weekend News]=true
+#       IGNORE_TV_SHOW[Channel 13 News]=true
+#       IGNORE_TV_SHOW[Face the Nation]=true
+#       IGNORE_TV_SHOW[Good Morning Iowa]=true
+#       IGNORE_TV_SHOW[Jimmy Kimmel Live]=true
+#       IGNORE_TV_SHOW[KCCI 8 News]=true
+#       IGNORE_TV_SHOW[KXAN News]=true
+#       IGNORE_TV_SHOW[Meet the Press]=true
+#       IGNORE_TV_SHOW[NBC Nightly News]=true
+#       IGNORE_TV_SHOW[Sunday Today]=true
+#       IGNORE_TV_SHOW[The Late Show]=true
+#       IGNORE_TV_SHOW[The Tonight Show]=true
+#       IGNORE_TV_SHOW[Today (1952)]=true
+#       IGNORE_TV_SHOW[Today in Iowa]=true
+        # Ref: https://bytefreaks.net/gnulinux/bash/bash-how-to-iterate-over-associative-array-and-print-all-keyvalue-pairs
+        IGNORE_TV_SHOWS=""; for KEY in "${!IGNORE_TV_SHOW[@]}"; do IGNORE_TV_SHOWS+="\"$KEY\" "; done
+
+# Paths to Scripts
+        declare -A PATHNAME
+        PATHNAME[_apply_configs]="$SBIN_DIR/_apply-configs"
+        PATHNAME[_functions]="$SBIN_DIR/_functions"
+        PATHNAME[_git]="$SBIN_DIR/_git"
+        PATHNAME[_run_apt_update]="$SBIN_DIR/_run_apt_update"
+        PATHNAME[_upd]="$SBIN_DIR/_upd"
+        PATHNAME[_vars]="$SBIN_DIR/_vars"
+        PATHNAME[apt_remove_duplicate_source_entries]="$SBIN_DIR/apt-remove-duplicate_source-entries.py"
+        PATHNAME[backup]="$SBIN_DIR/backup"
+        PATHNAME[backup_file]="$SBIN_DIR/backup-file"
+        PATHNAME[cleanup_and_exit]="$SBIN_DIR/cleanup-and-exit"
+        PATHNAME[currenttimeinseconds]="$SBIN_DIR/currenttimeinseconds"
+        PATHNAME[db_backup]="$SBIN_DIR/db-backup"
+        PATHNAME[ddnscheck]="$SBIN_DIR/ddnscheck"
+        PATHNAME[get_config]="$SBIN_DIR/get-config"
+        PATHNAME[lgh]="$SBIN_DIR/lgh"
+        PATHNAME[lhlib]="$SBIN_DIR/lhlib"
+        PATHNAME[loop_forever]="$SBIN_DIR/loop-forever"
+        PATHNAME[make_letsencrypt_p12_files]="$SBIN_DIR/make-letsencrypt-p12-files"
+        PATHNAME[make_passwords]="$SBIN_DIR/make-passwords"
+        PATHNAME[make_ssh_keys]="$SBIN_DIR/make-ssh-keys"
+        PATHNAME[makemkvcon]="/usr/bin/makemkvcon"
+        PATHNAME[master_loop]="$SBIN_DIR/master-loop"
+        PATHNAME[move_scans_to_onedrive]="$SBIN_DIR/move-scans-to-onedrive"
+        PATHNAME[process_ts]="$SBIN_DIR/process-ts"
+        PATHNAME[process_incoming_scans]="$SBIN_DIR/process-incoming-scans"
+        PATHNAME[remove_empty_directories]="$SBIN_DIR/remove-empty-directories"
+        PATHNAME[replace_in_file]="$SBIN_DIR/replace-in-file"
+        PATHNAME[rip]="$SBIN_DIR/rip"
+        PATHNAME[script_footer]="$SBIN_DIR/script-footer"
+        PATHNAME[script_setup]="$SBIN_DIR/script-setup"
+        PATHNAME[secureserver]="$SBIN_DIR/secureserver"
+        PATHNAME[show_plex_ts_files]="$SBIN_DIR/show-plex-ts-files"
+        PATHNAME[stopwatch]="$SBIN_DIR/stopwatch"
+        PATHNAME[syncplex]="$SBIN_DIR/syncplex"
+        PATHNAME[tar]="/bin/tar"
+        PATHNAME[transcode_ripped_dvds]="$SBIN_DIR/transcode-ripped-dvds"
+        PATHNAME[unlockserver]="$SBIN_DIR/unlockserver"
+        PATHNAME[upd]="$SBIN_DIR/upd"
+        PATHNAME[vaultclose]="$SBIN_DIR/vaultclose"
+        PATHNAME[vaultopen]="$SBIN_DIR/vaultopen"
+        PATHNAME[vaultsync]="$SBIN_DIR/vaultsync"
+        PATHNAME[xfers]="$SBIN_DIR/xfers"
+
+# Script permissions
+        PERMISSIONS_SCRIPT__functions=755
+        PERMISSIONS_SCRIPT__vars=755
+        PERMISSIONS_SCRIPT_makemkvcon=755
+        PERMISSIONS_SCRIPT_remove_empty_directories=755
+        PERMISSIONS_SCRIPT_rip=755
+        PERMISSIONS_SCRIPT_script_footer=755
+        PERMISSIONS_SCRIPT_script_setup=755
+
+# Require root to run these scripts (default is false or undefined)
+# DEPENDENT ON PATHNAME ARRAY DEFINITION ABOVE
+# Example: ROOT_REQUIRED[${PATHNAME[lgh]}]=true
+# It doesn't matter what the value is set to, as long as the key is defined
+        declare -A ROOT_REQUIRED
+        ROOT_REQUIRED[${PATHNAME[_apply_configs]}]=true
+        ROOT_REQUIRED[${PATHNAME[_git]}]=true
+        ROOT_REQUIRED[${PATHNAME[_upd]}]=true
+        ROOT_REQUIRED[${PATHNAME[lgh]}]=true
+        ROOT_REQUIRED[${PATHNAME[upd]}]=true
+
+# Disable start message for these scripts
+# DEPENDENT ON PATHNAME ARRAY DEFINITION ABOVE
+# Example: DISABLE_START_MESSAGE[${PATHNAME[lgh]}]=true
+# If the variable is defined at all, it resolves to true, even if the assigned falue is false
+        declare -A DISABLE_START_MESSAGE
+        # DISABLE_START_MESSAGE[${PATHNAME[timeformat]}]=true
+
+# Disable end message for these scripts
+# DEPENDENT ON PATHNAME ARRAY DEFINITION ABOVE
+# Example: DISABLE_END_MESSAGE[${PATHNAME[lgh]}]=true
+# If the variable is defined at all, it resolves to true, even if the assigned falue is false
+        declare -A DISABLE_END_MESSAGE
+        # DISABLE_END_MESSAGE[${PATHNAME[timeformat]}]=true
+
+# Restrict some scripts to particular hosts.
+# If a script pathname is referenced even once, 
+#       the script will run only if the hostname is associated with the script pathname.
+# Example: RESTRICT_SCRIPT_TO_HOST[${PATHNAME[lgh]}]=oz
+        declare -A RESTRICT_SCRIPT_TO_HOST
+        RESTRICT_SCRIPT_TO_HOST[${PATHNAME[show_plex_ts_files]}]=oz
+        RESTRICT_SCRIPT_TO_HOST[${PATHNAME[process_incoming_scans]}]=oz
+        RESTRICT_SCRIPT_TO_HOST[${PATHNAME[process_ts]}]=oz
+        RESTRICT_SCRIPT_TO_HOST[${PATHNAME[rip]}]=oz
+
+# Set a flag to confirm that the variables are defined
+        VARIABLES_ARE_DEFINED=true
+
+# Log the completion
+        if [ ! $DEBUG_MODE ]; then
+                logger $0: Variables loaded from _vars
+                fi
+

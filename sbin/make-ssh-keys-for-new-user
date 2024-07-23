@@ -1,0 +1,30 @@
+#!/bin/bash
+# make-ssh-keys-for-new-user
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Require root
+	f_require_root
+
+# Only allow this to run on server pd1.
+	f_only_on_server "pd1"
+
+# Go
+	ssh-keygen -t rsa -q -N "" -f $1
+	echo " $1" >> $1.pub
+	mkdir -p /home/$1/.ssh
+	mv $1 /home/$1/.ssh/id_rsa
+	mv $1.pub /home/$1/.ssh/id_rsa.pub
+	chown -R $1:nogroup /home/$1/.ssh
+	echo "In Microsoft Visual Studio / ubuntu-tools / configs / ssh / etc-ssh-sshd_config, add $1 after AllowUsers."
+	echo "In Microsoft Visual Studio / ubuntu-tools / configs / ssh / home-.ssh-authorized_keys, append this:"
+	cat /home/$1/.ssh/id_rsa.pub
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
