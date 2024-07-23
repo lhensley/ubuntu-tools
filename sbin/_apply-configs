@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Executing $0 on line ${LINENO}"
+DEBUG_MODE=true; if $DEBUG_MODE ; then echo "Executing $0 on line ${LINENO}" ; fi
 
 ###################################################
 # Notes
@@ -293,8 +293,12 @@ done
 # Update any netplan configuration files
 	if [ -f $GIT_UBUNTU_TOOLS_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME ]; then
 		echo "Updating /etc/netplan/current-plan.yaml from $GIT_UBUNTU_TOOLS_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME"
+		# IMPORTANT: The chmod command below CAN'T WAIT for _apply-permissions.
+		chmod -fR 400 "$GIT_UBUNTU_TOOLS_CONFIGS/etc/netplan"
 		rm -f /etc/NetworkManager/system-connections/* /etc/netplan/*
 		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME" /etc/netplan/current-plan.yaml
+		# IMPORTANT: The chmod command below CAN'T WAIT for _apply-permissions.
+		chmod -fR 400 "etc/netplan"
 		netplan apply &
 		fi
 
@@ -353,6 +357,8 @@ done
 
 ###################################################
 # Wrap up.
+
+if $DEBUG_MODE ; then echo "Ending $0 on line ${LINENO}" ; fi
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

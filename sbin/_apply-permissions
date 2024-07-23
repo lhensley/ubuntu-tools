@@ -1,6 +1,8 @@
 #!/bin/bash
 #_apply-permissions
 
+DEBUG_MODE=true; if $DEBUG_MODE ; then echo "Executing $0 on line ${LINENO}" ; fi
+
 ###################################################
 # Notes
 #
@@ -224,7 +226,7 @@ done
 	# /etc/netplan
 		if $(f_is_directory "/etc/netplan"); then
 			echo "Updating permissions for /etc/netplan/*"
-			chmod -f 400 "/etc/netplan/*"
+			chmod -fR 400 "/etc/netplan"
 			fi
 
 	# /etc/resolvconf
@@ -397,6 +399,8 @@ done
 
 ###################################################
 # Wrap up.
+
+if $DEBUG_MODE ; then echo "Ending $0 on line ${LINENO}" ; fi
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

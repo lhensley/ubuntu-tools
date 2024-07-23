@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DEBUG_MODE=true; if $DEBUG_MODE ; then echo "Executing $0 on line ${LINENO}" ; fi
+
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
