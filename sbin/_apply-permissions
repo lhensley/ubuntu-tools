@@ -258,6 +258,8 @@ done
 		# $SBIN_DIR (production location, on the PATH for all)
 			# chmod -fR $SBIN_PERMISSIONS "$SBIN_DIR"
 			# chown -fR $ROOT_USER:$ROOT_USER "$SBIN_DIR"
+		# Others
+			chmod -fR 400 "$GIT_UBUNTU_TOOLS/configs"/
 		# chmod -fR 700 "$GIT_UBUNTU_TOOLS_SBIN"/*
 		# NOTE: Some SBIN files will get 755 permissions
 		# in the "Exceptions" section at the bottom of this file.
