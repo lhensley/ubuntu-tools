@@ -21,7 +21,7 @@
 
 # Apply configs
 	echo
-	echo "Applying configurations and permissions."
+	echo "Applying configurations and permissions." && echo
 	f_apply_configs
 
 # Other updates
