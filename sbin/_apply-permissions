@@ -1,7 +1,7 @@
 #!/bin/bash
 #_apply-permissions
 
-DEBUG_MODE=true; if $DEBUG_MODE ; then echo "Executing $0 on line ${LINENO}" ; fi
+DEBUG_MODE=true; if ! $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 on line ${LINENO}" ; fi
 
 ###################################################
 # Notes
@@ -162,6 +162,7 @@ done
 #           Environment variables are fine for optional values.
 #   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
+if ! $DEBUG_MODE ; then echo "DEBUG MARKER in $0 on line ${LINENO}" ; fi
 
 	echo Applying permissions
 	echo
@@ -255,11 +256,13 @@ done
 		# $GIT_ROOT (working clone at ~/git)
 			# find "$GIT_ROOT" -type d -print -exec chmod 700 {} \; >> /dev/null 2>&1
 			# find "$GIT_ROOT" -type f -print -exec chmod 600 {} \; >> /dev/null 2>&1
-			chmod -fR $SBIN_PERMISSIONS "$GIT_ROOT"
+			find "$GIT_ROOT" -type d -print -exec chmod 700 {} \; >> /dev/null 2>&1
+			find "$GIT_ROOT" -type f -print -exec chmod 600 {} \; >> /dev/null 2>&1
 			chown -fR $ADMIN_USER:$ADMIN_USER "$GIT_ROOT"
 		# $SBIN_DIR (production location, on the PATH for all)
 			# chmod -fR $SBIN_PERMISSIONS "$SBIN_DIR"
 			# chown -fR $ROOT_USER:$ROOT_USER "$SBIN_DIR"
+			chmod -fR $SBIN_PERMISSIONS "$GIT_UBUNTU_TOOLS_SBIN"
 		# Others
 			# chmod -fR 400 "$GIT_UBUNTU_TOOLS/configs"/
 		# chmod -fR 700 "$GIT_UBUNTU_TOOLS_SBIN"/*
@@ -400,7 +403,7 @@ done
 ###################################################
 # Wrap up.
 
-if $DEBUG_MODE ; then echo "Ending $0 on line ${LINENO}" ; fi
+if ! $DEBUG_MODE ; then echo "DEBUG ENDING $0 on line ${LINENO}" ; fi
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEBUG_MODE=true; if $DEBUG_MODE ; then echo "Executing $0 on line ${LINENO}" ; fi
+DEBUG_MODE=true; if ! $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 on line ${LINENO}" ; fi
 
 # Include script setup file
 	source script-setup

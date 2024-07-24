@@ -1,9 +1,10 @@
 #!/bin/bash
 
-DEBUG_MODE=true; if DEBUG_MODE ; then echo "Executing $0 on line ${LINENO}" ; fi
+DEBUG_MODE=true; if ! $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 on line ${LINENO}" ; fi
 
 # Do stuff here
+if ! $DEBUG_MODE ; then echo "DEBUG MARKER in $0 on line ${LINENO}" ; fi
 
-if $DEBUG_MODE ; then echo "Ending $0 on line ${LINENO}" ; fi
+if ! $DEBUG_MODE ; then echo "DEBUG ENDING $0 on line ${LINENO}" ; fi
 
 exit 0
