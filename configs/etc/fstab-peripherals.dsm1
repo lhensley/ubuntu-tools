@@ -38,7 +38,7 @@ UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/5TBB ext4 nofail 0 0
 # PHYSICALLY REMOVED 4/5/2024 to install on dsm1.lanehensley.org for Ubuntu 24
 # 5TBC (5TB) Black 5TB External Seagate
 # Contains /mnt/5TBC/cold-backup.2022-04 (copy on /mnt/5TBD)
-UUID=fa9f5c57-94fd-4706-979e-4c30189592a5 /mnt/5TBC ext4 nofail 0 0
+# UUID=fa9f5c57-94fd-4706-979e-4c30189592a5 /mnt/5TBC ext4 nofail 0 0
 #
 # 5TBD (5TB) UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85
 # Contains /mnt/5TBD/cold-backup.2022-04 (copy on /mnt/5TBC)
@@ -52,7 +52,7 @@ UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 nofail 0 0
 # 5TBF (5TB) UUID=9c311371-fbce-423b-9f44-4301aca9e6e5
 # Not sure this exists ...
 # nofail allows the boot sequence to continue even if the drive fails to mount
-UUID=C824163824162A48 /mnt/5TBF ntfs nofail 0 0
+# UUID=C824163824162A48 /mnt/5TBF ntfs nofail 0 0
 #
 # 12TBA (12TB) Black 12TB External Seagate
 # Good condition; reliable
