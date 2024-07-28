@@ -194,11 +194,11 @@ done
 
     # 2024-07-23 Updated "sync" sequence based on https://stackoverflow.com/questions/18529206
         # Stash your local changes:
-            git -C "$GIT_UBUNTU_TOOLS" stash
+            # git -C "$GIT_UBUNTU_TOOLS" stash
         # Update the branch to the latest code
             git -C "$GIT_UBUNTU_TOOLS" pull
         # Merge your local changes into the latest code:
-            git -C "$GIT_UBUNTU_TOOLS" stash apply
+            # git -C "$GIT_UBUNTU_TOOLS" stash apply
         # Add, commit and push your changes
             if ! $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
             git -C "$GIT_UBUNTU_TOOLS" add "$GIT_UBUNTU_TOOLS"
