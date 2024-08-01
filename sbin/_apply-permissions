@@ -373,6 +373,13 @@ if ! $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N
 	#	chown -R $ROOT_USER:$ROOT_USER $SBIN_DIR
 	#	chmod -R $PERMISSIONS_SBIN $SBIN_DIR
 
+	# Wordpress wp-config.php
+		if $(f_is_file "/var/www/lanehensley.org/wp-config.php"); then
+			echo Updating permissions for "/var/www/lanehensley.org/wp-config.php"
+			chown -fR www-data:www-data "/var/www/lanehensley.org/wp-config.php"
+			chmod -f 400 "/var/www/lanehensley.org/wp-config.php"
+			fi
+
 	# Exceptions: These can be read or run by anyone
 		echo "Updating permissions for some required exceptions"
 #		# 2/16/2022: Not sure why it's necessary to confirm existence of these files except to keep chmod from failing below,
