@@ -315,7 +315,7 @@ if $install_gzip ; then f_install gzip; fi
 if $install_ifupdown ; then f_install ifupdown; fi
 if $install_inotify_tools ; then f_install "inotify-tools"; fi
 
-# lsyncd
+# lsyncd # Directory syncing
 if $install_lsyncd ; then
   if ! $(f_is_installed lsyncd); then
   echo
@@ -395,8 +395,9 @@ if $install_mysql_server ; then
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User=''"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test_%'"
-  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$MYSQL_ADMIN_NAME'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_ADMIN_PASSWORD'"
-  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_ADMIN_NAME'@localhost WITH GRANT OPTION"
+  # mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$MYSQL_ADMIN_NAME'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_ADMIN_PASSWORD'"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$MYSQL_ADMIN_NAME'@'%' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_ADMIN_PASSWORD'"
+  mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_ADMIN_NAME'@'%' WITH GRANT OPTION"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES"
   mkdir -p $MYSQL_CLIENT_CERTS_DIR
   cp "$MYSQL_SERVER_BIN_DIR/ca.pem" "$MYSQL_CLIENT_CERTS_DIR/$HOSTNAME-MySQL-ca.pem"
@@ -439,9 +440,10 @@ if $install_mysql_server ; then
           debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_APP_DB_PASS"
           apt-get install --yes phpmyadmin php-mbstring php-zip php-gd php-json php-curl
           phpenmod mbstring
-          cp $GIT_UBUNTU_TOOLS_CONFIGS$PHPMYAMIN_DIR/phpmyadmin.config.inc.php $PHPMYADMIN_DIR/config.inc.php
+#         cp /home/lhensley/git/ubuntu-tools/configs/usr/share/phpmyadmin/config.inc.php /usr/share/phpmyadmin/config.inc.php
+          cp $GIT_UBUNTU_TOOLS_CONFIGS$PHPMYAMIN_DIR/phpmyadmin/config.inc.php $PHPMYADMIN_DIR/config.inc.php
           chown -R www-data:www-data $PHPMYADMIN_DIR
-          chmod 644 $PHPMYADMIN_DIR/config.inc.php
+          chmod 600 $PHPMYADMIN_DIR/config.inc.php
           systemctl restart apache2
           echo "phpMyAdmin installed."
           fi
