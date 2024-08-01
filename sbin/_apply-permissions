@@ -365,7 +365,7 @@ if ! $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N
 		if $(f_is_installed "phpmyadmin"); then
 			echo Updating permissions for $PHPMYADMIN_DIR
 			chown -fR root:root $PHPMYADMIN_DIR
-			chmod -f 644 $PHPMYADMIN_DIR/config.inc.php
+			chmod -f 400 $PHPMYADMIN_DIR/config.inc.php
 			fi
 
 	# Set /usr/local/sbin ownership and permissions for $SBIN_DIR
