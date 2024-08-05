@@ -202,6 +202,7 @@ done
             # git -C "$GIT_UBUNTU_TOOLS" stash
         # Update the branch to the latest code
             if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+            echo "DEBUG TEST line ${LINENO} WITHOUT testing for debug mode"
             git -C "$GIT_UBUNTU_TOOLS" pull
         # Merge your local changes into the latest code:
             # git -C "$GIT_UBUNTU_TOOLS" stash apply
