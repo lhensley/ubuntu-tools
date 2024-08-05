@@ -166,25 +166,26 @@ if [[ $EUID -ne 0 ]]; then
     echo Clearing "$GIT_ROOT" and "$SBIN_DIR"
     rm -rf "$GIT_ROOT" "$SBIN_DIR"
 
-# Clone ubuntu-tools.git and set restrictive permissions
+# Clone ubuntu-tools and set restrictive permissions
     echo
-    echo "Cloning ubuntu-tools.git and setting permissions"
-    mkdir -p "$GIT_ROOT"
-    # Previously 775. Stupid! 2024-07-07
-    chmod 700 "$GIT_ROOT"
-    cd "$GIT_ROOT"
-    git clone https://github.com/$GITHUB_USER/ubuntu-tools.git
-    chown -R $ADMIN_USER:$ADMIN_USER "$GIT_ROOT"
-    chmod -R 400 "$GIT_ROOT"
-    chmod -R 700 "GIT_UBUNTU_TOOLS_SBIN"
-    cd
+    echo "Cloning ubuntu-tools and setting permissions"
+    cp -r "$ADMIN_HOME_DIR"/.gitconfig "$ADMIN_HOME_DIR"/.githubconfig "$ROOT_HOME_DIR"/
+    chown "$ROOT_USER":"$ROOT_USER" "$ROOT_HOME_DIR"/.gitconfig "$ROOT_HOME_DIR"/.githubconfig 
 
-# Copy scripts into /usr/local/sbin
-    echo
-    echo "Linking scripts into /usr/local/sbin"
+    # Set up repository directory and contents
+    rm -fr "$GIT_ROOT"
+    mkdir -p "$GIT_ROOT"
+    git -C "$GIT_ROOT" clone https://github.com/lhensley/ubuntu-tools
+
+    # Set permissions
+    find "$GIT_ROOT" -type d -print -exec chmod 700 {} \; >> /dev/null 2>&1
+    find "$GIT_ROOT" -type f -print -exec chmod 600 {} \; >> /dev/null 2>&1
+    chmod -R 755 "$GIT_UBUNTU_TOOLS_SBIN"
+    chown -R "$ADMIN_USER":"$ADMIN_USER" "$GIT_ROOT"
+
+    # Link to /usr/local/sbin
+    rm -rf "$SBIN_DIR"
     ln -s "$GIT_UBUNTU_TOOLS_SBIN" "$SBIN_PARENT"
-    chown -R $ADMIN_USER:$ADMIN_USER "$GIT_UBUNTU_TOOLS_SBIN"
-    chmod -R 700 "$GIT_UBUNTU_TOOLS_SBIN"
 
 # Run upd
     echo
