@@ -1,8 +1,8 @@
 #!/bin/bash
 #_apply-permissions
 
-DEBUG_MODE=false; if ! $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
-# if ! $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+# if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 ###################################################
 # Notes
@@ -163,7 +163,7 @@ done
 #           Environment variables are fine for optional values.
 #   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
-if ! $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 	echo Applying permissions
 	echo
@@ -249,20 +249,20 @@ if ! $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N
 
 	# Git
 		echo "Updating permissions for git"
-		if ! $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+		if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 		# Configs
 			chmod -f 600 $ROOT_HOME_DIR/.gitconfig
 			chmod -f 600 $ADMIN_HOME_DIR/.gitconfig
 			chown -f $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.gitconfig
 			chown -f $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.gitconfig
-		if ! $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+		if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 		# $GIT_ROOT (working clone at ~/git)
 			# find "$GIT_ROOT" -type d -print -exec chmod 700 {} \; >> /dev/null 2>&1
 			# find "$GIT_ROOT" -type f -print -exec chmod 600 {} \; >> /dev/null 2>&1
 			find "$GIT_ROOT" -type d -print -exec chmod 700 {} \; >> /dev/null 2>&1
 			find "$GIT_ROOT" -type f -print -exec chmod 600 {} \; >> /dev/null 2>&1
 			chown -fR $ADMIN_USER:$ADMIN_USER "$GIT_ROOT"
-		if ! $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+		if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 		# $SBIN_DIR (production location, on the PATH for all)
 			# chmod -fR $SBIN_PERMISSIONS "$SBIN_DIR"
 			# chown -fR $ROOT_USER:$ROOT_USER "$SBIN_DIR"
@@ -272,7 +272,7 @@ if ! $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N
 		# chmod -fR 700 "$GIT_UBUNTU_TOOLS_SBIN"/*
 		# NOTE: Some SBIN files will get 755 permissions
 		# in the "Exceptions" section at the bottom of this file.
-		if ! $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+		if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 	# Set $ADMIN_DIR/.coldstorage.log
 		echo "Updating permissions for $COLD_BACKUP_LOG"
@@ -415,7 +415,7 @@ if ! $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N
 ###################################################
 # Wrap up.
 
-if ! $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
