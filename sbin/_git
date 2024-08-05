@@ -2,6 +2,7 @@
 
 DEBUG_MODE=true; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 # if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+            echo "DEBUG TEST line ${LINENO} WITHOUT testing for debug mode. Value: $DEBUG_MODE"
 
 ###################################################
 # Notes
