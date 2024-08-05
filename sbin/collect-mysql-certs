@@ -20,7 +20,7 @@ DEBUG_MODE=true; if ! $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}
 
 # Do stuff here
 if ! $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
-	mkdir "$1"
+	mkdir -p "$1"
 	cp /var/lib/mysql/ca-key.pem "$1"
 	cp /var/lib/mysql/ca.pem "$1"
 	cp /var/lib/mysql/client-cert.pem "$1"
@@ -30,7 +30,7 @@ if ! $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N
 	cp /var/lib/mysql/server-cert.pem "$1"
 	cp /var/lib/mysql/server-key.pem "$1"
 
-if ! $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z" ; fi
+if ! $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
