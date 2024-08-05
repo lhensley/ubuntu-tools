@@ -5,7 +5,7 @@
 # Debug Mode
 # Leave near the top so it can be toggled on and off easily.
         # Default=false
-                DEBUG_MODE=false
+                # DEBUG_MODE=false
         # Alert levels: 0=none 1=light 2=normal 3=heavy 5=everything
                 #CONFIG_system_log_level
                 LOG_LEVEL=2
