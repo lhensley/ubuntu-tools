@@ -79,7 +79,7 @@ function f_print_usage {
   echo "  " $EXIT_CODE_USER_ABORT on user abort
   echo
 }
-
+            echo "DEBUG TEST line ${LINENO} WITHOUT testing for debug mode. Value: $DEBUG_MODE"
             if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 ###################################################
@@ -164,6 +164,7 @@ done
 #           Environment variables are fine for optional values.
 #   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
+            echo "DEBUG TEST line ${LINENO} WITHOUT testing for debug mode. Value: $DEBUG_MODE"
             if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 # if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
@@ -177,10 +178,13 @@ done
 
 # This section re-pulls all go files from github and updates $SBIN_DIR
 	# Change to local repository directory
+            echo "DEBUG TEST line ${LINENO} WITHOUT testing for debug mode. Value: $DEBUG_MODE"
             if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 		CURRENT_DIRECTORY=$(pwd)
+            echo "DEBUG TEST line ${LINENO} WITHOUT testing for debug mode. Value: $DEBUG_MODE"
             if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 		cd $GIT_UBUNTU_TOOLS
+            echo "DEBUG TEST line ${LINENO} WITHOUT testing for debug mode. Value: $DEBUG_MODE"
             if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
     # 2024-07-23 Updating the "sync" sequence that had been in place:
@@ -202,18 +206,22 @@ done
             # git -C "$GIT_UBUNTU_TOOLS" stash
         # Update the branch to the latest code
             if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
-            echo "DEBUG TEST line ${LINENO} WITHOUT testing for debug mode"
+            echo "DEBUG TEST line ${LINENO} WITHOUT testing for debug mode. Value: $DEBUG_MODE"
             git -C "$GIT_UBUNTU_TOOLS" pull
         # Merge your local changes into the latest code:
             # git -C "$GIT_UBUNTU_TOOLS" stash apply
         # Add, commit and push your changes
             if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+            echo "DEBUG TEST line ${LINENO} WITHOUT testing for debug mode. Value: $DEBUG_MODE"
             git -C "$GIT_UBUNTU_TOOLS" add "$GIT_UBUNTU_TOOLS"
             if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+            echo "DEBUG TEST line ${LINENO} WITHOUT testing for debug mode. Value: $DEBUG_MODE"
             git -C "$GIT_UBUNTU_TOOLS" commit
             if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+            echo "DEBUG TEST line ${LINENO} WITHOUT testing for debug mode. Value: $DEBUG_MODE"
             git -C "$GIT_UBUNTU_TOOLS" push
             if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+            echo "DEBUG TEST line ${LINENO} WITHOUT testing for debug mode. Value: $DEBUG_MODE"
 	    
     # 2024-07-23 No. All this is managed in _apply-permissions
     # # Set permissions for git directory
