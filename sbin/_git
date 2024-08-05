@@ -25,6 +25,7 @@ DEBUG_MODE=true; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" 
 #       All switches are options, but not all options are switches.
 #    remaining arguments: command line arguments that are neither options nor option arguments
 
+            echo "DEBUG TEST line ${LINENO} WITHOUT testing for debug mode. Value: $DEBUG_MODE"
 
 ###################################################
 # Basic Setup
@@ -47,6 +48,7 @@ DEBUG_MODE=true; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" 
 
 ###################################################
 # Functions
+            echo "DEBUG TEST line ${LINENO} WITHOUT testing for debug mode. Value: $DEBUG_MODE"
 
 function f_print_usage {
   echo
