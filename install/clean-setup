@@ -7,11 +7,10 @@
 # EVERY TIME THE SSH KEYS OR SEED FILE PASSWORD ARE UPDATED:
 #   • Install the new ssh keys on a stable server.
 #   • Make sure that these files are current and error-free
-#       clean-setup
-#       .git*
-#       make-seed-file
-#       .ssh/*
-#       variables
+#       /home/lhensley/.git*
+#       /home/lhensley/.ssh/*
+#       /home/lhensley/git/ubuntu-tools/install/*
+#       /home/lhensley/git/ubuntu-tools/sbin/make-seed-file
 #   • Run 'cd && sudo make-seed-file'
 #       (The password for encrypting the file can be found in 1Password.)
 # 
