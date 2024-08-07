@@ -47,14 +47,18 @@
     install_ifupdown=false          # Used for /etc/network/interfaces manual configuration; interferes with Network Manager
     install_lsyncd=false            # Keeps directories in sync using inotify or fsevents. Details at https://lsyncd.github.io/lsyncd/
     install_makemkv=false           # MakeMKV DVD ripper
+    install_mysql_server=false      # Relational Database
     install_nettools=false          # Print network connections, routing tables, interface statistics
     install_nfs=false               # Network File Service
+    install_phpmyadmin=false        # Web tool for managing MySQL
+    install_plexmediaserver=false   # Media streamer and library manager
     install_proftpd=false           # For scanning to brother@oz
     install_puttytools=false        # A free SSH and telnet client
     install_rclone=false            # command-line program to manage files on cloud storage. Details at https://rclone.org/
     install_resolvconf=false        # Name resolver
     install_ssh=false               # Secure Shell (already installed)
     install_sysbench=false          # A modular, cross-platform and multi-threaded benchmark tool.
+    install_tautulli=false          # Monitoring tool for Plex Media Server ***** PLEX MEDIA SERVER MUST BE INSTALLED TO INSTALL TAUTULLI *****
     install_uuid=false              # Use uuidgen instead. It's built-in.
 
 # STANDARD software (default to true)
@@ -76,17 +80,13 @@
     install_handbrake=true          # HandBrake video rendering
     install_inotify=true            # Do something when a file is created, deleted, or changed
     install_mailutils=true          # mail, Postfix, etc.
-    install_mysql_server=true       # Relational Database
     install_openssl=true            # OpenSSL
     install_openvpn=true            # Secure IP tunnel daemon
     install_php=true                # PHP
-    install_phpmyadmin=true         # Web tool for managing MySQL
-    install_plexmediaserver=true    # Media streamer and library manager
     install_ripmime=true            # Process files sent by email
     install_rsync=true              # A fast, versatile, remote (and local) file-copying tool
     install_sshfs=true              # Filesystem client based on ssh
     install_tasksel=true            # A user interface for installing tasks
-    install_tautulli=true           # Monitoring tool for Plex Media Server ***** PLEX MEDIA SERVER MUST BE INSTALLED TO INSTALL TAUTULLI *****
     install_unzip=true              # List, test and extract compressed files in a ZIP archive
     install_vim=true                # Vi IMproved, a programmer's text editor
     install_webmin=true             # Web-based system admin tools

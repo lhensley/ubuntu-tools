@@ -11,8 +11,8 @@ function f_pause () {
 }
 
 echo
-echo apt-get update && sudo apt-get dist-upgrade
-apt-get update && sudo apt-get dist-upgrade
+echo apt-get -y update && sudo apt-get -y dist-upgrade
+apt-get -y update && sudo apt-get -y dist-upgrade
 
 echo
 echo apt-get -y install coreutils git gpg moreutils '\'
