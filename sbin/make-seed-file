@@ -87,6 +87,9 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 echo "It has NOT been committed with git, or pushed to GitHub."
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 echo "That's essential, and it's up to you."
+echo "Suggestion: Issue this command:"
+echo "    cp seeds.tar.gz.gpg git/ubuntu-tools/install/"
+echo "  then sync up to Github (presumably from Visual Studio Code)."
 # echo "Attempting to email it to $ADMIN_EMAIL."
 # echo "If the email doesn't reach you, download seeds.tar.gz.gpg with sftp."
 # echo "  and add it to repository ubuntu-tools/install/"
