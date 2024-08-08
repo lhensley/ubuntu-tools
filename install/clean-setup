@@ -193,6 +193,8 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
     rm -rf "$SBIN_DIR"
     ln -s "$GIT_UBUNTU_TOOLS_SBIN" "$SBIN_PARENT"/
 
+# For reasons I don't understand, this was bricking the server on pd1 2024-08-08.
+# Took it out because it's run later anyway, and doesn't cause problems.
 ## Run upd
 #    echo
 #    echo upd
@@ -709,11 +711,6 @@ if $is_desktop ; then
     echo "$ADMIN_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/lane-NOPASSWD-users
     # echo "$USER_UBUNTU ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/lane-NOPASSWD-users
     chmod 440 /etc/sudoers.d/lane-NOPASSWD-users
-
-# CLEANUP: DUMP THIS SECTION [first] (2024-08-08)
-    echo "$0 [first]: Line ${LINENO}: mkdir /mnt/killme && rmdir /mnt/killme"
-    mkdir /mnt/killme && rmdir /mnt/killme
-    exit -1
 
 # THIS IS CRUCIAL. It updates /etc/ftab and /etc/NetworkManager/system-connections
 # Update
