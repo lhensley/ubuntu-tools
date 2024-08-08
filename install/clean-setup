@@ -183,11 +183,6 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
     mkdir -p "$GIT_ROOT"
     git -C "$GIT_ROOT" clone https://github.com/lhensley/ubuntu-tools
 
-# CLEANUP: DUMP THIS SECTION [first] (2024-08-08)
-    echo "$0 [first]: Line ${LINENO}: mkdir /mnt/killme && rmdir /mnt/killme"
-    mkdir /mnt/killme && rmdir /mnt/killme
-    exit -1
-
     # Set permissions
     find "$GIT_ROOT" -type d -print -exec chmod 700 {} \; >> /dev/null 2>&1
     find "$GIT_ROOT" -type f -print -exec chmod 600 {} \; >> /dev/null 2>&1
@@ -198,15 +193,10 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
     rm -rf "$SBIN_DIR"
     ln -s "$GIT_UBUNTU_TOOLS_SBIN" "$SBIN_PARENT"/
 
-# Run upd
-    echo
-    echo upd
-    upd
-
-# CLEANUP: DUMP THIS SECTION [secone] (2024-08-08)
-    echo "$0 [second]: Line ${LINENO}: mkdir /mnt/killme && rmdir /mnt/killme"
-    mkdir /mnt/killme && rmdir /mnt/killme
-    exit -1
+## Run upd
+#    echo
+#    echo upd
+#    upd
 
 ##############################################################
 ################# GITHUB FILES NOW ARE FULLY LOADED AND READY.
@@ -368,7 +358,7 @@ if $install_makemkv ; then
     echo
     echo "Installing MakeMKV"
     printf '\n\n' | add-apt-repository --yes ppa:heyarje/makemkv-beta
-    apt-get update
+    # apt-get update
     apt-get install --yes makemkv-bin makemkv-oss ccextractor
     # Configure MakeMKV
         usermod -a -G cdrom $ADMIN_USER
@@ -583,7 +573,7 @@ if $is_desktop ; then
         echo Installing Cubic
         apt-add-repository --yes ppa:cubic-wizard/release
         # read -p "Press enter to continue"
-        apt-get --yes update
+        # apt-get --yes update
         apt-get install --yes cubic
         echo "Cubic installed."
         fi
@@ -622,7 +612,7 @@ if $is_desktop ; then
         apt-get --yes install software-properties-common apt-transport-https curl wget ca-certificates
         wget -O- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/microsoft-edge.gpg
         echo 'deb [signed-by=/usr/share/keyrings/microsoft-edge.gpg] https://packages.microsoft.com/repos/edge stable main' | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
-        apt-get --yes update
+        # apt-get --yes update
         apt-get install microsoft-edge-stable --yes
         echo "Microsoft Edge installed."
         fi
@@ -720,6 +710,11 @@ if $is_desktop ; then
     # echo "$USER_UBUNTU ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/lane-NOPASSWD-users
     chmod 440 /etc/sudoers.d/lane-NOPASSWD-users
 
+# CLEANUP: DUMP THIS SECTION [first] (2024-08-08)
+    echo "$0 [first]: Line ${LINENO}: mkdir /mnt/killme && rmdir /mnt/killme"
+    mkdir /mnt/killme && rmdir /mnt/killme
+    exit -1
+
 # THIS IS CRUCIAL. It updates /etc/ftab and /etc/NetworkManager/system-connections
 # Update
     echo
@@ -802,4 +797,11 @@ if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %
 	source "${PATHNAME[script_footer]}"
 
 exit 0
+
+##########################################################################################
+
+# CLEANUP: DUMP THIS SECTION [second] (2024-08-08)
+    echo "$0 [second]: Line ${LINENO}: mkdir /mnt/killme && rmdir /mnt/killme"
+    mkdir /mnt/killme && rmdir /mnt/killme
+    exit -1
 
