@@ -9,7 +9,7 @@
     ADMIN_HOME_DIR=$ADMIN_DIR
     ROOT_USER="root"
     ROOT_DIR="/root"
-    UMASK=077
+    UMASK=0002
 
 # Used for installing git
     my_full_name="Lane Hensley"

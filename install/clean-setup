@@ -38,9 +38,9 @@ if [[ $EUID -ne 0 ]]; then
 
 # Set umask
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
-    # umask $UMASK
+    umask $UMASK
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
-exit -1
+# exit -1
 
 # Change to SETUP directory
     cd "$ADMIN_DIR/SETUP"

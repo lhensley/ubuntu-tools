@@ -790,7 +790,7 @@ source /etc/os-release
         SYSTEM_SNAPSHOT_FILE_PERMISSIONS=$PERMISSIONS_SYSTEM_SNAPSHOT_FILE
 
 # umask
-        UMASK=077
+        UMASK=0002
 
 # Video Processing Defaults
         PERMISSIONS_DEFAULT_VIDEO_FILE=664
