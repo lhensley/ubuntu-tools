@@ -23,7 +23,7 @@
 #     • ./jumpstart
 #
 
-DEBUG_MODE=true; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 # if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 # Make sure we're root.
@@ -38,7 +38,8 @@ if [[ $EUID -ne 0 ]]; then
 
 # Set umask
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
-    umask $UMASK
+    # DON'T AUTOMATE THIS! DANGER WILL ROBINSON!
+    # umask $UMASK
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 # exit -1
 
