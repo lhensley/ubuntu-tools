@@ -86,11 +86,6 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
     # echo "Adding the universe repository"
     # add-apt-repository --yes universe
 
-# CLEANUP: DUMP THIS SECTION [first] (2024-08-08)
-    echo "$0: Line ${LINENO}: mkdir /mnt/killme && rmdir /mnt/killme"
-    mkdir /mnt/killme && rmdir /mnt/killme
-    exit -1
-
     # Update packages
     # apt vs apt-get?
     #   Res (defining): https://askubuntu.com/questions/990823/apt-gives-unstable-cli-interface-warning
@@ -188,6 +183,11 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
     mkdir -p "$GIT_ROOT"
     git -C "$GIT_ROOT" clone https://github.com/lhensley/ubuntu-tools
 
+# CLEANUP: DUMP THIS SECTION [first] (2024-08-08)
+    echo "$0 [first]: Line ${LINENO}: mkdir /mnt/killme && rmdir /mnt/killme"
+    mkdir /mnt/killme && rmdir /mnt/killme
+    exit -1
+
     # Set permissions
     find "$GIT_ROOT" -type d -print -exec chmod 700 {} \; >> /dev/null 2>&1
     find "$GIT_ROOT" -type f -print -exec chmod 600 {} \; >> /dev/null 2>&1
@@ -196,15 +196,15 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
     # Link to /usr/local/sbin
     rm -rf "$SBIN_DIR"
-    ln -s "$GIT_UBUNTU_TOOLS_SBIN" "$SBIN_PARENT"
+    ln -s "$GIT_UBUNTU_TOOLS_SBIN" "$SBIN_PARENT"/
 
 # Run upd
     echo
     echo upd
     upd
 
-# CLEANUP: DUMP THIS SECTION [second] (2024-08-08)
-    echo "$0: Line ${LINENO}: mkdir /mnt/killme && rmdir /mnt/killme"
+# CLEANUP: DUMP THIS SECTION [secone] (2024-08-08)
+    echo "$0 [second]: Line ${LINENO}: mkdir /mnt/killme && rmdir /mnt/killme"
     mkdir /mnt/killme && rmdir /mnt/killme
     exit -1
 
