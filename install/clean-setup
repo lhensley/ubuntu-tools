@@ -198,6 +198,11 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
     echo upd
     upd
 
+# CLEANUP: DUMP THIS SECTION (2024-08-08)
+    echo "$0: Line ${LINENO}: mkdir /mnt/killme && rmdir /mnt/killme"
+    mkdir /mnt/killme && rmdir /mnt/killme
+    exit -1
+
 ##############################################################
 ################# GITHUB FILES NOW ARE FULLY LOADED AND READY.
 ##############################################################
@@ -212,8 +217,9 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 ###############################################################
 
 # Change to HOME directory and delete SETUP.
-    cd "$ADMIN_DIR"
-    rm -r "$ADMIN_DIR/SETUP"
+    cd
+# CLEANUP: Uncomment the command below (2024-08-08)
+#    rm -r "$ADMIN_DIR/SETUP"
 
 # Mandatory installations
 ###############################################################
