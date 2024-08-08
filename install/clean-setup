@@ -86,6 +86,11 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
     # echo "Adding the universe repository"
     # add-apt-repository --yes universe
 
+# CLEANUP: DUMP THIS SECTION [first] (2024-08-08)
+    echo "$0: Line ${LINENO}: mkdir /mnt/killme && rmdir /mnt/killme"
+    mkdir /mnt/killme && rmdir /mnt/killme
+    exit -1
+
     # Update packages
     # apt vs apt-get?
     #   Res (defining): https://askubuntu.com/questions/990823/apt-gives-unstable-cli-interface-warning
@@ -198,7 +203,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
     echo upd
     upd
 
-# CLEANUP: DUMP THIS SECTION (2024-08-08)
+# CLEANUP: DUMP THIS SECTION [second] (2024-08-08)
     echo "$0: Line ${LINENO}: mkdir /mnt/killme && rmdir /mnt/killme"
     mkdir /mnt/killme && rmdir /mnt/killme
     exit -1
