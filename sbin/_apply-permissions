@@ -204,9 +204,11 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		chown -f $ROOT_USER:$ROOT_USER /etc/fstab*
 
 	# /etc/HandBrake
+		if $(f_is_directory "/etc/HandBrake"); then
 			echo "Updating permissions for /etc/HandBrake"
 			chmod -fR 644 /etc/HandBrake
 			chmod 755 /etc/HandBrake
+			fi
 
 	# /etc/hosts
 		echo "Updating permissions for /etc/hosts"
