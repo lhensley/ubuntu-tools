@@ -246,14 +246,6 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		cp -T $GIT_UBUNTU_TOOLS_CONFIGS/etc/ddclient/ddclient.conf.default /etc/.default/ddclient.conf
 		fi
 
-# Update /etc/openvpn/easy-rsa
-	rm -f /etc/openvpn/easy-rsa/openssl-easyrsa.cnf
-	if $(f_is_installed "easy-rsa"); then
-		echo "Updating /etc/openvpn/easy-rsa/openssl-easyrsa.cnf from $GIT_UBUNTU_TOOLS_CONFIGS/etc/openvpn/easy-rsa/openssl-easyrsa.cnf.$HOSTNAME"
-		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/openvpn/easy-rsa/openssl-easyrsa.cnf.$HOSTNAME" "/etc/openvpn/easy-rsa/openssl-easyrsa.cnf"
-		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/openvpn/easy-rsa/openssl-easyrsa.cnf.$HOSTNAME" "/etc/openvpn/easy-rsa/pki/openssl-easyrsa.cnf"
-		fi
-
 # Update /etc/exports
 	rm -f /etc/exports
 	if $(f_is_installed "nfs-kernel-server"); then
@@ -311,6 +303,21 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		# IMPORTANT: The chmod command below CAN'T WAIT for _apply-permissions.
 		chmod -fR 400 "etc/netplan"
 		netplan apply &
+		fi
+
+# Update /etc/openvpn
+	rm -f /etc/openvpn/myserver.conf
+	if $(f_is_installed "openvpn"); then
+		echo "Updating /etc/openvpn/myserver.conf from $GIT_UBUNTU_TOOLS_CONFIGS/etc/openvpn/myserver.conf.$HOSTNAME"
+		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/openvpn/myserver.conf.$HOSTNAME" "/etc/openvpn/myserver.conf"
+		fi
+
+# Update /etc/openvpn/easy-rsa
+	rm -f /etc/openvpn/easy-rsa/openssl-easyrsa.cnf
+	if $(f_is_installed "easy-rsa"); then
+		echo "Updating /etc/openvpn/easy-rsa/openssl-easyrsa.cnf from $GIT_UBUNTU_TOOLS_CONFIGS/etc/openvpn/easy-rsa/openssl-easyrsa.cnf.$HOSTNAME"
+		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/openvpn/easy-rsa/openssl-easyrsa.cnf.$HOSTNAME" "/etc/openvpn/easy-rsa/openssl-easyrsa.cnf"
+		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/openvpn/easy-rsa/openssl-easyrsa.cnf.$HOSTNAME" "/etc/openvpn/easy-rsa/pki/openssl-easyrsa.cnf"
 		fi
 
 # Update /etc/ssl/*.cnf

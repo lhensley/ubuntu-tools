@@ -192,13 +192,6 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 #			chmod -f $PERMISSIONS_DYNU "$ROOT_HOME_DIR/.dynu.com"
 #			fi
 
-	# /etc/openvpn/easy-rsa
-		if $(f_is_installed "easy-rsa"); then
-			echo "Updating permissions for /etc/openvpn/easy-rsa/openssl-easyrsa.cnf"
-			chmod -f 644 "/etc/openvpn/easy-rsa/openssl-easyrsa.cnf"
-			chmod -f 600 "/etc/openvpn/easy-rsa/pki/openssl-easyrsa.cnf"
-			fi
-
 	# /etc/exports
 		if $(f_is_installed "nfs-kernel-server"); then
 			echo "Updating permissions for /etc/exports"
@@ -238,6 +231,19 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		if $(f_is_directory "/etc/netplan"); then
 			echo "Updating permissions for /etc/netplan/*"
 			chmod -fR 400 "/etc/netplan"
+			fi
+
+	# /etc/openvpn
+		if $(f_is_installed "openvpn"); then
+			echo "Updating permissions for /etc/openvpn/myserver.conf"
+			chmod -f 644 "/etc/openvpn/myserver.conf"
+			fi
+
+	# /etc/openvpn/easy-rsa
+		if $(f_is_installed "easy-rsa"); then
+			echo "Updating permissions for /etc/openvpn/easy-rsa/openssl-easyrsa.cnf"
+			chmod -f 644 "/etc/openvpn/easy-rsa/openssl-easyrsa.cnf"
+			chmod -f 600 "/etc/openvpn/easy-rsa/pki/openssl-easyrsa.cnf"
 			fi
 
 	# /etc/resolvconf
