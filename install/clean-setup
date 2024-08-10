@@ -488,7 +488,7 @@ if $install_openvpn ; then
   if ! $(f_is_installed openvpn); then
     echo
     echo "Installing openvpn."
-    apt-get install --yes openvpn                   # Secure IP tunnel daemon
+    apt-get install --yes openvpn easy-rsa                   # Secure IP tunnel daemon
     ufw allow OpenVPN
     echo "openvpn installed."
     fi
