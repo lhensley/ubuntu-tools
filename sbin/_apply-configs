@@ -308,6 +308,9 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 # Update /etc/ssl/*.cnf
 		echo "Updating /etc/ssl from $GIT_UBUNTU_TOOLS_CONFIGS/etc/ssl"
 		cp "$GIT_UBUNTU_TOOLS_CONFIGS"/etc/ssl/*.cnf "/etc/ssl/"
+		if [ -f $GIT_UBUNTU_TOOLS_CONFIGS/etc/ssl/openssl.conf.$HOSTNAME ]; then
+			cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/ssl/openssl.conf.$HOSTNAME" "etc/ssl/openssl.conf"
+			fi
 
 # Update /etc/resolvconf/resolv.conf.d/head
 	if $(f_is_installed "resolvconf"); then
