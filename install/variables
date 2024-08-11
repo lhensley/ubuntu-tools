@@ -4,7 +4,7 @@
 # Global install variables
     ADMIN_USER="lhensley"
     TIMEZONE="America/Chicago" # Don't use US/*. Not recognized in Ubuntu 24.04
-    HOSTNAME="pd1"
+    HOSTNAME="ca"
     ADMIN_DIR="/home/$ADMIN_USER"
     ADMIN_HOME_DIR=$ADMIN_DIR
     ROOT_USER="root"
@@ -30,7 +30,7 @@
 # Desktop Software
 # If this is set to false, GUI app installations will be ignored.
 # CAUTION: If accidentally set to true, all required GUI packages also will be installed.
-    is_desktop=true
+    is_desktop=false
     install_chrome=true             # Google Chrome web browser
     install_cubic=true              # Creates custom Ubuntu ISO files. Details at https://github.com/PJ-Singh-001/Cubic
     install_edge=true               # Microsoft Edge
@@ -62,22 +62,22 @@
     install_uuid=false              # Use uuidgen instead. It's built-in.
 
 # STANDARD software (default to true)
-    install_apache2=true            # Apache 2 Webserver
+    install_apache2=false            # Apache 2 Webserver
     install_apg=true                # Password generator
     install_at=true                 # Queue, examine or delete jobs for later execution
-    install_certbot=true            # Certificate Installer for https
-    install_cryfs=true              # Encrypted file system
+    install_certbot=false            # Certificate Installer for https
+    install_cryfs=false              # Encrypted file system
     install_curl=true               # Transfer a URL
-    install_ddclient=true           # Update IP addresses at dynamic DNS services
+    install_ddclient=false           # Update IP addresses at dynamic DNS services
     install_dos2unix=true           # DOS/MAC to UNIX text file format converter
-    install_exiftool=true           # Read and write meta information in files
+    install_exiftool=false           # Read and write meta information in files
     install_fail2ban=true           # Bans IP that makes too many password failures
-    install_ffmpeg=true             # FFmpeg video converter
-    install_ghostscript=true        # Compressing PDF scans
+    install_ffmpeg=calse             # FFmpeg video converter
+    install_ghostscript=false        # Compressing PDF scans
     install_git=true                # The stupid content tracker
     install_gpg=true                # OpenPGP encryption and signing tool
     install_gzip=true               # Compress or expand files
-    install_handbrake=true          # HandBrake video rendering
+    install_handbrake=false          # HandBrake video rendering
     install_inotify=true            # Do something when a file is created, deleted, or changed
     install_mailutils=true          # mail, Postfix, etc.
     install_openssl=true            # OpenSSL
@@ -86,7 +86,7 @@
     install_ripmime=true            # Process files sent by email
     install_rsync=true              # A fast, versatile, remote (and local) file-copying tool
     install_sshfs=true              # Filesystem client based on ssh
-    install_tasksel=true            # A user interface for installing tasks
+    install_tasksel=false            # A user interface for installing tasks
     install_unzip=true              # List, test and extract compressed files in a ZIP archive
     install_vim=true                # Vi IMproved, a programmer's text editor
     install_webmin=true             # Web-based system admin tools
