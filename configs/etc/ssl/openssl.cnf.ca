@@ -187,7 +187,7 @@ organizationalUnitName_default  = Geek Division
 
 commonName                      = Common Name (e.g. server FQDN or YOUR name)
 commonName_max                  = 64
-commonName_default              = ca.lanehensley.org
+commonName_default              = ca3.lanehensley.org
 
 emailAddress                    = Email Address
 emailAddress_max                = 64
