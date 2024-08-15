@@ -70,6 +70,7 @@
     install_curl=true               # Transfer a URL
     install_ddclient=false           # Update IP addresses at dynamic DNS services
     install_dos2unix=true           # DOS/MAC to UNIX text file format converter
+    install_easy-rsa=true           # Utility for managing X.509 Public Key Infrastructure
     install_exiftool=false           # Read and write meta information in files
     install_fail2ban=true           # Bans IP that makes too many password failures
     install_ffmpeg=calse             # FFmpeg video converter

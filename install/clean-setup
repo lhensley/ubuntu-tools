@@ -63,6 +63,9 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
     echo "Confirmed."
     echo
 
+# Reload systemd manager configuration
+    systemctl daemon-reload
+
 # Get timestamp
     TIMESTAMP=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
 
@@ -299,6 +302,7 @@ if $install_cryfs ; then f_install cryfs; fi
 if $install_curl ; then f_install curl; fi
 if $install_ddclient ; then f_install ddclient; fi
 if $install_dos2unix ; then f_install dos2unix; fi
+if $install_easy-rsa ; then f_install easy-rsa; fi
 if $install_exiftool ; then f_install exiftool; fi
 if $install_fail2ban ; then 
     f_install fail2ban
