@@ -69,7 +69,7 @@ UUID=64414aac-65cf-4e81-a561-f007cb82418b /mnt/12TBC ext4 nofail 0 0
 #
 # 20TBA (20TB) Black 20TB External WD
 # Good condition; reliable; added 2024-08-16
-UUID=9C0AA87D0AA855D4 /mnt/20TBA ext4 nofail 0 0
+UUID=9C0AA87D0AA855D4 /mnt/20TBA ntfs nofail 0 0
 #
 # ssd1tb (1TB); internal SSD drive on oz
 # UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb ext4 nofail 0 0
