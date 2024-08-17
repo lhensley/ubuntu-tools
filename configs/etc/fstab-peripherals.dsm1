@@ -31,9 +31,9 @@
 #
 ########################################################################################################
 #
-# 5TBB (5TB)
+# 3TBB (3TB)
 # Empty
-UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/5TBB ext4 nofail 0 0
+UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/3TBB ext4 nofail 0 0
 #
 # PHYSICALLY REMOVED 4/5/2024 to install on dsm1.lanehensley.org for Ubuntu 24
 # 5TBC (5TB) Black 5TB External Seagate
@@ -42,7 +42,7 @@ UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/5TBB ext4 nofail 0 0
 #
 # 5TBD (5TB) UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85
 # Contains /mnt/5TBD/cold-backup.2022-04 (copy on /mnt/5TBC)
-UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/5TBD ext4 nofail 0 0
+UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/5TBD ext4 nofail 0 0
 #
 # 5TBE (5TB) Black 5TB External Seagate
 # ACTIVE BACKUP DRIVE
