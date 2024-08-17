@@ -54,18 +54,22 @@ UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 nofail 0 0
 # nofail allows the boot sequence to continue even if the drive fails to mount
 # UUID=C824163824162A48 /mnt/5TBF ntfs nofail 0 0
 #
-# 12TBA (12TB) Black 12TB External Seagate
+# 12TBA (12TB) Black 12TB External WD
 # Good condition; reliable
 UUID=901c4177-b514-408a-997c-0cbeee89fa6e /mnt/12TBA ext4 auto,nofail 0 0
 #
-# 12TBB (12TB)
+# 12TBB (12TB) Black 12TB External WD
 # Plex data files (primary) at /mnt/12TBB/plex
 # Good condition; reliable
 UUID=27cf148b-4b43-4747-8a4f-e7013639b989 /mnt/12TBB ext4 nofail 0 0
 #
-# 12TBC (12TB) Black 12TB External Seagate
+# 12TBC (12TB) Black 12TB External WD
 # Good condition; reliable
 UUID=64414aac-65cf-4e81-a561-f007cb82418b /mnt/12TBC ext4 nofail 0 0
+#
+# 20TBA (20TB) Black 20TB External WD
+# Good condition; reliable; added 2024-08-16
+UUID=9C0AA87D0AA855D4 /mnt/20TBA ext4 nofail 0 0
 #
 # ssd1tb (1TB); internal SSD drive on oz
 # UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb ext4 nofail 0 0
