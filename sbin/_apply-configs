@@ -316,8 +316,9 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 	rm -f /etc/openvpn/easy-rsa/openssl-easyrsa.cnf
 	if $(f_is_installed "easy-rsa"); then
 		echo "Updating /etc/openvpn/easy-rsa/openssl-easyrsa.cnf from $GIT_UBUNTU_TOOLS_CONFIGS/etc/openvpn/easy-rsa/openssl-easyrsa.cnf.$HOSTNAME"
-		cp -p "$GIT_UBUNTU_TOOLS_CONFIGS/etc/openvpn/easy-rsa/openssl-easyrsa.cnf.$HOSTNAME" "/etc/openvpn/easy-rsa/openssl-easyrsa.cnf"
-		cp -p "$GIT_UBUNTU_TOOLS_CONFIGS/etc/openvpn/easy-rsa/openssl-easyrsa.cnf.$HOSTNAME" "/etc/openvpn/easy-rsa/pki/openssl-easyrsa.cnf"
+		mkdir -p "/etc/openvpn/easy-rsa/pki"
+		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/openvpn/easy-rsa/openssl-easyrsa.cnf.$HOSTNAME" "/etc/openvpn/easy-rsa/openssl-easyrsa.cnf"
+		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/openvpn/easy-rsa/openssl-easyrsa.cnf.$HOSTNAME" "/etc/openvpn/easy-rsa/pki/openssl-easyrsa.cnf"
 		fi
 
 # Update /etc/ssl/*.cnf
