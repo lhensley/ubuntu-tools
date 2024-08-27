@@ -67,12 +67,12 @@ password=dcc8ebd6219942d1bd3a57ac1ebcef1f # namecheap
 
 # List one or more hostnames one on each line.
 @
-db
-dsm1
-mail
-pd1
-www
-# *
+# db
+# dsm1
+# mail
+# pd1
+# www
+*
 
 ##########################################################################
 ### END ##################################################################
