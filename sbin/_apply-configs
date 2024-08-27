@@ -375,6 +375,8 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 # Apply permissions
 	_apply-permissions $ARGS
+	echo "Reloading daemons"
+	systemctl daemon-reload
 
 
 ###################################################
