@@ -1,38 +1,67 @@
 ### Basic HTTPS configuration file for ddclient
 
-# Dynu pd1.dynu.com
-# daemon=7200 # 90 minutes between refresh
-# daemon=0
-daemon=600 # 10 minutes between refresh
+# namecheap
+
+# daemon=7200 # in seconds; 120 minutes between refresh # from dynu
+# daemon=0 # in seconds
+daemon="1200" # in seconds; 20 minutes between refresh # namecheap
+
+# Set the time interval between the updates of the dynamic DNS name in seconds.
+# This option only takes effect if the ddclient runs in daemon mode.
+daemon_interval="1200" # namecheap
+
+# Set to "true" if ddclient should be run every time DHCP client ('dhclient'
+# from package isc-dhcp-client) updates the systems IP address.
+run_dhclient="false"
+
+# Set to "true" if ddclient should be run every time a new ppp connection is
+# established. This might be useful, if you are using dial-on-demand.
+run_ipup="false"
+
+# Set to "true" if ddclient should run in daemon mode
+# If this is changed to true, run_ipup and run_dhclient must be set to false.
+run_daemon="true"
+
 # Log update msgs to syslog.
 syslog=yes
+
 # Mail all msgs to root.
-mail=lane@lanehensley.org
+mail=root
+
 # Mail failed update msgs to root.
-mail-failure=lane@lanehensley.org
+mail-failure=root
+
 # Use ssl
 ssl=yes
+
 # Record PID in file.
 pid=/var/run/ddclient.pid
+
 # Get ip from server.
-# use=cmd, cmd='curl -s4 ifconfig.me/ip 2> /dev/null'
-use=web, web=dynamicdns.park-your-domain.com/getip
+# use=cmd, cmd='curl -s4 ifconfig.me/ip 2> /dev/null' # from dynu
+use=web, web=dynamicdns.park-your-domain.com/getip # namecheap
+
 # IP update server.
-# server=api.dynu.com
-server=dynamicdns.park-your-domain.com
+# server=api.dynu.com # from dynu
+server=dynamicdns.park-your-domain.com # namecheap
+
 # Use dyndns2 protocol
-# protocol=dyndns2
-protocol=namecheap
+# protocol=dyndns2 # from dynu
+protocol=namecheap # namecheap
+
 # Your username
-# login='lanehensley'
-login=lanehensley.org
+# login='lanehensley' # from dynu
+login='lanehensley.org' # namecheap
+
 # Your password or MD5/SHA256 of account password or New IP Update Password
 # password='ihbJXdoyFUofpyfExTQp'
-# password='aDgD2VjTKNd2J@r6FCqv'
-password=dcc8ebd6219942d1bd3a57ac1ebcef1f
+# password='aDgD2VjTKNd2J@r6FCqv' # from dynu
+password=dcc8ebd6219942d1bd3a57ac1ebcef1f # namecheap
+
 # List one or more hostnames one on each line.
 # @
 # db
+# dsm1
 # mail
 pd1
 # www
