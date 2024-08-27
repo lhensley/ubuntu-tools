@@ -1,26 +1,33 @@
-### Basic HTTPS configuration file for ddclient
-
-# namecheap
+### Configuration file for ddclient
+# This needs to be copied to these files, all root:root 600
+# /etc/default/ddclient
+# /etc/.default/ddclient
+# /etc/ddclient/ddclient.conf
+# /etc/ddclient.conf
 
 # daemon=7200 # in seconds; 120 minutes between refresh # from dynu
 # daemon=0 # in seconds
-daemon="1200" # in seconds; 20 minutes between refresh # namecheap
+daemon="10m" # 10 minutes between refresh # namecheap
 
 # Set the time interval between the updates of the dynamic DNS name in seconds.
 # This option only takes effect if the ddclient runs in daemon mode.
-daemon_interval="1200" # namecheap
+# daemon_interval="1200" # namecheap
+# DEPRECRATED!
 
 # Set to "true" if ddclient should be run every time DHCP client ('dhclient'
 # from package isc-dhcp-client) updates the systems IP address.
-run_dhclient="false"
+# run_dhclient="false"
+# DEPRECRATED!
 
 # Set to "true" if ddclient should be run every time a new ppp connection is
 # established. This might be useful, if you are using dial-on-demand.
-run_ipup="false"
+# run_ipup="false"
+# DEPRECRATED!
 
 # Set to "true" if ddclient should run in daemon mode
 # If this is changed to true, run_ipup and run_dhclient must be set to false.
-run_daemon="true"
+# run_daemon="true"
+# DEPRECRATED!
 
 # Log update msgs to syslog.
 syslog=yes
