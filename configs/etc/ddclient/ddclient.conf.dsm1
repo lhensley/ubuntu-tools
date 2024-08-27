@@ -1,8 +1,9 @@
 ### Basic HTTPS configuration file for ddclient
 
-# Dynu dsm1.dynu.com
+# Dynu pd1.dynu.com
 # daemon=7200 # 90 minutes between refresh
-daemon=0
+# daemon=0
+daemon=600 # 10 minutes between refresh
 # Log update msgs to syslog.
 syslog=yes
 # Mail all msgs to root.
@@ -14,19 +15,30 @@ ssl=yes
 # Record PID in file.
 pid=/var/run/ddclient.pid
 # Get ip from server.
-use=cmd, cmd='curl -s4 ifconfig.me/ip 2> /dev/null'
+# use=cmd, cmd='curl -s4 ifconfig.me/ip 2> /dev/null'
+use=web, web=dynamicdns.park-your-domain.com/getip
 # IP update server.
-server=api.dynu.com
+# server=api.dynu.com
+server=dynamicdns.park-your-domain.com
 # Use dyndns2 protocol
-protocol=dyndns2
+# protocol=dyndns2
+protocol=namecheap
 # Your username
-login='lanehensley'
+# login='lanehensley'
+login=lanehensley.org
 # Your password or MD5/SHA256 of account password or New IP Update Password
 # password='ihbJXdoyFUofpyfExTQp'
-password='aDgD2VjTKNd2J@r6FCqv'
+# password='aDgD2VjTKNd2J@r6FCqv'
+password=dcc8ebd6219942d1bd3a57ac1ebcef1f
 # List one or more hostnames one on each line.
-dsm1.lanehensley.org
+@
+db
+dsm1
+mail
+www
+# *
 
 ##########################################################################
 ### END ##################################################################
 ##########################################################################
+
