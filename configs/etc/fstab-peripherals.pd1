@@ -57,7 +57,7 @@ UUID=d8f30f08-2698-411c-a3ea-32b9748e9ba9 /mnt/bob ext4 nofail 0 0
 # 5TBF (5TB) UUID=9c311371-fbce-423b-9f44-4301aca9e6e5
 # Not sure this exists ...
 # nofail allows the boot sequence to continue even if the drive fails to mount
-# UUID=C824163824162A48 /mnt/5TBF ntfs nofail 0 0
+UUID=C824163824162A48 /mnt/5TBF ntfs noauto 0 0
 #
 # 12TBA (12TB) Black 12TB External Seagate
 # Good condition; reliable
@@ -71,6 +71,10 @@ UUID=d8f30f08-2698-411c-a3ea-32b9748e9ba9 /mnt/bob ext4 nofail 0 0
 # 12TBC (12TB) Black 12TB External Seagate
 # Good condition; reliable
 # UUID=64414aac-65cf-4e81-a561-f007cb82418b /mnt/12TBC ext4 nofail 0 0
+#
+# 20TBA (20TB) Black 20TB External WD
+# Good condition; reliable; added 2024-08-16
+UUID=9C0AA87D0AA855D4 /mnt/20TBA ntfs noauto 0 0
 #
 # ssd1tb (1TB); internal SSD drive on oz
 # UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb ext4 nofail 0 0
