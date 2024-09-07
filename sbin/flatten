@@ -1,4 +1,6 @@
 #!/bin/bash
+# Takes one argument: The containing directory path of the tree to be flattened.
+# All files in the tree will be moved to the containing directory.
 
 # Include script setup file
 	source script-setup
