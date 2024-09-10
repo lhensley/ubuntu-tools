@@ -19,6 +19,7 @@ ufw deny from 43.157.25.217 to any # 2024-07-08 - Germany address, blocked by Wo
 ufw deny from 51.15.184.67 to any # 2024-07-08 - France address, blocked by Wordfence, block count 1
 ufw deny from 54.80.109.178 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
 ufw deny from 62.146.177.34 to any # 2024-07-08 - Germany address, blocked by Wordfence, block count 8
+ufw deny from 75.119.0.0/16 to any # 2024-09-09 - Germany
 ufw deny from 77.95.113.13 to any # 2024-07-08 - United Kingdom address, blocked by Wordfence, block count 1
 ufw deny from 79.110.49.196 to any # 2024-07-08 - France address, blocked by Wordfence, block count 8
 ufw deny from 79.110.62.2 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 8
@@ -39,9 +40,13 @@ ufw deny from 104.193.135.243 to any # 2024-07-08 - Canada address, blocked by W
 ufw deny from 138.128.174.26 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
 ufw deny from 138.199.47.241 to any # 2024-07-08 - France address, blocked by Wordfence, block count 1
 ufw deny from 139.99.220.157 to any # 2024-07-08 - Australia address, blocked by Wordfence, block count 12
+ufw deny from 144.126.0.0/16 to any # 2024-09-09 - United States
 ufw deny from 156.38.128.82 to any # 2024-07-08 - South Africa address, blocked by Wordfence, block count 1
+ufw deny from 156.146.38.167 to any # 2024-09-09 - United States
 ufw deny from 161.97.131.39 to any # 2024-07-31 - Germany address, blocked by Wordfence, block count 13
+ufw deny from 164.132.182.113 to any # 2024-09-09 - France
 ufw deny from 167.99.79.202 to any # 2024-07-08 - Singapore address, blocked by Wordfence, block count 2
+ufw deny from 173.249.11.33 to any # 2024-09-09 - Germany
 ufw deny from 178.159.37.38 to any # 2024-07-08 - Ukraine address, blocked by Wordfence, block count 14
 ufw deny from 179.43.191.18 to any # 2024-07-08 - Switzerland address, blocked by Wordfence, block count 2
 ufw deny from 184.105.247.223 to any
@@ -56,6 +61,7 @@ ufw deny from 198.12.234.215 to any # 2024-07-08 - United States address, blocke
 ufw deny from 199.19.72.125 to any
 ufw deny from 199.45.154.114 to any
 ufw deny from 206.168.34.37 to any
+ufw deny from 207.180.196.201 to any - Germany
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
