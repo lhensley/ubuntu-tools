@@ -41,7 +41,7 @@ PVFlockFile="/tmp/process-video-file.lock"
 # ComchaplockFile="/tmp/comchap.lock"
 origFile="$1"
 # Updated Preset below 2024-07-12; thought I already had!
-HandbrakePreset="/etc/HandBrake/default.json"
+HandbrakePreset="/etc/HandBrake/Default.json"
 tmpHEVC="/tmp/tmpHEVC"
 uuid=$(uuidgen)
 #tmpFile="/tmp/$1.tmp"

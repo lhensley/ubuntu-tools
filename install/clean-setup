@@ -321,7 +321,7 @@ if $install_gzip ; then f_install gzip; fi
     if ! $(f_is_installed "handbrake-cli"); then
     echo
     echo "Installing HandBrake"
-    apt-get install --yes handbrake-cli libatlas-base-dev nvidia-driver-390
+    apt-get install --yes handbrake-cli libatlas-base-dev # nvidia-driver-390
     echo "HandBrake installed."
     fi
   fi

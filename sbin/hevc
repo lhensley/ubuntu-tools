@@ -1,0 +1,59 @@
+#!/bin/bash
+
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+# if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# POSSIBLE OPTION: USE IF YOU WANT
+# Require root
+	# f_require_root
+
+# CHECK FOR ENOUGH ARGUMENTS
+if [ $# -lt 2 ]; 
+    then echo "$EXIT_CODE_DESC_DIRECTORY_NOT_FOUND"
+	echo "Usage: $0 SOURCE_CONTAINER TARGET_CONTAINER"
+	exit $EXIT_CODE_DIRECTORY_NOT_FOUND
+fi
+
+# Do stuff here
+if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+SOURCE_CONTAINER="$(realpath $1)"
+TARGET_CONTAINER="$(realpath $2)"
+SOURCE_CONTAINER_LENGTH=${#SOURCE_CONTAINER}
+
+function process_file () {
+# Usage process_file SOURCE_FILE SOURCE_CONTAINER_LENGTH TARGET_CONTAINER
+	SOURCE_FILE="$1"
+	SOURCE_CONTAINER_LENGTH="$2"
+	SOURCE_COMPRESSOR_ID=$(exiftool -s3 -CompressorID "$SOURCE_FILE")
+	TARGET_CONTAINER="$3"
+	TARGET_RELATIVE_PATH="${SOURCE_FILE: -$SOURCE_CONTAINER_LENGTH}"
+	TARGET_FILE="$TARGET_CONTAINER"/"$TARGET_RELATIVE_PATH"
+	echo
+	echo "Source File: $SOURCE_FILE"
+	echo "Source Compressor_ID: $SOURCE_COMPRESSOR_ID"
+	echo "Source Container Length: $SOURCE_CONTAINER_LENGTH"
+	echo "Target Container: $TARGET_CONTAINER"
+	echo "Target Relative Path: $TARGET_RELATIVE_PATH"
+	echo "Target File: $TARGET_FILE"
+	}
+
+echo "Source: $SOURCE_CONTAINER)"
+echo "Target: $TARGET_CONTAINER)"
+echo
+export -f process_file
+find "$SOURCE_CONTAINER" -type f -exec bash -c process_file "{}" "$SOURCE_CONTAINER_LENGTH" "$TARGET_CONTAINER" \; # >> /dev/null 2>&1
+
+if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+

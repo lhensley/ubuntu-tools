@@ -11,7 +11,14 @@ DEBUG_MODE=true; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" 
 
 # POSSIBLE OPTION: USE IF YOU WANT
 # Require root
-	f_require_root
+	# f_require_root
+
+# CHECK FOR ENOUGH ARGUMENTS (change 0 to minimum arguments and flesh out Usage)
+if [ $# -lt 0 ]; 
+    then echo "$EXIT_CODE_DESC_DIRECTORY_NOT_FOUND"
+	echo "Usage: $0"
+	exit $EXIT_CODE_DIRECTORY_NOT_FOUND
+fi
 
 # Do stuff here
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi

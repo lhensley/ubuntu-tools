@@ -238,13 +238,15 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 # Update /etc/ddclient/
 	rm -f /etc/ddclient.*
-	if $(f_is_installed "ddclient"); then
-		echo "Updating /etc/ddclient.conf and /etc/ddclient/ddclient.conf from $GIT_UBUNTU_TOOLS_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME"
-		mkdir -p /etc/ddclient /etc/.default /etc/default
-		cp -T $GIT_UBUNTU_TOOLS_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient.conf
-		cp -T $GIT_UBUNTU_TOOLS_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient/ddclient.conf
-		cp -T $GIT_UBUNTU_TOOLS_CONFIGS/etc/ddclient/ddclient.conf.default /etc/.default/ddclient.conf
-		cp -T $GIT_UBUNTU_TOOLS_CONFIGS/etc/ddclient/ddclient.conf.default /etc/default/ddclient
+	if $(f_is_file "$GIT_UBUNTU_TOOLS_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME"); then
+		if $(f_is_installed "ddclient"); then
+			echo "Updating /etc/ddclient.conf and /etc/ddclient/ddclient.conf from $GIT_UBUNTU_TOOLS_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME"
+			mkdir -p /etc/ddclient /etc/.default /etc/default
+			cp -T $GIT_UBUNTU_TOOLS_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient.conf
+			cp -T $GIT_UBUNTU_TOOLS_CONFIGS/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient/ddclient.conf
+			cp -T $GIT_UBUNTU_TOOLS_CONFIGS/etc/ddclient/ddclient.conf.default /etc/.default/ddclient.conf
+			cp -T $GIT_UBUNTU_TOOLS_CONFIGS/etc/ddclient/ddclient.conf.default /etc/default/ddclient
+			fi
 		fi
 
 # Update /etc/exports
