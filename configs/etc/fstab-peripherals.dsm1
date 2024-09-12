@@ -1,14 +1,23 @@
 
 ########################################################################################################
 #
-# dsm1
+# master
 #
 ########################################################################################################
 #
 # These are the known peripheral (including internal non-root filesystem drives) mounts
 # as of 3/21/2022
 #
-# To show all devices, even unformatted:    sudo lsblk
+# To show all devices, even unformatted:    
+#   sudo lsblk
+#   sudo blkid
+#   sudo fdisk -l
+#
+#   sudo lsblk | grep [mountpoint, e.g., 5TBE]
+#   sudo blkid | grep [mountpoint, e.g., 5TBE; output will show device, e.g., └─sdc1]
+#   sudo fdisk -l /dev/[device]
+#
+# To get full info on a specific device, do this:
 #
 # To format an entire device as ext, unmount it and issue this:
 # sudo mkfs.ext4 -L new-volume-label /dev/yourpartitionhere
@@ -31,49 +40,66 @@
 #
 ########################################################################################################
 #
-# 3TBB (3TB)
-# Empty
+# bob (938G)
+# Samsung EVO 960 SSD [INTERNAL]
+# Block Size 4096   PARTLABEL [Unknown]  PARTUUID N/A
+UUID=d8f30f08-2698-411c-a3ea-32b9748e9ba9 /mnt/bob ext4 nofail 0 0
+#
+# 2TBA (1.8T)
+# SAMSUNG T7 Portable SSD, 2TB External Solid State Drive
+# Block Size 512   PARTLABEL [Unknown]  PARTUUID 2af01943-01
+# Good condition; reliable; added 2024-08-??
+UUID=56B9-DD05 /mnt/2TBA exfat nofail 0 0
+#
+# 3TBB (2.7T)
+# TOSHIBA External USB 3.0 HDD 
+# Block Size 4096   PARTLABEL [Unknown]  PARTUUID b448514c-b4e3-4489-b808-77319dd25393
 UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/3TBB ext4 nofail 0 0
 #
-# PHYSICALLY REMOVED 4/5/2024 to install on dsm1.lanehensley.org for Ubuntu 24
-# 5TBC (5TB) Black 5TB External Seagate
-# Contains /mnt/5TBC/cold-backup.2022-04 (copy on /mnt/5TBD)
-# UUID=fa9f5c57-94fd-4706-979e-4c30189592a5 /mnt/5TBC ext4 nofail 0 0
+# 4TBA ([Unknown])
+# SAMSUNG T7 Portable SSD, 4TB External Solid State Drive
+# Block Size 512   PARTLABEL [Unknown]  PARTUUID [Unknown]
+# Good condition; reliable; added 2024-08-13
+# UUID=[Unknown] /mnt/4TBA exfat nofail 0 0
 #
-# 5TBD (5TB) UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85
-# Contains /mnt/5TBD/cold-backup.2022-04 (copy on /mnt/5TBC)
+# 5TBC (4.5T)
+# WD My Passport 2627 HDD
+# Block Size 4096   PARTLABEL My Passport     PARTUUID f53adc00-e367-4352-bfd6-034c933c9f69
+UUID=fa9f5c57-94fd-4706-979e-4c30189592a5 /mnt/5TBC ext4 nofail 0 0
+#
+# 5TBD (4.5T)
+# WD My Passport 2627 HDD
+# Block Size 4096   PARTLABEL 5TBD     PARTUUID 6510919a-cc53-467e-a992-c6889b15968e
 UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/5TBD ext4 nofail 0 0
 #
-# 5TBE (5TB) Black 5TB External Seagate
-# ACTIVE BACKUP DRIVE
-# /mnt/5TBE/cold-backup is use. Confirm and document how/where (e.g., crontab?)
+# 5TBE (4.5T)
+# WD My Passport 2627 HDD
+# Block Size 4096   PARTLABEL 5TBD     PARTUUID 6510919a-cc53-467e-a992-c6889b15968e
 UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 nofail 0 0
 #
-# 5TBF (5TB) UUID=9c311371-fbce-423b-9f44-4301aca9e6e5
-# Not sure this exists ...
-# nofail allows the boot sequence to continue even if the drive fails to mount
-# UUID=C824163824162A48 /mnt/5TBF ntfs nofail 0 0
+#   sudo lsblk | grep [mountpoint, e.g., 5TBF]
+#   sudo blkid | grep [mountpoint, e.g., 5TBF; output will show device, e.g., └─sdc1]
+#   sudo fdisk -l /dev/[device]
 #
-# 12TBA (12TB) Black 12TB External WD
-# Good condition; reliable
+# 12TBA (10.9T) Black 12TB External WD
+# WD Elements 25A3 HDD
+# Block Size 4096   PARTLABEL 12TBA  PARTUUID 59c0a1fd-3595-469c-b8a4-2b6f97c10964
 UUID=901c4177-b514-408a-997c-0cbeee89fa6e /mnt/12TBA ext4 auto,nofail 0 0
 #
-# 12TBB (12TB) Black 12TB External WD
-# Plex data files (primary) at /mnt/12TBB/plex
-# Good condition; reliable
+# 12TBB (10.9T) Black 12TB External WD
+# WD My Book 25EE HDD
+# Block Size 4096   PARTLABEL 12TBB  PARTUUID [Unknown]
 UUID=27cf148b-4b43-4747-8a4f-e7013639b989 /mnt/12TBB ext4 nofail 0 0
 #
-# 12TBC (12TB) Black 12TB External WD
-# Good condition; reliable
+# 12TBC (10.9T) Black 12TB External WD
+# WD Elements 25A3 HDD
+# Block Size 4096   PARTLABEL 12TBC  PARTUUID a7c3f8f4-7a8e-4b3e-ba77-5501e90827b5
 UUID=64414aac-65cf-4e81-a561-f007cb82418b /mnt/12TBC ext4 nofail 0 0
 #
-# 20TBA (20TB) Black 20TB External WD
-# Good condition; reliable; added 2024-08-16
+# 20TBA (19T)
+# WD Elements 25A3 HDD
+# Block Size 512    PARTLABEL 12TBC  PARTUUID a7c3f8f4-7a8e-4b3e-ba77-5501e90827b5
 UUID=9C0AA87D0AA855D4 /mnt/20TBA ntfs nofail 0 0
-#
-# ssd1tb (1TB); internal SSD drive on oz
-# UUID=be4a7edd-1cde-4dfe-ab3c-f5b64a59a9ce /mnt/ssd1tb ext4 nofail 0 0
-# /mnt/ssd1tb /mnt/ssd1tb nfs rw,nofail
 #
 # # Silver5TB-A (5TB)
 # # UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs nofail 0 0
@@ -120,6 +146,10 @@ UUID=9C0AA87D0AA855D4 /mnt/20TBA ntfs nofail 0 0
 # AGING AND RISKY
 # RETIRED 1/4/2024
 # UUID=4e356144-2e69-4812-8958-d035a9ebc28e /mnt/cloteal ext4 nofail 0 0
+#
+# 5TBF (5TB) 
+# WD Easystore
+# DECOMMISSIONED 2024-08 because of major write errors
 #
 ########################################################################################################
 #
