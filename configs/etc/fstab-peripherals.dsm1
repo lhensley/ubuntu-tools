@@ -106,13 +106,13 @@ UUID=9C0AA87D0AA855D4 /mnt/20TBA ntfs nofail 0 0
 # sudo mount UUID=F049-1057 /mnt/flash
 #
 # (Black1TB) (931.48G)
-# WD SSD
+# WD HDD
 # Aging but still works just fine
 # Block Size 512    PARTLABEL Black1TB     PARTUUID a9643da6-01
 UUID=FA5E0ADF5E0A9513 /mnt/Black1TB ntfs nofail 0 0
 #
 # (Silver1TB) (931.48G)
-# WD SSD
+# WD HDD
 # Aging but still works just fine
 # Block Size 512    PARTLABEL Silver1TB     PARTUUID dea3ca1a-01
 UUID=82EC1C14EC1C04D7 /mnt/Silver1TB ntfs nofail 0 0
