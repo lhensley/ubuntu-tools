@@ -60,7 +60,7 @@ UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/3TBB ext4 nofail 0 0
 # SAMSUNG T7 Portable SSD, 4TB External Solid State Drive
 # Block Size 512   PARTLABEL Basic data partition  PARTUUID d70a9fe1-d620-4952-8bdc-6e0f92e24e1d
 # Good condition; reliable; added 2024-08-13
-# UUID=4E4F-4B83 /mnt/4TBA exfat nofail 0 0
+UUID=4E4F-4B83 /mnt/4TBA exfat nofail 0 0
 #
 # 5TBC (4.5T)
 # WD My Passport 2627 HDD
