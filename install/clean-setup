@@ -614,7 +614,8 @@ if $is_desktop ; then
     # Microsoft Edge
     # Updated as of September 2024.
     # Based on: https://www.omgubuntu.co.uk/2021/01/how-to-install-edge-on-ubuntu-linux
-    # If you get "Target XXX (YYY) is configured multiple times" referencing Microsoft,
+    # If you get "Target XXX (YYY) is configured multiple times" referencing Microsoft
+    #   when running upd,
     #   comment out deb [arch=amd64] https://packages.microsoft.com/repos/edge/ stable main
     #   using sudo vi /etc/apt/sources.list.d/microsoft-edge.list
     if $install_edge ; then
