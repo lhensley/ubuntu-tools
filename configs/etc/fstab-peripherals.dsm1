@@ -56,11 +56,11 @@ UUID=56B9-DD05 /mnt/2TBA exfat nofail 0 0
 # Block Size 4096   PARTLABEL [Unknown]  PARTUUID b448514c-b4e3-4489-b808-77319dd25393
 UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/3TBB ext4 nofail 0 0
 #
-# 4TBA ([Unknown])
+# 4TBA (3.64T)
 # SAMSUNG T7 Portable SSD, 4TB External Solid State Drive
-# Block Size 512   PARTLABEL [Unknown]  PARTUUID [Unknown]
+# Block Size 512   PARTLABEL Basic data partition  PARTUUID d70a9fe1-d620-4952-8bdc-6e0f92e24e1d
 # Good condition; reliable; added 2024-08-13
-# UUID=[Unknown] /mnt/4TBA exfat nofail 0 0
+# UUID=4E4F-4B83 /mnt/4TBA exfat nofail 0 0
 #
 # 5TBC (4.5T)
 # WD My Passport 2627 HDD
@@ -101,21 +101,27 @@ UUID=64414aac-65cf-4e81-a561-f007cb82418b /mnt/12TBC ext4 nofail 0 0
 # Block Size 512    PARTLABEL 12TBC  PARTUUID a7c3f8f4-7a8e-4b3e-ba77-5501e90827b5
 UUID=9C0AA87D0AA855D4 /mnt/20TBA ntfs nofail 0 0
 #
+# (Flash Drive for Scanner)
+# UUID=F049-1057 /mnt/flash vfat noauto 0 0
+# sudo mount UUID=F049-1057 /mnt/flash
+#
+# (Black1TB) (931.48G)
+# WD SSD
+# Aging but still works just fine
+# Block Size 512    PARTLABEL Black1TB     PARTUUID a9643da6-01
+UUID=FA5E0ADF5E0A9513 /mnt/Black1TB ntfs nofail 0 0
+#
+# (Silver1TB) (931.48G)
+# WD SSD
+# Aging but still works just fine
+# Block Size 512    PARTLABEL Silver1TB     PARTUUID dea3ca1a-01
+UUID=82EC1C14EC1C04D7 /mnt/Silver1TB ntfs nofail 0 0
+#
 # # Silver5TB-A (5TB)
 # # UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs nofail 0 0
 #
 # # Silver5TB-B (5TB)
 # # UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs nofail 0 0
-#
-# (Flash Drive for Scanner)
-# UUID=F049-1057 /mnt/flash vfat noauto 0 0
-# sudo mount UUID=F049-1057 /mnt/flash
-#
-# (Tablo Disk) (1TB)
-# Formerly Silver[something] (Has a black counterpart)
-# Aging but still works just fine
-# UUID=03fa5e8f-95ca-4d21-a42c-6218bd08b00c /mnt/tablo ext4 noauto 0 0
-# sudo mount UUID=03fa5e8f-95ca-4d21-a42c-6218bd08b00c /mnt/tablo
 #
 #######################################################################################################
 #
