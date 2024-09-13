@@ -612,14 +612,17 @@ if $is_desktop ; then
         fi
 
     # Microsoft Edge
+    # Updated as of September 2024.
+    # Based on: https://www.omgubuntu.co.uk/2021/01/how-to-install-edge-on-ubuntu-linux
     if $install_edge ; then
         echo
         echo "Installing Microsoft Edge."
-        apt-get --yes install software-properties-common apt-transport-https curl wget ca-certificates
-        wget -O- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/microsoft-edge.gpg
-        echo 'deb [signed-by=/usr/share/keyrings/microsoft-edge.gpg] https://packages.microsoft.com/repos/edge stable main' | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
-        # apt-get --yes update
-        apt-get install microsoft-edge-stable --yes
+        apt-get --yes install curl gpg wget ca-certificates software-properties-common apt-transport-https
+        curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+        install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
+        sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge-dev.list'
+        rm microsoft.gpg
+        apt update && sudo apt --yes install microsoft-edge-stable
         echo "Microsoft Edge installed."
         fi
 
