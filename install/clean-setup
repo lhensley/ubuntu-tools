@@ -614,6 +614,9 @@ if $is_desktop ; then
     # Microsoft Edge
     # Updated as of September 2024.
     # Based on: https://www.omgubuntu.co.uk/2021/01/how-to-install-edge-on-ubuntu-linux
+    # If you get "Target XXX (YYY) is configured multiple times" referencing Microsoft,
+    #   comment out deb [arch=amd64] https://packages.microsoft.com/repos/edge/ stable main
+    #   using sudo vi /etc/apt/sources.list.d/microsoft-edge.list
     if $install_edge ; then
         echo
         echo "Installing Microsoft Edge."
@@ -629,7 +632,7 @@ if $is_desktop ; then
     # xrdp
     if $install_xrdp ; then
         echo
-        echo "Installing xrdp"
+        echo "Installing xrdp."
         apt-get install --yes xrdp                  # A Remote Desktop Protocol (RDP) server
         echo "xrdp installed."
         fi
