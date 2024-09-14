@@ -375,12 +375,12 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 ############################################################################################################
 
-# echo -e "Done\n"
+echo -e "Done\n"
 
 # Apply permissions
-	echo
-	_apply-permissions $ARGS
-	echo "Reloading daemons"
+#	echo
+#	_apply-permissions $ARGS
+#	echo "Reloading daemons"
 
 
 ###################################################
