@@ -279,6 +279,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		rm -f /etc/fstab
 		cat /etc/fstab.original.install "$GIT_UBUNTU_TOOLS_CONFIGS/etc/fstab-peripherals.$HOSTNAME" > /tmp/fstab
 		mv /tmp/fstab /etc/fstab
+		systemctl daemon-reload
 		mount --all &
 		fi
 
@@ -377,9 +378,9 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 # echo -e "Done\n"
 
 # Apply permissions
+	echo
 	_apply-permissions $ARGS
 	echo "Reloading daemons"
-	systemctl daemon-reload
 
 
 ###################################################
