@@ -1,5 +1,18 @@
 #!/bin/bash
 
+# To replace TARGET as a mirror image of SOURCE, including deleting files in TARGET that aren't in SOURCE:
+# rsync -avE --delete SOURCE_USER@SOURCE_HOST:SOURCE_PATH/* TARGET_USER@TARGET_HOST:TARGET_PATH
+#     IMPORTANT: NO terminating "/" on TARGET_PATH
+
+# To merge SOURCE into TARGET, keeping the newest version when dupes occur:
+# rsync -avuE --progress SOURCE_USER@SOURCE_HOST:SOURCE_PATH/* TARGET_USER@TARGET_HOST:TARGET_PATH
+#     IMPORTANT: NO terminating "/" on TARGET_PATH
+#    OR
+# cp -apruv SOURCE/* TARGET/
+#    OR
+# mv -uv SOURCE/* TARGET
+
+
 # Include script setup file
 	source script-setup
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
@@ -53,7 +66,7 @@
 					TARGET_DIR="$TARGET_PLEX_CONTENT_DIR/$this_directory"
 					# echo
 					# echo Backing up $SOURCE_DIR to $TARGET_DIR
-					rsync -aloprtvE --delete "$SOURCE_FILE_SYSTEM/$SOURCE_DIR/"* "$TARGET_FILE_SYSTEM/$TARGET_DIR"
+					rsync -avE --delete "$SOURCE_FILE_SYSTEM/$SOURCE_DIR/"* "$TARGET_FILE_SYSTEM/$TARGET_DIR"
 				done
 #		done
 
@@ -62,3 +75,4 @@
 	source "${PATHNAME[script_footer]}"
 
 exit 0
+
