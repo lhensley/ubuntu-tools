@@ -3,3 +3,5 @@ sudo rsync -avE --delete '/mnt/20TBA/plex' '/mnt/12TBA'
 
 sudo du -hs /mnt/20TBA/plex && sudo du -hs /mnt/12TBA/plex && df -h /mnt/20TBA /mnt/12TBA && atq
 
+sudo at -c 7
+sudo at -c 9
