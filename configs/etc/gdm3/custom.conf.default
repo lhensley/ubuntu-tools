@@ -1,0 +1,36 @@
+# GDM configuration storage
+# -rw-r--r-- 1 root root 587 Sep 16 12:03 /etc/gdm3/custom.conf
+#
+# See /usr/share/gdm/gdm.schemas for a list of available options.
+
+[daemon]
+# Uncomment the line below to force the login screen to use Xorg
+WaylandEnable=false
+# Next line recommended (read 2024-09-16)
+# by https://askubuntu.com/questions/1434298/set-ubuntu-on-xorg-by-default-globally-but-without-preventing-the-choice-of-wa
+# but seems unnecessary.
+# Need to use X11 instead of Wayland as display server 
+# for full compatibility with TeamViewer
+# See also https://community.teamviewer.com/English/discussion/122410/teamviewer-support-on-wayland-experimental-state-%F0%9F%A7%AA/
+# DefaultSession=gnome-xorg.desktop
+
+# Enabling automatic login
+#  AutomaticLoginEnable = true
+#  AutomaticLogin = user1
+
+# Enabling timed login
+#  TimedLoginEnable = true
+#  TimedLogin = user1
+#  TimedLoginDelay = 10
+
+[security]
+
+[xdmcp]
+
+[chooser]
+
+[debug]
+# Uncomment the line below to turn on debugging
+# More verbose logs
+# Additionally lets the X server dump core if it crashes
+#Enable=true
