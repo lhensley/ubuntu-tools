@@ -8,9 +8,9 @@
 # rsync -avuE --progress SOURCE_USER@SOURCE_HOST:SOURCE_PATH/* TARGET_USER@TARGET_HOST:TARGET_PATH
 #     IMPORTANT: NO terminating "/" on TARGET_PATH
 #    OR
-# cp -apruv SOURCE/* TARGET/
-#    OR
-# mv -uv SOURCE/* TARGET
+# cp -apruv "$SOURCE/"* "$TARGET/" #### STRONGLY RECOMMENDED
+#    OR (don't do it!)
+# mv -uv "$SOURCE/"* "$TARGET/" #### STRONGLY NOT RECOMMENDED
 
 
 # Include script setup file

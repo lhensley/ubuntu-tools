@@ -98,8 +98,8 @@ UUID=64414aac-65cf-4e81-a561-f007cb82418b /mnt/12TBC ext4 nofail 0 0
 #
 # 20TBA (19T)
 # WD Elements 25A3 HDD
-# Block Size 512    PARTLABEL 12TBC  PARTUUID a7c3f8f4-7a8e-4b3e-ba77-5501e90827b5
-UUID=9C0AA87D0AA855D4 /mnt/20TBA ntfs nofail 0 0
+# Block Size 4096
+UUID=55c9b7d7-79b5-4695-88ca-d86b39678fbe /mnt/20TBA ext4 nofail 0 0
 #
 # (Flash Drive for Scanner)
 # UUID=F049-1057 /mnt/flash vfat noauto 0 0
