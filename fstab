@@ -1,0 +1,157 @@
+
+########################################################################################################
+#
+# master
+#
+########################################################################################################
+#
+# These are the known peripheral (including internal non-root filesystem drives) mounts
+# as of 3/21/2022
+#
+# To show all devices, even unformatted:    
+#   sudo lsblk
+#   sudo blkid
+#   sudo fdisk -l
+#
+#   sudo lsblk | grep [mountpoint, e.g., 5TBE]
+#   sudo blkid | grep [mountpoint, e.g., 5TBE; output will show device, e.g., └─sdc1]
+#   sudo fdisk -l /dev/[device]
+#
+# To get full info on a specific device, do this:
+#
+# To format an entire device as ext, unmount it and issue this:
+# sudo mkfs.ext4 -L new-volume-label /dev/yourpartitionhere
+# Example: sudo umount /dev/sdh; sudo mkfs.ext4 -L 12TBB /dev/sdh
+#
+# To format a drive, use the command above to find /dev/yourpartitionhere
+# Then:
+#    sudo umount /dev/yourpartitionhere
+#    sudo mkfs.ext4 /dev/yourpartitionhere
+#        NOTE: The UUID will change!
+#
+# To find all UUIDs on connected devices: sudo blkid | grep UUID
+# When possible, use the UUID and not PARTUUID.
+#
+######################################################################################################## 
+#
+# For entries below:
+# Uncomment UUID definitions for local devices.
+# Uncomment NFS definitions for remote devices.
+#
+########################################################################################################
+#
+# bob (938G)
+# Samsung EVO 960 SSD [INTERNAL]
+# Block Size 4096   PARTLABEL [Unknown]  PARTUUID N/A
+UUID=d8f30f08-2698-411c-a3ea-32b9748e9ba9 /mnt/bob ext4 nofail 0 0
+#
+# 2TBA (1.8T)
+# SAMSUNG T7 Portable SSD, 2TB External Solid State Drive
+# Block Size 512   PARTLABEL [Unknown]  PARTUUID 2af01943-01
+# Good condition; reliable; added 2024-08-??
+UUID=56B9-DD05 /mnt/2TBA exfat nofail 0 0
+#
+# 3TBB (2.7T)
+# TOSHIBA External USB 3.0 HDD 
+# Block Size 4096
+UUID=9a9fc896-a119-478e-a8f1-c6a2c0873218 /mnt/3TBB ext4 nofail 0 0
+#
+# 4TBA (3.64T)
+# SAMSUNG T7 Portable SSD, 4TB External Solid State Drive
+# Block Size 4096   PARTLABEL Basic data partition  PARTUUID d70a9fe1-d620-4952-8bdc-6e0f92e24e1d
+# Good condition; reliable; added 2024-08-13
+UUID=41102e3a-dac6-45b4-9a5b-20816b7530ea /mnt/4TBA ext4 nofail 0 0
+#
+# 5TBC (4.5T)
+# WD My Passport 2627 HDD
+# Block Size 4096
+UUID=4dfd8d3a-56e3-4449-8161-b93ea30fdf15 /mnt/5TBC ext4 nofail 0 0
+#
+# 5TBD (4.5T)
+# WD My Passport 2627 HDD
+# Block Size 4096
+UUID=b3b94524-7303-4c7d-a98c-b730d427af6b /mnt/5TBD ext4 nofail 0 0
+#
+# 5TBE (4.5T)
+# WD My Passport 2627 HDD
+# Block Size 4096
+UUID=a53f3904-4d68-4b91-95e2-bfa6d418b622 /mnt/5TBE ext4 nofail 0 0
+#
+# 12TBA (10.9T)
+# WD Elements 25A3 HDD
+# Block Size 4096   PARTLABEL 12TBA  PARTUUID 59c0a1fd-3595-469c-b8a4-2b6f97c10964
+UUID=901c4177-b514-408a-997c-0cbeee89fa6e /mnt/12TBA ext4 auto,nofail 0 0
+#
+# 12TBB (10.9T)
+# WD Elements 25A3 HDD
+# Block Size 4096
+UUID=f7d0c0fc-7869-4985-83c5-5552eaebc018 /mnt/12TBB ext4 auto,nofail 0 0
+#
+# 12TBC (10.9T)
+# WD Elements 25A3 HDD
+# Block Size 4096
+UUID=2681fbc8-8210-451c-bc73-4ebd55989f34 /mnt/12TBC ext4 nofail 0 0
+#
+# 20TBA (19T)
+# WD Elements 25A3 HDD
+# Block Size 4096
+UUID=55c9b7d7-79b5-4695-88ca-d86b39678fbe /mnt/20TBA ext4 nofail 0 0
+#
+# (Flash Drive for Scanner)
+# UUID=F049-1057 /mnt/flash vfat noauto 0 0
+# sudo mount UUID=F049-1057 /mnt/flash
+#
+# (Black1TB) (931.48G)
+# WD HDD
+# Aging but still works just fine
+# Block Size 512    PARTLABEL Black1TB     PARTUUID a9643da6-01
+UUID=FA5E0ADF5E0A9513 /mnt/Black1TB ntfs nofail 0 0
+#
+# (Silver1TB) (931.48G)
+# WD HDD
+# Aging but still works just fine
+# Block Size 512    PARTLABEL Silver1TB     PARTUUID dea3ca1a-01
+UUID=82EC1C14EC1C04D7 /mnt/Silver1TB ntfs nofail 0 0
+#
+# # Silver5TB-A (5TB)
+# # UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs nofail 0 0
+#
+# # Silver5TB-B (5TB)
+# # UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs nofail 0 0
+#
+#######################################################################################################
+#
+# unused
+#
+########################################################################################################
+#
+# ext10tb01 (10TB); external drive for Plex from oz
+# Power supply sounds like it's failing. Decommission SOON. 1/2/2023
+# Various archives. OK to wipe it out.
+# FAILED 1/4/2024
+# UUID=08853dd9-14a7-4707-b6d6-9f49150a7f32 /mnt/ext10tb01 ext4 rw,nofail 0 0
+#
+# MyBook3T01 (3TB)
+# NEEDS TO BE CATALOGUED CAREFULLY
+# AGING AND RISKY
+# RETIRED 1/4/2024
+# UUID=C6B89CABB89C9B8D /mnt/MyBook3T01 ntfs nofail 0 0
+#
+# bertha (3TB)
+# Empty
+# AGING AND RISKY
+# RETIRED 1/4/2024
+# UUID=d28256f9-c258-451e-b299-d4849cf19e0b /mnt/bertha ext4 nofail 0 0
+#
+# cloteal (10TB)
+# archives/video contains files and should be checked to see if there are duplicates
+# AGING AND RISKY
+# RETIRED 1/4/2024
+# UUID=4e356144-2e69-4812-8958-d035a9ebc28e /mnt/cloteal ext4 nofail 0 0
+#
+# 5TBF (5TB) 
+# WD Easystore
+# DECOMMISSIONED 2024-08 because of major write errors
+#
+########################################################################################################
+#
