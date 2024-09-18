@@ -53,8 +53,8 @@ UUID=56B9-DD05 /mnt/2TBA exfat nofail 0 0
 #
 # 3TBB (2.7T)
 # TOSHIBA External USB 3.0 HDD 
-# Block Size 4096   PARTLABEL [Unknown]  PARTUUID b448514c-b4e3-4489-b808-77319dd25393
-UUID=5b0eab37-02f0-441a-b15a-fb05045d7b85 /mnt/3TBB ext4 nofail 0 0
+# Block Size 4096
+UUID=9a9fc896-a119-478e-a8f1-c6a2c0873218 /mnt/3TBB ext4 nofail 0 0
 #
 # 4TBA (3.64T)
 # SAMSUNG T7 Portable SSD, 4TB External Solid State Drive
@@ -64,18 +64,18 @@ UUID=41102e3a-dac6-45b4-9a5b-20816b7530ea /mnt/4TBA ext4 nofail 0 0
 #
 # 5TBC (4.5T)
 # WD My Passport 2627 HDD
-# Block Size 4096   PARTLABEL My Passport     PARTUUID f53adc00-e367-4352-bfd6-034c933c9f69
-UUID=fa9f5c57-94fd-4706-979e-4c30189592a5 /mnt/5TBC ext4 nofail 0 0
+# Block Size 4096
+UUID=4dfd8d3a-56e3-4449-8161-b93ea30fdf15 /mnt/5TBC ext4 nofail 0 0
 #
 # 5TBD (4.5T)
 # WD My Passport 2627 HDD
-# Block Size 4096   PARTLABEL 5TBD     PARTUUID 6510919a-cc53-467e-a992-c6889b15968e
-UUID=74fcf036-b72c-47d9-be61-e63bdaf31881 /mnt/5TBD ext4 nofail 0 0
+# Block Size 4096
+UUID=b3b94524-7303-4c7d-a98c-b730d427af6b /mnt/5TBD ext4 nofail 0 0
 #
 # 5TBE (4.5T)
 # WD My Passport 2627 HDD
-# Block Size 4096   PARTLABEL 5TBD     PARTUUID 6510919a-cc53-467e-a992-c6889b15968e
-UUID=f8aad385-2d47-42aa-b62e-9a4afd024beb /mnt/5TBE ext4 nofail 0 0
+# Block Size 4096
+UUID=a53f3904-4d68-4b91-95e2-bfa6d418b622 /mnt/5TBE ext4 nofail 0 0
 #
 #   sudo lsblk | grep [mountpoint, e.g., 5TBF]
 #   sudo blkid | grep [mountpoint, e.g., 5TBF; output will show device, e.g., └─sdc1]
