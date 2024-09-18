@@ -89,8 +89,8 @@ UUID=f7d0c0fc-7869-4985-83c5-5552eaebc018 /mnt/12TBB ext4 auto,nofail 0 0
 #
 # 12TBC (10.9T)
 # WD Elements 25A3 HDD
-# Block Size 4096   PARTLABEL 12TBC  PARTUUID a7c3f8f4-7a8e-4b3e-ba77-5501e90827b5
-UUID=64414aac-65cf-4e81-a561-f007cb82418b /mnt/12TBC ext4 nofail 0 0
+# Block Size 4096
+UUID=2681fbc8-8210-451c-bc73-4ebd55989f34 /mnt/12TBC ext4 nofail 0 0
 #
 # 20TBA (19T)
 # WD Elements 25A3 HDD
