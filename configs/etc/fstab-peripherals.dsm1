@@ -77,10 +77,6 @@ UUID=b3b94524-7303-4c7d-a98c-b730d427af6b /mnt/5TBD ext4 nofail 0 0
 # Block Size 4096
 UUID=a53f3904-4d68-4b91-95e2-bfa6d418b622 /mnt/5TBE ext4 nofail 0 0
 #
-#   sudo lsblk | grep [mountpoint, e.g., 5TBF]
-#   sudo blkid | grep [mountpoint, e.g., 5TBF; output will show device, e.g., └─sdc1]
-#   sudo fdisk -l /dev/[device]
-#
 # 12TBA (10.9T)
 # WD Elements 25A3 HDD
 # Block Size 4096   PARTLABEL 12TBA  PARTUUID 59c0a1fd-3595-469c-b8a4-2b6f97c10964
