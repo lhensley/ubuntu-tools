@@ -13,6 +13,10 @@ DEBUG_MODE=true; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" 
 # Require root
 	# f_require_root
 
+# POSSIBLE OPTION: USE IF YOU WANT
+# Require a specific host
+	# f_require_host [HOST]
+
 # CHECK FOR ENOUGH ARGUMENTS (change 0 to minimum arguments and flesh out Usage)
 if [ $# -lt 0 ]; 
     then echo "$EXIT_CODE_DESC_DIRECTORY_NOT_FOUND"
