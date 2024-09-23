@@ -24,7 +24,8 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 # Apply configs
 	echo
 	echo "Applying configurations and permissions." && echo
-	f_apply_configs
+	_apply_configs
+	_apply_permissions
 
 # Other updates
 	echo
