@@ -175,8 +175,6 @@ done
 # 	git config --global url."https://git:$GIT_TOKEN@github.com/".insteadOf "git@github.com:" $> $REDIRECT
 
 # Apply configs
-    echo
-    echo "Applying updates if needed"
 	upd
 
 # This section re-pulls all go files from github and updates $SBIN_DIR
