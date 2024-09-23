@@ -174,6 +174,11 @@ done
 # 	git config --global url."https://ssh:$GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/" > $REDIRECT
 # 	git config --global url."https://git:$GIT_TOKEN@github.com/".insteadOf "git@github.com:" $> $REDIRECT
 
+# Apply configs
+    echo
+    echo "Applying updates if needed"
+	upd
+
 # This section re-pulls all go files from github and updates $SBIN_DIR
 	# Change to local repository directory
             if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
@@ -246,12 +251,6 @@ done
 # 	chown -R $ROOT_USER:$ROOT_USER $SERVICES_DIR
 # 	find $SERVICES_DIR -type d -print -exec chmod $SERVICES_DIR_PERMISSIONS {} \; >> /dev/null 2>&1
 # 	find $SERVICES_DIR -type f -print -exec chmod $SERVICES_FILE_PERMISSIONS {} \; >> /dev/null 2>&1
-
-# Apply configs
-    echo
-    echo "Applying configurations"
-	f_apply_configs $ARGS
-
 
 ###################################################
 # Wrap up.
