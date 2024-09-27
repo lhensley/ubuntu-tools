@@ -37,8 +37,10 @@ fi
 # Do stuff here
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
-echo "$START_DATEANDTIMESTAMP Start size" $(du -hs "$1")
+startupsize="$START_DATEANDTIMESTAMP Start size "$(du -hs "$1")
+# echo "$START_DATEANDTIMESTAMP Start size" $(du -hs "$1")
 find "$1" -type f -exec compress-with-hevc-file {} \;
+echo $startupsize
 echo "$START_DATEANDTIMESTAMP End size" $(du -hs "$1")
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
