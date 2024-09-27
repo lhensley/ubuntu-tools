@@ -52,17 +52,17 @@ if [ $(exiftool -s3 -CompressorID "$Filename") = "hvc1" ] ; then
 HandbrakePreset="/etc/HandBrake/Lane-2024-07-04.json"
 echo "$START_DATEANDTIMESTAMP $Filename re-rendering started."
 echo HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$Filename" -o "/tmp/$UUID"
-if [ $? ] ; then 
+if ! [ $? ] ; then 
     echo "$START_DATEANDTIMESTAMP $Filename re-rendering FAILED."
     exit -1
     fi
 echo exiftool -Comments="$HandbrakePreset" "/tmp/$UUID"
-if [ $? ] ; then 
+if ! [ $? ] ; then 
     echo "$START_DATEANDTIMESTAMP $Filename exif comment add FAILED."
     exit -1
     fi
 echo mv "/tmp/$UUID" "$Filename"
-if [ $? ] ; then 
+if ! [ $? ] ; then 
     echo "$START_DATEANDTIMESTAMP $Filename overwrite from temp file FAILED."
     exit -1
     fi
