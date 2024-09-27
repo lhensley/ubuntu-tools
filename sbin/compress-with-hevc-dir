@@ -28,15 +28,18 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 	# f_require_host [HOST]
 
 # CHECK FOR ENOUGH ARGUMENTS (change 0 to minimum arguments and flesh out Usage)
-if [ $# -lt 0 ]; 
+if [ $# -lt 1 ]; 
     then echo "$EXIT_CODE_DESC_DIRECTORY_NOT_FOUND"
-	echo "Usage: $(basename $0)"
+	echo "Usage: $(basename $0)" CONTAINER_DIRECTORY
 	exit $EXIT_CODE_DIRECTORY_NOT_FOUND
 fi
 
 # Do stuff here
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
+echo "$START_DATEANDTIMESTAMP $1 start size" $(du -hs "$1")
+find "$1" -type f -exec compress-with-hevc-file {} \;
+echo "$START_DATEANDTIMESTAMP $1 end size" $(du -hs "$1")
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 

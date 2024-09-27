@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEBUG_MODE=true; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 ###################################################
 # Notes
@@ -35,7 +35,7 @@ DEBUG_MODE=true; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" 
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 61; fi
 
 # Uncomment requirements for script execution
-	# f_require_root
+     # f_require_root
     # f_require_ubuntu
     # f_deprecated
     # f_require_minimum_version_number "version-number"
@@ -43,6 +43,17 @@ DEBUG_MODE=true; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" 
     # f_only_on_server "hostname"
     # f_require_confirmation "This text is displayed, requesting confirmation word." "ConfirmationWord"
     # set -x # For debugging
+
+# POSSIBLE OPTION: USE IF YOU WANT
+# Require a specific host
+	# f_require_host [HOST]
+
+# CHECK FOR ENOUGH ARGUMENTS (change 0 to minimum arguments and flesh out Usage)
+if [ $# -lt 0 ]; 
+    then echo "$EXIT_CODE_DESC_DIRECTORY_NOT_FOUND"
+	echo "Usage: $(basename $0)"
+	exit $EXIT_CODE_DIRECTORY_NOT_FOUND
+fi
 
 
 ###################################################
