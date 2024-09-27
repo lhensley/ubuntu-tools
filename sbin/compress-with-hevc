@@ -44,9 +44,10 @@ if ! [ -w "$Filename" ] ; then
     exit -1
     fi
 
-if [ $(exiftool -s3 -CompressorID "$Filename") = "hvc1" ] ; then 
+mediainfo "$Filename" | grep 'High Efficiency Video Coding' # >> /dev/null 2>> /dev/null
+if [ $? -eq 0 ] ; then 
     echo "$START_DATEANDTIMESTAMP $Filename is already an HEVC file."
-    exit -1
+#    exit -1
     fi
 
 HandbrakePreset="/etc/HandBrake/Lane-2024-07-04.json"
