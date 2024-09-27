@@ -30,7 +30,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 Filename="$1"
 
 if ! [ -f "$Filename" ] ; then 
-    echo "$START_DATEANDTIMESTAMP $Filename does not exist."
+    echo "$START_DATEANDTIMESTAMP $Filename is not a file."
     exit -1
     fi
 
