@@ -1,0 +1,66 @@
+#!/bin/bash
+
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+# if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+
+# POSSIBLE OPTION: USE IF YOU WANT
+# Require root
+	# f_require_root
+
+# POSSIBLE OPTION: USE IF YOU WANT
+# Require a specific host
+	# f_require_host [HOST]
+
+# CHECK FOR ENOUGH ARGUMENTS (change 0 to minimum arguments and flesh out Usage)
+if [ $# -lt 1 ]; 
+    then echo "$EXIT_CODE_DESC_DIRECTORY_NOT_FOUND"
+	echo "Usage: $(basename $0) VIDEO_FILE_NAME"
+	echo $#
+	exit $EXIT_CODE_DIRECTORY_NOT_FOUND
+fi
+
+# Do stuff here
+if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+Filename="$1"
+
+if ! [ -f "$Filename" ] ; then 
+    echo "$START_DATEANDTIMESTAMP $Filename does not exist."
+    exit -1
+    fi
+
+if ! [ $(exiftool -s3 -MIMEType "$Filename" | cut -c1-5) = "video" ] ; then 
+    echo 
+    echo "$START_DATEANDTIMESTAMP $Filename is not a video file."
+    exit -1
+    fi
+
+if ! [ -w "$Filename" ] ; then 
+    echo "$START_DATEANDTIMESTAMP $Filename is not writable."
+    exit -1
+    fi
+
+if [ $(exiftool -s3 -CompressorID "$Filename") = "hvc1" ] ; then 
+    echo 
+    echo "$START_DATEANDTIMESTAMP $Filename is already an HEVC file."
+    exit -1
+    fi
+
+HandbrakePreset="/etc/HandBrake/Lane-2024-07-04.json"
+echo HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$Filename" -o "/tmp/$UUID"
+echo $?
+
+if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+
