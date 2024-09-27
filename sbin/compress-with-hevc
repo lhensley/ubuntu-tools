@@ -21,7 +21,6 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 if [ $# -lt 1 ]; 
     then echo "$EXIT_CODE_DESC_DIRECTORY_NOT_FOUND"
 	echo "Usage: $(basename $0) VIDEO_FILE_NAME"
-	echo $#
 	exit $EXIT_CODE_DIRECTORY_NOT_FOUND
 fi
 
@@ -36,7 +35,6 @@ if ! [ -f "$Filename" ] ; then
     fi
 
 if ! [ $(exiftool -s3 -MIMEType "$Filename" | cut -c1-5) = "video" ] ; then 
-    echo 
     echo "$START_DATEANDTIMESTAMP $Filename is not a video file."
     exit -1
     fi
@@ -47,14 +45,28 @@ if ! [ -w "$Filename" ] ; then
     fi
 
 if [ $(exiftool -s3 -CompressorID "$Filename") = "hvc1" ] ; then 
-    echo 
     echo "$START_DATEANDTIMESTAMP $Filename is already an HEVC file."
     exit -1
     fi
 
 HandbrakePreset="/etc/HandBrake/Lane-2024-07-04.json"
+echo "$START_DATEANDTIMESTAMP $Filename re-rendering started."
 echo HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$Filename" -o "/tmp/$UUID"
-echo $?
+if $? ; then 
+    echo "$START_DATEANDTIMESTAMP $Filename re-rendering FAILED."
+    exit -1
+    fi
+echo exiftool -Comments="$HandbrakePreset" "/tmp/$UUID"
+if $? ; then 
+    echo "$START_DATEANDTIMESTAMP $Filename exif comment add FAILED."
+    exit -1
+    fi
+echo mv "/tmp/$UUID" "$Filename"
+if $? ; then 
+    echo "$START_DATEANDTIMESTAMP $Filename overwrite from temp file FAILED."
+    exit -1
+    fi
+echo "$START_DATEANDTIMESTAMP $Filename successfully re-rendered."
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
