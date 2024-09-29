@@ -57,7 +57,7 @@ if [ "X"$(exiftool -m -api largefilesupport=1 -s3 -Encoder "$Filename" | cut -c1
 
 HandbrakePreset="/etc/HandBrake/Lane-2024-07-04.json"
 echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering started."
-HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$Filename" -o "/tmp/$UUID" >> /dev/null 2>> /dev/null
+HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$Filename" -o "/tmp/$UUID" # >> /dev/null 2>> /dev/null
 if ! [ $? ] ; then 
     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering FAILED."
     exit -1

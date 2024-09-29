@@ -20,7 +20,7 @@ function f_file_ext () {
     # Usage f_dirname "PATH_AND_OR_FILE"
     # returns file extension of a full path and/or file
 	# See also f_dirname, f_file_main, and f_replace_ext
-    FILENAME=$(basename "$PATHFILE")
+    FILENAME=$(basename "$1")
     FILE_EXT=""
     if [[ $FILENAME == *.* ]] ; then
         FILE_EXT="${FILENAME##*.}"
@@ -32,7 +32,7 @@ function f_file_main () {
     # Usage f_dirname "PATH_AND_OR_FILE"
     # returns filename, without path or extension, of a full path and/or file
 	# See also f_dirname, f_file_ext, and f_replace_ext
-    FILENAME=$(basename "$PATHFILE")
+    FILENAME=$(basename "$1")
     FILE_EXT=""
     FILE_MAIN="$FILENAME"
     if [[ $FILENAME == *.* ]] ; then
