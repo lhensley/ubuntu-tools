@@ -9,6 +9,49 @@
 # Set a flag to confirm that the functions are not yet defined
 FUNCTIONS_ARE_DEFINED=false
 
+function f_dirname () {
+    # returns directory of a full path and/or file
+    # Usage f_dirname "PATH_AND_OR_FILE"
+	# See also f_file_ext, f_file_main, and f_replace_ext
+    dirname "$1"
+    }
+    
+function f_file_ext () {
+    # Usage f_dirname "PATH_AND_OR_FILE"
+    # returns file extension of a full path and/or file
+	# See also f_dirname, f_file_main, and f_replace_ext
+    FILENAME=$(basename "$PATHFILE")
+    FILE_EXT=""
+    if [[ $FILENAME == *.* ]] ; then
+        FILE_EXT="${FILENAME##*.}"
+        fi
+    echo "$FILE_EXT"
+    }
+
+function f_file_main () {
+    # Usage f_dirname "PATH_AND_OR_FILE"
+    # returns filename, without path or extension, of a full path and/or file
+	# See also f_dirname, f_file_ext, and f_replace_ext
+    FILENAME=$(basename "$PATHFILE")
+    FILE_EXT=""
+    FILE_MAIN="$FILENAME"
+    if [[ $FILENAME == *.* ]] ; then
+        FILE_EXT="${FILENAME##*.}"
+        FILENAME_LEN=${#FILENAME}
+        FILE_EXT_LEN=${#FILE_EXT}
+        FILE_MAIN_LEN=$((FILENAME_LEN-FILE_EXT_LEN-1))
+        FILE_MAIN=$(echo "$FILENAME" | cut -c1-"$FILE_MAIN_LEN")
+        fi
+    echo "$FILE_MAIN"
+    }
+
+function f_replace_ext () {
+    # Usage f_dirname "PATH_AND_OR_FILE" "NEW_EXTENSION"
+    # replaces a file extension returns file extension of a full path and/or file
+	# See also f_dirname, f_file_ext, and f_file_main
+    echo $(f_dirname "$1")/$(f_file_main "$1")."$2"
+    }
+
 function f_log_and_echo () {
 # Usage f_log_and_echo "$MESSAGE_TO_STDERR_AND_LOG" "$SEND_TEXT_ALERT_TRUE_OR_FALSE"
 	if $2; then echo $HOSTNAME $(basename $0): $1 | mail $TEXT_ALERTS; fi
