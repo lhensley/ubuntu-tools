@@ -62,8 +62,7 @@ if [ "X"$(exiftool -m -q -q -api largefilesupport=1 -s3 -Encoder "$Filename" | c
     fi
 
 HandbrakePreset="/etc/HandBrake/Lane-2024-07-04.json"
-echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering started."
-echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename "$(du -hs "$Filename)"
+echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering started $(du -hs "$Filename")
 HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$Filename" -o "/tmp/$UUID" >> /dev/null 2>> /dev/null
 if ! [ $? ] ; then 
     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering FAILED."
@@ -80,8 +79,7 @@ if ! [ $? ] ; then
     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename overwrite from temp file FAILED."
     exit -1
     fi
-echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename successfully re-rendered."
-echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') "$(f_replace_ext "$Filename" "mp4")" "$(du -hs "$Filename)"
+echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename successfully re-rendered $(du -hs "$Filename")
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
