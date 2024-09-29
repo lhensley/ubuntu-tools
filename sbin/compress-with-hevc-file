@@ -31,14 +31,14 @@ echo '--------'
 
 Filename="$1"
 
-echo Checking that $1 is a file.
+# echo Checking that $1 is a file.
 if ! [ -f "$Filename" ] ; then 
     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not a file."
     exit -1
     fi
 
-echo Checking that $1 is a video file.
-if ! [ $(exiftool -api largefilesupport=1 -s3 -MIMEType "$Filename" | cut -c1-5) = "video" ] ; then 
+# echo Checking that $1 is a video file.
+if ! [ $(exiftool -m -api largefilesupport=1 -s3 -MIMEType "$Filename" | cut -c1-5) = "video" ] ; then 
     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not a video file."
     exit -1
     fi
@@ -50,7 +50,7 @@ if ! [ -w "$Filename" ] ; then
     fi
 
 echo Checking that $1 has not already been rendered by HandBrake.
-if [ "X"$(exiftool -api largefilesupport=1 -s3 -Encoder "$Filename" | cut -c1-9) = "XHandBrake" ] ; then 
+if [ "X"$(exiftool -m -api largefilesupport=1 -s3 -Encoder "$Filename" | cut -c1-9) = "XHandBrake" ] ; then 
     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename already rendered by HandBrake."
     exit -1
     fi
@@ -62,7 +62,7 @@ if ! [ $? ] ; then
     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering FAILED."
     exit -1
     fi
-exiftool -api largefilesupport=1 -Comment="$HandbrakePreset" "/tmp/$UUID"
+exiftool -m -api largefilesupport=1 -Comment="$HandbrakePreset" "/tmp/$UUID"
 if ! [ $? ] ; then 
     echo "$$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename exif comment add FAILED."
     exit -1
