@@ -34,7 +34,7 @@ if ! [ -f "$Filename" ] ; then
     exit -1
     fi
 
-if ! [ $(exiftool -s3 -MIMEType "$Filename" | cut -c1-5) = "video" ] ; then 
+if ! [ $(exiftool -api largefilesupport=1 -s3 -MIMEType "$Filename" | cut -c1-5) = "video" ] ; then 
     echo "$START_DATEANDTIMESTAMP $Filename is not a video file."
     exit -1
     fi
@@ -44,7 +44,7 @@ if ! [ -w "$Filename" ] ; then
     exit -1
     fi
 
-if [ $(exiftool -s3 -Encoder "$Filename" | cut -c1-9) = "HandBrake" ] ; then 
+if [ "X"$(exiftool -api largefilesupport=1 -s3 -Encoder "$Filename" | cut -c1-9) = "XHandBrake" ] ; then 
     echo "$START_DATEANDTIMESTAMP $Filename already rendered by HandBrake."
     exit -1
     fi
@@ -56,12 +56,13 @@ if ! [ $? ] ; then
     echo "$START_DATEANDTIMESTAMP $Filename re-rendering FAILED."
     exit -1
     fi
-exiftool -Comment="$HandbrakePreset" "/tmp/$UUID"
+exiftool -api largefilesupport=1 -Comment="$HandbrakePreset" "/tmp/$UUID"
 if ! [ $? ] ; then 
     echo "$START_DATEANDTIMESTAMP $Filename exif comment add FAILED."
     exit -1
     fi
-mv "/tmp/$UUID" "$Filename"
+rm "$Filename"
+mv "/tmp/$UUID" $(f_replace_ext "$Filename" "mp4")
 if ! [ $? ] ; then 
     echo "$START_DATEANDTIMESTAMP $Filename overwrite from temp file FAILED."
     exit -1
