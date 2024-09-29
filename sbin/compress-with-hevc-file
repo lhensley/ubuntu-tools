@@ -43,13 +43,13 @@ if ! [ $(exiftool -m -api largefilesupport=1 -s3 -MIMEType "$Filename" | cut -c1
     exit -1
     fi
 
-echo Checking that $1 is writable.
+# echo Checking that $1 is writable.
 if ! [ -w "$Filename" ] ; then 
     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not writable."
     exit -1
     fi
 
-echo Checking that $1 has not already been rendered by HandBrake.
+# echo Checking that $1 has not already been rendered by HandBrake.
 if [ "X"$(exiftool -m -api largefilesupport=1 -s3 -Encoder "$Filename" | cut -c1-9) = "XHandBrake" ] ; then 
     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename already rendered by HandBrake."
     exit -1
