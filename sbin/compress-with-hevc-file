@@ -68,7 +68,9 @@ if ! [ $? ] ; then
     exit -1
     fi
 rm "$Filename"
-mv "/tmp/$UUID" $(f_replace_ext "$Filename" "mp4")
+# SRC="/tmp/$UUID"
+# TGT=
+mv "/tmp/$UUID" "$(f_replace_ext "$Filename" "mp4")"
 if ! [ $? ] ; then 
     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename overwrite from temp file FAILED."
     exit -1
