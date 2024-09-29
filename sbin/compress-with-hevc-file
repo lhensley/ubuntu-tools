@@ -38,7 +38,7 @@ if ! [ -f "$Filename" ] ; then
     fi
 
 # echo Checking that $1 is a video file.
-if ! [ $(exiftool -m -api largefilesupport=1 -s3 -MIMEType "$Filename" | cut -c1-5) = "video" ] ; then 
+if ! [ "X"$(exiftool -m -api largefilesupport=1 -s3 -MIMEType "$Filename" | cut -c1-5) = "Xvideo" ] ; then 
     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not a video file."
     exit -1
     fi
