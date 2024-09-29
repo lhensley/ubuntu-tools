@@ -27,47 +27,53 @@ fi
 # Do stuff here
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
+echo '--------'
+
 Filename="$1"
 
+echo Checking that $1 is a file.
 if ! [ -f "$Filename" ] ; then 
-    echo "$START_DATEANDTIMESTAMP $Filename is not a file."
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not a file."
     exit -1
     fi
 
+echo Checking that $1 is a video file.
 if ! [ $(exiftool -api largefilesupport=1 -s3 -MIMEType "$Filename" | cut -c1-5) = "video" ] ; then 
-    echo "$START_DATEANDTIMESTAMP $Filename is not a video file."
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not a video file."
     exit -1
     fi
 
+echo Checking that $1 is writable.
 if ! [ -w "$Filename" ] ; then 
-    echo "$START_DATEANDTIMESTAMP $Filename is not writable."
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not writable."
     exit -1
     fi
 
+echo Checking that $1 has not already been rendered by HandBrake.
 if [ "X"$(exiftool -api largefilesupport=1 -s3 -Encoder "$Filename" | cut -c1-9) = "XHandBrake" ] ; then 
-    echo "$START_DATEANDTIMESTAMP $Filename already rendered by HandBrake."
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename already rendered by HandBrake."
     exit -1
     fi
 
 HandbrakePreset="/etc/HandBrake/Lane-2024-07-04.json"
-echo "$START_DATEANDTIMESTAMP $Filename re-rendering started."
+echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering started."
 HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$Filename" -o "/tmp/$UUID" >> /dev/null 2>> /dev/null
 if ! [ $? ] ; then 
-    echo "$START_DATEANDTIMESTAMP $Filename re-rendering FAILED."
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering FAILED."
     exit -1
     fi
 exiftool -api largefilesupport=1 -Comment="$HandbrakePreset" "/tmp/$UUID"
 if ! [ $? ] ; then 
-    echo "$START_DATEANDTIMESTAMP $Filename exif comment add FAILED."
+    echo "$$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename exif comment add FAILED."
     exit -1
     fi
 rm "$Filename"
 mv "/tmp/$UUID" $(f_replace_ext "$Filename" "mp4")
 if ! [ $? ] ; then 
-    echo "$START_DATEANDTIMESTAMP $Filename overwrite from temp file FAILED."
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename overwrite from temp file FAILED."
     exit -1
     fi
-echo "$START_DATEANDTIMESTAMP $Filename successfully re-rendered."
+echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename successfully re-rendered."
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
