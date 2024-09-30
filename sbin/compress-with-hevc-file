@@ -84,7 +84,7 @@ if ! [ $? ] ; then
     fi
 filedu="$(du -hs "$newfile")"
 filesize=$(echo "$filedu" | cut -d $'\t' -f1)
-echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') Successfully re-rendered $newfile $filesize
+echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $newfile re-rendering successful $filesize
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
