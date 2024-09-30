@@ -79,7 +79,7 @@ if ! [ $? ] ; then
     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename overwrite from temp file FAILED."
     exit -1
     fi
-echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') Successfully re-rendered $(f_replace_ext "$Filename" "mp4") $(du -hs "$(f_replace_ext" "$Filename" "mp4"))
+echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') Successfully re-rendered $(f_replace_ext "$Filename" "mp4") $(du -hs $(f_replace_ext" "$Filename" "mp4"))
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
