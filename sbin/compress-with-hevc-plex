@@ -37,6 +37,8 @@ fi
 # Do stuff here
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
+date
+df -h
 compress-with-hevc-dir /mnt/4TBA/plex
 compress-with-hevc-dir /mnt/12TBA/plex
 
