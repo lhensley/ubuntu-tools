@@ -27,7 +27,7 @@ fi
 # Do stuff here
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
-echo '--------'
+# echo '--------'
 
 Filename="$1"
 newfile=$(f_replace_ext "$Filename" "mp4")
