@@ -30,7 +30,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 echo '--------'
 
 Filename="$1"
-newfile=$(f_replace_ext "$oldfile" "mp4")
+newfile=$(f_replace_ext "$Filename" "mp4")
 
 # echo Checking that $1 is a file.
 if ! [ -f "$Filename" ] ; then 
