@@ -30,6 +30,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 echo '--------'
 
 Filename="$1"
+newfile=$(f_replace_ext "$oldfile" "mp4")
 
 # echo Checking that $1 is a file.
 if ! [ -f "$Filename" ] ; then 
@@ -62,7 +63,9 @@ if [ "X"$(exiftool -m -q -q -api largefilesupport=1 -s3 -Encoder "$Filename" | c
     fi
 
 HandbrakePreset="/etc/HandBrake/Lane-2024-07-04.json"
-echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') Re-rendering started "$(du -hs "$Filename")"
+filedu="$(du -hs "$Filename")"
+filesize=$(echo "$filedu" | cut -d $'\t' -f1)
+echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering started $filesize
 HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$Filename" -o "/tmp/$UUID" >> /dev/null 2>> /dev/null
 if ! [ $? ] ; then 
     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering FAILED."
@@ -74,12 +77,14 @@ if ! [ $? ] ; then
     exit -1
     fi
 rm "$Filename"
-mv /tmp/$UUID "$(f_replace_ext "$Filename" mp4)"
+filedu="$(du -hs "$newfile")"
+filesize=$(echo "$filedu" | cut -d $'\t' -f1)
+mv /tmp/$UUID "$newfile"
 if ! [ $? ] ; then 
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename overwrite from temp file FAILED."
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $newfile import from temp file FAILED."
     exit -1
     fi
-echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') Successfully re-rendered $(f_replace_ext "$Filename" "mp4") "$(du -hs $(f_replace_ext "$Filename" "mp4")")
+echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') Successfully re-rendered $newfile $filesize
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
