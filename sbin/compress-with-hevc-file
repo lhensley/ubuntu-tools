@@ -30,61 +30,64 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 # echo '--------'
 
 Filename="$1"
+tempmp4="/tmp/$UUID.mp4"
 newfile=$(f_replace_ext "$Filename" "mp4")
+templog="/tmp/compress-with-hevc.log"
 
 # echo Checking that $1 is a file.
 if ! [ -f "$Filename" ] ; then 
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not a file."
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not a file." | tee -a "$templog"
     exit -1
     fi
 
 # echo Checking that $1 is not empty.
 if ! [ -s "$Filename" ] ; then 
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is empty."
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is empty." | tee -a "$templog"
     exit -1
     fi
 
 # echo Checking that $1 is a video file.
 if ! [ "X"$(exiftool -m -q -q -api largefilesupport=1 -s3 -MIMEType "$Filename" | cut -c1-5) = "Xvideo" ] ; then 
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not a video file."
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not a video file." | tee -a "$templog"
     exit -1
     fi
 
 # echo Checking that $1 is writable.
 if ! [ -w "$Filename" ] ; then 
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not writable."
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not writable." | tee -a "$templog"
     exit -1
     fi
 
 # echo Checking that $1 has not already been rendered by HandBrake.
 if [ "X"$(exiftool -m -q -q -api largefilesupport=1 -s3 -Encoder "$Filename" | cut -c1-9) = "XHandBrake" ] ; then 
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename already rendered by HandBrake."
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename already rendered by HandBrake." | tee -a "$templog"
     exit -1
     fi
 
 HandbrakePreset="/etc/HandBrake/Lane-2024-07-04.json"
 filedu="$(du -hs "$Filename")"
 filesize=$(echo "$filedu" | cut -d $'\t' -f1)
-echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering started $filesize
-HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$Filename" -o "/tmp/$UUID" >> /dev/null 2>> /dev/null
+echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering started $filesize  | tee -a "$templog"
+HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$Filename" -o "$tempmp4" >> /dev/null 2>> /dev/null
 if ! [ $? ] ; then 
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering FAILED."
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering FAILED." | tee -a "$templog"
     exit -1
     fi
-exiftool -m -q -q -api largefilesupport=1 -Comment="$HandbrakePreset" "/tmp/$UUID"
+exiftool -m -q -q -api largefilesupport=1 -Comment="$HandbrakePreset" "$tempmp4"
 if ! [ $? ] ; then 
-    echo "$$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename exif comment add FAILED."
+    echo "$$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename exif comment add FAILED." | tee -a "$templog"
     exit -1
     fi
 rm "$Filename"
-mv /tmp/$UUID "$newfile"
+mv $tempmp4 "$newfile"
 if ! [ $? ] ; then 
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $newfile import from temp file FAILED."
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $newfile import from temp file FAILED." | tee -a "$templog"
     exit -1
     fi
+rm -f "$tempmp4"*
 filedu="$(du -hs "$newfile")"
 filesize=$(echo "$filedu" | cut -d $'\t' -f1)
-echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $newfile re-rendering successful $filesize
+echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $newfile re-rendering successful $filesize | tee -a "$templog"
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
