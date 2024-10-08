@@ -304,8 +304,8 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 	# /home/lhensley/dvr (plex)
 		if $(f_is_directory "$ADMIN_HOME_DIR/dvr"); then
 			echo Updating permissions for "$ADMIN_HOME_DIR/dvr"
-			find "$ADMIN_HOME_DIR/dvr" -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
-			find "$ADMIN_HOME_DIR/dvr" -type f -print -exec chmod 644 {} \; >> /dev/null 2>&1
+			find "$ADMIN_HOME_DIR/dvr" -type d -print -exec chmod 777 {} \; >> /dev/null 2>&1
+			find "$ADMIN_HOME_DIR/dvr" -type f -print -exec chmod 666 {} \; >> /dev/null 2>&1
 			chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/dvr"
 			fi
 
