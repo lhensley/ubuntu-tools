@@ -259,17 +259,17 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 	# /etc/ufw/applications.d
 		echo Updating permissions for /etc/ufw/applications.d
-		chown -f $ROOT_USER:$ROOT_USER /etc/ufw/applications.d
-		chmod -f 644 /etc/ufw/applications.d/*
+		chown -fR $ROOT_USER:$ROOT_USER /etc/ufw/applications.d
+		chmod -fR 644 /etc/ufw/applications.d/*
 
 	# Git
 		echo "Updating permissions for git"
 		if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 		# Configs
-			chmod -f 600 $ROOT_HOME_DIR/.gitconfig
-			chmod -f 600 $ADMIN_HOME_DIR/.gitconfig
-			chown -f $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.gitconfig
-			chown -f $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.gitconfig
+			chmod -fR 600 $ROOT_HOME_DIR/.gitconfig
+			chmod -fR 600 $ADMIN_HOME_DIR/.gitconfig
+			chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.gitconfig
+			chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.gitconfig
 		if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 		# $GIT_ROOT (working clone at ~/git)
 			# find "$GIT_ROOT" -type d -print -exec chmod 700 {} \; >> /dev/null 2>&1
@@ -296,17 +296,17 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 	# /home/lhensley/vim Vim and vi config files
 		echo Updating permissions for "$ADMIN_HOME_DIR/.vim*" and "$ROOT_HOME_DIR/.vim*"
-		chmod -f 600 "$ADMIN_HOME_DIR/.vim*"
-		chmod -f 600 "$ROOT_HOME_DIR/.vim*"
-		chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.vim*"
-		chown -f $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.vim*"
+		chmod -fR 600 "$ADMIN_HOME_DIR/.vim"
+		chmod -fR 600 "$ROOT_HOME_DIR/.vim"
+		chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.vim"
+		chown -fR $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.vim"
 
 	# /home/lhensley/dvr (plex)
 		if $(f_is_directory "$ADMIN_HOME_DIR/dvr"); then
 			echo Updating permissions for "$ADMIN_HOME_DIR/dvr"
 			find "$ADMIN_HOME_DIR/dvr" -type d -print -exec chmod 777 {} \; >> /dev/null 2>&1
 			find "$ADMIN_HOME_DIR/dvr" -type f -print -exec chmod 666 {} \; >> /dev/null 2>&1
-			chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/dvr"
+			chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/dvr"
 			fi
 
 	# Set /lib/systemd/system ownership and permissions for $SERVICES_DIR
