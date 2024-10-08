@@ -39,6 +39,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 date
 df -h
+sudo _apply-permissions
 compress-with-hevc-dir /home/lhensley/dvr
 compress-with-hevc-dir /mnt/4TBA/plex
 compress-with-hevc-dir /mnt/12TBA/plex
