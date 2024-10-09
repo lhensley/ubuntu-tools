@@ -301,13 +301,13 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.vim"
 		chown -fR $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.vim"
 
-	# /home/lhensley/dvr (plex)
-		if $(f_is_directory "$ADMIN_HOME_DIR/dvr"); then
-			echo Updating permissions for "$ADMIN_HOME_DIR/dvr"
-			find "$ADMIN_HOME_DIR/dvr" -type d -print -exec chmod 777 {} \; >> /dev/null 2>&1
-			find "$ADMIN_HOME_DIR/dvr" -type f -print -exec chmod 666 {} \; >> /dev/null 2>&1
-			chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/dvr"
-			fi
+#	# /home/lhensley/dvr (plex)
+#		if $(f_is_directory "$ADMIN_HOME_DIR/dvr"); then
+#			echo Updating permissions for "$ADMIN_HOME_DIR/dvr"
+#			find "$ADMIN_HOME_DIR/dvr" -type d -print -exec chmod 777 {} \; >> /dev/null 2>&1
+#			find "$ADMIN_HOME_DIR/dvr" -type f -print -exec chmod 666 {} \; >> /dev/null 2>&1
+#			chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/dvr"
+#			fi
 
 	# Set /lib/systemd/system ownership and permissions for $SERVICES_DIR
 		echo Updating permissions for $SERVICES_DIR
@@ -380,7 +380,12 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		if $(f_is_installed "plexmediaserver"); then
 			if $SET_PLEX_FILE_PERMISSIONS; then
 				echo Applying Plex permissions ... > $REDIRECT
-				f_set_plex_media_recursive_permissions > /dev/null
+				find "$/mnt/4TBA/plex" -type d -print -exec chmod 777 {} \; >> /dev/null 2>&1
+				find "$/mnt/12TBA/plex" -type d -print -exec chmod 777 {} \; >> /dev/null 2>&1
+				find "$/mnt/4TBA/plex" -type f -print -exec chmod 666 {} \; >> /dev/null 2>&1
+				find "$/mnt/12TBA/plex" -type f -print -exec chmod 666 {} \; >> /dev/null 2>&1
+				chown -fR $ADMIN_USER:$ADMIN_USER "$/mnt/4TBA/plex" "$/mnt/12TBA/plex"
+				# f_set_plex_media_recursive_permissions > /dev/null
 				fi
 			fi
 

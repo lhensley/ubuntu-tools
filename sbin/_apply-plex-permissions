@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# DISABLED! DOESN'T DO ANYTHING!
+
 DEBUG_MODE=true; if $DEBUG_MODE ; then echo "Executing $0 line ${LINENO}" ; fi
 
 # Include script setup file
@@ -14,7 +16,8 @@ DEBUG_MODE=true; if $DEBUG_MODE ; then echo "Executing $0 line ${LINENO}" ; fi
 	# NOTE: Recommend leaving the f_balk command below until this script no longer is called by other scripts.
 	# When it's time, you may want to leave the script intact so it can be invoked from the command line, but drop the balk warning below.
 	# f_deprecated f_apply_configs f_set_plex_media_recursive_permissions
-	f_set_plex_media_recursive_permissions
+	# f_set_plex_media_recursive_permissions
+	# IE, this doesn't do anything.
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
