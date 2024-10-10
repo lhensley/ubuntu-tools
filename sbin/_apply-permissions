@@ -376,7 +376,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 			fi
 
 	# Plex Media Server Video Files
-		echo Updating permissions for Plex (takes a minute)
+		echo "Updating permissions for Plex (takes a minute)"
 #		if $(f_is_installed "plexmediaserver"); then
 #			if $SET_PLEX_FILE_PERMISSIONS; then
 #				echo Applying Plex permissions ... > $REDIRECT
