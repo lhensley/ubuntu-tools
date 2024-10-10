@@ -384,7 +384,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 				find "/mnt/12TBA/plex" -type d -print -exec chmod 777 {} \; >> /dev/null 2>&1
 				find "/mnt/4TBA/plex" -type f -print -exec chmod 666 {} \; >> /dev/null 2>&1
 				find "/mnt/12TBA/plex" -type f -print -exec chmod 666 {} \; >> /dev/null 2>&1
-				chown -fR $ADMIN_USER:$ADMIN_USER "$/mnt/4TBA/plex" "$/mnt/12TBA/plex"
+				chown -fR $ADMIN_USER:$ADMIN_USER "/mnt/4TBA/plex" "/mnt/12TBA/plex"
 				# f_set_plex_media_recursive_permissions > /dev/null
 #				fi
 #			fi
