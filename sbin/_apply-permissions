@@ -379,7 +379,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		echo Updating permissions for Plex
 #		if $(f_is_installed "plexmediaserver"); then
 #			if $SET_PLEX_FILE_PERMISSIONS; then
-				echo Applying Plex permissions ... > $REDIRECT
+#				echo Applying Plex permissions ... > $REDIRECT
 				find "/mnt/4TBA/plex" -type d -print -exec chmod 777 {} \; >> /dev/null 2>&1
 				find "/mnt/12TBA/plex" -type d -print -exec chmod 777 {} \; >> /dev/null 2>&1
 				find "/mnt/4TBA/plex" -type f -print -exec chmod 666 {} \; >> /dev/null 2>&1
