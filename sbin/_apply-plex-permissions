@@ -15,9 +15,16 @@ DEBUG_MODE=true; if $DEBUG_MODE ; then echo "Executing $0 line ${LINENO}" ; fi
 # Do the work
 	# NOTE: Recommend leaving the f_balk command below until this script no longer is called by other scripts.
 	# When it's time, you may want to leave the script intact so it can be invoked from the command line, but drop the balk warning below.
-	# f_deprecated f_apply_configs f_set_plex_media_recursive_permissions
-	# f_set_plex_media_recursive_permissions
-	# IE, this doesn't do anything.
+
+# Plex Media Server Video Files
+	echo "Updating permissions for Plex (takes a minute)"
+	chown -fR $ADMIN_USER:$ADMIN_USER "/home/lhensley/plex" "/mnt/4TBA/plex" "/mnt/12TBA/plex"
+	find "/home/lhensley/plex" -type d -print -exec chmod 777 {} \; >> /dev/null 2>&1
+	find "/home/lhensley/plex" -type f -print -exec chmod 666 {} \; >> /dev/null 2>&1
+	find "/mnt/4TBA/plex" -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
+	find "/mnt/4TBA/plex" -type f -print -exec chmod 644 {} \; >> /dev/null 2>&1
+	find "/mnt/12TBA/plex" -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
+	find "/mnt/12TBA/plex" -type f -print -exec chmod 644 {} \; >> /dev/null 2>&1
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

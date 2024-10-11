@@ -375,22 +375,6 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 			chown -f -R $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.HandBrake"
 			fi
 
-	# Plex Media Server Video Files
-		echo "Updating permissions for Plex (takes a minute)"
-#		if $(f_is_installed "plexmediaserver"); then
-#			if $SET_PLEX_FILE_PERMISSIONS; then
-#				echo Applying Plex permissions ... > $REDIRECT
-				find "/var/local/plex" -type d -print -exec chmod 777 {} \; >> /dev/null 2>&1
-				find "/mnt/4TBA/plex" -type d -print -exec chmod 777 {} \; >> /dev/null 2>&1
-				find "/mnt/12TBA/plex" -type d -print -exec chmod 777 {} \; >> /dev/null 2>&1
-				find "/var/local/plex" -type f -print -exec chmod 666 {} \; >> /dev/null 2>&1
-				find "/mnt/4TBA/plex" -type f -print -exec chmod 666 {} \; >> /dev/null 2>&1
-				find "/mnt/12TBA/plex" -type f -print -exec chmod 666 {} \; >> /dev/null 2>&1
-				chown -fR $ADMIN_USER:$ADMIN_USER "/var/local/plex" "/mnt/4TBA/plex" "/mnt/12TBA/plex"
-				# f_set_plex_media_recursive_permissions > /dev/null
-#				fi
-#			fi
-
 	# phpmyadmin
 		if $(f_is_installed "phpmyadmin"); then
 			echo Updating permissions for $PHPMYADMIN_DIR

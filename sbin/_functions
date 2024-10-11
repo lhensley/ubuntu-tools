@@ -535,20 +535,6 @@ function f_is_mounted () {
 		fi
 	}
 
-function f_set_plex_media_recursive_permissions () {
-#		chown -R $PLEX_USER:$PLEX_USER "$SBIN_DIR" "$VIDEO_WORK_DIRECTORY"
-#		chown -R $PLEX_USER:$PLEX_USER "$SBIN_DIR" "$VIDEO_STORE_DIRECTORY"
-		chown -R $PLEX_USER:$PLEX_USER "$VIDEO_WORK_DIRECTORY"/*
-		chown -R $PLEX_USER:$PLEX_USER "$VIDEO_STORE_DIRECTORY"/*
-#		echo $PLEX_USER
-#		echo $PERMISSIONS_PLEX_VIDEO_LIBRARY_DIRECTORY
-#		echo $PERMISSIONS_PLEX_VIDEO_FILE
-		find "$VIDEO_WORK_DIRECTORY" -type d -exec chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS {} \;
-		find "$VIDEO_WORK_DIRECTORY" -type f -exec chmod $PLEX_VIDEO_FILE_PERMISSIONS {} \;
-		find "$VIDEO_STORE_DIRECTORY" -type d -exec chmod $PLEX_VIDEO_LIBRARY_DIRECTORY_PERMISSIONS {} \;
-		find "$VIDEO_STORE_DIRECTORY" -type f -exec chmod $PLEX_VIDEO_FILE_PERMISSIONS {} \;
-	}
-
 function f_only_on_server () {
 	# $1 = allowed-short-host-name
 	if [ $HOSTNAME != "$1" ]; then f_die "This script runs only on $1." false $EXIT_CODE_SPECIFIC_SERVER_REQUIRED; fi

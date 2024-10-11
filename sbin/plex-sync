@@ -14,11 +14,7 @@
 # Require a specific host
 	f_require_host dsm1
 
-chown -R lhensley:lhensley /mnt/4TBA/plex /mnt/12TBA/plex
-find /mnt/4TBA/plex -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
-find /mnt/4TBA/plex -type f -print -exec chmod 644 {} \; >> /dev/null 2>&1
-find /mnt/12TBA/plex -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
-find /mnt/12TBA/plex -type f -print -exec chmod 644 {} \; >> /dev/null 2>&1
+sudo _apply-plex-permissions
 rsync -avE --delete /mnt/4TBA/plex /mnt/5TBC/archives/4TBA
 rsync -avE --delete /mnt/4TBA/archives /mnt/5TBC/archives/4TBA
 rsync -avE --delete /mnt/4TBA/plex /mnt/20TBA/archives/4TBA
