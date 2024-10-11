@@ -154,11 +154,19 @@ mkdir -p "$TARGET"
 rsync -avuE --progress "$SOURCE/"* "$TARGET"
 rm -r "$SOURCE"
 
-SOURCE="$CONTAINER/Perry Mason (1957)"
-TARGET="$CONTAINER/Perry Mason (1957) {tvdb=70589}"
-echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') Consolidating $TARGET" | tee -a "$templog"
-rsync -avuE --progress "$SOURCE/"* "$TARGET"
-rm -r "$SOURCE"
+# WEIRD: DON'T COPY!
+
+    SOURCE="$CONTAINER/Perry Mason (1957)"
+    TARGET="/mnt/4TBA/plex/TV Shows/Regular/Perry Mason (1957) {tvdb=70589}"
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') Consolidating $TARGET" | tee -a "$templog"
+    rsync -avuE --progress "$SOURCE/"* "$TARGET"
+    rm -r "$SOURCE"
+
+    SOURCE="$CONTAINER/Perry Mason (1957) {tvdb=70589}"
+    TARGET="/mnt/4TBA/plex/TV Shows/Regular/Perry Mason (1957) {tvdb=70589}"
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') Consolidating $TARGET" | tee -a "$templog"
+    rsync -avuE --progress "$SOURCE/"* "$TARGET"
+    rm -r "$SOURCE"
 
 SOURCE="$CONTAINER/Sanford & Son (1972)"
 TARGET="$CONTAINER/Sanford and Son (1972) {tvdb=78193}"
