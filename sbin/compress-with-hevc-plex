@@ -40,6 +40,225 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 date
 df -h
 sudo _apply-permissions
+
+CONTAINER="/mnt/12TBA/plex/TV Shows/Regular"
+
+SOURCE="$CONTAINER/"
+TARGET="$CONTAINER/"
+
+SOURCE="$CONTAINER/Adam-12 (1968)"
+TARGET="$CONTAINER/Adam-12 (1968) {tvdb=78686}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Bonanza (1959)"
+TARGET="$CONTAINER/Bonanza (1959) {tvdb=73378}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/CHiPs (1977)"
+TARGET="$CONTAINER/CHiPs (1977) {tvdb=78270}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Dragnet (1951)"
+TARGET="$CONTAINER/Dragnet (1951) {tvdb=72763}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Father Brown (2013)"
+TARGET="$CONTAINER/Father Brown (2013) {tvdb=265834}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Hawaii Five-0 (2010)"
+TARGET="$CONTAINER/Hawaii Five-0 (2010) {tvdb=164541}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Lost in Space (1965)"
+TARGET="$CONTAINER/Lost in Space (1965) {tvdb=72923}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Matlock (1986)"
+TARGET="$CONTAINER/Matlock (1986) {tvdb=73064}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Matlock (2024)/Season 02"
+TARGET="$CONTAINER/Matlock (1986) {tvdb=73064}/Season 02"
+mkdir -p "$TARGET"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Matlock (2024)/Season 03"
+TARGET="$CONTAINER/Matlock (1986) {tvdb=73064}/Season 03"
+mkdir -p "$TARGET"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Matlock (2024)/Season 04"
+TARGET="$CONTAINER/Matlock (1986) {tvdb=73064}/Season 04"
+mkdir -p "$TARGET"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Matlock (2024)/Season 05"
+TARGET="$CONTAINER/Matlock (1986) {tvdb=73064}/Season 05"
+mkdir -p "$TARGET"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Matlock (2024)/Season 06"
+TARGET="$CONTAINER/Matlock (1986) {tvdb=73064}/Season 06"
+mkdir -p "$TARGET"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Matlock (2024)/Season 07"
+TARGET="$CONTAINER/Matlock (1986) {tvdb=73064}/Season 07"
+mkdir -p "$TARGET"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Matlock (2024)/Season 08"
+TARGET="$CONTAINER/Matlock (1986) {tvdb=73064}/Season 08"
+mkdir -p "$TARGET"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Matlock (2024)/Season 09"
+TARGET="$CONTAINER/Matlock (1986) {tvdb=73064}/Season 09"
+mkdir -p "$TARGET"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Perry Mason (1957)"
+TARGET="$CONTAINER/Perry Mason (1957) {tvdb=70589}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Sanford & Son (1972)"
+TARGET="$CONTAINER/Sanford and Son (1972) {tvdb=78193}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Saturday Night Live (1975)"
+TARGET="$CONTAINER/Saturday Night Live (1975) {tvdb=76177}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Seinfeld (1989)"
+TARGET="$CONTAINER/Seinfeld (1989) {tvdb=79169}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Star Trek Deep Space Nine (1993)"
+TARGET="$CONTAINER/Star Trek Deep Space Nine (1993) {tvdb=72073}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Star Trek The Next Generation (1987)"
+TARGET="$CONTAINER/Star Trek The Next Generation (1987) {tvdb=71470}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Star Trek Voyager (1995)"
+TARGET="$CONTAINER/Star Trek Voyager (1995) {tvdb=74550}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Superman & Lois (2021)"
+TARGET="$CONTAINER/Superman & Lois (2021) {tvdb=375655}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Tales From the Darkside (1983)"
+TARGET="$CONTAINER/Tales From the Darkside (1984) {tvdb=78132}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/The Adventures of Superman (1952)"
+TARGET="$CONTAINER/Adventures of Superman (1952) {tvdb=77403}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/The Andy Griffith Show (1960)"
+TARGET="$CONTAINER/The Andy Griffith Show (1960) {tvdb=77754}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/The Beverly Hillbillies (1962)"
+TARGET="$CONTAINER/The Beverly Hillbillies (1962) {tvdb=71471}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/The Brady Bunch (1969)"
+TARGET="$CONTAINER/The Brady Bunch (1969) {tvdb=77010}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/The Carol Burnett Show (1967)"
+TARGET="$CONTAINER/The Carol Burnett Show (1967) {tvdb=70657}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/The Dick Van Dyke Show (1961)"
+TARGET="$CONTAINER/The Dick Van Dyke Show (1961) {tvdb=77041}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/The Fugitive (1963)"
+TARGET="$CONTAINER/The Fugitive (1963) {tvdb=75258}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/The Honeymooners (1955)"
+TARGET="$CONTAINER/The Honeymooners (1955) {tvdb=73923}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/The Invaders (1967)"
+TARGET="$CONTAINER/The Invaders (1967) {tvdb=73535}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/The Love Boat (1977)"
+TARGET="$CONTAINER/The Love Boat (1977) {tvdb=76954}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/The Powers of Matthew Star (1982)"
+TARGET="$CONTAINER/The Powers of Matthew Star (1982) {tvdb=78295}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/The Rifleman (1958)"
+TARGET="$CONTAINER/The Rifleman (1958) {tvdb=72089}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/The Simpsons (1989)"
+TARGET="$CONTAINER/The Simpsons (1989) {tvdb=71663}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/The Twilight Zone (1959)"
+TARGET="$CONTAINER/The Twilight Zone (1959) {tvdb=73587}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/The Wild, Wild West (1965)"
+TARGET="$CONTAINER/The Wild, Wild West (1965) {tvdb=71637}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
+SOURCE="$CONTAINER/Wonder Woman (1976)"
+TARGET="$CONTAINER/Wonder Woman (1975) {tvdb=71228}"
+rsync -avuE --progress "$SOURCE/"* "$TARGET"
+rm -r "$SOURCE"
+
 # compress-with-hevc-dir /home/lhensley/dvr
 compress-with-hevc-dir /mnt/4TBA/plex
 compress-with-hevc-dir /mnt/12TBA/plex
