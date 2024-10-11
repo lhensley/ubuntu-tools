@@ -2,7 +2,7 @@
 
 # DISABLED! DOESN'T DO ANYTHING!
 
-DEBUG_MODE=true; if $DEBUG_MODE ; then echo "Executing $0 line ${LINENO}" ; fi
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "Executing $0 line ${LINENO}" ; fi
 
 # Include script setup file
 	source script-setup
