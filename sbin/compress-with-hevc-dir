@@ -41,7 +41,7 @@ echo "$START_DATEANDTIMESTAMP searching for video files to re-render in $1."
 
 startupsize="$START_DATEANDTIMESTAMP Start size "$(du -hs "$1")
 # echo "$START_DATEANDTIMESTAMP Start size" $(du -hs "$1")
-find "$1" -type f -not -path '*/.*' -exec compress-with-hevc-file {} \;
+find "$1" -type f -not -path '*/.grab' -exec compress-with-hevc-file {} \;
 # echo '--------'
 echo $startupsize
 echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')   End size" $(du -hs "$1")
