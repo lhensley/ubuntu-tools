@@ -38,6 +38,7 @@ fi
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 sudo _apply-plex-permissions
+    rm /tmp/compress-with-hevc.log
     compress-with-hevc-dir /home/lhensley/plex
         SOURCE="/home/lhensley/plex"
         TARGET="/mnt/12TBA/plex/TV Shows/Regular"
