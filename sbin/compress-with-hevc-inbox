@@ -37,15 +37,13 @@ fi
 # Do stuff here
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
-sudo _apply-plex-permissions | tee -a "$templog"
+sudo _apply-plex-permissions
     compress-with-hevc-dir /home/lhensley/plex
         SOURCE="/home/lhensley/plex"
         TARGET="/mnt/12TBA/plex/TV Shows/Regular"
         sudo rsync -avuE "$SOURCE/"* "$TARGET"
         find "$SOURCE" -name *.mp4 -type f -not -path '*/.grab' -exec rm {} \;
     compress-with-hevc-dir "/mnt/12TBA/plex/TV Shows/Regular"
-sudo _apply-plex-permissions | tee -a "$templog"
-
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 # Include script footer file
