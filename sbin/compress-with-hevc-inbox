@@ -38,12 +38,12 @@ fi
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 sudo _apply-plex-permissions
-    rm /tmp/compress-with-hevc.log
+    rm -f /tmp/compress-with-hevc.log
     compress-with-hevc-dir /home/lhensley/plex
         SOURCE="/home/lhensley/plex"
         TARGET="/mnt/12TBA/plex/TV Shows/Regular"
         sudo rsync -avuE "$SOURCE/"* "$TARGET"
-        find "$SOURCE" -name *.mp4 -type f -not -path '*/.grab' -exec rm {} \;
+        find "$SOURCE" -name *.mp4 -type f -not -path '*/.grab' -exec rm -f {} \;
     compress-with-hevc-dir "/mnt/12TBA/plex/TV Shows/Regular"
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
