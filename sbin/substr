@@ -5,7 +5,7 @@ MYNAME="Lane Hensley"
 MYEMAIL="lane@lanehensley.org"
 
 COMMANDNAME="substr"
-VERSION="0.1"
+VERSION="0.2"
 COLOPHON="$MYNAME, $MYEMAIL"
 
 SEARCHSTRING="$1"
@@ -13,7 +13,7 @@ FULLSTRING="$2"
 # FLAG="$3"
 
 if [ "$FULLSTRING" = "" ] ; then
-	echo "$COMMANDNAME v$VERSION"
+	echo "$COMMANDNAME $VERSION"
 	echo "by $COLOPHON"
 	echo
 	echo "Usage: $COMMANDNAME STRING_SEARCHED_FOR STRING_SEARCHED"
