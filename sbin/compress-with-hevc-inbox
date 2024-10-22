@@ -10,7 +10,7 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 
 
 # Uncomment requirements for script execution
-     # f_require_root
+    # f_require_root
     # f_require_ubuntu
     # f_deprecated
     # f_require_minimum_version_number "version-number"
