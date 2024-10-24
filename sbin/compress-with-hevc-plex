@@ -174,7 +174,7 @@ rsync -avuE --progress "$SOURCE"/* "$TARGET" | tee -a "$templog" && rm -r "$SOUR
 
 # compress-with-hevc-dir /mnt/4TBA/plex
 # compress-with-hevc-dir /mnt/12TBA/plex
-# plex-sync
+# plex-sync # DON'T DO THIS AUTOMATICALLY. WHAT IF ORIGINAL IS DAMAGED?
 
 _apply-plex-permissions | tee -a "$templog"
 date | tee -a "$templog"
