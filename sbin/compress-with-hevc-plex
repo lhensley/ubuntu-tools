@@ -40,12 +40,13 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 templog="/tmp/compress-with-hevc.log"
 
 date | tee -a "$templog"
+echo "START" | tee -a "$templog"
 df -h | tee -a "$templog"
 
 _apply-plex-permissions | tee -a "$templog"
-echo "Test -2" | tee -a "$templog"
+# echo "Test -2" | tee -a "$templog"
 compress-with-hevc-dir /home/lhensley/plex
-echo "Test -1" | tee -a "$templog"
+# echo "Test -1" | tee -a "$templog"
 # compress-with-hevc-dir /mnt/4TBA/plex
 # compress-with-hevc-dir /mnt/12TBA/plex
 # _apply-plex-permissions | tee -a "$templog"
@@ -53,22 +54,24 @@ echo "Test -1" | tee -a "$templog"
 SOURCEBASE="/home/lhensley/plex/Inbox"
 TARGETBASE="/mnt/12TBA/plex/TV Shows/Regular"
 
-echo "Test A" | tee -a "$templog"
+# echo "Test A" | tee -a "$templog"
 SOURCE="$SOURCEBASE/Alfred Hitchcock Hour (1962)"
 TARGET="$TARGETBASE/The Alfred Hitchcock Hour (1962) {tvdb=74488}"
-echo "Test B" | tee -a "$templog"
+echo "SOURCE = $SOURCE" | tee -a "$templog"
+echo "TARGET = $TARGET" | tee -a "$templog"
+# echo "Test B" | tee -a "$templog"
 rsync -avuE --progress "$SOURCE"/* "$TARGET" && rm -r "$SOURCE"
-echo "Test C" | tee -a "$templog"
+# echo "Test C" | tee -a "$templog"
 
 # compress-with-hevc-dir /mnt/4TBA/plex
 # compress-with-hevc-dir /mnt/12TBA/plex
 # plex-sync
 
-echo "Test D" | tee -a "$templog"
+# echo "Test D" | tee -a "$templog"
 _apply-plex-permissions | tee -a "$templog"
-echo "Test E" | tee -a "$templog"
+# echo "Test E" | tee -a "$templog"
 date | tee -a "$templog"
-echo "Test F" | tee -a "$templog"
+echo "END" | tee -a "$templog"
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
