@@ -43,7 +43,9 @@ date | tee -a "$templog"
 df -h | tee -a "$templog"
 
 _apply-plex-permissions | tee -a "$templog"
+echo "Test -2" | tee -a "$templog"
 compress-with-hevc-dir /home/lhensley/plex
+echo "Test -1" | tee -a "$templog"
 # compress-with-hevc-dir /mnt/4TBA/plex
 # compress-with-hevc-dir /mnt/12TBA/plex
 # _apply-plex-permissions | tee -a "$templog"
