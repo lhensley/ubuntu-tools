@@ -80,6 +80,10 @@ SOURCE="$SOURCEBASE/Green Acres (1965) {tvdb=78101}"
 TARGET="$TARGETBASE/Green Acres (1965) {tvdb=78101}"
 rsync -avuE --progress "$SOURCE"/* "$TARGET" | tee -a "$templog" && rm -r "$SOURCE"
 
+SOURCE="$SOURCEBASE/Hawaii Five-0 (1968)"
+TARGET="$TARGETBASE/Hawaii Five-0 (2010) {tvdb=164541}"
+rsync -avuE --progress "$SOURCE"/* "$TARGET" | tee -a "$templog" && rm -r "$SOURCE"
+
 SOURCE="$SOURCEBASE/I Dream Of Jeannie (1965) {tvdb=77388}"
 TARGET="$TARGETBASE/I Dream Of Jeannie (1965) {tvdb=77388}"
 rsync -avuE --progress "$SOURCE"/* "$TARGET" | tee -a "$templog" && rm -r "$SOURCE"
