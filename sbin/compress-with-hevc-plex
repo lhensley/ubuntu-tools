@@ -49,7 +49,7 @@ compress-with-hevc-dir /home/lhensley/plex
 # compress-with-hevc-dir /mnt/12TBA/plex
 # _apply-plex-permissions | tee -a "$templog"
 
-SOURCEBASE="/home/lhensley/plex/Inbox"
+SOURCEBASE="/home/lhensley/plex/Inbox/TV Shows"
 TARGETBASE="/mnt/12TBA/plex/TV Shows/Regular"
 
 SOURCE="$SOURCEBASE/Alfred Hitchcock Hour (1962)"
