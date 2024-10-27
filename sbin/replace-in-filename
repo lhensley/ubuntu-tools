@@ -22,7 +22,7 @@ original_filename="$1"
 search_text="$2"
 replace_text="$3"
 new_filename=$(replace-in-string "$original_filename" "$search_text" "$replace_text")
-mv "$original_filename" echo "$new_filename"
+mv "$original_filename" "$new_filename"
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
