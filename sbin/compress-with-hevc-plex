@@ -115,6 +115,10 @@ SOURCE="$SOURCEBASE/Law & Order Special Victims Unit (1999) {tvdb=75692}"
 TARGET="$TARGETBASE/Law & Order Special Victims Unit (1999) {tvdb=75692}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/Perry Mason (1957) {tvdb=70589}"
+TARGET="$/mnt/4TBA/plex/TV Shows/Regular/Perry Mason (1957) {tvdb=70589}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/Sanford & Son (1972)"
 TARGET="$TARGETBASE/Sanford and Son (1972) {tvdb=78193}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
