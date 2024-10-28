@@ -35,7 +35,7 @@ if [ $# -lt 0 ];
 fi
 
 function f_cwhd () {
-    if $(f_is_directory "directory_name"); then 
+    if $(f_is_directory "$1"); then 
         rsync -avuE --progress "$1"/* "$2" | tee -a "$3"
         rm -r "$1"
         fi
@@ -198,6 +198,14 @@ f_cwhd "$SOURCE" "$TARGET" "$templog"
 SOURCE="$SOURCEBASE/Wings (1990) {tvdb=71962}"
 TARGET="$TARGETBASE/Wings (1990) {tvdb=71962}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCEBASE="/home/lhensley/plex/Quarantine/TV Shows"
+TARGETBASE="/mnt/4TBA/plex/TV Shows/Regular"
+
+SOURCE="$SOURCEBASE/Perry Mason (1957) {tvdb=70589}"
+TARGET="$TARGETBASE/Perry Mason (1957) {tvdb=70589}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 
 # compress-with-hevc-dir /mnt/4TBA/plex
 # compress-with-hevc-dir /mnt/12TBA/plex
