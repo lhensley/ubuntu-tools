@@ -182,6 +182,11 @@ TARGET="$TARGETBASE/The Irrational (2023) {tvdb=428894}"
 rsync -avuE --progress "$SOURCE"/* "$TARGET" | tee -a "$templog"
 rm -r "$SOURCE"
 
+SOURCE="$SOURCEBASE/The Love Boat (1977) {tvdb=76954}"
+TARGET="$TARGETBASE/The Love Boat (1977) {tvdb=76954}"
+rsync -avuE --progress "$SOURCE"/* "$TARGET" | tee -a "$templog"
+rm -r "$SOURCE"
+
 SOURCE="$SOURCEBASE/The Powers of Matthew Star (1982) {tvdb=78295}"
 TARGET="$TARGETBASE/The Powers of Matthew Star (1982) {tvdb=78295}"
 rsync -avuE --progress "$SOURCE"/* "$TARGET" | tee -a "$templog"
