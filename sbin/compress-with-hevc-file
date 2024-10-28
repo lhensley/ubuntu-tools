@@ -40,6 +40,12 @@ if ! [ -f "$Filename" ] ; then
     exit -1
     fi
 
+# echo Checking that $1 is not a /.grab/ directory.
+if [[ "$Filename" == *"/.grab/"* ]]; then
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename contains /.grab/ in path." | tee -a "$templog"
+    exit -1
+    fi
+
 # echo Checking that $1 is not empty.
 if ! [ -s "$Filename" ] ; then 
     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is empty." | tee -a "$templog"

@@ -21,11 +21,11 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 
 # POSSIBLE OPTION: USE IF YOU WANT
 # Require root
-	# f_require_root
+	f_require_root
 
 # POSSIBLE OPTION: USE IF YOU WANT
 # Require a specific host
-	# f_require_host [HOST]
+	f_require_host dsm1
 
 # CHECK FOR ENOUGH ARGUMENTS (change 0 to minimum arguments and flesh out Usage)
 if [ $# -lt 0 ]; 
