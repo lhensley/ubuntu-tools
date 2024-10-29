@@ -5,6 +5,8 @@ DEBUG_MODE=true; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" 
 # Do stuff here
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
+echo "I don't do anything yet."
+
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 exit 0

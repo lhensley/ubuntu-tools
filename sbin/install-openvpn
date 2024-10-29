@@ -21,7 +21,7 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 
 # POSSIBLE OPTION: USE IF YOU WANT
 # Require root
-	# f_require_root
+	f_require_root
 
 # POSSIBLE OPTION: USE IF YOU WANT
 # Require a specific host
