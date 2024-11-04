@@ -36,7 +36,11 @@ fi
 # Do stuff here
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
-echo "I don't do anything yet."
+SOURCE='/home/lhensley/sambashare/Tablo Rips'
+TARGET='/home/lhensley/plex/Inbox/TV Shows'
+find "$SOURCE" -type d -exec chmod 755 '{}' \;
+find "$SOURCE" -type f -exec chmod 644 '{}' \;
+sudo rsync -avuE --progress "$SOURCE"/* "$TARGET" && rm -r "$SOURCE/*"
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
