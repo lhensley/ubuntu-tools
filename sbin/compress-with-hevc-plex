@@ -59,67 +59,187 @@ compress-with-hevc-dir /home/lhensley/plex
 SOURCEBASE="/home/lhensley/plex/Inbox/TV Shows"
 TARGETBASE="/mnt/12TBA/plex/TV Shows/Regular"
 
+SOURCE="$SOURCEBASE/Adam-12 (1968)"
+TARGET="$TARGETBASE/Adam-12 (1968) {tvdb=78686}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Adam-12 (1968) {tvdb=78686}"
+TARGET="$TARGETBASE/Adam-12 (1968) {tvdb=78686}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/Alfred Hitchcock Hour (1962)"
 TARGET="$TARGETBASE/The Alfred Hitchcock Hour (1962) {tvdb=74488}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Bonanza (1959)"
+TARGET="$TARGETBASE/Bonanza (1959) {tvdb=73378}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
 SOURCE="$SOURCEBASE/Bonanza (1959) {tvdb=73378}"
 TARGET="$TARGETBASE/Bonanza (1959) {tvdb=73378}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/Carol Burnett and Friends (1972)"
+TARGET="$TARGETBASE/Carol Burnett and Friends (1972) {tvdb=77645}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/Carol Burnett and Friends (1972) {tvdb=77645}"
 TARGET="$TARGETBASE/Carol Burnett and Friends (1972) {tvdb=77645}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/CHiPs (1977)"
+TARGET="$TARGETBASE/CHiPs (1977) {tvdb=78270}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/CHiPs (1977) {tvdb=78270}"
+TARGET="$TARGETBASE/CHiPs (1977) {tvdb=78270}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Criminal Minds (2005)"
+TARGET="$TARGETBASE/Criminal Minds (2005) {tvdb=75710}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
 SOURCE="$SOURCEBASE/Criminal Minds (2005) {tvdb=75710}"
 TARGET="$TARGETBASE/Criminal Minds (2005) {tvdb=75710}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/Dragnet (1951)"
+TARGET="$TARGETBASE/Dragnet (1951) {tvdb=72763}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Dragnet (1951) {tvdb=72763}"
+TARGET="$TARGETBASE/Dragnet (1951) {tvdb=72763}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Father Brown (2013)"
+TARGET="$TARGETBASE/Father Brown (2013) {tvdb=265834}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/Father Brown (2013) {tvdb=265834}"
 TARGET="$TARGETBASE/Father Brown (2013) {tvdb=265834}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Good Times (1974)"
+TARGET="$TARGETBASE/Good Times (1974) {tvdb=77357}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
 SOURCE="$SOURCEBASE/Good Times (1974) {tvdb=77357}"
 TARGET="$TARGETBASE/Good Times (1974) {tvdb=77357}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/Green Acres (1965)"
+TARGET="$TARGETBASE/Green Acres (1965) {tvdb=78101}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/Green Acres (1965) {tvdb=78101}"
 TARGET="$TARGETBASE/Green Acres (1965) {tvdb=78101}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Hawaii Five-O (2010)"
+TARGET="$TARGETBASE/Hawaii Five-O (2010) {tvdb=164541}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
 SOURCE="$SOURCEBASE/Hawaii Five-0 (1968)"
 TARGET="$TARGETBASE/Hawaii Five-0 (2010) {tvdb=164541}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
-SOURCE="$SOURCEBASE/I Dream Of Jeannie (1965) {tvdb=77388}"
+SOURCE="$SOURCEBASE/Hawaii Five-0 (2010)"
+TARGET="$TARGETBASE/Hawaii Five-0 (2010) {tvdb=164541}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/I Dream Of Jeannie (1965)"
 TARGET="$TARGETBASE/I Dream Of Jeannie (1965) {tvdb=77388}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
-SOURCE="$SOURCEBASE/Interview With a Killer (2024) {tvdb=455903}"
-TARGET="$TARGETBASE/Interview With a Killer (2024) {tvdb=455903}"
+SOURCE="$SOURCEBASE/I Dream Of Jeannie (1965) {tvdb=77388}"
+TARGET="$TARGETBASE/I Dream Of Jeannie (1965) {tvdb=77388}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
 SOURCE="$SOURCEBASE/Interview With a Killer (2024)"
 TARGET="$TARGETBASE/Interview With a Killer (2024) {tvdb=455903}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/Interview With a Killer (2024) {tvdb=455903}"
+TARGET="$TARGETBASE/Interview With a Killer (2024) {tvdb=455903}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/KCCI Commitment 2024 3rd District U.S. Congressional Debate (2024)"
+TARGET="$TARGETBASE/KCCI Commitment 2024 3rd District U.S. Congressional Debate (2024)"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Law & Order (1990)"
+TARGET="$TARGETBASE/Law & Order (1990) {tvdb=72368}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/Law & Order (1990) {tvdb=72368}"
 TARGET="$TARGETBASE/Law & Order (1990) {tvdb=72368}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Law & Order Criminal Intent (2001)"
+TARGET="$TARGETBASE/Law & Order Criminal Intent (2001) {tvdb=71489}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
 SOURCE="$SOURCEBASE/Law & Order Criminal Intent (2001) {tvdb=71489}"
 TARGET="$TARGETBASE/Law & Order Criminal Intent (2001) {tvdb=71489}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/Law & Order Special Victims Unit (1999)"
+TARGET="$TARGETBASE/Law & Order Special Victims Unit (1999) {tvdb=75692}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/Law & Order Special Victims Unit (1999) {tvdb=75692}"
 TARGET="$TARGETBASE/Law & Order Special Victims Unit (1999) {tvdb=75692}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Lost in Space (1965)"
+TARGET="$TARGETBASE/Lost in Space (1965) {tvdb=72923}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Lost in Space (1965) {tvdb=72923}"
+TARGET="$TARGETBASE/Lost in Space (1965) {tvdb=72923}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Matlock (1986)"
+TARGET="$TARGETBASE/Matlock (1986) {tbdv=73064}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Matlock (1986) {tbdv=73064}"
+TARGET="$TARGETBASE/Matlock (1986) {tbdv=73064}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Matlock (2024)"
+TARGET="$TARGETBASE/Matlock (2024) {tbdv=434780}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Matlock (2024) {tbdv=434780}"
+TARGET="$TARGETBASE/Matlock (2024) {tbdv=434780}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Perry Mason (1957)"
+TARGET="$/mnt/4TBA/plex/TV Shows/Regular/Perry Mason (1957) {tvdb=70589}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
 SOURCE="$SOURCEBASE/Perry Mason (1957) {tvdb=70589}"
 TARGET="$/mnt/4TBA/plex/TV Shows/Regular/Perry Mason (1957) {tvdb=70589}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/Rowan & Martin'\''s Laugh-In (1967)"
+TARGET="$TARGETBASE/Rowan & Martin'\''s Laugh-In (1967) {tvdb=71413}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Rowan & Martin'\''s Laugh-In (1967) {tvdb=71413}"
+TARGET="$TARGETBASE/Rowan & Martin'\''s Laugh-In (1967) {tvdb=71413}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/Sanford & Son (1972)"
+TARGET="$TARGETBASE/Sanford and Son (1972) {tvdb=78193}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Sanford & Son (1972) {tvdb=78193}"
+TARGET="$TARGETBASE/Sanford and Son (1972) {tvdb=78193}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Sanford and Son (1972)"
 TARGET="$TARGETBASE/Sanford and Son (1972) {tvdb=78193}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
@@ -127,20 +247,68 @@ SOURCE="$SOURCEBASE/Sanford and Son (1972) {tvdb=78193}"
 TARGET="$TARGETBASE/Sanford and Son (1972) {tvdb=78193}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/Saturday Night Live (1975)"
+TARGET="$TARGETBASE/Saturday Night Live (1975) {tvdb=76177}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/Saturday Night Live (1975) {tvdb=76177}"
 TARGET="$TARGETBASE/Saturday Night Live (1975) {tvdb=76177}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Seinfeld (1989)"
+TARGET="$TARGETBASE/Seinfeld (1989) {tvdb=79169}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Seinfeld (1989) {tvdb=79169}"
+TARGET="$TARGETBASE/Seinfeld (1989) {tvdb=79169}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Soap (1977)"
+TARGET="$TARGETBASE/Soap (1977) {tvdb=77370}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
 SOURCE="$SOURCEBASE/Soap (1977) {tvdb=77370}"
 TARGET="$TARGETBASE/Soap (1977) {tvdb=77370}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/Star Trek Deep Space Nine (1993)"
+TARGET="$TARGETBASE/Star Trek Deep Space Nine (1993) {tvdb=72073}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Star Trek Deep Space Nine (1993) {tvdb=72073}"
+TARGET="$TARGETBASE/Star Trek Deep Space Nine (1993) {tvdb=72073}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Star Trek The Next Generation (1987)"
+TARGET="$TARGETBASE/Star Trek The Next Generation (1987) {tvdb=71470}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/Star Trek The Next Generation (1987) {tvdb=71470}"
 TARGET="$TARGETBASE/Star Trek The Next Generation (1987) {tvdb=71470}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/Star Trek Voyager (1995)"
+TARGET="$SOURCEBASE/Star Trek Voyager (1995) {tvdb=74550}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Star Trek Voyager (1995) {tvdb=74550}"
+TARGET="$SOURCEBASE/Star Trek Voyager (1995) {tvdb=74550}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Superman & Lois (2021)"
+TARGET="$TARGETBASE/Superman & Lois (2021) {tvdb=375655}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/Superman & Lois (2021) {tvdb=375655}"
 TARGET="$TARGETBASE/Superman & Lois (2021) {tvdb=375655}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Tales From the Darkside (1983)"
+TARGET="$TARGETBASE/Tales From the Darkside (1984) {tbdb=78132}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Tales From the Darkside (1984) {tbdb=78132}"
+TARGET="$TARGETBASE/Tales From the Darkside (1984) {tbdb=78132}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
 SOURCE="$SOURCEBASE/The Adventures of Superman (1952)"
@@ -151,32 +319,124 @@ SOURCE="$SOURCEBASE/The Alfred Hitchcock Hour (1962) {tvdb=74488}"
 TARGET="$TARGETBASE/The Alfred Hitchcock Hour (1962) {tvdb=74488}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/The Andy Griffith Show (1960)"
+TARGET="$TARGETBASE/The Andy Griffith Show (1960) {tvdb=77754}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Andy Griffith Show (1960) {tvdb=77754}"
+TARGET="$TARGETBASE/The Andy Griffith Show (1960) {tvdb=77754}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Beverly Hillbillies (1962)"
+TARGET="$TARGETBASE/The Beverly Hillbillies (1962) {tvdb=71471}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/The Beverly Hillbillies (1962) {tvdb=71471}"
 TARGET="$TARGETBASE/The Beverly Hillbillies (1962) {tvdb=71471}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Big Bang Theory (2007)"
+TARGET="$TARGETBASE/The Big Bang Theory (2007) {tvdb=80379}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Big Bang Theory (2007) {tvdb=80379}"
+TARGET="$TARGETBASE/The Big Bang Theory (2007) {tvdb=80379}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Brady Bunch (1969)"
+TARGET="$TARGETBASE/The Brady Bunch (1969) {tvdb=77010}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
 SOURCE="$SOURCEBASE/The Brady Bunch (1969) {tvdb=77010}"
 TARGET="$TARGETBASE/The Brady Bunch (1969) {tvdb=77010}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/The Carol Burnett Show (1967)"
+TARGET="$TARGETBASE/The Carol Burnett Show (1967) {tvdb=70657}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Carol Burnett Show (1967) {tvdb=70657}"
+TARGET="$TARGETBASE/The Carol Burnett Show (1967) {tvdb=70657}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Dick Van Dyke Show (1961)"
+TARGET="$TARGETBASE/The Dick Van Dyke Show (1961) {tvdb=77041}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Dick Van Dyke Show (1961) {tvdb=77041}"
+TARGET="$TARGETBASE/The Dick Van Dyke Show (1961) {tvdb=77041}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Fugitive (1963)"
+TARGET="$TARGETBASE/The Fugitive (1963) {tvdb=75258}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/The Fugitive (1963) {tvdb=75258}"
 TARGET="$TARGETBASE/The Fugitive (1963) {tvdb=75258}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Honeymooners (1955)"
+TARGET="$TARGETBASE/The Honeymooners (1955) {tvdb=73923}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Honeymooners (1955) {tvdb=73923}"
+TARGET="$TARGETBASE/The Honeymooners (1955) {tvdb=73923}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Invaders (1967)"
+TARGET="$TARGETBASE/The Invaders (1967) {tvdb=73535}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Invaders (1967) {tvdb=73535}"
+TARGET="$TARGETBASE/The Invaders (1967) {tvdb=73535}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Irrational (2023)"
+TARGET="$TARGETBASE/The Irrational (2023) {tvdb=428894}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
 SOURCE="$SOURCEBASE/The Irrational (2023) {tvdb=428894}"
 TARGET="$TARGETBASE/The Irrational (2023) {tvdb=428894}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/The Love Boat (1977)"
+TARGET="$TARGETBASE/The Love Boat (1977) {tvdb=76954}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/The Love Boat (1977) {tvdb=76954}"
 TARGET="$TARGETBASE/The Love Boat (1977) {tvdb=76954}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Powers of Matthew Star (1982)"
+TARGET="$TARGETBASE/The Powers of Matthew Star (1982) {tvdb=78295}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
 SOURCE="$SOURCEBASE/The Powers of Matthew Star (1982) {tvdb=78295}"
 TARGET="$TARGETBASE/The Powers of Matthew Star (1982) {tvdb=78295}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/The Rifleman (1958)"
+TARGET="$TARGETBASE/The Rifleman (1958) {tvdb=72089}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Rifleman (1958) {tvdb=72089}"
+TARGET="$TARGETBASE/The Rifleman (1958) {tvdb=72089}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Simpsons (1989)"
+TARGET="$TARGETBASE/The Simpsons (1989) {tvdb=71663}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/The Simpsons (1989) {tvdb=71663}"
 TARGET="$TARGETBASE/The Simpsons (1989) {tvdb=71663}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Twilight Zone (1959)"
+TARGET="$TARGETBASE/The Twilight Zone (1959) {tvdb=73587}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/The Twilight Zone (1959) {tvdb=73587}"
+TARGET="$TARGETBASE/The Twilight Zone (1959) {tvdb=73587}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
 SOURCE="$SOURCEBASE/The Universe (2007)"
@@ -191,25 +451,56 @@ SOURCE="$SOURCEBASE/The Wild Wild West (1965)"
 TARGET="$TARGETBASE/The Wild, Wild West (1965) {tvdb=71637}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/The Wild, Wild West (1965)"
+TARGET="$TARGETBASE/The Wild, Wild West (1965) {tvdb=71637}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/The Wild, Wild West (1965) {tvdb=71637}"
 TARGET="$TARGETBASE/The Wild, Wild West (1965) {tvdb=71637}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Time Tunnel (1966)"
+TARGET="$TARGETBASE/Time Tunnel (1966) {tvdb=77268}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Time Tunnel (1966) {tvdb=77268}"
+TARGET="$TARGETBASE/Time Tunnel (1966) {tvdb=77268}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Voyage to the Bottom of the Sea (1964)"
+TARGET="$TARGETBASE/Voyage to the Bottom of the Sea (1964) {tvdb=77301}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Voyage to the Bottom of the Sea (1964) {tvdb=77301}"
+TARGET="$TARGETBASE/Voyage to the Bottom of the Sea (1964) {tvdb=77301}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
 SOURCE="$SOURCEBASE/Welcome Back Kotter (1975)"
 TARGET="$TARGETBASE/Welcome Back Kotter (1975) {tvdb=78572}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/Welcome Back Kotter (1975) {tvdb=78572}"
+TARGET="$TARGETBASE/Welcome Back Kotter (1975) {tvdb=78572}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Wings (1990)"
+TARGET="$TARGETBASE/Wings (1990) {tvdb=71962}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
 SOURCE="$SOURCEBASE/Wings (1990) {tvdb=71962}"
 TARGET="$TARGETBASE/Wings (1990) {tvdb=71962}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
-SOURCEBASE="/home/lhensley/plex/Quarantine/TV Shows"
-TARGETBASE="/mnt/4TBA/plex/TV Shows/Regular"
-
-SOURCE="$SOURCEBASE/Perry Mason (1957) {tvdb=70589}"
-TARGET="$TARGETBASE/Perry Mason (1957) {tvdb=70589}"
+SOURCE="$SOURCEBASE/Wonder Woman (1976) {tvdb=71228}"
+TARGET="$TARGETBASE/Wonder Woman (1976) {tvdb=71228}"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
+SOURCE="$SOURCEBASE/Wonder Woman (1976)"
+TARGET="$TARGETBASE/Wonder Woman (1976) {tvdb=71228}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCEBASE="/home/lhensley/plex/Quarantine/TV Shows"
+TARGETBASE="/mnt/4TBA/plex/TV Shows/Regular"
 
 # compress-with-hevc-dir /mnt/4TBA/plex
 # compress-with-hevc-dir /mnt/12TBA/plex
