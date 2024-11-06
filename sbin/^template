@@ -38,6 +38,9 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 echo "I don't do anything yet."
 
+# Option to text the administrator when the script ends
+# echo "[$(hostname)] $(basename $0): completed" | mail "$ADMIN_CELL_EMAIL"
+
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 # Include script footer file

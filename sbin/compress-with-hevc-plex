@@ -498,6 +498,7 @@ TARGETBASE="/mnt/4TBA/plex/TV Shows/Regular"
 _apply-plex-permissions | tee -a "$templog"
 date | tee -a "$templog"
 echo "END" | tee -a "$templog"
+echo "[$(hostname)] $(basename $0): completed" | mail "$ADMIN_CELL_EMAIL"
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
