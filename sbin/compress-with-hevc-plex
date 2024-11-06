@@ -41,8 +41,8 @@ df -h | tee -a "$templog"
 
 _apply-plex-permissions | tee -a "$templog"
 compress-with-hevc-dir /home/lhensley/plex
-# compress-with-hevc-dir /mnt/4TBA/plex
-# compress-with-hevc-dir /mnt/12TBA/plex
+compress-with-hevc-dir /mnt/4TBA/plex
+compress-with-hevc-dir /mnt/12TBA/plex
 # _apply-plex-permissions | tee -a "$templog"
 
 SOURCEBASE="/home/lhensley/plex/Inbox/TV Shows"
@@ -98,6 +98,10 @@ f_cwhd "$SOURCE" "$TARGET" "$templog"
 
 SOURCE="$SOURCEBASE/Dragnet (1951) {tvdb=72763}"
 TARGET="$TARGETBASE/Dragnet (1951) {tvdb=72763}"
+f_cwhd "$SOURCE" "$TARGET" "$templog"
+
+SOURCE="$SOURCEBASE/Election Night Decision 2024 (2024)"
+TARGET="$TARGETBASE/Election Night Decision 2024 (2024)"
 f_cwhd "$SOURCE" "$TARGET" "$templog"
 
 SOURCE="$SOURCEBASE/Father Brown (2013)"
