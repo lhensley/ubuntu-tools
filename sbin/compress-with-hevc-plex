@@ -40,9 +40,9 @@ echo "START" | tee -a "$templog"
 df -h | tee -a "$templog"
 
 _apply-plex-permissions | tee -a "$templog"
-compress-with-hevc-dir /mnt/12TBA/plex
-compress-with-hevc-dir /mnt/4TBA/plex
 compress-with-hevc-dir /home/lhensley/plex
+compress-with-hevc-dir /mnt/4TBA/plex
+compress-with-hevc-dir /mnt/12TBA/plex
 # _apply-plex-permissions | tee -a "$templog"
 
 SOURCEBASE="/home/lhensley/plex/Inbox/TV Shows"
