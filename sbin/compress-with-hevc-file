@@ -8,7 +8,6 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
 	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
-
 # POSSIBLE OPTION: USE IF YOU WANT
 # Require root
 	# f_require_root
@@ -19,15 +18,13 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 
 # CHECK FOR ENOUGH ARGUMENTS (change 0 to minimum arguments and flesh out Usage)
 if [ $# -lt 1 ]; 
-    then echo "$EXIT_CODE_DESC_DIRECTORY_NOT_FOUND"
-	echo "Usage: $(basename $0) VIDEO_FILE_NAME"
+    then echo "[$(hostname)] $(basename $0): $EXIT_CODE_DESC_DIRECTORY_NOT_FOUND"
+	echo "[$(hostname)] $(basename $0): Usage: $(basename $0) VIDEO_FILE_NAME"
 	exit $EXIT_CODE_DIRECTORY_NOT_FOUND
 fi
 
 # Do stuff here
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
-
-# echo '--------'
 
 Filename="$1"
 tempmp4="/tmp/$UUID.mp4"
@@ -36,66 +33,47 @@ templog="/tmp/compress-with-hevc.log"
 
 # echo Checking that $1 is a file.
 if ! [ -f "$Filename" ] ; then 
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not a file." | tee -a "$templog"
+    echo "[$(hostname)] $(basename $0): $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not a file." | tee -a "$templog"
     exit -1
     fi
 
 # echo Checking that $1 is not a /.grab/ directory.
 if [[ "$Filename" == *"/.grab/"* ]]; then
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename contains /.grab/ in path." | tee -a "$templog"
+    echo "[$(hostname)] $(basename $0): $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename contains /.grab/ in path." | tee -a "$templog"
     exit -1
     fi
 
 # echo Checking that $1 is not empty.
 if ! [ -s "$Filename" ] ; then 
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is empty." | tee -a "$templog"
+    echo "[$(hostname)] $(basename $0): $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is empty." | tee -a "$templog"
     exit -1
     fi
 
 # echo Checking that $1 is a video file.
 if ! [ "X"$(exiftool -m -q -q -api largefilesupport=1 -s3 -MIMEType "$Filename" | cut -c1-5) = "Xvideo" ] ; then 
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not a video file." | tee -a "$templog"
+    echo "[$(hostname)] $(basename $0): $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not a video file." | tee -a "$templog"
     exit -1
     fi
 
 # echo Checking that $1 is writable.
 if ! [ -w "$Filename" ] ; then 
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not writable." | tee -a "$templog"
+    echo "[$(hostname)] $(basename $0): $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename is not writable." | tee -a "$templog"
     exit -1
     fi
 
 # echo Checking that $1 has not already been rendered by HandBrake.
 if [ "X"$(exiftool -m -q -q -api largefilesupport=1 -s3 -Encoder "$Filename" | cut -c1-9) = "XHandBrake" ] ; then 
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename already rendered by HandBrake." | tee -a "$templog"
+    echo "[$(hostname)] $(basename $0): $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename already rendered by HandBrake." | tee -a "$templog"
     exit -1
     fi
 
-HandbrakePreset="/etc/HandBrake/Lane-2024-07-04.json"
-filedu="$(du -hs "$Filename")"
-filesize=$(echo "$filedu" | cut -d $'\t' -f1)
-echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering started $filesize  | tee -a "$templog"
-HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$Filename" -o "$tempmp4" >> /dev/null 2>> /dev/null
+# echo Add $Filename to the queue.
+echo "[$(hostname)] $(basename $0): $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') Adding $Filename to queue." | tee -a "$templog"
+nq compress-with-hevc-file-nq "$Filename" "$tempmp4" "$newfile" "$templog" >> /dev/null 2>> /dev/null
 if ! [ $? ] ; then 
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering FAILED." | tee -a "$templog"
+    echo "[$(hostname)] $(basename $0): $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename failed to queue." | tee -a "$templog"
     exit -1
     fi
-exiftool -m -q -q -api largefilesupport=1 -Comment="$HandbrakePreset" "$tempmp4"
-if ! [ $? ] ; then 
-    echo "$$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename exif comment add FAILED." | tee -a "$templog"
-    exit -1
-    fi
-rm "$Filename"
-mv $tempmp4 "$newfile"
-if ! [ $? ] ; then 
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $newfile import from temp file FAILED." | tee -a "$templog"
-    exit -1
-    fi
-rm -f "$tempmp4"*
-filedu="$(du -hs "$newfile")"
-filesize=$(echo "$filedu" | cut -d $'\t' -f1)
-echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $newfile re-rendering successful $filesize | tee -a "$templog"
-
-if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

@@ -1,0 +1,52 @@
+#!/bin/bash
+
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+# if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# CHECK FOR ENOUGH ARGUMENTS (change 0 to minimum arguments and flesh out Usage)
+if [ $# -lt 4 ]; 
+    then echo "$EXIT_CODE_DESC_DIRECTORY_NOT_FOUND"
+	echo "Usage: $(basename $0) SOURCE_FILE TEMP_MP4_FILE NEW_FILE TEMP_LOG_FILE"
+	exit $EXIT_CODE_DIRECTORY_NOT_FOUND
+fi
+
+Filename="$1"
+tempmp4="$2"
+newfile="$3"
+templog="$4"
+HandbrakePreset="/etc/HandBrake/Lane-2024-07-04.json"
+filedu="$(du -hs "$Filename")"
+filesize=$(echo "$filedu" | cut -d $'\t' -f1)
+echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering started $filesize  | tee -a "$templog"
+HandBrakeCLI --preset-import-file "$HandbrakePreset" -i "$Filename" -o "$tempmp4" >> /dev/null 2>> /dev/null
+if ! [ $? ] ; then 
+    echo "[$(hostname)] $(basename $0): $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename re-rendering FAILED." | tee -a "$templog"
+    exit -1
+    fi
+exiftool -m -q -q -api largefilesupport=1 -Comment="$HandbrakePreset" "$tempmp4"
+if ! [ $? ] ; then 
+    echo "[$(hostname)] $(basename $0): $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $Filename exif comment add FAILED." | tee -a "$templog"
+    exit -1
+    fi
+rm "$Filename"
+mv $tempmp4 "$newfile"
+if ! [ $? ] ; then 
+    echo "[$(hostname)] $(basename $0): $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $newfile import from temp file FAILED." | tee -a "$templog"
+    exit -1
+    fi
+rm -f "$tempmp4"*
+filedu="$(du -hs "$newfile")"
+filesize=$([$(hostname)] $(basename $0): echo "$filedu" | cut -d $'\t' -f1)
+echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z') $newfile re-rendering successful $filesize | tee -a "$templog"
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+
