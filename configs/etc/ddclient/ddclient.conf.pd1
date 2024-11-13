@@ -46,8 +46,7 @@ pid=/var/run/ddclient.pid
 
 # Get ip from server.
 # use=cmd, cmd='curl -s4 ifconfig.me/ip 2> /dev/null' # from dynu
-# use=web, web=dynamicdns.park-your-domain.com/getip # namecheap
-use=web, web=checkip.dyndns.org [2, 8] # Experiment 11/13/2024
+use=web, web=dynamicdns.park-your-domain.com/getip # namecheap
 
 # IP update server.
 # server=api.dynu.com # from dynu
