@@ -7,7 +7,7 @@
 
 # daemon=7200 # in seconds; 120 minutes between refresh # from dynu
 # daemon=0 # in seconds
-daemon="10m" # 10 minutes between refresh # namecheap
+daemon="2h" # 10 minutes between refresh # namecheap
 
 # Set the time interval between the updates of the dynamic DNS name in seconds.
 # This option only takes effect if the ddclient runs in daemon mode.
@@ -46,7 +46,8 @@ pid=/var/run/ddclient.pid
 
 # Get ip from server.
 # use=cmd, cmd='curl -s4 ifconfig.me/ip 2> /dev/null' # from dynu
-use=web, web=dynamicdns.park-your-domain.com/getip # namecheap
+# use=web, web=dynamicdns.park-your-domain.com/getip # namecheap
+use=web, web=checkip.dyndns.org [2, 8] # Experiment 11/13/2024
 
 # IP update server.
 # server=api.dynu.com # from dynu
