@@ -7,7 +7,7 @@
 
 # daemon=7200 # in seconds; 120 minutes between refresh # from dynu
 # daemon=0 # in seconds
-daemon="2h" # 10 minutes between refresh # namecheap
+daemon=7200 # in seconds; 120 minutes between refresh
 
 # Set the time interval between the updates of the dynamic DNS name in seconds.
 # This option only takes effect if the ddclient runs in daemon mode.
