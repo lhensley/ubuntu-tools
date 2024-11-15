@@ -250,6 +250,10 @@ done
 # 	find $SERVICES_DIR -type d -print -exec chmod $SERVICES_DIR_PERMISSIONS {} \; >> /dev/null 2>&1
 # 	find $SERVICES_DIR -type f -print -exec chmod $SERVICES_FILE_PERMISSIONS {} \; >> /dev/null 2>&1
 
+if [ -f /var/run/reboot-required ] ; then
+    echo && echo "REBOOT NEEDED!"
+    fi
+
 ###################################################
 # Wrap up.
 

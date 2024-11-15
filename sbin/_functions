@@ -619,6 +619,9 @@ function f_upd () {
 	# echo TEMPORARY DIAGNOSTIC MARKER A in f_upd in _functions.
 	f_run_apt_updates
 	# echo TEMPORARY DIAGNOSTIC MARKER B in f_upd in _functions.
+	if [ -f /var/run/reboot-required ] ; then
+		echo && echo "REBOOT NEEDED!"
+		fi
 	}
 
 function f_apply_configs () {
