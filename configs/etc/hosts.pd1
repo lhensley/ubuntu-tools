@@ -12,5 +12,5 @@
 192.168.168.253 homerun-01.local homerun-01.lan homerun-01
 
 ::1 localhost.local localhost
-2604:2d80:5383:bb00::3 pd1.local pd1.lan pd1 nuc01.local nuc01.lan nuc01
-2604:2d80:5383:bb00::8 dsm1.local dsm1.lan dsm1 go.local go.lan go
+fe80::3 pd1.local pd1.lan pd1 nuc01.local nuc01.lan nuc01
+fe80::8 dsm1.local dsm1.lan dsm1 go.local go.lan go

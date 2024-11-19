@@ -15,6 +15,9 @@ network:
                 route-metric: 1000 # lower numbers have highest priority
             accept-ra: true
             ipv6-address-token: '::8'
+            addresses:
+                - 192.168.168.8/24
+                - fe80::8/64
             nameservers:
                 addresses: [192.168.168.1, 8.8.8.8, '2001:4860:4860::8844']
                 search: [local, lan]
