@@ -1,14 +1,16 @@
 #
-# This file generated from [ubuntu-tools]/configs/etc/hosts.dsm1
+# This file generated from [ubuntu-tools]/configs/etc/pd1.dsm1
 # Updated 2024-07-08
 #
-127.0.0.1 localhost.local localhost
-192.168.168.1 router.local router
-192.168.168.3 pd1.local pd1 nuc01.local nuc01
-192.168.168.7 TabloDSM.local TabloDSM
-192.168.168.8 dsm1.local dsm1 go.local go
-192.168.168.70 pd1-wifi.local pd1-wifi
-192.168.168.251 dsm1-wifi.local dsm1-wifi
-192.168.168.253 homerun-01.local homerun-01
+127.0.0.1 localhost.local localhost.lan localhost
+192.168.168.1 router.local router.lan router
+192.168.168.3 pd1.local pd1.lan pd1 nuc01.local nuc01.lan nuc01
+192.168.168.7 TabloDSM.local TabloDSM.lan TabloDSM
+192.168.168.8 dsm1.local dsm1.lan dsm1 go.local go.lan go
+192.168.168.70 pd1-wifi.local pd1-wifi.lan pd1-wifi
+192.168.168.251 dsm1-wifi.local dsm1-wifi.lan dsm1-wifi
+192.168.168.253 homerun-01.local homerun-01.lan homerun-01
 
-::1 localhost
+::1 localhost.local localhost
+2604:2d80:5383:bb00::3 pd1.local pd1.lan pd1 nuc01.local nuc01.lan nuc01
+2604:2d80:5383:bb00::8 dsm1.local dsm1.lan dsm1 go.local go.lan go
