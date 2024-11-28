@@ -51,7 +51,7 @@ use=cmd, cmd='curl -4 ifconfig.me'
 
 # Get ipv6 from server.
 # usev6=cmd, cmd='curl ifconfig.me' # Works, as far as I know.
-usev6=if, if=ethernet0
+usev6=ifv6, ifv6=ethernet0
 
 # IP update server.
 # server=api.dynu.com # from dynu
