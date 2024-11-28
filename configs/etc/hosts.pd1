@@ -3,6 +3,7 @@
 # Updated 2024-07-08, 2024-11-18 (merging ipv6 and ipv4)
 #
 ::1 127.0.0.1 localhost.local localhost.lan localhost
+255.255.255.255	broadcasthost
 192.168.168.1 router.local router.lan router
 2604:2d80:5383:bb00::3 192.168.168.3 pd1.local pd1.lan pd1 nuc01.local nuc01.lan nuc01
 192.168.168.7 TabloDSM.local TabloDSM.lan TabloDSM
