@@ -44,10 +44,14 @@ ssl=yes
 # Record PID in file.
 pid=/var/run/ddclient.pid
 
-# Get ip from server.
+# Get ipv4 from server.
 # use=cmd, cmd='curl -s4 ifconfig.me/ip 2> /dev/null' # from dynu
 # use=web, web=dynamicdns.park-your-domain.com/getip # namecheap
 use=cmd, cmd='curl -4 ifconfig.me'
+
+# Get ipv6 from server.
+# usev6=cmd, cmd='curl ifconfig.me' # Works, as far as I know.
+usev6=if, if=ethernet0
 
 # IP update server.
 # server=api.dynu.com # from dynu
