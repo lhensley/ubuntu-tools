@@ -30,7 +30,8 @@ ufw deny from 80.76.49.175 to any # 2024-07-08 - United States address, blocked 
 ufw deny from 82.102.27.195 to any # 2024-07-08 - Norway address, blocked by Wordfence, block count 1
 ufw deny from 85.215.98.196 to any # 2024-12-09 - Germany
 ufw deny from 85.215.106.195 to any # 2024-12-09 - Germany
-ufw deny from 87.236.176.87 to any
+ufw deny from 87.120.113.169 to any # 2024-12-23 - Bulgaria
+ufw deny from 87.236.176.87 to any # United Kingdom
 ufw deny from 91.92.240.138 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 32
 ufw deny from 91.92.242.0/24 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 45
 ufw deny from 91.92.243.0/24 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 23
