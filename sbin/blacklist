@@ -11,66 +11,66 @@
 # To see what Wordpress has blocked over the last 30 days,
 # visit https://lanehensley.org/wp-admin/admin.php?page=WordfenceWAF
 
-ufw deny from 4.213.7.108 to any # 2024-1-06 - India
-ufw deny from 5.161.136.10 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
-ufw deny from 15.204.52.61 to any
-ufw deny from 15.237.189.64 to any # 2024-09-15 - France
-ufw deny from 23.137.104.0/24 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 2
-ufw deny from 43.131.2.238 to any # 2024-07-16 - Germany, blocked by Wordfence, block count 1
-ufw deny from 43.157.25.217 to any # 2024-07-08 - Germany address, blocked by Wordfence, block count 1
-ufw deny from 51.15.184.67 to any # 2024-07-08 - France address, blocked by Wordfence, block count 1
-ufw deny from 52.187.192.213 to any # 2024-11-15 - Australia
-ufw deny from 54.80.109.178 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
-ufw deny from 62.146.177.34 to any # 2024-07-08 - Germany address, blocked by Wordfence, block count 8
-ufw deny from 75.119.0.0/16 to any # 2024-09-09 - Germany
-ufw deny from 77.95.113.13 to any # 2024-07-08 - United Kingdom address, blocked by Wordfence, block count 1
-ufw deny from 79.110.49.196 to any # 2024-07-08 - France address, blocked by Wordfence, block count 8
-ufw deny from 79.110.62.2 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 8
-ufw deny from 80.76.49.175 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 13
-ufw deny from 82.102.27.195 to any # 2024-07-08 - Norway address, blocked by Wordfence, block count 1
-ufw deny from 85.215.98.196 to any # 2024-12-09 - Germany
-ufw deny from 85.215.106.195 to any # 2024-12-09 - Germany
-ufw deny from 87.120.113.169 to any # 2024-12-23 - Bulgaria
-ufw deny from 87.236.176.87 to any # United Kingdom
-ufw deny from 91.92.240.138 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 32
-ufw deny from 91.92.242.0/24 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 45
-ufw deny from 91.92.243.0/24 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 23
-ufw deny from 91.92.244.113 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 1
-ufw deny from 91.92.248.144 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 8
-ufw deny from 91.92.252.16 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 8
-ufw deny from 93.90.206.97 to any # 2024-12-09 - Germany
-ufw deny from 94.156.65.0/24 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 2
-ufw deny from 94.156.68.8 to any # 2024-07-08 - Netherlands address, blocked by Wordfence, block count 4
-ufw deny from 94.156.69.0/24 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 4
-ufw deny from 101.132.97.62 to any # 2024-07-08 - China address, blocked by Wordfence, block count 1
-ufw deny from 104.193.135.243 to any # 2024-07-08 - Canada address, blocked by Wordfence, block count 7
-ufw deny from 138.128.174.26 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
-ufw deny from 138.199.47.241 to any # 2024-07-08 - France address, blocked by Wordfence, block count 1
-ufw deny from 139.99.220.157 to any # 2024-07-08 - Australia address, blocked by Wordfence, block count 12
-ufw deny from 144.126.0.0/16 to any # 2024-09-09 - United States
-ufw deny from 156.38.128.82 to any # 2024-07-08 - South Africa address, blocked by Wordfence, block count 1
-ufw deny from 156.146.38.167 to any # 2024-09-09 - United States
-ufw deny from 161.97.131.39 to any # 2024-07-31 - Germany address, blocked by Wordfence, block count 13
-ufw deny from 164.132.182.113 to any # 2024-09-09 - France
-ufw deny from 167.99.79.202 to any # 2024-07-08 - Singapore address, blocked by Wordfence, block count 2
-ufw deny from 170.205.30.77 to any # 2024-12-09 - United States
-ufw deny from 172.86.114.245 to any # 2024-11-06 - United States
-ufw deny from 173.249.11.33 to any # 2024-09-09 - Germany
-ufw deny from 178.159.37.38 to any # 2024-07-08 - Ukraine address, blocked by Wordfence, block count 14
-ufw deny from 179.43.191.18 to any # 2024-07-08 - Switzerland address, blocked by Wordfence, block count 2
-ufw deny from 184.105.247.223 to any
-ufw deny from 184.154.46.40 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
-ufw deny from 185.220.101.0/24 to any # 2024-09-02
-ufw deny from 188.164.196.16 to any # 2024-07-08 - Spain address, blocked by Wordfence, block count 1
-ufw deny from 193.189.100.204 to any # 2024-07-08 - Sweden address, blocked by Wordfence, block count 1
-ufw deny from 194.38.20.13 to any # 2024-07-22 - Ukraine address, blocked by Wordfence, block count 3
-ufw deny from 194.38.23.16 to any # 2024-07-08 - Ukraine address, blocked by Wordfence, block count 35
-ufw deny from 194.163.145.202 to any # 2024-07-08 - Germany address, blocked by Wordfence, block count 17
-ufw deny from 198.12.234.215 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
-ufw deny from 199.19.72.125 to any
-ufw deny from 199.45.154.114 to any
-ufw deny from 206.168.34.37 to any
-ufw deny from 207.180.196.201 to any # 2024-09-09 - Germany
+ufw reject from 4.213.7.108 to any # 2024-1-06 - India
+ufw reject from 5.161.136.10 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
+ufw reject from 15.204.52.61 to any
+ufw reject from 15.237.189.64 to any # 2024-09-15 - France
+ufw reject from 23.137.104.0/24 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 2
+ufw reject from 43.131.2.238 to any # 2024-07-16 - Germany, blocked by Wordfence, block count 1
+ufw reject from 43.157.25.217 to any # 2024-07-08 - Germany address, blocked by Wordfence, block count 1
+ufw reject from 51.15.184.67 to any # 2024-07-08 - France address, blocked by Wordfence, block count 1
+ufw reject from 52.187.192.213 to any # 2024-11-15 - Australia
+ufw reject from 54.80.109.178 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
+ufw reject from 62.146.177.34 to any # 2024-07-08 - Germany address, blocked by Wordfence, block count 8
+ufw reject from 75.119.0.0/16 to any # 2024-09-09 - Germany
+ufw reject from 77.95.113.13 to any # 2024-07-08 - United Kingdom address, blocked by Wordfence, block count 1
+ufw reject from 79.110.49.196 to any # 2024-07-08 - France address, blocked by Wordfence, block count 8
+ufw reject from 79.110.62.2 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 8
+ufw reject from 80.76.49.175 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 13
+ufw reject from 82.102.27.195 to any # 2024-07-08 - Norway address, blocked by Wordfence, block count 1
+ufw reject from 85.215.98.196 to any # 2024-12-09 - Germany
+ufw reject from 85.215.106.195 to any # 2024-12-09 - Germany
+ufw reject from 87.120.113.169 to any # 2024-12-23 - Bulgaria
+ufw reject from 87.236.176.87 to any # United Kingdom
+ufw reject from 91.92.240.138 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 32
+ufw reject from 91.92.242.0/24 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 45
+ufw reject from 91.92.243.0/24 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 23
+ufw reject from 91.92.244.113 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 1
+ufw reject from 91.92.248.144 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 8
+ufw reject from 91.92.252.16 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 8
+ufw reject from 93.90.206.97 to any # 2024-12-09 - Germany
+ufw reject from 94.156.65.0/24 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 2
+ufw reject from 94.156.68.8 to any # 2024-07-08 - Netherlands address, blocked by Wordfence, block count 4
+ufw reject from 94.156.69.0/24 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 4
+ufw reject from 101.132.97.62 to any # 2024-07-08 - China address, blocked by Wordfence, block count 1
+ufw reject from 104.193.135.243 to any # 2024-07-08 - Canada address, blocked by Wordfence, block count 7
+ufw reject from 138.128.174.26 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
+ufw reject from 138.199.47.241 to any # 2024-07-08 - France address, blocked by Wordfence, block count 1
+ufw reject from 139.99.220.157 to any # 2024-07-08 - Australia address, blocked by Wordfence, block count 12
+ufw reject from 144.126.0.0/16 to any # 2024-09-09 - United States
+ufw reject from 156.38.128.82 to any # 2024-07-08 - South Africa address, blocked by Wordfence, block count 1
+ufw reject from 156.146.38.167 to any # 2024-09-09 - United States
+ufw reject from 161.97.131.39 to any # 2024-07-31 - Germany address, blocked by Wordfence, block count 13
+ufw reject from 164.132.182.113 to any # 2024-09-09 - France
+ufw reject from 167.99.79.202 to any # 2024-07-08 - Singapore address, blocked by Wordfence, block count 2
+ufw reject from 170.205.30.77 to any # 2024-12-09 - United States
+ufw reject from 172.86.114.245 to any # 2024-11-06 - United States
+ufw reject from 173.249.11.33 to any # 2024-09-09 - Germany
+ufw reject from 178.159.37.38 to any # 2024-07-08 - Ukraine address, blocked by Wordfence, block count 14
+ufw reject from 179.43.191.18 to any # 2024-07-08 - Switzerland address, blocked by Wordfence, block count 2
+ufw reject from 184.105.247.223 to any
+ufw reject from 184.154.46.40 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
+ufw reject from 185.220.101.0/24 to any # 2024-09-02
+ufw reject from 188.164.196.16 to any # 2024-07-08 - Spain address, blocked by Wordfence, block count 1
+ufw reject from 193.189.100.204 to any # 2024-07-08 - Sweden address, blocked by Wordfence, block count 1
+ufw reject from 194.38.20.13 to any # 2024-07-22 - Ukraine address, blocked by Wordfence, block count 3
+ufw reject from 194.38.23.16 to any # 2024-07-08 - Ukraine address, blocked by Wordfence, block count 35
+ufw reject from 194.163.145.202 to any # 2024-07-08 - Germany address, blocked by Wordfence, block count 17
+ufw reject from 198.12.234.215 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
+ufw reject from 199.19.72.125 to any
+ufw reject from 199.45.154.114 to any
+ufw reject from 206.168.34.37 to any
+ufw reject from 207.180.196.201 to any # 2024-09-09 - Germany
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
