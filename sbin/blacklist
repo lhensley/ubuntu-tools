@@ -18,6 +18,7 @@ ufw reject from 15.237.189.64 to any # 2024-09-15 - France
 ufw reject from 23.137.104.0/24 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 2
 ufw reject from 43.131.2.238 to any # 2024-07-16 - Germany, blocked by Wordfence, block count 1
 ufw reject from 43.157.25.217 to any # 2024-07-08 - Germany address, blocked by Wordfence, block count 1
+ufw reject from 45.61.161.101 to any # 2024-12-30 - Germany
 ufw reject from 51.15.184.67 to any # 2024-07-08 - France address, blocked by Wordfence, block count 1
 ufw reject from 52.187.192.213 to any # 2024-11-15 - Australia
 ufw reject from 54.80.109.178 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
@@ -69,6 +70,7 @@ ufw reject from 194.163.145.202 to any # 2024-07-08 - Germany address, blocked b
 ufw reject from 198.12.234.215 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
 ufw reject from 199.19.72.125 to any
 ufw reject from 199.45.154.114 to any
+ufe reject from 204.10.194.57 to any # 2024-12-30 - Germany
 ufw reject from 206.168.34.37 to any
 ufw reject from 207.180.196.201 to any # 2024-09-09 - Germany
 # Include script footer file
