@@ -70,7 +70,7 @@ ufw reject from 194.163.145.202 to any # 2024-07-08 - Germany address, blocked b
 ufw reject from 198.12.234.215 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
 ufw reject from 199.19.72.125 to any
 ufw reject from 199.45.154.114 to any
-ufe reject from 204.10.194.57 to any # 2024-12-30 - Germany
+ufw reject from 204.10.194.57 to any # 2024-12-30 - Germany
 ufw reject from 206.168.34.37 to any
 ufw reject from 207.180.196.201 to any # 2024-09-09 - Germany
 # Include script footer file
