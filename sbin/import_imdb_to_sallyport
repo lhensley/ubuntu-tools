@@ -53,7 +53,7 @@ https://datasets.imdbws.com/title.ratings.tsv.gz
 echo "Done."; echo ""
 
 echo "Decompressing datasets."
-gunzip \
+gunzip --force \
 /tmp/name.basics.tsv.gz \
 /tmp/title.akas.tsv.gz \
 /tmp/title.basics.tsv.gz \
