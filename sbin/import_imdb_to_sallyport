@@ -1,0 +1,93 @@
+#!/bin/bash
+# IMDb Non-Commercial Datasets (Documentation)
+#   https://developer.imdb.com/non-commercial-datasets
+# IMDb Data Files Available for Download
+#   https://datasets.imdbws.com
+
+
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+# if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Uncomment requirements for script execution
+    # f_require_root
+    # f_require_ubuntu
+    # f_deprecated
+    # f_require_minimum_version_number "version-number"
+    # f_require_maximum_version_number "version-number"
+    # f_only_on_server "hostname"
+    # f_require_confirmation "This text is displayed, requesting confirmation word." "ConfirmationWord"
+    # set -x # For debugging
+
+# POSSIBLE OPTION: USE IF YOU WANT
+# Require root
+	# f_require_root
+
+# POSSIBLE OPTION: USE IF YOU WANT
+# Require a specific host
+	f_require_host dsm1
+    
+# CHECK FOR ENOUGH ARGUMENTS (change 0 to minimum arguments and flesh out Usage)
+if [ $# -lt 0 ]; 
+    then echo "$EXIT_CODE_DESC_DIRECTORY_NOT_FOUND"
+	echo "Usage: $(basename $0)"
+	exit $EXIT_CODE_DIRECTORY_NOT_FOUND
+fi
+
+# Do stuff here
+if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+echo "Downloading datasets from IMDb."
+wget -P /tmp \
+https://datasets.imdbws.com/name.basics.tsv.gz \
+https://datasets.imdbws.com/title.akas.tsv.gz \
+https://datasets.imdbws.com/title.basics.tsv.gz \
+https://datasets.imdbws.com/title.crew.tsv.gz \
+https://datasets.imdbws.com/title.episode.tsv.gz \
+https://datasets.imdbws.com/title.principals.tsv.gz \
+https://datasets.imdbws.com/title.ratings.tsv.gz
+echo "Done."; echo ""
+
+echo "Decompressing datasets."
+gunzip \
+/tmp/name.basics.tsv.gz \
+/tmp/title.akas.tsv.gz \
+/tmp/title.basics.tsv.gz \
+/tmp/title.crew.tsv.gz \
+/tmp/title.episode.tsv.gz \
+/tmp/title.principals.tsv.gz \
+/tmp/title.ratings.tsv.gz
+echo "Done."; echo ""
+
+echo "Importing sallyport.imdb_title_akas …"
+mysql --local-infile=ON -e "TRUNCATE sallyport.imdb_title_akas; LOAD DATA LOCAL INFILE '/tmp/title.akas.tsv' INTO TABLE sallyport.imdb_title_akas FIELDS TERMINATED BY '\t' IGNORE 1 LINES"
+echo "Importing sallyport.imdb_title_basics …"
+mysql --local-infile=ON -e "TRUNCATE sallyport.imdb_title_basics; LOAD DATA LOCAL INFILE '/tmp/title.basics.tsv' INTO TABLE sallyport.imdb_title_basics FIELDS TERMINATED BY '\t' IGNORE 1 LINES"
+echo "Importing sallyport.imdb_title_crew …"
+mysql --local-infile=ON -e "TRUNCATE sallyport.imdb_title_crew; LOAD DATA LOCAL INFILE '/tmp/title.crew.tsv' INTO TABLE sallyport.imdb_title_crew FIELDS TERMINATED BY '\t' IGNORE 1 LINES"
+echo "Importing sallyport.imdb_title_episode …"
+mysql --local-infile=ON -e "TRUNCATE sallyport.imdb_title_episode; LOAD DATA LOCAL INFILE '/tmp/title.episode.tsv' INTO TABLE sallyport.imdb_title_episode FIELDS TERMINATED BY '\t' IGNORE 1 LINES"
+echo "Importing sallyport.imdb_title_principals …"
+mysql --local-infile=ON -e "TRUNCATE sallyport.imdb_title_principals; LOAD DATA LOCAL INFILE '/tmp/title.principals.tsv' INTO TABLE sallyport.imdb_title_principals FIELDS TERMINATED BY '\t' IGNORE 1 LINES"
+echo "Importing sallyport.imdb_title_ratings …"
+mysql --local-infile=ON -e "TRUNCATE sallyport.imdb_title_ratings; LOAD DATA LOCAL INFILE '/tmp/title.ratings.tsv' INTO TABLE sallyport.imdb_title_ratings FIELDS TERMINATED BY '\t' IGNORE 1 LINES"
+echo "Importing sallyport.imdb_name.basics …"
+mysql --local-infile=ON -e "TRUNCATE sallyport.imdb_name_basics; LOAD DATA LOCAL INFILE '/tmp/name.basics.tsv' INTO TABLE sallyport.imdb_name_basics FIELDS TERMINATED BY '\t' IGNORE 1 LINES"
+echo "Done."
+
+
+# Option to text the administrator when the script ends
+# echo "[$(hostname)] $(basename $0): completed" | mail "$ADMIN_CELL_EMAIL"
+
+if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+
