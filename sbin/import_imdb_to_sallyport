@@ -63,6 +63,8 @@ gunzip --force \
 /tmp/title.ratings.tsv.gz
 echo "Done."; echo ""
 
+echo "Importing imdb.name.basics …"
+mysql --local-infile=ON -e "TRUNCATE imdb.name_basics; LOAD DATA LOCAL INFILE '/tmp/name.basics.tsv' INTO TABLE imdb.name_basics FIELDS TERMINATED BY '\t' IGNORE 1 LINES"
 echo "Importing imdb.title_akas …"
 mysql --local-infile=ON -e "TRUNCATE imdb.title_akas; LOAD DATA LOCAL INFILE '/tmp/title.akas.tsv' INTO TABLE imdb.title_akas FIELDS TERMINATED BY '\t' IGNORE 1 LINES"
 echo "Importing imdb.title_basics …"
@@ -75,8 +77,6 @@ echo "Importing imdb.title_principals …"
 mysql --local-infile=ON -e "TRUNCATE imdb.title_principals; LOAD DATA LOCAL INFILE '/tmp/title.principals.tsv' INTO TABLE imdb.title_principals FIELDS TERMINATED BY '\t' IGNORE 1 LINES"
 echo "Importing imdb.title_ratings …"
 mysql --local-infile=ON -e "TRUNCATE imdb.title_ratings; LOAD DATA LOCAL INFILE '/tmp/title.ratings.tsv' INTO TABLE imdb.title_ratings FIELDS TERMINATED BY '\t' IGNORE 1 LINES"
-echo "Importing imdb.name.basics …"
-mysql --local-infile=ON -e "TRUNCATE imdb.name_basics; LOAD DATA LOCAL INFILE '/tmp/name.basics.tsv' INTO TABLE imdb.name_basics FIELDS TERMINATED BY '\t' IGNORE 1 LINES"
 echo "Done."
 
 
