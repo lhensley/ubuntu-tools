@@ -217,11 +217,11 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		fi
 
 # Update ~/.ssh/authorized_keys
-	if $(f_is_installed "openssh-server"); then
+#	if $(f_is_installed "openssh-server"); then
 		echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys from $GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys"
 		cp "$GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys" "$ADMIN_HOME_DIR/.ssh/authorized_keys"
 		cp "$GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys" "$ROOT_HOME_DIR/.ssh/authorized_keys"
-		fi
+#		fi
 
 # Update Vim and vi config file
 # Commented out because defaults in Ubuntu 22 are much better
@@ -340,11 +340,11 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		fi
 
 # Update /etc/sshd_config
-	if $(f_is_installed "ssh-server"); then
+#	if $(f_is_installed "ssh-server"); then
 		echo "Updating /etc/ssh/sshd_config from $GIT_UBUNTU_TOOLS_CONFIGS/etc/ssh/sshd_config"
 		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/ssh/sshd_config" "/etc/ssh/sshd_config"
 		systemctl restart ssh
-		fi
+#		fi
 
 # Update /etc/ufw/applications.d/lane-applications
 	if $(f_is_directory "$GIT_UBUNTU_TOOLS_CONFIGS/etc/ufw/applications.d"); then
