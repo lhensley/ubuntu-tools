@@ -13,8 +13,12 @@ DEBUG_MODE=true; if $DEBUG_MODE ; then echo "Executing $0 line ${LINENO}" ; fi
 # Do the work
 	# NOTE: Recommend leaving the f_balk command below until this script no longer is called by other scripts.
 	# When it's time, you may want to leave the script intact so it can be invoked from the command line, but drop the balk warning below.
-	f_deprecated f_upd
-	f_upd
+	echo "_upd is deprecated and needs to go away along with PATHNAME[_upd] entries in _vars."
+	echo "Use upd instead."
+	echo "If no problems show up prior to 2026-01-18, dump it!"
+	exit -1
+	# f_deprecated f_upd
+	# f_upd
 
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
