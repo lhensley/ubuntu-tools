@@ -1,0 +1,26 @@
+#
+# This file generated from [ubuntu-tools]/configs/etc/hosts
+# NOTE: System seems to expect .lan and .localdomain to be defined
+# Updated 2025-01-18 (adding .localdomain)
+#
+# 2025-01-18: Suspicious that defining ipv4 and ipv6 on the same line is problematic.
+#
+# ipv4
+127.0.0.1 localhost.local localhost.lan localhost.localdomain localhost
+255.255.255.255	broadcasthost
+192.168.168.1 router.local router.lan router.localdomain router
+192.168.168.3 pd1.local pd1.lan pd1.localdomain pd1 nuc01.local nuc01.lan nuc01.localdomain nuc01
+192.168.168.7 TabloDSM.local TabloDSM.lan TabloDSM.localdomain TabloDSM
+192.168.168.8 dsm1.local dsm1.lan dsm1.localdomain dsm1 go.local go.lan go.localdomain go
+192.168.168.70 pd1-wifi.local pd1-wifi.lan pd1-wifi.localdomain pd1-wifi
+192.168.168.71 dsm1-wifi.local dsm1-wifi.lan dsm1-wifi.localdomain dsm1-wifi
+192.168.168.253 homerun-01.local homerun-01.lan homerun-01.localdomain homerun-01
+#
+# ipv6
+::1 localhost.local localhost.lan localhost.localdomain localhost
+# 2025-01-18 Confirmed that link local addresses are not used by Mac. Removing.
+#fd00::3 pd1.local pd1.lan pd1.localdomain pd1 nuc01.local nuc01.lan nuc01.localdomain nuc01
+#fd00::8 dsm1.local dsm1.lan dsm1.localdomain dsm1 go.local go.lan go.localdomain go
+#
+# ###
+#

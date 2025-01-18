@@ -268,8 +268,8 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 # Update /etc/hosts
 	rm -f /etc/hosts
-		echo "Updating /etc/hosts from $GIT_UBUNTU_TOOLS_CONFIGS/etc/hosts.$HOSTNAME"
-		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/hosts.$HOSTNAME" "/etc/hosts"
+		echo "Updating /etc/hosts from $GIT_UBUNTU_TOOLS_CONFIGS/etc/hosts"
+		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/hosts" "/etc/hosts"
 
 # Update /etc/fstab
 	# Horrible error below. Do this ONLY at installation. 2024-07-07
