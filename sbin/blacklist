@@ -32,7 +32,8 @@ ufw reject from 82.102.27.195 to any # 2024-07-08 - Norway address, blocked by W
 ufw reject from 84.16.224.227 to any # 2024-12-31 - Germany
 ufw reject from 85.215.98.196 to any # 2024-12-09 - Germany
 ufw reject from 85.215.106.195 to any # 2024-12-09 - Germany
-ufw reject from 87.120.113.169 to any # 2024-12-23 - Bulgaria
+ufw reject from 87.120.113.0/24 to any # 2025-01-20 - Bulgaria
+ufw reject from 87.120.126.0/24 to any # 2025-01-20 - Bulgaria
 ufw reject from 87.236.176.87 to any # United Kingdom
 ufw reject from 91.92.240.138 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 32
 ufw reject from 91.92.242.0/24 to any # 2024-07-08 - Bulgaria address, blocked by Wordfence, block count 45

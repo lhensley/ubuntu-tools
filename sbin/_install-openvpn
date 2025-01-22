@@ -1,0 +1,215 @@
+#!/bin/bash
+# 
+# Updated 2024-10-29, 2025-01-19
+# Based on 
+# 	• PRIMARY: Ubuntu: How to install and use OpenVPN (October 18, 2024)
+# 	• DigitalOcean: How To Set Up and Configure a Certificate Authority On Ubuntu 22.04 (April 25, 2022)
+# 	• LinuxConfig: How to setup a OpenVPN server on Ubuntu 20.04 (May 14, 2020)
+# 
+# These instructions install the OpenVPN server on an Ubuntu host.
+# 
+# There are two ways to connect securely to a remote node using OpenVPN: TAP and TUN.
+# 	TAP (like a wiretap) PROBABLY *NOT* WHAT YOU WANT
+# 		○ Connects at OSI Layer 2, Data Link Layer
+# 		○ Bridges one network to another
+# 		○ Higher overhead because broadcasts always cross the connection
+# 		○ Allows local nodes on the client and server side to connect to each other using the encrypted software bridge.
+# 		○ Use this if the goal is to join two physical networks function as if they were one.
+# 	TUN (TUNnel) PROBABLY YOU WANT THIS.
+# 		○ Connects at OSI Layer 3, Network Layer
+# 		○ Establishes a route from one network to another
+# 		○ Lower overhead
+# 		○ Routes client internet traffic to the internet connection on the server side, encrypting the client/server connection so neither other nodes on the client's local network nor the internet nodes through which the traffic is routed can eavesdrop. That secures communication over public networks like airports or hotels.
+# 		○ Use this if the goal is to establish a secure connection between client and server through which the client can use the server's internet connection (e.g., Nord VPN).
+# 
+# IMPORTANT: These instructions assume that you're creating a TUN connection. We'll use UDP and not TCP. UDP is faster, and TCP is more reliable. Finally, we'll be using UDP port 1194, the default for OpenVPN.
+# 
+# RECOMMENDATION: Install on only one host on the same local network. It's not clear (to me) whether or not the virtual network addressing will collide.
+# 
+#################################################
+
+# Config Variables (Change away)
+	EASYRSA_BATCH="yes"
+    EASYRSA_REQ_CN="\"lanehensley.org\""
+    EASYRSA_REQ_COUNTRY="US"
+    EASYRSA_REQ_PROVINCE="Iowa"
+    EASYRSA_REQ_CITY="Des Moines"
+    EASYRSA_REQ_ORG="Hog Heaven DSM"
+    EASYRSA_REQ_EMAIL="lane@lanehensley.org"
+    EASYRSA_REQ_OU="Geek Division"
+    EASYRSA_ALGO="ec"
+    EASYRSA_DIGEST="sha512"
+    EASYRSA_PKI="\"$HOME/easy-rsa/pki\""
+
+# Standard Variables (Don't change these)
+	# Generate Revision Timestamp
+	REV=$(date '+%Y%m%d%H%M%S%Z')
+
+# INSTALLATION
+	# Retrieve repository updates
+	sudo apt --yes update
+	# Install needed software
+	sudo apt install --yes openvpn easy-rsa
+	# Allow clients to reach our server through the firewall
+	sudo ufw allow OpenVPN
+	# Archive existing easy-rsa working directory if it exists
+	if [ -d ~/easy-rsa ]; then
+		mv ~/easy-rsa ~/easy-rsa-$REV
+		fi
+	# Create ~/easy-rsa working directory
+	mkdir ~/easy-rsa
+	# Record Revision Timestamp
+	echo $REV > ~/easy-rsa/rev
+	# Create symbolic links to the easy-rsa installation
+	ln -s /usr/share/easy-rsa/* ~/easy-rsa/
+	# Create symbolic links to the easy-rsa installation
+	cp ~/easy-rsa/vars.example ~/easy-rsa/vars
+	# Restrict access to me alone
+	chmod 700 ~/easy-rsa
+	
+	
+# SET UP CERTIFICATE AUTHORITY AND CREATE CLIENT & SERVER KEYS AND CERTIFICATES
+	# Set variables in ~/easy-rsa/vars
+		echo >> ~/easy-rsa/vars
+		echo >> ~/easy-rsa/vars
+		echo "# Custom Variables $(cat ~/easy-rsa/rev)" \
+			>> ~/easy-rsa/vars
+		echo >> ~/easy-rsa/vars
+		echo 'set_var EASYRSA_BATCH          "yes"' \
+			>> ~/easy-rsa/vars
+		echo "set_var EASYRSA_REQ_CN        " \
+			"\"lanehensley.org\"" \
+			>> ~/easy-rsa/vars
+		echo 'set_var EASYRSA_REQ_COUNTRY    "US"' \
+			>> ~/easy-rsa/vars
+		echo 'set_var EASYRSA_REQ_PROVINCE   "Iowa"' \
+			>> ~/easy-rsa/vars
+		echo 'set_var EASYRSA_REQ_CITY       "Des Moines"' \
+			>> ~/easy-rsa/vars
+		echo 'set_var EASYRSA_REQ_ORG        "Hog Heaven DSM"' \
+			>> ~/easy-rsa/vars
+		echo 'set_var EASYRSA_REQ_EMAIL      "lane@lanehensley.org"' \
+			>> ~/easy-rsa/vars
+		echo 'set_var EASYRSA_REQ_OU         "Geek Division"' \
+			>> ~/easy-rsa/vars
+		echo 'set_var EASYRSA_ALGO           "ec"' \
+			>> ~/easy-rsa/vars
+		echo 'set_var EASYRSA_DIGEST         "sha512"' \
+			>> ~/easy-rsa/vars
+		echo "set_var EASYRSA_PKI           " \
+			"\"/home/$(whoami)/easy-rsa/pki\"" \
+			>> ~/easy-rsa/vars
+	# Change to easy-rsa working directory
+		cd ~/easy-rsa
+	# initialize the Public Key Infrastructure
+		# ./easyrsa --req-cn=$(hostname).lanehensley.org init-pki
+		./easyrsa --req-cn=lanehensley.org init-pki
+	# Build the Certificate Authority and create the root public and private key pair.
+		./easyrsa --req-cn=$(hostname).lanehensley.org build-ca nopass
+	# Create server keys and certificates
+		# Generate a key pair for the server and link them to names with revision info
+		./easyrsa gen-req \
+			$(cat ~/easy-rsa/rev)-server-$(hostname) nopass
+		ln ~/easy-rsa/pki/private/ca.key \
+			~/easy-rsa/pki/private/$(cat ~/easy-rsa/rev)-ca.key
+		ln ~/easy-rsa/pki/private/ca.key \
+			~/easy-rsa/pki/$(cat ~/easy-rsa/rev)-ca.key
+		# Generate Diffie Hellman parameters, rename, and link
+		./easyrsa gen-dh
+		ln ~/easy-rsa/pki/dh.pem \
+			~/easy-rsa/pki/$(cat ~/easy-rsa/rev)-dh.pem
+		# Create a certificate for the server
+		./easyrsa sign-req server \
+			$(cat ~/easy-rsa/rev)-server-$(hostname)
+		# Copy certificates and keys to /etc/openvpn/server
+		sudo ln pki/$(cat ~/easy-rsa/rev)-dh.pem \
+			pki/dh.pem pki/ca.crt \
+			/etc/openvpn/server/
+		sudo cp \
+			pki/issued/$(cat ~/easy-rsa/rev)-server-$(hostname).crt \
+			/etc/openvpn/server/
+		sudo cp \
+			pki/private/$(cat ~/easy-rsa/rev)-server-$(hostname).key \
+			/etc/openvpn/server/
+	# Create client certificates
+		for i in {1..20} ; do
+			CLIENT=$(printf \
+			"$(cat ~/easy-rsa/rev)-client-%02d-to-$(hostname)\n" $i)
+			./easyrsa gen-req $CLIENT nopass
+./easyrsa sign-req client $CLIENT
+		done
+	# Change to home directory
+		cd
+	
+# SIMPLE SERVER CONFIGURATION
+	# Copy template
+		SAMPLES='/usr/share/doc/openvpn/examples/sample-config-files'
+		SERVERCONF="/etc/openvpn/server/$(cat ~/easy-rsa/rev)-"
+		SERVERCONF+="server-$(hostname).conf"
+		sudo cp "$SAMPLES/server.conf" "$SERVERCONF"
+	# Edit "$SERVERCONF"
+		SEARCH="key server.key"
+		REPLACE="key /etc/openvpn/server/"
+		REPLACE+="$(cat ~/easy-rsa/rev)-server-$(hostname).key"
+		sudo sed -i "s:$SEARCH:$REPLACE:g" "$SERVERCONF"
+		SEARCH="cert server.crt"
+		REPLACE="cert /etc/openvpn/server/"
+		REPLACE+="$(cat ~/easy-rsa/rev)-server-$(hostname).crt"
+		sudo sed -i "s:$SEARCH:$REPLACE:g" "$SERVERCONF"
+		SEARCH="dh dh2048.pem"
+		REPLACE="dh /etc/openvpn/server/$(cat ~/easy-rsa/rev)-dh.pem"
+		sudo sed -i "s:$SEARCH:$REPLACE:g" "$SERVERCONF"
+	# Edit "/etc/sysctl.conf"
+		SEARCH="#net.ipv4.ip_forward=1"
+		REPLACE="net.ipv4.ip_forward=1"
+		sudo sed -i "s/$SEARCH/$REPLACE/g" "/etc/sysctl.conf"
+	# Complete this set with a TLS Authentication (TA) key
+		openvpn --genkey secret ta.key
+	# Set data-cipher
+		SEARCH=";data-ciphers"
+		REPLACE="data-ciphers"
+		sudo sed -i "s/$SEARCH/$REPLACE/g" "/etc/sysctl.conf"
+	# Reload sysctl
+		sudo sysctl -p /etc/sysctl.conf
+	# Start the server & enable it to start automatically on reboot
+		sudo systemctl start openvpn@server-$(hostname) \
+		&& sudo systemctl enable openvpn@server-$(hostname)
+		
+# CREATING CONFIGURATION FILES FOR CLIENTS
+	# Copy template
+		SAMPLES='/usr/share/doc/openvpn/examples/sample-config-files'
+		CLIENTCONF="/etc/openvpn/client-to-$(hostname).conf"
+		sudo cp "$SAMPLES/client.conf" "$CLIENTCONF"
+	# Edit "$CLIENTCONF"
+		SEARCH="key client.key"
+		REPLACE="key client-to-$(hostname).key"
+		sudo sed -i "s/$SEARCH/$REPLACE/g" "$CLIENTCONF"
+		SEARCH="cert client.crt"
+		REPLACE="cert client-to-$(hostname).crt"
+		sudo sed -i "s/$SEARCH/$REPLACE/g" "$CLIENTCONF"
+		SEARCH=";tls-auth ta.key 1"
+		REPLACE="tls-auth ta.key 1"
+		sudo sed -i "s/$SEARCH/$REPLACE/g" "$CLIENTCONF"
+		SEARCH="remote my-server-1"
+		REPLACE="remote lanehensley.org"
+		sudo sed -i "s/$SEARCH/$REPLACE/g" "$CLIENTCONF"
+	# Link client .ovpn file to .conf file
+		sudo ln "$CLIENTCONF" \
+			"/etc/openvpn/client-to-$(hostname).ovpn"
+	Based on
+		○ OpenVPN: Creating configuration files for server and clients
+
+# EXTREMELY IMPORTANT
+# Once you've generated client and server certificates and keys, 
+# move ~/easy-rsa/pki/private/ca.key to the Easy-RSA record in 1Password 
+# as soon as possible. If it gets compromised, you have a huge security problem.
+	echo
+	echo -en "\007" # Beep
+	echo "Once you've generated" \
+		"client and server certificates and keys,"
+	echo "move ~/easy-rsa/pki/private/ca.key" \
+		"to the Easy-RSA record in 1Password"
+	echo "as soon as possible." \
+		"If it gets compromised, you have a huge security problem."
+	Echo "ALSO: Don't forget to forward port 1194 on the router."
+
