@@ -503,7 +503,13 @@ TARGETBASE="/mnt/4TBA/plex/TV Shows/Regular"
 _apply-plex-permissions | tee -a "$templog"
 date | tee -a "$templog"
 echo "END" | tee -a "$templog"
-echo "[$(hostname)] $(basename $0): completed" | mail "$ADMIN_CELL_EMAIL"
+MESSAGE_FILE="/tmp/$(uuidgen)"
+echo "[$(hostname)] $(basename $0): completed." > $MESSAGE_FILE
+echo "$(ps -ef | grep '00:00:00 nq ' | wc -l) compression jobs are in queue now." >> $MESSAGE_FILE
+echo "These may take several hours to complete." >> $MESSAGE_FILE
+echo "To display the number of jobs remaining: ps -ef | grep '00:00:00 nq ' | wc -l" >> $MESSAGE_FILE
+echo "See /tmp/compress-with-hevc.log for more information." >> $MESSAGE_FILE
+cat $MESSAGE_FILE | mail "$ADMIN_USER"
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
