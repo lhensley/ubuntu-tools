@@ -1,5 +1,4 @@
 #!/bin/bash
-# Syncs /mnt/12TBA and /mnt/12TBC to match /mnt/12TBB
 
 # Include script setup file
 	source script-setup
@@ -14,7 +13,7 @@
 # Require a specific host
 	f_require_host dsm1
 
-sudo _apply-plex-permissions
+sudo _apply-plex-permissions # Using the find command
 rsync -avE --delete /mnt/4TBA/plex /mnt/5TBC/archives/4TBA
 rsync -avE --delete /mnt/4TBA/archives /mnt/5TBC/archives/4TBA
 rsync -avE --delete /mnt/4TBA/plex /mnt/20TBA/archives/4TBA
