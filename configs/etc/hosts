@@ -12,6 +12,7 @@
 192.168.168.3 pd1.local pd1.lan pd1.localdomain pd1 nuc01.local nuc01.lan nuc01.localdomain nuc01
 192.168.168.7 TabloDSM.local TabloDSM.lan TabloDSM.localdomain TabloDSM
 192.168.168.8 dsm1.local dsm1.lan dsm1.localdomain dsm1 go.local go.lan go.localdomain go
+192.168.168.48 macbook.local macbook.lan macbook.localdomain macbook
 192.168.168.70 pd1-wifi.local pd1-wifi.lan pd1-wifi.localdomain pd1-wifi
 192.168.168.71 dsm1-wifi.local dsm1-wifi.lan dsm1-wifi.localdomain dsm1-wifi
 192.168.168.253 homerun-01.local homerun-01.lan homerun-01.localdomain homerun-01
