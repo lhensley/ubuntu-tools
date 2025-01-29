@@ -1,0 +1,37 @@
+#!/bin/bash
+
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Do stuff here
+if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+search_string="$1"
+file="$2"
+delimiter=":"
+field_number=1
+
+# CHECK FOR ENOUGH ARGUMENTS
+if [ $# -lt 2 ]; then
+    echo "Not enough arguments" >&2
+    echo "Purpose: Displays the byte position of the first instance of a string in a file." >&2
+    echo "First byte of the file is 1, not 0." >&2
+	echo "Usage: $(basename $0) string-to-find file-to-search" >&2
+	exit 1
+    fi
+
+if [ ! -f "$file" ]; then  # Check whether $file is not a regular file
+    echo "$file: File not found." >&2
+    echo "Purpose: Displays the byte position of the first instance of a string in a file." >&2
+    echo "First byte of the file is 1, not 0." >&2
+	echo "Usage: $(basename $0) string-to-find file-to-search" >&2
+    exit 169
+    fi
+
+if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+grepresult=$(grep -abo "$search_string" "$file" | head -1)
+result=$(($(echo "$grepresult" | cut -d "$delimiter" -f "$field_number") + 1))
+echo $result
+
+exit 0
+

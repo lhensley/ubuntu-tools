@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Example: DisplaySubstringInFile filename first-include-text first-exclude-text
+
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Do stuff here
+if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+file="$1"
+first_include_text="$2"
+first_exclude_text="$3"
+
+# CHECK FOR ENOUGH ARGUMENTS
+if [ $# -lt 3 ]; then
+    echo "Not enough arguments" >&2
+    echo "Purpose: Displays a substring of a text file." >&2
+	echo "Usage: $(basename $0) first-include-text first-exclude-text" >&2
+	exit 1
+    fi
+
+if [ ! -f "$file" ]; then  # Check whether $file is not a regular file
+    echo "$file: File not found." >&2
+    echo "Purpose: Displays a substring of a text file." >&2
+	echo "Usage: $(basename $0) first-include-text first-exclude-text" >&2
+    exit 169
+    fi
+
+if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+start_byte=$(FindTextInFile "$first_include_text" "$file")
+end_byte=$(FindTextInFile "$first_exclude_text" "$file")
+
+# echo "$file"
+# echo "$start_byte"
+# echo "$end_byte"
+# echo $(FindTextInFile "$first_include_text" "$file")
+# echo $(FindTextInFile "$first_exclude_text" "$file")
+
+DisplayByteRangeInFile "$file" "$start_byte" "$end_byte"
+
+exit 0
+

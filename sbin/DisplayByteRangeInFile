@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Example: DisplayByteRangeInFile filename $(FindTextInFile first-include-text filename) $(($(FindTextInFile first-excluded-text filename)-1))
+
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Do stuff here
+if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+file="$1"
+start_byte="$2"
+end_byte="$3"
+
+# CHECK FOR ENOUGH ARGUMENTS
+if [ $# -lt 3 ]; then
+    echo "Not enough arguments" >&2
+    echo "Purpose: Displays a range of bytes in a file." >&2
+    echo "First byte of the file is 1, not 0." >&2
+	echo "Usage: $(basename $0) file-to-search start-byte end-byte" >&2
+	exit 1
+    fi
+
+if [ ! -f "$file" ]; then  # Check whether $file is not a regular file
+    echo "$file: File not found." >&2
+    echo "Purpose: Displays a range of bytes in a file." >&2
+    echo "First byte of the file is 1, not 0." >&2
+	echo "Usage: $(basename $0) file-to-search start-byte end-byte" >&2
+    exit 169
+    fi
+
+if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+count=$(($end_byte +1 - $start_byte))
+skip=$(($start_byte - 1))
+
+dd if="$file" bs=1 skip=$skip count=$count 2>/dev/null
+echo ""
+
+exit 0
+
