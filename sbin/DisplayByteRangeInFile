@@ -13,27 +13,49 @@ end_byte="$3"
 
 # CHECK FOR ENOUGH ARGUMENTS
 if [ $# -lt 3 ]; then
-    echo "Not enough arguments" >&2
+    echo "$(basename $0): Not enough arguments" >&2
+	echo "Usage: $(basename $0) file-to-search start-byte end-byte" >&2
     echo "Purpose: Displays a range of bytes in a file." >&2
     echo "First byte of the file is 1, not 0." >&2
-	echo "Usage: $(basename $0) file-to-search start-byte end-byte" >&2
 	exit 1
     fi
 
-if [ ! -f "$file" ]; then  # Check whether $file is not a regular file
-    echo "$file: File not found." >&2
+if [[ ! "$start_byte" =~ ^-?[0-9]+$ ]] || [ ! $start_byte -gt 0 ]; then
+    echo "$(basename $0): The start-byte must be an integer greater than zero." >&2
+	echo "Usage: $(basename $0) file-to-search start-byte end-byte" >&2
     echo "Purpose: Displays a range of bytes in a file." >&2
     echo "First byte of the file is 1, not 0." >&2
+	exit 22
+    fi
+
+if [[ ! "$end_byte" =~ ^-?[0-9]+$ ]] || [ ! $end_byte -gt 0 ]; then
+    echo "$(basename $0): The end-byte must be an integer greater than zero." >&2
 	echo "Usage: $(basename $0) file-to-search start-byte end-byte" >&2
+    echo "Purpose: Displays a range of bytes in a file." >&2
+    echo "First byte of the file is 1, not 0." >&2
+	exit 22
+    fi
+
+if [[ $end_byte -lt $start_byte ]]; then
+    echo "$(basename $0): The end-byte cannot be less than the start-byte." >&2
+ 	echo "Usage: $(basename $0) file-to-search start-byte end-byte" >&2
+    echo "Purpose: Displays a range of bytes in a file." >&2
+    echo "First byte of the file is 1, not 0." >&2
+	exit 22
+    fi
+
+if [ ! -f "$file" ]; then  # Check whether $file is not a regular file
+    echo "$(basename $0): $file: File not found." >&2
+    echo "Purpose: Displays a range of bytes in a file." >&2
+	echo "Usage: $(basename $0) file-to-search start-byte end-byte" >&2
+    echo "Purpose: Displays a range of bytes in a file." >&2
+    echo "First byte of the file is 1, not 0." >&2
     exit 169
     fi
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
-count=$(($end_byte - $start_byte))
-skip=$(($start_byte - 1))
-
-dd if="$file" bs=1 skip=$skip count=$count 2>/dev/null
+tail -c+"$start_byte" "$file" | head -c+$(($end_byte-$start_byte))
 echo ""
 
 exit 0
