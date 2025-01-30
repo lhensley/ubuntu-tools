@@ -30,7 +30,7 @@ if [ ! -f "$file" ]; then  # Check whether $file is not a regular file
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
-count=$(($end_byte +1 - $start_byte))
+count=$(($end_byte - $start_byte))
 skip=$(($start_byte - 1))
 
 dd if="$file" bs=1 skip=$skip count=$count 2>/dev/null

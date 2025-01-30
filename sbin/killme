@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Define the directory to iterate through
+directory="/home/lhensley/sc"
+
+list1=/home/lhensley/list1.txt
+list2=/home/lhensley/list2.txt
+rm -f "$list1"
+rm -f "$list2"
+
+# Loop through files in the directory
+for file in "$directory"/*; do
+  # Check if the item is a file (not a directory)
+  if [ -f "$file" ]; then
+    # Do something with the file
+    DisplaySubstringInFile "$file" "type=\"application/ld+json\">" "</script>" | tr '\n' ' ' >> "$list1"
+    DisplaySubstringInFile "$file" "\"name\": \"">" "\",   \"description\":" | tr '\n' ' ' >> "$list1a"
+    echo "" >> "$list1"
+    DisplaySubstringInFile "$file" "<h2 class=\"sc-1b6bgon-0 iHvfq\"><span>" "Join To Watch The Full Video" >> "$list2"
+  fi
+done
