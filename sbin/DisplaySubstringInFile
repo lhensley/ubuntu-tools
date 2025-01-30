@@ -30,12 +30,6 @@ if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 start_byte=$(FindTextInFile "$first_include_text" "$file")
 end_byte=$(FindTextInFile "$first_exclude_text" "$file" "$start_byte")
-echo "$file"
-echo start_byte "$start_byte"
-echo end_byte "$end_byte"
-echo DisplayByteRangeInFile "$file" "$start_byte" "$end_byte"
-exit 1
-
 DisplayByteRangeInFile "$file" "$start_byte" "$end_byte"
 
 exit 0
