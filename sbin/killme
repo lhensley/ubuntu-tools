@@ -21,15 +21,20 @@ list2e=/home/lhensley/list2e.txt
 
 rm -f "$list1" "$list1a" "$list1b" "$list1c" "$list1d" "$list1e" "$list1f" "$list1g" "$list1h"
 rm -f "$list2" "$list2a" "$list2b" "$list2c" "$list2d" "$list2e"
+rm -fr /home/lhensley/sc4
+mkdir -p /home/lhensley/sc4
 
 # Loop through files in the directory
 for file in "$directory"/*; do
   # Check if the item is a file (not a directory)
   if [ -f "$file" ]; then
     # Do something with the file
-    DisplaySubstringInFile "$file" "type=\"application/ld+json\">" "</script>" | tr '\n' ' ' >> "$list1"
-    DisplaySubstringInFile "$file" "\"name\": \">" "\",   \"description\":" >> "$list1a"
-    echo "" >> "$list1"
-    DisplaySubstringInFile "$file" "<h2 class=\"sc-1b6bgon-0 iHvfq\"><span>" "Join To Watch The Full Video" >> "$list2"
+    DisplaySubstringInFile "$file" "type=\"application/ld+json\">" "</script>" | tr '\n' ' ' > "/home/lhensley/sc4/$(basename $file)"
+    DisplaySubstringInFile "/home/lhensley/sc4/$(basename $file)" "\"name\": \">" "\",   \"description\"" | dd bs=102 skip=1 >> "$list1a" 2>/dev/null
+    DisplaySubstringInFile "/home/lhensley/sc4/$(basename $file)" "\"description\": \"" "\",   \"thumbnailUrl\"" | dd bs=16 skip=1 >> "$list1b" 2>/dev/null
+    DisplaySubstringInFile "/home/lhensley/sc4/$(basename $file)" "\"thumbnailUrl\": \"" "\",   \"uploadDate\"" | dd bs=17 skip=1 >> "$list1c" 2>/dev/null
+    DisplaySubstringInFile "/home/lhensley/sc4/$(basename $file)" "\"uploadDate\": \"" "\",   \"contentUrl\"" | dd bs=15 skip=1 >> "$list1d" 2>/dev/null
+    DisplaySubstringInFile "$file" "<meta data-rh=\"true\" name=\"dti.url\"" "/>" | dd bs=44 skip=1 >> "$list2a" 2>/dev/null
+    DisplaySubstringInFile "$file" "<h2 class=\"sc-1b6bgon-0 iHvfq\"><span>" "</span></h2>" | dd bs=37 skip=1 >> "$list2b" 2>/dev/null
   fi
 done
