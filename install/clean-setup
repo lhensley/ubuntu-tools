@@ -532,6 +532,7 @@ fi
 
 if $install_proftpd ; then f_install proftpd; fi
 if $install_putty_tools ; then f_install "putty-tools"; fi
+if $install_python3 ; then f_install python3 pipx; pipx ensurepath; fi
 if $install_rclone ; then f_install rclone; fi
 if $install_resolvconf ; then f_install resolvconf; fi
 if $install_ripmime ; then f_install ripmime; fi

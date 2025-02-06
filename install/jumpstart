@@ -15,11 +15,11 @@ echo apt-get -y update && sudo apt-get -y dist-upgrade
 apt-get -y update && sudo apt-get -y dist-upgrade
 
 echo
-echo apt-get -y install coreutils git gpg moreutils '\'
+echo apt-get -y install coreutils git-all gpg moreutils '\'
 echo "   " openssh-client openssh-server ufw util-linux
-apt-get -y install coreutils git gpg moreutils \
+apt-get -y install coreutils git-all gpg moreutils \
 	openssh-client openssh-server ufw util-linux
-systemctl enable �now ssh
+systemctl enable --now ssh
 
 echo
 echo wget --no-cache -O seeds.tar.gz.gpg https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar.gz.gpg
