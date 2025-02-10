@@ -2,9 +2,9 @@
 
 seconds=180
 
-printf "\n"
 for ((i=$seconds; i>0; i--)); do
    sleep 1 &
    printf "\r$i "
    wait
 done
+printf "\n"
