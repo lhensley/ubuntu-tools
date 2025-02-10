@@ -1,0 +1,9 @@
+#!/bin/bash
+
+seconds=180
+
+for ((i=$seconds; i>0; i--)); do
+   sleep 1 &
+   printf "$i \r"
+   wait
+done
