@@ -1,20 +1,31 @@
 #!/bin/bash
 
-seconds="$1"
+string=$1
+count=$(echo "$string" | grep -o ":" | wc -l)
 
-if [ $# -lt 1 ]; then
-   echo "$(basename $0): You must specify an integer greater than zero." >&2
-	echo "Usage: $(basename $0) seconds" >&2
+if [ $count -eq 0 ] ; then string="0:0:"$string; fi # Adjust; OK
+if [ $count -eq 1 ] ; then string="0:"$string; fi # Adjust; OK
+seconds=$(echo "$string" | awk -F: '{ print ($1 * 3600) + ($2 * 60) + $3 }')
+
+illegal=false
+allowed="[:0-9]"
+if [[ ! $string =~ ^$allowed+$ ]] || [ $seconds -gt 86399 ] ; then
+  illegal=true
+  fi
+
+if $illegal || [ $# -lt 1 ] || [ $count -gt 2 ] || [[ ! "$seconds" =~ ^-?[0-9]+$ ]] ; then
+   echo "$(basename $0): You must specify seconds as an integer greater or equal to 0," >&2
+   echo "  or hours, minutes, seconds in [HH:[MM:]]SS format, greater or equal to 00:00:00." >&2
+   echo "Maximum time is 86399 seconds, or 23:59:59." >&2
+ 	echo "Usage: $(basename $0) seconds" >&2
    echo "Purpose: Counts down from the speficied number of seconds" >&2
 	exit 1
-    fi
+   fi
 
-if [[ ! "$seconds" =~ ^-?[0-9]+$ ]] || [ ! "$seconds" -gt 0 ]; then
-   echo "$(basename $0): You must specify an integer greater than zero." >&2
-	echo "Usage: $(basename $0) seconds" >&2
-   echo "Purpose: Counts down from the speficied number of seconds" >&2
-	exit 22
-    fi
+if [ $# -gt 1 ] ; then
+   echo "Too many arguments." >&2
+   echo 1
+   fi
 
 for ((i=$seconds; i>0; i--)); do
    sleep 1 &
@@ -24,3 +35,7 @@ for ((i=$seconds; i>0; i--)); do
    done
 
 printf "\rDone.     \a\n"
+exit 0
+
+##########################################################################
+
