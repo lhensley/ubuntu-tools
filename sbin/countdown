@@ -1,10 +1,24 @@
 #!/bin/bash
 
-seconds=180
+seconds="$1"
+
+if [ $# -lt 1 ]; then
+   echo "$(basename $0): You must specify an integer greater than zero." >&2
+	echo "Usage: $(basename $0) seconds" >&2
+   echo "Purpose: Counts down from the speficied number of seconds" >&2
+	exit 1
+    fi
+
+if [[ ! "$seconds" =~ ^-?[0-9]+$ ]] || [ ! "$seconds" -gt 0 ]; then
+   echo "$(basename $0): You must specify an integer greater than zero." >&2
+	echo "Usage: $(basename $0) seconds" >&2
+   echo "Purpose: Counts down from the speficied number of seconds" >&2
+	exit 22
+    fi
 
 for ((i=$seconds; i>0; i--)); do
    sleep 1 &
    printf "\r$i "
    wait
 done
-printf "\rDone.\n"
+printf "\rDone.\a\n"
