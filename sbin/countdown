@@ -19,11 +19,15 @@ if $illegal || [ $# -lt 1 ] || [ $count -gt 2 ] || [[ ! "$seconds" =~ ^-?[0-9]+$
    echo "Maximum time is 86399 seconds, or 23:59:59." >&2
  	echo "Usage: $(basename $0) seconds" >&2
    echo "Purpose: Counts down from the speficied number of seconds" >&2
+   echo "by Lane Hensley, lane@lanehensley.org" >&2
 	exit 1
    fi
 
 if [ $# -gt 1 ] ; then
-   echo "Too many arguments." >&2
+   echo "$(basename $0): Too many arguments." >&2
+ 	echo "Usage: $(basename $0) seconds" >&2
+   echo "Purpose: Counts down from the speficied number of seconds" >&2
+   echo "by Lane Hensley, lane@lanehensley.org" >&2
    echo 1
    fi
 
