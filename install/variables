@@ -79,6 +79,7 @@
     install_gpg=true                # OpenPGP encryption and signing tool
     install_gzip=true               # Compress or expand files
     install_handbrake=false         # HandBrake video rendering
+    install_html2text=true          # Convert html to text
     install_inotify=true            # Do something when a file is created, deleted, or changed
     install_mailutils=true          # mail, Postfix, etc.
     install_openssl=true            # OpenSSL

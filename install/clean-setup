@@ -314,6 +314,7 @@ if $install_ghostscript ; then f_install ghostscript ; fi
 if $install_git ; then f_install git; fi
 if $install_gpg ; then f_install gpg; fi
 if $install_gzip ; then f_install gzip; fi
+if $install_html2text ; then f_install html2text; fi
 
 # HandBrake
 # Works on Ubuntu 22, but contradicts https://handbrake.fr/docs/en/1.5.0/get-handbrake/download-and-install.html

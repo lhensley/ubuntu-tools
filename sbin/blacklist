@@ -13,6 +13,7 @@
 
 ufw reject from 4.213.7.108 to any # 2024-1-06 - India
 ufw reject from 5.161.136.10 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
+ufw reject from 15.188.232.0/24 to any # 2025-02-10 - France
 ufw reject from 15.204.52.61 to any
 ufw reject from 15.237.189.64 to any # 2024-09-15 - France
 ufw reject from 23.137.104.0/24 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 2
@@ -49,6 +50,7 @@ ufw reject from 156.38.128.82 to any # 2024-07-08 - South Africa address, blocke
 ufw reject from 156.146.38.167 to any # 2024-09-09 - United States
 ufw reject from 161.97.131.39 to any # 2024-07-31 - Germany address, blocked by Wordfence, block count 13
 ufw reject from 164.132.182.113 to any # 2024-09-09 - France
+ufw reject from 167.88.166.120 to any # 2025-02-10 - United States
 ufw reject from 167.99.79.202 to any # 2024-07-08 - Singapore address, blocked by Wordfence, block count 2
 ufw reject from 170.205.30.77 to any # 2024-12-09 - United States
 ufw reject from 172.86.114.245 to any # 2024-11-06 - United States
