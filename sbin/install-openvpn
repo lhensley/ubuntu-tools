@@ -36,7 +36,50 @@ fi
 # Do stuff here
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
-echo "I don't do anything yet."
+# SET VARIABLES
+	# Generate Revision Timestamp
+	REV="$(date '+%Y%m%d%H%M%S%Z')"
+	# RSA variables
+	EASYRSA="$ADMIN_HOME_DIR/easy-rsa"
+	EASYRSA_OLD="$EASYRSA-$REV"
+	EASYRSA_REV_FILE="$EASYRSA/rev"
+	EASYRSA_VARS="$EASYRSA/vars"
+	EASYRSA_BATCH="yes"
+	EASYRSA_REQ_CN="$DOMAIN_NAME"
+	EASYRSA_REQ_COUNTRY="US"
+	EASYRSA_REQ_PROVINCE="Iowa"
+	EASYRSA_REQ_CITY="Des Moines"
+	EASYRSA_REQ_ORG="Hog Heaven DSM"
+	EASYRSA_REQ_EMAIL="$ADMIN_EMAIL"
+	EASYRSA_REQ_OU="Geek Division"
+	EASYRSA_ALGO="ec"
+	EASYRSA_DIGEST="sha512"
+	EASYRSA_PKI="$EASYRSA/pki"
+
+# INSTALLATION
+	# Retrieve repository updates
+	sudo apt --yes update
+	# Install needed software
+	sudo apt install --yes openvpn easy-rsa
+	# Allow clients to reach our server through the firewall
+	sudo ufw allow OpenVPN
+	# Archive existing easy-rsa working directory if it exists
+	if [ -d "$EASYRSA" ]; then
+		"$EASYRSA" "$EASYRSA_REV_FILE"
+		fi
+	# Create ~/easy-rsa working directory
+	mkdir "$EASYRSA"
+	# Record Revision Timestamp
+	echo $REV > "$EASYRSA_VARS"
+	# Create symbolic links to the easy-rsa installation
+	ln -s /usr/share/easy-rsa/* "$EASYRSA"
+	# Create symbolic links to the easy-rsa installation
+	cp ~/easy-rsa/vars.example "$EASYRSA_VARS"
+	# Restrict access to me alone
+	chmod 700 "$EASYRSA"
+	
+
+
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 

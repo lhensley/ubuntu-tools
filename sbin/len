@@ -1,0 +1,21 @@
+#!/bin/bash
+
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Do stuff here
+if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+string="$1"
+
+if [ $# -ne 1 ]; then
+    echo "$(basename $0): Takes exactly one parameter" >&2
+    echo "by Lane Hensley, lane@lanehensley.org, https://lanehensley.org" >&2
+	echo "Usage: $(basename $0) string" >&2
+    echo "Purpose: Displays the length of a string." >&2
+	exit 1
+    fi
+
+echo ${#string}
+
+exit 0
+

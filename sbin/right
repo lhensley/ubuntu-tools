@@ -1,0 +1,35 @@
+#!/bin/bash
+
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Do stuff here
+if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+string="$1"
+num_chars="$2"
+
+if [[ -z "$string" || -z "$num_chars" ]] || [ $# -ne 2 ]; then
+    echo "$(basename $0): Takes exactly two parameters" >&2
+    echo "by Lane Hensley, lane@lanehensley.org, https://lanehensley.org" >&2
+	echo "Usage: $(basename $0) <string> <number_of_characters>" >&2
+    echo "Purpose: Displays the last <number_of_characters> characters of a string." >&2
+    exit 1
+fi
+
+if ! [[ "$num_chars" =~ ^[0-9]+$ ]]; then
+    echo "$(basename $0): Number of characters must be a non-negative integer." >&2
+    echo "by Lane Hensley, lane@lanehensley.org, https://lanehensley.org" >&2
+	echo "Usage: $(basename $0) <string> <number_of_characters>" >&2
+    echo "Purpose: Displays the first <number_of_characters> characters of a string." >&2
+    exit 1
+fi
+
+if (( num_chars > ${#string} )); then
+    num_chars=${#string}
+fi
+
+backward=$(echo $string | rev)
+echo "${backward:0:$num_chars}" | rev
+
+exit 0
+
