@@ -30,8 +30,8 @@
 
 ### FILL IN THESE VARIABLES!!! ###
      COLOPHON="(c) $(date +%Y) by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
-     PURPOSE="Adds escape codes to a string" # Don't include $0, e.g., "Prints the first 5 characters of a string" 
-     USAGE="[-ifshv --input --file= --string= --help --version]" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
+     PURPOSE="Displays the row or column cursor position, top left being 0 0" # Don't include $0, e.g., "Prints the first 5 characters of a string" 
+     USAGE="[-crhv --column --row --help --version]" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
      VERSION_NUMBER="0.1"
      QUIET_MODE=false
      VERBOSE_MODE=false
@@ -64,46 +64,32 @@
      EXIT_CODE_INVALID_ARGUMENTS=173
      REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode. This is where text that could be suppressed by quiet mode is directed. 
 
-function f_alert () {
-	# Information for user.
-     # Variable 1: Error or other message (e.g., "File not found")
-     echo "$(basename $0) version $VERSION_NUMBER: $1" >&2
-	echo "Usage: $(basename $0) $USAGE" >&2
-     echo "Purpose: $PURPOSE" >&2
-     echo "$COLOPHON" >&2
-	}
-
 ###################################################
 # Functions
-# EDIT THIS!
 
+# EDIT THIS!
 function f_print_usage {
   echo >&2
   echo Usage: $USAGE >&2
-  echo Version: $VERSION_NUMBER >&2
+  echo "Version: $VERSION_NUMBER" >&2
   echo Purpose: $PURPOSE >&2
-#  echo Requires root or sudo. >&2
+#  echo Requires root or sudo. >&2 #OPTIONAL!
   echo >&2
   echo "Options:" >&2
-  echo "  -i --input                                      Use standard input for input (default)" >&2
-  echo "  -f<source-file-name> --file=<source-file-name>  Use specified file contents for input" >&2
-  echo "  -s<source-string> --string=<source-string>      Use specified string for input" >&2
-  echo "    IMPORTANT: The three lines above are mutually exclusive. Detault is -i or --input" >&2
-#  echo "  -q --quiet                                        Mimimal output" >&2
-#  echo "  -V --verbose                                      Verbose output" >&2
-  echo "  -v --version                                      Display version number, then exit" >&2
-#  echo "                                                    (no other options processed)" >&2
-  echo "  -h --help                                       Display usage and help information," >&2
-  echo "                                                  then exit (no other options processed)" >&2
+#  echo "  -q --quiet                        Mimimal output" >&2
+#  echo "  -V --verbose                      Verbose output" >&2
+  echo "  -c --column   Display column (default, and overrides -r or --row if -c or --column selected)" >&2
+  echo "  -r --row      Display row (works only if neither -c nor --column selected)" >&2
+  echo "  -v --version  Display version number, then exit (no other options processed)" >&2
+  echo "  -h --help     Display usage and help information, then exit (no other options processed)" >&2
   echo >&2
-  echo "Example usages: echo \$string |" $(basename "$0") -i >&2
-  echo "                echo \$string |" $(basename "$0") --input >&2
-  echo "                cat <filename> |" $(basename "$0") -i >&2
-  echo "                cat <filename> |" $(basename "$0") --input >&2
-  echo "                "$(basename "$0") -f\<source-file-name\> >&2
-  echo "                "$(basename "$0") -file=\<source-file-name\> >&2
-  echo "                "$(basename "$0") -s\<\$source-string\> >&2
-  echo "                "$(basename "$0") -string=\<\$source-string\> >&2
+  echo "Example usage: " $(basename "$0") -c >&2
+  echo "               " $(basename "$0") --column >&2
+  echo "               " $(basename "$0") -r >&2
+  echo "               " $(basename "$0") --row >&2
+  echo "               " $(basename "$0") -c -r >&2
+  echo "               " $(basename "$0") --column --row >&2
+  echo >&2
      #  # Describe any exit codes returned. For examples below, comment out any unused values. EXAMPLE:
      #  echo Return values: >&2
      #  echo "  " $EXIT_CODE_SUCCESS on success, >&2
@@ -119,8 +105,22 @@ function f_print_usage {
      #  # echo "  " $EXIT_CODE_FILE_IN_USE if file in use, >&2
      #  echo "  " $EXIT_CODE_USER_ABORT on user abort >&2
      #  echo >&2
-   echo  >&2 ; echo $COLOPHON >&2
- }
+  echo >&2 ; echo $COLOPHON >&2
+  }
+
+# OK as is; no need to update
+function f_alert () {
+	# Information for user.
+     # Variable 1: Error or other message (e.g., "File not found")
+     echo "$(basename $0) version $VERSION_NUMBER: $1" >&2
+     echo "$COLOPHON" >&2
+	echo "Usage: $(basename $0) $USAGE" >&2
+     echo "Purpose: $PURPOSE" >&2
+	}
+
+
+###################################################
+# General error testing
 
 ###################################################
 # Parse options and arguments with getopt
@@ -140,8 +140,8 @@ function f_print_usage {
 #       Similarly for long options, options optionA, optionB, and optionC are switches; optiona, optionb, and optionc expect arguments
 #   Double Colon after an option means an argument is optional. 
 #   The '-- "$@"' at the end means that all other command arguments are "remaining arguments".
-PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options f:his:v \
-    --long file:,help,input,string:,version \
+PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options crhv \
+    --long column,row,help,version \
     -- "$@")
 VALID_ARGUMENTS=$?
 if [ "$VALID_ARGUMENTS" != "0" ]; then f_print_usage; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
@@ -151,33 +151,33 @@ if [ "$VALID_ARGUMENTS" != "0" ]; then f_print_usage; exit $EXIT_CODE_INVALID_AR
 #   the shell script now thinks that it was called with these simpler, standardised set of arguments.
 eval set -- "$PARSED_ARGUMENTS"
 
-# Setting default
-unset string
-if [[ -p /dev/stdin ]] || ! test -t 0 ; then  # Testing for anything at standard input
-     while IFS= read -r line; do
-          if [[ -z "$content" ]]; then
-               string="$line"
-               else string="$string"$'\n'"$line"
-               fi
-          done
-     fi
+#!/bin/bash
+# based on a script from http://invisible-island.net/xterm/xterm.faq.html
+exec < /dev/tty
+oldstty=$(stty -g)
+stty raw -echo min 0
+# on my system, the following line can be replaced by the line below it
+echo -en "\033[6n" > /dev/tty
+# tput u7 > /dev/tty    # when TERM=xterm (and relatives)
+IFS=';' read -r -d R -a pos
+stty $oldstty
+# change from one-based to zero based so they work with: tput cup $row $col
+rowval=$((${pos[0]:2} - 1))    # strip off the esc-[
+colval=$((${pos[1]} - 1))
 
+column=false
+row=false
 while : ; do
     case "$1" in
-       -f | --file )
-          MODE=file
-          string=$(cat "$2")
-          shift 2
-           ;;   
-       -s | --string )
-          MODE=string
-          string="$2"
-          shift 2
-           ;;   
-       -i | --input ) # Doesn't do anything here because it's dealt with in default above.
+      -c | --column )
+          column=true
           shift 1
            ;;   
-       -h | --help )  # Help, if you're so stupid that you don't get that :)
+      -r | --row )
+          row=true
+          shift 1
+           ;;   
+      -h | --help )  # Help, if you're so stupid that you don't get that :)
            f_print_usage
            exit $EXIT_CODE_SUCCESS
            ;;   
@@ -206,6 +206,11 @@ while : ; do
   esac
 done
 
+
+###################################################
+# Test for correct number of arguments.
+# IMPORTANT: You have to test this AFTER all the shifting above.
+
 # Review this.
 # CHECK FOR CORRECT NUMBER/RANGE OF ARGUMENTS
 if [ $# -ne 0 ]; 
@@ -224,13 +229,9 @@ fi
 #   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
-printf "%d" ${#string}
-if [ $(cursor --column) -ne 0 ] ; then
-     echo "" >&2 # This allows piping the result above to another program, and only issue a newline to the console.
-     fi
-
-exit 0
-
+if $row && ! $column ; then
+     printf "%d" "$rowval"; else
+     printf "%d" "$colval"; fi
 
 ###################################################
 # Wrap up.

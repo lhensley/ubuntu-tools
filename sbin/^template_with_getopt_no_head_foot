@@ -3,6 +3,7 @@
 ###################################################
 # Notes
 #
+# USE "getopt", NOT "getopts" !
 # "getopts" is built into shell, which makes it run faster then "getopt", which is an external command
 # But "getopts" does not support long command line arguments (e.g., shellscriptname --argument=value)
 # STRONG RECOMMENDATION: Use getopt and not getopts
@@ -29,13 +30,13 @@
 
 ### FILL IN THESE VARIABLES!!! ###
      COLOPHON="(c) $(date +%Y) by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
-     PURPOSE="Sample purpose" # Don't include $0, e.g., "Prints the first 5 characters of a string" 
-     USAGE="Sample usage" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>"
+     PURPOSE="SAMPLE PURPOSE" # Don't include $0, e.g., "Prints the first 5 characters of a string" 
+     USAGE="SAMPLE USAGE" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
      VERSION_NUMBER="0.1"
      QUIET_MODE=false
      VERBOSE_MODE=false
 
-# Global variables
+# Stable variables; OK to leave this in without edits.
      ARGS="" # Adapted when flags are parsed.
      EXIT_CODE_SUCCESS=0
      EXIT_CODE_EPERM=1 # Operation not permitted
@@ -60,63 +61,73 @@
      EXIT_CODE_DIRECTORY_NOT_FOUND=170
      EXIT_CODE_FILE_IN_USE=171
      EXIT_CODE_WRONG_HOST=172
+     EXIT_CODE_INVALID_ARGUMENTS=173
      REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode. This is where text that could be suppressed by quiet mode is directed. 
 
-############## IMPORTANT: See "FILL THIS IN!!!!!" below. ##############
-function f_alert () {
-	# Information for user.
-     # Variable 1: Error or other message (e.g., "File not found")
-     echo "$(basename $0) version $VERSION_NUMBER: $1" >&2
-     echo "$COLOPHON" >&2
-	echo "Usage: $(basename $0) $USAGE" >&2
-     echo "Purpose: $PURPOSE" >&2
-	}
-
-# CHECK FOR ENOUGH ARGUMENTS (change 0 to minimum arguments and flesh out Usage)
-if [ $# -lt 0 ]; 
-     then echo "$EXIT_CODE_DESC_DIRECTORY_NOT_FOUND"
-	echo "Usage: $(basename $0)"
-	exit $EXIT_CODE_DIRECTORY_NOT_FOUND
-fi
 
 ###################################################
 # Functions
 
+# EDIT THIS!
 function f_print_usage {
-  echo
-  echo Usage: $(basename "$0") [-hqVv --help --quiet --verbose --version]
-  echo "Version $VERSION_NUMBER"
-  echo Apply configureations and selected permissions on local system.
-  echo Requires root or sudo.
-  echo
-  echo "Options:"
-  echo "  -q --quiet                        Mimimal output"
-  echo "  -V --verbose                      Verbose output"
-  echo "  -v --version                      Display version number, then exit (no other options processed)"
-  echo "  --help                            Display usage and help information, then exit (no other options processed)"
-  echo
-  echo "Example usage: " $(basename "$0")
-  echo
+  echo >&2
+  echo Usage: $USAGE >&2
+  echo "Version: $VERSION_NUMBER" >&2
+  echo Purpose: $PURPOSE >&2
+  echo Requires root or sudo. >&2 #OPTIONAL!
+  echo >&2
+  echo "Options:" >&2
+  echo "  -q --quiet                        Mimimal output" >&2
+  echo "  -V --verbose                      Verbose output" >&2
+  echo "  -v --version                      Display version number, then exit (no other options processed)" >&2
+  echo "  -h --help                         Display usage and help information, then exit (no other options processed)" >&2
+  echo >&2
+  echo "Example usage: " $(basename "$0") >&2
+  echo >&2
      #  # Describe any exit codes returned. For examples below, comment out any unused values. EXAMPLE:
-     #  echo Return values:
-     #  echo "  " $EXIT_CODE_SUCCESS on success,
-     #  echo "  " $EXIT_CODE_INTERNAL_ERROR on internal error,
-     #  echo "  " $EXIT_CODE_INVALID_OPTIONS if invalid options specified,
-     #  echo "  " $EXIT_CODE_ROOT_REQUIRED if root required,
-     #  # echo "  " $EXIT_CODE_UBUNTU_REQUIRED if Ubuntu required,
-     #  # echo "  " $EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED if minimum OS version required,
-     #  # echo "  " $EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED if maximum OS version required,
-     #  # echo "  " $EXIT_CODE_SPECIFIC_SERVER_REQUIRED if specific server required,
-     #  # echo "  " $EXIT_CODE_FILE_NOT_FOUND if file not found,
-     #  # echo "  " $EXIT_CODE_DIRECTORY_NOT_FOUND if directory not found,
-     #  # echo "  " $EXIT_CODE_FILE_IN_USE if file in use,
-     #  echo "  " $EXIT_CODE_USER_ABORT on user abort
-     #  echo
-  }
+     #  echo Return values: >&2
+     #  echo "  " $EXIT_CODE_SUCCESS on success, >&2
+     #  echo "  " $EXIT_CODE_INTERNAL_ERROR on internal error, >&2
+     #  echo "  " $EXIT_CODE_INVALID_OPTIONS if invalid options specified, >&2
+     #  echo "  " $EXIT_CODE_ROOT_REQUIRED if root required, >&2
+     #  # echo "  " $EXIT_CODE_UBUNTU_REQUIRED if Ubuntu required, >&2
+     #  # echo "  " $EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED if minimum OS version required, >&2
+     #  # echo "  " $EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED if maximum OS version required, >&2
+     #  # echo "  " $EXIT_CODE_SPECIFIC_SERVER_REQUIRED if specific server required, >&2
+     #  # echo "  " $EXIT_CODE_FILE_NOT_FOUND if file not found, >&2
+     #  # echo "  " $EXIT_CODE_DIRECTORY_NOT_FOUND if directory not found, >&2
+     #  # echo "  " $EXIT_CODE_FILE_IN_USE if file in use, >&2
+     #  echo "  " $EXIT_CODE_USER_ABORT on user abort >&2
+     #  echo >&2
+    echo >&2 ; echo $COLOPHON >&2
+}
+
+# OK as is; no need to update
+function f_alert () {
+	# Information for user.
+     # Variable 1: Error or other message (e.g., "File not found")
+     echo "$(basename $0) version $VERSION_NUMBER: $1" >&2
+	echo "Usage: $(basename $0) $USAGE" >&2
+     echo "Purpose: $PURPOSE" >&2
+     echo "$COLOPHON" >&2
+	}
+
+
+###################################################
+# General error testing
+
+# Review this.
+# CHECK FOR CORRECT NUMBER/RANGE OF ARGUMENTS
+if [ $# -ne 0 ]; 
+     then echo "Invalid number of arguments." >&2
+	f_print_usage
+	exit $EXIT_CODE_INVALID_ARGUMENTS
+fi
 
 
 ###################################################
 # Parse options and arguments with getopt
+# READ AND EDIT THIS!
 
 # Note about the following call to getopt
 #   Options used here with the getopt command itself
@@ -130,8 +141,9 @@ function f_print_usage {
 #   Colon after an option means an argument is required. 
 #       In this example, options A, B, and C are switches; a, b, and c expect arguments
 #       Similarly for long options, options optionA, optionB, and optionC are switches; optiona, optionb, and optionc expect arguments
+#   Double Colon after an option means an argument is optional. 
 #   The '-- "$@"' at the end means that all other command arguments are "remaining arguments".
-PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options Vvq \
+PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options hqVv \
     --long help,quiet,verbose,version \
     -- "$@")
 VALID_ARGUMENTS=$?
@@ -144,12 +156,12 @@ eval set -- "$PARSED_ARGUMENTS"
 
 while : ; do
     case "$1" in
-      -h | --help )
+      -h | --help )  # Help, if you're so stupid that you don't get that :)
            f_print_usage
            exit $EXIT_CODE_SUCCESS
            ;;   
       -v | --version)  # Version number
-           echo $VERSION_NUMBER
+           echo $(basename $0): version $VERSION_NUMBER >&2
            exit $EXIT_CODE_SUCCESS
            ;;
       -q | --quiet)  # Quiet mode
@@ -166,7 +178,9 @@ while : ; do
            shift
            break 
            ;;
-      *) f_die "Unexpected option: $1 - Script programming error. Valid option has no handler." false $EXIT_CODE_INTERNAL_ERROR
+      *) # Invalid option.
+          f_alert "Invalid option."
+          exit EXIT_CODE_INVALID_OPTIONS
            ;;
   esac
 done
@@ -181,17 +195,9 @@ done
 #   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
-echo "I don't do anything yet."
-
-printf "%q" "$string"
-
-# i = stdio, s = string, f = file (can't be combined; default = s)
-# h = help, v = version
+echo "I don't do anything yet." >&2
 
 ###################################################
 # Wrap up.
-
-# Option to text the administrator when the script ends
-# echo "[$(hostname)] $(basename $0): completed" | mail "$ADMIN_CELL_EMAIL"
 
 exit 0

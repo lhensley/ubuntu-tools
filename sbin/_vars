@@ -415,6 +415,7 @@ source /etc/os-release
         EXIT_CODE_DESC_DIRECTORY_NOT_FOUND='Directory not found' # 170
         EXIT_CODE_DESC_FILE_IN_USE='File in use' # 171
         EXIT_CODE_DESC_WRONG_HOST='Wrong host' # 172
+        EXIT_CODE_DESC_INVALID_ARGUMENTS='Invalid arguments' # 173
 
 # Text Alerts
 # DEPENDENT on user definitions above
