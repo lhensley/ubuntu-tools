@@ -1,35 +1,220 @@
 #!/bin/bash
 
-DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+###################################################
+# Notes
+#
+# USE "getopt", NOT "getopts" !
+# "getopts" is built into shell, which makes it run faster then "getopt", which is an external command
+# But "getopts" does not support long command line arguments (e.g., shellscriptname --argument=value)
+# STRONG RECOMMENDATION: Use getopt and not getopts
+#
+# DEPRECATED: Initially followed tutorial at https://www.shellscript.sh/tips/getopt/
+# New Tutorial: https://www.tutorialspoint.com/unix_commands/getopt.htm
+# man page for getopt is at https://man7.org/linux/man-pages/man1/getopt.1.html
+#
+# Defining terms
+#    argument: any text appended to a command (syn.: parameter)
+#    parameter: synonym for argument
+#    option: a command argument preceded by a single or double hyphen (e.g., -o, or --option)
+#       An option may have an argument of its own (an "option argument", e.g., -o value-o, or --option value-o, or --option=value-o)
+#       All options are arguments, but not all arguments are options.
+#    short option: an option consisting of single hyphen and letter, with or without an option argument specified (e.g., -a value-a -b)
+#    long option: an option consisting of a double hyphen and word, with or without an option argument specified (e.g., --arga value-a --argb=value-b --argc)
+#    switch: a short or long option, with no option argument specified (e.g., -a --argb)
+#       All switches are options, but not all options are switches.
+#    remaining arguments: command line arguments that are neither options nor option arguments
 
-# Do stuff here
-if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+###################################################
+# Basic Setup
+
+### FILL IN THESE VARIABLES!!! ###
+     PURPOSE="Displays the last <number-of-characters> characters of a string." # Don't include $0, e.g., "Saves the world" 
+     USAGE="[-hv --help --version] <source-string> <number-of-characters>" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
+     VERSION_NUMBER="0.1"
+     COLOPHON="(c) $(date +%Y) by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
+
+# Stable variables; OK to leave this in without edits.
+     ARGS="" # Adapted when flags are parsed.
+     EXIT_CODE_SUCCESS=0
+     EXIT_CODE_EPERM=1 # Operation not permitted
+     EXIT_CODE_ENOENT=2 # No such file or directory
+     EXIT_CODE_EIO=5 # Input/output error
+     EXIT_CODE_E2BIG=7 # Argument list too long
+     EXIT_CODE_EEXIST=17 # File exists
+     EXIT_CODE_ENOTDIR=20 # Not a directory
+     EXIT_CODE_EISDIR=21 # Is a directory
+     EXIT_CODE_EINVAL=22 # Invalid argument
+     EXIT_CODE_EFBIG=27 # File too large
+     EXIT_CODE_ERANGE=34 # Numerical result out of range
+     EXIT_CODE_INTERNAL_ERROR=161
+     EXIT_CODE_INVALID_OPTIONS=162
+     EXIT_CODE_ROOT_REQUIRED=163
+     EXIT_CODE_UBUNTU_REQUIRED=164
+     EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED=165
+     EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED=166
+     EXIT_CODE_SPECIFIC_SERVER_REQUIRED=167
+     EXIT_CODE_USER_ABORT=168
+     EXIT_CODE_FILE_NOT_FOUND=169
+     EXIT_CODE_DIRECTORY_NOT_FOUND=170
+     EXIT_CODE_FILE_IN_USE=171
+     EXIT_CODE_WRONG_HOST=172
+     EXIT_CODE_INVALID_ARGUMENTS=173
+     PROGRAM_NAME="$(basename $0)"
+     QUIET_MODE=false
+     REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode. This is where text that could be suppressed by quiet mode is directed. 
+     VERBOSE_MODE=false
+
+
+###################################################
+# Functions
+
+# EDIT THIS!
+function f_print_usage {
+  echo "$PROGRAM_NAME version $VERSION_NUMBER" >&2
+  echo Usage: $PROGRAM_NAME $USAGE >&2
+  echo Purpose: $PURPOSE >&2
+#  echo Requires root or sudo. >&2 #OPTIONAL!
+  echo >&2
+  echo "Options:" >&2
+#  echo "  -q --quiet                        Mimimal output" >&2
+#  echo "  -V --verbose                      Verbose output" >&2
+  echo "  -v --version  Display version number, then exit (no other options processed)" >&2
+  echo "  -h --help     Display usage and help information, then exit (no other options processed)" >&2
+  echo >&2
+  echo "Example usage: " $PROGRAM_NAME snapshot 4 >&2
+  echo >&2 ; echo $COLOPHON >&2
+}
+
+# OK as is; no need to update
+function f_alert () {
+	# Information for user.
+     # Variable 1: Error or other message (e.g., "File not found")
+     echo "$PROGRAM_NAME version $VERSION_NUMBER: $1" >&2
+	echo "Usage: $PROGRAM_NAME $USAGE" >&2
+     echo "Purpose: $PURPOSE" >&2
+     echo "$COLOPHON" >&2
+	}
+
+
+###################################################
+# General error testing
+
+# # Review this.
+# # CHECK FOR CORRECT NUMBER/RANGE OF ARGUMENTS
+# if [ $# -ne 0 ]; 
+#      then echo "Invalid number of arguments." >&2
+# 	f_print_usage
+# 	exit $EXIT_CODE_INVALID_ARGUMENTS
+# fi
+
+
+###################################################
+# Parse options and arguments with getopt
+# READ AND EDIT THIS!
+
+# Note about the following call to getopt
+#   Options used here with the getopt command itself
+#       --name : Script name, used for reporting errors
+#       --options : Definition of short options
+#       --longoptions (--long) : Definition of long options
+#   Options used used with the getopt command itself
+#       --alternative : Allow long options to start with a single '-'.
+#       --help : Display help text and exit.  No other output is generated.
+#       --quiet, --test, --unquoted, --version
+#   Colon after an option means an argument is required. 
+#       In this example, options A, B, and C are switches; a, b, and c expect arguments
+#       Similarly for long options, options optionA, optionB, and optionC are switches; optiona, optionb, and optionc expect arguments
+#   Double Colon after an option means an argument is optional.
+#   The '-- "$@"' at the end means that all other command arguments are "remaining arguments".
+PARSED_ARGUMENTS=$(getopt --name $PROGRAM_NAME --options hv \
+    --long help,version \
+    -- "$@")
+VALID_ARGUMENTS=$?
+if [ "$VALID_ARGUMENTS" != "0" ]; then f_print_usage; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
+
+# Note about next command: 
+# By reading that set of standardised arguments into the shell's input arguments 
+#   the shell script now thinks that it was called with these simpler, standardised set of arguments.
+eval set -- "$PARSED_ARGUMENTS"
+
+while : ; do
+    case "$1" in
+      -h | --help )  # Help, if you're so stupid that you don't get that :)
+           f_print_usage
+           exit $EXIT_CODE_SUCCESS
+           ;;   
+      -v | --version)  # Version number
+           echo $PROGRAM_NAME: version $VERSION_NUMBER >&2
+           exit $EXIT_CODE_SUCCESS
+           ;;
+#      -q | --quiet)  # Quiet mode
+#           QUIET_MODE=true
+#           REDIRECT="/dev/null"
+#           ARGS+=" --quiet"
+#           shift # Only one (default) shift for a switch, i.e., no argument
+#           ;;
+#      -V | --verbose)  # Verbose mode
+#           VERBOSE_MODE=true
+#           shift # Only one (default) shift for a switch, i.e., no argument
+#           ;;
+      --) # -- means the end of the arguments; drop this, and break out of the while loop
+           shift
+           break 
+           ;;
+      *) # Invalid option.
+          f_alert "Invalid option."
+          exit EXIT_CODE_INVALID_OPTIONS
+           ;;
+  esac
+done
+
+
+###################################################
+# Do the work.
+# IMPORTANT NOTES: 
+#   Don't forget that you still can read and use environment variables!
+#       Best practice: Required values should be required on and read from the command line, not environment variables.
+#           Environment variables are fine for optional values.
+#   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
+#   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
 string="$1"
 num_chars="$2"
 
+# Review this.
+# CHECK FOR CORRECT NUMBER/RANGE OF ARGUMENTS
+if [ $# -ne 2 ]; 
+     then echo "Invalid number of arguments." >&2
+	f_print_usage
+	exit $EXIT_CODE_INVALID_ARGUMENTS
+     fi
+
 if [[ -z "$string" || -z "$num_chars" ]] || [ $# -ne 2 ]; then
-    echo "$(basename $0): Takes exactly two parameters" >&2
-    echo "by Lane Hensley, lane@lanehensley.org, https://lanehensley.org" >&2
-	echo "Usage: $(basename $0) <string> <number_of_characters>" >&2
-    echo "Purpose: Displays the last <number_of_characters> characters of a string." >&2
-    exit 1
+     echo "$PROGRAM_NAME: Takes exactly two parameters" >&2
+     echo "by Lane Hensley, lane@lanehensley.org, https://lanehensley.org" >&2
+     echo "Usage: $PROGRAM_NAME <string> <number_of_characters>" >&2
+     echo "Purpose: Displays the first <number_of_characters> characters of a string." >&2
+     exit 1
 fi
 
 if ! [[ "$num_chars" =~ ^[0-9]+$ ]]; then
-    echo "$(basename $0): Number of characters must be a non-negative integer." >&2
-    echo "by Lane Hensley, lane@lanehensley.org, https://lanehensley.org" >&2
-	echo "Usage: $(basename $0) <string> <number_of_characters>" >&2
-    echo "Purpose: Displays the first <number_of_characters> characters of a string." >&2
-    exit 1
+     echo "$PROGRAM_NAME: Number of characters must be a non-negative integer." >&2
+     echo "by Lane Hensley, lane@lanehensley.org, https://lanehensley.org" >&2
+	echo "Usage: $PROGRAM_NAME <string> <number_of_characters>" >&2
+     echo "Purpose: Displays the first <number_of_characters> characters of a string." >&2
+     exit 1
 fi
 
 if (( num_chars > ${#string} )); then
-    num_chars=${#string}
+     num_chars=${#string}
 fi
-
+  
 backward=$(echo $string | rev)
 echo "${backward:0:$num_chars}" | rev
 
-exit 0
 
+###################################################
+# Wrap up.
+
+exit 0

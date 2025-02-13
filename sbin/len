@@ -30,8 +30,8 @@
 
 ### FILL IN THESE VARIABLES!!! ###
      COLOPHON="(c) $(date +%Y) by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
-     PURPOSE="Adds escape codes to a string" # Don't include $0, e.g., "Prints the first 5 characters of a string" 
-     USAGE="[-ifshv --input --file= --string= --help --version]" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
+     PURPOSE="Prints the length of a string" # Don't include $0, e.g., "Prints the first 5 characters of a string" 
+     USAGE="[-ifshv --input --file= --string= --help --version] [<input-string>]" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
      VERSION_NUMBER="0.1"
      QUIET_MODE=false
      VERBOSE_MODE=false
@@ -62,8 +62,9 @@
      EXIT_CODE_FILE_IN_USE=171
      EXIT_CODE_WRONG_HOST=172
      EXIT_CODE_INVALID_ARGUMENTS=173
+     PROGRAM_NAME=$(basename "$0")
      REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode. This is where text that could be suppressed by quiet mode is directed. 
-
+ 
 function f_alert () {
 	# Information for user.
      # Variable 1: Error or other message (e.g., "File not found")
@@ -78,9 +79,8 @@ function f_alert () {
 # EDIT THIS!
 
 function f_print_usage {
-  echo >&2
-  echo Usage: $USAGE >&2
-  echo Version: $VERSION_NUMBER >&2
+  echo "$PROGRAM_NAME version $VERSION_NUMBER" >&2
+  echo Usage: $PROGRAM_NAME $USAGE >&2
   echo Purpose: $PURPOSE >&2
 #  echo Requires root or sudo. >&2
   echo >&2
@@ -96,14 +96,15 @@ function f_print_usage {
   echo "  -h --help                                       Display usage and help information," >&2
   echo "                                                  then exit (no other options processed)" >&2
   echo >&2
-  echo "Example usages: echo \$string |" $(basename "$0") -i >&2
-  echo "                echo \$string |" $(basename "$0") --input >&2
-  echo "                cat <filename> |" $(basename "$0") -i >&2
-  echo "                cat <filename> |" $(basename "$0") --input >&2
-  echo "                "$(basename "$0") -f\<source-file-name\> >&2
-  echo "                "$(basename "$0") -file=\<source-file-name\> >&2
-  echo "                "$(basename "$0") -s\<\$source-string\> >&2
-  echo "                "$(basename "$0") -string=\<\$source-string\> >&2
+  echo "Example usages: cat <filename> | $PROGRAM_NAME -i" >&2
+  echo "                echo \$string | $PROGRAM_NAME -i" >&2
+  echo "                echo \$string | $PROGRAM_NAME --input" >&2
+  echo "                cat <filename> | $PROGRAM_NAME --input" >&2
+  echo "                $PROGRAM_NAME <input-string>" >&2
+  echo "                $PROGRAM_NAME "-s\<input-string\>"" >&2
+  echo "                $PROGRAM_NAME "-string=\<input-string\>"" >&2
+  echo "                $PROGRAM_NAME -f\<source-file-name\>" >&2
+  echo "                $PROGRAM_NAME -file=\<source-file-name\>" >&2
      #  # Describe any exit codes returned. For examples below, comment out any unused values. EXAMPLE:
      #  echo Return values: >&2
      #  echo "  " $EXIT_CODE_SUCCESS on success, >&2
@@ -152,7 +153,8 @@ if [ "$VALID_ARGUMENTS" != "0" ]; then f_print_usage; exit $EXIT_CODE_INVALID_AR
 eval set -- "$PARSED_ARGUMENTS"
 
 # Setting default
-unset string
+     unset string
+
 if [[ -p /dev/stdin ]] || ! test -t 0 ; then  # Testing for anything at standard input
      while IFS= read -r line; do
           if [[ -z "$content" ]]; then
@@ -208,12 +210,16 @@ done
 
 # Review this.
 # CHECK FOR CORRECT NUMBER/RANGE OF ARGUMENTS
-if [ $# -ne 0 ]; 
+if [ $# -gt 1 ]; 
      then echo "Invalid number of arguments." >&2
 	f_print_usage
 	exit $EXIT_CODE_INVALID_ARGUMENTS
 fi
 
+if [ $# -eq 1 ]; then
+     MODE=string
+     string="$1"
+     fi
 
 ###################################################
 # Do the work.

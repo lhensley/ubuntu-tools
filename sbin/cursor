@@ -62,6 +62,7 @@
      EXIT_CODE_FILE_IN_USE=171
      EXIT_CODE_WRONG_HOST=172
      EXIT_CODE_INVALID_ARGUMENTS=173
+     PROGRAM_NAME=$(basename "$0")
      REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode. This is where text that could be suppressed by quiet mode is directed. 
 
 ###################################################
@@ -69,9 +70,8 @@
 
 # EDIT THIS!
 function f_print_usage {
-  echo >&2
-  echo Usage: $USAGE >&2
-  echo "Version: $VERSION_NUMBER" >&2
+  echo "$PROGRAM_NAME version $VERSION_NUMBER" >&2
+  echo Usage: $PROGRAM_NAME $USAGE >&2
   echo Purpose: $PURPOSE >&2
 #  echo Requires root or sudo. >&2 #OPTIONAL!
   echo >&2
@@ -83,28 +83,12 @@ function f_print_usage {
   echo "  -v --version  Display version number, then exit (no other options processed)" >&2
   echo "  -h --help     Display usage and help information, then exit (no other options processed)" >&2
   echo >&2
-  echo "Example usage: " $(basename "$0") -c >&2
-  echo "               " $(basename "$0") --column >&2
-  echo "               " $(basename "$0") -r >&2
-  echo "               " $(basename "$0") --row >&2
-  echo "               " $(basename "$0") -c -r >&2
-  echo "               " $(basename "$0") --column --row >&2
-  echo >&2
-     #  # Describe any exit codes returned. For examples below, comment out any unused values. EXAMPLE:
-     #  echo Return values: >&2
-     #  echo "  " $EXIT_CODE_SUCCESS on success, >&2
-     #  echo "  " $EXIT_CODE_INTERNAL_ERROR on internal error, >&2
-     #  echo "  " $EXIT_CODE_INVALID_OPTIONS if invalid options specified, >&2
-     #  echo "  " $EXIT_CODE_ROOT_REQUIRED if root required, >&2
-     #  # echo "  " $EXIT_CODE_UBUNTU_REQUIRED if Ubuntu required, >&2
-     #  # echo "  " $EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED if minimum OS version required, >&2
-     #  # echo "  " $EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED if maximum OS version required, >&2
-     #  # echo "  " $EXIT_CODE_SPECIFIC_SERVER_REQUIRED if specific server required, >&2
-     #  # echo "  " $EXIT_CODE_FILE_NOT_FOUND if file not found, >&2
-     #  # echo "  " $EXIT_CODE_DIRECTORY_NOT_FOUND if directory not found, >&2
-     #  # echo "  " $EXIT_CODE_FILE_IN_USE if file in use, >&2
-     #  echo "  " $EXIT_CODE_USER_ABORT on user abort >&2
-     #  echo >&2
+  echo "Example usage: " $PROGRAM_NAME -c >&2
+  echo "               " $PROGRAM_NAME --column >&2
+  echo "               " $PROGRAM_NAME -r >&2
+  echo "               " $PROGRAM_NAME --row >&2
+  echo "               " $PROGRAM_NAME -c -r >&2
+  echo "               " $PROGRAM_NAME --column --row >&2
   echo >&2 ; echo $COLOPHON >&2
   }
 
@@ -112,9 +96,9 @@ function f_print_usage {
 function f_alert () {
 	# Information for user.
      # Variable 1: Error or other message (e.g., "File not found")
-     echo "$(basename $0) version $VERSION_NUMBER: $1" >&2
+     echo "$PROGRAM_NAME version $VERSION_NUMBER: $1" >&2
      echo "$COLOPHON" >&2
-	echo "Usage: $(basename $0) $USAGE" >&2
+	echo "Usage: $PROGRAM_NAME $USAGE" >&2
      echo "Purpose: $PURPOSE" >&2
 	}
 
@@ -140,7 +124,7 @@ function f_alert () {
 #       Similarly for long options, options optionA, optionB, and optionC are switches; optiona, optionb, and optionc expect arguments
 #   Double Colon after an option means an argument is optional. 
 #   The '-- "$@"' at the end means that all other command arguments are "remaining arguments".
-PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options crhv \
+PARSED_ARGUMENTS=$(getopt --name $PROGRAM_NAME --options crhv \
     --long column,row,help,version \
     -- "$@")
 VALID_ARGUMENTS=$?
@@ -182,7 +166,7 @@ while : ; do
            exit $EXIT_CODE_SUCCESS
            ;;   
       -v | --version)  # Version number
-           echo $(basename $0): version $VERSION_NUMBER >&2
+           echo $PROGRAM_NAME: version $VERSION_NUMBER >&2
            exit $EXIT_CODE_SUCCESS
            ;;
 #      -q | --quiet)  # Quiet mode

@@ -62,6 +62,7 @@
      EXIT_CODE_FILE_IN_USE=171
      EXIT_CODE_WRONG_HOST=172
      EXIT_CODE_INVALID_ARGUMENTS=173
+     PROGRAM_NAME=$(basename "$0")
      REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode. This is where text that could be suppressed by quiet mode is directed. 
 
 ###################################################
@@ -69,9 +70,8 @@
 # EDIT THIS!
 
 function f_print_usage {
-  echo >&2
-  echo Usage: $USAGE >&2
-  echo Version: $VERSION_NUMBER >&2
+  echo "$PROGRAM_NAME version $VERSION_NUMBER" >&2
+  echo Usage: $PROGRAM_NAME $USAGE >&2
   echo Purpose: $PURPOSE >&2
 #  echo Requires root or sudo. >&2
   echo >&2
