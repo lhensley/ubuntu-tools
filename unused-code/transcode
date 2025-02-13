@@ -104,7 +104,7 @@ function f_print_usage {
   echo "                                    defined in $SBIN_DIR/_vars"
   echo "                                    is used"
   echo
-  echo " -q, --quiet                        print and log with mimimal detail"
+  echo " -q, --quiet                        print and log with minimal detail"
   echo " -v, --verbose                      print and log with great detail"
   echo " -?, --help                         give this help list and exit"
   echo "     --version                      print program version and exit"

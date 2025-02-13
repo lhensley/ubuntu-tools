@@ -29,12 +29,13 @@
 # Basic Setup
 
 ### FILL IN THESE VARIABLES!!! ###
-     COLOPHON="(c) $(date +%Y) by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
+     COLOPHON="$(printf "\u00A9") $(date +%Y) by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
      PURPOSE="Displays the row or column cursor position, top left being 0 0" # Don't include $0, e.g., "Prints the first 5 characters of a string" 
      USAGE="[-crhv --column --row --help --version]" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
      VERSION_NUMBER="0.1"
      QUIET_MODE=false
      VERBOSE_MODE=false
+     ROOT_REQUIRED=false
 
 # Stable variables; OK to leave this in without edits.
      ARGS="" # Adapted when flags are parsed.
@@ -62,7 +63,8 @@
      EXIT_CODE_FILE_IN_USE=171
      EXIT_CODE_WRONG_HOST=172
      EXIT_CODE_INVALID_ARGUMENTS=173
-     PROGRAM_NAME=$(basename "$0")
+     PROGRAM_NAME="$(basename $0)"
+     QUIET_MODE=false
      REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode. This is where text that could be suppressed by quiet mode is directed. 
 
 ###################################################
@@ -70,37 +72,26 @@
 
 # EDIT THIS!
 function f_print_usage {
-  echo "$PROGRAM_NAME version $VERSION_NUMBER" >&2
+  printf "%s" "$PROGRAM_NAME $VERSION_NUMBER" >&2
+  if [ $# -gt 0 ] ; then echo ": Error: $1" >&2 ; else echo "" >&2 ; fi
+  echo $COLOPHON >&2
   echo Usage: $PROGRAM_NAME $USAGE >&2
   echo Purpose: $PURPOSE >&2
-#  echo Requires root or sudo. >&2 #OPTIONAL!
-  echo >&2
+  if $ROOT_REQUIRED ; then echo Requires root or sudo. >&2 ; fi
   echo "Options:" >&2
-#  echo "  -q --quiet                        Mimimal output" >&2
+#  echo "  -q --quiet                        Minimal output" >&2
 #  echo "  -V --verbose                      Verbose output" >&2
   echo "  -c --column   Display column (default, and overrides -r or --row if -c or --column selected)" >&2
   echo "  -r --row      Display row (works only if neither -c nor --column selected)" >&2
   echo "  -v --version  Display version number, then exit (no other options processed)" >&2
   echo "  -h --help     Display usage and help information, then exit (no other options processed)" >&2
-  echo >&2
   echo "Example usage: " $PROGRAM_NAME -c >&2
   echo "               " $PROGRAM_NAME --column >&2
   echo "               " $PROGRAM_NAME -r >&2
   echo "               " $PROGRAM_NAME --row >&2
   echo "               " $PROGRAM_NAME -c -r >&2
   echo "               " $PROGRAM_NAME --column --row >&2
-  echo >&2 ; echo $COLOPHON >&2
   }
-
-# OK as is; no need to update
-function f_alert () {
-	# Information for user.
-     # Variable 1: Error or other message (e.g., "File not found")
-     echo "$PROGRAM_NAME version $VERSION_NUMBER: $1" >&2
-     echo "$COLOPHON" >&2
-	echo "Usage: $PROGRAM_NAME $USAGE" >&2
-     echo "Purpose: $PURPOSE" >&2
-	}
 
 
 ###################################################
@@ -128,7 +119,7 @@ PARSED_ARGUMENTS=$(getopt --name $PROGRAM_NAME --options crhv \
     --long column,row,help,version \
     -- "$@")
 VALID_ARGUMENTS=$?
-if [ "$VALID_ARGUMENTS" != "0" ]; then f_print_usage; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
+if [ "$VALID_ARGUMENTS" != "0" ]; then f_print_usage "Invalid arguments"; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
 
 # Note about next command: 
 # By reading that set of standardised arguments into the shell's input arguments 
@@ -184,7 +175,7 @@ while : ; do
            break 
            ;;
       *) # Invalid option.
-          f_alert "Invalid option."
+          f_print_usage "Invalid option."
           exit EXIT_CODE_INVALID_OPTIONS
            ;;
   esac
@@ -197,11 +188,10 @@ done
 
 # Review this.
 # CHECK FOR CORRECT NUMBER/RANGE OF ARGUMENTS
-if [ $# -ne 0 ]; 
-     then echo "Invalid number of arguments." >&2
-	f_print_usage
+if [ $# -ne 0 ] ; then
+	f_print_usage "Invalid number of arguments."
 	exit $EXIT_CODE_INVALID_ARGUMENTS
-fi
+     fi
 
 
 ###################################################

@@ -32,7 +32,9 @@
      PURPOSE="Displays the last <number-of-characters> characters of a string." # Don't include $0, e.g., "Saves the world" 
      USAGE="[-hv --help --version] <source-string> <number-of-characters>" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
      VERSION_NUMBER="0.1"
-     COLOPHON="(c) $(date +%Y) by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
+     COLOPHON="$(printf "\u00A9") $(date +%Y) by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
+     ROOT_REQUIRED=false
+     VERBOSE_MODE=false
 
 # Stable variables; OK to leave this in without edits.
      ARGS="" # Adapted when flags are parsed.
@@ -63,7 +65,6 @@
      PROGRAM_NAME="$(basename $0)"
      QUIET_MODE=false
      REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode. This is where text that could be suppressed by quiet mode is directed. 
-     VERBOSE_MODE=false
 
 
 ###################################################
@@ -71,42 +72,17 @@
 
 # EDIT THIS!
 function f_print_usage {
-  echo "$PROGRAM_NAME version $VERSION_NUMBER" >&2
+  printf "%s" "$PROGRAM_NAME $VERSION_NUMBER" >&2
+  if [ $# -gt 0 ] ; then echo ": Error: $1" >&2 ; else echo "" >&2 ; fi
+  echo $COLOPHON >&2
   echo Usage: $PROGRAM_NAME $USAGE >&2
   echo Purpose: $PURPOSE >&2
-#  echo Requires root or sudo. >&2 #OPTIONAL!
-  echo >&2
+  if $ROOT_REQUIRED ; then echo Requires root or sudo. >&2 ; fi
   echo "Options:" >&2
-#  echo "  -q --quiet                        Mimimal output" >&2
-#  echo "  -V --verbose                      Verbose output" >&2
   echo "  -v --version  Display version number, then exit (no other options processed)" >&2
   echo "  -h --help     Display usage and help information, then exit (no other options processed)" >&2
-  echo >&2
   echo "Example usage: " $PROGRAM_NAME snapshot 4 >&2
-  echo >&2 ; echo $COLOPHON >&2
 }
-
-# OK as is; no need to update
-function f_alert () {
-	# Information for user.
-     # Variable 1: Error or other message (e.g., "File not found")
-     echo "$PROGRAM_NAME version $VERSION_NUMBER: $1" >&2
-	echo "Usage: $PROGRAM_NAME $USAGE" >&2
-     echo "Purpose: $PURPOSE" >&2
-     echo "$COLOPHON" >&2
-	}
-
-
-###################################################
-# General error testing
-
-# # Review this.
-# # CHECK FOR CORRECT NUMBER/RANGE OF ARGUMENTS
-# if [ $# -ne 0 ]; 
-#      then echo "Invalid number of arguments." >&2
-# 	f_print_usage
-# 	exit $EXIT_CODE_INVALID_ARGUMENTS
-# fi
 
 
 ###################################################
@@ -131,7 +107,7 @@ PARSED_ARGUMENTS=$(getopt --name $PROGRAM_NAME --options hv \
     --long help,version \
     -- "$@")
 VALID_ARGUMENTS=$?
-if [ "$VALID_ARGUMENTS" != "0" ]; then f_print_usage; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
+if [ "$VALID_ARGUMENTS" != "0" ] ; then f_print_usage "Invalid arguments" ; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
 
 # Note about next command: 
 # By reading that set of standardised arguments into the shell's input arguments 
@@ -163,7 +139,7 @@ while : ; do
            break 
            ;;
       *) # Invalid option.
-          f_alert "Invalid option."
+          f_print_usage "Invalid option."
           exit EXIT_CODE_INVALID_OPTIONS
            ;;
   esac
@@ -184,26 +160,19 @@ num_chars="$2"
 
 # Review this.
 # CHECK FOR CORRECT NUMBER/RANGE OF ARGUMENTS
-if [ $# -ne 2 ]; 
-     then echo "Invalid number of arguments." >&2
-	f_print_usage
+if [ $# -ne 2 ] ; then 
+	f_print_usage "Invalid number of arguments."
 	exit $EXIT_CODE_INVALID_ARGUMENTS
      fi
 
 if [[ -z "$string" || -z "$num_chars" ]] || [ $# -ne 2 ]; then
-     echo "$PROGRAM_NAME: Takes exactly two parameters" >&2
-     echo "by Lane Hensley, lane@lanehensley.org, https://lanehensley.org" >&2
-     echo "Usage: $PROGRAM_NAME <string> <number_of_characters>" >&2
-     echo "Purpose: Displays the first <number_of_characters> characters of a string." >&2
-     exit 1
+	f_print_usage "Takes exactly two parameters"
+     exit $EXIT_CODE_EPERM
 fi
 
 if ! [[ "$num_chars" =~ ^[0-9]+$ ]]; then
-     echo "$PROGRAM_NAME: Number of characters must be a non-negative integer." >&2
-     echo "by Lane Hensley, lane@lanehensley.org, https://lanehensley.org" >&2
-	echo "Usage: $PROGRAM_NAME <string> <number_of_characters>" >&2
-     echo "Purpose: Displays the first <number_of_characters> characters of a string." >&2
-     exit 1
+	f_print_usage "Number of characters must be a non-negative integer."
+     exit $EXIT_CODE_EPERM
 fi
 
 if (( num_chars > ${#string} )); then
@@ -211,7 +180,10 @@ if (( num_chars > ${#string} )); then
 fi
   
 backward=$(echo $string | rev)
-echo "${backward:0:$num_chars}" | rev
+printf "%s" $("${backward:0:$num_chars}" | rev)
+if [ $(cursor --column) -ne 0 ] ; then
+     echo "" >&2 # This allows piping the result above to another program, and only issue a newline to the console.
+     fi
 
 
 ###################################################

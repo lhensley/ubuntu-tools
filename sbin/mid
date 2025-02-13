@@ -29,8 +29,8 @@
 # Basic Setup
 
 ### FILL IN THESE VARIABLES!!! ###
-     PURPOSE="Displays the first <number-of-characters> characters of a string." # Don't include $0, e.g., "Saves the world" 
-     USAGE="[-hv --help --version] <source-string> <number-of-characters>" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
+     PURPOSE="Displays a substring of a source string" # Don't include $0, e.g., "Saves the world" 
+     USAGE="[-hv --help --version] <source-string> <start-position> <length>" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
      VERSION_NUMBER="0.1"
      COLOPHON="$(printf "\u00A9") $(date +%Y) by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
      ROOT_REQUIRED=false
@@ -70,19 +70,21 @@
 ###################################################
 # Functions
 
-# EDIT THIS!
 function f_print_usage {
   printf "%s" "$PROGRAM_NAME $VERSION_NUMBER" >&2
-  if [ $# -gt 0 ] ; then echo ": Error: $1" >&2 ; else echo "" >&2 ; fi
+  if [ $# -gt 0 ] ; then echo ": Error: $1" ; else echo "" ; fi
   echo $COLOPHON >&2
   echo Usage: $PROGRAM_NAME $USAGE >&2
+  ##### Not standard! DROP?
+  echo "   NOTE: The first character in the source string is at start position 1, not 0." >&2
+
   echo Purpose: $PURPOSE >&2
   if $ROOT_REQUIRED ; then echo Requires root or sudo. >&2 ; fi
   echo "Options:" >&2
-  echo "  -v --version  Display version number, then exit (no other options processed)" >&2
-  echo "  -h --help     Display usage and help information, then exit (no other options processed)" >&2
-  echo "Example usage: " $PROGRAM_NAME supercalifragilisticexpialidocious 5 >&2
-}
+    echo "  -v --version  Display version number, then exit (no other options processed)" >&2
+    echo "  -h --help     Display usage and help information, then exit (no other options processed)" >&2
+  echo "Example usage:  $PROGRAM_NAME \"This is the day\" 6 2">&2
+  }
 
 
 ###################################################
@@ -101,13 +103,13 @@ function f_print_usage {
 #   Colon after an option means an argument is required. 
 #       In this example, options A, B, and C are switches; a, b, and c expect arguments
 #       Similarly for long options, options optionA, optionB, and optionC are switches; optiona, optionb, and optionc expect arguments
-#   Double Colon after an option means an argument is optional.
+#   Double Colon after an option means an argument is optional. 
 #   The '-- "$@"' at the end means that all other command arguments are "remaining arguments".
 PARSED_ARGUMENTS=$(getopt --name $PROGRAM_NAME --options hv \
     --long help,version \
     -- "$@")
 VALID_ARGUMENTS=$?
-if [ "$VALID_ARGUMENTS" != "0" ] ; then f_print_usage "Invalid arguments" ; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
+if [ "$VALID_ARGUMENTS" != "0" ] ; then f_print_usage ; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
 
 # Note about next command: 
 # By reading that set of standardised arguments into the shell's input arguments 
@@ -121,19 +123,9 @@ while : ; do
            exit $EXIT_CODE_SUCCESS
            ;;   
       -v | --version)  # Version number
-           echo $PROGRAM_NAME: version $VERSION_NUMBER >&2
+           echo "$PROGRAM_NAME: version $VERSION_NUMBER" >&2
            exit $EXIT_CODE_SUCCESS
            ;;
-#      -q | --quiet)  # Quiet mode
-#           QUIET_MODE=true
-#           REDIRECT="/dev/null"
-#           ARGS+=" --quiet"
-#           shift # Only one (default) shift for a switch, i.e., no argument
-#           ;;
-#      -V | --verbose)  # Verbose mode
-#           VERBOSE_MODE=true
-#           shift # Only one (default) shift for a switch, i.e., no argument
-#           ;;
       --) # -- means the end of the arguments; drop this, and break out of the while loop
            shift
            break 
@@ -155,31 +147,20 @@ done
 #   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
-string="$1"
-num_chars="$2"
-
-# Review this.
 # CHECK FOR CORRECT NUMBER/RANGE OF ARGUMENTS
-if [ $# -ne 2 ]; then
-	f_print_usage "Invalid number of arguments."
+if [ $# -ne 3 ] ; then
+	f_print_usage "Wrong number of arguments"
 	exit $EXIT_CODE_INVALID_ARGUMENTS
      fi
 
-if [[ -z "$string" || -z "$num_chars" ]] || [ $# -ne 2 ] ; then
-	f_print_usage "Takes exactly two parameters."
-     exit $EXIT_CODE_EPERM
-     fi
+string="$1"
+offset="$(($2-1))"
+length="$3"
 
-if ! [[ "$num_chars" =~ ^[0-9]+$ ]] ; then
-	f_print_usage "Number of characters must be a non-negative integer."
-     exit $EXIT_CODE_EPERM
-     fi
-
-if (( num_chars > ${#string} )) ; then
-     num_chars=${#string}
-     fi
-  
-printf "%s" "${string:0:$num_chars}"
+source_string="$string"
+start_position="$offset"
+substring="${source_string:start_position:length}"
+printf "%s" "$substring"
 if [ $(cursor --column) -ne 0 ] ; then
      echo "" >&2 # This allows piping the result above to another program, and only issue a newline to the console.
      fi

@@ -67,7 +67,7 @@ function f_print_usage {
   echo Requires root or sudo.
   echo
   echo "Options:"
-  echo "  -q --quiet                        Mimimal output"
+  echo "  -q --quiet                        Minimal output"
   echo "  -V --verbose                      Verbose output"
   echo "  -v --version                      Display version number, then exit (no other options processed)"
   echo "  --help                            Display usage and help information, then exit (no other options processed)"

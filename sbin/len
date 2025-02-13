@@ -29,12 +29,14 @@
 # Basic Setup
 
 ### FILL IN THESE VARIABLES!!! ###
-     COLOPHON="(c) $(date +%Y) by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
-     PURPOSE="Prints the length of a string" # Don't include $0, e.g., "Prints the first 5 characters of a string" 
+     COLOPHON="$(printf "\u00A9") $(date +%Y) by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
+     PURPOSE="Displays the length of a string" # Don't include $0, e.g., "Prints the first 5 characters of a string" 
      USAGE="[-ifshv --input --file= --string= --help --version] [<input-string>]" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
      VERSION_NUMBER="0.1"
      QUIET_MODE=false
      VERBOSE_MODE=false
+     ROOT_REQUIRED=false
+
 
 # Stable variables; OK to leave this in without edits.
      ARGS="" # Adapted when flags are parsed.
@@ -62,65 +64,37 @@
      EXIT_CODE_FILE_IN_USE=171
      EXIT_CODE_WRONG_HOST=172
      EXIT_CODE_INVALID_ARGUMENTS=173
-     PROGRAM_NAME=$(basename "$0")
+     PROGRAM_NAME="$(basename $0)"
+     QUIET_MODE=false
      REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode. This is where text that could be suppressed by quiet mode is directed. 
- 
-function f_alert () {
-	# Information for user.
-     # Variable 1: Error or other message (e.g., "File not found")
-     echo "$(basename $0) version $VERSION_NUMBER: $1" >&2
-	echo "Usage: $(basename $0) $USAGE" >&2
-     echo "Purpose: $PURPOSE" >&2
-     echo "$COLOPHON" >&2
-	}
+
 
 ###################################################
 # Functions
 # EDIT THIS!
 
 function f_print_usage {
-  echo "$PROGRAM_NAME version $VERSION_NUMBER" >&2
+  printf "%s" "$PROGRAM_NAME $VERSION_NUMBER" >&2
+  if [ $# -gt 0 ] ; then echo ": Error: $1" >&2 ; else echo "" >&2 ; fi
+  echo $COLOPHON >&2
   echo Usage: $PROGRAM_NAME $USAGE >&2
   echo Purpose: $PURPOSE >&2
-#  echo Requires root or sudo. >&2
-  echo >&2
+  if $ROOT_REQUIRED ; then echo Requires root or sudo. >&2 ; fi
   echo "Options:" >&2
   echo "  -i --input                                      Use standard input for input (default)" >&2
   echo "  -f<source-file-name> --file=<source-file-name>  Use specified file contents for input" >&2
   echo "  -s<source-string> --string=<source-string>      Use specified string for input" >&2
-  echo "    IMPORTANT: The three lines above are mutually exclusive. Detault is -i or --input" >&2
-#  echo "  -q --quiet                                        Mimimal output" >&2
-#  echo "  -V --verbose                                      Verbose output" >&2
-  echo "  -v --version                                      Display version number, then exit" >&2
-#  echo "                                                    (no other options processed)" >&2
+  echo "     IMPORTANT: The three lines above are mutually exclusive. Default is -i or --input" >&2
+  echo "  -v --version                                    Display version number, then exit" >&2
   echo "  -h --help                                       Display usage and help information," >&2
   echo "                                                  then exit (no other options processed)" >&2
-  echo >&2
-  echo "Example usages: cat <filename> | $PROGRAM_NAME -i" >&2
-  echo "                echo \$string | $PROGRAM_NAME -i" >&2
-  echo "                echo \$string | $PROGRAM_NAME --input" >&2
-  echo "                cat <filename> | $PROGRAM_NAME --input" >&2
+  echo "Example usages: cat <filename> | $PROGRAM_NAME" >&2
+  echo "                echo \$string | $PROGRAM_NAME" >&2
   echo "                $PROGRAM_NAME <input-string>" >&2
   echo "                $PROGRAM_NAME "-s\<input-string\>"" >&2
   echo "                $PROGRAM_NAME "-string=\<input-string\>"" >&2
   echo "                $PROGRAM_NAME -f\<source-file-name\>" >&2
   echo "                $PROGRAM_NAME -file=\<source-file-name\>" >&2
-     #  # Describe any exit codes returned. For examples below, comment out any unused values. EXAMPLE:
-     #  echo Return values: >&2
-     #  echo "  " $EXIT_CODE_SUCCESS on success, >&2
-     #  echo "  " $EXIT_CODE_INTERNAL_ERROR on internal error, >&2
-     #  echo "  " $EXIT_CODE_INVALID_OPTIONS if invalid options specified, >&2
-     #  echo "  " $EXIT_CODE_ROOT_REQUIRED if root required, >&2
-     #  # echo "  " $EXIT_CODE_UBUNTU_REQUIRED if Ubuntu required, >&2
-     #  # echo "  " $EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED if minimum OS version required, >&2
-     #  # echo "  " $EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED if maximum OS version required, >&2
-     #  # echo "  " $EXIT_CODE_SPECIFIC_SERVER_REQUIRED if specific server required, >&2
-     #  # echo "  " $EXIT_CODE_FILE_NOT_FOUND if file not found, >&2
-     #  # echo "  " $EXIT_CODE_DIRECTORY_NOT_FOUND if directory not found, >&2
-     #  # echo "  " $EXIT_CODE_FILE_IN_USE if file in use, >&2
-     #  echo "  " $EXIT_CODE_USER_ABORT on user abort >&2
-     #  echo >&2
-   echo  >&2 ; echo $COLOPHON >&2
  }
 
 ###################################################
@@ -145,7 +119,7 @@ PARSED_ARGUMENTS=$(getopt --name $(basename "$0") --options f:his:v \
     --long file:,help,input,string:,version \
     -- "$@")
 VALID_ARGUMENTS=$?
-if [ "$VALID_ARGUMENTS" != "0" ]; then f_print_usage; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
+if [ "$VALID_ARGUMENTS" != "0" ]; then f_print_usage "Invalid arguments"; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
 
 # Note about next command: 
 # By reading that set of standardised arguments into the shell's input arguments 
@@ -202,7 +176,7 @@ while : ; do
            break 
            ;;
       *) # Invalid option.
-          f_alert "Invalid option."
+          f_print_usage "Invalid option."
           exit EXIT_CODE_INVALID_OPTIONS
            ;;
   esac
@@ -210,13 +184,12 @@ done
 
 # Review this.
 # CHECK FOR CORRECT NUMBER/RANGE OF ARGUMENTS
-if [ $# -gt 1 ]; 
-     then echo "Invalid number of arguments." >&2
-	f_print_usage
+if [ $# -gt 1 ] ; then
+	f_print_usage "Invalid number of arguments"
 	exit $EXIT_CODE_INVALID_ARGUMENTS
-fi
+     fi
 
-if [ $# -eq 1 ]; then
+if [ $# -eq 1 ] ; then
      MODE=string
      string="$1"
      fi

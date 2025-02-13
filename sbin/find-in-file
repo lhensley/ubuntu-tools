@@ -29,15 +29,24 @@
 # Basic Setup
 
 ### FILL IN THESE VARIABLES!!! ###
-     PURPOSE="Displays the first <number-of-characters> characters of a string." # Don't include $0, e.g., "Saves the world" 
-     USAGE="[-hv --help --version] <source-string> <number-of-characters>" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
+     PURPOSE="Finds the position of a search-string in a text-file" # Don't include $0, e.g., "Saves the world" 
+     USAGE="[-vh --help --version] <search-string> <filename>" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
      VERSION_NUMBER="0.1"
-     COLOPHON="$(printf "\u00A9") $(date +%Y) by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
      ROOT_REQUIRED=false
-     VERBOSE_MODE=false
+     OPTIONS=(
+          "-v --version  Display version number, then exit (no other options processed)"
+          "-h --help     Display usage and help information, then exit (no other options processed)"
+          )
+     EXAMPLE_USAGE=(
+          "Example usage: $(basename $0) <html> <index.html>"
+          "  Returns position of the search-string with exit code 0."
+          "  If not found, returns nothing with exit code 173."
+          )
+     SHORT_GETOPT="hv"; LONG_GETOPT="help,version"
 
 # Stable variables; OK to leave this in without edits.
      ARGS="" # Adapted when flags are parsed.
+     COLOPHON="$(printf "\u00A9") $(date +%Y) by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
      EXIT_CODE_SUCCESS=0
      EXIT_CODE_EPERM=1 # Operation not permitted
      EXIT_CODE_ENOENT=2 # No such file or directory
@@ -65,24 +74,37 @@
      PROGRAM_NAME="$(basename $0)"
      QUIET_MODE=false
      REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode. This is where text that could be suppressed by quiet mode is directed. 
+     VERBOSE_MODE=false
 
 
 ###################################################
 # Functions
 
-# EDIT THIS!
+# LEAVE THIS ALONE!
 function f_print_usage {
   printf "%s" "$PROGRAM_NAME $VERSION_NUMBER" >&2
-  if [ $# -gt 0 ] ; then echo ": Error: $1" >&2 ; else echo "" >&2 ; fi
+  if [ $# -gt 0 ] ; then echo ": Error: $1" ; else echo "" ; fi
   echo $COLOPHON >&2
   echo Usage: $PROGRAM_NAME $USAGE >&2
   echo Purpose: $PURPOSE >&2
   if $ROOT_REQUIRED ; then echo Requires root or sudo. >&2 ; fi
   echo "Options:" >&2
-  echo "  -v --version  Display version number, then exit (no other options processed)" >&2
-  echo "  -h --help     Display usage and help information, then exit (no other options processed)" >&2
-  echo "Example usage: " $PROGRAM_NAME supercalifragilisticexpialidocious 5 >&2
-}
+  for i in "${!OPTIONS[@]}"; do
+     echo "  ${OPTIONS[$i]}" >&2
+     done
+  for i in "${!EXAMPLE_USAGE[@]}"; do
+     echo "${EXAMPLE_USAGE[$i]}" >&2
+     done
+  }
+
+
+###################################################
+# Test for big problems
+
+if $ROOT_REQUIRED && [[ $EUID -ne 0 ]]; then
+     f_print_usage "Root privileges required."
+     exit EXIT_CODE_ROOT_REQUIRED
+     fi
 
 
 ###################################################
@@ -101,13 +123,14 @@ function f_print_usage {
 #   Colon after an option means an argument is required. 
 #       In this example, options A, B, and C are switches; a, b, and c expect arguments
 #       Similarly for long options, options optionA, optionB, and optionC are switches; optiona, optionb, and optionc expect arguments
-#   Double Colon after an option means an argument is optional.
+#   Double Colon after an option means an argument is optional. 
 #   The '-- "$@"' at the end means that all other command arguments are "remaining arguments".
-PARSED_ARGUMENTS=$(getopt --name $PROGRAM_NAME --options hv \
-    --long help,version \
-    -- "$@")
-VALID_ARGUMENTS=$?
-if [ "$VALID_ARGUMENTS" != "0" ] ; then f_print_usage "Invalid arguments" ; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
+# For more info on getopt syntax: https://linux.die.net/man/1/getopt
+     PARSED_ARGUMENTS=$(getopt --name $PROGRAM_NAME --options $SHORT_GETOPT \
+          --long $LONG_GETOPT -- "$@")
+# Taking this out. Not sure what it does.
+     # VALID_ARGUMENTS=$?
+     #if [ "$VALID_ARGUMENTS" != "0" ] ; then f_print_usage ; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
 
 # Note about next command: 
 # By reading that set of standardised arguments into the shell's input arguments 
@@ -116,21 +139,36 @@ eval set -- "$PARSED_ARGUMENTS"
 
 while : ; do
     case "$1" in
-      -h | --help )  # Help, if you're so stupid that you don't get that :)
+#       -f | --file )
+#          MODE=file
+#          string=$(cat "$2")
+#          shift 2
+#           ;;   
+#       -s | --string )
+#          MODE=string
+#          string="$2"
+#          shift 2
+#           ;;   
+#       -i | --input ) # Doesn't do anything here because it's dealt with in default above.
+#          shift 1
+#           ;;   
+       -h | --help )  # Help, if you're so stupid that you don't get that :)
            f_print_usage
            exit $EXIT_CODE_SUCCESS
            ;;   
       -v | --version)  # Version number
-           echo $PROGRAM_NAME: version $VERSION_NUMBER >&2
+           echo $(basename $0): version $VERSION_NUMBER >&2
            exit $EXIT_CODE_SUCCESS
            ;;
 #      -q | --quiet)  # Quiet mode
+#          ##### DROP THIS OPTION?
 #           QUIET_MODE=true
 #           REDIRECT="/dev/null"
 #           ARGS+=" --quiet"
 #           shift # Only one (default) shift for a switch, i.e., no argument
 #           ;;
 #      -V | --verbose)  # Verbose mode
+#          ##### DROP THIS OPTION?
 #           VERBOSE_MODE=true
 #           shift # Only one (default) shift for a switch, i.e., no argument
 #           ;;
@@ -155,33 +193,32 @@ done
 #   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
-string="$1"
-num_chars="$2"
-
 # Review this.
 # CHECK FOR CORRECT NUMBER/RANGE OF ARGUMENTS
-if [ $# -ne 2 ]; then
-	f_print_usage "Invalid number of arguments."
+if [ $# -ne 2 ] ; then
+	f_print_usage "Must have exactly two arguments."
 	exit $EXIT_CODE_INVALID_ARGUMENTS
      fi
 
-if [[ -z "$string" || -z "$num_chars" ]] || [ $# -ne 2 ] ; then
-	f_print_usage "Takes exactly two parameters."
-     exit $EXIT_CODE_EPERM
+search_string="$1"
+filename="$2"
+
+if ! test -f "$filename" ; then
+	f_print_usage "File not found."
+	exit $EXIT_CODE_FILE_NOT_FOUND
      fi
 
-if ! [[ "$num_chars" =~ ^[0-9]+$ ]] ; then
-	f_print_usage "Number of characters must be a non-negative integer."
-     exit $EXIT_CODE_EPERM
-     fi
-
-if (( num_chars > ${#string} )) ; then
-     num_chars=${#string}
-     fi
-  
-printf "%s" "${string:0:$num_chars}"
-if [ $(cursor --column) -ne 0 ] ; then
-     echo "" >&2 # This allows piping the result above to another program, and only issue a newline to the console.
+haystack=$(cat "$filename")
+rest=${haystack#*$search_string}
+start_byte=$(( ${#haystack} + 1 - ${#rest} - ${#search_string} ))
+if [ $start_byte -gt 0 ] ; then
+     printf "%d" $start_byte;
+     if [ $(cursor --column) -ne 0 ] ; then
+          echo "" >&2 # This allows piping the result above to another program, and only issue a newline to the console.
+          exit $EXIT_CODE_SUCCESS
+          fi
+     else
+          exit -1
      fi
 
 
