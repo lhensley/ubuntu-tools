@@ -130,7 +130,7 @@ eval set -- "$PARSED_ARGUMENTS"
 
 # Setting default
 unset string
-if [[ -p /dev/stdin ]] || ! test -t 0 ; then  # Testing for anything at standard input
+if [[ -p /dev/stdin ]] || ! test -t 0 ; then  # Testing for anything at standard input or pipe
      while IFS= read -r line; do
           if [[ -z "$content" ]]; then
                string="$line"

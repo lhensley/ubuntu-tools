@@ -143,15 +143,8 @@ if $ROOT_REQUIRED && [[ $EUID -ne 0 ]]; then
 #   Double Colon after an option means an argument is optional. 
 #   The '-- "$@"' at the end means that all other command arguments are "remaining arguments".
 # For more info on getopt syntax: https://linux.die.net/man/1/getopt
-     PARSED_ARGUMENTS=$(getopt --name $PROGRAM_NAME --options $SHORT_GETOPT \
-          --long $LONG_GETOPT -- "$@")
-# Taking this out. Not sure what it does.
-     # VALID_ARGUMENTS=$?
-     #if [ "$VALID_ARGUMENTS" != "0" ] ; then f_print_usage ; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
-
-# Note about next command: 
-# By reading that set of standardised arguments into the shell's input arguments 
-#   the shell script now thinks that it was called with these simpler, standardised set of arguments.
+PARSED_ARGUMENTS=$(getopt --name $PROGRAM_NAME --options $SHORT_GETOPT \
+     --long $LONG_GETOPT -- "$@")
 eval set -- "$PARSED_ARGUMENTS"
 
 while : ; do

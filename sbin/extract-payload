@@ -1,4 +1,9 @@
 #!/bin/bash
+  test
+  test
+  test
+  test
+
 
 ###################################################
 TO DO:
@@ -20,76 +25,79 @@ Manage option of dropping argument 3
 # man page for getopt is at https://man7.org/linux/man-pages/man1/getopt.1.html
 #
 # Defining terms
-#    argument: any text appended to a command (syn.: parameter)
-#    parameter: synonym for argument
-#    option: a command argument preceded by a single or double hyphen (e.g., -o, or --option)
-#       An option may have an argument of its own (an "option argument", e.g., -o value-o, or --option value-o, or --option=value-o)
-#       All options are arguments, but not all arguments are options.
-#    short option: an option consisting of single hyphen and letter, with or without an option argument specified (e.g., -a value-a -b)
-#    long option: an option consisting of a double hyphen and word, with or without an option argument specified (e.g., --arga value-a --argb=value-b --argc)
-#    switch: a short or long option, with no option argument specified (e.g., -a --argb)
-#       All switches are options, but not all options are switches.
-#    remaining arguments: command line arguments that are neither options nor option arguments
+#  argument: any text appended to a command (syn.: parameter)
+#  parameter: synonym for argument
+#  option: a command argument preceded by a single or double hyphen (e.g., -o, or --option)
+#    An option may have an argument of its own (an "option argument", e.g., -o value-o, or --option value-o, or --option=value-o)
+#    All options are arguments, but not all arguments are options.
+#  short option: an option consisting of single hyphen and letter, with or without an option argument specified (e.g., -a value-a -b)
+#  long option: an option consisting of a double hyphen and word, with or without an option argument specified (e.g., --arga value-a --argb=value-b --argc)
+#  switch: a short or long option, with no option argument specified (e.g., -a --argb)
+#    All switches are options, but not all options are switches.
+#  remaining arguments: command line arguments that are neither options nor option arguments
 
 
 ###################################################
 # Basic Setup
 
 ### FILL IN THESE VARIABLES!!! ###
-     PROGRAM_NAME="$(basename $0)"
-     PURPOSE="Displays content between specified strings" # Don't include $0, e.g., "Saves the world" 
-     USAGE="[-fvh --file --help --version] <begin-bookend-string> <end-bookend-string> [<haystack-string>]" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
-     VERSION_NUMBER="0.1"
-     ROOT_REQUIRED=false
-     OPTIONS=(
-          "-f<filename> --file=<filename>"
-          "   Contents read as <haystack-string>; drop the thind argument if used"
-          "-v --version"
-          "   Display version number, then exit (no other options processed)"
-          "-h --help"
-          "   Display usage and help information, then exit (no other options processed)"
-          )
-     EXAMPLE_USAGE=(
-          "Example usages: $PROGRAM_NAME \"<span>\" \"</span>\" \"\$haystack_string\""
-          "                $PROGRAM_NAME -f\"~/file.html\" \"<span>\" \"</span>\""
-          "                $PROGRAM_NAME --file=\"~/file.html\" \"<span>\" \"</span>\""
-          "                echo "\"\$haystack_string\"" | $PROGRAM_NAME \"<span>\" \"</span>\""
-          "  Returns position of the search-string with exit code 0."
-          "  If not found or error found, returns with non-0 exit code."
-          )
-     SHORT_GETOPT="f:hv"; LONG_GETOPT="file:,help,version"
-
+  PROGRAM_NAME="$(basename $0)"
+  PURPOSE="Displays content between specified strings" # Don't include $0, e.g., "Saves the world" 
+  USAGE="[-fvh --file --help --version] <begin-bookend-string> <end-bookend-string> [<haystack-string>]" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
+  VERSION_NUMBER="0.1"
+  ROOT_REQUIRED=false
+  OPTIONS=(
+    "-f<filename> --file=<filename>"
+    "   Contents read as <haystack-string>; drop the thind argument if used"
+    "-v --version"
+    "   Display version number, then exit (no other options processed)"
+    "-h --help"
+    "   Display usage and help information, then exit (no other options processed)"
+    )
+  EXAMPLE_USAGE=(
+    "Example usages: $PROGRAM_NAME \"<span>\" \"</span>\" \"\$haystack_string\""
+    "                $PROGRAM_NAME -f\"~/file.html\" \"<span>\" \"</span>\""
+    "                $PROGRAM_NAME --file=\"~/file.html\" \"<span>\" \"</span>\""
+    "                echo "\"\$haystack_string\"" | $PROGRAM_NAME \"<span>\" \"</span>\""
+    "  Returns position of the search-string with exit code 0."
+    "  If not found or error found, returns with non-0 exit code."
+    "  The <haystack-string> is determined in this order of precedence:"
+    "    The -f\"~/file.html\" or --file=\"~/file.html\" option is set with the arguments"
+    "    The optional third argument (\"\$haystack_string\") is specified"
+    "    The <haystack-string> is taken from stdin (including piping)"
+    )
+  SHORT_GETOPT="f:hv"; LONG_GETOPT="file:,help,version"
 
 # Stable variables; OK to leave this in without edits.
-     ARGS="" # Adapted when flags are parsed.
-     COLOPHON="$(printf "\u00A9") $(date +%Y) by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
-     EXIT_CODE_SUCCESS=0
-     EXIT_CODE_EPERM=1 # Operation not permitted
-     EXIT_CODE_ENOENT=2 # No such file or directory
-     EXIT_CODE_EIO=5 # Input/output error
-     EXIT_CODE_E2BIG=7 # Argument list too long
-     EXIT_CODE_EEXIST=17 # File exists
-     EXIT_CODE_ENOTDIR=20 # Not a directory
-     EXIT_CODE_EISDIR=21 # Is a directory
-     EXIT_CODE_EINVAL=22 # Invalid argument
-     EXIT_CODE_EFBIG=27 # File too large
-     EXIT_CODE_ERANGE=34 # Numerical result out of range
-     EXIT_CODE_INTERNAL_ERROR=161
-     EXIT_CODE_INVALID_OPTIONS=162
-     EXIT_CODE_ROOT_REQUIRED=163
-     EXIT_CODE_UBUNTU_REQUIRED=164
-     EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED=165
-     EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED=166
-     EXIT_CODE_SPECIFIC_SERVER_REQUIRED=167
-     EXIT_CODE_USER_ABORT=168
-     EXIT_CODE_FILE_NOT_FOUND=169
-     EXIT_CODE_DIRECTORY_NOT_FOUND=170
-     EXIT_CODE_FILE_IN_USE=171
-     EXIT_CODE_WRONG_HOST=172
-     EXIT_CODE_INVALID_ARGUMENTS=173
-     QUIET_MODE=false
-     REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode. This is where text that could be suppressed by quiet mode is directed. 
-     VERBOSE_MODE=false
+  ARGS="" # Adapted when flags are parsed.
+  COLOPHON="$(printf "\u00A9") $(date +%Y) by Lane Hensley, lane@lanehensley.org, https://lanehensley.org"
+  EXIT_CODE_SUCCESS=0
+  EXIT_CODE_EPERM=1 # Operation not permitted
+  EXIT_CODE_ENOENT=2 # No such file or directory
+  EXIT_CODE_EIO=5 # Input/output error
+  EXIT_CODE_E2BIG=7 # Argument list too long
+  EXIT_CODE_EEXIST=17 # File exists
+  EXIT_CODE_ENOTDIR=20 # Not a directory
+  EXIT_CODE_EISDIR=21 # Is a directory
+  EXIT_CODE_EINVAL=22 # Invalid argument
+  EXIT_CODE_EFBIG=27 # File too large
+  EXIT_CODE_ERANGE=34 # Numerical result out of range
+  EXIT_CODE_INTERNAL_ERROR=161
+  EXIT_CODE_INVALID_OPTIONS=162
+  EXIT_CODE_ROOT_REQUIRED=163
+  EXIT_CODE_UBUNTU_REQUIRED=164
+  EXIT_CODE_MINIMUM_OS_VERSION_REQUIRED=165
+  EXIT_CODE_MAXIMUM_OS_VERSION_REQUIRED=166
+  EXIT_CODE_SPECIFIC_SERVER_REQUIRED=167
+  EXIT_CODE_USER_ABORT=168
+  EXIT_CODE_FILE_NOT_FOUND=169
+  EXIT_CODE_DIRECTORY_NOT_FOUND=170
+  EXIT_CODE_FILE_IN_USE=171
+  EXIT_CODE_WRONG_HOST=172
+  EXIT_CODE_INVALID_ARGUMENTS=173
+  QUIET_MODE=false
+  REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode. This is where text that could be suppressed by quiet mode is directed. 
+  VERBOSE_MODE=false
 
 
 ###################################################
@@ -143,73 +151,65 @@ if $ROOT_REQUIRED && [[ $EUID -ne 0 ]]; then
 # For more info on getopt syntax: https://linux.die.net/man/1/getopt
      PARSED_ARGUMENTS=$(getopt --name $PROGRAM_NAME --options $SHORT_GETOPT \
           --long $LONG_GETOPT -- "$@")
-# Taking this out. Not sure what it does.
-     # VALID_ARGUMENTS=$?
-     #if [ "$VALID_ARGUMENTS" != "0" ] ; then f_print_usage ; exit $EXIT_CODE_INVALID_ARGUMENTS; fi
 
 # Note about next command: 
 # By reading that set of standardised arguments into the shell's input arguments 
 #   the shell script now thinks that it was called with these simpler, standardised set of arguments.
 eval set -- "$PARSED_ARGUMENTS"
 
+unset filename
 while : ; do
     case "$1" in
-#       -f | --file )
-#          MODE=file
-#          string=$(cat "$2")
-#          shift 2
-#           ;;   
-#       -s | --string )
-#          MODE=string
-#          string="$2"
-#          shift 2
-#           ;;   
-#       -i | --input ) # Doesn't do anything here because it's dealt with in default above.
-#          shift 1
-#           ;;   
+       -f | --file )
+           filename="$2"
+           shift 2
+           ;;   
        -h | --help )  # Help, if you're so stupid that you don't get that :)
            f_print_usage
            exit $EXIT_CODE_SUCCESS
            ;;   
-      -v | --version)  # Version number
+       -v | --version)  # Version number
            echo $PROGRAM_NAME: version $VERSION_NUMBER >&2
            exit $EXIT_CODE_SUCCESS
            ;;
-#      -q | --quiet)  # Quiet mode
-#          ##### DROP THIS OPTION?
-#           QUIET_MODE=true
-#           REDIRECT="/dev/null"
-#           ARGS+=" --quiet"
-#           shift # Only one (default) shift for a switch, i.e., no argument
-#           ;;
-#      -V | --verbose)  # Verbose mode
-#          ##### DROP THIS OPTION?
-#           VERBOSE_MODE=true
-#           shift # Only one (default) shift for a switch, i.e., no argument
-#           ;;
-      --) # -- means the end of the arguments; drop this, and break out of the while loop
+       --) # -- means the end of the arguments; drop this, and break out of the while loop
            shift
            break 
            ;;
-      *) # Invalid option.
-          f_print_usage "Invalid option."
-          exit EXIT_CODE_INVALID_OPTIONS
+       *) # Invalid option.
+           f_print_usage "Invalid option."
+           exit EXIT_CODE_INVALID_OPTIONS
            ;;
   esac
 done
 
 
+
+
 ###################################################
 # Do the work.
-# IMPORTANT NOTES: 
-#   Don't forget that you still can read and use environment variables!
-#       Best practice: Required values should be required on and read from the command line, not environment variables.
-#           Environment variables are fine for optional values.
-#   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
-#   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
-# EDIT this.
-# CHECK FOR CORRECT NUMBER/RANGE OF ARGUMENTS, and add error message.
+unset haystack_string
+
+filename="$3"
+     if [ ! test -f "$filename" ] && [ $# -gt 2 ] ; then
+          f_print_usage "File not found."
+          exit $EXIT_CODE_FILE_NOT_FOUND
+          fi
+     haystack_string=$(cat "$filename"); 
+          haystack_length=$(len "$haystack_string")
+               if [ $haystack_length -lt 3 ] ; then
+                    f_print_usage "Insufficient text in $filename"
+                    exit 1
+                    fi
+
+
+
+### Read to haystack_string if there is anything to read from stdin
+if [[ -p /dev/stdin ]] || ! test -t 0 ;
+     haystack_string=$(cat)
+     fi
+
 if [ $# -ne 3 ] ; then
 	f_print_usage "Must have exactly three arguments."
 	exit $EXIT_CODE_INVALID_ARGUMENTS
