@@ -29,6 +29,7 @@
 # Basic Setup
 
 ### FILL IN THESE VARIABLES!!! ###
+     PROGRAM_NAME="$(basename $0)" # Don't move this. Needed in this section below.
      PURPOSE="SAMPLE PURPOSE" # Don't include $0, e.g., "Saves the world" 
      USAGE="SAMPLE USAGE" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
           # SAMPLE below for two arguments
@@ -48,13 +49,13 @@
           "-h --help     Display usage and help information, then exit (no other options processed)"
           )
      EXAMPLE_USAGE=(
-          "Example usages: cat <filename> | $(basename $0)"
-          "                echo \$string | $(basename $0)"
-          "                $(basename $0) <input-string>"
-          "                $(basename $0) "-s\<input-string\>""
-          "                $(basename $0) "-string=\<input-string\>""
-          "                $(basename $0) -f\<source-file-name\>"
-          "                $(basename $0) -file=\<source-file-name\>"
+          "Example usages: cat <filename> | $PROGRAM_NAME"
+          "                echo \$string | $PROGRAM_NAME"
+          "                $PROGRAM_NAME <input-string>"
+          "                $PROGRAM_NAME "-s\<input-string\>""
+          "                $PROGRAM_NAME "-string=\<input-string\>""
+          "                $PROGRAM_NAME -f\<source-file-name\>"
+          "                $PROGRAM_NAME -file=\<source-file-name\>"
           )
      SHORT_GETOPT="hv"; LONG_GETOPT="help,version"
      # Including quiet & verbose: SHORT_GETOPT="hqVv"; LONG_GETOPT="help,quiet,verbose,version"
@@ -88,7 +89,6 @@
      EXIT_CODE_FILE_IN_USE=171
      EXIT_CODE_WRONG_HOST=172
      EXIT_CODE_INVALID_ARGUMENTS=173
-     PROGRAM_NAME="$(basename $0)"
      QUIET_MODE=false
      REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode. This is where text that could be suppressed by quiet mode is directed. 
      VERBOSE_MODE=false

@@ -29,8 +29,13 @@
 # Basic Setup
 
 ### FILL IN THESE VARIABLES!!! ###
-     PURPOSE="Finds the position of a search-string in a text-file" # Don't include $0, e.g., "Saves the world" 
-     USAGE="[-vh --help --version] <search-string> <filename>" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
+     PROGRAM_NAME="$(basename $0)" # Don't move this. Needed in this section below.
+     PURPOSE="Displays content between specified strings" # Don't include $0, e.g., "Saves the world" 
+     USAGE="[-vh --help --version] <filename> <begin-bookend-string> <end-bookend-string>" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
+          # SAMPLE below for two arguments
+          # USAGE="[-vh --help --version] <search-string> <filename>" 
+          # SAMPLE below for stream management
+          # USAGE="[-ifsvh --input --file --stream --help--version] <substring> [<source-string>]"
      VERSION_NUMBER="0.1"
      ROOT_REQUIRED=false
      OPTIONS=(
@@ -38,11 +43,14 @@
           "-h --help     Display usage and help information, then exit (no other options processed)"
           )
      EXAMPLE_USAGE=(
-          "Example usage: $(basename $0) \"<html>\" ~/index.html"
+          "Example usage: $(basename $0) ~/file.txt \"<span>\" \"</span>\""
           "  Returns position of the search-string with exit code 0."
-          "  If not found, returns nothing with exit code 173."
+          "  If not found, returns nothing with exit code 1."
           )
      SHORT_GETOPT="hv"; LONG_GETOPT="help,version"
+     # Including quiet & verbose: SHORT_GETOPT="hqVv"; LONG_GETOPT="help,quiet,verbose,version"
+     # Including stream options: SHORT_GETOPT="if:s:hv"; LONG_GETOPT="input,file:,stream:,help,version"
+
 
 # Stable variables; OK to leave this in without edits.
      ARGS="" # Adapted when flags are parsed.
@@ -71,7 +79,6 @@
      EXIT_CODE_FILE_IN_USE=171
      EXIT_CODE_WRONG_HOST=172
      EXIT_CODE_INVALID_ARGUMENTS=173
-     PROGRAM_NAME="$(basename $0)"
      QUIET_MODE=false
      REDIRECT="/dev/stdout" # Switch to "/dev/null" for quiet mode. This is where text that could be suppressed by quiet mode is directed. 
      VERBOSE_MODE=false
@@ -193,33 +200,65 @@ done
 #   We haven't yet tested for the existence of required options and/or remaining arguments (now $1, $2, etc.)
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 
-# Review this.
-# CHECK FOR CORRECT NUMBER/RANGE OF ARGUMENTS
-if [ $# -ne 2 ] ; then
-	f_print_usage "Must have exactly two arguments."
+# EDIT this.
+# CHECK FOR CORRECT NUMBER/RANGE OF ARGUMENTS, and add error message.
+if [ $# -ne 3 ] ; then
+	f_print_usage "Must have exactly three arguments."
 	exit $EXIT_CODE_INVALID_ARGUMENTS
      fi
 
-search_string="$1"
-filename="$2"
+### BELOW: Test outcomes! Don't assume anything!
 
-if ! test -f "$filename" ; then
-	f_print_usage "File not found."
-	exit $EXIT_CODE_FILE_NOT_FOUND
-     fi
-
-### https://superuser.com/questions/1001973/bash-find-string-index-position-of-substring
-haystack=$(cat "$filename")
-rest=${haystack#*$search_string}
-start_byte=$(( ${#haystack} + 1 - ${#rest} - ${#search_string} ))
-if [ $start_byte -gt 0 ] ; then
-     printf "%d" $start_byte;
-     if [ $(cursor --column) -ne 0 ] ; then
-          echo "" >&2 # This allows piping the result above to another program, and only issue a newline to the console.
-          exit $EXIT_CODE_SUCCESS
+filename="$1"
+     if ! test -f "$filename" ; then
+          f_print_usage "File not found."
+          exit $EXIT_CODE_FILE_NOT_FOUND
           fi
-     else
-          exit -1
+     haystack_string=$(cat "$filename"); 
+          haystack_length=$(len "$haystack_string")
+               if [ $haystack_length -lt 3 ] ; then
+                    f_print_usage "Insufficient text in $filename"
+                    exit 1
+                    fi
+begin_string="$2"; 
+     begin_length=$(len "$begin_string");
+          if [ $begin_length -lt 1 ] ; then
+               f_print_usage "Insufficient text in <begin-bookend-string>"
+               exit 1
+               fi
+     begin_position=$(find-in-string "$begin_string" "$haystack_string")
+          if [ -z "${begin_position}" ]; then
+               f_print_usage "<begin-bookend-string> not found in <filename>"
+               exit 1
+               fi
+remnant_position=$(( begin_position + begin_length ))
+     remnant_length=$(( haystack_length - remnant_position ))
+     remnant_string=$(right "$haystack_string" "$remnant_length")
+end_string="$3"
+     end_length=$(len "$end_string");
+     if [ $end_length -lt 1 ] ; then
+          f_print_usage "Insufficient text in <end-bookend-string>"
+          exit 1
+          fi
+     end_position=$(find-in-string "$end_string" "$remnant_string")
+          if [ -z "${end_position}" ]; then
+               f_print_usage "<end-bookend-string> not found in <filename>"
+               exit 1
+               fi
+payload_length=$(( $end_position - 1 ))
+     if [ $payload_length -lt 1 ] ; then
+          f_print_usage "Payload empty"
+          exit 1
+          fi
+     payload_string=$(left "$remnant_string" "$payload_length")
+          if [ -z "${end_position}" ]; then
+               f_print_usage "Payload empty"
+               exit 1
+               fi
+
+printf "%s" "$payload_string"
+if [ $(cursor --column) -ne 0 ] ; then
+     echo "" >&2 # This allows piping the result above to another program, and only issue a newline to the console.
      fi
 
 

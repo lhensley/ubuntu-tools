@@ -180,7 +180,8 @@ if (( num_chars > ${#string} )); then
 fi
   
 backward=$(echo $string | rev)
-printf "%s" $("${backward:0:$num_chars}" | rev)
+forward=$(echo "${backward:0:$num_chars}" | rev)
+printf "%s" "$forward"
 if [ $(cursor --column) -ne 0 ] ; then
      echo "" >&2 # This allows piping the result above to another program, and only issue a newline to the console.
      fi
