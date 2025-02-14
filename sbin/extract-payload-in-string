@@ -30,36 +30,20 @@
 
 ### FILL IN THESE VARIABLES!!! ###
      PROGRAM_NAME="$(basename $0)" # Don't move this. Needed in this section below.
-     PURPOSE="SAMPLE PURPOSE" # Don't include $0, e.g., "Saves the world" 
-     USAGE="SAMPLE USAGE" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
-          # SAMPLE below for two arguments
-          # USAGE="[-vh --help --version] <search-string> <filename>" 
-          # SAMPLE below for stream management
-          # USAGE="[-ifsvh --input --file --stream --help--version] <substring> [<source-string>]"
+     PURPOSE="Displays content between specified strings" # Don't include $0, e.g., "Saves the world" 
+     USAGE="[-vh --help --version] <haystack-string> <begin-bookend-string> <end-bookend-string>" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
      VERSION_NUMBER="0.1"
      ROOT_REQUIRED=false
      OPTIONS=(
-          "-i --input                                      Use standard input for input (default)"
-          "-f<source-file-name> --file=<source-file-name>  Use specified file contents for input"
-          "-s<source-string> --string=<source-string>      Use specified string for input"
-          "     IMPORTANT: The three lines above are mutually exclusive. Default is -i or --input."
-          "-q --quiet    Minimal output"
-          "-V --verbose  Verbose output"
           "-v --version  Display version number, then exit (no other options processed)"
           "-h --help     Display usage and help information, then exit (no other options processed)"
           )
      EXAMPLE_USAGE=(
-          "Example usages: cat <filename> | $PROGRAM_NAME"
-          "                echo \$string | $PROGRAM_NAME"
-          "                $PROGRAM_NAME <input-string>"
-          "                $PROGRAM_NAME "-s\<input-string\>""
-          "                $PROGRAM_NAME "-string=\<input-string\>""
-          "                $PROGRAM_NAME -f\<source-file-name\>"
-          "                $PROGRAM_NAME -file=\<source-file-name\>"
+          "Example usage: $(basename $0) \$haystack-string \"<span>\" \"</span>\""
+          "  Returns position of the search-string with exit code 0."
+          "  If not found or error found, returns with non-0 exit code."
           )
      SHORT_GETOPT="hv"; LONG_GETOPT="help,version"
-     # Including quiet & verbose: SHORT_GETOPT="hqVv"; LONG_GETOPT="help,quiet,verbose,version"
-     # Including stream options: SHORT_GETOPT="if:s:hv"; LONG_GETOPT="input,file:,stream:,help,version"
 
 
 # Stable variables; OK to leave this in without edits.
@@ -174,7 +158,7 @@ while : ; do
            exit $EXIT_CODE_SUCCESS
            ;;   
       -v | --version)  # Version number
-           echo $PROGRAM_NAME: version $VERSION_NUMBER >&2
+           echo $(basename $0): version $VERSION_NUMBER >&2
            exit $EXIT_CODE_SUCCESS
            ;;
 #      -q | --quiet)  # Quiet mode
@@ -212,12 +196,59 @@ done
 
 # EDIT this.
 # CHECK FOR CORRECT NUMBER/RANGE OF ARGUMENTS, and add error message.
-if [ $# -ne 0 ] ; then
-	f_print_usage "Error message"
+if [ $# -ne 3 ] ; then
+	f_print_usage "Must have exactly three arguments."
 	exit $EXIT_CODE_INVALID_ARGUMENTS
      fi
 
-echo "I don't do anything yet." >&2
+### BELOW: Test outcomes! Don't assume anything!
+
+haystack_string="$1"
+     haystack_length=$(len "$haystack_string")
+          if [ $haystack_length -lt 3 ] ; then
+               f_print_usage "Insufficient text in <haystack-string>"
+               exit 1
+               fi
+begin_string="$2"; 
+     begin_length=$(len "$begin_string");
+          if [ $begin_length -lt 1 ] ; then
+               f_print_usage "Insufficient text in <begin-bookend-string>"
+               exit 1
+               fi
+     begin_position=$(find-in-string "$begin_string" "$haystack_string")
+          if [ -z "${begin_position}" ]; then
+               f_print_usage "<begin-bookend-string> not found in <haystack-string>"
+               exit 1
+               fi
+remnant_position=$(( begin_position + begin_length ))
+     remnant_length=$(( haystack_length - remnant_position ))
+     remnant_string=$(right "$haystack_string" "$remnant_length")
+end_string="$3"
+     end_length=$(len "$end_string");
+     if [ $end_length -lt 1 ] ; then
+          f_print_usage "Insufficient text in <end-bookend-string>"
+          exit 1
+          fi
+     end_position=$(find-in-string "$end_string" "$remnant_string")
+          if [ -z "${end_position}" ]; then
+               f_print_usage "<end-bookend-string> not found in <haystack-string>"
+               exit 1
+               fi
+payload_length=$(( $end_position - 1 ))
+     if [ $payload_length -lt 1 ] ; then
+          f_print_usage "Payload empty"
+          exit 1
+          fi
+     payload_string=$(left "$remnant_string" "$payload_length")
+          if [ -z "${end_position}" ]; then
+               f_print_usage "Payload empty"
+               exit 1
+               fi
+
+printf "%s" "$payload_string"
+if [ $(cursor --column) -ne 0 ] ; then
+     echo "" >&2 # This allows piping the result above to another program, and only issue a newline to the console.
+     fi
 
 
 ###################################################

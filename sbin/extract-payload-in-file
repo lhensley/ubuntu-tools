@@ -45,7 +45,7 @@
      EXAMPLE_USAGE=(
           "Example usage: $(basename $0) ~/file.txt \"<span>\" \"</span>\""
           "  Returns position of the search-string with exit code 0."
-          "  If not found, returns nothing with exit code 1."
+          "  If not found or error found, returns with non-0 exit code."
           )
      SHORT_GETOPT="hv"; LONG_GETOPT="help,version"
      # Including quiet & verbose: SHORT_GETOPT="hqVv"; LONG_GETOPT="help,quiet,verbose,version"
