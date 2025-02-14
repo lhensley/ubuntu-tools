@@ -1,16 +1,11 @@
 #!/bin/bash
-  test
-  test
-  test
-  test
-
 
 ###################################################
-TO DO:
-Enable -f option.
-Manage presence/absence of -f.
-Detect and manage haystack coming by pipe/stdio
-Manage option of dropping argument 3
+# TO DO:
+# Enable -f option.
+# Manage presence/absence of -f.
+# Detect and manage haystack coming by pipe/stdio
+# Manage option of dropping argument 3
 
 ###################################################
 # Notes
@@ -43,7 +38,7 @@ Manage option of dropping argument 3
 ### FILL IN THESE VARIABLES!!! ###
   PROGRAM_NAME="$(basename $0)"
   PURPOSE="Displays content between specified strings" # Don't include $0, e.g., "Saves the world" 
-  USAGE="[-fvh --file --help --version] <begin-bookend-string> <end-bookend-string> [<haystack-string>]" # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
+  USAGE='[-fvh --file --help --version] <begin-bookend-string> <end-bookend-string> [<haystack-string>]' # Don't include $0, e.g., "[-hqVv --help --quiet --verbose --version] <arg1> <arg2> <arg3>" Can go to multiple lines with \n in the string.
   VERSION_NUMBER="0.1"
   ROOT_REQUIRED=false
   OPTIONS=(
@@ -113,11 +108,11 @@ function f_print_usage {
   if $ROOT_REQUIRED ; then echo Requires root or sudo. >&2 ; fi
   echo "Options:" >&2
   for i in "${!OPTIONS[@]}"; do
-     echo "  ${OPTIONS[$i]}" >&2
-     done
+    echo "  ${OPTIONS[$i]}" >&2
+    done
   for i in "${!EXAMPLE_USAGE[@]}"; do
-     echo "${EXAMPLE_USAGE[$i]}" >&2
-     done
+    echo "${EXAMPLE_USAGE[$i]}" >&2
+    done
   }
 
 
@@ -125,9 +120,9 @@ function f_print_usage {
 # Test for big problems
 
 if $ROOT_REQUIRED && [[ $EUID -ne 0 ]]; then
-     f_print_usage "Root privileges required."
-     exit EXIT_CODE_ROOT_REQUIRED
-     fi
+  f_print_usage "Root privileges required."
+  exit EXIT_CODE_ROOT_REQUIRED
+  fi
 
 
 ###################################################
@@ -149,8 +144,8 @@ if $ROOT_REQUIRED && [[ $EUID -ne 0 ]]; then
 #   Double Colon after an option means an argument is optional. 
 #   The '-- "$@"' at the end means that all other command arguments are "remaining arguments".
 # For more info on getopt syntax: https://linux.die.net/man/1/getopt
-     PARSED_ARGUMENTS=$(getopt --name $PROGRAM_NAME --options $SHORT_GETOPT \
-          --long $LONG_GETOPT -- "$@")
+  PARSED_ARGUMENTS=$(getopt --name $PROGRAM_NAME --options $SHORT_GETOPT \
+    --long $LONG_GETOPT -- "$@")
 
 # Note about next command: 
 # By reading that set of standardised arguments into the shell's input arguments 
@@ -184,87 +179,86 @@ while : ; do
 done
 
 
-
-
 ###################################################
 # Do the work.
 
 unset haystack_string
 
-filename="$3"
-     if [ ! test -f "$filename" ] && [ $# -gt 2 ] ; then
-          f_print_usage "File not found."
-          exit $EXIT_CODE_FILE_NOT_FOUND
+# Priority 1: Set with -f or --file options.
+if [[ ! -v haystack_string ]]; then # If haystack_string is NOT set
+     if [[ -v filename ]]; then # If filename IS set
+          echo filename: $filename
+          if [ ! test -f "$filename" ] ; then
+               f_print_usage "File not found."
+               exit $EXIT_CODE_FILE_NOT_FOUND
+               fi
           fi
      haystack_string=$(cat "$filename"); 
-          haystack_length=$(len "$haystack_string")
-               if [ $haystack_length -lt 3 ] ; then
-                    f_print_usage "Insufficient text in $filename"
-                    exit 1
-                    fi
-
-
-
-### Read to haystack_string if there is anything to read from stdin
-if [[ -p /dev/stdin ]] || ! test -t 0 ;
-     haystack_string=$(cat)
+     haystack_length=$(len "$haystack_string")
      fi
 
-if [ $# -ne 3 ] ; then
-	f_print_usage "Must have exactly three arguments."
+# Priority 2: Set as a third argument, <haystack-string>
+if [[ ! -v haystack_string ]]; then # If haystack_string is NOT set
+     haystack_string="$3"; 
+     haystack_length=$(len "$haystack_string")
+     fi
+
+# Priority 3: Read into stdin (including by pipe)
+if [[ ! -v haystack_string ]]; then # If haystack_string is NOT set
+     if [[ -p /dev/stdin ]] || ! test -t 0 ; then # If any data queued in stdin
+          haystack_string=$(cat)
+          haystack_length=$(len "$haystack_string")
+          fi
+     fi
+
+if [ $# -lt 2 ] || [ $# -gt 3 ]; then
+	f_print_usage "Must have two or three arguments."
 	exit $EXIT_CODE_INVALID_ARGUMENTS
      fi
 
-### BELOW: Test outcomes! Don't assume anything!
-
-filename="$1"
-     if ! test -f "$filename" ; then
-          f_print_usage "File not found."
-          exit $EXIT_CODE_FILE_NOT_FOUND
-          fi
-     haystack_string=$(cat "$filename"); 
-          haystack_length=$(len "$haystack_string")
-               if [ $haystack_length -lt 3 ] ; then
-                    f_print_usage "Insufficient text in $filename"
-                    exit 1
-                    fi
-begin_string="$2"; 
-     begin_length=$(len "$begin_string");
-          if [ $begin_length -lt 1 ] ; then
+begin_bookend_string="$1"; 
+     begin_bookend_length=$(len "$begin_bookend_string");
+          if [ $begin_bookend_length -lt 1 ] ; then
                f_print_usage "Insufficient text in <begin-bookend-string>"
                exit 1
                fi
-     begin_position=$(find-in-string "$begin_string" "$haystack_string")
-          if [ -z "${begin_position}" ]; then
-               f_print_usage "<begin-bookend-string> not found in <filename>"
+     echo begin_bookend_string: $begin_bookend_string
+     echo haystack_string: $haystack_string
+     begin_bookend_position=$(find-in-string "$begin_bookend_string" "$haystack_string")
+          if [ -z "${begin_bookend_position}" ]; then
+               f_print_usage "<begin-bookend-string> not found in <haystack-string>"
                exit 1
                fi
-remnant_position=$(( begin_position + begin_length ))
+
+remnant_position=$(( begin_bookend_position + begin_bookend_length ))
      remnant_length=$(( haystack_length - remnant_position ))
      remnant_string=$(right "$haystack_string" "$remnant_length")
-end_string="$3"
-     end_length=$(len "$end_string");
-     if [ $end_length -lt 1 ] ; then
+
+end_bookend_string="$2"
+     end_bookend_length=$(len "$end_bookend_string");
+     if [ $end_bookend_length -lt 1 ] ; then
           f_print_usage "Insufficient text in <end-bookend-string>"
           exit 1
           fi
-     end_position=$(find-in-string "$end_string" "$remnant_string")
-          if [ -z "${end_position}" ]; then
-               f_print_usage "<end-bookend-string> not found in <filename>"
+     end_bookend_position=$(find-in-string "$end_bookend_string" "$remnant_string")
+          if [ -z "${end_bookend_position}" ]; then
+               f_print_usage "<end-bookend-string> not found in <haystack-string>"
                exit 1
                fi
-payload_length=$(( $end_position - 1 ))
+
+payload_length=$(( $end_bookend_position - 1 ))
      if [ $payload_length -lt 1 ] ; then
           f_print_usage "Payload empty"
           exit 1
           fi
      payload_string=$(left "$remnant_string" "$payload_length")
-          if [ -z "${end_position}" ]; then
+          if [ -z "${end_bookend_position}" ]; then
                f_print_usage "Payload empty"
                exit 1
                fi
 
 printf "%s" "$payload_string"
+
 if [ $(cursor --column) -ne 0 ] ; then
      echo "" >&2 # This allows piping the result above to another program, and only issue a newline to the console.
      fi
