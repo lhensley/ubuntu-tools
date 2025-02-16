@@ -204,8 +204,14 @@ search_string="$1"
 haystack="$2"
 
 ### https://superuser.com/questions/1001973/bash-find-string-index-position-of-substring
-rest=${haystack#*$search_string}
-start_byte=$(( ${#haystack} + 1 - ${#rest} - ${#search_string} ))
+if [[ "$haystack_string" == *"$begin_bookend_string"* ]]; then
+          rest=${haystack#*$search_string}
+          start_byte=$(( ${#haystack} + 1 - ${#rest} - ${#search_string} ))
+     else
+          f_print_usage "<search-string> not found in <haystack-string>"
+          exit -1
+     fi
+
 if [ $start_byte -gt 0 ] ; then
      printf "%d" $start_byte;
      if [ $(cursor --column) -ne 0 ] ; then

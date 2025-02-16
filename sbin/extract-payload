@@ -43,7 +43,7 @@
   ROOT_REQUIRED=false
   OPTIONS=(
     "-f<filename> --file=<filename>"
-    "   Contents read as <haystack-string>; drop the thind argument if used"
+    "   Contents read as <haystack-string>; drop the third argument if used"
     "-v --version"
     "   Display version number, then exit (no other options processed)"
     "-h --help"
@@ -53,7 +53,7 @@
     "Example usages: $PROGRAM_NAME \"<span>\" \"</span>\" \"\$haystack_string\""
     "                $PROGRAM_NAME -f\"~/file.html\" \"<span>\" \"</span>\""
     "                $PROGRAM_NAME --file=\"~/file.html\" \"<span>\" \"</span>\""
-    "                echo "\"\$haystack_string\"" | $PROGRAM_NAME \"<span>\" \"</span>\""
+    "                cat "\"\$haystack_string\"" | $PROGRAM_NAME \"<span>\" \"</span>\""
     "  Returns position of the search-string with exit code 0."
     "  If not found or error found, returns with non-0 exit code."
     "  The <haystack-string> is determined in this order of precedence:"
@@ -185,29 +185,28 @@ done
 unset haystack_string
 
 # Priority 1: Set with -f or --file options.
-if [[ ! -v haystack_string ]]; then # If haystack_string is NOT set
-     if [[ -v filename ]]; then # If filename IS set
-          echo filename: $filename
-          if [ ! test -f "$filename" ] ; then
+if [ -z "$haystack_string" ]; then # If haystack_string is NOT set
+     if test -v filename; then # If filename IS set
+          if ! test -f "$filename" ; then
                f_print_usage "File not found."
                exit $EXIT_CODE_FILE_NOT_FOUND
                fi
+          haystack_string=$(cat "$filename"); 
+          haystack_length="${#haystack_string}"
           fi
-     haystack_string=$(cat "$filename"); 
-     haystack_length=$(len "$haystack_string")
      fi
 
 # Priority 2: Set as a third argument, <haystack-string>
-if [[ ! -v haystack_string ]]; then # If haystack_string is NOT set
+if [ -z "$haystack_string" ] && [ $# -gt 2 ] ; then # If haystack_string is NOT set
      haystack_string="$3"; 
-     haystack_length=$(len "$haystack_string")
+     haystack_length="${#haystack_string}"
      fi
 
 # Priority 3: Read into stdin (including by pipe)
-if [[ ! -v haystack_string ]]; then # If haystack_string is NOT set
+if [ -z "$haystack_string" ]; then # If haystack_string is NOT set
      if [[ -p /dev/stdin ]] || ! test -t 0 ; then # If any data queued in stdin
           haystack_string=$(cat)
-          haystack_length=$(len "$haystack_string")
+          haystack_length="${#haystack_string}"
           fi
      fi
 
@@ -217,52 +216,121 @@ if [ $# -lt 2 ] || [ $# -gt 3 ]; then
      fi
 
 begin_bookend_string="$1"; 
-     begin_bookend_length=$(len "$begin_bookend_string");
+     begin_bookend_length=${#begin_bookend_string};
           if [ $begin_bookend_length -lt 1 ] ; then
                f_print_usage "Insufficient text in <begin-bookend-string>"
                exit 1
                fi
-     echo begin_bookend_string: $begin_bookend_string
-     echo haystack_string: $haystack_string
-     begin_bookend_position=$(find-in-string "$begin_bookend_string" "$haystack_string")
-          if [ -z "${begin_bookend_position}" ]; then
+     if [[ "$haystack_string" == *"$begin_bookend_string"* ]]; then
+
+################################################################################
+##########     UNDER CONSTRUCTION!     #########################################
+################################################################################
+
+          ############### SLOW! ###############
+          ### Pseudocode:
+          ###       Need: haystack_string (done)
+          ###             begin_bookend_length (done)
+          ###             begin_bookend_position (done)
+          ###   remnant_string(rest)=right(haystack_string,len(haystack_string)-(begin_bookend_position+begin_bookend_length))
+
+echo MB
+          x=$(grep -oba "$begin_bookend_string" <<< "$haystack_string")
+          begin_bookend_position="${x%%":"*}"
+
+echo MA
+          remnant_position=$(( begin_bookend_position + begin_bookend_length))
+
+echo A
+          rest="${haystack_string:$(( begin_bookend_position + begin_bookend_length - 2 ))}"
+
+echo B
+          # rest=${haystack_string#*$begin_bookend_string} ### This call is SLOW on big strings!
+          remnant_string=$rest
+          # begin_bookend_position=$(( ${#haystack_string} + 1 - ${#rest} - ${#begin_bookend_string} ))
+          else
                f_print_usage "<begin-bookend-string> not found in <haystack-string>"
                exit 1
-               fi
+          fi
 
-remnant_position=$(( begin_bookend_position + begin_bookend_length ))
-     remnant_length=$(( haystack_length - remnant_position ))
-     remnant_string=$(right "$haystack_string" "$remnant_length")
+echo C
+# "Remnant" is everything in the haystack AFTER the begin_bookend
+# remnant_position=$(( begin_bookend_position + begin_bookend_length ))
+remnant_length=$(( haystack_length - remnant_position ))
 
+echo D
 end_bookend_string="$2"
-     end_bookend_length=$(len "$end_bookend_string");
+     end_bookend_length=${#end_bookend_string};
+echo end_bookend_string: $end_bookend_string
+# echo end_bookend_position: $end_bookend_position
+echo end_bookend_length: $end_bookend_length
+echo start of remnant: ${remnant_string:0:30}
      if [ $end_bookend_length -lt 1 ] ; then
+echo E
           f_print_usage "Insufficient text in <end-bookend-string>"
           exit 1
           fi
-     end_bookend_position=$(find-in-string "$end_bookend_string" "$remnant_string")
-          if [ -z "${end_bookend_position}" ]; then
-               f_print_usage "<end-bookend-string> not found in <haystack-string>"
-               exit 1
-               fi
+echo "haystack_length (1293891): $haystack_length"
+echo "begin_bookend_position (1443): $begin_bookend_position"
+echo "begin_bookend_length (6): $begin_bookend_length"
+echo "remnant_position (1449): $remnant_position"
+echo "remnant_length (1235, calculated): $remnant_length"
+echo "end_bookend_position (2684): $end_bookend_position"
+echo "end_bookend_length (9): $end_bookend_length"
+     if [[ "$remnant_string" == *"$end_bookend_string"* ]]; then
+echo F
+          ### DUPE OF ABOVE?
+          rest=${remnant_string#*$end_bookend_string}
+          end_bookend_position=$(( ${#remnant_string} - ${#rest} - ${#end_bookend_string} ))
+echo "haystack_length (1293891): $haystack_length"
+echo "begin_bookend_position (1443): $begin_bookend_position"
+echo "begin_bookend_length (6): $begin_bookend_length"
+echo "remnant_position (1449): $remnant_position"
+echo "remnant_length (1235, calculated): $remnant_length"
+echo "end_bookend_position (2684): $end_bookend_position"
+echo "end_bookend_length (9): $end_bookend_length"
+     else
+echo G
+echo "haystack_length (1293891): $haystack_length"
+echo "begin_bookend_position (1443): $begin_bookend_position"
+echo "begin_bookend_length (6): $begin_bookend_length"
+echo "remnant_position (1449): $remnant_position"
+echo "remnant_length (1235, calculated): $remnant_length"
+echo "end_bookend_position (2684): $end_bookend_position"
+echo "end_bookend_length (9): $end_bookend_length"
+          f_print_usage "<end-bookend-string> not found in <haystack-string>"
+          exit 1
+     fi
 
-payload_length=$(( $end_bookend_position - 1 ))
+echo H
+payload_length=$(( $end_bookend_position ))
      if [ $payload_length -lt 1 ] ; then
+echo I
           f_print_usage "Payload empty"
           exit 1
           fi
-     payload_string=$(left "$remnant_string" "$payload_length")
+echo J
+     payload_string=${remnant_string:0:$payload_length}
           if [ -z "${end_bookend_position}" ]; then
+echo K
                f_print_usage "Payload empty"
                exit 1
                fi
 
+echo L
 printf "%s" "$payload_string"
 
 if [ $(cursor --column) -ne 0 ] ; then
      echo "" >&2 # This allows piping the result above to another program, and only issue a newline to the console.
      fi
 
+echo "haystack_length (1293891): $haystack_length"
+echo "begin_bookend_position (1443): $begin_bookend_position"
+echo "begin_bookend_length (6): $begin_bookend_length"
+echo "remnant_position (1449): $remnant_position"
+echo "remnant_length (1235, calculated): $remnant_length"
+echo "end_bookend_position (2684): $end_bookend_position"
+echo "end_bookend_length (9): $end_bookend_length"
 
 ###################################################
 # Wrap up.
