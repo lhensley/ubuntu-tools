@@ -191,22 +191,25 @@ if [ -z "$haystack_string" ]; then # If haystack_string is NOT set
                f_print_usage "File not found."
                exit $EXIT_CODE_FILE_NOT_FOUND
                fi
-          haystack_string=$(cat "$filename"); 
-          haystack_length="${#haystack_string}"
+          haystack_string="$(cat "$filename")" 
+#          haystack_length="${#haystack_string}"
+cat "$haystack_string" > ~/sc/parsing/haystack1.html
           fi
      fi
 
 # Priority 2: Set as a third argument, <haystack-string>
 if [ -z "$haystack_string" ] && [ $# -gt 2 ] ; then # If haystack_string is NOT set
      haystack_string="$3"; 
-     haystack_length="${#haystack_string}"
+#     haystack_length="${#haystack_string}"
+cat "$haystack_string" > ~/sc/parsing/haystack2.html
      fi
 
 # Priority 3: Read into stdin (including by pipe)
 if [ -z "$haystack_string" ]; then # If haystack_string is NOT set
      if [[ -p /dev/stdin ]] || ! test -t 0 ; then # If any data queued in stdin
-          haystack_string=$(cat)
+          haystack_string="$(cat)"
           haystack_length="${#haystack_string}"
+echo "$haystack_string" > ~/sc/parsing/haystack3.html
           fi
      fi
 
@@ -260,7 +263,7 @@ remnant_length=$(( haystack_length - remnant_position ))
 
 echo D
 end_bookend_string="$2"
-     end_bookend_length=${#end_bookend_string};
+     end_bookend_length=${#end_bookend_string}
 echo end_bookend_string: $end_bookend_string
 # echo end_bookend_position: $end_bookend_position
 echo end_bookend_length: $end_bookend_length
