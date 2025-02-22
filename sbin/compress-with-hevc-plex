@@ -500,16 +500,23 @@ TARGETBASE="/mnt/4TBA/plex/TV Shows/Regular"
 # compress-with-hevc-dir /mnt/12TBA/plex
 # plex-sync # DON'T DO THIS AUTOMATICALLY. WHAT IF ORIGINAL IS DAMAGED?
 
+# Append log
 _apply-plex-permissions | tee -a "$templog"
 date | tee -a "$templog"
 echo "END" | tee -a "$templog"
-MESSAGE_FILE="/tmp/messages-$(uuidgen)"
-echo "[$(hostname)] $(basename \"$0\"): jobs completed." > $MESSAGE_FILE
-echo "$(ps -ef | grep '00:00:00 nq ' | wc -l) compression jobs are in queue now." >> $MESSAGE_FILE
-echo "These may take several hours to complete." >> $MESSAGE_FILE
-echo "To display the number of jobs remaining: ps -ef | grep '00:00:00 nq ' | wc -l" >> $MESSAGE_FILE
-echo "See $templog for more information." >> $MESSAGE_FILE
-nq cat $MESSAGE_FILE | mail "$ADMIN_USER" >> /dev/null 2>> /dev/null
+
+# Message the administrator about current status
+MESSAGE_FILE="/tmp/compress-with-hevc-messages-$(uuidgen)"
+touch "$MESSAGE_FILE"
+chown root:root "$MESSAGE_FILE"
+chmod 600 "$MESSAGE_FILE"
+PROGRAM_NAME=$(basename \"$0\")
+echo "[$(hostname)] $PROGRAM_NAME: jobs completed." >> "$MESSAGE_FILE"
+echo "$(ps -ef | grep '00:00:00 nq ' | wc -l) compression jobs are in queue now." >> "$MESSAGE_FILE"
+echo "These may take several hours to complete." >> "$MESSAGE_FILE"
+echo "To display the number of jobs remaining: ps -ef | grep '00:00:00 nq ' | wc -l" >> "$MESSAGE_FILE"
+echo "See $templog for more information." >> "$MESSAGE_FILE"
+nq cat "$MESSAGE_FILE" | mail "$ADMIN_USER" >> /dev/null 2>> /dev/null
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
