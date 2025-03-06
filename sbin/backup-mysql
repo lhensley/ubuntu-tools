@@ -41,7 +41,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 mkdir /tmp/$UUID
 mysqldump --all-databases --routines --force | gzip > /tmp/$UUID/$HOSTNAME.sql.gz
 if [ $HOSTNAME = dsm1 ] ; then
-    mkdir -p /mnt/5TBC/archives/mysql /mnt/12TBA/archives/mysql
+    mkdir -p /mnt/5TBC/archives/mysql /mnt/20TBA/archives/mysql
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/5TBC/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/5TBC/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gz
