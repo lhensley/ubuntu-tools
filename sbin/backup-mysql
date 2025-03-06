@@ -39,21 +39,20 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 # mysqldump --all-databases --routines --force > ~/$HOSTNAME.sql
 # mysqldump --all-databases --routines --force | gzip > ~/$HOSTNAME.sql.gz
 mkdir /tmp/$UUID
-mysqldump --all-databases --routines --force | gpg --symmetric --cipher-algo AES256 | \
-    gzip > /tmp/$UUID/$HOSTNAME.sql.gpg.gz
+mysqldump --all-databases --routines --force | gzip > /tmp/$UUID/$HOSTNAME.sql.gz
 if [ "$HOSTNAME"="dsm1" ] ; then
     mkdir -p /mnt/5TBC/archives/mysql /mnt/12TBA/archives/mysql
-    cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/5TBC/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gpg.gz
-    cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/5TBC/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gpg.gz
-    cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gpg.gz
-    cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/20TBA/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gpg.gz
+    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/5TBC/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gz
+    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/5TBC/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gz
+    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gz
+    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/20TBA/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gz
     fi
 if [ "$HOSTNAME"="pd1" ] ; then
     mkdir -p /mnt/bob/archives/mysql
-    cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/bob/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gpg.gz
-    cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/bob/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gpg.gz
+    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/bob/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gz
+    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/bob/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gz
     fi
-mv /tmp/$UUID/$HOSTNAME.sql.gpg.gz ~
+mv /tmp/$UUID/$HOSTNAME.sql.gz ~
 rm -rf /tmp/$UUID
 
 # Option to text the administrator when the script ends
