@@ -36,7 +36,24 @@ fi
 # Do stuff here
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
-mysqldump --all-databases --routines --force > ~/$HOSTNAME.sql
+# mysqldump --all-databases --routines --force > ~/$HOSTNAME.sql
+# mysqldump --all-databases --routines --force | gzip > ~/$HOSTNAME.sql.gz
+mysqldump --all-databases --routines --force | gpg --symmetric --cipher-algo AES256 | \
+    gzip > /tmp/$UUID/$HOSTNAME.sql.gpg.gz
+if [ "$HOSTNAME"="dsm1" ]
+    mkdir -p /mnt/5TBC/archives/mysql /mnt/12TBA/archives/mysql
+    cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/5TBC/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gpg.gz
+    cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/5TBC/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gpg.gz
+    cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gpg.gz
+    cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/20TBA/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gpg.gz
+    fi
+if [ "$HOSTNAME"="pd1" ]
+    mkdir -p /mnt/bob/archives/mysql
+    cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/bob/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gpg.gz
+    cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/bob/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gpg.gz
+    fi
+mv /tmp/$UUID/$HOSTNAME.sql.gpg.gz ~
+rm -rf /tmp/$UUID
 
 # Option to text the administrator when the script ends
 # echo "[$(hostname)] $(basename $0): completed" | mail "$ADMIN_CELL_EMAIL"
