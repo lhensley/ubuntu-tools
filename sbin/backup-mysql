@@ -38,16 +38,17 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 # mysqldump --all-databases --routines --force > ~/$HOSTNAME.sql
 # mysqldump --all-databases --routines --force | gzip > ~/$HOSTNAME.sql.gz
+mkdir /tmp/$UUID
 mysqldump --all-databases --routines --force | gpg --symmetric --cipher-algo AES256 | \
     gzip > /tmp/$UUID/$HOSTNAME.sql.gpg.gz
-if [ "$HOSTNAME"="dsm1" ]
+if [ "$HOSTNAME"="dsm1" ] ; then
     mkdir -p /mnt/5TBC/archives/mysql /mnt/12TBA/archives/mysql
     cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/5TBC/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gpg.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/5TBC/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gpg.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gpg.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/20TBA/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gpg.gz
     fi
-if [ "$HOSTNAME"="pd1" ]
+if [ "$HOSTNAME"="pd1" ] ; then
     mkdir -p /mnt/bob/archives/mysql
     cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/bob/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gpg.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gpg.gz /mnt/bob/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gpg.gz
