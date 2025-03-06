@@ -19,7 +19,7 @@ ufw reject from 15.237.189.64 to any # 2024-09-15 - France
 ufw reject from 23.137.104.0/24 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 2
 ufw reject from 43.131.2.238 to any # 2024-07-16 - Germany, blocked by Wordfence, block count 1
 ufw reject from 43.157.25.217 to any # 2024-07-08 - Germany address, blocked by Wordfence, block count 1
-ufw reject from 45.61.161.101 to any # 2024-12-30 - Germany
+ufw reject from 45.61.0.0/16 to any # 2024-12-30 - Germany
 ufw reject from 51.15.0.0/16 to any # 2024-07-08 - France address, blocked by Wordfence, block count 1
 ufw reject from 51.68.0.0/16 to any #2025-02-03 - France
 ufw reject from 52.187.192.213 to any # 2024-11-15 - Australia
@@ -46,6 +46,7 @@ ufw reject from 138.128.174.26 to any # 2024-07-08 - United States address, bloc
 ufw reject from 138.199.47.241 to any # 2024-07-08 - France address, blocked by Wordfence, block count 1
 ufw reject from 139.99.220.157 to any # 2024-07-08 - Australia address, blocked by Wordfence, block count 12
 ufw reject from 144.126.0.0/16 to any # 2024-09-09 - United States
+ufw reject from 146.19.215.24 to any # 2025-03-03 - Germany
 ufw reject from 156.38.128.82 to any # 2024-07-08 - South Africa address, blocked by Wordfence, block count 1
 ufw reject from 156.146.38.167 to any # 2024-09-09 - United States
 ufw reject from 161.97.131.39 to any # 2024-07-31 - Germany address, blocked by Wordfence, block count 13
@@ -63,6 +64,7 @@ ufw reject from 185.220.100.0/24 to any # 2024-12-31 - Germany
 ufw reject from 185.220.101.0/24 to any # 2024-09-02 - Germany
 ufw reject from 188.164.196.16 to any # 2024-07-08 - Spain address, blocked by Wordfence, block count 1
 ufw reject from 192.42.116.187 to any # 2024-13-31 - Netherlands
+ufw reject from 193.26.115.62 to any # 2025-03-03 - United States
 ufw reject from 193.189.100.204 to any # 2024-07-08 - Sweden address, blocked by Wordfence, block count 1
 ufw reject from 194.38.0.0/16 to any # 2025-02-03 - Ukraine
 ufw reject from 194.163.145.202 to any # 2024-07-08 - Germany address, blocked by Wordfence, block count 17
@@ -71,7 +73,7 @@ ufw reject from 199.19.72.125 to any
 ufw reject from 199.45.154.114 to any
 ufw reject from 204.10.194.57 to any # 2024-12-30 - Germany
 ufw reject from 206.168.34.37 to any
-ufw reject from 207.180.196.201 to any # 2024-09-09 - Germany
+ufw reject from 207.180.0.0/16 to any # 2024-09-09 - Germany
 ufw reject from 213.136.0.0/16 to any #2025-02-03 - Germany
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"

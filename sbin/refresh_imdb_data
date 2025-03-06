@@ -1,0 +1,156 @@
+#!/bin/bash
+
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+# if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Uncomment requirements for script execution
+    # f_require_root
+    # f_require_ubuntu
+    # f_deprecated
+    # f_require_minimum_version_number "version-number"
+    # f_require_maximum_version_number "version-number"
+    # f_only_on_server "hostname"
+    # f_require_confirmation "This text is displayed, requesting confirmation word." "ConfirmationWord"
+    # set -x # For debugging
+
+# POSSIBLE OPTION: USE IF YOU WANT
+# Require root
+	f_require_root
+
+# POSSIBLE OPTION: USE IF YOU WANT
+# Require a specific host
+	f_require_host dsm1
+
+# CHECK FOR ENOUGH ARGUMENTS (change 0 to minimum arguments and flesh out Usage)
+if [ $# -lt 0 ]; 
+    then echo "$EXIT_CODE_DESC_DIRECTORY_NOT_FOUND"
+	echo "Usage: $(basename $0)"
+	exit $EXIT_CODE_DIRECTORY_NOT_FOUND
+fi
+
+# Do stuff here
+if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Initialize
+working_directory="$(pwd)"
+mysqlfiles="/var/lib/mysql-files"
+cd "$mysqlfiles"
+if [ $? -ne 0 ] ; then
+    echo "Unable to change to MySQL files directory."
+    exit 1
+    fi
+
+# Cleanup at start
+rm -fr *
+
+echo "Downloading current IMDb datasets."
+wget https://datasets.imdbws.com/name.basics.tsv.gz
+wget https://datasets.imdbws.com/title.akas.tsv.gz
+wget https://datasets.imdbws.com/title.basics.tsv.gz
+wget https://datasets.imdbws.com/title.crew.tsv.gz
+wget https://datasets.imdbws.com/title.episode.tsv.gz
+wget https://datasets.imdbws.com/title.principals.tsv.gz
+wget https://datasets.imdbws.com/title.ratings.tsv.gz
+
+echo "Decompressing IMDb data files."
+gzip -d *.gz
+
+infile="$mysqlfiles/name.basics.tsv"; table="\`lane_media\`.\`name_basics\`"
+string="LOAD DATA LOW_PRIORITY INFILE '$infile' "
+string+="REPLACE INTO TABLE $table "
+string+="FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' "
+string+="IGNORE 1 LINES;"
+echo $string
+#echo "Importing data to $table"
+sudo mysql -e "truncate $table"
+sudo mysql -e "$string"
+
+infile="$mysqlfiles/title.akas.tsv"; table="\`lane_media\`.\`title_akas\`"
+string="LOAD DATA LOW_PRIORITY INFILE '$infile' "
+string+="REPLACE INTO TABLE $table "
+string+="FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' "
+string+="IGNORE 1 LINES;"
+echo $string
+#echo "Importing data to $table"
+sudo mysql -e "truncate $table"
+sudo mysql -e "$string"
+
+infile="$mysqlfiles/title.basics.tsv"; table="\`lane_media\`.\`title_basics\`"
+string="LOAD DATA LOW_PRIORITY INFILE '$infile' "
+string+="REPLACE INTO TABLE $table "
+string+="FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' "
+string+="IGNORE 1 LINES;"
+echo $string
+#echo "Importing data to $table"
+sudo mysql -e "truncate $table"
+sudo mysql -e "$string"
+
+infile="$mysqlfiles/title.crew.tsv"; table="\`lane_media\`.\`title_crew\`"
+string="LOAD DATA LOW_PRIORITY INFILE '$infile' "
+string+="REPLACE INTO TABLE $table "
+string+="FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' "
+string+="IGNORE 1 LINES;"
+echo $string
+#echo "Importing data to $table"
+sudo mysql -e "truncate $table"
+sudo mysql -e "$string"
+
+infile="$mysqlfiles/title.episode.tsv"; table="\`lane_media\`.\`title_episode\`"
+string="LOAD DATA LOW_PRIORITY INFILE '$infile' "
+string+="REPLACE INTO TABLE $table "
+string+="FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' "
+string+="IGNORE 1 LINES;"
+echo $string
+#echo "Importing data to $table"
+sudo mysql -e "truncate $table"
+sudo mysql -e "$string"
+
+infile="$mysqlfiles/title.principals.tsv"; table="\`lane_media\`.\`title_principals\`"
+string="LOAD DATA LOW_PRIORITY INFILE '$infile' "
+string+="REPLACE INTO TABLE $table "
+string+="FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' "
+string+="IGNORE 1 LINES;"
+echo $string
+#echo "Importing data to $table"
+sudo mysql -e "truncate $table"
+sudo mysql -e "$string"
+
+infile="$mysqlfiles/title.ratings.tsv"; table="\`lane_media\`.\`title_ratings\`"
+string="LOAD DATA LOW_PRIORITY INFILE '$infile' "
+string+="REPLACE INTO TABLE $table "
+string+="FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' "
+string+="IGNORE 1 LINES;"
+echo $string
+#echo "Importing data to $table"
+sudo mysql -e "truncate $table"
+sudo mysql -e "$string"
+
+# Cleanup at end
+rm -fr *
+
+# Log that the script has been run
+event_name="dataset update"
+comment="See IMDb Non-Commercial Datasets at https://developer.imdb.com/non-commercial-datasets/"
+string="INSERT INTO \`storage_containers\`.\`log\` (\`log_id\`, \`event_name\`, `comment\`, \`timestamp\`) "
+string+="VALUES (NULL, \'$event_name\', \'$comment\', CURRENT_TIMESTAMP);"
+mysql -e "$string"
+
+cd
+echo "Done."
+
+# Option to text the administrator when the script ends
+# echo "[$(hostname)] $(basename $0): completed" | mail "$ADMIN_CELL_EMAIL"
+
+if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+
