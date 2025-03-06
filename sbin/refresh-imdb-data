@@ -136,8 +136,8 @@ rm -fr *
 # Log that the script has been run
 event_name="dataset update"
 comment="See IMDb Non-Commercial Datasets at https://developer.imdb.com/non-commercial-datasets/"
-string="INSERT INTO \`storage_containers\`.\`log\` (\`log_id\`, \`event_name\`, `comment\`, \`timestamp\`) "
-string+="VALUES (NULL, \'$event_name\', \'$comment\', CURRENT_TIMESTAMP);"
+string="INSERT INTO \`lane_media\`.\`log\` (\`log_id\`, \`event_name\`, \`comment\`, \`timestamp\`) "
+string+="VALUES (NULL, '$event_name', '$comment', CURRENT_TIMESTAMP);"
 mysql -e "$string"
 
 cd
