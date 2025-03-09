@@ -43,18 +43,18 @@ mysqldump --all-databases --routines --force | gzip > /tmp/$UUID/$HOSTNAME.sql.g
 chmod 600 /tmp/$UUID/$HOSTNAME.sql.gz
 if [ $HOSTNAME = dsm1 ] ; then
     mkdir -p /mnt/5TBC/archives/mysql /mnt/20TBA/archives/mysql
-    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/5TBC/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gz
-    chmod 600 /mnt/5TBC/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gz
+    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/5TBC/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
+    chmod 600 /mnt/5TBC/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/5TBC/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gz
     chmod 600 /mnt/5TBC/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gz
-    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gz
-    chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gz
+    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
+    chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/20TBA/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gz
     chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gz
     fi
 if [ $HOSTNAME = pd1 ] ; then
     mkdir -p /mnt/bob/archives/mysql
-    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/bob/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP.sql.gz
+    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/bob/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/bob/archives/mysql/$HOSTNAME-$START_MONTHSTAMP.sql.gz
     fi
 mv /tmp/$UUID/$HOSTNAME.sql.gz $ADMIN_HOME_DIR/
