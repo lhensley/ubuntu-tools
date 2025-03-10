@@ -38,9 +38,10 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 # SET VARIABLES
 	# Generate Revision Timestamp
-	REV="$(date '+%Y%m%d%H%M%S%Z')"
+	REV=$(date '+%Y%m%d%H%M%S%Z')
 	# RSA variables
 	EASYRSA="$ADMIN_HOME_DIR/easy-rsa"
+	EASYRSA_TIMESTAMP="$EASYRSA-timestamp"
 	EASYRSA_OLD="$EASYRSA-$REV"
 	EASYRSA_REV_FILE="$EASYRSA/rev"
 	EASYRSA_VARS="$EASYRSA/vars"
@@ -65,12 +66,15 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 	sudo ufw allow OpenVPN
 	# Archive existing easy-rsa working directory if it exists
 	if [ -d "$EASYRSA" ]; then
-		"$EASYRSA" "$EASYRSA_REV_FILE"
+		EASYRSA_OLD_TIMESTAMP="$(echo $EASYRSA_REV_FILE)"
+		echo Renaming $EASYRSA to $EASYRSA_OLD
+		mv "$EASYRSA" "$EASYRSA_OLD"
 		fi
 	# Create ~/easy-rsa working directory
 	mkdir "$EASYRSA"
 	# Record Revision Timestamp
 	echo $REV > "$EASYRSA_VARS"
+	echo $REV > "$EASYRSA_TIMESTAMP"
 	# Create symbolic links to the easy-rsa installation
 	ln -s /usr/share/easy-rsa/* "$EASYRSA"
 	# Create symbolic links to the easy-rsa installation

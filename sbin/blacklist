@@ -64,6 +64,7 @@ ufw reject from 185.220.100.0/24 to any # 2024-12-31 - Germany
 ufw reject from 185.220.101.0/24 to any # 2024-09-02 - Germany
 ufw reject from 188.164.196.16 to any # 2024-07-08 - Spain address, blocked by Wordfence, block count 1
 ufw reject from 192.42.116.187 to any # 2024-13-31 - Netherlands
+ufw reject from 193.24.211.4 to any # 2025-03-10 - Germany
 ufw reject from 193.26.115.62 to any # 2025-03-03 - United States
 ufw reject from 193.189.100.204 to any # 2024-07-08 - Sweden address, blocked by Wordfence, block count 1
 ufw reject from 194.38.0.0/16 to any # 2025-02-03 - Ukraine
