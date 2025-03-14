@@ -48,11 +48,11 @@ if [ $HOSTNAME = dsm1 ] ; then
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     chmod 600 /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
-    ln -f /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/5TBC/archives/mysql/dsm1.current.sql.gz
+    ln -f /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/5TBC/archives/mysql/dsm1.sql.gz
     chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
-    ln -f /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/20TBA/archives/mysql/dsm1.current.sql.gz
+    ln -f /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/20TBA/archives/mysql/dsm1.sql.gz
     fi
 if [ $HOSTNAME = pd1 ] ; then
     mkdir -p /mnt/bob/archives/mysql
@@ -60,7 +60,7 @@ if [ $HOSTNAME = pd1 ] ; then
     chmod 600 /mnt/bob/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     chmod 600 /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
-    ln -f /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/bob/archives/mysql/pd1.current.sql.gz
+    ln -f /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/bob/archives/mysql/pd1.sql.gz
     fi
 mv /tmp/$UUID/$HOSTNAME.sql.gz $ADMIN_HOME_DIR/
 chmod 600 $ADMIN_HOME_DIR/$HOSTNAME.sql.gz
