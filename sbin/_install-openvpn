@@ -49,6 +49,8 @@
 	# Retrieve repository updates
 	sudo apt --yes update
 	# Install needed software
+	sudo apt purge --yes openvpn easy-rsa
+	sudo rm -r /etc/openvpn
 	sudo apt install --yes openvpn easy-rsa
 	# Allow clients to reach our server through the firewall
 	sudo ufw allow OpenVPN
