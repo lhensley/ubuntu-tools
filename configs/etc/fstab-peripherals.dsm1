@@ -43,7 +43,7 @@
 # bob (938G)
 # Samsung EVO 960 SSD [INTERNAL]
 # Block Size 4096   PARTLABEL [Unknown]  PARTUUID N/A
-UUID=d8f30f08-2698-411c-a3ea-32b9748e9ba9 /mnt/bob ext4 nofail 0 0
+# UUID=d8f30f08-2698-411c-a3ea-32b9748e9ba9 /mnt/bob ext4 nofail 0 0
 #
 # 2TBA (1.8T)
 # SAMSUNG T7 Portable SSD, 2TB External Solid State Drive
@@ -105,13 +105,13 @@ UUID=55c9b7d7-79b5-4695-88ca-d86b39678fbe /mnt/20TBA ext4 nofail 0 0
 # WD HDD
 # Aging but still works just fine
 # Block Size 512    PARTLABEL Black1TB     PARTUUID a9643da6-01
-UUID=FA5E0ADF5E0A9513 /mnt/Black1TB ntfs nofail 0 0
+# UUID=FA5E0ADF5E0A9513 /mnt/Black1TB ntfs nofail 0 0
 #
 # (Silver1TB) (931.48G)
 # WD HDD
 # Aging but still works just fine
 # Block Size 512    PARTLABEL Silver1TB     PARTUUID dea3ca1a-01
-UUID=82EC1C14EC1C04D7 /mnt/Silver1TB ntfs nofail 0 0
+# UUID=82EC1C14EC1C04D7 /mnt/Silver1TB ntfs nofail 0 0
 #
 # # Silver5TB-A (5TB)
 # # UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs nofail 0 0
