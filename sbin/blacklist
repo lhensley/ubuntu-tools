@@ -51,6 +51,7 @@ ufw reject from 156.38.128.82 to any # 2024-07-08 - South Africa address, blocke
 ufw reject from 156.146.38.167 to any # 2024-09-09 - United States
 ufw reject from 161.97.131.39 to any # 2024-07-31 - Germany address, blocked by Wordfence, block count 13
 ufw reject from 164.132.182.113 to any # 2024-09-09 - France
+ufw reject from 167.86.82.113 to any # 2025-03-18 - Germany
 ufw reject from 167.88.166.120 to any # 2025-02-10 - United States
 ufw reject from 167.99.79.202 to any # 2024-07-08 - Singapore address, blocked by Wordfence, block count 2
 ufw reject from 170.205.30.77 to any # 2024-12-09 - United States
