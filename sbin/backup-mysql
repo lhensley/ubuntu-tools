@@ -65,6 +65,9 @@ if [ $HOSTNAME = dsm1 ] ; then
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     ln -f /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/20TBA/archives/mysql/dsm1.sql.gz
+    sftp pd1 <<< $'put /tmp/$UUID/$HOSTNAME.sql.gz'
+    ssh pd1 mysql < $HOSTNAME.sql.gz
+    ssh pd1 mv $HOSTNAME.sql.gz $HOSTNAME.sql.gz.old
     fi
 if [ $HOSTNAME = pd1 ] ; then
     mkdir -p /mnt/bob/archives/mysql
@@ -75,7 +78,7 @@ if [ $HOSTNAME = pd1 ] ; then
     ln -f /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/bob/archives/mysql/pd1.sql.gz
     fi
 mv /tmp/$UUID/$HOSTNAME.sql.gz $ADMIN_HOME_DIR/
-chmod 600 $ADMIN_HOME_DIR/$HOSTNAME.sql.gz
+# chmod 600 $ADMIN_HOME_DIR/$HOSTNAME.sql.gz
 rm -rf /tmp/$UUID
 
 # Option to text the administrator when the script ends
