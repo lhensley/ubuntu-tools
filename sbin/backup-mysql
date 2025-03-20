@@ -75,11 +75,15 @@ if [ $HOSTNAME = dsm1 ] ; then
 #    echo "Tightening permissions on /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz" > /dev/stderr
 #    chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     ln -f /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/20TBA/archives/mysql/dsm1.sql.gz
-    echo "Copying the dump to pd1" > /dev/stderr
+#    echo "Copying the dump to pd1" > /dev/stderr
     chown $ADMIN_USER /tmp/$UUID/$HOSTNAME.sql.gz
     sudo -u $ADMIN_USER sftp pd1 <<< $"put /tmp/$UUID/$HOSTNAME.sql.gz"
-    echo "Importing the dump on pd1 (This takes a while too!)" > /dev/stderr
-    sudo -u $ADMIN_USER ssh pd1 gunzip -f dsm1.sql.gz | mysql
+    echo "Decompressing the dump on pd1" > /dev/stderr
+    sudo -u $ADMIN_USER ssh pd1 gunzip dsm1.sql.gz
+    echo "Importing the dump into MySQL on pd1" > /dev/stderr
+    sudo -u $ADMIN_USER ssh mysql -e dsm1.sql
+    echo "Cleaning up on pd1" > /dev/stderr
+    sudo -u $ADMIN_USER ssh rm -f dsm1.sql
 #    sudo -u $ADMIN_USER ssh pd1 mv $HOSTNAME.sql.gz dsm1.sql.gz.old
     chown $ROOT_USER /tmp/$UUID/$HOSTNAME.sql.gz
 #    sudo -u $ADMIN_USER ssh pd1 rm dsm1.sql*
@@ -96,7 +100,7 @@ if [ $HOSTNAME = pd1 ] ; then
     fi
 mv /tmp/$UUID/$HOSTNAME.sql.gz $ADMIN_HOME_DIR/
 # chmod 600 $ADMIN_HOME_DIR/$HOSTNAME.sql.gz
-echo "Cleaning up" > /dev/stderr
+# echo "Cleaning up" > /dev/stderr
 rm -rf /tmp/$UUID
 echo "Done!" > /dev/stderr
 
