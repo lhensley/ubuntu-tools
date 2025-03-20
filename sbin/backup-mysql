@@ -39,7 +39,19 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 # mysqldump --all-databases --routines --force > ~/$HOSTNAME.sql
 # mysqldump --all-databases --routines --force | gzip > ~/$HOSTNAME.sql.gz
 mkdir /tmp/$UUID
-mysqldump --all-databases --routines --force | gzip > /tmp/$UUID/$HOSTNAME.sql.gz
+# mysqldump --all-databases --routines --force | gzip > /tmp/$UUID/$HOSTNAME.sql.gz
+mysqldump --databases \
+    $(for d in $(mysql -Bse 'show databases') ;
+        do if [ "$d" != "information_schema" ] \
+        && [ "$d" != "mysql" ] \
+        && [ "$d" != "performance_schema" ] \
+        && [ "$d" != "phpmyadmin" ] \
+        && [ "$d" != "sys" ]; \
+        then printf "%s " "$d"; fi; done) \
+        --triggers --events --routines \
+#        Experimenting with dropping --force (causes mysqldump to continue after errors.)
+#        --force \
+        | gzip > /tmp/$UUID/$HOSTNAME.sql.gz
 chmod 600 /tmp/$UUID/$HOSTNAME.sql.gz
 if [ $HOSTNAME = dsm1 ] ; then
     mkdir -p /mnt/5TBC/archives/mysql /mnt/20TBA/archives/mysql
