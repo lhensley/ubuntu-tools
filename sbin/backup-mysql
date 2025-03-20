@@ -78,7 +78,7 @@ if [ $HOSTNAME = dsm1 ] ; then
     echo "Copying the dump to pd1"
     sftp pd1 <<< $'put /tmp/$UUID/$HOSTNAME.sql.gz'
     echo "Importing the dump on pd1"
-    sudo -u $ADMIN_USER ssh pd1 mysql -e $HOSTNAME.sql.gz
+    sudo -u $ADMIN_USER ssh pd1 gunzip $HOSTNAME.sql.gz | mysql
     sudo -u $ADMIN_USER ssh pd1 mv $HOSTNAME.sql.gz $HOSTNAME.sql.gz.old
     fi
 if [ $HOSTNAME = pd1 ] ; then
