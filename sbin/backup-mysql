@@ -79,7 +79,7 @@ if [ $HOSTNAME = dsm1 ] ; then
     chown $ADMIN_USER /tmp/$UUID/$HOSTNAME.sql.gz
     sudo -u $ADMIN_USER sftp pd1 <<< $"put /tmp/$UUID/$HOSTNAME.sql.gz"
     echo "Importing the dump on pd1 (This takes a while too!)" > /dev/stderr
-    sudo -u $ADMIN_USER ssh pd1 gunzip $HOSTNAME.sql.gz | mysql
+    sudo -u $ADMIN_USER ssh pd1 yes yes | gunzip $HOSTNAME.sql.gz | mysql
     sudo -u $ADMIN_USER ssh pd1 mv $HOSTNAME.sql.gz $HOSTNAME.sql.gz.old
     chown $ROOT_USER /tmp/$UUID/$HOSTNAME.sql.gz
 #    sudo -u $ADMIN_USER ssh pd1 rm $HOSTNAME.sql*
