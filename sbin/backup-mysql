@@ -76,10 +76,13 @@ if [ $HOSTNAME = dsm1 ] ; then
 #    chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     ln -f /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/20TBA/archives/mysql/dsm1.sql.gz
     echo "Copying the dump to pd1"
-    sudo -u $ADMIN_USER sftp pd1 <<< $'put /tmp/$UUID/$HOSTNAME.sql.gz'
-    echo "Importing the dump on pd1"
+    chown $ADMIN_USER /tmp/$UUID/$HOSTNAME.sql.gz
+    sudo -u $ADMIN_USER sftp pd1 <<< $"put /tmp/$UUID/$HOSTNAME.sql.gz"
+    chown $ROOT_USER /tmp/$UUID/$HOSTNAME.sql.gz
+    echo "Importing the dump on pd1 (This takes a while too!)"
     sudo -u $ADMIN_USER ssh pd1 gunzip $HOSTNAME.sql.gz | mysql
     sudo -u $ADMIN_USER ssh pd1 mv $HOSTNAME.sql.gz $HOSTNAME.sql.gz.old
+#    sudo -u $ADMIN_USER ssh pd1 rm $HOSTNAME.sql*
     fi
 if [ $HOSTNAME = pd1 ] ; then
     mkdir -p /mnt/bob/archives/mysql
