@@ -58,34 +58,34 @@ echo "Tightening permissions on /tmp/$UUID/$HOSTNAME.sql.gz"
 chmod 600 /tmp/$UUID/$HOSTNAME.sql.gz
 if [ $HOSTNAME = dsm1 ] ; then
     mkdir -p /mnt/5TBC/archives/mysql /mnt/20TBA/archives/mysql
-    echo Copying the dump to /mnt/5TBC/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
-    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/5TBC/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
-#    chmod 600 /mnt/5TBC/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
+    echo Copying the dump to /mnt/5TBC/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
+    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/5TBC/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
+#    chmod 600 /mnt/5TBC/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
     echo Copying the dump to /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
 #    echo "Tightening permissions on /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz"
 #    chmod 600 /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
-    echo Copying the dump to /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
-    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
+    echo Copying the dump to /mnt/20TBA/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
+    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/20TBA/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
     ln -f /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/5TBC/archives/mysql/dsm1.sql.gz
-#    echo "Tightening permissions on /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz"
-#    chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
+#    echo "Tightening permissions on /mnt/20TBA/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz"
+#    chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
     echo Copying the dump to /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
 #    echo "Tightening permissions on /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz"
 #    chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     ln -f /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/20TBA/archives/mysql/dsm1.sql.gz
     echo "Copying the dump to pd1"
-    sftp pd1 <<< $'put /tmp/$UUID/$HOSTNAME.sql.gz'
+    sudo -u $ADMIN_USER sftp pd1 <<< $'put /tmp/$UUID/$HOSTNAME.sql.gz'
     echo "Importing the dump on pd1"
     sudo -u $ADMIN_USER ssh pd1 gunzip $HOSTNAME.sql.gz | mysql
     sudo -u $ADMIN_USER ssh pd1 mv $HOSTNAME.sql.gz $HOSTNAME.sql.gz.old
     fi
 if [ $HOSTNAME = pd1 ] ; then
     mkdir -p /mnt/bob/archives/mysql
-    echo "Copying the dump to /mnt/bob/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz"
-    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/bob/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
-#    chmod 600 /mnt/bob/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
+    echo "Copying the dump to /mnt/bob/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz"
+    cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/bob/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
+#    chmod 600 /mnt/bob/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
     echo "Copying the dump to /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz"
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
 #    chmod 600 /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
