@@ -79,11 +79,12 @@ if [ $HOSTNAME = dsm1 ] ; then
     chown $ADMIN_USER /tmp/$UUID/$HOSTNAME.sql.gz
     sudo -u $ADMIN_USER sftp pd1 <<< $"put /tmp/$UUID/$HOSTNAME.sql.gz"
     echo "Decompressing the dump on pd1" > /dev/stderr
+    sudo -u $ADMIN_USER ssh pd1 rm -f dsm1.sql
     sudo -u $ADMIN_USER ssh pd1 gunzip dsm1.sql.gz
     echo "Importing the dump into MySQL on pd1" > /dev/stderr
     sudo -u $ADMIN_USER ssh mysql -e dsm1.sql
     echo "Cleaning up on pd1" > /dev/stderr
-    sudo -u $ADMIN_USER ssh rm -f dsm1.sql
+    sudo -u $ADMIN_USER ssh pd1 rm -f dsm1.sql
 #    sudo -u $ADMIN_USER ssh pd1 mv $HOSTNAME.sql.gz dsm1.sql.gz.old
     chown $ROOT_USER /tmp/$UUID/$HOSTNAME.sql.gz
 #    sudo -u $ADMIN_USER ssh pd1 rm dsm1.sql*
