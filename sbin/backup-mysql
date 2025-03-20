@@ -38,8 +38,10 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 # mysqldump --all-databases --routines --force > ~/$HOSTNAME.sql
 # mysqldump --all-databases --routines --force | gzip > ~/$HOSTNAME.sql.gz
+echo Making temporary directory /tmp/$UUID
 mkdir /tmp/$UUID
 # mysqldump --all-databases --routines --force | gzip > /tmp/$UUID/$HOSTNAME.sql.gz
+echo "Dumping all user databases. (This takes a while.)"
 mysqldump --databases \
     $(for d in $(mysql -Bse 'show databases') ;
         do if [ "$d" != "information_schema" ] \
@@ -52,34 +54,48 @@ mysqldump --databases \
         | gzip > /tmp/$UUID/$HOSTNAME.sql.gz
 #        Experimenting with dropping --force (causes mysqldump to continue after errors.)
 #        --force \
+echo "Tightening permissions on /tmp/$UUID/$HOSTNAME.sql.gz"
 chmod 600 /tmp/$UUID/$HOSTNAME.sql.gz
 if [ $HOSTNAME = dsm1 ] ; then
     mkdir -p /mnt/5TBC/archives/mysql /mnt/20TBA/archives/mysql
+    echo Copying the dump to /mnt/5TBC/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/5TBC/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
-    chmod 600 /mnt/5TBC/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
+#    chmod 600 /mnt/5TBC/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
+    echo Copying the dump to /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
-    chmod 600 /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
+#    echo "Tightening permissions on /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz"
+#    chmod 600 /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
+    echo Copying the dump to /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
     ln -f /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/5TBC/archives/mysql/dsm1.sql.gz
-    chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
+#    echo "Tightening permissions on /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz"
+#    chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
+    echo Copying the dump to /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
-    chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
+#    echo "Tightening permissions on /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz"
+#    chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     ln -f /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/20TBA/archives/mysql/dsm1.sql.gz
+    echo "Copying the dump to pd1"
     sftp pd1 <<< $'put /tmp/$UUID/$HOSTNAME.sql.gz'
+    echo "Importing the dump on pd1"
     sudo -u $ADMIN_USER ssh pd1 mysql -e $HOSTNAME.sql.gz
     sudo -u $ADMIN_USER ssh pd1 mv $HOSTNAME.sql.gz $HOSTNAME.sql.gz.old
     fi
 if [ $HOSTNAME = pd1 ] ; then
     mkdir -p /mnt/bob/archives/mysql
+    echo "Copying the dump to /mnt/bob/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz"
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/bob/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
-    chmod 600 /mnt/bob/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
+#    chmod 600 /mnt/bob/archives/mysql/$HOSTNAME-$START_WEEKDAYSTAMP3.sql.gz
+    echo "Copying the dump to /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz"
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
-    chmod 600 /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
+#    chmod 600 /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     ln -f /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/bob/archives/mysql/pd1.sql.gz
     fi
 mv /tmp/$UUID/$HOSTNAME.sql.gz $ADMIN_HOME_DIR/
 # chmod 600 $ADMIN_HOME_DIR/$HOSTNAME.sql.gz
+echo "Cleaning up"
 rm -rf /tmp/$UUID
+echo "Done!"
 
 # Option to text the administrator when the script ends
 # echo "[$(hostname)] $(basename $0): completed" | mail "$ADMIN_CELL_EMAIL"
