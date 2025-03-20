@@ -49,9 +49,9 @@ mysqldump --databases \
         && [ "$d" != "sys" ]; \
         then printf "%s " "$d"; fi; done) \
         --triggers --events --routines \
+        | gzip > /tmp/$UUID/$HOSTNAME.sql.gz
 #        Experimenting with dropping --force (causes mysqldump to continue after errors.)
 #        --force \
-        | gzip > /tmp/$UUID/$HOSTNAME.sql.gz
 chmod 600 /tmp/$UUID/$HOSTNAME.sql.gz
 if [ $HOSTNAME = dsm1 ] ; then
     mkdir -p /mnt/5TBC/archives/mysql /mnt/20TBA/archives/mysql
