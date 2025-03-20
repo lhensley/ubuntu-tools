@@ -66,8 +66,8 @@ if [ $HOSTNAME = dsm1 ] ; then
     chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     ln -f /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/20TBA/archives/mysql/dsm1.sql.gz
     sftp pd1 <<< $'put /tmp/$UUID/$HOSTNAME.sql.gz'
-    ssh pd1 mysql < $HOSTNAME.sql.gz
-    ssh pd1 mv $HOSTNAME.sql.gz $HOSTNAME.sql.gz.old
+    sudo -u $ADMIN_USER ssh pd1 mysql -e $HOSTNAME.sql.gz
+    sudo -u $ADMIN_USER ssh pd1 mv $HOSTNAME.sql.gz $HOSTNAME.sql.gz.old
     fi
 if [ $HOSTNAME = pd1 ] ; then
     mkdir -p /mnt/bob/archives/mysql
