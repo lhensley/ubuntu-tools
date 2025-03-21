@@ -38,7 +38,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 # mysqldump --all-databases --routines --force > ~/$HOSTNAME.sql
 # mysqldump --all-databases --routines --force | gzip > ~/$HOSTNAME.sql.gz
-echo Making temporary directory /tmp/$UUID > /dev/stderr
+# echo Making temporary directory /tmp/$UUID > /dev/stderr
 mkdir /tmp/$UUID
 # mysqldump --all-databases --routines --force | gzip > /tmp/$UUID/$HOSTNAME.sql.gz
 echo "Dumping all user databases. (This takes a while.)" > /dev/stderr
@@ -54,7 +54,7 @@ mysqldump --databases \
         | gzip > /tmp/$UUID/$HOSTNAME.sql.gz
 #        Experimenting with dropping --force (causes mysqldump to continue after errors.)
 #        --force \
-echo "Tightening permissions on /tmp/$UUID/$HOSTNAME.sql.gz" > /dev/stderr
+# echo "Tightening permissions on /tmp/$UUID/$HOSTNAME.sql.gz" > /dev/stderr
 chmod 600 /tmp/$UUID/$HOSTNAME.sql.gz
 if [ $HOSTNAME = dsm1 ] ; then
     mkdir -p /mnt/5TBC/archives/mysql /mnt/20TBA/archives/mysql
@@ -81,7 +81,7 @@ if [ $HOSTNAME = dsm1 ] ; then
     echo "Decompressing the dump on pd1" > /dev/stderr
     sudo -u $ADMIN_USER ssh pd1 rm -f dsm1.sql
     sudo -u $ADMIN_USER ssh pd1 gunzip dsm1.sql.gz
-    echo "Importing the dump into MySQL on pd1" > /dev/stderr
+    echo "Importing the dump into MySQL on pd1.  (This REALLY takes a while.)" > /dev/stderr
     sudo -u $ADMIN_USER ssh pd1 mysql < dsm1.sql
     echo "Cleaning up on pd1" > /dev/stderr
     sudo -u $ADMIN_USER ssh pd1 rm -f dsm1.sql
