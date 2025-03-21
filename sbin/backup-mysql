@@ -38,10 +38,10 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 # mysqldump --all-databases --routines --force > ~/$HOSTNAME.sql
 # mysqldump --all-databases --routines --force | gzip > ~/$HOSTNAME.sql.gz
-# echo Making temporary directory /tmp/$UUID > /dev/stderr
+# echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Making temporary directory /tmp/$UUID > /dev/stderr
 mkdir /tmp/$UUID
 # mysqldump --all-databases --routines --force | gzip > /tmp/$UUID/$HOSTNAME.sql.gz
-echo "Dumping all user databases. (This takes a while.)" > /dev/stderr
+echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Dumping all user databases. (This takes a while.)" > /dev/stderr
 mysqldump --databases \
     $(for d in $(mysql -Bse 'show databases') ;
         do if [ "$d" != "information_schema" ] \
@@ -54,36 +54,36 @@ mysqldump --databases \
         | gzip > /tmp/$UUID/$HOSTNAME.sql.gz
 #        Experimenting with dropping --force (causes mysqldump to continue after errors.)
 #        --force \
-# echo "Tightening permissions on /tmp/$UUID/$HOSTNAME.sql.gz" > /dev/stderr
+# echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Tightening permissions on /tmp/$UUID/$HOSTNAME.sql.gz" > /dev/stderr
 chmod 600 /tmp/$UUID/$HOSTNAME.sql.gz
 if [ $HOSTNAME = dsm1 ] ; then
     mkdir -p /mnt/5TBC/archives/mysql /mnt/20TBA/archives/mysql
-    echo Copying the dump to /mnt/5TBC/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz  > /dev/stderr
+    echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/5TBC/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz  > /dev/stderr
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/5TBC/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
 #    chmod 600 /mnt/5TBC/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
-    echo Copying the dump to /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz > /dev/stderr
+    echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz > /dev/stderr
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
-#    echo "Tightening permissions on /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz" > /dev/stderr
+#    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Tightening permissions on /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz" > /dev/stderr
 #    chmod 600 /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
-    echo Copying the dump to /mnt/20TBA/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz > /dev/stderr
+    echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/20TBA/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz > /dev/stderr
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/20TBA/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
     ln -f /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/5TBC/archives/mysql/dsm1.sql.gz
-#    echo "Tightening permissions on /mnt/20TBA/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz" > /dev/stderr
+#    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Tightening permissions on /mnt/20TBA/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz" > /dev/stderr
 #    chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
-    echo Copying the dump to /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz > /dev/stderr
+    echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz > /dev/stderr
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
-#    echo "Tightening permissions on /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz" > /dev/stderr
+#    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Tightening permissions on /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz" > /dev/stderr
 #    chmod 600 /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     ln -f /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/20TBA/archives/mysql/dsm1.sql.gz
-    echo "Copying the dump to pd1" > /dev/stderr
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to pd1" > /dev/stderr
     chown $ADMIN_USER /tmp/$UUID/$HOSTNAME.sql.gz
     sudo -u $ADMIN_USER sftp pd1 <<< $"put /tmp/$UUID/$HOSTNAME.sql.gz" > /dev/null 2> /dev/null
-    echo "Decompressing the dump on pd1" > /dev/stderr
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Decompressing the dump on pd1" > /dev/stderr
     sudo -u $ADMIN_USER ssh pd1 rm -f dsm1.sql
     sudo -u $ADMIN_USER ssh pd1 gunzip dsm1.sql.gz
-    echo "Importing the dump into MySQL on pd1.  (This REALLY takes a while.)" > /dev/stderr
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Importing the dump into MySQL on pd1.  (This REALLY takes a while.)" > /dev/stderr
     sudo -u $ADMIN_USER ssh pd1 mysql < dsm1.sql
-    echo "Cleaning up on pd1" > /dev/stderr
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Cleaning up on pd1" > /dev/stderr
     sudo -u $ADMIN_USER ssh pd1 rm -f dsm1.sql
 #    sudo -u $ADMIN_USER ssh pd1 mv $HOSTNAME.sql.gz dsm1.sql.gz.old
     chown $ROOT_USER /tmp/$UUID/$HOSTNAME.sql.gz
@@ -91,19 +91,19 @@ if [ $HOSTNAME = dsm1 ] ; then
     fi
 if [ $HOSTNAME = pd1 ] ; then
     mkdir -p /mnt/bob/archives/mysql
-    echo "Copying the dump to /mnt/bob/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz" > /dev/stderr
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/bob/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz" > /dev/stderr
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/bob/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
 #    chmod 600 /mnt/bob/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
-    echo "Copying the dump to /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz" > /dev/stderr
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz" > /dev/stderr
     cp /tmp/$UUID/$HOSTNAME.sql.gz /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
 #    chmod 600 /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
     ln -f /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/bob/archives/mysql/pd1.sql.gz
     fi
 mv /tmp/$UUID/$HOSTNAME.sql.gz $ADMIN_HOME_DIR/
 # chmod 600 $ADMIN_HOME_DIR/$HOSTNAME.sql.gz
-# echo "Cleaning up" > /dev/stderr
+# echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Cleaning up" > /dev/stderr
 rm -rf /tmp/$UUID
-echo "Done!" > /dev/stderr
+echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Done!" > /dev/stderr
 
 # Option to text the administrator when the script ends
 # echo "[$(hostname)] $(basename $0): completed" | mail "$ADMIN_CELL_EMAIL" > /dev/stderr
