@@ -62,17 +62,7 @@ gzip -d *.gz
 
 infile="$mysqlfiles/name.basics.tsv"; table="\`lane_media\`.\`name_basics\`"
 string="LOAD DATA LOW_PRIORITY INFILE '$infile' "
-string+="REPLACE INTO TABLE $table "
-string+="FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' "
-string+="IGNORE 1 LINES;"
-echo $string
-#echo "Importing data to $table"
-sudo mysql -e "truncate $table"
-sudo mysql -e "$string"
-
-infile="$mysqlfiles/title.akas.tsv"; table="\`lane_media\`.\`title_akas\`"
-string="LOAD DATA LOW_PRIORITY INFILE '$infile' "
-string+="REPLACE INTO TABLE $table "
+string+="IGNORE INTO TABLE $table "
 string+="FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' "
 string+="IGNORE 1 LINES;"
 echo $string
@@ -82,7 +72,17 @@ sudo mysql -e "$string"
 
 infile="$mysqlfiles/title.basics.tsv"; table="\`lane_media\`.\`title_basics\`"
 string="LOAD DATA LOW_PRIORITY INFILE '$infile' "
-string+="REPLACE INTO TABLE $table "
+string+="IGNORE INTO TABLE $table "
+string+="FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' "
+string+="IGNORE 1 LINES;"
+echo $string
+#echo "Importing data to $table"
+sudo mysql -e "truncate $table"
+sudo mysql -e "$string"
+
+infile="$mysqlfiles/title.akas.tsv"; table="\`lane_media\`.\`title_akas\`"
+string="LOAD DATA LOW_PRIORITY INFILE '$infile' "
+string+="IGNORE INTO TABLE $table "
 string+="FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' "
 string+="IGNORE 1 LINES;"
 echo $string
@@ -92,7 +92,7 @@ sudo mysql -e "$string"
 
 infile="$mysqlfiles/title.crew.tsv"; table="\`lane_media\`.\`title_crew\`"
 string="LOAD DATA LOW_PRIORITY INFILE '$infile' "
-string+="REPLACE INTO TABLE $table "
+string+="IGNORE INTO TABLE $table "
 string+="FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' "
 string+="IGNORE 1 LINES;"
 echo $string
@@ -102,7 +102,7 @@ sudo mysql -e "$string"
 
 infile="$mysqlfiles/title.episode.tsv"; table="\`lane_media\`.\`title_episode\`"
 string="LOAD DATA LOW_PRIORITY INFILE '$infile' "
-string+="REPLACE INTO TABLE $table "
+string+="IGNORE INTO TABLE $table "
 string+="FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' "
 string+="IGNORE 1 LINES;"
 echo $string
@@ -112,7 +112,7 @@ sudo mysql -e "$string"
 
 infile="$mysqlfiles/title.principals.tsv"; table="\`lane_media\`.\`title_principals\`"
 string="LOAD DATA LOW_PRIORITY INFILE '$infile' "
-string+="REPLACE INTO TABLE $table "
+string+="IGNORE INTO TABLE $table "
 string+="FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' "
 string+="IGNORE 1 LINES;"
 echo $string
@@ -122,7 +122,7 @@ sudo mysql -e "$string"
 
 infile="$mysqlfiles/title.ratings.tsv"; table="\`lane_media\`.\`title_ratings\`"
 string="LOAD DATA LOW_PRIORITY INFILE '$infile' "
-string+="REPLACE INTO TABLE $table "
+string+="IGNORE INTO TABLE $table "
 string+="FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' "
 string+="IGNORE 1 LINES;"
 echo $string
