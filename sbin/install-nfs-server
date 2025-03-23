@@ -1,0 +1,18 @@
+#!/bin/bash
+
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Do stuff here
+if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Based on https://documentation.ubuntu.com/server/how-to/networking/install-nfs/index.html
+sudo apt install nfs-kernel-server
+sudo systemctl enable nfs-kernel-server.service
+sudo systemctl start nfs-kernel-server.service
+# Port TCP/2049 is the only one that needs to be opened in NFSv4
+# https://serverfault.com/questions/954661/what-services-and-ports-are-required-for-nfsv4
+echo Manage the configuration through Webmin in Networking / NFS Exports.
+
+if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+exit 0

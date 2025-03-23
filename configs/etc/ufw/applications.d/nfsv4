@@ -1,0 +1,4 @@
+[NFSv4]
+title="NFSv4"
+description="Network File System v4"
+ports=2049/tcp
