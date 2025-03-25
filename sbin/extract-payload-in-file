@@ -110,7 +110,7 @@ function f_print_usage {
 
 if $ROOT_REQUIRED && [[ $EUID -ne 0 ]]; then
      f_print_usage "Root privileges required."
-     exit EXIT_CODE_ROOT_REQUIRED
+     exit $EXIT_CODE_ROOT_REQUIRED
      fi
 
 
@@ -185,7 +185,7 @@ while : ; do
            ;;
       *) # Invalid option.
           f_print_usage "Invalid option."
-          exit EXIT_CODE_INVALID_OPTIONS
+          exit $EXIT_CODE_INVALID_OPTIONS
            ;;
   esac
 done

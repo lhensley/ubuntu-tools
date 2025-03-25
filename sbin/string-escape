@@ -178,7 +178,7 @@ while : ; do
            ;;
       *) # Invalid option.
           f_print_usage "Invalid option."
-          exit EXIT_CODE_INVALID_OPTIONS
+          exit $EXIT_CODE_INVALID_OPTIONS
            ;;
   esac
 done
