@@ -39,10 +39,6 @@
      VERSION_NUMBER="0.1"
      ROOT_REQUIRED=false
      OPTIONS=(
-          "-i --input                                      Use standard input for input (default)"
-          "-f<source-file-name> --file=<source-file-name>  Use specified file contents for input"
-          "-s<source-string> --string=<source-string>      Use specified string for input"
-          "     IMPORTANT: The three lines above are mutually exclusive. Default is -i or --input."
           "-q --quiet    Minimal output"
           "-V --verbose  Verbose output"
           "-v --version  Display version number, then exit (no other options processed)"

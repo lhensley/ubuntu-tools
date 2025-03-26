@@ -39,23 +39,14 @@
      VERSION_NUMBER="0.1"
      ROOT_REQUIRED=true
      OPTIONS=(
-          "-i --input                                      Use standard input for input (default)"
-          "-f<source-file-name> --file=<source-file-name>  Use specified file contents for input"
-          "-s<source-string> --string=<source-string>      Use specified string for input"
-          "     IMPORTANT: The three lines above are mutually exclusive. Default is -i or --input."
+          "-i --install  "
           "-q --quiet    Minimal output"
           "-V --verbose  Verbose output"
           "-v --version  Display version number, then exit (no other options processed)"
           "-h --help     Display usage and help information, then exit (no other options processed)"
           )
      EXAMPLE_USAGE=(
-          "Example usages: cat <filename> | $PROGRAM_NAME"
-          "                echo \$string | $PROGRAM_NAME"
-          "                $PROGRAM_NAME <input-string>"
-          "                $PROGRAM_NAME "-s\<input-string\>""
-          "                $PROGRAM_NAME "-string=\<input-string\>""
-          "                $PROGRAM_NAME -f\<source-file-name\>"
-          "                $PROGRAM_NAME -file=\<source-file-name\>"
+          "Example usage: $PROGRAM_NAME arg1 arg2 arg3"
           )
      SHORT_GETOPT="hv"; LONG_GETOPT="help,version"
      # Including quiet & verbose: SHORT_GETOPT="hqVv"; LONG_GETOPT="help,quiet,verbose,version"
@@ -147,6 +138,13 @@ PARSED_ARGUMENTS=$(getopt --name $PROGRAM_NAME --options $SHORT_GETOPT \
      --long $LONG_GETOPT -- "$@")
 eval set -- "$PARSED_ARGUMENTS"
 
+count_install=0
+index_install=(( $count_install - 1 ))
+count_remove=0
+index_remove=(( $count_remove - 1 ))
+count_purge=0
+index_purge=(( $count_purge - 1 ))
+
 while : ; do
     case "$1" in
 #       -f | --file )
@@ -165,7 +163,17 @@ while : ; do
        -h | --help )  # Help, if you're so stupid that you don't get that :)
            f_print_usage
            exit $EXIT_CODE_SUCCESS
-           ;;   
+           ;;
+      -i | --install ) # Install
+          count_install++
+          index_install++
+          ;;
+     -p | --purge ) # Purge
+          count_purge++
+          index_purge++
+     -r | -u | --remove | --uninstall ) # Purge
+          count_remove++
+          index_remove++
       -v | --version)  # Version number
            echo $PROGRAM_NAME: version $VERSION_NUMBER >&2
            exit $EXIT_CODE_SUCCESS
