@@ -325,6 +325,12 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/openvpn/easy-rsa/openssl-easyrsa.cnf.$HOSTNAME" "/etc/openvpn/easy-rsa/pki/openssl-easyrsa.cnf"
 		fi
 
+# Update /etc/phpmyadmin
+	if $(f_is_installed "phpmyadmin"); then
+		echo "Updating /etc/phpmyadmin/config.inc.php from $GIT_UBUNTU_TOOLS_CONFIGS/etc/phpmyadmin/config.inc.php.$HOSTNAME"
+		cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/phpmyadmin/config.inc.php.$HOSTNAME" "/etc/phpmyadmin/config.inc.php"
+		fi
+
 # Update /etc/ssl/*.cnf
 		echo "Updating /etc/ssl from $GIT_UBUNTU_TOOLS_CONFIGS/etc/ssl"
 		cp "$GIT_UBUNTU_TOOLS_CONFIGS"/etc/ssl/*.cnf "/etc/ssl/"

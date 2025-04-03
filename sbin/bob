@@ -225,3 +225,24 @@ echo "I don't do anything yet." >&2
 # Wrap up.
 
 exit 0
+
+
+###################################################
+# Sandbox
+
+###################################################
+# Installing phpmyadmin
+# Assumes you're sudo
+
+
+
+###################################################
+# Purging phpmyadmin
+# Assumes you're sudo
+
+debconf-set-selections <<< "phpmyadmin phpmyadmin/dbconfig-uninstall boolean true"
+apt-get purge --yes phpmyadmin
+rm -rf /usr/share/phpmyadmin /etc/phpmyadmin
+systemctl restart apache2
+
+

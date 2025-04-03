@@ -246,6 +246,12 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 			chmod -f 600 "/etc/openvpn/easy-rsa/pki/openssl-easyrsa.cnf"
 			fi
 
+	# /etc/phpmyadmin
+		if $(f_is_installed "phpmyadmin"); then
+			echo "Updating permissions for /etc/phpmyadmin/config.inc.php"
+			chmod -f 644 "/etc/phpmyadmin/config.inc.php"
+			fi
+
 	# /etc/resolvconf
 		if $(f_is_installed "resolvconf"); then
 			echo Updating permissions for /etc/resolvconf/resolv.conf.d/head

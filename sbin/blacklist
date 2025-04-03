@@ -11,6 +11,7 @@
 # To see what Wordpress has blocked over the last 30 days,
 # visit https://lanehensley.org/wp-admin/admin.php?page=WordfenceWAF
 
+ufw reject from 3.79.116.10 to any # 2025-04-02 - Germany
 ufw reject from 4.213.7.108 to any # 2024-1-06 - India
 ufw reject from 5.161.136.10 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
 ufw reject from 15.188.232.0/24 to any # 2025-02-10 - France
