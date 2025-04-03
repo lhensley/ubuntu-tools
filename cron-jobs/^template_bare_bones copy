@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Purpose: Copy current certificates & keys for pd1 from dsm1
+# Reason: Port 80 is forwarded to dsm1, so pd1 can't get certificates directly via certbot
+# What it does: Copy dsm1:/etc/letsencrypt/live/pd1.lanehensley.org to pd1:/etc/letsencrypt/dsm1/
+#               Applies proper security
+#               Cleans up
+# When to run it: Daily in the very morning
+# Who runs it: $ADMIN_USER (lhensley) @ dsm1
+# Where it lives: dsm1:/home/lhensley/git/ubuntu-tools/cron-jobs
+
+sudo rm -rf /tmp/pd1.lanehensley.org
+sudo cp -Lr /etc/letsencrypt/live/pd1.lanehensley.org /tmp
+sudo chmod -R 700 /tmp/pd1.lanehensley.org
+sudo chown -R lhensley:lhensley /tmp/pd1.lanehensley.org
+ssh pd1 sudo rm -rf /tmp/pd1.lanehensley.org
+rsync -aqvE --delete /tmp/pd1.lanehensley.org/* pd1:/tmp/pd1.lanehensley.org
+rm -rf /tmp/pd1.lanehensley.org
+ssh pd1 sudo chown -R root:root /tmp/pd1.lanehensley.org
+ssh pd1 sudo rm -r /etc/letsencrypt/dsm1
+ssh pd1 sudo mkdir -p /etc/letsencrypt/dsm1
+ssh pd1 sudo rm -rf /etc/letsencrypt/dsm1/pd1.lanehensley.org
+ssh pd1 sudo mv /tmp/pd1.lanehensley.org /etc/letsencrypt/dsm1/
+ssh pd1 sudo chmod 755 /etc/letsencrypt
+ssh pd1 sudo chmod 700 /etc/letsencrypt/dsm1
+ssh pd1 sudo chmod 755 /etc/letsencrypt/dsm1/pd1.lanehensley.org
+ssh pd1 sudo chmod 644 /etc/letsencrypt/dsm1/pd1.lanehensley.org/cert.pem
+ssh pd1 sudo chmod 644 /etc/letsencrypt/dsm1/pd1.lanehensley.org/chain.pem
+ssh pd1 sudo chmod 644 /etc/letsencrypt/dsm1/pd1.lanehensley.org/fullchain.pem
+ssh pd1 sudo chmod 644 /etc/letsencrypt/dsm1/pd1.lanehensley.org/README
+ssh pd1 sudo chmod 600 /etc/letsencrypt/dsm1/pd1.lanehensley.org/privkey.pem
+
+exit 0
