@@ -33,6 +33,11 @@ $cfg['Servers'][$i]['user'] = 'lhensley';
 $cfg['Servers'][$i]['verbose'] = 'dsm1';
 $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
+$cfg['Servers'][$i]['ssl'] = true;
+$cfg['Servers'][$i]['ssl_verify'] = true;
+$cfg['Servers'][$i]['ssl_key'] = '/etc/mysql/ssl-clients/dsm1/client-key.pem';
+$cfg['Servers'][$i]['ssl_cert'] = '/etc/mysql/ssl-clients/dsm1/client-cert.pem';
+$cfg['Servers'][$i]['ssl_ca'] = '/etc/mysql/ssl-clients/dsm1/ca.pem';
 
 /**
  * phpMyAdmin configuration storage settings.
@@ -79,6 +84,11 @@ $cfg['Servers'][$i]['user'] = 'lhensley';
 $cfg['Servers'][$i]['verbose'] = 'pd1';
 $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
+$cfg['Servers'][$i]['ssl'] = true;
+$cfg['Servers'][$i]['ssl_verify'] = true;
+$cfg['Servers'][$i]['ssl_key'] = '/etc/mysql/ssl-clients/pd1/client-key.pem';
+$cfg['Servers'][$i]['ssl_cert'] = '/etc/mysql/ssl-clients/pd1/client-cert.pem';
+$cfg['Servers'][$i]['ssl_ca'] = '/etc/mysql/ssl-clients/pd1/ca.pem';
 
 /**
  * phpMyAdmin configuration storage settings.
@@ -202,6 +212,8 @@ $cfg['SaveDir'] = '';
  */
 //$cfg['URLQueryEncryption'] = true;
 //$cfg['URLQueryEncryptionSecretKey'] = '';
+
+$cfg['ForceSSL'] = true;
 
 /**
  * You can find more configuration options in the documentation
