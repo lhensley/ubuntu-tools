@@ -5,9 +5,9 @@
 # What it does: Copy dsm1:/etc/letsencrypt/live/pd1.lanehensley.org to pd1:/etc/letsencrypt/dsm1/
 #               Applies proper security
 #               Cleans up
-# When to run it: Daily in the very morning
+# When to run it: Daily in the very morning (2:47 a.m.)
 # Who runs it: $ADMIN_USER (lhensley) @ dsm1
-# Where it lives: dsm1:/home/lhensley/git/ubuntu-tools/sbin/cron-jobs/certs-to-pd1
+# Where it lives: dsm1:/usr/local/sbin/cron-jobs/certs-to-pd1
 
 sudo rm -rf /tmp/pd1.lanehensley.org
 sudo cp -Lr /etc/letsencrypt/live/pd1.lanehensley.org /tmp
