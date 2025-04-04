@@ -27,14 +27,14 @@ $i++;
 /* Authentication type */
 $cfg['Servers'][$i]['auth_type'] = 'cookie';
 /* Server parameters */
-$cfg['Servers'][$i]['host'] = 'dsm1.local';
+$cfg['Servers'][$i]['host'] = 'localhost';
 $cfg['Servers'][$i]['port'] = '3306';
 $cfg['Servers'][$i]['user'] = 'lhensley';
-$cfg['Servers'][$i]['verbose'] = 'dsm1 (Production8)';
+$cfg['Servers'][$i]['verbose'] = 'dsm1 (Production) v9';
 $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
 // $cfg['Servers'][$i]['ssl'] defines whether to use SSL at all.
-$cfg['Servers'][$i]['ssl'] = true;
+$cfg['Servers'][$i]['ssl'] = false;
 // $cfg['Servers'][$i]['ssl_verify'] (default = true)
 // If set to false, it will not verify the identity of the server.
 // Set to false ONLY if absolutely necessary.
@@ -147,9 +147,9 @@ $cfg['Servers'][$i]['ssl'] = true;
 // Set to false ONLY if absolutely necessary.
 $cfg['Servers'][$i]['ssl_verify'] = true;
 // These do what you think they do.
-// $cfg['Servers'][$i]['ssl_key'] = '/etc/letsencrypt/live/lanehensley.org/privkey.pem';
-// $cfg['Servers'][$i]['ssl_cert'] = '/etc/letsencrypt/live/lanehensley.org/cert.pem';
-// $cfg['Servers'][$i]['ssl_ca'] = '/etc/letsencrypt/live/lanehensley.org/chain.pem';
+$cfg['Servers'][$i]['ssl_key'] = '/etc/phpmyadmin/ssl-clients/dsm1/client-key.pem';
+$cfg['Servers'][$i]['ssl_cert'] = '/etc/phpmyadmin/ssl-clients/dsm1/client-cert.pem';
+$cfg['Servers'][$i]['ssl_ca'] = '/etc/phpmyadmin/ssl-clients/dsm1/ca.pem';
 
 /**
  * phpMyAdmin configuration storage settings.
