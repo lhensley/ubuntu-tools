@@ -27,10 +27,10 @@ $i++;
 /* Authentication type */
 $cfg['Servers'][$i]['auth_type'] = 'cookie';
 /* Server parameters */
-$cfg['Servers'][$i]['host'] = 'lanehensley';
+$cfg['Servers'][$i]['host'] = 'lanehensley.org';
 $cfg['Servers'][$i]['port'] = '10408';
 $cfg['Servers'][$i]['user'] = 'lhensley';
-$cfg['Servers'][$i]['verbose'] = 'dsm1 (Production3)';
+$cfg['Servers'][$i]['verbose'] = 'dsm1 (Production4)';
 $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
 // $cfg['Servers'][$i]['ssl'] defines whether to use SSL at all.
