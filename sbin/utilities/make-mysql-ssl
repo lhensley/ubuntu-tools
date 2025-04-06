@@ -13,25 +13,36 @@ rm -rf newcerts
 mkdir newcerts && cd newcerts
 
 # Create CA certificate
+echo Create CA certificate
 openssl genrsa 2048 > ca-key.pem
 openssl req -new -x509 -nodes -days 3600 \
-        -key ca-key.pem -out ca.pem
+        -key ca-key.pem -out ca.pem \
+        -subj "/C=US/ST=Iowa/L=Des Moines/O=Hog Heaven DSM/OU=Geek Division/CN=CA Certificate"
 
 # Create server certificate, remove passphrase, and sign it
 # server-cert.pem = public key, server-key.pem = private key
+echo Create server certificate, remove passphrase, and sign it
 openssl req -newkey rsa:2048 -days 3600 \
-        -nodes -keyout server-key.pem -out server-req.pem
+        -nodes -keyout server-key.pem -out server-req.pem \
+        -subj "/C=US/ST=Iowa/L=Des Moines/O=Hog Heaven DSM/OU=Geek Division/CN=Server Certificate"
 openssl rsa -in server-key.pem -out server-key.pem
 openssl x509 -req -in server-req.pem -days 3600 \
         -CA ca.pem -CAkey ca-key.pem -set_serial 01 -out server-cert.pem
 
 # Create client certificate, remove passphrase, and sign it
 # client-cert.pem = public key, client-key.pem = private key
+# echo Create client certificate, remove passphrase, and sign it
+# echo CRITICAL: When prompted for a Common Name, DON'T use the default.
+# echo RECOMMENDED ALTERNATIVE: $(hostname).client
 openssl req -newkey rsa:2048 -days 3600 \
-        -nodes -keyout client-key.pem -out client-req.pem
+        -nodes -keyout client-key.pem -out client-req.pem \
+        -subj "/C=US/ST=Iowa/L=Des Moines/O=Hog Heaven DSM/OU=Geek Division/CN=Client Certificate"
 openssl rsa -in client-key.pem -out client-key.pem
 openssl x509 -req -in client-req.pem -days 3600 \
         -CA ca.pem -CAkey ca-key.pem -set_serial 01 -out client-cert.pem
+
+# After generating the certificates, verify them
+openssl verify -CAfile ca.pem server-cert.pem client-cert.pem
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
