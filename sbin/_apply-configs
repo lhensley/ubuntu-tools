@@ -337,10 +337,10 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 	echo B
 		cp "$GIT_UBUNTU_TOOLS_CONFIGS"/etc/ssl/*.cnf "/etc/ssl/"
 	echo C
-	echo C2 $GIT_UBUNTU_TOOLS_CONFIGS/etc/ssl/openssl.conf.$HOSTNAME
-		if [ -f $GIT_UBUNTU_TOOLS_CONFIGS/etc/ssl/openssl.conf.$HOSTNAME ]; then
+	echo C2 $GIT_UBUNTU_TOOLS_CONFIGS/etc/ssl/openssl.cnf.$HOSTNAME
+		if [ -f $GIT_UBUNTU_TOOLS_CONFIGS/etc/ssl/openssl.cnf.$HOSTNAME ]; then
 	echo D
-			cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/ssl/openssl.conf.$HOSTNAME" "/etc/ssl/openssl.conf"
+			cp "$GIT_UBUNTU_TOOLS_CONFIGS/etc/ssl/openssl.cnf.$HOSTNAME" "/etc/ssl/openssl.conf"
 	echo E
 			fi
 	echo F
