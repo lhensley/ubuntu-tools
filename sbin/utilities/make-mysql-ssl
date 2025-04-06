@@ -21,6 +21,7 @@ openssl req -new -x509 -nodes -days 3600 \
 
 # Create server certificate, remove passphrase, and sign it
 # server-cert.pem = public key, server-key.pem = private key
+echo WHAT ABOUT ME?
 echo Create server certificate, remove passphrase, and sign it
 openssl req -newkey rsa:2048 -days 3600 \
         -nodes -keyout server-key.pem -out server-req.pem \
@@ -43,6 +44,12 @@ openssl x509 -req -in client-req.pem -days 3600 \
 
 # After generating the certificates, verify them
 openssl verify -CAfile ca.pem server-cert.pem client-cert.pem
+
+# From https://dev.mysql.com/doc/refman/8.4/en/creating-rsa-files-using-openssl.html
+openssl genrsa -out private_key.pem 2048
+openssl rsa -in private_key.pem -pubout -out public_key.pem
+chmod 400 private_key.pem
+chmod 444 public_key.pem
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
