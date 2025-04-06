@@ -369,10 +369,12 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		#   systemd-networkd is not running, output might be incomplete.
 		#	Failed to reload network settings: Unit dbus-org.freedesktop.network1.service not found.
 		# TBD. 2024-07-21
-		echo "  Restarting systemd-networkd"
-		systemctl restart systemd-networkd
-		echo "  Restarting ufw"
-		systemctl restart ufw
+		# echo "  Restarting systemd-networkd"
+		# systemctl restart systemd-networkd
+		# echo "  Restarting ufw"
+		# systemctl restart ufw
+		echo "  Restarting systemd-networkd ufw apache2 mysql webmin"
+		systemctl restart systemd-networkd ufw apache2 mysql webmin
 		fi
 
 # Update $PHPMYADMIN_DIR/config.inc.php
