@@ -21,7 +21,6 @@ openssl req -new -x509 -nodes -days 3600 \
 
 # Create server certificate, remove passphrase, and sign it
 # $(hostname)-server-cert.pem = public key, $(hostname)-server-key.pem = private key
-echo WHAT ABOUT ME?
 echo Create server certificate, remove passphrase, and sign it
 openssl req -newkey rsa:2048 -days 3600 \
         -nodes -keyout $(hostname)-server-key.pem -out $(hostname)-server-req.pem \
