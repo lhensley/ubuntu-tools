@@ -9,43 +9,41 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 # Create clean environment
-rm -rf newcerts
-mkdir newcerts && cd newcerts
+rm -rf mysql-certs
+mkdir mysql-certs && cd mysql-certs
 
 # Create CA certificate
-echo Create CA certificate
-openssl genrsa 2048 > $(hostname)-ca-key.pem
-openssl req -new -x509 -nodes -days 3600 \
-        -key $(hostname)-ca-key.pem -out $(hostname)-ca.pem \
+openssl genrsa 2048 > ca-key.pem
+openssl req -new -x509 -nodes -days 3600 -quiet \
+        -key ca-key.pem -out ca.pem \
         -subj "/C=US/ST=Iowa/L=Des Moines/O=Hog Heaven DSM/OU=Geek Division/CN=CA Certificate"
 
 # Create server certificate, remove passphrase, and sign it
-# $(hostname)-server-cert.pem = public key, $(hostname)-server-key.pem = private key
-echo Create server certificate, remove passphrase, and sign it
-openssl req -newkey rsa:2048 -days 3600 \
-        -nodes -keyout $(hostname)-server-key.pem -out $(hostname)-server-req.pem \
+# server-cert.pem = public key, server-key.pem = private key
+openssl req -newkey rsa:2048 -days 3600 -quiet \
+        -nodes -keyout server-key.pem -out server-req.pem \
         -subj "/C=US/ST=Iowa/L=Des Moines/O=Hog Heaven DSM/OU=Geek Division/CN=Server Certificate"
-openssl rsa -in $(hostname)-server-key.pem -out $(hostname)-server-key.pem
-openssl x509 -req -in $(hostname)-server-req.pem -days 3600 \
-        -CA $(hostname)-ca.pem -CAkey $(hostname)-ca-key.pem -set_serial 01 -out $(hostname)-server-cert.pem
+openssl rsa -in server-key.pem -out server-key.pem
+openssl x509 -req -in server-req.pem -days 3600 \
+        -CA ca.pem -CAkey ca-key.pem -set_serial 01 -out server-cert.pem
 
 # Create client certificate, remove passphrase, and sign it
-# $(hostname)-client-cert.pem = public key, $(hostname)-client-key.pem = private key
-openssl req -newkey rsa:2048 -days 3600 \
-        -nodes -keyout $(hostname)-client-key.pem -out $(hostname)-client-req.pem \
+# client-cert.pem = public key, client-key.pem = private key
+openssl req -newkey rsa:2048 -days 3600 -quiet \
+        -nodes -keyout client-key.pem -out client-req.pem \
         -subj "/C=US/ST=Iowa/L=Des Moines/O=Hog Heaven DSM/OU=Geek Division/CN=Client Certificate"
-openssl rsa -in $(hostname)-client-key.pem -out $(hostname)-client-key.pem
-openssl x509 -req -in $(hostname)-client-req.pem -days 3600 \
-        -CA $(hostname)-ca.pem -CAkey $(hostname)-ca-key.pem -set_serial 01 -out $(hostname)-client-cert.pem
+openssl rsa -in client-key.pem -out client-key.pem
+openssl x509 -req -in client-req.pem -days 3600 \
+        -CA ca.pem -CAkey ca-key.pem -set_serial 01 -out client-cert.pem
 
 # After generating the certificates, verify them
-openssl verify -CAfile $(hostname)-ca.pem $(hostname)-server-cert.pem $(hostname)-client-cert.pem
+openssl verify -CAfile ca.pem server-cert.pem client-cert.pem
 
 # From https://dev.mysql.com/doc/refman/8.4/en/creating-rsa-files-using-openssl.html
-openssl genrsa -out $(hostname)-private_key.pem 2048
-openssl rsa -in $(hostname)-private_key.pem -pubout -out $(hostname)-public_key.pem
-chmod 400 $(hostname)-private_key.pem
-chmod 444 $(hostname)-public_key.pem
+openssl genrsa -out private_key.pem 2048
+openssl rsa -in private_key.pem -pubout -out public_key.pem
+chmod 400 private_key.pem
+chmod 444 public_key.pem
 
 if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
