@@ -9,8 +9,8 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 # Create clean environment
-rm -rf mysql-certs
-mkdir mysql-certs && cd mysql-certs
+rm -rf MySQL-Certs
+mkdir MySQL-Certs && cd MySQL-Certs
 
 # Create CA certificate
 openssl genrsa 2048 > ca-key.pem
