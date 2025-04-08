@@ -29,7 +29,7 @@ $cfg['Servers'][$i]['auth_type'] = 'cookie';
 /* Server parameters */
 $cfg['Servers'][$i]['host'] = 'localhost';
 $cfg['Servers'][$i]['port'] = '3306';
-$cfg['Servers'][$i]['user'] = 'lhensley';
+// $cfg['Servers'][$i]['user'] = 'lhensley';
 $cfg['Servers'][$i]['verbose'] = 'dsm1 (Production) v9';
 $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
@@ -85,7 +85,7 @@ $cfg['Servers'][$i]['auth_type'] = 'cookie';
 /* Server parameters */
 $cfg['Servers'][$i]['host'] = 'pd1.local';
 $cfg['Servers'][$i]['port'] = '3306';
-$cfg['Servers'][$i]['user'] = 'lhensley';
+// $cfg['Servers'][$i]['user'] = 'lhensley';
 $cfg['Servers'][$i]['verbose'] = 'pd1';
 $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
@@ -136,7 +136,7 @@ $cfg['Servers'][$i]['auth_type'] = 'cookie';
 /* Server parameters */
 $cfg['Servers'][$i]['host'] = 'lanehensley.org';
 $cfg['Servers'][$i]['port'] = '10408';
-$cfg['Servers'][$i]['user'] = 'lhensley';
+// $cfg['Servers'][$i]['user'] = 'lhensley';
 $cfg['Servers'][$i]['verbose'] = 'dsm1 PKI 1';
 $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
@@ -193,7 +193,7 @@ $cfg['Servers'][$i]['auth_type'] = 'cookie';
 /* Server parameters */
 $cfg['Servers'][$i]['host'] = 'lanehensley.org';
 $cfg['Servers'][$i]['port'] = '10408';
-$cfg['Servers'][$i]['user'] = 'lhensley';
+// $cfg['Servers'][$i]['user'] = 'lhensley';
 $cfg['Servers'][$i]['verbose'] = 'dsm1 lhensley lanehensley.org 10408 ssl etc v10';
 $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
@@ -250,7 +250,7 @@ $cfg['Servers'][$i]['auth_type'] = 'cookie';
 /* Server parameters */
 $cfg['Servers'][$i]['host'] = 'lanehensley.org';
 $cfg['Servers'][$i]['port'] = '10403';
-$cfg['Servers'][$i]['user'] = 'lhensley';
+// $cfg['Servers'][$i]['user'] = 'lhensley';
 $cfg['Servers'][$i]['verbose'] = 'pd1 lhensley lanehensley.org 10403 ssl etc v1';
 $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
@@ -307,7 +307,7 @@ $cfg['Servers'][$i]['auth_type'] = 'cookie';
 /* Server parameters */
 $cfg['Servers'][$i]['host'] = 'dsm1.local';
 $cfg['Servers'][$i]['port'] = '3306';
-$cfg['Servers'][$i]['user'] = 'root';
+// $cfg['Servers'][$i]['user'] = 'root';
 $cfg['Servers'][$i]['verbose'] = 'dsm1 root local 3306 ssl etc v1';
 $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
@@ -364,7 +364,7 @@ $cfg['Servers'][$i]['auth_type'] = 'cookie';
 /* Server parameters */
 $cfg['Servers'][$i]['host'] = 'pd1.local';
 $cfg['Servers'][$i]['port'] = '3306';
-$cfg['Servers'][$i]['user'] = 'root';
+// $cfg['Servers'][$i]['user'] = 'root';
 $cfg['Servers'][$i]['verbose'] = 'pd1 root local 3306 ssl etc v1';
 $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
