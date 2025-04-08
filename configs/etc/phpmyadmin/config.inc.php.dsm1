@@ -316,7 +316,7 @@ $cfg['Servers'][$i]['ssl'] = true;
 // $cfg['Servers'][$i]['ssl_verify'] (default = true)
 // If set to false, it will not verify the identity of the server.
 // Set to false ONLY if absolutely necessary.
-$cfg['Servers'][$i]['ssl_verify'] = true;
+////////// $cfg['Servers'][$i]['ssl_verify'] = true;
 // These do what you think they do.
 $cfg['Servers'][$i]['ssl_key'] = '/etc/phpmyadmin/MySQL-Certs/dsm1/client-key.pem';
 $cfg['Servers'][$i]['ssl_cert'] = '/etc/phpmyadmin/MySQL-Certs/dsm1/client-cert.pem';
