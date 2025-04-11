@@ -7,7 +7,11 @@ exit 0
 #################################################################################################
 ##### Optional Modules (move up to use) #########################################################
 #################################################################################################
+echo CRITICAL ERROR: The script MUST include an exit 0 command before the optional modules section.
 exit 1
+
+# Echo to standard error
+echo "This text is being sent to standard error." >&2
 
 # Require root
 if [[ $EUID -ne 0 ]]; then
@@ -15,7 +19,25 @@ if [[ $EUID -ne 0 ]]; then
   exit 163
   fi
 
+function f_require_root () {
+  # If running with root privileges, do nothing. Otherwise, abort with error.
+  if [[ $EUID -ne 0 ]]; then
+    # echo "You are not using root credentials."
+    f_die "Root privileges required." false $EXIT_CODE_ROOT_REQUIRED
+    fi
+    }
 
-echo "This is a test" | mail -s "subject 1" -A ~/.bash* lane@lanehensley.org
+function f_is_directory {
+  # Usage: if $(f_is_directory "directory_name"); then commands_if_true; else commands_if_false; fi
+  # $1 = "$string_to_check"
+    if [ -d "$1" ]; then echo true; else echo false; fi
+    }
+
+function f_is_file {
+  # Usage: if $(f_is_file "file_or_path_name"); then commands_if_true; else commands_if_false; fi
+  # $1 = "$string_to_check"
+    if [ -f "$1" ]; then echo true; else echo false; fi
+    }
+
 
 

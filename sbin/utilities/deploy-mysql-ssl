@@ -1,9 +1,50 @@
 #!/bin/bash
 
-DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+# Require root
+if [[ $EUID -ne 0 ]]; then
+  echo "Root priviletes required." >&2
+  exit 163
+  fi
 
-# Do stuff here
-if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+# Copy to MySQL server /var/lib/mysql and set ownership
+if [ -d "/home/lhensley/killme" ]; then # Execute only if target directory exists
+  cp /home/lhensley/MySQL-Certs/*.pem /home/lhensley/killme/ \
+    && chown mysql:mysql /home/lhensley/killme/*.pem
+  fi
+
+# Copy to mysqladmin configs /etc/phpmyadmin and set ownership
+if [ -d "/etc/phpmyadmin" ]; then # Execute only if target directory exists
+  mkdir -p /etc/phpmyadmin/MySQL-Certs/$(hostname) \
+    && cp /home/lhensley/MySQL-Certs/*.pem /etc/phpmyadmin/MySQL-Certs/$(hostname)/ \
+    && chown www-data:www-data /etc/phpmyadmin/MySQL-Certs/$(hostname)/*.pem
+  fi
+
+# Email certificates to root (Lane)
+echo "See attached." | mail -s "$(hostname) MySQL Certificates" \
+  -A /home/lhensley/MySQL-Certs/ca-key.pem \
+  -A /home/lhensley/MySQL-Certs/ca.pem \
+  -A /home/lhensley/MySQL-Certs/client-cert.pem \
+  -A /home/lhensley/MySQL-Certs/client-key.pem \
+  -A /home/lhensley/MySQL-Certs/client-req.pem \
+  -A /home/lhensley/MySQL-Certs/private_key.pem \
+  -A /home/lhensley/MySQL-Certs/public_key.pem \
+  -A /home/lhensley/MySQL-Certs/server-cert.pem \
+  -A /home/lhensley/MySQL-Certs/server-key.pem \
+  -A /home/lhensley/MySQL-Certs/server-req.pem \
+  root
+
+echo "Done. DON'T FORGET to <rm -r /home/lhensley/MySQL-Certs> as soon as possible!"
+
+exit 0
+
+#################################################################################################
+##### Optional Modules (move up to use) #########################################################
+#################################################################################################
+echo CRITICAL ERROR: The script MUST include an exit 0 command before the optional modules section.
+exit 1
+
+# Echo to standard error
+echo "This text is being sent to standard error." >&2
 
 # Require root
 if [[ $EUID -ne 0 ]]; then
@@ -11,43 +52,24 @@ if [[ $EUID -ne 0 ]]; then
   exit 163
   fi
 
-# Create clean environment
-rm -rf MySQL-Certs
-mkdir MySQL-Certs && cd MySQL-Certs
+function f_require_root () {
+  # If running with root privileges, do nothing. Otherwise, abort with error.
+  if [[ $EUID -ne 0 ]]; then
+    # echo "You are not using root credentials."
+    f_die "Root privileges required." false $EXIT_CODE_ROOT_REQUIRED
+    fi
+    }
 
-# Create CA certificate
-openssl genrsa 2048 > ca-key.pem
-openssl req -new -x509 -nodes -days 3600 \
-        -key ca-key.pem -out ca.pem \
-        -subj "/C=US/ST=Iowa/L=Des Moines/O=Hog Heaven DSM/OU=Geek Division/CN=CA Certificate"
+function f_is_directory {
+  # Usage: if $(f_is_directory "directory_name"); then commands_if_true; else commands_if_false; fi
+  # $1 = "$string_to_check"
+    if [ -d "$1" ]; then echo true; else echo false; fi
+    }
 
-# Create server certificate, remove passphrase, and sign it
-# server-cert.pem = public key, server-key.pem = private key
-openssl req -newkey rsa:2048 -days 3600 \
-        -nodes -keyout server-key.pem -out server-req.pem \
-        -subj "/C=US/ST=Iowa/L=Des Moines/O=Hog Heaven DSM/OU=Geek Division/CN=Server Certificate"
-openssl rsa -in server-key.pem -out server-key.pem
-openssl x509 -req -in server-req.pem -days 3600 \
-        -CA ca.pem -CAkey ca-key.pem -set_serial 01 -out server-cert.pem
+function f_is_file {
+  # Usage: if $(f_is_file "file_or_path_name"); then commands_if_true; else commands_if_false; fi
+  # $1 = "$string_to_check"
+    if [ -f "$1" ]; then echo true; else echo false; fi
+    }
 
-# Create client certificate, remove passphrase, and sign it
-# client-cert.pem = public key, client-key.pem = private key
-openssl req -newkey rsa:2048 -days 3600 \
-        -nodes -keyout client-key.pem -out client-req.pem \
-        -subj "/C=US/ST=Iowa/L=Des Moines/O=Hog Heaven DSM/OU=Geek Division/CN=Client Certificate"
-openssl rsa -in client-key.pem -out client-key.pem
-openssl x509 -req -in client-req.pem -days 3600 \
-        -CA ca.pem -CAkey ca-key.pem -set_serial 01 -out client-cert.pem
 
-# After generating the certificates, verify them
-openssl verify -CAfile ca.pem server-cert.pem client-cert.pem
-
-# From https://dev.mysql.com/doc/refman/8.4/en/creating-rsa-files-using-openssl.html
-openssl genrsa -out private_key.pem 2048
-openssl rsa -in private_key.pem -pubout -out public_key.pem
-chmod 400 private_key.pem
-chmod 444 public_key.pem
-
-if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
-
-exit 0
