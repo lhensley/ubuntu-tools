@@ -249,7 +249,14 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 	# /etc/phpmyadmin
 		if $(f_is_installed "phpmyadmin"); then
 			echo "Updating permissions for /etc/phpmyadmin/config.inc.php"
+			chown -R www-data:www-data "/etc/phpmyadmin/MySQL-Certs"
 			chmod -f 644 "/etc/phpmyadmin/config.inc.php"
+			find "/etc/phpmyadmin/MySQL-Certs" -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
+			find "/etc/phpmyadmin/MySQL-Certs" -type f -print -exec chmod 644 {} \; >> /dev/null 2>&1
+			find "/etc/phpmyadmin/MySQL-Certs" -name client-key.pem -type f -print -exec chmod 644 {} \; >> /dev/null 2>&1
+			find "/etc/phpmyadmin/MySQL-Certs" -name private_key.pem -type f -print -exec chmod 644 {} \; >> /dev/null 2>&1
+			find "/etc/phpmyadmin/MySQL-Certs" -name public_key.pem -type f -print -exec chmod 644 {} \; >> /dev/null 2>&1
+			find "/etc/phpmyadmin/MySQL-Certs" -name server-key.pem -type f -print -exec chmod 644 {} \; >> /dev/null 2>&1
 			fi
 
 	# /etc/resolvconf
