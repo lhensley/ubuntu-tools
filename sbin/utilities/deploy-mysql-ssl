@@ -8,19 +8,15 @@ if [[ $EUID -ne 0 ]]; then
 
 # Copy to MySQL server /var/lib/mysql and set ownership
 if [ -d "/var/lib/mysql" ]; then # Execute only if target directory exists
-  mkdir -p /home/lhensley/killme1 \
-    && cp /home/lhensley/MySQL-Certs/*.pem /home/lhensley/killme1/ \
-    && chown mysql:mysql /home/lhensley/killme1/*.pem
+    cp /home/lhensley/MySQL-Certs/*.pem /var/lib/mysql/ \
+    && chown mysql:mysql /var/lib/mysql/*.pem
   fi
 
 # Copy to mysqladmin configs /etc/phpmyadmin and set ownership
 if [ -d "/etc/phpmyadmin" ]; then # Execute only if target directory exists
-#  mkdir -p /etc/phpmyadmin/MySQL-Certs/$(hostname) \
-#    && cp /home/lhensley/MySQL-Certs/*.pem /etc/phpmyadmin/MySQL-Certs/$(hostname)/ \
-#    && chown -R www-data:www-data /etc/phpmyadmin/MySQL-Certs
-  mkdir -p /home/lhensley/killme2/MySQL-Certs/$(hostname) \
-    && cp /home/lhensley/MySQL-Certs/*.pem /home/lhensley/killme2/MySQL-Certs/$(hostname)/ \
-    && chown -R www-data:www-data /home/lhensley/killme2/MySQL-Certs
+  mkdir -p /etc/phpmyadmin/MySQL-Certs/$(hostname) \
+    && cp /home/lhensley/MySQL-Certs/*.pem /etc/phpmyadmin/MySQL-Certs/$(hostname)/ \
+    && chown -R www-data:www-data /etc/phpmyadmin/MySQL-Certs
   fi
 
 # Email certificates to root (Lane)
