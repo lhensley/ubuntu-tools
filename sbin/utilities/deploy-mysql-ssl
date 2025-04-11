@@ -1,12 +1,21 @@
 #!/bin/bash
 
-# Based on https://dev.mysql.com/doc/refman/8.4/en/creating-ssl-files-using-openssl.html,
-# Following examples 1 and 3
-
 DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 # Do stuff here
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Require root
+if [[ $EUID -ne 0 ]]; then
+  echo "Root priviletes required." >&2
+  exit 163
+  fi
+
+
+
+
+
+
 
 # Create clean environment
 rm -rf MySQL-Certs

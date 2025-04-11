@@ -1,12 +1,21 @@
 #!/bin/bash
 
-DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
-
-# Do stuff here
-if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
-
 echo "I don't do anything yet."
 
-if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
-
 exit 0
+
+#################################################################################################
+##### Optional Modules (move up to use) #########################################################
+#################################################################################################
+exit 1
+
+# Require root
+if [[ $EUID -ne 0 ]]; then
+  echo "Root priviletes required." >&2
+  exit 163
+  fi
+
+
+echo "This is a test" | mail -s "subject 1" -A ~/.bash* lane@lanehensley.org
+
+
