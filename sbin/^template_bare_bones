@@ -15,7 +15,7 @@ echo "This text is being sent to standard error." >&2
 
 # Require root
 if [[ $EUID -ne 0 ]]; then
-  echo "Root priviletes required." >&2
+  echo "Root privileges required." >&2
   exit 163
   fi
 

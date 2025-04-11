@@ -2,13 +2,13 @@
 
 # Require root
 if [[ $EUID -ne 0 ]]; then
-  echo "Root priviletes required." >&2
+  echo "Root privileges required." >&2
   exit 163
   fi
 
 # Copy to MySQL server /var/lib/mysql and set ownership
 if [ -d "/var/lib/mysql" ]; then # Execute only if target directory exists
-  mkdir -p /home/lhensley/killme1
+  mkdir -p /home/lhensley/killme1 \
     && cp /home/lhensley/MySQL-Certs/*.pem /home/lhensley/killme1/ \
     && chown mysql:mysql /home/lhensley/killme1/*.pem
   fi
@@ -52,7 +52,7 @@ echo "This text is being sent to standard error." >&2
 
 # Require root
 if [[ $EUID -ne 0 ]]; then
-  echo "Root priviletes required." >&2
+  echo "Root privileges required." >&2
   exit 163
   fi
 
