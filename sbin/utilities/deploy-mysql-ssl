@@ -18,8 +18,8 @@ if [ -d "/etc/phpmyadmin" ]; then # Execute only if target directory exists
 #  mkdir -p /etc/phpmyadmin/MySQL-Certs/$(hostname) \
 #    && cp /home/lhensley/MySQL-Certs/*.pem /etc/phpmyadmin/MySQL-Certs/$(hostname)/ \
 #    && chown -R www-data:www-data /etc/phpmyadmin/MySQL-Certs
-  mkdir -p /home/lhensley/killme2/MySQL-Certs/$(homename) \
-    && cp /home/lhensley/MySQL-Certs/*.pem /home/lhensley/killme2/MySQL-Certs/$(homename)/ \
+  mkdir -p /home/lhensley/killme2/MySQL-Certs/$(hostname) \
+    && cp /home/lhensley/MySQL-Certs/*.pem /home/lhensley/killme2/MySQL-Certs/$(hostname)/ \
     && chown -R www-data:www-data /home/lhensley/killme2/MySQL-Certs
   fi
 
