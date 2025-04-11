@@ -17,10 +17,10 @@ if [ -d "/var/lib/mysql" ]; then # Execute only if target directory exists
 if [ -d "/etc/phpmyadmin" ]; then # Execute only if target directory exists
 #  mkdir -p /etc/phpmyadmin/MySQL-Certs/$(hostname) \
 #    && cp /home/lhensley/MySQL-Certs/*.pem /etc/phpmyadmin/MySQL-Certs/$(hostname)/ \
-#    && chown www-data:www-data /etc/phpmyadmin/MySQL-Certs/$(hostname)/*.pem
-  mkdir -p /home/lhensley/killme2 \
-    && cp /home/lhensley/MySQL-Certs/*.pem /home/lhensley/killme2/ \
-    && chown www-data:www-data /home/lhensley/killme2/*.pem
+#    && chown -R www-data:www-data /etc/phpmyadmin/MySQL-Certs
+  mkdir -p /home/lhensley/killme2/MySQL-Certs/$(homename) \
+    && cp /home/lhensley/MySQL-Certs/*.pem /home/lhensley/killme2/MySQL-Certs/$(homename)/ \
+    && chown -R www-data:www-data /home/lhensley/killme2/MySQL-Certs
   fi
 
 # Email certificates to root (Lane)
