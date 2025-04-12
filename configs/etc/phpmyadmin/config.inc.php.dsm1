@@ -19,6 +19,7 @@ $cfg['blowfish_secret'] = sodium_hex2bin('901ef69d2ebf4bc5afdafb6c515b20fea1c4d3
  * Servers configuration
  */
 $i = 0;
+// $cfg['MysqlSslWarningSafeHosts'] = ['127.0.0.1', 'localhost', 'dsm1.local', 'pd1.local', 'router.local', '192.168.168.33'];
 
 /**
  * SERVER START: dsm1
