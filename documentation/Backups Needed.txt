@@ -1,0 +1,12 @@
+Backups Needed
+
+For All Servers
+  /etc
+  /home (hove plex stuff first) (exclude plex directory)
+  /opt
+  /usr
+    /usr/local
+  /var
+    /var/local
+    /var/www
+  /usr

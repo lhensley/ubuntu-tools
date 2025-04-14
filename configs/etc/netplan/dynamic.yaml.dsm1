@@ -37,4 +37,5 @@ network:
                 route-metric: 2000 # lower numbers have highest priority
             accept-ra: true
             ipv6-address-token: "::2:8"
-#            activation-mode: manual
+            # NetworkManager (which we use) definitions do not support activation-mode: off
+            activation-mode: manual   # options: on (default), off, manual 
