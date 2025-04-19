@@ -1,0 +1,82 @@
+#!/bin/bash
+
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+# if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+# Uncomment requirements for script execution
+    # f_require_root
+    # f_require_ubuntu
+    # f_deprecated
+    # f_require_minimum_version_number "version-number"
+    # f_require_maximum_version_number "version-number"
+    # f_only_on_server "hostname"
+    # f_require_confirmation "This text is displayed, requesting confirmation word." "ConfirmationWord"
+    # set -x # For debugging
+
+# POSSIBLE OPTION: USE IF YOU WANT
+# Require root
+	f_require_root
+
+# POSSIBLE OPTION: USE IF YOU WANT
+# Require a specific host
+	# f_require_host [HOST]
+
+# CHECK FOR ENOUGH ARGUMENTS (change 0 to minimum arguments and flesh out Usage)
+if [ $# -lt 0 ]; 
+    then echo "$EXIT_CODE_DESC_DIRECTORY_NOT_FOUND" > /dev/stderr
+	echo "Usage: $(basename $0)" > /dev/stderr
+	exit $EXIT_CODE_DIRECTORY_NOT_FOUND
+fi
+
+# Do stuff here
+if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+if [ $HOSTNAME = dsm1 ] ; then
+    mkdir -p /mnt/5TBC/archives/fs /mnt/20TBA/archives/fs
+    echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/5TBC/archives/fs/$HOSTNAME-d-$START_WEEKDAYSTAMP3.fs.gz  > /dev/stderr
+    cp /backups/%HOSTNAME.tar.gz /mnt/5TBC/archives/fs/$HOSTNAME-d-$START_WEEKDAYSTAMP3.fs.gz
+    echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/5TBC/archives/fs/$HOSTNAME-m-$START_MONTHSTAMP.fs.gz > /dev/stderr
+    cp /backups/$HOSTNAME.tar.gz /mnt/5TBC/archives/fs/$HOSTNAME-m-$START_MONTHSTAMP.fs.gz
+    echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/20TBA/archives/fs/$HOSTNAME-d-$START_WEEKDAYSTAMP3.fs.gz > /dev/stderr
+    cp /backups/$HOSTNAME.tar.gz /mnt/20TBA/archives/fs/$HOSTNAME-d-$START_WEEKDAYSTAMP3.fs.gz
+    ln -f /mnt/5TBC/archives/fs/$HOSTNAME-m-$START_MONTHSTAMP.fs.gz /mnt/5TBC/archives/fs/%HOSTNAME.fs.gz
+    echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/20TBA/archives/fs/$HOSTNAME-m-$START_MONTHSTAMP.fs.gz > /dev/stderr
+    cp /backups/$HOSTNAME.tar.gz /mnt/20TBA/archives/fs/$HOSTNAME-m-$START_MONTHSTAMP.fs.gz
+    ln -f /mnt/20TBA/archives/fs/$HOSTNAME-m-$START_MONTHSTAMP.fs.gz /mnt/20TBA/archives/fs/$HOSTNAME.fs.gz
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to pd1" > /dev/stderr
+    chown $ADMIN_USER /backups/$HOSTNAME.tar.gz
+    sudo -u $ADMIN_USER sftp pd1 <<< $"put /backups/$HOSTNAME.tar.gz" > /dev/null 2> /dev/null
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Decompressing the dump on pd1" > /dev/stderr
+    sudo -u $ADMIN_USER ssh pd1 rm -f $HOSTNAME.fs
+    sudo -u $ADMIN_USER ssh pd1 gunzip $HOSTNAME.fs.gz
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Importing the dump into fs on pd1.  (This REALLY takes a while.)" > /dev/stderr
+    sudo -u $ADMIN_USER ssh pd1 fs < $HOSTNAME.fs
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Cleaning up on pd1" > /dev/stderr
+    sudo -u $ADMIN_USER ssh pd1 rm -f $HOSTNAME.fs
+    chown $ROOT_USER /backups/$HOSTNAME.tar.gz
+    fi
+if [ $HOSTNAME = pd1 ] ; then
+    mkdir -p /mnt/bob/archives/fs
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/bob/archives/fs/$HOSTNAME-d-$START_WEEKDAYSTAMP3.fs.gz" > /dev/stderr
+    cp /backups/$HOSTNAME.tar.gz /mnt/bob/archives/fs/$HOSTNAME-d-$START_WEEKDAYSTAMP3.fs.gz
+    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/bob/archives/fs/$HOSTNAME-m-$START_MONTHSTAMP.fs.gz" > /dev/stderr
+    cp /backups/$HOSTNAME.tar.gz /mnt/bob/archives/fs/$HOSTNAME-m-$START_MONTHSTAMP.fs.gz
+    ln -f /mnt/bob/archives/fs/$HOSTNAME-m-$START_MONTHSTAMP.fs.gz /mnt/bob/archives/fs/pd1.fs.gz
+    fi
+mv /backups/$HOSTNAME.tar.gz $ADMIN_HOME_DIR/
+rm -rf /backups
+echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Done!" > /dev/stderr
+
+if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+exit 0
+

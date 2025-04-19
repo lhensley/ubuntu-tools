@@ -51,7 +51,7 @@ ufw reject from 144.126.0.0/16 to any # 2024-09-09 - United States
 ufw reject from 146.19.215.24 to any # 2025-03-03 - Germany
 ufw reject from 156.38.128.82 to any # 2024-07-08 - South Africa address, blocked by Wordfence, block count 1
 ufw reject from 156.146.38.167 to any # 2024-09-09 - United States
-ufw reject from 161.97.131.39 to any # 2024-07-31 - Germany address, blocked by Wordfence, block count 13
+ufw reject from 161.97.0.0/16 to any # 2024-07-31 - Germany address, blocked by Wordfence, block count 13
 ufw reject from 164.132.182.113 to any # 2024-09-09 - France
 ufw reject from 167.86.82.113 to any # 2025-03-18 - Germany
 ufw reject from 167.88.166.120 to any # 2025-02-10 - United States
@@ -72,6 +72,7 @@ ufw reject from 193.26.115.62 to any # 2025-03-03 - United States
 ufw reject from 193.189.100.204 to any # 2024-07-08 - Sweden address, blocked by Wordfence, block count 1
 ufw reject from 194.38.0.0/16 to any # 2025-02-03 - Ukraine
 ufw reject from 194.163.145.202 to any # 2024-07-08 - Germany address, blocked by Wordfence, block count 17
+ufw reject from 196.251.72.179 to any # 2025-04-14 - Seychelles
 ufw reject from 198.12.234.215 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
 ufw reject from 199.19.72.125 to any
 ufw reject from 199.45.154.114 to any

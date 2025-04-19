@@ -209,7 +209,7 @@ if $install_wordpress ; then
   fi
 
 # Clean up
-rmdir -p --ignore-fail-on-non-empty wordpress
+rmdir -fp --ignore-fail-on-non-empty wordpress
 rm -f latest.tar.gz
 chown -R www-data:www-data .
 
