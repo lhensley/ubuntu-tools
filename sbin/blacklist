@@ -11,7 +11,9 @@
 # To see what Wordpress has blocked over the last 30 days,
 # visit https://lanehensley.org/wp-admin/admin.php?page=WordfenceWAF
 
+ufw reject from 3.12.124.160 to any # 2025-04-21
 ufw reject from 3.79.116.10 to any # 2025-04-02 - Germany
+ufw reject from 3.111.188.38 to any # 2025-05-21 - India
 ufw reject from 4.213.7.108 to any # 2024-1-06 - India
 ufw reject from 5.161.136.10 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
 ufw reject from 15.188.232.0/24 to any # 2025-02-10 - France
@@ -20,6 +22,7 @@ ufw reject from 15.237.189.64 to any # 2024-09-15 - France
 ufw reject from 23.137.104.0/24 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 2
 ufw reject from 43.131.2.238 to any # 2024-07-16 - Germany, blocked by Wordfence, block count 1
 ufw reject from 43.157.25.217 to any # 2024-07-08 - Germany address, blocked by Wordfence, block count 1
+ufw reject from 44.216.106.147 to any # 2025-04-21
 ufw reject from 45.61.0.0/16 to any # 2024-12-30 - Germany
 ufw reject from 51.15.0.0/16 to any # 2024-07-08 - France address, blocked by Wordfence, block count 1
 ufw reject from 51.68.0.0/16 to any #2025-02-03 - France
@@ -38,6 +41,7 @@ ufw reject from 85.215.98.196 to any # 2024-12-09 - Germany
 ufw reject from 85.215.106.195 to any # 2024-12-09 - Germany
 ufw reject from 87.120.0.0/16 to any #2025-02-03 - Bulgaria
 ufw reject from 87.236.176.87 to any # United Kingdom
+ufw reject from 88.99.27.84 to any # 2025-04-21
 ufw reject from 91.92.0.0 to any # 2024-02-03 - Bulgaria
 ufw reject from 93.90.206.97 to any # 2024-12-09 - Germany
 ufw reject from 94.156.0.0/16 to any # 2024-02-03 - Bulgaria
@@ -48,6 +52,7 @@ ufw reject from 138.128.174.26 to any # 2024-07-08 - United States address, bloc
 ufw reject from 138.199.47.241 to any # 2024-07-08 - France address, blocked by Wordfence, block count 1
 ufw reject from 139.99.220.157 to any # 2024-07-08 - Australia address, blocked by Wordfence, block count 12
 ufw reject from 144.126.0.0/16 to any # 2024-09-09 - United States
+ufw reject from 154.83.0.0/16 to any # 2025-04-21 - Seychelles
 ufw reject from 146.19.215.24 to any # 2025-03-03 - Germany
 ufw reject from 156.38.128.82 to any # 2024-07-08 - South Africa address, blocked by Wordfence, block count 1
 ufw reject from 156.146.38.167 to any # 2024-09-09 - United States
@@ -63,6 +68,7 @@ ufw reject from 178.159.37.38 to any # 2024-07-08 - Ukraine address, blocked by 
 ufw reject from 179.43.191.18 to any # 2024-07-08 - Switzerland address, blocked by Wordfence, block count 2
 ufw reject from 184.105.247.223 to any
 ufw reject from 184.154.46.40 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
+ufw reject form 185.20.226.30 to any # 2025-04-21 - Russian Federation
 ufw reject from 185.220.100.0/24 to any # 2024-12-31 - Germany
 ufw reject from 185.220.101.0/24 to any # 2024-09-02 - Germany
 ufw reject from 188.164.196.16 to any # 2024-07-08 - Spain address, blocked by Wordfence, block count 1
@@ -72,8 +78,9 @@ ufw reject from 193.26.115.62 to any # 2025-03-03 - United States
 ufw reject from 193.189.100.204 to any # 2024-07-08 - Sweden address, blocked by Wordfence, block count 1
 ufw reject from 194.38.0.0/16 to any # 2025-02-03 - Ukraine
 ufw reject from 194.163.145.202 to any # 2024-07-08 - Germany address, blocked by Wordfence, block count 17
-ufw reject from 196.251.72.179 to any # 2025-04-14 - Seychelles
+ufw reject from 196.251.0.0/16 to any # 2025-04-14 - Seychelles and South Africa
 ufw reject from 198.12.234.215 to any # 2024-07-08 - United States address, blocked by Wordfence, block count 1
+ufe reject from 198.58.112.204 to any # 2025-04-21 - United States
 ufw reject from 199.19.72.125 to any
 ufw reject from 199.45.154.114 to any
 ufw reject from 204.10.194.57 to any # 2024-12-30 - Germany
