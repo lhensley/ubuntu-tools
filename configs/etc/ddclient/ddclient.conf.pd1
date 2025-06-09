@@ -33,7 +33,9 @@ daemon=7200 # in seconds; 120 minutes between refresh
 syslog=yes
 
 # Mail all msgs to root.
-mail=root
+# Commented out 2025-06-09 because of excessive unhelpful warnings.
+# See next section (mail-failure), which emails root if an error/failure occurs.
+# mail=root
 
 # Mail failed update msgs to root.
 mail-failure=root
