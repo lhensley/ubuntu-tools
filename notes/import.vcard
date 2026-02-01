@@ -1,0 +1,80 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//macOS 26.2//EN
+N:Morris;Tammy;;;
+FN:Tammy Morris
+ADR;type=HOME;type=pref:;;1310 Hunters Meadow Ln;Houston;TX;77055-6548;
+item1.X-ABDATE;type=pref:2025-12-25
+item1.X-ABLabel:update
+END:VCARD
+
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//macOS 26.2//EN
+N:Morris;Lamar;;;
+FN:Lamar Morris
+ADR;type=HOME;type=pref:;;1310 Hunters Meadow Ln;Houston;TX;77055-6548;
+item1.X-ABDATE;type=pref:2025-12-25
+item1.X-ABLabel:update
+END:VCARD
+
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//macOS 26.2//EN
+N:Morris;Drew;;;
+FN:Drew Morris
+ADR;type=HOME;type=pref:;;1310 Hunters Meadow Ln;Houston;TX;77055-6548;
+item1.X-ABDATE;type=pref:2025-12-25
+item1.X-ABLabel:update
+END:VCARD
+
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//macOS 26.2//EN
+N:Morris;Makay;;;
+FN:Makay Morris
+ADR;type=HOME;type=pref:;;1310 Hunters Meadow Ln;Houston;TX;77055-6548;
+item1.X-ABDATE;type=pref:2025-12-25
+item1.X-ABLabel:update
+END:VCARD
+
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//macOS 26.2//EN
+N:Morris;Scout;;;
+FN:Scout Morris
+ADR;type=HOME;type=pref:;;1310 Hunters Meadow Ln;Houston;TX;77055-6548;
+item1.X-ABDATE;type=pref:2025-12-25
+item1.X-ABLabel:update
+END:VCARD
+
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//macOS 26.2//EN
+N:Peatross;Betsy;;;
+FN:Betsy Peatross
+ADR;type=HOME;type=pref:;;1 Beaux Rivages;Shreveport;LA;71106-6806;
+item1.X-ABDATE;type=pref:2025-12-25
+item1.X-ABLabel:update
+END:VCARD
+
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//macOS 26.2//EN
+N:Williams;Stacy;;;
+FN:Stacy Williams
+ADR;type=HOME;type=pref:;;215 Hollybrook Dr;Shreveport;LA;71106-8569;
+item1.X-ABDATE;type=pref:2025-12-25
+item1.X-ABLabel:update
+END:VCARD
+
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//macOS 26.2//EN
+N:Williams;Cynthia;;;
+FN:Cynthia Williams
+ADR;type=HOME;type=pref:;;215 Hollybrook Dr;Shreveport;LA;71106-8569;
+item1.X-ABDATE;type=pref:2025-12-25
+item1.X-ABLabel:update
+END:VCARD
+
