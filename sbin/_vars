@@ -460,24 +460,16 @@ source /etc/os-release
         declare -A ARCHIVE_FILE_SYSTEM
                 ARCHIVE_FILE_SYSTEM[default]="/"
                 ARCHIVE_FILE_SYSTEM[pd1]="/mnt/5TBE"
-                ARCHIVE_FILE_SYSTEM[adam]="/mnt/5TBD"
-                ARCHIVE_FILE_SYSTEM[oz]="/mnt/5TBC"
                 ARCHIVE_FILE_SYSTEM[dsm1]="/mnt/5TBC"
         declare -A ARCHIVE_DIRECTORY
                 ARCHIVE_DIRECTORY[default]="/var/lib/archives/$HOSTNAME"
                 ARCHIVE_DIRECTORY[pd1]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
-                ARCHIVE_DIRECTORY[adam]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
-                ARCHIVE_DIRECTORY[oz]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
                 ARCHIVE_DIRECTORY[dsm1]=${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}/archives/$HOSTNAME
         THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[default]}"
                 if [ $HOSTNAME == "pd1" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
-                if [ $HOSTNAME == "adam" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
-                if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
                 if [ $HOSTNAME == "dsm1" ]; then THIS_ARCHIVE_FILE_SYSTEM="${ARCHIVE_FILE_SYSTEM[$HOSTNAME]}"; fi
         THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[default]}"
                 if [ $HOSTNAME == "pd1" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
-                if [ $HOSTNAME == "adam" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
-                if [ $HOSTNAME == "oz" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
                 if [ $HOSTNAME == "dsm1" ]; then THIS_ARCHIVE_DIRECTORY="${ARCHIVE_DIRECTORY[$HOSTNAME]}"; fi
         ARCHIVE_TAR_FILE="$HOSTNAME-$START_DATESTAMP.gz"
                 ARCHIVE_TAR_FULL="$THIS_ARCHIVE_DIRECTORY/$ARCHIVE_TAR_FILE"

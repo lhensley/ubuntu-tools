@@ -165,7 +165,8 @@ done
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
-	echo Applying permissions
+	echo 
+	echo $0: Applying permissions
 	echo
 
 	# /etc/comskip

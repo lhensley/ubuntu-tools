@@ -21,15 +21,15 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 #	echo "Updating local git repository."
 #	f_git
 
-# Apply configs
 	echo
-	echo "Applying configurations and permissions." && echo
+	echo
+	echo "$0: Applying configurations and permissions." && echo
 	_apply-configs
 	_apply-permissions
 
-# Other updates
 	echo
-	echo "Updating local apt packages"
+	echo
+	echo "$0: Updating local apt packages"
 	f_upd
 	echo
 

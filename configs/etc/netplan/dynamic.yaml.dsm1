@@ -21,21 +21,21 @@ network:
             nameservers:
                 addresses: [192.168.168.1, 8.8.8.8, '2001:4860:4860::8844']
                 search: [local, lan]
-    wifis:
-        wifi0:
-            match:
-                macaddress: a8:41:f4:d4:2e:c4
-            set-name: wifi0
-            access-points:
-                "Hog Heaven DSM":
-                    password: "fuckitymcfuckface"
-            dhcp4: true
-            dhcp4-overrides: # This section added 2024-07-08
-                route-metric: 2500 # lower numbers have highest priority
-            dhcp6: true
-            dhcp6-overrides: # This section added 2024-07-08
-                route-metric: 2000 # lower numbers have highest priority
-            accept-ra: true
-            ipv6-address-token: "::2:8"
-            # NetworkManager (which we use) definitions do not support activation-mode: off
-            activation-mode: manual   # options: on (default), off, manual 
+#    wifis:
+#        wifi0:
+#            match:
+#                macaddress: a8:41:f4:d4:2e:c4
+#            set-name: wifi0
+#            access-points:
+#                "Hog Heaven DSM":
+#                    password: "fuckitymcfuckface"
+#            dhcp4: true
+#            dhcp4-overrides: # This section added 2024-07-08
+#                route-metric: 2500 # lower numbers have highest priority
+#            dhcp6: true
+#            dhcp6-overrides: # This section added 2024-07-08
+#                route-metric: 2000 # lower numbers have highest priority
+#            accept-ra: true
+#            ipv6-address-token: "::2:8"
+#            # NetworkManager (which we use) definitions do not support activation-mode: off
+#            activation-mode: manual   # options: on (default), off, manual 
