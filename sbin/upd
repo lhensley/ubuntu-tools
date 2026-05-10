@@ -21,9 +21,6 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 #	echo "Updating local git repository."
 #	f_git
 
-# Debug point
-echo $0: Debug point A.
-
 	echo
 	echo
 	echo "$0: Applying configurations and permissions." && echo
@@ -36,6 +33,11 @@ echo $0: Debug point A.
 	f_upd
 	echo
 
+	echo
+	echo
+	echo "$0: IMPORTANT: To update from github, run:"
+	echo "  sudo git-updates"
+ 	
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
