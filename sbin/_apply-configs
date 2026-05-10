@@ -219,6 +219,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 # Update ~/.ssh/authorized_keys
 #	if $(f_is_installed "openssh-server"); then
 		echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys/* from $GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.ssh/"
+		echo cp "  $GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys"* "$ADMIN_HOME_DIR/.ssh/"
 		cp "$GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys"* "$ADMIN_HOME_DIR/.ssh/"
 		cp "$GIT_UBUNTU_TOOLS_CONFIGS/ADMIN_HOME_DIR/.ssh/authorized_keys"* "$ROOT_HOME_DIR/.ssh/"
 #		fi
