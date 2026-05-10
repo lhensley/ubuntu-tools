@@ -21,6 +21,9 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 #	echo "Updating local git repository."
 #	f_git
 
+# Debug point
+echo $0: Debug point A.
+
 	echo
 	echo
 	echo "$0: Applying configurations and permissions." && echo
