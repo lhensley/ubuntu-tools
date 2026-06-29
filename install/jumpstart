@@ -22,17 +22,19 @@ apt-get -y install coreutils git-all gpg moreutils \
 systemctl enable --now ssh
 
 echo
-echo wget --no-cache -O seeds.tar.gz.gpg https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar.gz.gpg
-wget --no-cache -O seeds.tar.gz.gpg https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar.gz.gpg
-# sudo curl -L -O https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar.gz.gpg
+echo curl -L -O https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar.gz.gpg
+# wget --no-cache -O seeds.tar.gz.gpg https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar.gz.gpg
+curl -L -O https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar.gz.gpg
 
 echo
-echo wget --no-cache -O clean-setup https://github.com/lhensley/ubuntu-tools/raw/master/install/clean-setup
-wget --no-cache -O clean-setup https://github.com/lhensley/ubuntu-tools/raw/master/install/clean-setup
+echo curl -L -O https://github.com/lhensley/ubuntu-tools/raw/master/install/clean-setup
+# wget --no-cache -O clean-setup https://github.com/lhensley/ubuntu-tools/raw/master/install/clean-setup
+curl -L -O https://github.com/lhensley/ubuntu-tools/raw/master/install/clean-setup
 
 echo
-echo wget --no-cache -O variables https://github.com/lhensley/ubuntu-tools/raw/master/install/variables
-wget --no-cache -O variables https://github.com/lhensley/ubuntu-tools/raw/master/install/variables
+echo curl -L -O https://github.com/lhensley/ubuntu-tools/raw/master/install/variables
+# wget --no-cache -O variables https://github.com/lhensley/ubuntu-tools/raw/master/install/variables
+curl -L -O https://github.com/lhensley/ubuntu-tools/raw/master/install/variables
 
 echo
 echo gpg -d -o seeds.tar.gz seeds.tar.gz.gpg
