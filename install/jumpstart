@@ -24,6 +24,7 @@ systemctl enable --now ssh
 echo
 echo wget --no-cache -O seeds.tar.gz.gpg https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar.gz.gpg
 wget --no-cache -O seeds.tar.gz.gpg https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar.gz.gpg
+# sudo curl -L -O https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar.gz.gpg
 
 echo
 echo wget --no-cache -O clean-setup https://github.com/lhensley/ubuntu-tools/raw/master/install/clean-setup
