@@ -15,11 +15,10 @@ echo apt-get -y update && sudo apt-get -y dist-upgrade
 apt-get -y update && sudo apt-get -y dist-upgrade
 
 echo
-echo apt-get -y install coreutils git-all gpg moreutils '\'
-echo "   " openssh-client openssh-server ufw util-linux
-apt-get -y install coreutils git-all gpg moreutils \
-	openssh-client openssh-server ufw util-linux
-systemctl enable --now ssh
+echo apt-get -y install git-all moreutils
+apt-get -y install git-all moreutils
+
+### sand 3: TESTED THRU HERE, and confirmed that curl is installed.
 
 echo
 echo curl -L -O https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar.gz.gpg
@@ -29,7 +28,9 @@ curl -L -O https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar
 echo
 echo curl -L -O https://github.com/lhensley/ubuntu-tools/raw/master/install/clean-setup
 # wget --no-cache -O clean-setup https://github.com/lhensley/ubuntu-tools/raw/master/install/clean-setup
-curl -L -O https://github.com/lhensley/ubuntu-tools/raw/master/install/clean-setup
+curl -L -O https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/install/clean-setup
+
+curl -L -O https://github.com/lhensley/ubuntu-tools/raw/refs/heads/master/install/jumpstart
 
 echo
 echo curl -L -O https://github.com/lhensley/ubuntu-tools/raw/master/install/variables

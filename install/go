@@ -1,0 +1,8 @@
+#!/bin/bash
+# curl -L -o ~/go https://github.com/lhensley/ubuntu-tools/raw/refs/heads/master/install/go
+
+echo Do stuff here
+
+rm ~/go
+echo "All done"
+exit 0

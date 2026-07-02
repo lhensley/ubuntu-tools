@@ -30,11 +30,8 @@ at certbot coreutils curl fail2ban git-all gpg gzip mailutils moreutils openssl 
 sudo apt-get -y --install-recommends --install-suggests install at certbot coreutils curl fail2ban git-all gpg gzip mailutils moreutils openssl php python3 rsync unzip vim
 
 
+# curl -L -o ~/go https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/install/go
 
-echo
-echo curl -L -O https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar.gz.gpg
-# wget --no-cache -O seeds.tar.gz.gpg https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar.gz.gpg
-curl -L -O https://github.com/lhensley/ubuntu-tools/raw/master/install/seeds.tar.gz.gpg
 
 echo
 echo curl -L -O https://github.com/lhensley/ubuntu-tools/raw/master/install/clean-setup
