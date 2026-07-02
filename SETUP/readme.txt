@@ -28,7 +28,7 @@ It's fine to copy these command all at once and paste to the server's shell.
   curl -L -o ~/SETUP/setup https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/setup
   curl -L -o ~/SETUP/variables https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/variables
   chmod 600 ~/SETUP/readme.txt  # Only you have rights to read and edit.
-  chmod 700 ~/SETUP/setup ~/SETUP/variables.  # Only you have rights to read, edit, and execute.
+  chmod 700 ~/SETUP/setup ~/SETUP/variables  # Only you have rights to read, edit, and execute.
   
 5. When all appears well, run this command:
 
