@@ -1,15 +1,14 @@
 #!/bin/bash
-# Used for clean-setup and related scripts.
+# Used for setup and related scripts.
 
 # Global install variables
+    HOSTNAME="newhostname"  # <=========== ESSENTIAL!
     ADMIN_USER="lhensley"
-    TIMEZONE="America/Chicago" # Don't use US/*. Not recognized in Ubuntu 24.04
-    HOSTNAME="ca"
+    TIMEZONE="America/Chicago"  # Don't use US/CENTRAL. Not recognized in Ubuntu 24.04
     ADMIN_DIR="/home/$ADMIN_USER"
     ADMIN_HOME_DIR=$ADMIN_DIR
     ROOT_USER="root"
     ROOT_DIR="/root"
-    UMASK=0002
 
 # Used for installing git
     my_full_name="Lane Hensley"
@@ -31,71 +30,73 @@
 # If this is set to false, GUI app installations will be ignored.
 # CAUTION: If accidentally set to true, all required GUI packages also will be installed.
     is_desktop=false
-    install_chrome=true             # Google Chrome web browser
-    install_cubic=true              # Creates custom Ubuntu ISO files. Details at https://github.com/PJ-Singh-001/Cubic
-    install_edge=true               # Microsoft Edge
-    install_filezilla=true          # A powerful client for plain FTP, FTP over SSL/TLS (FTPS) and the SSH File Transfer Protocol (SFTP)
-    install_gimp=true               # An image manipulation and paint program
-    install_todoist=true            # Todoist task manager
-    install_xrdp=true               # A Remote Desktop Protocol (RDP) server
-    install_zoom=true               # Video conferencing
+    install_chrome=false            # Google Chrome web browser
+    install_cubic=false             # Creates custom Ubuntu ISO files. Details at https://github.com/PJ-Singh-001/Cubic
+    install_edge=false              # Microsoft Edge
+    install_filezilla=false         # A powerful client for plain FTP, FTP over SSL/TLS (FTPS) and the SSH File Transfer Protocol (SFTP)
+    install_gimp=false              # An image manipulation and paint program
+    install_todoist=false           # Todoist task manager
+    install_xrdp=false              # A Remote Desktop Protocol (RDP) server
+    install_zoom=false              # Video conferencing
 
 # OPTIONAL software (default to false)
+    install_apg=false               # Password generator
     install_apt_cacher_ng=false     # Caching system for apt software distribution
     install_bridgeutils=false       # Bridge-utils extensions for the interfaces(5) file format
     install_comskip=false           # Commercial skipper for videos
+    install_cryfs=false             # Encrypted file system
+    install_dos2unix=false          # DOS/MAC to UNIX text file format converter
+    install_easyrsa=false           # Utility for managing X.509 Public Key Infrastructure
+    install_exiftool=false          # Read and write meta information in files
+    install_ffmpeg=false            # FFmpeg video converter
+    install_ghostscript=false       # Compressing PDF scans
+    install_handbrake=false         # HandBrake video rendering
+    install_html2text=false         # Convert html to text
     install_ifupdown=false          # Used for /etc/network/interfaces manual configuration; interferes with Network Manager
+    install_inotify=false           # Do something when a file is created, deleted, or changed
     install_lsyncd=false            # Keeps directories in sync using inotify or fsevents. Details at https://lsyncd.github.io/lsyncd/
     install_makemkv=false           # MakeMKV DVD ripper
-    install_mysql_server=false      # Relational Database
     install_nettools=false          # Print network connections, routing tables, interface statistics
     install_nfs=false               # Network File Service
-    install_phpmyadmin=false        # Web tool for managing MySQL
+    install_openvpn=false           # Secure IP tunnel daemon
     install_plexmediaserver=false   # Media streamer and library manager
     install_proftpd=false           # For scanning to brother@oz
     install_puttytools=false        # A free SSH and telnet client
     install_rclone=false            # command-line program to manage files on cloud storage. Details at https://rclone.org/
-    install_resolvconf=false        # Name resolver
+    install_resolvconf=false        # Name resolver (already installed)
+    install_ripmime=false           # Process files sent by email
     install_ssh=false               # Secure Shell (already installed)
+    install_sshfs=false             # Filesystem client based on ssh
+    install_tasksel=false           # A user interface for installing tasks
     install_sysbench=false          # A modular, cross-platform and multi-threaded benchmark tool.
     install_tautulli=false          # Monitoring tool for Plex Media Server ***** PLEX MEDIA SERVER MUST BE INSTALLED TO INSTALL TAUTULLI *****
     install_uuid=false              # Use uuidgen instead. It's built-in.
 
-# STANDARD software (default to true)
-    install_apache2=false           # Apache 2 Webserver
-    install_apg=true                # Password generator
-    install_at=true                   # Queue, examine or delete jobs for later execution
-    install_certbot=false             # Certificate Installer for https
-    install_cryfs=false             # Encrypted file system
-    install_curl=true                 # Transfer a URL
-    install_ddclient=false          # Update IP addresses at dynamic DNS services
-    install_dos2unix=true           # DOS/MAC to UNIX text file format converter
-    install_easyrsa=true            # Utility for managing X.509 Public Key Infrastructure
-    install_exiftool=false          # Read and write meta information in files
-    install_fail2ban=true             # Bans IP that makes too many password failures
-    install_ffmpeg=calse            # FFmpeg video converter
-    install_ghostscript=false       # Compressing PDF scans
-    install_git=true                  # The stupid content tracker
-    install_gpg=true                  # OpenPGP encryption and signing tool
-    install_gzip=true                 # Compress or expand files
-    install_handbrake=false         # HandBrake video rendering
-    install_html2text=true          # Convert html to text
-    install_inotify=true            # Do something when a file is created, deleted, or changed
-    install_mailutils=true            # mail, Postfix, etc.
-    install_openssl=true              # OpenSSL
-    install_openvpn=true            # Secure IP tunnel daemon
-    install_php=true                  # PHP
+# MANDATORY software (default to true; the code in readme.txt already should have installed these)
+    install_apache2=true            # Apache 2 Webserver
+    install_at=true                 # Queue, examine or delete jobs for later execution
+    install_certbot=true            # Certificate Installer for https
+    install_curl=true               # Transfer a URL; wget no longer works well for us as of 2026
+    install_fail2ban=true           # Bans IP that makes too many password failures
+    install_git=true                # Distributed version control system
+    install_gpg=true                # OpenPGP encryption and signing tool
+    install_gzip=true               # Compress or expand files
+    install_openssl=true            # OpenSSL
+    install_php=true                # PHP
     install_python3=true            # This will install Python 3 and pipx
-    install_ripmime=true            # Process files sent by email
-    install_rsync=true                # A fast, versatile, remote (and local) file-copying tool
-    install_sshfs=true              # Filesystem client based on ssh
-    install_tasksel=false           # A user interface for installing tasks
-    install_unzip=true                # List, test and extract compressed files in a ZIP archive
-    install_vim=true                  # Vi IMproved, a programmer's text editor
+    install_rsync=true              # A fast, versatile, remote (and local) file-copying tool
+    install_unzip=true              # List, test and extract compressed files in a ZIP archive
+    install_vim=true                # Vi IMproved, a programmer's text editor
+
+# STANDARD software (default to true)
+    install_ddclient=true           # Update IP addresses at dynamic DNS services
+    install_mailutils=true          # mail, Postfix, etc.
+    install_mysql_server=true       # Relational Database
+    install_phpmyadmin=true         # Web tool for managing MySQL
     install_webmin=true             # Web-based system admin tools
 
 # Set a flag to confirm that the variables are defined
-    VARIABLES_ARE_DEFINED=true
+    VARIABLES_ARE_DEFINED=false
 
 function f_pause () {
   read -s -n 1 -p "Press any key to continue . . .\n"

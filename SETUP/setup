@@ -3,25 +3,6 @@
 # READ THIS BEFORE RUNNING!
 # The ./variables file MUST be EDITED and run ONLY on a newly-installed OS,
 # and NOT an existing or upgraded system.
-#
-# EVERY TIME THE SSH KEYS OR SEED FILE PASSWORD ARE UPDATED:
-#   • Install the new ssh keys on a stable server.
-#   • Make sure that these files are current and error-free
-#       /home/lhensley/.git*
-#       /home/lhensley/.ssh/*
-#       /home/lhensley/git/ubuntu-tools/install/*
-#       /home/lhensley/git/ubuntu-tools/sbin/make-seed-file
-#   • Run 'cd && sudo make-seed-file'
-#       (The password for encrypting the file can be found in 1Password.)
-# 
-# TO INSTALL FROM THE USB FLASH DRIVE
-#   • Follow the instructions from "Installing Ubuntu" on OneNote
-#     to install a clean Ubuntu operating system.
-#   • Boot the new system and get to the command line.
-#   • Download the seed file with these commands.
-#     • wget --no-cache --output-file ./jumpstart bit.ly/4dy0JlZ && chmod 700 ./jumpstart
-#     • ./jumpstart
-#
 
 DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 # if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
@@ -36,13 +17,6 @@ if [[ $EUID -ne 0 ]]; then
     VARIABLES_ARE_DEFINED=false
     source ./variables
 
-# Set umask
-if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
-    # DON'T AUTOMATE THIS! DANGER WILL ROBINSON!
-    # umask $UMASK
-if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
-# exit -1
-
 # Change to SETUP directory
     cd "$ADMIN_DIR/SETUP"
 
@@ -50,7 +24,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
     echo
     echo -en "\007" # Beep
     echo "STOP!"
-    echo "Have you updated the './variables' file? It's critical that you do."
+    echo "Have you updated the '~/SETUP/variables' file? It's critical that you do."
     echo "You MUST type the word CONFIRMED and press RETURN/ENTER to continue."
     read USER_INPUT
     if [ "X$USER_INPUT" != "XCONFIRMED" ] ; then

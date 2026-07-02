@@ -30,7 +30,7 @@ It's fine to copy these command all at once and paste to the server's shell.
   chmod 600 ~/SETUP/readme.txt  # Only you have rights to read and edit.
   chmod 700 ~/SETUP/setup ~/SETUP/variables.  # Only you have rights to read, edit, and execute.
   
-5. If all appears well, run this command:
+5. When all appears well, run this command:
 
   sudo reboot now. # Reboot
 
@@ -39,11 +39,6 @@ It's fine to copy these command all at once and paste to the server's shell.
 6. THIS STEP IS ABSOLUTELY REQUIRED.
 Login to the new server, and change directory to ~/SETUP. Edit ~/SETUP/variables as you see appropriate.
 
-
-
-
-Already installed: coreutils curl gpg gzip moreutils openssl python3 rsync vim 
-Needs interaction: mailutils, webmin
 
 
 
