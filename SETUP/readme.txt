@@ -25,7 +25,6 @@ It's fine to copy these command all at once and paste to the server's shell.
   sudo apt-get -y update && sudo apt-get -y dist-upgrade  # Bring all packages current.
   sudo apt-get -y install git-all moreutils  # Add several needed utilities.
   mkdir -p ~/SETUP # Create a setup directory in your home directory. 
-  cd ~/SETUP  # Set your current working directory to your home directory.
   curl -L -o ~/SETUP/readme.txt https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/readme.txt
   curl -L -o ~/SETUP/setup https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/setup
   curl -L -o ~/SETUP/variables https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/variables
