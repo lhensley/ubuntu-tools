@@ -4,23 +4,42 @@
 # The ./variables file MUST be EDITED and run ONLY on a newly-installed OS,
 # and NOT an existing or upgraded system.
 
-DEBUG_MODE=true; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+DEBUG_MODE=true; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z") ; fi
 # if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
-# Make sure we're root.
-if [[ $EUID -ne 0 ]]; then
-        echo "Use sudo. $0 must be run as root." 1>&2
-        exit 1
-    fi
+#######################################################################
+echo
+echo "################################################################"
+echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
+echo "Making sure we're root"
+    echo
+    if [[ $EUID -ne 0 ]]; then
+            echo "Use sudo. $0 must be run as root." 1>&2
+            exit 1
+        fi
 
-# Set a flag to confirm that the variables are not yet defined
+#######################################################################
+echo
+echo "################################################################"
+echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
+echo "Setting a flag to confirm that the variables are not yet defined"
+    echo
     VARIABLES_ARE_DEFINED=false
     source ./variables
 
-# Change to SETUP directory
+#######################################################################
+echo
+echo "################################################################"
+echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
+echo "Changing to $ADMIN_DIR/SETUP directory"
+    echo
     cd "$ADMIN_DIR/SETUP"
 
-# Confirm that the variables have been updated.
+#######################################################################
+echo
+echo "################################################################"
+echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
+echo "Confirming that the variables have been updated"
     echo
     echo -en "\007" # Beep
     echo "STOP!"
@@ -37,21 +56,46 @@ if [[ $EUID -ne 0 ]]; then
     echo "Confirmed."
     echo
 
-# Reload systemd manager configuration
+#######################################################################
+echo
+echo "################################################################"
+echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
+echo "Reloading systemd manager configuration"
+    echo
     systemctl daemon-reload
 
-# Get timestamp
+#######################################################################
+echo
+echo "################################################################"
+echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
+echo "Getting timestamp"
+    echo
     TIMESTAMP=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
 
-# Set timezone
+#######################################################################
+echo
+echo "################################################################"
+echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
+echo "Setting timezone"
+    echo
     echo timedatectl set-timezone $TIMEZONE
     timedatectl set-timezone $TIMEZONE
 
-# Get us into noninteractive mode
+#######################################################################
+echo
+echo "################################################################"
+echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
+echo "Getting us into noninteractive mode"
+    echo
     export DEBIAN_FRONTEND=noninteractive
 
-# Add universe (and multiverse? no for now ...) repository
+#######################################################################
+echo
+echo "################################################################"
+echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
+echo "Adding universe (and multiverse? no for now ...) repository"
 # More info is at https://itsfoss.com/ubuntu-repositories/
+    echo
     REPOSITORY="universe"
     grep -h "$REPOSITORY" /etc/apt/sources.list > /dev/null 2>&1
     if [ $? -ne 0 ]; then
@@ -77,27 +121,33 @@ if [[ $EUID -ne 0 ]]; then
     apt-get --yes autoremove
 
 # # Install git and open the git port
-# REMOVED FOR SECURITY
+# REMOVED FOR SECURITY: You can't post security keys to Github on a public repository on Github! D'uh!
 #     echo
 #     echo Installing and configuring git
 #     apt-get install --yes git
 #     ufw allow git
 
-# Copy .gitconfig* to $ADMIN_DIR
-# REMOVED FOR SECURITY
+# # Copy .gitconfig* to $ADMIN_DIR
+# REMOVED FOR SECURITY: You can't post security keys to Github on a public repository on Github! D'uh!
 #     ADMIN_FILE="$ADMIN_DIR/$BASEFILE"
 #     cp "$OUTFILE"* $ADMIN_DIR/
 #     chown $ADMIN_USER:$ADMIN_USER "$ADMIN_FILE"*
 
-# Copy .git* and set permissions
+#######################################################################
+echo
+echo "################################################################"
+echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
+echo "Copying .git* and set permissions
     echo
-    echo cd $ADMIN_DIR/SETUP
-	cd $ADMIN_DIR/SETUP
-    #############
-    echo
+########### Next three lines are redundant
+#    echo cd $ADMIN_DIR/SETUP
+# 	 cd $ADMIN_DIR/SETUP
+#    echo
+########### Next three lines are handled on OS installation with Github
     echo cp -r $ADMIN_DIR/SETUP/.ssh $ADMIN_DIR/.
     cp -r $ADMIN_DIR/SETUP/.ssh $ADMIN_DIR/.
     echo
+########### Now back to normal!
     echo chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.ssh
     chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.ssh
     echo
@@ -106,11 +156,14 @@ if [[ $EUID -ne 0 ]]; then
     echo
     echo chmod -R 600 $ADMIN_DIR/.ssh/*
     chmod -R 600 $ADMIN_DIR/.ssh/*
-    echo
-    # Two lines below used to show 644. Why? 2024-07-07
-    echo chmod 600 $ADMIN_DIR/.ssh/id_ed25519.pub
-    chmod 600 $ADMIN_DIR/.ssh/id_ed25519.pub
-    #############
+        #############
+        # Removed the next three line because even though it's true 
+        #   that public keys need to be readable to anyone,
+        #   the only file in .ssh for now is authorized_keys
+        # echo
+        # echo chmod 600 $ADMIN_DIR/.ssh/*.pub
+        # chmod 600 $ADMIN_DIR/.ssh/*.pub
+        #############
     echo
     echo cp $ADMIN_DIR/SETUP/.git* $ADMIN_DIR/.
     cp $ADMIN_DIR/SETUP/.git* $ADMIN_DIR/.

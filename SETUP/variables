@@ -2,7 +2,7 @@
 # Used for setup and related scripts.
 
 # Global install variables
-    HOSTNAME="newhostname"  # <=========== ESSENTIAL!
+    HOSTNAME=$(hostname)
     ADMIN_USER="lhensley"
     TIMEZONE="America/Chicago"  # Don't use US/CENTRAL. Not recognized in Ubuntu 24.04
     ADMIN_DIR="/home/$ADMIN_USER"
