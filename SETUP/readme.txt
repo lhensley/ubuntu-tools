@@ -40,6 +40,11 @@ It's fine to copy these command all at once and paste to the server's shell.
 Login to the new server, and change directory to ~/SETUP. Edit ~/SETUP/variables as you see appropriate.
 
 
+####################
+
+# NOT FINISHED!
+
+
 
 
 
