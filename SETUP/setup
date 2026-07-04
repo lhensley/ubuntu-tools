@@ -4,7 +4,7 @@
 # The ./variables file MUST be EDITED and run ONLY on a newly-installed OS,
 # and NOT an existing or upgraded system.
 
-DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+DEBUG_MODE=true; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 # if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 # Make sure we're root.
@@ -59,23 +59,6 @@ if [[ $EUID -ne 0 ]]; then
       echo "Adding the $REPOSITORY repository"
       add-apt-repository --yes $REPOSITORY
       fi
-    # echo
-    # echo "Adding the universe repository"
-    # add-apt-repository --yes universe
-
-    # Update packages
-    # apt vs apt-get?
-    #   Res (defining): https://askubuntu.com/questions/990823/apt-gives-unstable-cli-interface-warning
-    #   Res: https://itsfoss.com/apt-vs-apt-get-difference/
-    #   Res: https://linuxconfig.org/apt-vs-apt-get-advanced-package-tool
-    #   Res: https://www.google.com/search?q=apt+and+apt-get
-    # "update" downloads package information from all configured sources
-    # "upgrade" is an extraneous subset of "dist-upgrade" below;
-    #    Ref: https://askubuntu.com/questions/194651/why-use-apt-upgrade-instead-of-apt-dist-upgrade#:~:text=apt%2Dget%20upgrade%20will%20not,install%20but%20not%20remove%20packages
-    #    sudo apt-get --yes upgrade \
-    # "dist-upgrade" installs available upgrades of all packages
-    # currently installed on the system and intelligently handles
-    # changing dependencies with new versions of packages
     echo
     echo Updating local host of upgradable packages and upgrading them.
     echo DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
@@ -106,7 +89,7 @@ if [[ $EUID -ne 0 ]]; then
 #     cp "$OUTFILE"* $ADMIN_DIR/
 #     chown $ADMIN_USER:$ADMIN_USER "$ADMIN_FILE"*
 
-# Copy .ssh, .git*, clean-setup, and variable files and set permissions
+# Copy .git* and set permissions
     echo
     echo cd $ADMIN_DIR/SETUP
 	cd $ADMIN_DIR/SETUP
@@ -170,16 +153,21 @@ if [[ $EUID -ne 0 ]]; then
     rm -rf "$SBIN_DIR"
     ln -s "$GIT_UBUNTU_TOOLS_SBIN" "$SBIN_PARENT"/
 
-# For reasons I don't understand, this was bricking the server on pd1 2024-08-08.
-# Took it out because it's run later anyway, and doesn't cause problems.
-## Run upd
-#    echo
-#    echo upd
-#    upd
-
 ##############################################################
 ################# GITHUB FILES NOW ARE FULLY LOADED AND READY.
 ##############################################################
+
+
+
+
+############## STOP HERE FOR TESTING! #####################################################
+echo Stopping for testing.
+if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+exit 0
+
+
+
+
 
 # Include script setup file
 	source script-setup
@@ -446,8 +434,7 @@ if $install_nfs ; then
   if ! $(f_is_installed "nfs-common"); then
     echo
     echo "Installing nfs."
-    apt-get install --yes nfs-common
-    apt-get install --yes nfs-kernel-server
+    apt-get install --yes nfs-common nfs-kernel-server
     echo "nfs installed."
     fi
   fi
