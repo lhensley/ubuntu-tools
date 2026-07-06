@@ -38,10 +38,11 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 
 date
+echo "Copying 'Plex Media Server'. This should take about two minutes."
 rm -rf /tmp/plex-files
 snap stop plexmediaserver
 mkdir -p /tmp/plex-files
-echo "Copying 'Plex Media Server'"
+chmod 700 /tmp/plex-files
 cp -r '/var/snap/plexmediaserver/common/Library/Application Support'/* /tmp/plex-files/
 snap start plexmediaserver
 date
