@@ -37,7 +37,7 @@ It's fine to copy these command all at once and paste to the server's shell.
   mv ~/'Contents of githubconfig.txt' ~/.githubconfig
   mkdir -p ~/SETUP # Create a setup directory in your home directory
   curl -L -o ~/SETUP/readme.txt  https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/readme.txt
-  curl -L -o ~/SETUP/setup.      https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/setup
+  curl -L -o ~/SETUP/setup       https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/setup
   curl -L -o ~/SETUP/variables   https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/variables
   chmod 600 ~/.gitconfig                     # Only you have rights to read and edit
   chmod 600 ~/.githubconfig                  # Only you have rights to read and edit

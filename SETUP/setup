@@ -25,7 +25,7 @@ echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
 echo "Setting a flag to confirm that the variables are not yet defined"
     echo
     VARIABLES_ARE_DEFINED=false
-    source ./variables
+    source ~/SETUP/variables
 
 #######################################################################
 echo
@@ -104,7 +104,7 @@ echo "Adding universe (and multiverse? no for now ...) repository"
       add-apt-repository --yes $REPOSITORY
       fi
     echo
-    echo Updating local host of upgradable packages and upgrading them.
+    echo Updating local host of upgradable packages and upgrading them
     echo DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
     DEBIAN_FRONTEND=noninteractive apt-get --yes update && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
     # "clean" clears out the local repository of retrieved package files.
@@ -120,70 +120,21 @@ echo "Adding universe (and multiverse? no for now ...) repository"
     echo apt-get --yes autoremove
     apt-get --yes autoremove
 
-# # Install git and open the git port
-# REMOVED FOR SECURITY: You can't post security keys to Github on a public repository on Github! D'uh!
-#     echo
-#     echo Installing and configuring git
-#     apt-get install --yes git
-#     ufw allow git
-
-# # Copy .gitconfig* to $ADMIN_DIR
-# REMOVED FOR SECURITY: You can't post security keys to Github on a public repository on Github! D'uh!
-#     ADMIN_FILE="$ADMIN_DIR/$BASEFILE"
-#     cp "$OUTFILE"* $ADMIN_DIR/
-#     chown $ADMIN_USER:$ADMIN_USER "$ADMIN_FILE"*
-
 #######################################################################
 echo
 echo "################################################################"
 echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
-echo "Copying .git* and set permissions
-    echo
-########### Next three lines are redundant
-#    echo cd $ADMIN_DIR/SETUP
-# 	 cd $ADMIN_DIR/SETUP
-#    echo
-########### Next three lines are handled on OS installation with Github
-    echo cp -r $ADMIN_DIR/SETUP/.ssh $ADMIN_DIR/.
-    cp -r $ADMIN_DIR/SETUP/.ssh $ADMIN_DIR/.
-    echo
-########### Now back to normal!
-    echo chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.ssh
-    chown -R $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.ssh
-    echo
-    echo chmod 700 $ADMIN_DIR/.ssh
-    chmod 700 $ADMIN_DIR/.ssh
-    echo
-    echo chmod -R 600 $ADMIN_DIR/.ssh/*
-    chmod -R 600 $ADMIN_DIR/.ssh/*
-        #############
-        # Removed the next three line because even though it's true 
-        #   that public keys need to be readable to anyone,
-        #   the only file in .ssh for now is authorized_keys
-        # echo
-        # echo chmod 600 $ADMIN_DIR/.ssh/*.pub
-        # chmod 600 $ADMIN_DIR/.ssh/*.pub
-        #############
-    echo
-    echo cp $ADMIN_DIR/SETUP/.git* $ADMIN_DIR/.
-    cp $ADMIN_DIR/SETUP/.git* $ADMIN_DIR/.
-    echo
-    echo chown $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/clean-setup $ADMIN_DIR/SETUP/variables
-    chown $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.git* $ADMIN_DIR/SETUP/clean-setup $ADMIN_DIR/SETUP/variables
-    echo
-    echo chmod 600 $ADMIN_DIR/.git*
-    chmod 600 $ADMIN_DIR/.git*
-    echo
-    echo chmod 700 $ADMIN_DIR/SETUP/clean-setup $ADMIN_DIR/SETUP/variables
-    chmod 700 $ADMIN_DIR/SETUP/clean-setup $ADMIN_DIR/SETUP/variables
-    # echo
-    # echo rm -r $ADMIN_DIR/SETUP
-    # rm -r $ADMIN_DIR/SETUP
-
-# Wipe out existing git and /usr/local/sbin if they exist
+echo "Wiping out existing git and /usr/local/sbin if they exist"
     echo
     echo Clearing "$GIT_ROOT" and "$SBIN_DIR"
-    rm -rf "$GIT_ROOT" "$SBIN_DIR"
+    rm -rf "$GIT_ROOT" "$SBIN_DIR" # NOTE: Should it be "$SBIN_DIR"/* ? so that the directory itself remains? 7/4/2026
+
+
+
+#######################################################################
+# TESTING STOP
+exit 1
+
 
 # Clone ubuntu-tools and set restrictive permissions
     echo
