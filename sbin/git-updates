@@ -215,7 +215,12 @@ done
             if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
             git -C "$GIT_UBUNTU_TOOLS" push
             if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
-	    
+
+    # 2026-07-06 Add _apply-permissions
+	echo "$0: Applying configurations and permissions." && echo
+	_apply-configs
+	_apply-permissions
+
     # 2024-07-23 No. All this is managed in _apply-permissions
     # # Set permissions for git directory
     #     echo
