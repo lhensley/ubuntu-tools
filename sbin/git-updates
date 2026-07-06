@@ -174,8 +174,9 @@ done
 # 	git config --global url."https://ssh:$GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/" > $REDIRECT
 # 	git config --global url."https://git:$GIT_TOKEN@github.com/".insteadOf "git@github.com:" $> $REDIRECT
 
-# Apply configs
-	upd
+######## Moved this to the end so configs and permissions would be applied correctly 2026-07-06
+# # Apply configs
+# 	upd
 
 # This section re-pulls all go files from github and updates $SBIN_DIR
 	# Change to local repository directory

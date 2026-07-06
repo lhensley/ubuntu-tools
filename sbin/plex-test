@@ -36,9 +36,9 @@ fi
 # Do stuff here
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
-
 date
-echo "Copying 'Plex Media Server'. This should take about two minutes."
+echo "Copying '/var/snap/plexmediaserver/common/Library/Application Support' to /tmp/plex-files. 
+echo "This should take about two minutes."
 rm -rf /tmp/plex-files
 snap stop plexmediaserver
 mkdir -p /tmp/plex-files
@@ -46,9 +46,6 @@ chmod 700 /tmp/plex-files
 cp -r '/var/snap/plexmediaserver/common/Library/Application Support'/* /tmp/plex-files/
 snap start plexmediaserver
 date
-
-
-
 
 # Option to text the administrator when the script ends
 # echo "[$(hostname)] $(basename $0): completed" | mail "$ADMIN_CELL_EMAIL"
