@@ -37,7 +37,7 @@ fi
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 date
-echo "Copying '/var/snap/plexmediaserver/common/Library/Application Support' to /tmp/plex-files. 
+echo "Copying '/var/snap/plexmediaserver/common/Library/Application Support' to /tmp/plex-files." 
 echo "This should take about two minutes."
 rm -rf /tmp/plex-files
 snap stop plexmediaserver
