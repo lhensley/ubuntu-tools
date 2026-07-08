@@ -48,8 +48,9 @@ mysqldump --databases \
 
 chmod 600 $WORKING_DUMP
 
-########################################################################################################################
-# IMPORTANT: At this point, the $WORKING_DUMP is finished. Everything else is moving it around and naming it as helpful.
+###########################################################################
+# IMPORTANT: At this point, the $WORKING_DUMP is finished. 
+# Everything else is compessing, moving it around and naming it as helpful.
 
 if [ $HOSTNAME = dsm1SPOIL ] ; then
     mkdir -p /mnt/5TBC/archives/mysql /mnt/20TBA/archives/mysql
