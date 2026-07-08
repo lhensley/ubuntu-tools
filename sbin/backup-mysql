@@ -27,11 +27,11 @@ fi
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 # Set variables
-WORKING_DIR="/tmp/$UUID"
-WORKING_DUMP="$WORKING_DIR/$HOSTNAME.sql.gz"
+WORKING_DIR="/tmp/mysql-$UUID"
+WORKING_DUMP="$WORKING_DIR/$HOSTNAME.sql"
 TIMESTAMP="$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')"
 
-echo WORKING_DIR="/tmp/mysql-dump-$UUID"
+echo WORKING_DIR="/tmp/mysql-$UUID"
 echo WORKING_DUMP=$WORKING_DUMP
 echo TIMESTAMP=$TIMESTAMP
 echo mkdir --mode=600 -p $WORKING_DIR
@@ -47,10 +47,13 @@ mysqldump --databases \
         && [ "$d" != "sys" ]; \
         then printf "%s " "$d"; fi; done) \
         --triggers --events --routines > $WORKING_DUMP
-### NOTE: Earlier versions added: | gzip
 
 echo chmod -R 600 $WORKING_DIR/*
 chmod -R 600 $WORKING_DIR/*
+
+######
+# TEMPORARY
+exit 0
 
 ###########################################################################
 # IMPORTANT: At this point, the $WORKING_DUMP is finished. 
