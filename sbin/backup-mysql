@@ -28,7 +28,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 # Set variables
 WORKING_DUMP="/tmp/$UUID/$HOSTNAME.sql.gz"
-TIMESTAMP="$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'"
+TIMESTAMP="$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'")
 
 echo WORKING_DUMP=$WORKING_DUMP
 echo TIMESTAMP=$TIMESTAMP
