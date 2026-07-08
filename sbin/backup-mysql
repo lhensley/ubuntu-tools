@@ -28,7 +28,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 # Set variables
 WORKING_DIR="/tmp/mysql-$UUID"
-WORKING_DUMP="$WORKING_DIR/$HOSTNAME.sql"
+WORKING_DUMP="$WORKING_DIR/MySQL.$HOSTNAME.dump.sql"
 TIMESTAMP="$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')"
 
 # echo WORKING_DIR="/tmp/mysql-$UUID"
@@ -52,52 +52,52 @@ mysqldump --databases \
 # echo chmod -R 600 $WORKING_DIR/*
 chmod -R 600 $WORKING_DIR/*
 
-###########################################################################
+############################################################################
 # IMPORTANT: At this point, the $WORKING_DUMP is finished. 
-# Everything else is compessing, moving it around and naming it as helpful.
+# Everything else is compessing, moving it around, and naming it as helpful.
 
-if [ $HOSTNAME = dsm1SPOIL ] ; then
-    mkdir -p /mnt/5TBC/archives/mysql /mnt/20TBA/archives/mysql
-    echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/5TBC/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz  > /dev/stderr
-    cp $WORKING_DUMP /mnt/5TBC/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
-    echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz > /dev/stderr
-    cp $WORKING_DUMP /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
-    echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/20TBA/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz > /dev/stderr
-    cp $WORKING_DUMP /mnt/20TBA/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
-    ln -f /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/5TBC/archives/mysql/dsm1.sql.gz
-    echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz > /dev/stderr
-    cp $WORKING_DUMP /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
-    ln -f /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/20TBA/archives/mysql/dsm1.sql.gz
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to pd1" > /dev/stderr
-    chown $ADMIN_USER $WORKING_DUMP
-    sudo -u $ADMIN_USER sftp pd1 <<< $"put $WORKING_DUMP" > /dev/null 2> /dev/null
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Decompressing the dump on pd1" > /dev/stderr
-    sudo -u $ADMIN_USER ssh pd1 rm -f dsm1.sql
-    sudo -u $ADMIN_USER ssh pd1 gunzip dsm1.sql.gz
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Importing the dump into MySQL on pd1.  (This REALLY takes a while.)" > /dev/stderr
-    sudo -u $ADMIN_USER ssh pd1 mysql < dsm1.sql
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Cleaning up on pd1" > /dev/stderr
-    sudo -u $ADMIN_USER ssh pd1 rm -f dsm1.sql
-    chown $ROOT_USER $WORKING_DUMP
-    fi
+###### Disabling this section 2026-07-08
+# if [ $HOSTNAME = dsm1 ] ; then
+#     mkdir -p /mnt/5TBC/archives/mysql /mnt/20TBA/archives/mysql
+#     echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/5TBC/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz  > /dev/stderr
+#     cp $WORKING_DUMP /mnt/5TBC/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
+#     echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz > /dev/stderr
+#     cp $WORKING_DUMP /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
+#     echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/20TBA/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz > /dev/stderr
+#     cp $WORKING_DUMP /mnt/20TBA/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
+#     ln -f /mnt/5TBC/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/5TBC/archives/mysql/dsm1.sql.gz
+#     echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz > /dev/stderr
+#     cp $WORKING_DUMP /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
+#     ln -f /mnt/20TBA/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/20TBA/archives/mysql/dsm1.sql.gz
+#     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to pd1" > /dev/stderr
+#     chown $ADMIN_USER $WORKING_DUMP
+#     sudo -u $ADMIN_USER sftp pd1 <<< $"put $WORKING_DUMP" > /dev/null 2> /dev/null
+#     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Decompressing the dump on pd1" > /dev/stderr
+#     sudo -u $ADMIN_USER ssh pd1 rm -f dsm1.sql
+#     sudo -u $ADMIN_USER ssh pd1 gunzip dsm1.sql.gz
+#     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Importing the dump into MySQL on pd1.  (This REALLY takes a while.)" > /dev/stderr
+#     sudo -u $ADMIN_USER ssh pd1 mysql < dsm1.sql
+#     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Cleaning up on pd1" > /dev/stderr
+#     sudo -u $ADMIN_USER ssh pd1 rm -f dsm1.sql
+#     chown $ROOT_USER $WORKING_DUMP
+#     fi
 
-if [ $HOSTNAME = pd1 ] ; then
-    mkdir -p /mnt/bob/archives/mysql
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/bob/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz" > /dev/stderr
-    cp $WORKING_DUMP /mnt/bob/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
-    echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz" > /dev/stderr
-    cp $WORKING_DUMP /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
-    ln -f /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/bob/archives/mysql/pd1.sql.gz
-    fi
+###### Disabling this section 2026-07-08
+# if [ $HOSTNAME = pd1 ] ; then
+#     mkdir -p /mnt/bob/archives/mysql
+#     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/bob/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz" > /dev/stderr
+#     cp $WORKING_DUMP /mnt/bob/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
+#     echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz" > /dev/stderr
+#     cp $WORKING_DUMP /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz
+#     ln -f /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/bob/archives/mysql/pd1.sql.gz
+#     fi
 
 echo mv $WORKING_DUMP $ADMIN_HOME_DIR/
 mv $WORKING_DUMP $ADMIN_HOME_DIR/
-# TEMPORARY STOP
-exit 0
 
 #####################################################################
 # 2026-07-08: Is the command below necessary or helpful? Checking ...
-# rm -rf /tmp/$UUID
+rm -rf $WORKING_DIR
 echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Done!" > /dev/stderr
 
 # Option to text the administrator when the script ends
@@ -110,4 +110,3 @@ if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %
 	source "${PATHNAME[script_footer]}"
 
 exit 0
-
