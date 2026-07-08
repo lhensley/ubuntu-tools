@@ -42,13 +42,13 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 PLEX_FILES_DIR="/var/snap/plexmediaserver/common/Library/Application Support"
 ARCHIVE_PLEX="$ADMIN_DIR/backups"
 
-echo "Copying contents of '$PLEX_FILES_DIR' to "'$ARCHIVE_PLEX'"
+echo "Copying contents of '$PLEX_FILES_DIR' to '$ARCHIVE_PLEX'"
 echo "This should take about two minutes."
-rm -rf $ARCHIVE_PLEX
+rm -rf "$ARCHIVE_PLEX"
 snap stop plexmediaserver
 echo "Making the copy ..."
-mkdir -p $ARCHIVE_PLEX
-chmod 700 $ARCHIVE_PLEX
+mkdir -p "$ARCHIVE_PLEX"
+chmod 700 "$ARCHIVE_PLEX"
 cp -r "$PLEX_FILES_DIR/"* "$ARCHIVE_PLEX/"
 snap start plexmediaserver
 echo "Done."
