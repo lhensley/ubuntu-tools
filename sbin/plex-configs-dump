@@ -50,7 +50,7 @@ snap stop plexmediaserver
 echo "Making the copy ..."
 mkdir -p "$ARCHIVE_PLEX"
 chmod 700 "$ARCHIVE_PLEX"
-cp -r "$PLEX_FILES_DIR/"* "$ARCHIVE_PLEX/"
+cp -rf "$PLEX_FILES_DIR/"* "$ARCHIVE_PLEX/"
 echo "Starting Plex"
 snap start plexmediaserver
 echo "Done."
