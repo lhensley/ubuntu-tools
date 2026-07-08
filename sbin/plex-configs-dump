@@ -1,4 +1,7 @@
 #!/bin/bash
+# Copies contents of '/var/snap/plexmediaserver/common/Library/Application Support' to /tmp/plex-files.
+# The 'Plex Media Server' directory is the only content
+#  of '/var/snap/plexmediaserver/common/Library/Application Support'
 
 DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 # if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
@@ -36,16 +39,16 @@ fi
 # Do stuff here
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
-date
-echo "Copying '/var/snap/plexmediaserver/common/Library/Application Support' to /tmp/plex-files." 
+echo "Copying contents of '/var/snap/plexmediaserver/common/Library/Application Support' to /tmp/plex-files." 
 echo "This should take about two minutes."
 rm -rf /tmp/plex-files
 snap stop plexmediaserver
+echo "Making the copy ..."
 mkdir -p /tmp/plex-files
 chmod 700 /tmp/plex-files
 cp -r '/var/snap/plexmediaserver/common/Library/Application Support'/* /tmp/plex-files/
 snap start plexmediaserver
-date
+echo "Done."
 
 # Option to text the administrator when the script ends
 # echo "[$(hostname)] $(basename $0): completed" | mail "$ADMIN_CELL_EMAIL"
