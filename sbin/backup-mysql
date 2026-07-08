@@ -32,7 +32,6 @@ TIMESTAMP="$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')"
 
 echo WORKING_DUMP=$WORKING_DUMP
 echo TIMESTAMP=$TIMESTAMP
-exit 0
 
 echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Dumping all user databases. (This takes a while.)" > /dev/stderr
 mysqldump --databases \
