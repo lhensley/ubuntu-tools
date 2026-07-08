@@ -51,7 +51,7 @@ chmod 600 $WORKING_DUMP
 ########################################################################################################################
 # IMPORTANT: At this point, the $WORKING_DUMP is finished. Everything else is moving it around and naming it as helpful.
 
-if [ $HOSTNAME = dsm1 ] ; then
+if [ $HOSTNAME = dsm1SPOIL ] ; then
     mkdir -p /mnt/5TBC/archives/mysql /mnt/20TBA/archives/mysql
     echo $(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Copying the dump to /mnt/5TBC/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz  > /dev/stderr
     cp $WORKING_DUMP /mnt/5TBC/archives/mysql/$HOSTNAME-d-$START_WEEKDAYSTAMP3.sql.gz
