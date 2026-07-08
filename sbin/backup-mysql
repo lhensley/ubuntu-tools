@@ -31,13 +31,14 @@ WORKING_DIR="/tmp/mysql-$UUID"
 WORKING_DUMP="$WORKING_DIR/$HOSTNAME.sql"
 TIMESTAMP="$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')"
 
-echo WORKING_DIR="/tmp/mysql-$UUID"
+# echo WORKING_DIR="/tmp/mysql-$UUID"
 echo WORKING_DUMP=$WORKING_DUMP
 echo TIMESTAMP=$TIMESTAMP
-echo mkdir --mode=600 -p $WORKING_DIR
+# echo mkdir --mode=600 -p $WORKING_DIR
 mkdir --mode=600 -p $WORKING_DIR
 
-echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Dumping all user databases. (This takes a while.)" > /dev/stderr
+# echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Dumping all user databases. (This takes a while.)" > /dev/stderr
+echo "Dumping all user databases. (This takes a while.)" > /dev/stderr
 mysqldump --databases \
     $(for d in $(mysql -Bse 'show databases') ;
         do if [ "$d" != "information_schema" ] \
