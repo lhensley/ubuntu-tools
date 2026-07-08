@@ -27,13 +27,15 @@ fi
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 # Set variables
-WORKING_DUMP="/tmp/$UUID/$HOSTNAME.sql.gz"
+WORKING_DIR="/tmp/$UUID"
+WORKING_DUMP="$WORKING_DIR/$HOSTNAME.sql.gz"
 TIMESTAMP="$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')"
 
+echo WORKING_DIR="/tmp/$UUID"
 echo WORKING_DUMP=$WORKING_DUMP
 echo TIMESTAMP=$TIMESTAMP
-echo mkdir --mode=600 -p $WORKING_DUMP
-mkdir --mode=600 -p $WORKING_DUMP
+echo mkdir --mode=600 -p $WORKING_DIR
+mkdir --mode=600 -p $WORKING_DIR
 
 echo "$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z'): Dumping all user databases. (This takes a while.)" > /dev/stderr
 mysqldump --databases \
@@ -47,7 +49,8 @@ mysqldump --databases \
         --triggers --events --routines \
         | gzip > $WORKING_DUMP
 
-chmod 600 $WORKING_DUMP
+echo chmod -R 600 $WORKING_DIR/*
+chmod -R 600 $WORKING_DIR/*
 
 ###########################################################################
 # IMPORTANT: At this point, the $WORKING_DUMP is finished. 
