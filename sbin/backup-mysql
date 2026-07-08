@@ -49,12 +49,8 @@ mysqldump --databases \
         then printf "%s " "$d"; fi; done) \
         --triggers --events --routines > $WORKING_DUMP
 
-echo chmod -R 600 $WORKING_DIR/*
+# echo chmod -R 600 $WORKING_DIR/*
 chmod -R 600 $WORKING_DIR/*
-
-######
-# TEMPORARY
-exit 0
 
 ###########################################################################
 # IMPORTANT: At this point, the $WORKING_DUMP is finished. 
@@ -94,7 +90,11 @@ if [ $HOSTNAME = pd1 ] ; then
     ln -f /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/bob/archives/mysql/pd1.sql.gz
     fi
 
+echo mv $WORKING_DUMP $ADMIN_HOME_DIR/
 mv $WORKING_DUMP $ADMIN_HOME_DIR/
+# TEMPORARY STOP
+exit 0
+
 #####################################################################
 # 2026-07-08: Is the command below necessary or helpful? Checking ...
 # rm -rf /tmp/$UUID
