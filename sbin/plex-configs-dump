@@ -45,11 +45,13 @@ ARCHIVE_PLEX="$ADMIN_DIR/backups"
 echo "Copying contents of '$PLEX_FILES_DIR' to '$ARCHIVE_PLEX'"
 echo "This should take about two minutes."
 rm -rf "$ARCHIVE_PLEX"
+echo "Stopping Plex"
 snap stop plexmediaserver
 echo "Making the copy ..."
 mkdir -p "$ARCHIVE_PLEX"
 chmod 700 "$ARCHIVE_PLEX"
 cp -r "$PLEX_FILES_DIR/"* "$ARCHIVE_PLEX/"
+echo "Starting Plex"
 snap start plexmediaserver
 echo "Done."
 
