@@ -28,7 +28,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 # Set variables
 WORKING_DIR="/tmp/mysql-$UUID"
-WORKING_DUMP="$WORKING_DIR/MySQL.$HOSTNAME.dump.sql"
+WORKING_DUMP="$WORKING_DIR/$HOSTNAME.sql"
 TIMESTAMP="$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')"
 
 # echo WORKING_DIR="/tmp/mysql-$UUID"
@@ -92,8 +92,9 @@ chmod -R 600 $WORKING_DIR/*
 #     ln -f /mnt/bob/archives/mysql/$HOSTNAME-m-$START_MONTHSTAMP.sql.gz /mnt/bob/archives/mysql/pd1.sql.gz
 #     fi
 
-echo mv $WORKING_DUMP $ADMIN_HOME_DIR/
-mv $WORKING_DUMP $ADMIN_HOME_DIR/
+mkdir --mode=600 -p "$ADMIN_HOME_DIR/backups/MySQL"
+echo mv $WORKING_DUMP $ADMIN_HOME_DIR/backups/MySQL/
+mv $WORKING_DUMP $ADMIN_HOME_DIR/backups/MySQL/
 
 #####################################################################
 # 2026-07-08: Is the command below necessary or helpful? Checking ...
