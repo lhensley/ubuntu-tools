@@ -40,7 +40,7 @@ fi
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 PLEX_FILES_DIR="/var/snap/plexmediaserver/common/Library/Application Support"
-ARCHIVE_PLEX="$ADMIN_DIR/backups"
+ARCHIVE_PLEX="$ADMIN_HOME_DIR/backups"
 
 echo "Copying contents of '$PLEX_FILES_DIR' to '$ARCHIVE_PLEX'"
 echo "This should take about two minutes."
