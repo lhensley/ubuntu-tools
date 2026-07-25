@@ -26,31 +26,23 @@ and 'Contents of githubconfig.txt'. Download both of them.
 4. SFTP (Termius) from the client machine to the new server and login to the new server.
 Copy the files from the Downloads folder on the client machine to your home directory on the new server.
 IMPORTANT: Keep the "Contents of " parts of the file names.
-Move the files from the Downloads folder on the client machine to the Trash and close SFTP.
+Close SFTP (optional).
 
 5. SSH (Termius) from the client machine to the new server and login to the new server.
 Issue these commands:   
   mv ~/'Contents of gitconfig.txt' ~/.gitconfig
   mv ~/'Contents of githubconfig.txt' ~/.githubconfig
-#  chmod 600 ~/.git*
+
+6. (Removed)
+
+7. (Removed)
 
 8. At the CLI, enter these commands. 
 It's fine to copy these command all at once and paste to the server's shell.
 Unexpected warnings and errors are not unusual. Recommend executing these one at a time.
 
-  # UPDATE THESE! 
-  # HOSTNAME=$(hostname)
-  # ADMIN_USER="lhensley"
-  # TIMEZONE="America/Chicago"  # Don't use US/CENTRAL. Not recognized in Ubuntu 24.04
-  # ADMIN_DIR="/home/$ADMIN_USER"
-  # ADMIN_HOME_DIR=$ADMIN_DIR
-  # ROOT_USER="root"
-  # ROOT_DIR="/root"
   sudo apt-get -y update && sudo apt-get -y dist-upgrade  # Bring all packages current
   sudo apt-get -y install at certbot fail2ban git-all moreutils php unzip # Add several needed utilities
-  # Install above also installed: coreutils curl gpg gzip moreutils openssl python3 rsync vim and more
-  # mv ~/'Contents of gitconfig.txt' ~/.gitconfig
-  # mv ~/'Contents of githubconfig.txt' ~/.githubconfig
   mkdir -p ~/SETUP # Create a setup directory in your home directory
   curl -L -o ~/SETUP/readme.txt  https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/readme.txt
   curl -L -o ~/SETUP/setup       https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/setup
@@ -69,7 +61,6 @@ Unexpected warnings and errors are not unusual. Recommend executing these one at
 Login to the new server, and edit ~/SETUP/variables as you see appropriate.
 
 12. Run the setup script:
-
   sudo ~/SETUP/setup  # Runs the system setup routine for a newly provisioning server
 
 
