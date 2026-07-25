@@ -47,21 +47,22 @@ Unexpected warnings and errors are not unusual. Recommend executing these one at
   curl -L -o ~/SETUP/readme.txt  https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/readme.txt
   curl -L -o ~/SETUP/setup       https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/setup
   curl -L -o ~/SETUP/variables   https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/variables
-  chmod 600 ~/.gitconfig                         # Only you have rights to read and edit
-  chmod 600 ~/.githubconfig                      # Only you have rights to read and edit
-  chmod 600 ~/SETUP/readme.txt                   # Only you have rights to read and edit
-  chmod 700 ~/SETUP ~/SETUP/setup ~/SETUP/setup  # Only you have rights to read, edit, and execute
+  chmod 600 ~/.gitconfig                             # Only you have rights to read and edit
+  chmod 600 ~/.githubconfig                          # Only you have rights to read and edit
+  chmod 600 ~/SETUP/readme.txt                       # Only you have rights to read and edit
+  chmod 700 ~/SETUP ~/SETUP/setup ~/SETUP/variables  # Only you have rights to read, edit, and execute
   chown lhensley:lhensley ~/.gitconfig ~/.githubconfig ~/SETUP/readme.txt ~/SETUP/setup ~/SETUP/variables
   
 9. When all appears well, run this command:  sudo reboot now  # Reboot
+The server will restart, which will end your SSH session. Wait about one minute and re-connect.
 
-10. The server will restart, which will end your SSH session. Wait about one minute and re-connect.
+10. (Removed.)
 
 11. THIS STEP IS ABSOLUTELY REQUIRED.
 Login to the new server, and edit ~/SETUP/variables as you see appropriate.
 
 12. Run the setup script:
-  sudo ~/SETUP/setup  # Runs the system setup routine for a newly provisioning server
+    sudo ~/SETUP/setup  # Runs the system setup routine for a newly provisioning server
 
 
 

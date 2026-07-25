@@ -25,7 +25,7 @@ echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
 echo "Setting a flag to confirm that the variables are not yet defined"
     echo
     VARIABLES_ARE_DEFINED=false
-    source /home/$(whoami)/SETUP/variables
+    source /home/$SUDO_USER/SETUP/variables
 
 #######################################################################
 echo
@@ -124,11 +124,15 @@ echo "Adding universe (and multiverse? no for now ...) repository"
 echo
 echo "################################################################"
 echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
-echo "Wiping out existing git and /usr/local/sbin if they exist"
+echo "Wiping out existing git and /usr/local/sbin if they exist" # "git" no longer used 2026-07-25
     echo
-    echo Clearing "$GIT_ROOT" and "$SBIN_DIR"
-    rm -rf "$GIT_ROOT" "$SBIN_DIR" # NOTE: Should it be "$SBIN_DIR"/* ? so that the directory itself remains? 7/4/2026
-
+    echo Clearing "$GIT_ROOT" and "$SBIN_DIR" # "git" no longer used 2026-07-25
+    mkdir -p "$SBIN_DIR"
+    chmod 755 "$SBIN_DIR"
+    rm -rf "$GIT_ROOT" "$SBIN_DIR"/*
+    # DROP THIS LINE AND THE NEXT! 2026-07-25
+    ls -al /usr/local/*
+    
 #######################################################################
 # REMOVED 2026-07-25. Use loginctl instead of who.
 # The /run/utmp (and /var/run/utmp) file is being removed across major Linux distributions 
@@ -151,7 +155,7 @@ echo "Wiping out existing git and /usr/local/sbin if they exist"
 
 #######################################################################
 # TESTING STOP
-exit 1
+echo Line ${LINENO}; exit 1
 
 
 # Clone ubuntu-tools and set restrictive permissions
