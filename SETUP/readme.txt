@@ -53,8 +53,9 @@ Unexpected warnings and errors are not unusual. Recommend executing these one at
   chmod 700 ~/SETUP ~/SETUP/setup ~/SETUP/variables  # Only you have rights to read, edit, and execute
   chown lhensley:lhensley ~/.gitconfig ~/.githubconfig ~/SETUP/readme.txt ~/SETUP/setup ~/SETUP/variables
   
-9. When all appears well, run this command:  sudo reboot now  # Reboot
-The server will restart, which will end your SSH session. Wait about one minute and re-connect.
+# 2026-07-25: Is #9 necessary? Why are we rebooting?
+# 9. When all appears well, run this command:  sudo reboot now  # Reboot
+# The server will restart, which will end your SSH session. Wait about one minute and re-connect.
 
 10. (Removed.)
 
