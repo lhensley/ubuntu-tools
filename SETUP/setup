@@ -211,13 +211,10 @@ f_install "moreutils"
     echo "php installed."
     fi;
 
+
 # ssh is installed with the OS.
-#    ufw allow SSH.  # Dropped 2026-07-25
-
-#######################################################################
-# TESTING STOP
-echo Line ${LINENO}; exit 1
-
+   ufw allow SSH.
+   
 
 # tzdata
     if ! $(f_is_installed tzdata); then
@@ -289,6 +286,10 @@ if $install_git ; then f_install git; fi
 if $install_gpg ; then f_install gpg; fi
 if $install_gzip ; then f_install gzip; fi
 if $install_html2text ; then f_install html2text; fi
+
+#######################################################################
+# TESTING STOP
+echo Line ${LINENO}; exit 1
 
 # HandBrake
 # Works on Ubuntu 22, but contradicts https://handbrake.fr/docs/en/1.5.0/get-handbrake/download-and-install.html
