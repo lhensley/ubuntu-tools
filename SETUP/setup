@@ -25,7 +25,7 @@ echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
 echo "Setting a flag to confirm that the variables are not yet defined"
     echo
     VARIABLES_ARE_DEFINED=false
-    source $ADMIN_DIR/SETUP/variables
+    source /home/$(whoami)/SETUP/variables
 
 #######################################################################
 echo
