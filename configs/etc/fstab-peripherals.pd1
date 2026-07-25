@@ -43,80 +43,96 @@
 # bob (938G)
 # Samsung EVO 960 SSD [INTERNAL]
 # Block Size 4096   PARTLABEL [Unknown]  PARTUUID N/A
+# MANUAL MOUNT: sudo mkdir -p /mnt/bob; sudo mount -U d8f30f08-2698-411c-a3ea-32b9748e9ba9 -t ext4 /mnt/bob
 UUID=d8f30f08-2698-411c-a3ea-32b9748e9ba9 /mnt/bob ext4 nofail 0 0
 #
 # 2TBA (1.8T)
 # SAMSUNG T7 Portable SSD, 2TB External Solid State Drive
 # Block Size 512   PARTLABEL [Unknown]  PARTUUID 2af01943-01
 # Good condition; reliable; added 2024-08-??
+# MANUAL MOUNT: sudo mkdir -p /mnt/2TBA; sudo mount -U 56B9-DD05 -t ext4 /mnt/2TBA ### Mylio? Not found 7/21/26
 # UUID=56B9-DD05 /mnt/2TBA exfat nofail 0 0
 #
 # 3TBB (2.7T)
 # TOSHIBA External USB 3.0 HDD 
 # Block Size 4096
+# MANUAL MOUNT: sudo mkdir -p /mnt/3TBB; sudo mount -U 9a9fc896-a119-478e-a8f1-c6a2c0873218 -t ext4 /mnt/3TBB
 # UUID=9a9fc896-a119-478e-a8f1-c6a2c0873218 /mnt/3TBB ext4 nofail 0 0
 #
 # 4TBA (3.64T)
 # SAMSUNG T7 Portable SSD, 4TB External Solid State Drive
 # Block Size 4096   PARTLABEL Basic data partition  PARTUUID d70a9fe1-d620-4952-8bdc-6e0f92e24e1d
 # Good condition; reliable; added 2024-08-13
+# MANUAL MOUNT: sudo mkdir -p /mnt/4TBA; sudo mount -U 41102e3a-dac6-45b4-9a5b-20816b7530ea -t ext4 /mnt/4TBA
 # UUID=41102e3a-dac6-45b4-9a5b-20816b7530ea /mnt/4TBA ext4 nofail 0 0
 #
 # 5TBC (4.5T)
 # WD My Passport 2627 HDD
 # Block Size 4096
+# MANUAL MOUNT: sudo mkdir -p /mnt/5TBC; sudo mount -U 4dfd8d3a-56e3-4449-8161-b93ea30fdf15 -t ext4 /mnt/5TBC
 # UUID=4dfd8d3a-56e3-4449-8161-b93ea30fdf15 /mnt/5TBC ext4 nofail 0 0
 #
 # 5TBD (4.5T)
 # WD My Passport 2627 HDD
 # Block Size 4096
+# MANUAL MOUNT: sudo mkdir -p /mnt/5TBD; sudo mount -U b3b94524-7303-4c7d-a98c-b730d427af6b -t ext4 /mnt/5TBD
 # UUID=b3b94524-7303-4c7d-a98c-b730d427af6b /mnt/5TBD ext4 nofail 0 0
 #
 # 5TBE (4.5T)
 # WD My Passport 2627 HDD
 # Block Size 4096
+# MANUAL MOUNT: sudo mkdir -p /mnt/5TBE; sudo mount -U a53f3904-4d68-4b91-95e2-bfa6d418b622 -t ext4 /mnt/5TBE
 # UUID=a53f3904-4d68-4b91-95e2-bfa6d418b622 /mnt/5TBE ext4 nofail 0 0
 #
 # 12TBA (10.9T)
 # WD Elements 25A3 HDD
 # Block Size 4096   PARTLABEL 12TBA  PARTUUID 59c0a1fd-3595-469c-b8a4-2b6f97c10964
+# MANUAL MOUNT: sudo mkdir -p /mnt/12TBA; sudo mount -U 901c4177-b514-408a-997c-0cbeee89fa6e -t ext4 /mnt/12TBA
 # UUID=901c4177-b514-408a-997c-0cbeee89fa6e /mnt/12TBA ext4 auto,nofail 0 0
 #
 # 12TBB (10.9T)
 # WD Elements 25A3 HDD
 # Block Size 4096
+# MANUAL MOUNT: sudo mkdir -p /mnt/12TBB; sudo mount -U f7d0c0fc-7869-4985-83c5-5552eaebc018 -t ext4 /mnt/12TBB
 # UUID=f7d0c0fc-7869-4985-83c5-5552eaebc018 /mnt/12TBB ext4 auto,nofail 0 0
 #
 # 12TBC (10.9T)
 # WD Elements 25A3 HDD
 # Block Size 4096
+# MANUAL MOUNT: sudo mkdir -p /mnt/12TBC; sudo mount -U 2681fbc8-8210-451c-bc73-4ebd55989f34 -t ext4 /mnt/12TBC
 # UUID=2681fbc8-8210-451c-bc73-4ebd55989f34 /mnt/12TBC ext4 nofail 0 0
 #
 # 20TBA (19T)
 # WD Elements 25A3 HDD
 # Block Size 4096
+# MANUAL MOUNT: sudo mkdir -p /mnt/20TBA; sudo mount -U 55c9b7d7-79b5-4695-88ca-d86b39678fbe -t ext4 /mnt/20TBA
 # UUID=55c9b7d7-79b5-4695-88ca-d86b39678fbe /mnt/20TBA ext4 nofail 0 0
 #
 # (Flash Drive for Scanner)
 # UUID=F049-1057 /mnt/flash vfat noauto 0 0
+# MANUAL MOUNT: sudo mkdir -p /mnt/flash; sudo mount -U F049-1057 -t ext4 /mnt/flash
 # sudo mount UUID=F049-1057 /mnt/flash
 #
 # (Black1TB) (931.48G)
 # WD HDD
 # Aging but still works just fine
 # Block Size 512    PARTLABEL Black1TB     PARTUUID a9643da6-01
-UUID=FA5E0ADF5E0A9513 /mnt/Black1TB ntfs nofail 0 0
+# MANUAL MOUNT: sudo mkdir -p /mnt/Black1TB; sudo mount -U FA5E0ADF5E0A9513 -t ntfs /mnt/Black1TB
+# UUID=FA5E0ADF5E0A9513 /mnt/Black1TB ntfs nofail 0 0
 #
 # (Silver1TB) (931.48G)
 # WD HDD
 # Aging but still works just fine
 # Block Size 512    PARTLABEL Silver1TB     PARTUUID dea3ca1a-01
+# MANUAL MOUNT: sudo mkdir -p /mnt/Silver1TB; sudo mount -U 82EC1C14EC1C04D7 -t ntfs /mnt/Silver1TB
 UUID=82EC1C14EC1C04D7 /mnt/Silver1TB ntfs nofail 0 0
 #
 # # Silver5TB-A (5TB)
+# MANUAL MOUNT: sudo mkdir -p /mnt/Silver5TB-A; sudo mount -U 0A538B3244DE3676 -t ntfs /mnt/Silver5TB-A
 # # UUID=0A538B3244DE3676 /mnt/Silver5TB-A ntfs nofail 0 0
 #
 # # Silver5TB-B (5TB)
+# MANUAL MOUNT: sudo mkdir -p /mnt/Silver5TB-B; sudo mount -U D2929F3D929F254F -t ntfs /mnt/Silver5TB-B
 # # UUID=D2929F3D929F254F /mnt/Silver5TB-B ntfs nofail 0 0
 #
 #######################################################################################################

@@ -25,7 +25,7 @@ echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
 echo "Setting a flag to confirm that the variables are not yet defined"
     echo
     VARIABLES_ARE_DEFINED=false
-    source ~/SETUP/variables
+    source $ADMIN_DIR/SETUP/variables
 
 #######################################################################
 echo
@@ -43,7 +43,7 @@ echo "Confirming that the variables have been updated"
     echo
     echo -en "\007" # Beep
     echo "STOP!"
-    echo "Have you updated the '~/SETUP/variables' file? It's critical that you do."
+    echo "Have you updated the $ADMIN_DIR'/SETUP/variables' file? It's critical that you do."
     echo "You MUST type the word CONFIRMED and press RETURN/ENTER to continue."
     read USER_INPUT
     if [ "X$USER_INPUT" != "XCONFIRMED" ] ; then
@@ -129,6 +129,24 @@ echo "Wiping out existing git and /usr/local/sbin if they exist"
     echo Clearing "$GIT_ROOT" and "$SBIN_DIR"
     rm -rf "$GIT_ROOT" "$SBIN_DIR" # NOTE: Should it be "$SBIN_DIR"/* ? so that the directory itself remains? 7/4/2026
 
+#######################################################################
+# REMOVED 2026-07-25. Use loginctl instead of who.
+# The /run/utmp (and /var/run/utmp) file is being removed across major Linux distributions 
+# to prevent a critical Year 2038 (Y2038) overflow bug. 
+# Because the legacy utmp structure relies on 32-bit integers to store time, 
+# it is incompatible with future dates. 
+# It is being phased out in favor of modern, Y2038-safe replacements
+# Source: https://microos.opensuse.org/blog/2023-11-06-utmp-and-wtmp-are-gone/
+# #######################################################################
+# echo
+# echo "################################################################"
+# echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z")
+# echo "Creating /run/utmp database file, which enables the who command."
+# echo "Necessary for Ubuntu 26.04 and later."
+#     echo
+#     sudo touch /run/utmp
+#     sudo chown root:utmp /run/utmp
+#     sudo chmod g+w /run/utmp
 
 
 #######################################################################
