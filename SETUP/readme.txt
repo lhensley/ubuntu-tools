@@ -37,17 +37,19 @@ Unexpected warnings and errors are not unusual. Recommend executing these one at
   sudo apt-get -y update && sudo apt-get -y dist-upgrade  # Bring all packages current
   sudo apt-get -y install at certbot fail2ban git-all moreutils php unzip # Add several needed utilities
   # Install above also installed: coreutils curl gpg gzip moreutils openssl python3 rsync vim and more
-  mv ~/'Contents of gitconfig.txt' ~/.gitconfig
-  mv ~/'Contents of githubconfig.txt' ~/.githubconfig
-  mkdir -p ~/SETUP # Create a setup directory in your home directory
-  curl -L -o ~/SETUP/readme.txt  https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/readme.txt
-  curl -L -o ~/SETUP/setup       https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/setup
-  curl -L -o ~/SETUP/variables   https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/variables
-  chmod 600 ~/.gitconfig                     # Only you have rights to read and edit
-  chmod 600 ~/.githubconfig                  # Only you have rights to read and edit
-  chmod 600 ~/SETUP/readme.txt               # Only you have rights to read and edit
-  chmod 700 ~/SETUP/setup ~/SETUP/variables  # Only you have rights to read, edit, and execute
-  chown lhensley:lhensley ~/.gitconfig ~/.githubconfig ~/SETUP/readme.txt ~/SETUP/setup ~/SETUP/variables
+  # mv ~/'Contents of gitconfig.txt' ~/.gitconfig
+  # mv ~/'Contents of githubconfig.txt' ~/.githubconfig
+  mkdir -p /root/SETUP # Create a setup directory in your home directory
+  curl -L -o /root/SETUP/readme.txt  https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/readme.txt
+  curl -L -o /root/SETUP/setup       https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/setup
+  curl -L -o /root/SETUP/variables   https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/variables
+  chmod 600 /root/.gitconfig                         # Only root has rights to read and edit
+  chmod 600 /root/.githubconfig                      # Only root has rights to read and edit
+  chmod 600 /root/SETUP/readme.txt                   # Only root has rights to read and edit
+  chmod 700 /root/SETUP/setup /root/SETUP/variables  # Only root has rights to read, edit, and execute
+  chown lhensley:lhensley /root/.gitconfig /root/.githubconfig /root/SETUP/readme.txt /root/SETUP/setup /root/SETUP/variables
+  mv /root/.git* /home/lhensley/
+  mv /root/SETUP /home/lhensley/
   
 9. When all appears well, run this command:
 

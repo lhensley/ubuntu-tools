@@ -40,26 +40,20 @@
     install_zoom=false              # Video conferencing
 
 # OPTIONAL software (default to false)
-    install_apg=false               # Password generator
     install_apt_cacher_ng=false     # Caching system for apt software distribution
     install_bridgeutils=false       # Bridge-utils extensions for the interfaces(5) file format
     install_comskip=false           # Commercial skipper for videos
     install_cryfs=false             # Encrypted file system
     install_dos2unix=false          # DOS/MAC to UNIX text file format converter
     install_easyrsa=false           # Utility for managing X.509 Public Key Infrastructure
-    install_exiftool=false          # Read and write meta information in files
-    install_ffmpeg=false            # FFmpeg video converter
     install_ghostscript=false       # Compressing PDF scans
-    install_handbrake=false         # HandBrake video rendering
     install_html2text=false         # Convert html to text
     install_ifupdown=false          # Used for /etc/network/interfaces manual configuration; interferes with Network Manager
     install_inotify=false           # Do something when a file is created, deleted, or changed
-    install_lsyncd=false            # Keeps directories in sync using inotify or fsevents. Details at https://lsyncd.github.io/lsyncd/
-    install_makemkv=false           # MakeMKV DVD ripper
+    install_lsyncd=false            # Keeps directories in sync using inotify or fsevents. Details at https://lsyncd.github.io/lsyncd/; CUSTOM INSTALLATION
+    install_makemkv=false           # MakeMKV DVD ripper; CUSTOM INSTALLATION
     install_nettools=false          # Print network connections, routing tables, interface statistics
     install_nfs=false               # Network File Service
-    install_openvpn=false           # Secure IP tunnel daemon
-    install_plexmediaserver=false   # Media streamer and library manager
     install_proftpd=false           # For scanning to brother@oz
     install_puttytools=false        # A free SSH and telnet client
     install_rclone=false            # command-line program to manage files on cloud storage. Details at https://rclone.org/
@@ -69,20 +63,28 @@
     install_sshfs=false             # Filesystem client based on ssh
     install_tasksel=false           # A user interface for installing tasks
     install_sysbench=false          # A modular, cross-platform and multi-threaded benchmark tool.
-    install_tautulli=false          # Monitoring tool for Plex Media Server ***** PLEX MEDIA SERVER MUST BE INSTALLED TO INSTALL TAUTULLI *****
+    install_tautulli=false          # Monitoring tool for Plex Media Server ***** PLEX MEDIA SERVER MUST BE INSTALLED TO INSTALL TAUTULLI *****; CUSTOM INSTALLATION
     install_uuid=false              # Use uuidgen instead. It's built-in.
 
+# OPTIONAL RECOMMENDED software (default to true)
+    install_apg=true                # Password generator
+    install_exiftool=true           # Read and write meta information in files
+    install_ffmpeg=true             # FFmpeg video converter
+    install_handbrake=true          # HandBrake video rendering
+    install_openvpn=true            # Secure IP tunnel daemon; CUSTOM INSTALLATION
+    install_plexmediaserver=true    # Media streamer and library manager; CUSTOM INSTALLATION
+
 # MANDATORY software (default to true; the code in readme.txt already should have installed these)
-    install_apache2=true            # Apache 2 Webserver
+    install_apache2=true            # Apache 2 Webserver; CUSTOM INSTALLATION
     install_at=true                 # Queue, examine or delete jobs for later execution
-    install_certbot=true            # Certificate Installer for https
+    install_certbot=true            # Certificate Installer for https; CUSTOM INSTALLATION
     install_curl=true               # Transfer a URL; wget no longer works well for us as of 2026
-    install_fail2ban=true           # Bans IP that makes too many password failures
+    install_fail2ban=true           # Bans IP that makes too many password failures; CUSTOM INSTALLATION
     install_git=true                # Distributed version control system
     install_gpg=true                # OpenPGP encryption and signing tool
     install_gzip=true               # Compress or expand files
     install_openssl=true            # OpenSSL
-    install_php=true                # PHP
+    install_php=true                # PHP; CUSTOM INSTALLATION
     install_python3=true            # This will install Python 3 and pipx
     install_rsync=true              # A fast, versatile, remote (and local) file-copying tool
     install_unzip=true              # List, test and extract compressed files in a ZIP archive
@@ -90,10 +92,10 @@
 
 # STANDARD software (default to true)
     install_ddclient=true           # Update IP addresses at dynamic DNS services
-    install_mailutils=true          # mail, Postfix, etc.
-    install_mysql_server=true       # Relational Database
-    install_phpmyadmin=true         # Web tool for managing MySQL
-    install_webmin=true             # Web-based system admin tools
+    install_mailutils=true          # mail, Postfix, etc.; CUSTOM INSTALLATION
+    install_mysql_server=true       # Relational Database; CUSTOM INSTALLATION
+    install_phpmyadmin=true         # Web tool for managing MySQL; CUSTOM INSTALLATION
+    install_webmin=true             # Web-based system admin tools; CUSTOM INSTALLATION
 
 # Set a flag to confirm that the variables are defined
     VARIABLES_ARE_DEFINED=false

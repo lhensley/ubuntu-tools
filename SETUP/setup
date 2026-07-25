@@ -213,7 +213,7 @@ f_install "moreutils"
 # f_install network-manager
 # f_install nvidia-driver-390
 
-# PHP is installed every time.
+# PHP
   if ! $(f_is_installed php); then
     echo
     echo "Installing php"
@@ -263,13 +263,13 @@ if $install_apg ; then f_install apg; fi
 # apt-cacher-ng
 if $install_apt_cacher_ng ; then
   if ! $(f_is_installed "apt-cacher-ng"); then
-  echo
-  echo "Installing apt-cacher-ng."
-  # Based on https://www.tecmint.com/apt-cache-server-in-ubuntu/
-  apt-get install --yes apt-cacher-ng avahi-daemon squid-deb-proxy-client
-  echo "apt-gacher-ng installed."
+    echo
+    echo "Installing apt-cacher-ng."
+    # Based on https://www.tecmint.com/apt-cache-server-in-ubuntu/
+    apt-get install --yes apt-cacher-ng avahi-daemon squid-deb-proxy-client
+    echo "apt-gacher-ng installed."
+    fi
   fi
-fi
 
 if $install_at ; then f_install at; fi
 if $install_bridgeutils ; then f_install bridgeutils; fi
