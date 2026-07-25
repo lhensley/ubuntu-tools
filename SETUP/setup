@@ -130,8 +130,6 @@ echo "Wiping out existing git and /usr/local/sbin if they exist" # "git" no long
     mkdir -p "$SBIN_DIR"
     chmod 755 "$SBIN_DIR"
     rm -rf "$GIT_ROOT" "$SBIN_DIR"/*
-    # DROP THIS LINE AND THE NEXT! 2026-07-25
-    ls -al /usr/local/*
     
 #######################################################################
 # REMOVED 2026-07-25. Use loginctl instead of who.
@@ -168,7 +166,7 @@ echo "Wiping out existing git and /usr/local/sbin if they exist" # "git" no long
     find "$GIT_ROOT" -type d -print -exec chmod 700 {} \; >> /dev/null 2>&1
     find "$GIT_ROOT" -type f -print -exec chmod 600 {} \; >> /dev/null 2>&1
     chmod -R 755 "$GIT_UBUNTU_TOOLS_SBIN"
-    chown -R "$ADMIN_USER":"$ADMIN_USER" "$GIT_ROOT"
+    chown -R "$ROOT_USER":"$ROOT_USER" "$GIT_ROOT"
 
     # Link to /usr/local/sbin
     rm -rf "$SBIN_DIR"
@@ -177,11 +175,6 @@ echo "Wiping out existing git and /usr/local/sbin if they exist" # "git" no long
 ##############################################################
 ################# GITHUB FILES NOW ARE FULLY LOADED AND READY.
 ##############################################################
-
-#######################################################################
-# TESTING STOP
-echo Line ${LINENO}; exit 1
-
 
 # Include script setup file
 	source script-setup
@@ -219,7 +212,12 @@ f_install "moreutils"
     fi;
 
 # ssh is installed with the OS.
-    ufw allow SSH
+#    ufw allow SSH.  # Dropped 2026-07-25
+
+#######################################################################
+# TESTING STOP
+echo Line ${LINENO}; exit 1
+
 
 # tzdata
     if ! $(f_is_installed tzdata); then
@@ -783,10 +781,4 @@ if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 exit 0
 
-##########################################################################################
-
-# CLEANUP: DUMP THIS SECTION [second] (2024-08-08)
-    echo "$0 [second]: Line ${LINENO}: mkdir /mnt/killme && rmdir /mnt/killme"
-    mkdir /mnt/killme && rmdir /mnt/killme
-    exit -1
-
+# Look up for CLEANUP.
