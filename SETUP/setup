@@ -153,11 +153,6 @@ echo "Wiping out existing git and /usr/local/sbin if they exist" # "git" no long
 #     sudo chmod g+w /run/utmp
 
 
-#######################################################################
-# TESTING STOP
-echo Line ${LINENO}; exit 1
-
-
 # Clone ubuntu-tools and set restrictive permissions
     echo
     echo "Cloning ubuntu-tools and setting permissions"
@@ -183,7 +178,9 @@ echo Line ${LINENO}; exit 1
 ################# GITHUB FILES NOW ARE FULLY LOADED AND READY.
 ##############################################################
 
-
+#######################################################################
+# TESTING STOP
+echo Line ${LINENO}; exit 1
 
 
 ############## STOP HERE FOR TESTING! #####################################################
