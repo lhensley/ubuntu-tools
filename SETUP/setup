@@ -213,7 +213,7 @@ f_install "moreutils"
 
 
 # ssh is installed with the OS.
-   ufw allow SSH.
+   ufw allow SSH
    
 
 # tzdata
@@ -287,9 +287,6 @@ if $install_gpg ; then f_install gpg; fi
 if $install_gzip ; then f_install gzip; fi
 if $install_html2text ; then f_install html2text; fi
 
-#######################################################################
-# TESTING STOP
-echo Line ${LINENO}; exit 1
 
 # HandBrake
 # Works on Ubuntu 22, but contradicts https://handbrake.fr/docs/en/1.5.0/get-handbrake/download-and-install.html
@@ -297,13 +294,15 @@ echo Line ${LINENO}; exit 1
     if ! $(f_is_installed "handbrake-cli"); then
     echo
     echo "Installing HandBrake"
-    apt-get install --yes handbrake-cli libatlas-base-dev # nvidia-driver-390
+#    apt-get install --yes handbrake-cli libatlas-base-dev # nvidia-driver-390 # Removed 2026-07-25
+    apt-get install --yes handbrake-cli
     echo "HandBrake installed."
     fi
   fi
 
 if $install_ifupdown ; then f_install ifupdown; fi
 if $install_inotify_tools ; then f_install "inotify-tools"; fi
+
 
 # lsyncd # Directory syncing
 if $install_lsyncd ; then
@@ -332,6 +331,10 @@ if $install_mailutils ; then
   echo "mailutils installed."
   fi
 fi
+
+#######################################################################
+# TESTING STOP
+echo Line ${LINENO}; exit 1
 
 # MakeMKV
 # DON'T USE THE SNAP INSTALLER
