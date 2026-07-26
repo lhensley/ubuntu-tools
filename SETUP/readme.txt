@@ -59,6 +59,46 @@ Login to the new server, and edit ~/SETUP/variables as you see appropriate.
 
 
 
+WORKING
+  apache2
+  apg
+  at
+  curl
+  exiftool
+  fail2ban
+  ffmpeg
+  git
+  gpg
+  gzip
+  HandBrake-CLI
+  openssl
+  php
+  python3
+  rsync
+  unzip
+
+PROBLEMS
+  NetworkManager (probably fine) It's Netplan on server OS
+  mysql (just needs data & accounts)
+  certbot
+  ddclient (for dsm1 only?)
+  mailutils
+  phpmyadmin
+  plexmediaserver
+  webmin
+  vi (reverts to vim)
+  openVPN
+
+
+Drop ~/SETUP.
+
+
+After stabilized and rebooted,
+https://ubuntu.com/esm is Expanded Security Maintenance (NO!)
+https://ubuntu.com/pro (NO! Same thing!)
+
+
+
 
 
 
