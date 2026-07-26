@@ -472,10 +472,6 @@ if $install_openvpn ; then
     fi
   fi
 
-#######################################################################
-# TESTING STOP
-echo Line ${LINENO}; exit 1
-
 
 # Plex Media Server
 if $install_plexmediaserver ; then
@@ -787,3 +783,8 @@ if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %
 exit 0
 
 # Look up for CLEANUP.
+
+#######################################################################
+# TESTING STOP
+echo Line ${LINENO}; exit 1
+
