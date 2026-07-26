@@ -327,14 +327,10 @@ if $install_mailutils ; then
   debconf-set-selections <<< "postfix postfix/mailname string $MAILNAME@$DOMAIN_NAME"
   debconf-set-selections <<< "postfix postfix/main_mailer_type string $MAIN_MAILER_TYPE"
   apt-get install --yes mailutils postfix
-  ufw allow SMTP
+  # ufw allow SMTP  # 2026-07-25: Was that ever a good idea?  SMTP not defined any more. Good.
   echo "mailutils installed."
   fi
 fi
-
-#######################################################################
-# TESTING STOP
-echo Line ${LINENO}; exit 1
 
 # MakeMKV
 # DON'T USE THE SNAP INSTALLER
@@ -475,6 +471,11 @@ if $install_openvpn ; then
     echo "openvpn installed."
     fi
   fi
+
+#######################################################################
+# TESTING STOP
+echo Line ${LINENO}; exit 1
+
 
 # Plex Media Server
 if $install_plexmediaserver ; then
