@@ -54,6 +54,7 @@
     install_makemkv=false           # MakeMKV DVD ripper; CUSTOM INSTALLATION
     install_nettools=false          # Print network connections, routing tables, interface statistics
     install_nfs=false               # Network File Service
+    install_openvpn=false           # Secure IP tunnel daemon; CUSTOM INSTALLATION, NOT ACCESS SERVER. DON'T DO THIS ONE.
     install_proftpd=false           # For scanning to brother@oz
     install_puttytools=false        # A free SSH and telnet client
     install_rclone=false            # command-line program to manage files on cloud storage. Details at https://rclone.org/
@@ -71,7 +72,6 @@
     install_exiftool=true           # Read and write meta information in files
     install_ffmpeg=true             # FFmpeg video converter
     install_handbrake=true          # HandBrake video rendering
-    install_openvpn=true            # Secure IP tunnel daemon; CUSTOM INSTALLATION
     install_plexmediaserver=true    # Media streamer and library manager; CUSTOM INSTALLATION
 
 # MANDATORY software (default to true; the code in readme.txt already should have installed these)
