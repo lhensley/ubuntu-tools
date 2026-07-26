@@ -33,14 +33,9 @@ Issue these commands:
   mv ~/'Contents of gitconfig.txt' ~/.gitconfig
   mv ~/'Contents of githubconfig.txt' ~/.githubconfig
 
-6. (Removed)
-
-7. (Removed)
-
-8. At the CLI, enter these commands. 
+6. At the CLI, enter these commands. 
 It's fine to copy these command all at once and paste to the server's shell.
 Unexpected warnings and errors are not unusual. Recommend executing these one at a time.
-
   sudo apt-get -y update && sudo apt-get -y dist-upgrade  # Bring all packages current
   sudo apt-get -y install at certbot fail2ban git-all moreutils php unzip # Add several needed utilities
   mkdir -p ~/SETUP # Create a setup directory in your home directory
@@ -52,25 +47,17 @@ Unexpected warnings and errors are not unusual. Recommend executing these one at
   chmod 600 ~/SETUP/readme.txt                       # Only you have rights to read and edit
   chmod 700 ~/SETUP ~/SETUP/setup ~/SETUP/variables  # Only you have rights to read, edit, and execute
   chown lhensley:lhensley ~/.gitconfig ~/.githubconfig ~/SETUP/readme.txt ~/SETUP/setup ~/SETUP/variables
+  sudo mkdir -p /mnt/bob /mnt/2TBA /mnt/3TBB /mnt/4TBA /mnt/5TBC /mnt/5TBD /mnt/5TBE /mnt/12TBA /mnt/12TBB /mnt/12TBC 
+  sudo mkdir -p /mnt/20TBA /mnt/Black1TB /mnt/Silver1TB /mnt/Silver5TB-A /mnt/Silver5TB-B
+  sudo chmod 700 /mnt/*
   
-# 2026-07-25: Is #9 necessary? Why are we rebooting?
-# 9. When all appears well, run this command:  sudo reboot now  # Reboot
-# The server will restart, which will end your SSH session. Wait about one minute and re-connect.
-
-10. (Removed.)
-
-11. THIS STEP IS ABSOLUTELY REQUIRED.
+7. THIS STEP IS ABSOLUTELY REQUIRED.
 Login to the new server, and edit ~/SETUP/variables as you see appropriate.
 
-12. Run the setup script:
+8. Run the setup script:
     sudo ~/SETUP/setup  # Runs the system setup routine for a newly provisioning server
 
 
-
-
-####################
-
-# NOT FINISHED!
 
 
 

@@ -441,8 +441,6 @@ fi
 
 if $install_net_tools ; then f_install "net-tools"; fi
 
-# Remote this line, but no hurry. 2026-07-25
-
 # nfs
 if $install_nfs ; then
   if ! $(f_is_installed "nfs-common"); then
