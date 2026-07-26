@@ -98,7 +98,11 @@ https://ubuntu.com/esm is Expanded Security Maintenance (NO!)
 https://ubuntu.com/pro (NO! Same thing!)
 
 
-
+Add to setup:
+Move openvpn to false
+Copy /home/lhensley/mysql-client-certificates/* to '/etc/phpmyadmin/MySQL-Certs'
+run /usr/local/sbin/git-updates
+run netplan apply (ignore lots of errors)
 
 
 
