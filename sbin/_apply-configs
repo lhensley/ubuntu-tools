@@ -163,11 +163,6 @@ done
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
-###################################################
-# Troubleshooting
-echo $GIT_UBUNTU_TOOLS_CONFIGS/etc/netplan/dynamic.yaml.$HOSTNAME
-exit 1
-
 # Set timezone
 	echo
 	echo "Setting timezone to $TIMEZONE"
