@@ -433,6 +433,9 @@ if $install_mysql_server ; then
           cp $GIT_UBUNTU_TOOLS_CONFIGS$PHPMYAMIN_DIR/phpmyadmin/config.inc.php $PHPMYADMIN_DIR/config.inc.php
           chown -R www-data:www-data $PHPMYADMIN_DIR
           chmod 600 $PHPMYADMIN_DIR/config.inc.php
+          mkdir -p /etc/phpmyadmin/MySQL-Certs
+          cp "$MYSQL_CLIENT_CERTS_DIR"/* /etc/phpmyadmin/MySQL-Certs/
+          chown -R root:root /etc/phpmyadmin/MySQL-Certs
           systemctl restart apache2
           echo "phpMyAdmin installed."
           fi
@@ -702,12 +705,43 @@ if $is_desktop ; then
 # THIS IS CRUCIAL. It updates /etc/ftab and /etc/NetworkManager/system-connections
 # Update
     echo
-    echo "Running upd"
-    upd
+    echo "Running upd and git-updates"
+    upd && git-updates
+    netplan apply
+
+# Open up some ports (needs to be after running git-updates above)
+    ufw allow ssh
+    if ! $(f_is_installed achache2); then
+        ufw allow 'Apache Full' # http AND https
+        fi
+    if ! $(f_is_installed ); then
+        ufw allow MySQL
+        fi
+    if ! $(f_is_installed ssh); then
+        ufw allow 'Plex Media Server' # if not already specified
+        fi
+    if ! $(f_is_installed ssh); then
+        ufw allow Tautulli
+        fi
+    if ! $(f_is_installed ssh); then
+        ufw allow Webmin
+        fi
 
 # Remount all using /etc/fstab, as amended above (upd)
     echo
     echo Mounting all known peripherals
+    while read -r line; do
+        # Skip commented lines
+        [[ "$line" =~ ^[[:space:]]*# ]] && continue
+
+        # Extract columns
+        read -r device mountpt rest <<< "$line"
+
+        # Check if mount point starts with /mnt
+        if [[ "$mountpt" == /mnt* ]]; then
+            mkdir -p $mountpt
+        fi
+    done < /etc/fstab
     mount --all
 
 # Invoke /usr/local/sbin/_apply-configs
@@ -780,6 +814,7 @@ if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
 
+rm -R /home/$SUDO_USER/SETUP
 exit 0
 
 # Look up for CLEANUP.

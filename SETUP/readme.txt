@@ -59,11 +59,20 @@ Login to the new server, and edit ~/SETUP/variables as you see appropriate.
 
 
 
-WORKING
+Things to backup
+  Filesystems with tar/gzip
+  MySQL dump
+  crontabs
+  plexmediaserver
+  uids and gids? TBD...
+
+
+WORKING AS EXPECTED
   apache2
   apg
   at
   curl
+  ddclient
   exiftool
   fail2ban
   ffmpeg
@@ -71,27 +80,24 @@ WORKING
   gpg
   gzip
   HandBrake-CLI
+  mailutils
+  NetworkManager (fixed)
   openssl
+  openVPN # <==== IMPORTANT: DON'T INSTALL THIS VERSION. USE ACCESS SERVER FROM openvpn.net
   php
   python3
   rsync
   unzip
+  vi (reverts to vim)
+  webmin
 
 PROBLEMS
-  NetworkManager (probably fine) It's Netplan on server OS
-  mysql (just needs data & accounts)
   certbot
-  ddclient (for dsm1 only?)
-  mailutils
+
+MANUAL ISSUES TO MANAGE  
+  mysql (just needs data & accounts)
   phpmyadmin
   plexmediaserver
-  webmin
-  vi (reverts to vim)
-  openVPN
-
-
-Drop ~/SETUP.
-
 
 After stabilized and rebooted,
 https://ubuntu.com/esm is Expanded Security Maintenance (NO!)
@@ -99,15 +105,9 @@ https://ubuntu.com/pro (NO! Same thing!)
 
 
 Add to setup:
-Move openvpn to false
-Copy /home/lhensley/mysql-client-certificates/* to '/etc/phpmyadmin/MySQL-Certs'
-run /usr/local/sbin/git-updates
-run netplan apply (ignore lots of errors)
-
-
-
-
-
-
-
-
+DONE: Move openvpn to false
+DONE: Copy /home/lhensley/mysql-client-certificates/* ("$MYSQL_CLIENT_CERTS_DIR"/*) to '/etc/phpmyadmin/MySQL-Certs'
+  DONE: and change owners to root
+DONE: run /usr/local/sbin/git-updates
+DONE: run netplan apply (ignore lots of errors)
+DONE: rm -R /home/$SUDO_USER/SETUP
