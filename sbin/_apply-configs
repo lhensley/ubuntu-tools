@@ -286,6 +286,7 @@ exit 1
 		mv /tmp/fstab /etc/fstab
 		systemctl daemon-reload
 		mount --all &
+read
 		fi
 
 # Update /etc/lsyncd/*
