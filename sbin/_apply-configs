@@ -281,7 +281,6 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		mv /tmp/fstab /etc/fstab
 		systemctl daemon-reload
 		mount --all &
-read
 		fi
 
 # Update /etc/lsyncd/*
