@@ -367,7 +367,9 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		# echo "  Restarting ufw"
 		# systemctl restart ufw
 		echo "  Restarting systemd-networkd ufw apache2 mysql webmin"
+		echo Test point A
 		systemctl restart systemd-networkd ufw apache2 mysql webmin
+		echo Test point B
 		fi
 
 # Update $PHPMYADMIN_DIR/config.inc.php
