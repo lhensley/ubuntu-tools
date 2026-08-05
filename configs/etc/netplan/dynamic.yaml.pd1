@@ -1,7 +1,7 @@
 # pd1-dynamic.yaml
 network:
     version: 2
-    renderer: NetworkManager
+    renderer: networkd
     ethernets:
         ethernet0:
             match:
@@ -12,7 +12,7 @@ network:
                 route-metric: 1500 # lower numbers have highest priority
             dhcp6: true
             dhcp6-overrides: # This section added 2024-07-08
-                route-metric: 1000 # lower numbers have highest priority
+                route-metric: 1500 # lower numbers have highest priority
             accept-ra: true
             ipv6-address-token: '::3'
             addresses:
