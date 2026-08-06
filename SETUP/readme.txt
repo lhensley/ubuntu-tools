@@ -51,7 +51,7 @@ Unexpected warnings and errors are not unusual. Recommend executing these one at
   sudo mkdir -p /mnt/20TBA /mnt/Black1TB /mnt/Silver1TB /mnt/Silver5TB-A /mnt/Silver5TB-B
   sudo chmod 700 /mnt/*
   
-7. THIS STEP IS ABSOLUTELY REQUIRED.
+7. UPDATE VARIABLES 
 Login to the new server, and edit ~/SETUP/variables as you see appropriate.
 
 8. Run the setup script:
@@ -67,7 +67,7 @@ Things to backup
   uids and gids? TBD...
 
 Manual restore:
-  # Letsencrype
+  # Letsencrypt
     sudo mkdir -p /etc/letscrypt
     sudo cp -r /mnt/4TBA/lifeboat/etc/letsencrypt/* /etc/letsencrypt/
     # NEXT LINE IS FAILING.
@@ -83,6 +83,10 @@ Manual restore:
   # Plex Media Server
     sudo mkdir -p /backups
     sudo cp -r /mnt/4TBA/lifeboat/backups/'Plex Media Server' /backups/
+  # Lane home
+    sudo mkdir -p /home/lhensley/restores
+    sudo cp -r /mnt/4TBA/lifeboat/home/lhensley/* /home/lhensley/restores/
+    sudo chown -R lhensley:lhensley /home/lhensley/restores
 
 
 WORKING AS EXPECTED
