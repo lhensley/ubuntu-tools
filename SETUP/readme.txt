@@ -66,6 +66,24 @@ Things to backup
   plexmediaserver
   uids and gids? TBD...
 
+Manual restore:
+  # Letsencrype
+    sudo mkdir -p /etc/letscrypt
+    sudo cp -r /mnt/4TBA/lifeboat/etc/letsencrypt/* /etc/letsencrypt/
+    # NEXT LINE IS FAILING.
+    sudo systemctl restart certbot
+  # /var/www
+    sudo mkdir -p /var/www
+    sudo cp -r /mnt/4TBA/lifeboat/var/www/* /var/www/
+  # apache2
+    sudo mkdir -p /etc/apache2
+    sudo cp -r /mnt/4TBA/lifeboat/etc/apache2/* /etc/apache2/
+    # NEXT LINE IS FAILING.
+    sudo systemctl restart apache2
+  # Plex Media Server
+    sudo mkdir -p /backups
+    sudo cp -r /mnt/4TBA/lifeboat/backups/'Plex Media Server' /backups/
+
 
 WORKING AS EXPECTED
   apache2
