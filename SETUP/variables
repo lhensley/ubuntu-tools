@@ -30,14 +30,16 @@
 # If this is set to false, GUI app installations will be ignored.
 # CAUTION: If accidentally set to true, all required GUI packages also will be installed.
     is_desktop=false
-    install_chrome=false            # Google Chrome web browser
-    install_cubic=false             # Creates custom Ubuntu ISO files. Details at https://github.com/PJ-Singh-001/Cubic
-    install_edge=false              # Microsoft Edge
-    install_filezilla=false         # A powerful client for plain FTP, FTP over SSL/TLS (FTPS) and the SSH File Transfer Protocol (SFTP)
-    install_gimp=false              # An image manipulation and paint program
-    install_todoist=false           # Todoist task manager
-    install_xrdp=false              # A Remote Desktop Protocol (RDP) server
-    install_zoom=false              # Video conferencing
+    if [ is_desktop ]; then
+      install_chrome=false          # Google Chrome web browser
+      install_cubic=false           # Creates custom Ubuntu ISO files. Details at https://github.com/PJ-Singh-001/Cubic
+      install_edge=false            # Microsoft Edge
+      install_filezilla=false       # A powerful client for plain FTP, FTP over SSL/TLS (FTPS) and the SSH File Transfer Protocol (SFTP)
+      install_gimp=false            # An image manipulation and paint program
+      install_todoist=false         # Todoist task manager
+      install_xrdp=false            # A Remote Desktop Protocol (RDP) server
+      install_zoom=false            # Video conferencing
+      fi
 
 # OPTIONAL software (default to false)
     install_apt_cacher_ng=false     # Caching system for apt software distribution

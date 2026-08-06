@@ -212,8 +212,10 @@ f_install "moreutils"
     fi;
 
 
-# ssh is installed with the OS.
-   ufw allow SSH
+# UNNECESSARY.
+# # ssh is installed with the OS.
+#     echo IGNORE any error sayind ERROR: Could not find a profile matching 'SSH' immediately after this message.
+#     ufw allow SSH
    
 
 # tzdata
@@ -236,7 +238,7 @@ if $install_apache2 ; then
     echo "Installing apache2"
     apt-get install --yes apache2 apache2-doc apache2-suexec-pristine
     # ufw allow 'Apache' # http only
-    ufw allow 'Apache Full' # http AND https
+    # ufw allow 'Apache Full' # http AND https
     # ufw allow http
     # ufw allow https
     a2enmod ssl rewrite
@@ -379,7 +381,7 @@ if $install_mysql_server ; then
         # END Generate passwords
   MYSQL_PACKAGES="mysql-server openssl libcurl4-openssl-dev libssl-dev php-gmp php-symfony php-imagick php-twig-doc php-symfony-translation"
   apt-get install --yes $MYSQL_PACKAGES
-  ufw allow MySQL
+  # ufw allow MySQL
   mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
   mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User=''"
@@ -470,7 +472,7 @@ if $install_openvpn ; then
     echo
     echo "Installing openvpn."
     apt-get install --yes openvpn easy-rsa                   # Secure IP tunnel daemon
-    ufw allow OpenVPN
+    # ufw allow OpenVPN
     echo "openvpn installed."
     fi
   fi
@@ -493,7 +495,7 @@ if $install_plexmediaserver ; then
           # cat PlexSign.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/PlexSigkey.gpg
           # apt-get --yes update
           # apt-get install --yes plexmediaserver
-      ufw allow 'Plex Media Server' # if not already specified
+      # ufw allow 'Plex Media Server' # if not already specified
       echo "Plex Media Server installed."
     if $install_tautulli ; then
         # Install Tautulli for https://this-server:8181
@@ -502,7 +504,7 @@ if $install_plexmediaserver ; then
             echo "Installing Tautulli."
             # apt-get install --yes snapd
             snap install tautulli
-            ufw allow Tautulli
+            # ufw allow Tautulli
             echo "Tautulli installed."
         fi
   fi
@@ -510,7 +512,7 @@ fi
 
 if $install_proftpd ; then f_install proftpd; fi
 if $install_putty_tools ; then f_install "putty-tools"; fi
-if $install_python3 ; then f_install python3 pipx; pipx ensurepath; fi
+if $install_python3 ; then f_install python3; apt-get -y install pipx; pipx ensurepath; fi
 if $install_rclone ; then f_install rclone; fi
 if $install_resolvconf ; then f_install resolvconf; fi
 if $install_ripmime ; then f_install ripmime; fi
@@ -544,7 +546,7 @@ if $install_webmin ; then
         apt-get install --yes $WEBMIN_PACKAGES
         dpkg --install ./webmin-current.deb
         rm -f ./webmin-current.deb
-        ufw allow Webmin
+        # ufw allow Webmin
         echo "Webmin installed."
         fi
     fi
@@ -709,24 +711,6 @@ if $is_desktop ; then
     upd && git-updates
     netplan apply
 
-# Open up some ports (needs to be after running git-updates above)
-    ufw allow ssh
-    if ! $(f_is_installed achache2); then
-        ufw allow 'Apache Full' # http AND https
-        fi
-    if ! $(f_is_installed ); then
-        ufw allow MySQL
-        fi
-    if ! $(f_is_installed ssh); then
-        ufw allow 'Plex Media Server' # if not already specified
-        fi
-    if ! $(f_is_installed ssh); then
-        ufw allow Tautulli
-        fi
-    if ! $(f_is_installed ssh); then
-        ufw allow Webmin
-        fi
-
 # Remount all using /etc/fstab, as amended above (upd)
     echo
     echo Mounting all known peripherals
@@ -749,10 +733,14 @@ if $is_desktop ; then
     echo Applying configuration
     $SBIN_DIR/_apply-configs
 
-##################################################################################
-# DIAGNOSTIC MARKER: Made it this far without bricking the server 8/5/2022 1:34PM
-# Problem seems to be with upd, so working that angle.
-##################################################################################
+# OPEN UFW FOR INSTALLED SERVERS
+  ufw allow SSH
+  if $install_achache2 ; then ufw allow 'Apache Full'; fi
+  if $install_mysql ; then ufw allow MySQL; fi
+  if $install_openvpn ; then ufw allow OpenVPN; fi
+  if $install_plexmediaserver ; then ufw allow 'Plex Media Server'; fi
+  if $install_tautulli ; then ufw allow Tautulli; fi
+  if $install_webmin ; then ufw allow Webmin; fi
 
 # Report password information
     echo
@@ -794,16 +782,16 @@ if $is_desktop ; then
 # # Cold Restore
 #    cold-restore
 
-# Enable ufw
-    echo
-    echo Enabling ufw
-    ufw allow SSH
-    echo y | sudo ufw enable
+# # Enable ufw
+#     echo
+#     echo Enabling ufw
+#     ufw allow SSH
+#     echo y | sudo ufw enable
 
 # Last instructions
 	echo
 	echo -en "\007" # Beep
-    echo "Reboot using   sudo init 6"
+    echo "Reboot using   sudo reboot now"
     echo "THEN run       sudo cold-restore (optional)"
     echo "THEN Reboot again."
     echo

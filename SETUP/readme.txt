@@ -124,12 +124,8 @@ MANUAL ISSUES TO MANAGE
 After stabilized and rebooted,
 https://ubuntu.com/esm is Expanded Security Maintenance (NO!)
 https://ubuntu.com/pro (NO! Same thing!)
+YES DO THIS: https://ubuntu.com/pro/subscribe
 
 
-Add to setup:
-DONE: Move openvpn to false
-DONE: Copy /home/lhensley/mysql-client-certificates/* ("$MYSQL_CLIENT_CERTS_DIR"/*) to '/etc/phpmyadmin/MySQL-Certs'
-  DONE: and change owners to root
-DONE: run /usr/local/sbin/git-updates
-DONE: run netplan apply (ignore lots of errors)
-DONE: rm -R /home/$SUDO_USER/SETUP
+
+
