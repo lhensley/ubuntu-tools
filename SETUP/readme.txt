@@ -16,8 +16,6 @@ EVERYTHING THAT FOLLOWS CAN BE DONE FROM A SSH CLIENT MACHINE.
 2. USE CURRENT DOCUMENTATION
 If you are not reading this document from Github or Visual Studio Code that upates Github, do.
 For Github, go to https://github.com, log in as lhensley, and select repository lhensley/ubuntu-tools.
-Open SETUP/readme.txt (this document). The https://github.com ALWAYS is the authorized version.
-2026-07-24: Look at updating this step. Other (better?) ways to get this documents.
 
 3. GIT CONFIGS
 In 1Password, look for the Ubuntu Installation entry, 
