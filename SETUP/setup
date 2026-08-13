@@ -195,6 +195,7 @@ echo "Wiping out existing git and /usr/local/sbin if they exist" # "git" no long
 
 f_install "debconf-utils"
 f_install "moreutils"
+f_install "fwupd"
 # f_install network-manager
 # f_install nvidia-driver-390
 
@@ -796,14 +797,15 @@ if $is_desktop ; then
     echo "THEN Reboot again."
     echo
 
-if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
-
 # Include script footer file
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
 
 rm -R /home/$SUDO_USER/SETUP
+
 exit 0
+
+if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 # Look up for CLEANUP.
 
