@@ -1,5 +1,4 @@
 ### Configuration file for ddclient
-### THIS FILE DOESN'T DO ANYTHING; EFFECTIVELY TURN OFF THE HOST FROM TALKING TO THE DDNS PROVIDER!
 # This needs to be copied to these files, all root:root 600
 # /etc/default/ddclient
 # /etc/.default/ddclient
@@ -8,7 +7,7 @@
 
 # daemon=7200 # in seconds; 120 minutes between refresh # from dynu
 # daemon=0 # in seconds
-# daemon=7200 # in seconds; 120 minutes between refresh
+daemon=7200 # in seconds; 120 minutes between refresh
 
 # Set the time interval between the updates of the dynamic DNS name in seconds.
 # This option only takes effect if the ddclient runs in daemon mode.
@@ -31,7 +30,7 @@
 # DEPRECRATED!
 
 # Log update msgs to syslog.
-# syslog=yes
+syslog=yes
 
 # Mail all msgs to root.
 # Commented out 2025-06-09 because of excessive unhelpful warnings.
@@ -39,10 +38,10 @@
 # mail=root
 
 # Mail failed update msgs to root.
-# mail-failure=root
+mail-failure=root
 
 # Use ssl
-# ssl=yes
+ssl=yes
 
 # Record PID in file.
 pid=/var/run/ddclient.pid
@@ -50,7 +49,7 @@ pid=/var/run/ddclient.pid
 # Get ipv4 from server.
 # use=cmd, cmd='curl -s4 ifconfig.me/ip 2> /dev/null' # from dynu
 # use=web, web=dynamicdns.park-your-domain.com/getip # namecheap (subject to failure as of 2024-11-28)
-# use=cmd, cmd='curl -4 ifconfig.me'
+use=cmd, cmd='curl -4 ifconfig.me'
 
 # Get ipv6 from server.
 # usev6=cmd, cmd='curl ifconfig.me' # Works, as far as I know.
@@ -58,24 +57,24 @@ pid=/var/run/ddclient.pid
 
 # IP update server.
 # server=api.dynu.com # from dynu
-# server=dynamicdns.park-your-domain.com # namecheap
+server=dynamicdns.park-your-domain.com # namecheap
 
 # Use dyndns2 protocol
 # protocol=dyndns2 # from dynu
-# protocol=namecheap # namecheap
+protocol=namecheap # namecheap
 
 # Your username
 # login='lanehensley' # from dynu
-# login='lanehensley.org' # namecheap
+login='lanehensley.org' # namecheap
 
 # Your password or MD5/SHA256 of account password or New IP Update Password
 # password='ihbJXdoyFUofpyfExTQp'
 # password='aDgD2VjTKNd2J@r6FCqv' # from dynu
-# password=dcc8ebd6219942d1bd3a57ac1ebcef1f # namecheap
+password=dcc8ebd6219942d1bd3a57ac1ebcef1f # namecheap
 
 # List one or more hostnames one on each line.
-# @
-# *
+@
+*
 
 ##########################################################################
 ### END ##################################################################
