@@ -63,13 +63,14 @@ Things to backup
   uids and gids? TBD...
 
 Manual restore:
-    SETUP_TIME=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
+#    SETUP_TIME=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
+    SETUP_TIME="2026-08-13"
     TMP_SETUP_DIR=/tmp/$SETUP_TIME
     sudo mkdir -p $TMP_SETUP_DIR
 #  # lifeboat
 #    sudo mkdir -p ~/lifeboat
   # Letsencrypt
-    $CONFIG_ETC=/etc/letscrypt
+    CONFIG_ETC=/etc/letscrypt
     sudo rm -rf $TMP_SETUP_DIR/*
     sudo mv $CONFIG_ETC/* $TMP_SETUP_DIR/
     sudo cp -r /mnt/4TBA/lifeboat$CONFIG_ETC/* $CONFIG_ETC/
@@ -81,13 +82,13 @@ Manual restore:
     sudo cp -r /mnt/4TBA/lifeboat/var/www/* /var/www/
     sudo chown -R www-data:www-data /var/www
   # apache2   DEFIN
-    $CONFIG_ETC=/etc/apache2
+    CONFIG_ETC=/etc/apache2
     sudo rm -rf $TMP_SETUP_DIR/*
     sudo mv $CONFIG_ETC/* $TMP_SETUP_DIR/
     sudo cp -r /mnt/4TBA/lifeboat$CONFIG_ETC/* $CONFIG_ETC/
     sudo mkdir -p $CONFIG_ETC/$SETUP_TIME
     sudo mv $TMP_SETUP_DIR/* $CONFIG_ETC/$SETUP_TIME/
-    sudo systemctl restart apache2
+  #  sudo systemctl restart apache2
   # Plex Media Server
     sudo mkdir -p /backups
     sudo cp -r /mnt/4TBA/lifeboat/backups/'Plex Media Server' /backups/
@@ -95,7 +96,6 @@ Manual restore:
     sudo mkdir -p /home/lhensley/restores
     sudo cp -r /mnt/4TBA/lifeboat/home/lhensley/* /home/lhensley/restores/
     sudo chown -R lhensley:lhensley /home/lhensley/restores
-
 
 WORKING AS EXPECTED
   apache2
@@ -137,3 +137,65 @@ YES DO THIS: https://ubuntu.com/pro/subscribe
 
 
 Find the passwords in ~ and /root directories.
+
+
+
+NEED TO RESTORE 
+contents of ~ and /root *
+webmin
+mail
+MySQL *
+ddclient
+apache2 and /var/www *
+certbot/Letsencrypt
+Plex *
+crontabs
+uids and gids? TBD...
+OpenVPN
+phpmyadmin
+git
+
+WHAT CAN WE DO RIGHT NOW 
+
+# UFW
+sudo ufw enable
+
+# plex
+sudo snap stop plexmediaserver
+sudo cp -r '/mnt/4TBA/lifeboat/var/snap/plexmediaserver/common/Library/Application Support' '/var/snap/plexmediaserver/common/Library/'
+sudo snap start plexmediaserver
+# WORKS! Needs some configuration, but you'll see it, and it's easy.
+
+# home directory
+mkdir -p /home/lhensley/RESTORES
+sudo mv /home/lhensley/mysql-client-certificates /home/lhensley/RESTORES/ 
+sudo mv /home/lhensley/.my* /home/lhensley/RESTORES/
+sudo mv /home/lhensley/git /home/lhensley/git-new
+sudo cp -r /mnt/4TBA/lifeboat/home/lhensley/* /home/lhensley/
+sudo mv /home/lhensley/RESTORES/* /home/lhensley/
+sudo mv /home/lhensley/RESTORES/.* /home/lhensley/
+sudo rmdir /home/lhensley/RESTORES
+
+# /root doesn't appear to need anything.
+
+# mysql
+sudo apt update
+sudo apt install mysql-server
+sudo systemctl status mysql
+sudo systemctl start mysql
+sudo systemctl enable mysql
+sudo mysql
+  ALTER USER 'root'@'localhost' IDENTIFIED BY 'YourStrongPassword';
+  exit;
+sudo mysql_secure_installation
+  choose YES
+  choose 2 (strong for user admin)
+  choose YES (to change the password for admin)
+    enter new password
+  choose YES (to remove anonymous users)
+  choose YES (to disallow root login remotely)
+  choose YES (to remove test database and access to it)
+  choose YES (to reload privilege tables now)
+sudo chown lhensley:lhensley /home/lhensley/MySQL.dsm1.dump.sql
+mysql -u admin -p -f < /home/lhensley/MySQL.dsm1.dump.sql
+
