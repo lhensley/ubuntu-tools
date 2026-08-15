@@ -30,14 +30,18 @@ Close SFTP (optional).
 5. SSH (Termius) from the client machine to the new server and login to the new server.
 It's fine to copy these command all at once and paste to the server's shell.
 Unexpected warnings and errors are not unusual. Recommend executing these one at a time.
-  mv ~/'Contents of gitconfig.txt' ~/.gitconfig
-  mv ~/'Contents of githubconfig.txt' ~/.githubconfig
   sudo apt-get -y update && sudo apt-get -y dist-upgrade  # Bring all packages current
-  sudo apt-get -y install at certbot fail2ban git-all moreutils php unzip # Add several needed utilities
+  sudo apt-get -y install curl
   mkdir -p ~/SETUP # Create a setup directory in your home directory
   curl -L -o ~/SETUP/readme.txt  https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/readme.txt
   curl -L -o ~/SETUP/setup       https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/setup
   curl -L -o ~/SETUP/variables   https://raw.githubusercontent.com/lhensley/ubuntu-tools/master/SETUP/variables
+  mv ~/'Contents of gitconfig.txt' ~/.gitconfig
+  mv ~/'Contents of githubconfig.txt' ~/.githubconfig
+  sudo ufw --force enable
+  sudo apt-get -y update && sudo apt-get -y dist-upgrade  # Bring all packages current
+  sudo apt-get -y install curl
+  sudo apt-get -y install at certbot fail2ban git-all moreutils php unzip # Add several needed utilities
   chmod 600 ~/.gitconfig                             # Only you have rights to read and edit
   chmod 600 ~/.githubconfig                          # Only you have rights to read and edit
   chmod 600 ~/SETUP/readme.txt                       # Only you have rights to read and edit
@@ -46,7 +50,7 @@ Unexpected warnings and errors are not unusual. Recommend executing these one at
   sudo mkdir -p /mnt/bob /mnt/2TBA /mnt/3TBB /mnt/4TBA /mnt/5TBC /mnt/5TBD /mnt/5TBE /mnt/12TBA /mnt/12TBB /mnt/12TBC 
   sudo mkdir -p /mnt/20TBA /mnt/Black1TB /mnt/Silver1TB /mnt/Silver5TB-A /mnt/Silver5TB-B
   sudo chmod 700 /mnt/* 
-  
+    
 6. UPDATE VARIABLES 
 Login to the new server, and edit ~/SETUP/variables as you see appropriate.
 
@@ -219,5 +223,29 @@ sudo cp -r /mnt/4TBA/lifeboat/letscrypt /etc/
 #   ssl 
 #   phpmyadmin 
 #   wordpress
+
+
+PROBLEMS
+Servers can't ssh to each other: don't have ed25519 keys: BIG ISSUE. Copy from backup.
+Need a thorough inventory of which /etc stuff should be restored. Some are here; others?
+  /etc/.default
+  /etc/HandBrake
+  /etc/aliases
+  /etc/aliases.db
+  /etc/apache2
+  /etc/ddclient
+  /etc/ddclient
+  /etc/default
+  /etc/fstab
+  /etc/hostname
+  /etc/hosts
+  /etc/hosts.allow
+  /etc/hosts.deny
+  /etc/letscrypt
+  /etc/mysql
+  /etc/postfix
+Same with /var and /usr
+Need to develop something to create the lifeboats nightly on a SSD and copied to a HDD (and/or partner server)
+
 
 

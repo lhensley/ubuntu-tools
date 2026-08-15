@@ -331,7 +331,7 @@ if $install_mailutils ; then
   debconf-set-selections <<< "postfix postfix/main_mailer_type string $MAIN_MAILER_TYPE"
   apt-get install --yes mailutils postfix
   # ufw allow SMTP  # 2026-07-25: Was that ever a good idea?  SMTP not defined any more. Good.
-  echo "mailutils installed."
+  echo "mailutils and postfix installed."
   fi
 fi
 
