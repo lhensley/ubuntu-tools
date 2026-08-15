@@ -141,24 +141,36 @@ Find the passwords in ~ and /root directories.
 
 
 NEED TO RESTORE 
-contents of ~ and /root *
-webmin
-mail
+webmin *
+mail *
 MySQL *
-ddclient
-apache2 and /var/www *
+ddclient *
+HandBrake *
+apache2
+/var/www *
 certbot/Letsencrypt
 Plex *
 crontabs
 uids and gids? TBD...
 OpenVPN
 phpmyadmin
-git
+git *
+contents of ~ and /root *
 
-WHAT CAN WE DO RIGHT NOW 
+WHAT CAN WE DO RIGHT NOW
+
+# ddclient working
+# webmin working
 
 # UFW
 sudo ufw enable
+
+# HandBrakeCLI
+sudo cp -r /mnt/4TBA/lifeboat/etc/HandBrake /etc/
+
+# mail
+restore /etc/alias*, /etc/postfix/*
+restart postfix
 
 # plex
 sudo snap stop plexmediaserver
@@ -198,4 +210,14 @@ sudo mysql_secure_installation
   choose YES (to reload privilege tables now)
 sudo chown lhensley:lhensley /home/lhensley/MySQL.dsm1.dump.sql
 mysql -u admin -p -f < /home/lhensley/MySQL.dsm1.dump.sql
+sudo cp /mnt/4TBA/lifeboat/home/lhensley/.mylogin.cnf ~/
+
+# apache2
+sudo cp -r /mnt/4TBA/lifeboat/apache2 /etc/
+sudo cp -r /mnt/4TBA/lifeboat/letscrypt /etc/
+# and more ...
+#   ssl 
+#   phpmyadmin 
+#   wordpress
+
 

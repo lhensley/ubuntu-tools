@@ -59,6 +59,7 @@ source /etc/os-release
 # Start timestamps
 # Ref https://www.cyberciti.biz/faq/linux-unix-formatting-dates-for-display/ for date format %codes
 	START_DATEANDTIMESTAMP=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')     # Like 2020-09-07-16-05-23-CDT. Used in naming SSH keys and backing up installed files like fstab
+	START_DTS=$(/bin/date '+%Y-%m-%d %H:%M:%S %Z')                  # Like 2020-09-07 16:05:23 CDT. Better human readable but still sortable
 	START_DATESTAMP=$(/bin/date '+%Y-%m-%d   ')                     # Like 2020-09-07. Used in backup variables below
 	START_DAYSTAMP=$(/bin/date '+%d')                               # Like 07
 	START_MONTHSTAMP=$(/bin/date '+%Y-%m')                          # Like 2020-09
