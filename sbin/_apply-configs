@@ -164,7 +164,7 @@ done
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 echo "####################################################"
-echo "$0" begins (Applying configurationss)
+echo "$0" begins 	Applying configurations
 echo "####################################################"
 echo
 
