@@ -163,9 +163,9 @@ done
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
-echo "####################################################"
+echo "######################################################################"
 echo "$0" begins 	Applying configurations
-echo "####################################################"
+echo "######################################################################"
 echo
 
 # Set timezone
