@@ -68,7 +68,7 @@ Things to backup
 
 Manual restore:
 #    SETUP_TIME=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')
-    SETUP_TIME="2026-08-13"
+    SETUP_TIME="2026-08-15"
     TMP_SETUP_DIR=/tmp/$SETUP_TIME
     sudo mkdir -p $TMP_SETUP_DIR
 #  # lifeboat

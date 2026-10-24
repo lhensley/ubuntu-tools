@@ -7,6 +7,8 @@
 DEBUG_MODE=true; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T %Z") ; fi
 # if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
+echo ($START_DTS $0: "Started") >> $INSTALL_LOG
+
 #######################################################################
 echo
 echo "################################################################"
@@ -15,6 +17,7 @@ echo "Making sure we're root"
     echo
     if [[ $EUID -ne 0 ]]; then
             echo "Use sudo. $0 must be run as root." 1>&2
+            echo ($START_DTS $0: "Stopped because sudo was missing") >> $INSTALL_LOG
             exit 1
         fi
 
@@ -50,6 +53,7 @@ echo "Confirming that the variables have been updated"
         echo 
         echo "Confirmation FAILED."
         echo
+        echo ($START_DTS $0: "Stopped because confirmation was missing") >> $INSTALL_LOG
         exit 1
         fi
     echo
@@ -244,7 +248,7 @@ if $install_apache2 ; then
     # ufw allow https
     a2enmod ssl rewrite
     systemctl restart apache2
-    echo "apache2 installed."
+    echo "apache2 installed." '
     fi
   fi
 
@@ -802,6 +806,8 @@ if $is_desktop ; then
 	source "${PATHNAME[script_footer]}"
 
 rm -R /home/$SUDO_USER/SETUP
+
+echo ($START_DTS $0: "Ended") >> $INSTALL_LOG
 
 exit 0
 

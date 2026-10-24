@@ -1,0 +1,137 @@
+#!/bin/bash
+
+########################################################################################################################
+SEE NOTES AT THE END OF THIS FILE
+########################################################################################################################
+
+DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+# if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Include script setup file
+	source script-setup
+	if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
+	if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+
+echo ($START_DTS $0: "Started") >> $INSTALL_LOG
+
+# Uncomment requirements for script execution
+    f_require_root
+    # f_require_ubuntu
+    # f_deprecated
+	# f_require_host [HOST]
+    # f_require_minimum_version_number "version-number"
+    # f_require_maximum_version_number "version-number"
+    # f_only_on_server "hostname"
+    # f_require_confirmation "This text is displayed, requesting confirmation word." "ConfirmationWord"
+    # set -x # For debugging
+
+# CHECK FOR ENOUGH ARGUMENTS (change 0 to minimum arguments and flesh out Usage)
+if [ $# -lt 0 ]; 
+    then echo "$EXIT_CODE_DESC_DIRECTORY_NOT_FOUND"
+	echo "Usage: $(basename $0)"
+	exit $EXIT_CODE_DIRECTORY_NOT_FOUND
+fi
+
+# Do stuff here
+if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+  package_candidate="mysql-server"
+  if ! $(f_is_installed $package_candidate); then
+    echo
+    echo "Installing $package_candidate."
+    # Based on https://dev.mysql.com/doc/refman/8.4/en/linux-installation-apt-repo.html
+    apt-get --yes update && apt-get install --yes $package_candidate
+    echo "$package_candidate installed."
+    # NOTE: Don't forget to open prt 3306: sudo ufw allow MySQL
+  else 
+    echo $package_candidate is already installed.
+    exit 1
+    fi
+
+# THIS IS NOT FINISHED. FOCUSING ON THE NOTES BELOW AS OF 2026-08-16
+
+# Option to text the administrator when the script ends
+# echo "[$(hostname)] $(basename $0): completed" | mail "$ADMIN_CELL_EMAIL"
+
+if $DEBUG_MODE ; then echo "DEBUG ENDING $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
+echo ($START_DTS $0: "Ended") >> $INSTALL_LOG
+
+exit 0
+
+
+########################################################################################################################
+NOTES
+########################################################################################################################
+
+# Leave this here to ensure that what follows is is not executed.
+exit 1
+
+Date on this file: 2026-08-16
+Running on Ubuntu Server 26.04, with MySQL v8.4 (v9 exists)
+
+Basic tasks
+    Install mysql-server: sudo apt-get --yes update && sudo apt-get install --yes mysql-server
+    Check that it's running: sudo systemctl status mysql
+    Open the TCP port 3306: sudo ufw allow MySQL
+    Initialize security: sudo mysql_secure_installation
+        Would you like to setup VALIDATE PASSWORD component? Y
+        Please enter 0 = LOW, 1 = MEDIUM and 2 = STRONG: 2
+        Change the password for admin ? Y
+        New password: [Get from 1Password]
+        Do you wish to continue with the password provided? Y
+        Remove anonymous users? Y
+        Disallow root login remotely? Y
+        Remove test database and access to it? Y
+        Reload privilege tables now? Y
+    NOT DONE HERE: Neither root nor lhensley are defined. Yet.
+        For root, use sudo and no password: sudo mysql -u root
+            THEN set the password with this SQL: ALTER USER 'root'@'localhost' IDENTIFIED BY 'root-password';
+                    # get 'root-password' from 1Password
+                exit; # If you're done
+        For lhensley: use this: mysql # (No sudo)
+            THEN set the password with this SQL: CREATE USER 'lhensley'@'%' IDENTIFIED BY 'lhensley-password';
+                    # get 'lhensley-password' from 1Password
+            THEN set the permissions for lhensley with this SQL:
+                GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, SHUTDOWN, PROCESS, FILE, REFERENCES, 
+                    INDEX, ALTER, SHOW DATABASES, SUPER, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, 
+                    REPLICATION SLAVE, REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, 
+                    CREATE USER, EVENT, TRIGGER, CREATE TABLESPACE, CREATE ROLE, DROP ROLE ON *.* 
+                    TO `lhensley`@`%` WITH GRANT OPTION;
+                GRANT ALLOW_NONEXISTENT_DEFINER,APPLICATION_PASSWORD_ADMIN,AUDIT_ABORT_EXEMPT,AUDIT_ADMIN,
+                    AUTHENTICATION_POLICY_ADMIN,BACKUP_ADMIN,BINLOG_ADMIN,BINLOG_ENCRYPTION_ADMIN,CLONE_ADMIN,
+                    CONNECTION_ADMIN,ENCRYPTION_KEY_ADMIN,FIREWALL_EXEMPT,FLUSH_OPTIMIZER_COSTS,FLUSH_PRIVILEGES,
+                    FLUSH_STATUS,FLUSH_TABLES,FLUSH_USER_RESOURCES,GROUP_REPLICATION_ADMIN,
+                    GROUP_REPLICATION_STREAM,INNODB_REDO_LOG_ARCHIVE,INNODB_REDO_LOG_ENABLE,OPTIMIZE_LOCAL_TABLE,
+                    PASSWORDLESS_USER_ADMIN,PERSIST_RO_VARIABLES_ADMIN,REPLICATION_APPLIER,
+                    REPLICATION_SLAVE_ADMIN,RESOURCE_GROUP_ADMIN,RESOURCE_GROUP_USER,ROLE_ADMIN,
+                    SENSITIVE_VARIABLES_OBSERVER,SERVICE_CONNECTION_ADMIN,SESSION_VARIABLES_ADMIN,SET_ANY_DEFINER,
+                    SHOW_ROUTINE,SYSTEM_USER,SYSTEM_VARIABLES_ADMIN,TABLE_ENCRYPTION_ADMIN,TELEMETRY_LOG_ADMIN,
+                    TRANSACTION_GTID_TAG,XA_RECOVER_ADMIN ON *.* TO `lhensley`@`%` WITH GRANT OPTION;
+                FLUSH PRIVILEGES;
+            Update the passwords in ~/.my.cnf and in /root.
+        CONSIDER: Stop using lhensley in normal use, and use admin. They have the same privileges.
+    Restore any dump/backup applicable. EXAMPLE CLI COMMAND BELOW, you'll need to adjust this to your circumstances.
+        sudo cp /mnt/4TBA/lifeboat/backups/2026-08-14-dsm1.sql /home/lhensley/
+        sudo chown lhensley:lhensley /home/lhensley/2026-08-14-dsm1.sql
+        sudo mysql --force -u root < /home/lhensley/2026-08-14-dsm1.sql # THIS WILL TAKE A LONG TIME.  2:15:40
+        sudo rm /home/lhensley/2026-08-14-dsm1.sql
+
+    Still to do (not necessarily in order):
+        Apparent IP problem, missing SSH certificates
+            # Works on dsm1, needs to do on pd1
+            cp -r /mnt/4TBA/lifeboat/home/lhensley/.ssh /home/lhensley/
+        Edit /etc/mysql/mysql.conf.d/mysqld.cnf and change the values of bind-address and mysqlx-bind-address both to 0.0.0.0
+            After: sudo systemctl restart mysql
+        Fix SSH certificates
+        Certificates
+        Connect from DBeaver
+        phpMyAdmin
+        backups
+        wordpress connections
+
+

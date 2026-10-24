@@ -808,6 +808,10 @@ source /etc/os-release
         unset TARGET_FILE_OWNER               # Will be used only if defined
         unset TARGET_FILE_PERMISSIONS         # Will be used only if defined
 
+# Installation Log
+        INSTALL_LOG=$ADMIN_HOME_DIR/installation.log
+        # to write to the log: echo ($START_DTS $0: "message") >> $INSTALL_LOG
+
 # ssh
 # DEPENENT on timestamps above
         SSHD_CONFIG="/etc/ssh/sshd_config"
