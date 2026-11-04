@@ -1,0 +1,133 @@
+#!/bin/bash
+# setup2026
+# Updated 1 Nov 2026
+
+
+#####################################################################################################
+# INSTRUCTIONS
+#####################################################################################################
+
+# Copy this file to the ~ directory and set its permissions for 700.
+# Edit the file to adjust the VARIABLES definitions below.
+# To start the Execute this file with this command:
+#   sudo ~/setup2026
+
+
+#####################################################################################################
+# VARIABLES
+#####################################################################################################
+
+echo "Defining variables."
+
+my_full_name="Lane Hensley"
+my_email="lane@lanehensley.org"
+ADMIN_DIR="/home/lhensley"
+ADMIN_HOME_DIR="$ADMIN_DIR"
+ROOT_USER="root"
+ROOT_HOME_DIR="/root"
+GITHUB_USER="lhensley"
+GIT_ROOT="$ADMIN_DIR/git"
+GIT_UBUNTU_TOOLS="$GIT_ROOT/ubuntu-tools"
+GIT_UBUNTU_TOOLS_CONFIGS="$GIT_UBUNTU_TOOLS/configs"
+GIT_UBUNTU_TOOLS_SBIN="$GIT_UBUNTU_TOOLS/sbin"
+GIT_UBUNTU_TOOLS_SERVICES="$GIT_UBUNTU_TOOLS/services"
+GIT_UBUNTU_TOOLS_SETUP="$GIT_UBUNTU_TOOLS/setup"
+SBIN_DIR="/usr/local/sbin"
+SBIN_PARENT="$(dirname $SBIN_DIR)"
+
+INSTALL_LOG="$ADMIN_DIR/installation_log.txt"
+# Possible values for TIMEZONE: 
+# "America/Honolulu" "America/Anchorage" "America/Los_Angeles" "America/Phoenix" 
+# "America/Denver" "America/Chicago" "America/New_York"
+TIMEZONE="America/Chicago"
+
+
+#####################################################################################################
+# FUNCTIONS
+#####################################################################################################
+
+echo "Defining functions."
+
+function f_dirname () {
+    # returns directory of a full path and/or file
+    # Usage f_dirname "PATH_AND_OR_FILE"
+	# See also f_file_ext, f_file_main, and f_replace_ext
+    dirname "$1"
+    }
+    
+
+function f_record_to_installation_log () {
+    # records a log entry in $INSTALL_LOG
+    # Usage f_record_to_installation_log $message
+    echo "$(date)   $1" >> $INSTALL_LOG
+    }
+    
+
+#####################################################################################################
+# CHECK FOR SUDO
+#####################################################################################################
+
+echo "Checking that we're root or sudo."
+
+if [[ $EUID -ne 0 ]]; then
+    echo ""
+    echo "Use sudo. $0 must be run as root." 1>&2
+    exit 1
+    fi
+
+
+#####################################################################################################
+# SET TIMEZONE
+#####################################################################################################
+
+echo "Setting time zone."
+
+echo "" >> $INSTALL_LOG
+echo "" >> $INSTALL_LOG
+f_record_to_installation_log "Begin execution of $0"
+timedatectl set-timezone $TIMEZONE
+f_record_to_installation_log "Time zone set to $TIMEZONE"
+
+
+#####################################################################################################
+# INSTALL universe REPOSITORY AND UPGRADES
+#####################################################################################################
+
+echo "Installing universe repository and apt packages updated."
+
+add-apt-repository universe --yes
+apt --yes clean
+apt --yes autoremove
+apt update && apt --yes dist-upgrade
+f_record_to_installation_log "universe repository installed and apt packages updated"
+
+
+#####################################################################################################
+# INSTALL BASIC UTILITIES
+#####################################################################################################
+
+echo "Installing universe repository and apt packages updated."
+
+sudo apt --yes install at certbot curl debconf-utils fail2ban fwupd git git-doc moreutils openssl ufw unzip
+f_record_to_installation_log "universe repository installed and apt packages updated"
+
+
+
+
+
+
+
+
+
+
+#####################################################################################################
+# END
+#####################################################################################################
+
+echo "Done."
+echo ""
+echo "You may want to delete file $0 ."
+
+f_record_to_installation_log "$0 done"
+
+exit 0
