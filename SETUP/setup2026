@@ -53,8 +53,11 @@ function f_dirname () {
     # Usage f_dirname "PATH_AND_OR_FILE"
 	# See also f_file_ext, f_file_main, and f_replace_ext
     dirname "$1"
-    }
-    
+    }    
+
+function f_pause () {
+  read -s -n 1 -p "Press any key to continue . . .\n"
+}
 
 function f_record_to_installation_log () {
     # records a log entry in $INSTALL_LOG
