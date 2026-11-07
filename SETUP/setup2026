@@ -19,6 +19,8 @@
 
 echo "Defining variables."
 
+unset ABORT
+
 my_full_name="Lane Hensley"
 my_email="lane@lanehensley.org"
 ADMIN_DIR="/home/lhensley"
@@ -34,6 +36,10 @@ GIT_UBUNTU_TOOLS_SERVICES="$GIT_UBUNTU_TOOLS/services"
 GIT_UBUNTU_TOOLS_SETUP="$GIT_UBUNTU_TOOLS/setup"
 SBIN_DIR="/usr/local/sbin"
 SBIN_PARENT="$(dirname $SBIN_DIR)"
+
+COPY_LIFEBOAT=false
+LIFEBOAT_MOUNT_POINT=/mnt/4TBA
+LIFEBOAT_DRIVE_UUID=41102e3a-dac6-45b4-9a5b-20816b7530ea
 
 INSTALL_LOG="$ADMIN_DIR/installation_log.txt"
 # Possible values for TIMEZONE: 
@@ -55,8 +61,14 @@ function f_dirname () {
     dirname "$1"
     }    
 
+function f_is_file {
+	# Usage: if $(f_is_file "file_or_path_name"); then commands_if_true; else commands_if_false; fi
+	# $1 = "$string_to_check"
+    if [ -f "$1" ]; then echo true; else echo false; fi
+	}
+
 function f_pause () {
-  read -s -n 1 -p "Press any key to continue . . .\n"
+    read -s -n 1 -p "Press any key to continue . . .\n"
 }
 
 function f_record_to_installation_log () {
@@ -75,8 +87,33 @@ echo "Checking that we're root or sudo."
 if [[ $EUID -ne 0 ]]; then
     echo ""
     echo "Use sudo. $0 must be run as root." 1>&2
+    echo "ABORTED." 1>&2
     exit 1
     fi
+
+
+#####################################################################################################
+# CHECK FOR REQUIRED FILES
+#####################################################################################################
+
+echo "Checking that all required files are present."
+
+if ! $(f_is_file $ADMIN_DIR/'Contents of gitconfig.txt') ; then
+    set ABORT=true
+    echo File \'$ADMIN_DIR/Contents of gitconfig.txt\' is REQUIRED.
+    fi
+
+if ! $(f_is_file $ADMIN_DIR/'Contents of githubconfig.txt') ; then
+    set ABORT=true
+    echo File \'$ADMIN_DIR/'Contents of githubconfig.txt'\' is REQUIRED.
+    fi
+
+if $ABORT ; then
+    echo "ABORTED." 1>&2
+    exit 1
+    fi
+
+echo 0
 
 
 #####################################################################################################
@@ -100,8 +137,8 @@ echo "Installing universe repository and apt packages updated."
 
 add-apt-repository universe --yes
 apt --yes clean
-apt --yes autoremove
 apt update && apt --yes dist-upgrade
+apt --yes autoremove
 f_record_to_installation_log "universe repository installed and apt packages updated"
 
 
@@ -113,6 +150,76 @@ echo "Installing universe repository and apt packages updated."
 
 sudo apt --yes install at certbot curl debconf-utils fail2ban fwupd git git-doc moreutils openssl ufw unzip
 f_record_to_installation_log "universe repository installed and apt packages updated"
+
+
+#####################################################################################################
+# CREATE MOUNT POINTS FOR EXTERNAL STORAGE
+#####################################################################################################
+
+echo "Creating mount points for external storage."
+
+if [ $HOSTNAME == "dsm1" ]; then
+    sudo mkdir -p /mnt/2TBA /mnt/3TBB /mnt/4TBA /mnt/5TBC /mnt/5TBD /mnt/5TBE /mnt/12TBA /mnt/12TBB \
+        /mnt/12TBC /mnt/20TBA /mnt/Black1TB /mnt/Silver1TB /mnt/Silver5TB-A /mnt/Silver5TB-B
+    sudo chmod 700 /mnt/*
+    fi
+
+if [ $HOSTNAME == "pd1" ]; then
+    sudo mkdir -p /mnt/bob
+    sudo chmod 700 /mnt/*
+    fi
+
+f_record_to_installation_log "mount points created for external storage"
+
+
+#####################################################################################################
+# INITIALIZE $SBIN_DIR
+#####################################################################################################
+
+echo "Initializing $SBIN_DIR."
+
+mkdir -p "$SBIN_DIR"              # Make $SBIN_DIR
+chmod 755 "$SBIN_DIR"             # Set permissions
+rm -rf "$GIT_ROOT" "$SBIN_DIR"/*  # Make sure these directories are empty.
+
+f_record_to_installation_log "initialized $SBIN_DIR"
+
+
+#####################################################################################################
+# COPY THE LIFEBOAT TO HOME DIRECTORY FOR dsm1 ONLY
+#####################################################################################################
+
+LIFEBOAT_MOUNT_POINT=/mnt/4TBA
+LIFEBOAT_DRIVE_UUID=41102e3a-dac6-45b4-9a5b-20816b7530ea
+
+if $COPY_LIFEBOAT ; then
+  if [ $HOSTNAME == "dsm1" ]; then
+    mkdir -p $LIFEBOAT_MOUNT_POINT; sudo mount -U $LIFEBOAT_DRIVE_UUID -t ext4 $LIFEBOAT_MOUNT_POINT
+    echo "Copying content into ~/lifeboat."
+    # rsync
+      # -a = archive mode is -rlptgoD (no -A,-X,-U,-N,-H)
+      # -E = preserve executability
+      # --info-progress2 = outputs overall transfer statistics for the entire job
+      # -v = verbose, which we've not used
+      rsync -aE --info=progress2 --delete $LIFEBOAT_MOUNT_POINT/lifeboat $ADMIN_DIR/
+    fi
+  fi
+
+
+#####################################################################################################
+# SET UP GIT AND CLONE THE REPOSITORY TO THIS HOST
+#####################################################################################################
+
+# Rename the configuration files.
+mv $ADMIN_DIR/'Contents of gitconfig.txt' $ADMIN_DIR/.gitconfig
+mv $ADMIN_DIR/'Contents of githubconfig.txt' $ADMIN_DIR/.githubconfig
+
+# Set permissions for the configuration files.
+chown $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.gitconfig $ADMIN_DIR/.githubconfig  # I own them
+chmod 400 $ADMIN_DIR/.gitconfig $ADMIN_DIR/.githubconfig                      # only I can read them
+
+
+
 
 
 
@@ -127,9 +234,9 @@ f_record_to_installation_log "universe repository installed and apt packages upd
 # END
 #####################################################################################################
 
-echo "Done."
-echo ""
-echo "You may want to delete file $0 ."
+echo "Done." 1>&2
+echo "" 1>&2
+echo "You may want to delete file $0 ." 1>&2v
 
 f_record_to_installation_log "$0 done"
 
