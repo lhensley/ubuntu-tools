@@ -83,7 +83,7 @@ function f_print_usage {
 
 ###################################################
 # Set default variable values
-VERSION_NUMBER="0.1.x"
+VERSION_NUMBER="0.2.x"
 QUIET_MODE=false
 VERBOSE_MODE=false
 ARGS="" # Add arguments to primary function called as needed

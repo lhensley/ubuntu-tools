@@ -1,0 +1,99 @@
+at certbot curl debconf-utils fail2ban
+fwupd moreutils libssl-dev openssl ufw unzip
+
+php php-cli libapache2-mod-php php-mysql php-gd php-curl php-imap php-ldap
+libmcrypt-dev php-mbstring php-dev php-pear
+libc-client2007e mlock uw-mailutils
+
+tzdata
+
+apache2 apache2-doc apache2-suexec-pristine
+
+apt-cacher-ng avahi-daemon squid-deb-proxy-client
+
+handbrake-cli
+
+lsyncd
+
+mailutils postfix
+
+makemkv-bin makemkv-oss ccextractor
+
+apg
+
+mysql-server openssl libcurl4-openssl-dev libssl-dev php-gmp php-symfony php-imagick php-twig-doc php-symfony-translation
+
+phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+
+openssl
+nfs-common nfs-kernel-server
+
+openvpn easy-rsa
+
+wget curl gpg gnupg2 software-properties-common apt-transport-https lsb-release ca-certificates
+
+proftpd putty-tools python3 pipx
+
+rclone
+
+resolvconf
+
+ripmime
+
+rsync
+
+sshfs
+
+sysbench
+
+tasksel
+
+vim
+
+unzip
+
+openssl libcurl4-openssl-dev libssl-dev perl
+
+libnet-ssleay-perl libauthen-pam-perl
+
+libpam-runtime libio-pty-perl apt-show-versions
+
+python libsocket6-perl libapt-pkg-perl
+
+debconf-utils
+
+moreutils
+
+fwupd
+
+comskip
+cryfs
+curl
+ddclient
+dos2unix
+easy-rsa
+exiftool
+fail2ban 
+
+ffmpeg
+ghostscript
+git
+gpg
+gzip
+html2text
+ifupdown
+inotify-tools
+
+lsyncd
+net-tools
+nfs-common
+nfs-common nfs-kernel-server
+
+
+
+
+
+
+snap install plexmediaserver tautulli
+
+snap install --classic certbot

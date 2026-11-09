@@ -19,8 +19,6 @@
 
 echo "Defining variables."
 
-unset ABORT
-
 my_full_name="Lane Hensley"
 my_email="lane@lanehensley.org"
 ADMIN_DIR="/home/lhensley"
@@ -28,7 +26,7 @@ ADMIN_HOME_DIR="$ADMIN_DIR"
 ROOT_USER="root"
 ROOT_HOME_DIR="/root"
 GITHUB_USER="lhensley"
-GIT_ROOT="$ADMIN_DIR/git"
+GIT_ROOT="$ADMIN_DIR/code"
 GIT_UBUNTU_TOOLS="$GIT_ROOT/ubuntu-tools"
 GIT_UBUNTU_TOOLS_CONFIGS="$GIT_UBUNTU_TOOLS/configs"
 GIT_UBUNTU_TOOLS_SBIN="$GIT_UBUNTU_TOOLS/sbin"
@@ -98,6 +96,8 @@ if [[ $EUID -ne 0 ]]; then
 
 echo "Checking that all required files are present."
 
+ABORT=false
+
 if ! $(f_is_file $ADMIN_DIR/'Contents of gitconfig.txt') ; then
     set ABORT=true
     echo File \'$ADMIN_DIR/Contents of gitconfig.txt\' is REQUIRED.
@@ -112,8 +112,6 @@ if $ABORT ; then
     echo "ABORTED." 1>&2
     exit 1
     fi
-
-echo 0
 
 
 #####################################################################################################
@@ -207,20 +205,14 @@ if $COPY_LIFEBOAT ; then
 
 
 #####################################################################################################
-# SET UP GIT AND CLONE THE REPOSITORY TO THIS HOST
+# DOWNLOAD THE ubuntu-tools REPOSITORY TO THIS HOST
 #####################################################################################################
 
-# Rename the configuration files.
-mv $ADMIN_DIR/'Contents of gitconfig.txt' $ADMIN_DIR/.gitconfig
-mv $ADMIN_DIR/'Contents of githubconfig.txt' $ADMIN_DIR/.githubconfig
-
-# Set permissions for the configuration files.
-chown $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.gitconfig $ADMIN_DIR/.githubconfig  # I own them
-chmod 400 $ADMIN_DIR/.gitconfig $ADMIN_DIR/.githubconfig                      # only I can read them
-
-
-
-
+rm -fr /var/local/ubuntu-tools*
+curl -L -s -o /var/local/ubuntu-tools.zip -O https://github.com/lhensley/ubuntu-tools/archive/master.zip
+unzip -q -d /var/local /var/local/ubuntu-tools.zip
+mv /var/local/ubuntu-tools-master /var/local/ubuntu-tools
+rm /var/local/ubuntu-tools.zip
 
 
 
@@ -236,7 +228,7 @@ chmod 400 $ADMIN_DIR/.gitconfig $ADMIN_DIR/.githubconfig                      # 
 
 echo "Done." 1>&2
 echo "" 1>&2
-echo "You may want to delete file $0 ." 1>&2v
+echo "You may want to delete file $0 ." 1>&2
 
 f_record_to_installation_log "$0 done"
 

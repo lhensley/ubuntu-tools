@@ -42,7 +42,7 @@
       fi
 
 # OPTIONAL software (default to false)
-    install_apt_cacher_ng=false     # Caching system for apt software distribution
+    install_apt_cacher_ng=false     # Caching system for apt software distribution DON'T DO THIS!!!!
     install_bridgeutils=false       # Bridge-utils extensions for the interfaces(5) file format
     install_comskip=false           # Commercial skipper for videos
     install_cryfs=false             # Encrypted file system
