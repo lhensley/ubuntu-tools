@@ -21,6 +21,42 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 #	echo "Updating local git repository."
 #	f_git
 
+	# Refresh $GIT_UBUNTU_TOOLS
+	echo
+	echo "Refreshing $GIT_UBUNTU_TOOLS"
+
+	#####################################################################################################
+	# DOWNLOAD THE ubuntu-tools REPOSTORY
+	#####################################################################################################
+
+	echo "Downloading the ubuntu-tools repository to $REPO_DIR."
+
+	rm -fr "$REPO_DIR"
+	curl -L -s -o "$REPO_DIR.zip" \
+		-O https://github.com/lhensley/ubuntu-tools/archive/master.zip
+	unzip -q -d "$REPO_PARENT" "$REPO_DIR.zip"
+	mv "$REPO_DIR-master" "$REPO_DIR"
+	rm "$REPO_DIR.zip"
+
+	f_record_to_installation_log "downloaded the ubuntu-tools repository"
+
+
+	#####################################################################################################
+	# INITIALIZING AND POPULATING $SBIN_DIR
+	#####################################################################################################
+
+	echo "Initializing and populating $SBIN_DIR."
+
+	mkdir -p "$SBIN_DIR"              # Make $SBIN_DIR
+	chmod 755 "$SBIN_DIR"             # Set permissions
+	rm -rf "$SBIN_DIR"/*              # Make sure this directory are empty.
+	cp -r "$REPO_DIR/sbin" "$SBIN_PARENT/"
+
+	f_record_to_installation_log "initialized and populating $SBIN_DIR"
+
+
+
+
 	echo
 	echo
 	echo "$0: Applying configurations and permissions." && echo

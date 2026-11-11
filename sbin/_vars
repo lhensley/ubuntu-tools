@@ -648,8 +648,8 @@ source /etc/os-release
 #   copy changes into the ubuntu-tools/install/variables script, too.
         GIT_BRANCH="master"
         # GIT_BRANCH="dev"
-        # GIT_ROOT="$ADMIN_HOME_DIR/git"            # Formerly system.git     CHANGED 11/8/2026
-        GIT_ROOT="/var/local"            # Formerly system.git.   CHANGED 11/8/2026
+        # GIT_ROOT="$ADMIN_HOME_DIR/git"    # Formerly system.git     CHANGED 11/8/2026
+        GIT_ROOT="/var/local"               # Formerly system.git     CHANGED 11/8/2026
         GIT_UBUNTU_TOOLS="$GIT_ROOT/ubuntu-tools"                # Formerly system.git.go
         GIT_UBUNTU_TOOLS_CONFIGS="$GIT_UBUNTU_TOOLS/configs"     # Formerly system.git.go.configs
         GIT_UBUNTU_TOOLS_SBIN="$GIT_UBUNTU_TOOLS/sbin"           # Formerly #system.git.go.sbin

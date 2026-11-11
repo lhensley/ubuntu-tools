@@ -27,6 +27,8 @@ ROOT_USER="root"
 ROOT_HOME_DIR="/root"
 SBIN_DIR="/usr/local/sbin"
 SBIN_PARENT="$(dirname $SBIN_DIR)"
+REPO_DIR="/var/local/ubuntu-tools"
+REPO_PARENT="$(dirname $REPO_DIR)"
 
 COPY_LIFEBOAT=true
 LIFEBOAT_MOUNT_POINT=/mnt/4TBA
@@ -187,14 +189,14 @@ f_record_to_installation_log "queued copying lifeboat to ~/lifeboat"
 # DOWNLOAD THE ubuntu-tools REPOSTORY
 #####################################################################################################
 
-echo "Downloading the ubuntu-tools repository to /var/local/ubuntu-tools."
+echo "Downloading the ubuntu-tools repository to $REPO_DIR."
 
-rm -fr /var/local/ubuntu-tools*
-curl -L -s -o /var/local/ubuntu-tools.zip \
+rm -fr "$REPO_DIR"
+curl -L -s -o "$REPO_DIR.zip" \
   -O https://github.com/lhensley/ubuntu-tools/archive/master.zip
-unzip -q -d /var/local /var/local/ubuntu-tools.zip
-mv /var/local/ubuntu-tools-master /var/local/ubuntu-tools
-rm /var/local/ubuntu-tools.zip
+unzip -q -d "$REPO_PARENT" "$REPO_DIR.zip"
+mv "$REPO_DIR-master" "$REPO_DIR"
+rm "$REPO_DIR.zip"
 
 f_record_to_installation_log "downloaded the ubuntu-tools repository"
 
@@ -208,7 +210,7 @@ echo "Initializing and populating $SBIN_DIR."
 mkdir -p "$SBIN_DIR"              # Make $SBIN_DIR
 chmod 755 "$SBIN_DIR"             # Set permissions
 rm -rf "$SBIN_DIR"/*              # Make sure this directory are empty.
-cp -r /var/local/ubuntu-tools/sbin /usr/local/
+cp -r "$REPO_DIR/sbin" "$SBIN_PARENT/"
 
 f_record_to_installation_log "initialized and populating $SBIN_DIR"
 
