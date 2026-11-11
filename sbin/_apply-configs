@@ -259,15 +259,11 @@ echo
 	if $(f_is_installed "nfs-kernel-server"); then
 		if $(f_is_file "$REPO_DIR/configs/etc/exports.$HOSTNAME"); then
 				echo "Updating /etc/exports from $REPO_DIR/configs/etc/exports.$HOSTNAME"
-				echo "v 1"
-				echo "repo: $REPO_DIR/configs/etc/exports.$HOSTNAME"
-				echo "ls -al $REPO_DIR/configs/etc/exports.$HOSTNAME"
-				ls -al $REPO_DIR/configs/etc/exports.$HOSTNAME
 				cp "$REPO_DIR/configs/etc/exports.$HOSTNAME" "/etc/exports"
 				exportfs -r
 				systemctl restart nfs-server
 			else
-				echo "WARNING: No config file in the repository for this host."
+				echo "X WARNING: No config file in the repository for this host."
 			fi
 		fi
 
