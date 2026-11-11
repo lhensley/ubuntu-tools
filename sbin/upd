@@ -32,11 +32,12 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 	echo "Downloading the ubuntu-tools repository to $REPO_DIR."
 
 	rm -fr "$REPO_DIR"
-	curl -L -s -o "$REPO_DIR.zip" \
-		-O https://github.com/lhensley/ubuntu-tools/archive/master.zip
-	unzip -q -d "$REPO_PARENT" "$REPO_DIR.zip"
-	mv "$REPO_DIR-master" "$REPO_DIR"
-	rm "$REPO_DIR.zip"
+  curl -L -s -o "$REPO_DIR.zip" \
+  	-O https://github.com/lhensley/ubuntu-tools/archive/master.zip
+# unzip -q -d "$REPO_PARENT" "$REPO_DIR.zip"
+#	mv "$REPO_DIR-master" "$REPO_DIR"
+#	rm "$REPO_DIR.zip"
+
 
 	f_record_to_installation_log "downloaded the ubuntu-tools repository"
 
