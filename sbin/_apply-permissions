@@ -171,23 +171,23 @@ echo "######################################################################"
 echo
 
 	# /etc/comskip
-			echo "Updating permissions for /etc/comskip"
+			echo "$0: Updating permissions for /etc/comskip"
 			chmod -fR 644 /etc/comskip
 			chmod 755 /etc/comskip
 
 	# Set /etc/ddclient
 		if $(f_is_installed "ddclient"); then
-			echo "Updating permissions for /etc/ddclient"
+			echo "$0: Updating permissions for /etc/ddclient"
 			chmod -f 600 /etc/ddclient.conf /etc/ddclient/ddclient.conf /etc/default/ddclient # confirmed value
 			chown -f $ROOT_USER:$ROOT_USER /etc/ddclient.conf /etc/ddclient/ddclient.conf /etc/default/ddclient /etc/.default/ddclient
 			fi
 
 #	# /etc/.dynu.com
 #		if [ -f /etc/.dynu.com ]; then
-#			echo "Updating permissions for /etc/.dynu.com"
+#			echo "$0: Updating permissions for /etc/.dynu.com"
 #			chown -f $ROOT_USER:$ROOT_USER /etc/.dynu.com
 #			chmod -f $PERMISSIONS_DYNU /etc/.dynu.com
-#			echo chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.dynu.com"
+#			echo $0: chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.dynu.com"
 #			chown -f $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.dynu.com"
 #			chmod -f $PERMISSIONS_DYNU "$ADMIN_HOME_DIR/.dynu.com"
 #			chown -f $ROOT_USER:$ROOT_USER "$ROOT_HOME_DIR/.dynu.com"
@@ -196,61 +196,61 @@ echo
 
 	# /etc/exports
 		if $(f_is_installed "nfs-kernel-server"); then
-			echo "Updating permissions for /etc/exports"
+			echo "$0: Updating permissions for /etc/exports"
 			chmod -f 600 "/etc/exports"
 			fi
 
 	# /etc/fstab
-		echo "Updating permissions for /etc/fstab*"
+		echo "$0: Updating permissions for /etc/fstab*"
 		chmod -f 644 /etc/fstab* # NOT 600. Apps need to read it. Esp k8s 9/17/2023 -LH
 		chown -f $ROOT_USER:$ROOT_USER /etc/fstab*
 
 	# /etc/HandBrake
 		if $(f_is_directory "/etc/HandBrake"); then
-			echo "Updating permissions for /etc/HandBrake"
+			echo "$0: Updating permissions for /etc/HandBrake"
 			chmod -fR 644 /etc/HandBrake
 			chmod 755 /etc/HandBrake
 			fi
 
 	# /etc/hosts
-		echo "Updating permissions for /etc/hosts"
+		echo "$0: Updating permissions for /etc/hosts"
 		chmod -f 644 /etc/hosts
 
 	# /etc/lsyncd
 		if $(f_is_installed "lsyncd"); then
-			echo "Updating permissionf for lsyncd"
+			echo "$0: Updating permissionf for lsyncd"
 			chown -f $ROOT_USER:$ROOT_USER /etc/lsyncd/lsyncd.conf.lua
 			chmod -f 600 /etc/lsyncd/lsyncd.conf.lua
 			fi
 
 	# /etc/motd
 		if [ -f /etc/motd ]; then
-			echo "Updating permissions for /etc/motd"
+			echo "$0: Updating permissions for /etc/motd"
 			chmod -f 644 /etc/motd
 			fi
 
 	# /etc/netplan
 		if $(f_is_directory "/etc/netplan"); then
-			echo "Updating permissions for /etc/netplan/*"
+			echo "$0: Updating permissions for /etc/netplan/*"
 			chmod -fR 400 "/etc/netplan"
 			fi
 
 	# /etc/openvpn
 		if $(f_is_installed "openvpn"); then
-			echo "Updating permissions for /etc/openvpn/myserver.conf"
+			echo "$0: Updating permissions for /etc/openvpn/myserver.conf"
 			chmod -f 644 "/etc/openvpn/myserver.conf"
 			fi
 
 	# /etc/openvpn/easy-rsa
 		if $(f_is_installed "easy-rsa"); then
-			echo "Updating permissions for /etc/openvpn/easy-rsa/openssl-easyrsa.cnf"
+			echo "$0: Updating permissions for /etc/openvpn/easy-rsa/openssl-easyrsa.cnf"
 			chmod -f 644 "/etc/openvpn/easy-rsa/openssl-easyrsa.cnf"
 			chmod -f 600 "/etc/openvpn/easy-rsa/pki/openssl-easyrsa.cnf"
 			fi
 
 	# /etc/phpmyadmin
 		if $(f_is_installed "phpmyadmin"); then
-			echo "Updating permissions for /etc/phpmyadmin/config.inc.php"
+			echo "$0: Updating permissions for /etc/phpmyadmin/config.inc.php"
 			chown -R www-data:www-data "/etc/phpmyadmin/MySQL-Certs"
 			chmod -f 644 "/etc/phpmyadmin/config.inc.php"
 			find "/etc/phpmyadmin/MySQL-Certs" -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
@@ -263,36 +263,36 @@ echo
 
 	# /etc/resolvconf
 		if $(f_is_installed "resolvconf"); then
-			echo Updating permissions for /etc/resolvconf/resolv.conf.d/head
+			echo $0: Updating permissions for /etc/resolvconf/resolv.conf.d/head
 			chown -f $ROOT_USER:$ROOT_USER /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
 			chmod -f 644 /etc/resolvconf/resolv.conf.d/head # NOT confirmed; relevant to system viability?
 			fi
 	
 	# /etc/ssl
-			echo "Updating permissions for /etc/ssl/*.cnf"
+			echo "$0: Updating permissions for /etc/ssl/*.cnf"
 			chmod -f 644 /etc/ssl/*.cnf
 
 	# /etc/ufw/applications.d
-		echo Updating permissions for /etc/ufw/applications.d
+		echo $0: Updating permissions for /etc/ufw/applications.d
 		chown -fR $ROOT_USER:$ROOT_USER /etc/ufw/applications.d
 		chmod -fR 644 /etc/ufw/applications.d/*
 
 	# Git
-		echo "Updating permissions for git"
+		echo "$0: Updating permissions for git"
 		if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 		# Configs
 			chmod -fR 600 $ROOT_HOME_DIR/.gitconfig
 			chmod -fR 600 $ADMIN_HOME_DIR/.gitconfig
 			chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.gitconfig
 			chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.gitconfig
-		if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+		if $DEBUG_MODE ; then echo "$0: DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 		# $GIT_ROOT (working clone at ~/git)
 			# find "$GIT_ROOT" -type d -print -exec chmod 700 {} \; >> /dev/null 2>&1
 			# find "$GIT_ROOT" -type f -print -exec chmod 600 {} \; >> /dev/null 2>&1
 			find "$GIT_ROOT" -type d -print -exec chmod 700 {} \; >> /dev/null 2>&1
 			find "$GIT_ROOT" -type f -print -exec chmod 600 {} \; >> /dev/null 2>&1
 			chown -fR $ADMIN_USER:$ADMIN_USER "$GIT_ROOT"
-		if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
+		if $DEBUG_MODE ; then echo "$0: DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 		# $SBIN_DIR (production location, on the PATH for all)
 			# chmod -fR $SBIN_PERMISSIONS "$SBIN_DIR"
 			# chown -fR $ROOT_USER:$ROOT_USER "$SBIN_DIR"
@@ -305,12 +305,12 @@ echo
 		if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
 	# Set $ADMIN_DIR/.coldstorage.log
-		echo "Updating permissions for $COLD_BACKUP_LOG"
+		echo "$0: Updating permissions for $COLD_BACKUP_LOG"
 		chmod -f 600 $COLD_BACKUP_LOG
 		chown -f $ADMIN_USER:$ADMIN_USER $COLD_BACKUP_LOG
 
 	# /home/lhensley/vim Vim and vi config files
-		echo Updating permissions for "$ADMIN_HOME_DIR/.vim*" and "$ROOT_HOME_DIR/.vim*"
+		echo $0: Updating permissions for "$ADMIN_HOME_DIR/.vim*" and "$ROOT_HOME_DIR/.vim*"
 		chmod -fR 600 "$ADMIN_HOME_DIR/.vim"
 		chmod -fR 600 "$ROOT_HOME_DIR/.vim"
 		chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/.vim"
@@ -318,21 +318,21 @@ echo
 
 #	# /home/lhensley/dvr (plex)
 #		if $(f_is_directory "$ADMIN_HOME_DIR/dvr"); then
-#			echo Updating permissions for "$ADMIN_HOME_DIR/dvr"
+#			echo $0: Updating permissions for "$ADMIN_HOME_DIR/dvr"
 #			find "$ADMIN_HOME_DIR/dvr" -type d -print -exec chmod 777 {} \; >> /dev/null 2>&1
 #			find "$ADMIN_HOME_DIR/dvr" -type f -print -exec chmod 666 {} \; >> /dev/null 2>&1
 #			chown -fR $ADMIN_USER:$ADMIN_USER "$ADMIN_HOME_DIR/dvr"
 #			fi
 
 	# Set /lib/systemd/system ownership and permissions for $SERVICES_DIR
-		echo Updating permissions for $SERVICES_DIR
+		echo $0: Updating permissions for $SERVICES_DIR
 		chown -R $ROOT_USER:$ROOT_USER $SERVICES_DIR
 		find $SERVICES_DIR -type d -print -exec chmod $PERMISSIONS_SERVICES_DIR {} \; >> /dev/null 2>&1
 		find $SERVICES_DIR -type f -print -exec chmod $PERMISSIONS_SERVICES_FILES {} \; >> /dev/null 2>&1
 		
 	# MySQL
 		if $(f_is_installed "mysql-server"); then
-			echo "Updating permissions for MySQL"
+			echo "$0: Updating permissions for MySQL"
 			chown -R $ROOT_USER:$ROOT_USER /etc/mysql
 			chmod 755 /etc/mysql /etc/mysql/conf.d /etc/mysql/mysql.conf.d
 			chmod 600 /etc/mysql/debian.cnf
@@ -353,7 +353,7 @@ echo
 
 	# MakeMKV
 		if $(f_is_installed "makemkv-bin"); then
-			echo "Updating permissions for MakeMKV"
+			echo "$0: Updating permissions for MakeMKV"
 			chmod -f 700 "$ADMIN_HOME_DIR/.MakeMKV"
 			chmod -f 700 "$ROOT_HOME_DIR/.MakeMKV"
 			chmod -fR 600 "$ADMIN_HOME_DIR/.MakeMKV"/*
@@ -364,7 +364,7 @@ echo
 
 	# ~/.ssh
 #		if $(f_is_installed "ssh"); then
-			echo Updating permissions for $ADMIN_HOME_DIR/.ssh and $ROOT_HOME_DIR/.ssh
+			echo $0: Updating permissions for $ADMIN_HOME_DIR/.ssh and $ROOT_HOME_DIR/.ssh
 			chown -fR $ADMIN_USER:$ADMIN_USER $ADMIN_HOME_DIR/.ssh
 			chown -fR $ROOT_USER:$ROOT_USER $ROOT_HOME_DIR/.ssh
 			chmod -f 700 $ADMIN_HOME_DIR/.ssh $ROOT_HOME_DIR/.ssh
@@ -374,14 +374,14 @@ echo
 
 	# SSHD config file
 		if $(f_is_installed "ssh"); then
-			echo Updating permissions for "$SSHD_CONFIG"
+			echo $0: Updating permissions for "$SSHD_CONFIG"
 			chown -f $ROOT_USER:$ROOT_USER "$SSHD_CONFIG"
 			chmod -f 600 "$SSHD_CONFIG"
 			fi
 
 	# HandBrake config files
 		if $(f_is_installed "handbrake-cli"); then
-			echo Updating permissions for "$ADMIN_HOME_DIR/.HandBrake" and "$ROOT_HOME_DIR/.HandBrake"
+			echo $0: Updating permissions for "$ADMIN_HOME_DIR/.HandBrake" and "$ROOT_HOME_DIR/.HandBrake"
 			chmod -f 700 "$ADMIN_HOME_DIR/.HandBrake"
 			chmod -f 700 "$ROOT_HOME_DIR/.HandBrake"
 			chmod -f -R 600 "$ADMIN_HOME_DIR/.HandBrake"/*
@@ -392,7 +392,7 @@ echo
 
 	# phpmyadmin
 		if $(f_is_installed "phpmyadmin"); then
-			echo Updating permissions for $PHPMYADMIN_DIR
+			echo $0: Updating permissions for $PHPMYADMIN_DIR
 			chown -fR root:root $PHPMYADMIN_DIR
 			chmod -f 400 $PHPMYADMIN_DIR/config.inc.php
 			fi
@@ -404,13 +404,13 @@ echo
 
 	# Wordpress wp-config.php
 		if $(f_is_file "/var/www/lanehensley.org/wp-config.php"); then
-			echo Updating permissions for "/var/www/lanehensley.org/wp-config.php"
+			echo $0: Updating permissions for "/var/www/lanehensley.org/wp-config.php"
 			chown -fR www-data:www-data "/var/www/lanehensley.org/wp-config.php"
 			chmod -f 400 "/var/www/lanehensley.org/wp-config.php"
 			fi
 
 	# Exceptions: These can be read or run by anyone
-		echo "Updating permissions for some required exceptions"
+		echo "$0: Updating permissions for some required exceptions"
 #		# 2/16/2022: Not sure why it's necessary to confirm existence of these files except to keep chmod from failing below,
 #		# which can be managed with the --silent flag. Added that to all chmods below.
 #		# Confirm that referenced files below exist.
@@ -423,19 +423,19 @@ echo
 #			# f_require_file "${PATHNAME[upd]}"
 #			# f_require_file "${PATHNAME[_apply_configs]}"
 		# These based on functional requirements
-			echo " " ${PATHNAME[makemkvcon]}
+			echo " $0: " ${PATHNAME[makemkvcon]}
 			chmod --silent $PERMISSIONS_SCRIPT_makemkvcon "${PATHNAME[makemkvcon]}"
-			echo " " ${PATHNAME[_functions]}
+			echo " $0: " ${PATHNAME[_functions]}
 			chmod --silent $PERMISSIONS_SCRIPT__functions "${PATHNAME[_functions]}"
-			echo " " ${PATHNAME[_vars]}
+			echo " $0: " ${PATHNAME[_vars]}
 			chmod --silent $PERMISSIONS_SCRIPT__vars "${PATHNAME[_vars]}"
-			echo " " ${PATHNAME[remove_empty_directories]}
+			echo " $0: " ${PATHNAME[remove_empty_directories]}
 			chmod --silent $PERMISSIONS_SCRIPT_remove_empty_directories "${PATHNAME[remove_empty_directories]}"
-			echo " " ${PATHNAME[rip]}
+			echo " $0: " ${PATHNAME[rip]}
 			chmod --silent $PERMISSIONS_SCRIPT_rip "${PATHNAME[rip]}"
-			echo " " ${PATHNAME[script_footer]}
+			echo " $0: " ${PATHNAME[script_footer]}
 			chmod --silent $PERMISSIONS_SCRIPT_script_footer "${PATHNAME[script_footer]}" 
-			echo " " ${PATHNAME[script_setup]}
+			echo " $0: " ${PATHNAME[script_setup]}
 			chmod --silent $PERMISSIONS_SCRIPT_script_setup "${PATHNAME[script_setup]}" 
 		# These based on desire. CAUTION: Don't expose anything that has a password or code in it.
 			# chmod 740 "${PATHNAME[upd]}"

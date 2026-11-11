@@ -170,12 +170,12 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 # Set timezone
 #	echo
-	echo "$0 Setting timezone to $TIMEZONE"
+	echo "$0: Setting timezone to $TIMEZONE"
     timedatectl set-timezone $TIMEZONE
 
 # Clear /etc/NetworkManager/system-connections
 	if $(f_is_installed "network-manager"); then 
-		echo "Clearing /etc/NetworkManager/system-connections"
+		echo "$0: Clearing /etc/NetworkManager/system-connections"
 		rm -f /etc/NetworkManager/system-connections/*
 		fi
 
@@ -206,7 +206,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 # Update ~/.HandBrake
 	rm -f "$ADMIN_HOME_DIR/.HandBrake"/* "$ROOT_HOME_DIR/.HandBrake/"*
 	if $(f_is_installed "handbrake-cli"); then
-		echo "Updating $ADMIN_HOME_DIR/.HandBrake from $REPO_DIR/configs/ADMIN_HOME_DIR/.HandBrake"
+		echo "$0: Updating $ADMIN_HOME_DIR/.HandBrake from $REPO_DIR/configs/ADMIN_HOME_DIR/.HandBrake"
 		mkdir -p "$ADMIN_HOME_DIR/.HandBrake" "$ROOT_HOME_DIR/.HandBrake"
 		cp "$REPO_DIR/configs/ADMIN_HOME_DIR/.HandBrake/"* "$ADMIN_HOME_DIR/.HandBrake"
 		cp "$REPO_DIR/configs/ADMIN_HOME_DIR/.HandBrake/"* "$ROOT_HOME_DIR/.HandBrake"
@@ -215,7 +215,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 # Update ~/.MakeMKV
 	rm -f "$ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ROOT_HOME_DIR/.MakeMKV/settings.conf"
 	if $(f_is_installed "makemkv-bin"); then
-		echo "Updating $ADMIN_HOME_DIR/.MakeMKV/settings.conf from $REPO_DIR/configs/ADMIN_HOME_DIR/.MakeMKV/settings.conf"
+		echo "$0: Updating $ADMIN_HOME_DIR/.MakeMKV/settings.conf from $REPO_DIR/configs/ADMIN_HOME_DIR/.MakeMKV/settings.conf"
 		mkdir -p "$ADMIN_HOME_DIR/.MakeMKV" "$ROOT_HOME_DIR/.MakeMKV"
 		cp "$REPO_DIR/configs/ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ADMIN_HOME_DIR/.MakeMKV/"
 		cp "$REPO_DIR/configs/ADMIN_HOME_DIR/.MakeMKV/settings.conf" "$ROOT_HOME_DIR/.MakeMKV/"
@@ -223,7 +223,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 # Update ~/.ssh/authorized_keys
 #	if $(f_is_installed "openssh-server"); then
-		echo "Updating $ADMIN_HOME_DIR/.ssh/authorized_keys/* from $REPO_DIR/configs/ADMIN_HOME_DIR/.ssh/"
+		echo "$0: Updating $ADMIN_HOME_DIR/.ssh/authorized_keys/* from $REPO_DIR/configs/ADMIN_HOME_DIR/.ssh/"
 		cp "$REPO_DIR/configs/ADMIN_HOME_DIR/.ssh/authorized_keys"* "$ADMIN_HOME_DIR/.ssh/"
 		cp "$REPO_DIR/configs/ADMIN_HOME_DIR/.ssh/authorized_keys"* "$ROOT_HOME_DIR/.ssh/"
 #		fi
@@ -238,14 +238,14 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 # Update /etc/comskips
 	rm -rf /etc/comskip
-	echo "Updating /etc/comskip from $REPO_DIR/configs/etc/comskip"
+	echo "$0: Updating /etc/comskip from $REPO_DIR/configs/etc/comskip"
 	cp -r "$REPO_DIR/configs/etc/comskip" "/etc/comskip"
 
 # Update /etc/ddclient/
 	rm -f /etc/ddclient.*
 	if $(f_is_file "$REPO_DIR/configs/etc/ddclient/ddclient.conf.$HOSTNAME"); then
 		if $(f_is_installed "ddclient"); then
-			echo "Updating /etc/ddclient.conf and /etc/ddclient/ddclient.conf from $REPO_DIR/configs/etc/ddclient/ddclient.conf.$HOSTNAME"
+			echo "$0: Updating /etc/ddclient.conf and /etc/ddclient/ddclient.conf from $REPO_DIR/configs/etc/ddclient/ddclient.conf.$HOSTNAME"
 			mkdir -p /etc/ddclient /etc/.default /etc/default
 			cp -T $REPO_DIR/configs/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient.conf
 			cp -T $REPO_DIR/configs/etc/ddclient/ddclient.conf.$HOSTNAME /etc/ddclient/ddclient.conf
@@ -258,33 +258,33 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 	rm -f /etc/exports
 	if $(f_is_installed "nfs-kernel-server"); then
 		if $(f_is_file "$REPO_DIR/configs/etc/exports.$HOSTNAME"); then
-				echo "Updating /etc/exports from $REPO_DIR/configs/etc/exports.$HOSTNAME"
+				echo "$0: Updating /etc/exports from $REPO_DIR/configs/etc/exports.$HOSTNAME"
 				cp "$REPO_DIR/configs/etc/exports.$HOSTNAME" "/etc/exports"
 				exportfs -r
 				systemctl restart nfs-server
 			else
-				echo " WARNING: nfs-kernel-server is installed, but no config file in the repository for this host."
+				echo "$0:  WARNING: nfs-kernel-server is installed, but no config file in the repository for this host."
 			fi
 		fi
 
 # Update /etc/HandBrake
 	rm -rf "/etc/HandBrake"
 	if $(f_is_installed "handbrake-cli"); then
-		echo "Updating /etc/HandBrake from $REPO_DIR/configs/ADMIN_HOME_DIR/.HandBrake"
+		echo "$0: Updating /etc/HandBrake from $REPO_DIR/configs/ADMIN_HOME_DIR/.HandBrake"
 		mkdir -p "/etc/HandBrake"
 		cp "$REPO_DIR/configs/ADMIN_HOME_DIR/.HandBrake/"* "/etc/HandBrake/"
 		fi
 
 # Update /etc/hosts
 	rm -f /etc/hosts
-		echo "Updating /etc/hosts from $REPO_DIR/configs/etc/hosts"
+		echo "$0: Updating /etc/hosts from $REPO_DIR/configs/etc/hosts"
 		cp "$REPO_DIR/configs/etc/hosts" "/etc/hosts"
 
 # Update /etc/fstab
 	# Horrible error below. Do this ONLY at installation. 2024-07-07
 	# cp --update /etc/fstab /etc/fstab.original.install
 	if $(f_is_file "$REPO_DIR/configs/etc/fstab-peripherals.$HOSTNAME"); then
-		echo "Updating /etc/fstab from /etc/fstab.original.install and $REPO_DIR/configs/etc/fstab-peripherals.$HOSTNAME"
+		echo "$0: Updating /etc/fstab from /etc/fstab.original.install and $REPO_DIR/configs/etc/fstab-peripherals.$HOSTNAME"
 		rm -f /etc/fstab
 		cat /etc/fstab.original.install "$REPO_DIR/configs/etc/fstab-peripherals.$HOSTNAME" > /tmp/fstab
 		mv /tmp/fstab /etc/fstab
@@ -295,20 +295,23 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 # Update /etc/lsyncd/*
 	rm -f /etc/lyncd/*
 	if $(f_is_installed "lsyncd"); then
-		echo "Updating /etc/lsyncd/lsyncd.conf.lua from $REPO_DIR/configs/lsyncd/lsyncd.conf.lua.$HOSTNAME"
-		cp $REPO_DIR/configs/lsyncd/lsyncd.conf.lua.$HOSTNAME /etc/lsyncd/lsyncd.conf.lua
-		systemctl restart lsyncd
-		fi
+		if $(f_is_file "$REPO_DIR/configs/etc/exports.$HOSTNAME"); then
+				echo "$0: Updating /etc/lsyncd/lsyncd.conf.lua from $REPO_DIR/configs/lsyncd/lsyncd.conf.lua.$HOSTNAME"
+				cp $REPO_DIR/configs/lsyncd/lsyncd.conf.lua.$HOSTNAME /etc/lsyncd/lsyncd.conf.lua
+				systemctl restart lsyncd
+			else
+				echo "$0: WARNING: nfs-kernel-server is installed, but no config file in the repository for this host."
+			fi
 
 # Update /etc/motd
 	if [ -f $REPO_DIR/configs/etc/motd.$HOSTNAME ]; then
-		echo "Updating /etc/motd from $REPO_DIR/configs/etc/motd.$HOSTNAME"
+		echo "$0: Updating /etc/motd from $REPO_DIR/configs/etc/motd.$HOSTNAME"
 		cp "$REPO_DIR/configs/etc/motd.$HOSTNAME" "/etc/motd"
 		fi
 
 # Update any netplan configuration files
 	if [ -f $REPO_DIR/configs/etc/netplan/dynamic.yaml.$HOSTNAME ]; then
-		echo "Updating /etc/netplan/current-plan.yaml from $REPO_DIR/configs/etc/netplan/dynamic.yaml.$HOSTNAME"
+		echo "$0: Updating /etc/netplan/current-plan.yaml from $REPO_DIR/configs/etc/netplan/dynamic.yaml.$HOSTNAME"
 		# IMPORTANT: The chmod command below CAN'T WAIT for _apply-permissions.
 		chmod -fR 400 "$REPO_DIR/configs/etc/netplan"
 		rm -f /etc/NetworkManager/system-connections/* /etc/netplan/*
@@ -321,14 +324,14 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 # Update /etc/openvpn
 	rm -f /etc/openvpn/myserver.conf
 	if $(f_is_installed "openvpn"); then
-		echo "Updating /etc/openvpn/myserver.conf from $REPO_DIR/configs/etc/openvpn/myserver.conf.$HOSTNAME"
+		echo "$0: Updating /etc/openvpn/myserver.conf from $REPO_DIR/configs/etc/openvpn/myserver.conf.$HOSTNAME"
 		cp "$REPO_DIR/configs/etc/openvpn/myserver.conf.$HOSTNAME" "/etc/openvpn/myserver.conf"
 		fi
 
 # Update /etc/openvpn/easy-rsa
 	rm -f /etc/openvpn/easy-rsa/openssl-easyrsa.cnf
 	if $(f_is_installed "easy-rsa"); then
-		echo "Updating /etc/openvpn/easy-rsa/openssl-easyrsa.cnf from $REPO_DIR/configs/etc/openvpn/easy-rsa/openssl-easyrsa.cnf.$HOSTNAME"
+		echo "$0: Updating /etc/openvpn/easy-rsa/openssl-easyrsa.cnf from $REPO_DIR/configs/etc/openvpn/easy-rsa/openssl-easyrsa.cnf.$HOSTNAME"
 		mkdir -p "/etc/openvpn/easy-rsa/pki"
 		cp "$REPO_DIR/configs/etc/openvpn/easy-rsa/openssl-easyrsa.cnf.$HOSTNAME" "/etc/openvpn/easy-rsa/openssl-easyrsa.cnf"
 		cp "$REPO_DIR/configs/etc/openvpn/easy-rsa/openssl-easyrsa.cnf.$HOSTNAME" "/etc/openvpn/easy-rsa/pki/openssl-easyrsa.cnf"
@@ -336,12 +339,12 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 # Update /etc/phpmyadmin
 	if $(f_is_installed "phpmyadmin"); then
-		echo "Updating /etc/phpmyadmin/config.inc.php from $REPO_DIR/configs/etc/phpmyadmin/config.inc.php.$HOSTNAME"
+		echo "$0: Updating /etc/phpmyadmin/config.inc.php from $REPO_DIR/configs/etc/phpmyadmin/config.inc.php.$HOSTNAME"
 		cp "$REPO_DIR/configs/etc/phpmyadmin/config.inc.php.$HOSTNAME" "/etc/phpmyadmin/config.inc.php"
 		fi
 
 # Update /etc/ssl/*.cnf
-		echo "Updating /etc/ssl from $REPO_DIR/configs/etc/ssl"
+		echo "$0: Updating /etc/ssl from $REPO_DIR/configs/etc/ssl"
 		cp "$REPO_DIR/configs"/etc/ssl/*.cnf "/etc/ssl/"
 		if [ -f $REPO_DIR/configs/etc/ssl/openssl.cnf.$HOSTNAME ]; then
 			cp "$REPO_DIR/configs/etc/ssl/openssl.cnf.$HOSTNAME" "/etc/ssl/openssl.cnf"
@@ -349,21 +352,21 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 # Update /etc/resolvconf/resolv.conf.d/head
 	if $(f_is_installed "resolvconf"); then
-		echo "Updating /etc/resolvconf/resolv.conf.d/head from $REPO_DIR/configs/resolvconf/resolv.conf.d/head"
+		echo "$0: Updating /etc/resolvconf/resolv.conf.d/head from $REPO_DIR/configs/resolvconf/resolv.conf.d/head"
 		mkdir -p /etc/resolvconf/resolv.conf.d
 		cp $REPO_DIR/configs/resolvconf/resolv.conf.d/head /etc/resolvconf/resolv.conf.d/
 		fi
 
 # Update /etc/sshd_config
 #	if $(f_is_installed "ssh-server"); then
-		echo "Updating /etc/ssh/sshd_config from $REPO_DIR/configs/etc/ssh/sshd_config"
+		echo "$0: Updating /etc/ssh/sshd_config from $REPO_DIR/configs/etc/ssh/sshd_config"
 		cp "$REPO_DIR/configs/etc/ssh/sshd_config" "/etc/ssh/sshd_config"
 		systemctl restart ssh
 #		fi
 
 # Update /etc/ufw/applications.d/lane-applications
 	if $(f_is_directory "$REPO_DIR/configs/etc/ufw/applications.d"); then
-		echo "Updating /etc/ufw/applications.d from $REPO_DIR/configs/etc/ufw/applications.d"
+		echo "$0: Updating /etc/ufw/applications.d from $REPO_DIR/configs/etc/ufw/applications.d"
 		rm -fr /etc/ufw/applications.d/*
 		cp $REPO_DIR/configs/etc/ufw/applications.d/* /etc/ufw/applications.d/
 		# Unclear why restarting systemd-networkd is necessary. 
@@ -385,7 +388,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 # Update $PHPMYADMIN_DIR/config.inc.php
 	if $(f_is_installed "phpmyadmin"); then
 		if $(f_is_file "$REPO_DIR/configs$PHPMYADMIN_DIR/config.inc.php.$HOSTNAME"); then
-			echo "Updating $PHPMYADMIN_DIR/config.inc.php from $REPO_DIR/configs$PHPMYADMIN_DIR/config.inc.php.$HOSTNAME"
+			echo "$0: Updating $PHPMYADMIN_DIR/config.inc.php from $REPO_DIR/configs$PHPMYADMIN_DIR/config.inc.php.$HOSTNAME"
 			mkdir -p "$PHPMYADMIN_DIR"
 			cp "$REPO_DIR/configs$PHPMYADMIN_DIR/config.inc.php.$HOSTNAME" "$PHPMYADMIN_DIR/config.inc.php"
 			systemctl restart apache2 &
