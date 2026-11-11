@@ -10,26 +10,11 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 # Require root
 	f_require_root
 
-# Apply patches
-	# echo
-	# echo Applying patches.
-	# upd_patch
+#####################################################################################################
+# DOWNLOAD THE ubuntu-tools REPOSTORY
+#####################################################################################################
 
-# Update from github.com
-# Commented this part out 25 June 2024; want to break git activity.
-#	echo
-#	echo "Updating local git repository."
-#	f_git
-
-	# Refresh $GIT_UBUNTU_TOOLS
-	echo
-	echo "Refreshing $GIT_UBUNTU_TOOLS"
-
-	#####################################################################################################
-	# DOWNLOAD THE ubuntu-tools REPOSTORY
-	#####################################################################################################
-
-	echo "Downloading the ubuntu-tools repository to $REPO_DIR."
+	echo "$0: Downloading the ubuntu-tools repository to $REPO_DIR."
 
 	rm -fr "$REPO_DIR"
   curl -L -s -o "$REPO_DIR.zip" \
@@ -39,43 +24,48 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
   rm "$REPO_DIR.zip"
 
 
-	f_record_to_installation_log "downloaded the ubuntu-tools repository"
+#####################################################################################################
+# INITIALIZING AND POPULATING $SBIN_DIR
+#####################################################################################################
 
-
-	#####################################################################################################
-	# INITIALIZING AND POPULATING $SBIN_DIR
-	#####################################################################################################
-
-	echo "Initializing and populating $SBIN_DIR."
+	echo "$0: Initializing and populating $SBIN_DIR."
 
 	mkdir -p "$SBIN_DIR"              # Make $SBIN_DIR
 	chmod 755 "$SBIN_DIR"             # Set permissions
 	rm -rf "$SBIN_DIR"/*              # Make sure this directory are empty.
 	cp -r "$REPO_DIR/sbin" "$SBIN_PARENT/"
 
-	f_record_to_installation_log "initialized and populating $SBIN_DIR"
 
+#####################################################################################################
+# APPLYING CONFIGURATIONS AND PERMISSIONS
+#####################################################################################################
 
-
-
-	echo
-	echo
-	echo "$0: Applying configurations and permissions." && echo
+	echo "$0: Applying configurations and permissions."
 	_apply-configs
 	_apply-permissions
 
-	echo
-	echo
+
+#####################################################################################################
+# UPDATING LOCAL APT PACKAGES
+#####################################################################################################
+
 	echo "$0: Updating local apt packages"
 	f_upd
 	echo
 
-	echo
-	echo
+
+#####################################################################################################
+# DROP THIS PART
+#####################################################################################################
+
 	echo "$0: IMPORTANT: To update from github, run:"
 	echo "  sudo git-updates"
  	
-# Include script footer file
+
+#####################################################################################################
+# FOOTER
+#####################################################################################################
+
 	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
 	source "${PATHNAME[script_footer]}"
 
