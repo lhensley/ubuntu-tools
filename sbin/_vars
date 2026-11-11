@@ -657,6 +657,8 @@ source /etc/os-release
         GIT_UBUNTU_TOOLS_SETUP="$GIT_UBUNTU_TOOLS/setup"         # Formerly system.git.go.setup
         # GIT_TOKEN="Removed for security"   # Formerly system.git.token
         SERVICES_DIR="/lib/systemd/system"
+        REPO_PARENT="$GIT_ROOT"
+        REPO_DIR="$GIT_UBUNTU_TOOLS"
 
 # HandBrake
 # DEPENDENT ON $ADMIN_HOME_DIR DEFINITION ABOVE
