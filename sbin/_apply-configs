@@ -163,14 +163,14 @@ done
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
-echo "######################################################################"
-echo "$0" begins 	Applying configurations
-echo "######################################################################"
-echo
+# echo "######################################################################"
+# echo "$0" begins 	Applying configurations
+# echo "######################################################################"
+# echo
 
 # Set timezone
-	echo
-	echo "Setting timezone to $TIMEZONE"
+#	echo
+	echo "$0 Setting timezone to $TIMEZONE"
     timedatectl set-timezone $TIMEZONE
 
 # Clear /etc/NetworkManager/system-connections
@@ -263,7 +263,7 @@ echo
 				exportfs -r
 				systemctl restart nfs-server
 			else
-				echo "X WARNING: No config file in the repository for this host."
+				echo " WARNING: nfs-kernel-server is installed, but no config file in the repository for this host."
 			fi
 		fi
 
