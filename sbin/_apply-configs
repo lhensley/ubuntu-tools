@@ -382,12 +382,12 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		echo "$0: Restarting systemd-networkd ufw apache2 mysql webmin"
 #			echo "    This may hang for a minute or two."
 		# echo Test point A
-		systemctl try-restart systemd-networkd ufw apache2 mysql webmin
-#		if systemctl list-unit-files systemd-networkd &>/dev/null; then systemctl restart systemd-networkd; fi
-#		if systemctl ufw systemd-networkd &>/dev/null; then systemctl restart ufw; fi
-#		if systemctl apache2 systemd-networkd &>/dev/null; then systemctl restart apache2; fi
-#		if systemctl mysql systemd-networkd &>/dev/null; then systemctl restart mysql; fi
-#		if systemctl webmin systemd-networkd &>/dev/null; then systemctl restart webmin; fi
+#		systemctl restart systemd-networkd ufw apache2 mysql webmin
+		if systemctl list-unit-files systemd-networkd &>/dev/null; then systemctl restart systemd-networkd; fi
+		if systemctl ufw systemd-networkd &>/dev/null; then systemctl restart ufw; fi
+		if systemctl apache2 systemd-networkd &>/dev/null; then systemctl restart apache2; fi
+		if systemctl mysql systemd-networkd &>/dev/null; then systemctl restart mysql; fi
+		if systemctl webmin systemd-networkd &>/dev/null; then systemctl restart webmin; fi
 		# echo Test point B
 		fi
 
