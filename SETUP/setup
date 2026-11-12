@@ -10,14 +10,14 @@
 # Copy this file to the ~ directory and set its permissions for 700.
 # Edit the file to adjust the VARIABLES definitions below.
 # To start the Execute this file with this command:
-#   sudo ~/setup2026
+#   sudo ~/setup
 
 
 #####################################################################################################
 # VARIABLES
 #####################################################################################################
 
-echo "Defining variables."
+echo "$0: Defining variables."
 
 my_full_name="Lane Hensley"
 my_email="lane@lanehensley.org"
@@ -45,7 +45,7 @@ TIMEZONE="America/Chicago"
 # FUNCTIONS
 #####################################################################################################
 
-echo "Defining functions."
+echo "$0: Defining functions."
 
 function f_dirname () {
     # returns directory of a full path and/or file
@@ -75,12 +75,12 @@ function f_record_to_installation_log () {
 # CHECK FOR SUDO
 #####################################################################################################
 
-echo "Checking that we're root or sudo."
+echo "sudo ~/setupChecking that we're root or sudo."
 
 if [[ $EUID -ne 0 ]]; then
     echo ""
-    echo "Use sudo. $0 must be run as root." 1>&2
-    echo "ABORTED." 1>&2
+    echo "$0: Use sudo. $0 must be run as root." 1>&2
+    echo "  *** ABORTED ***" 1>&2
     exit 1
     fi
 
@@ -89,18 +89,18 @@ if [[ $EUID -ne 0 ]]; then
 # CHECK FOR REQUIRED FILES
 #####################################################################################################
 
-echo "Checking that all required files are present."
+echo "$0: Checking that all required files are present."
 
 ABORT=false
 
 # EXAMPLE:
 # if ! $(f_is_file $ADMIN_DIR/'Contents of gitconfig.txt') ; then
 #     set ABORT=true
-#     echo File \'$ADMIN_DIR/Contents of gitconfig.txt\' is REQUIRED.
+#     echo $0: \'$ADMIN_DIR/Contents of gitconfig.txt\' is REQUIRED.
 #     fi
 
 if $ABORT ; then
-    echo "ABORTED." 1>&2
+    echo "$0: ABORTED." 1>&2
     exit 1
     fi
 
@@ -122,7 +122,7 @@ f_record_to_installation_log "Time zone set to $TIMEZONE"
 # SAVE THE ORIGINAL / AND /boot FILE SYSTEMS. 2024-07-07
 #####################################################################################################
 
-    echo "Saving the original /etc/fstab."
+    echo "$0: Saving the original /etc/fstab."
 
 	cp --update /etc/fstab /etc/fstab.original.install
 
@@ -131,7 +131,7 @@ f_record_to_installation_log "Time zone set to $TIMEZONE"
 # INSTALL universe REPOSITORY AND UPGRADES
 #####################################################################################################
 
-echo "Installing universe repository and apt packages updated."
+echo "$0: Installing universe repository and apt packages updated."
 
 add-apt-repository universe --yes
 apt --yes clean
@@ -144,7 +144,7 @@ f_record_to_installation_log "universe repository installed and apt packages upd
 # INSTALL BASIC UTILITIES
 #####################################################################################################
 
-echo "Installing universe repository and apt packages updated."
+echo "$0: Installing universe repository and apt packages updated."
 
 # Not used currently: git git-doc
 sudo apt --yes install at certbot curl debconf-utils fail2ban \
@@ -157,7 +157,7 @@ f_record_to_installation_log "universe repository installed and apt packages upd
 # CREATE MOUNT POINTS FOR EXTERNAL STORAGE
 #####################################################################################################
 
-echo "Creating mount points for external storage."
+echo "$0: Creating mount points for external storage."
 
 if [ $HOSTNAME == "dsm1" ]; then
     sudo mkdir -p /mnt/2TBA /mnt/3TBB /mnt/4TBA /mnt/5TBC /mnt/5TBD /mnt/5TBE /mnt/12TBA /mnt/12TBB \
