@@ -49,7 +49,7 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 # UPDATING LOCAL APT PACKAGES
 #####################################################################################################
 
-	echo "$0: Updating local apt packages"
+# 	echo "$0: Updating local apt packages"
 	f_upd
 	echo
 
@@ -58,8 +58,8 @@ DEBUG_MODE=false; if $DEBUG_MODE ; then echo "DEBUG EXECUTING $0 line ${LINENO}"
 # DROP THIS PART
 #####################################################################################################
 
-	echo "$0: IMPORTANT: To update from github, run:"
-	echo "  sudo git-updates"
+#	echo "$0: IMPORTANT: To update from github, run:"
+#	echo "  sudo git-updates"
  	
 
 #####################################################################################################

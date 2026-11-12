@@ -620,7 +620,7 @@ function f_upd () {
 	f_run_apt_updates
 	# echo TEMPORARY DIAGNOSTIC MARKER B in f_upd in _functions.
 	if [ -f /var/run/reboot-required ] ; then
-		echo && echo "*** REBOOT NEEDED NOW! ***"
+		echo "$0: WARHING: *** REBOOT NEEDED NOW! ***"
 		fi
 	}
 
@@ -915,24 +915,24 @@ f_run_apt_updates () {
     # "dist-upgrade" installs available upgrades of all packages
     # currently installed on the system and intelligently handles
     # changing dependencies with new versions of packages
-    echo
-    echo Updating local host of upgradable packages and upgrading them.
+#    echo
+    echo $0: Updating local host of upgradable packages and upgrading them.
       echo DEBIAN_FRONTEND=noninteractive apt-get-update-if-needed && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
 	# echo TEMPORARY DIAGNOSTIC MARKER A1 in f_run_apt_updates in _functions.
     DEBIAN_FRONTEND=noninteractive apt-get-update-if-needed && DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
 	# echo TEMPORARY DIAGNOSTIC MARKER A2 in f_run_apt_updates in _functions.
     # "clean" clears out the local repository of retrieved package files.
-    echo
-    echo Clearing out the local repository of retrieved package files.
-    echo apt-get --yes clean
+  #  echo
+    echo $0: Clearing out the local repository of retrieved package files.
+  #  echo apt-get --yes clean
     apt-get --yes clean
 	# echo TEMPORARY DIAGNOSTIC MARKER B in f_run_apt_updates in _functions.
     # "autoremove" removes those dependencies that were installed with
     # now-removed applications and that are no longer used
     # by anything else on the system
-    echo
-    echo "Removing those dependencies that were associated with non-removed applications that no longer are used"
-    echo apt-get --yes autoremove
+  #  echo
+    echo "$0: Removing those dependencies that were associated with non-removed applications that no longer are used"
+  #  echo apt-get --yes autoremove
     apt-get --yes autoremove
 	# echo TEMPORARY DIAGNOSTIC MARKER C in f_run_apt_updates in _functions.
 	}
