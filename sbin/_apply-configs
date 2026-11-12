@@ -379,8 +379,8 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		# systemctl restart systemd-networkd
 		# echo "  Restarting ufw"
 		# systemctl restart ufw
-		echo "  Restarting systemd-networkd ufw apache2 mysql webmin"
-		echo "    This may hang for a minute or two."
+		echo "Restarting systemd-networkd ufw apache2 mysql webmin"
+#			echo "    This may hang for a minute or two."
 		# echo Test point A
 		systemctl restart systemd-networkd ufw apache2 mysql webmin
 		# echo Test point B
@@ -398,9 +398,6 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 
 
 ############################################################################################################
-
-echo 
-echo -e "Done\n"
 
 # Apply permissions
 #	echo
