@@ -302,6 +302,7 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 			else
 				echo "$0: WARNING: nfs-kernel-server is installed, but no config file in the repository for this host."
 			fi
+		fi
 
 # Update /etc/motd
 	if [ -f $REPO_DIR/configs/etc/motd.$HOSTNAME ]; then
