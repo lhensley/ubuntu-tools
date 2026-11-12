@@ -34,7 +34,7 @@ COPY_LIFEBOAT=true
 LIFEBOAT_MOUNT_POINT=/mnt/4TBA
 LIFEBOAT_DRIVE_UUID=41102e3a-dac6-45b4-9a5b-20816b7530ea
 
-INSTALL_LOG="$ADMIN_DIR/installation_log.txt"
+INSTALL_LOG="$ADMIN_DIR/installation.log"
 # Possible values for TIMEZONE: 
 # "America/Honolulu" "America/Anchorage" "America/Los_Angeles" "America/Phoenix" 
 # "America/Denver" "America/Chicago" "America/New_York"
@@ -62,7 +62,7 @@ function f_is_file {
 
 function f_pause () {
     read -s -n 1 -p "Press any key to continue . . .\n"
-}
+    }
 
 function f_record_to_installation_log () {
     # records a log entry in $INSTALL_LOG
@@ -287,10 +287,15 @@ if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; 
 # END
 #####################################################################################################
 
-echo "Done." 1>&2
+# echo "Done." 1>&2
 echo "" 1>&2
 echo "You may want to delete file $0" 1>&2
 
 f_record_to_installation_log "$0 done"
 
+# Include script footer file
+	f_debug_variable "script_footer" "${PATHNAME[script_footer]}"
+	source "${PATHNAME[script_footer]}"
+
 exit 0
+
