@@ -289,7 +289,7 @@ if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; 
 
 echo "Done." 1>&2
 echo "" 1>&2
-echo "You may want to delete file $0 ." 1>&2
+echo "You may want to delete file $0" 1>&2
 
 f_record_to_installation_log "$0 done"
 
