@@ -1,6 +1,6 @@
 #!/bin/bash
 # setup2026
-# Updated 1 Nov 2026
+# Updated 12 Nov 2026
 
 
 #####################################################################################################
@@ -180,7 +180,7 @@ f_record_to_installation_log "mount points created for external storage"
 if $COPY_LIFEBOAT ; then
   if [ $HOSTNAME == "dsm1" ]; then
     mkdir -p $LIFEBOAT_MOUNT_POINT; sudo mount -U $LIFEBOAT_DRIVE_UUID -t ext4 $LIFEBOAT_MOUNT_POINT
-    echo "Copying content into ~/lifeboat."
+    echo "$0: Copying content into ~/lifeboat."
     # rsync
       # -a = archive mode is -rlptgoD (no -A,-X,-U,-N,-H)
       # -E = preserve executability
@@ -198,7 +198,7 @@ f_record_to_installation_log "queued copying lifeboat to ~/lifeboat"
 # DOWNLOAD THE ubuntu-tools REPOSTORY
 #####################################################################################################
 
-echo "Downloading the ubuntu-tools repository to $REPO_DIR."
+echo "$0: Downloading the ubuntu-tools repository to $REPO_DIR."
 
 rm -fr "$REPO_DIR"
 curl -L -s -o "$REPO_DIR.zip" \
@@ -214,7 +214,7 @@ f_record_to_installation_log "downloaded the ubuntu-tools repository"
 # INITIALIZING AND POPULATING $SBIN_DIR
 #####################################################################################################
 
-echo "Initializing and populating $SBIN_DIR."
+echo "$0: Initializing and populating $SBIN_DIR."
 
 mkdir -p "$SBIN_DIR"              # Make $SBIN_DIR
 chmod 755 "$SBIN_DIR"             # Set permissions
@@ -229,7 +229,7 @@ f_record_to_installation_log "initialized and populating $SBIN_DIR"
 # Unclear what purpose this serves. Disabled 10/07/2026 pending need for this.
 #####################################################################################################
 
-# echo "Reloading systemd manager configuration"
+# echo "$0: Reloading systemd manager configuration"
 
 # systemctl daemon-reload   # Line 69 in setup-pre-2026
 
@@ -241,7 +241,7 @@ f_record_to_installation_log "initialized and populating $SBIN_DIR"
 # Unclear what purpose this serves. Disabled 10/07/2026 pending need for this.
 #####################################################################################################
 
-# echo "Getting a timestamp"
+# echo "$0: Getting a timestamp"
 
 # TIMESTAMP=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')   # Line 77 in setup-pre-2026
 
@@ -252,7 +252,7 @@ f_record_to_installation_log "initialized and populating $SBIN_DIR"
 # ENTER NON-INTERACTIVE MODE
 #####################################################################################################
 
-echo "Turn on non-interactive mode"
+echo "$0: Turn on non-interactive mode"
 
 # Unclear what purpose this serves. 
 export DEBIAN_FRONTEND=noninteractive   # Line 94 in setup-pre-2026
