@@ -174,12 +174,16 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
     timedatectl set-timezone $TIMEZONE
 
 # Clear /etc/NetworkManager/system-connections
+# Ubuntu Server makes use of Netplan paired with systemd-networkd
+# Ubuntu Desktop uses NetworkManager
 	if $(f_is_installed "network-manager"); then 
 		echo "$0: Clearing /etc/NetworkManager/system-connections"
 		rm -f /etc/NetworkManager/system-connections/*
 		fi
 
 # This heads off a network manager problem defined at https://askubuntu.com/questions/71159/network-manager-says-device-not-managed
+# Ubuntu Server makes use of Netplan paired with systemd-networkd
+# Ubuntu Desktop uses NetworkManager
 	if $(f_is_installed "network-manager"); then 
 		# echo touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
 		touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
@@ -311,6 +315,8 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		fi
 
 # Update any netplan configuration files
+# Ubuntu Server makes use of Netplan paired with systemd-networkd
+# Ubuntu Desktop uses NetworkManager
 	if [ -f $REPO_DIR/configs/etc/netplan/dynamic.yaml.$HOSTNAME ]; then
 		echo "$0: Updating /etc/netplan/current-plan.yaml from $REPO_DIR/configs/etc/netplan/dynamic.yaml.$HOSTNAME"
 		# IMPORTANT: The chmod command below CAN'T WAIT for _apply-permissions.
@@ -370,20 +376,10 @@ if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %
 		echo "$0: Updating /etc/ufw/applications.d from $REPO_DIR/configs/etc/ufw/applications.d"
 		rm -fr /etc/ufw/applications.d/*
 		cp $REPO_DIR/configs/etc/ufw/applications.d/* /etc/ufw/applications.d/
-		# Unclear why restarting systemd-networkd is necessary. 
-		# But on dsm1, restarting ufw was generating errors:
-		#   systemd-networkd is not running, output might be incomplete.
-		#	Failed to reload network settings: Unit dbus-org.freedesktop.network1.service not found.
-		# TBD. 2024-07-21
-		# echo "  Restarting systemd-networkd"
-		# systemctl restart systemd-networkd
-		# echo "  Restarting ufw"
-		# systemctl restart ufw
-		echo "$0: Restarting systemd-networkd ufw apache2 mysql webmin"
-#			echo "    This may hang for a minute or two."
-		# echo Test point A
-#		systemctl restart systemd-networkd ufw apache2 mysql webmin
+		echo "$0: Restarting services"
 		if systemctl list-unit-files systemd-networkd &>/dev/null; then systemctl restart systemd-networkd; fi
+		# Ubuntu Server makes use of Netplan paired with systemd-networkd
+		# Ubuntu Desktop uses NetworkManager
 		if systemctl ufw systemd-networkd &>/dev/null; then systemctl restart ufw; fi
 		if systemctl apache2 systemd-networkd &>/dev/null; then systemctl restart apache2; fi
 		if systemctl mysql systemd-networkd &>/dev/null; then systemctl restart mysql; fi
