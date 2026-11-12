@@ -165,10 +165,10 @@ done
 #   We also haven't yet tested for the valid options arguments and/or remaining arguments (now $1, $2, etc.)
 if $DEBUG_MODE ; then echo "DEBUG MARKER $0 line ${LINENO}" $(date +"%F %T.%3N %Z") ; fi
 
-echo "######################################################################"
-echo "$0" begins  Applying permissions
-echo "######################################################################"
-echo
+# echo "######################################################################"
+# echo "$0" begins  Applying permissions
+# echo "######################################################################"
+# echo
 
 	# /etc/comskip
 			echo "$0: Updating permissions for /etc/comskip"
@@ -251,7 +251,7 @@ echo
 	# /etc/phpmyadmin
 		if $(f_is_installed "phpmyadmin"); then
 			echo "$0: Updating permissions for /etc/phpmyadmin/config.inc.php"
-			chown -R www-data:www-data "/etc/phpmyadmin/MySQL-Certs"
+			chown -fR www-data:www-data "/etc/phpmyadmin/MySQL-Certs"
 			chmod -f 644 "/etc/phpmyadmin/config.inc.php"
 			find "/etc/phpmyadmin/MySQL-Certs" -type d -print -exec chmod 755 {} \; >> /dev/null 2>&1
 			find "/etc/phpmyadmin/MySQL-Certs" -type f -print -exec chmod 644 {} \; >> /dev/null 2>&1
@@ -410,7 +410,7 @@ echo
 			fi
 
 	# Exceptions: These can be read or run by anyone
-		echo "$0: Updating permissions for some required exceptions"
+#		echo "$0: Updating permissions for some required exceptions"
 #		# 2/16/2022: Not sure why it's necessary to confirm existence of these files except to keep chmod from failing below,
 #		# which can be managed with the --silent flag. Added that to all chmods below.
 #		# Confirm that referenced files below exist.
@@ -423,19 +423,19 @@ echo
 #			# f_require_file "${PATHNAME[upd]}"
 #			# f_require_file "${PATHNAME[_apply_configs]}"
 		# These based on functional requirements
-			echo " $0: " ${PATHNAME[makemkvcon]}
+			echo "$0: Updating permissions for" ${PATHNAME[makemkvcon]}
 			chmod --silent $PERMISSIONS_SCRIPT_makemkvcon "${PATHNAME[makemkvcon]}"
-			echo " $0: " ${PATHNAME[_functions]}
+			echo "$0: Updating permissions for" ${PATHNAME[_functions]}
 			chmod --silent $PERMISSIONS_SCRIPT__functions "${PATHNAME[_functions]}"
-			echo " $0: " ${PATHNAME[_vars]}
+			echo "$0: Updating permissions for" ${PATHNAME[_vars]}
 			chmod --silent $PERMISSIONS_SCRIPT__vars "${PATHNAME[_vars]}"
-			echo " $0: " ${PATHNAME[remove_empty_directories]}
+			echo "$0: Updating permissions for" ${PATHNAME[remove_empty_directories]}
 			chmod --silent $PERMISSIONS_SCRIPT_remove_empty_directories "${PATHNAME[remove_empty_directories]}"
-			echo " $0: " ${PATHNAME[rip]}
+			echo "$0: Updating permissions for" ${PATHNAME[rip]}
 			chmod --silent $PERMISSIONS_SCRIPT_rip "${PATHNAME[rip]}"
-			echo " $0: " ${PATHNAME[script_footer]}
+			echo "$0: Updating permissions for" ${PATHNAME[script_footer]}
 			chmod --silent $PERMISSIONS_SCRIPT_script_footer "${PATHNAME[script_footer]}" 
-			echo " $0: " ${PATHNAME[script_setup]}
+			echo "$0: Updating permissions for" ${PATHNAME[script_setup]}
 			chmod --silent $PERMISSIONS_SCRIPT_script_setup "${PATHNAME[script_setup]}" 
 		# These based on desire. CAUTION: Don't expose anything that has a password or code in it.
 			# chmod 740 "${PATHNAME[upd]}"
