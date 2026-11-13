@@ -211,7 +211,7 @@ f_install "fwupd"
     PHP_PACKAGES+=" libmcrypt-dev php-mbstring php-dev php-pear"
     PHP_PACKAGES+=" libc-client2007e mlock uw-mailutils"
     apt install --yes $PHP_PACKAGES
-    phpenmod gd curl imap ldap mbstring
+    phpenmod gd curl ldap mbstring
     systemctl restart apache2
     echo "php installed."
     fi;

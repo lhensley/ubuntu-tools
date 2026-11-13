@@ -21,6 +21,7 @@ echo "$0: Defining variables."
 
 my_full_name="Lane Hensley"
 my_email="lane@lanehensley.org"
+DOMAIN_NAME="lanehensley.org"
 ADMIN_DIR="/home/lhensley"
 ADMIN_HOME_DIR="$ADMIN_DIR"
 ROOT_USER="root"
@@ -114,6 +115,7 @@ echo "Setting time zone."
 echo "" >> $INSTALL_LOG
 echo "" >> $INSTALL_LOG
 f_record_to_installation_log "Begin execution of $0"
+ln -fs /usr/share/zoneinfo/"$TIMEZONE" /etc/localtime
 timedatectl set-timezone $TIMEZONE
 f_record_to_installation_log "Time zone set to $TIMEZONE"
 
@@ -144,13 +146,13 @@ f_record_to_installation_log "universe repository installed and apt packages upd
 # INSTALL BASIC UTILITIES
 #####################################################################################################
 
-echo "$0: Installing universe repository and apt packages updated."
+echo "$0: Installing basic utilities."
 
 # Not used currently: git git-doc
-sudo apt --yes install at certbot curl debconf-utils fail2ban \
-    fwupd moreutils libssl-dev openssl ufw unzip
+apt --yes install apg at curl debconf-utils fail2ban \
+    fwupd moreutils libssl-dev openssl tzdata ufw unzip
 
-f_record_to_installation_log "universe repository installed and apt packages updated"
+f_record_to_installation_log "installed basic utilities"
 
 
 #####################################################################################################
@@ -160,14 +162,14 @@ f_record_to_installation_log "universe repository installed and apt packages upd
 echo "$0: Creating mount points for external storage."
 
 if [ $HOSTNAME == "dsm1" ]; then
-    sudo mkdir -p /mnt/2TBA /mnt/3TBB /mnt/4TBA /mnt/5TBC /mnt/5TBD /mnt/5TBE /mnt/12TBA /mnt/12TBB \
-        /mnt/12TBC /mnt/20TBA /mnt/Black1TB /mnt/Silver1TB /mnt/Silver5TB-A /mnt/Silver5TB-B
-    sudo chmod 700 /mnt/*
+    mkdir -p /mnt/2TBA /mnt/3TBB /mnt/4TBA /mnt/5TBC /mnt/5TBD /mnt/5TBE /mnt/12TBA /mnt/12TBB \
+      /mnt/12TBC /mnt/20TBA /mnt/Black1TB /mnt/Silver1TB /mnt/Silver5TB-A /mnt/Silver5TB-B
+    chmod 700 /mnt/*
     fi
 
 if [ $HOSTNAME == "pd1" ]; then
-    sudo mkdir -p /mnt/bob
-    sudo chmod 700 /mnt/*
+    mkdir -p /mnt/bob
+    chmod 700 /mnt/*
     fi
 
 f_record_to_installation_log "mount points created for external storage"
@@ -179,7 +181,7 @@ f_record_to_installation_log "mount points created for external storage"
 
 if $COPY_LIFEBOAT ; then
   if [ $HOSTNAME == "dsm1" ]; then
-    mkdir -p $LIFEBOAT_MOUNT_POINT; sudo mount -U $LIFEBOAT_DRIVE_UUID -t ext4 $LIFEBOAT_MOUNT_POINT
+    mkdir -p $LIFEBOAT_MOUNT_POINT; mount -U $LIFEBOAT_DRIVE_UUID -t ext4 $LIFEBOAT_MOUNT_POINT
     echo "$0: Copying content into ~/lifeboat."
     # rsync
       # -a = archive mode is -rlptgoD (no -A,-X,-U,-N,-H)
@@ -252,12 +254,11 @@ f_record_to_installation_log "initialized and populating $SBIN_DIR"
 # ENTER NON-INTERACTIVE MODE
 #####################################################################################################
 
-echo "$0: Turn on non-interactive mode"
+echo "$0: Turning on non-interactive mode for installing applications."
 
-# Unclear what purpose this serves. 
-export DEBIAN_FRONTEND=noninteractive   # Line 94 in setup-pre-2026
+export DEBIAN_FRONTEND=noninteractive
 
-f_record_to_installation_log "turned on non-interactive mode"
+f_record_to_installation_log "turned on non-interactive mode for installing applications"
 
 
 #####################################################################################################
@@ -269,12 +270,82 @@ if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; 
 if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
 
 
+#####################################################################################################
+# INSTALL APACHE2
+#####################################################################################################
+
+echo "$0: Installing apache2."
+
+apt --yes install --yes apache2-doc apache2-suexec-pristine
+a2enmod ssl rewrite
+systemctl restart apache2
+
+f_record_to_installation_log "installed apache2"
+
+
+#####################################################################################################
+# INSTALL PHP
+#####################################################################################################
+
+echo "$0: Installing php."
+
+PHP_PACKAGES="build-essential php libapache2-mod-php"
+PHP_PACKAGES+=" php-cli php-mysql php-gd"
+PHP_PACKAGES+=" php-curl php-ldap libmcrypt-dev"
+PHP_PACKAGES+=" php-mbstring php-dev php-pear"
+PHP_PACKAGES+=" libc-client2007e mlock uw-mailutils"
+apt install --yes $PHP_PACKAGES
+phpenmod gd curl ldap mbstring
+systemctl restart apache2
+
+f_record_to_installation_log "installed php"
+
+
+#####################################################################################################
+# INSTALL CERTBOT AND LETSENCRYPT
+#####################################################################################################
+
+echo "$0: Installing certbot and LetsEncrypt."
+
+command -v apt >/dev/null 2>&1 && apt --yes remove certbot
+command -v cnf >/dev/null 2>&1 && dnf remove certbot
+command -v yum >/dev/null 2>&1 && yum remove certbot
+if ! snap info certbot > /dev/null 2> /dev/null ; then 
+  snap install --classic certbot
+  ln -s /snap/bin/certbot /usr/bin/certbot
+  fi
+
+f_record_to_installation_log "installed certbot and LetsEncrypt"
+
+
+#####################################################################################################
+# INSTALL MySQL
+#####################################################################################################
+
+echo "$0: Installing MySQL."
+
+apt-get install --yes mysql-server
+mysql -e "DELETE FROM mysql.user WHERE User='';" # Delete anonymous users
+mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');" # Ensure the root user can not log in remotely
+mysql -e "DROP DATABASE IF EXISTS test; DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%';" # Remove the test database
+mysql -e "FLUSH PRIVILEGES;" # Flush the privileges tables
+
+
+
+f_record_to_installation_log "installed mysql"
 
 
 
 
 
-### Good from set-pre-2026 line 182
+
+
+
+
+
+
+
+### Good from set-pre-2026 line 205
 
 
 
