@@ -324,15 +324,47 @@ f_record_to_installation_log "installed certbot and LetsEncrypt"
 
 echo "$0: Installing MySQL."
 
+# Install the package
 apt-get install --yes mysql-server
+# Harden the installation
 mysql -e "DELETE FROM mysql.user WHERE User='';" # Delete anonymous users
 mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');" # Ensure the root user can not log in remotely
 mysql -e "DROP DATABASE IF EXISTS test; DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%';" # Remove the test database
 mysql -e "FLUSH PRIVILEGES;" # Flush the privileges tables
-
-
+# Open the eligible client addresses
+sed -i 's/127.0.0.1/127.0.0.1,10.255.255.255,192.168.168.255/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 
 f_record_to_installation_log "installed mysql"
+
+
+#####################################################################################################
+# INSTALL phpMyAdmin
+#####################################################################################################
+
+echo "$0: Installing phpMyAdmin."
+
+# Based on https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04
+# UPDATED TO: https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-22-04
+export DEBIAN_FRONTEND=noninteractive
+debconf-set-selections <<< "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2"
+debconf-set-selections <<< "phpmyadmin phpmyadmin/dbconfig-install boolean true"
+debconf-set-selections <<< "phpmyadmin phpmyadmin/app-password-confirm password $PHPMYADMIN_APP_PASS"
+apt-get install --yes phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+phpenmod mbstring
+cp $GIT_UBUNTU_TOOLS_CONFIGS$PHPMYAMIN_DIR/phpmyadmin/config.inc.php $PHPMYADMIN_DIR/config.inc.php
+chown -R www-data:www-data $PHPMYADMIN_DIR
+chmod 600 $PHPMYADMIN_DIR/config.inc.php
+mkdir -p /etc/phpmyadmin/MySQL-Certs
+cp "$MYSQL_CLIENT_CERTS_DIR"/* /etc/phpmyadmin/MySQL-Certs/
+chown -R root:root /etc/phpmyadmin/MySQL-Certs
+systemctl restart apache2
+
+# Web Server: apache2
+# Configure database for phpmyadmin with dbconfig-common?: YES
+# MySQL application password for phpmyadmin: [Leave it blank]
+# 
+
+f_record_to_installation_log "installed phpMyAdmin"
 
 
 
@@ -370,3 +402,23 @@ f_record_to_installation_log "$0 done"
 
 exit 0
 
+
+
+
+#############################################
+# NOTES
+#############################################
+
+# Alert to reboot
+# 
+# Passwords in config files: BAD BAD BAD!
+#   ddclient
+#   phpmyadmin blowfish secret 
+#   review ALL of them
+#
+# Manual processes
+#    User admin for mysql
+#    OpenVPN on dsm1 only
+#
+# Restores
+#

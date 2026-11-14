@@ -446,7 +446,7 @@ if $install_mysql_server ; then
           chown -R root:root /etc/phpmyadmin/MySQL-Certs
           systemctl restart apache2
           echo "phpMyAdmin installed."
-          fi
+          fi 
   fi
 fi
 
