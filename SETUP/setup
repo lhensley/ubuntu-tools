@@ -130,6 +130,17 @@ f_record_to_installation_log "Time zone set to $TIMEZONE"
 
 
 #####################################################################################################
+# ENTER NON-INTERACTIVE MODE
+#####################################################################################################
+
+echo "$0: Turning on non-interactive mode for installing applications."
+
+export DEBIAN_FRONTEND=noninteractive
+
+f_record_to_installation_log "turned on non-interactive mode for installing applications"
+
+
+#####################################################################################################
 # INSTALL universe REPOSITORY AND UPGRADES
 #####################################################################################################
 
@@ -149,10 +160,106 @@ f_record_to_installation_log "universe repository installed and apt packages upd
 echo "$0: Installing basic utilities."
 
 # Not used currently: git git-doc
-apt --yes install apg at curl debconf-utils fail2ban \
-    fwupd moreutils libssl-dev openssl tzdata ufw unzip
+apt --yes install apg at curl ddclient debconf-utils fail2ban \
+    fwupd gpg gzip libssl-dev moreutils openssl tzdata ufw unzip uuid-runtime
+# NOTES:
+# As of 11/14/2026 (and earlier), the ddns service is at namecheap
+# To force an update and give you diagnostic data: 
+#   ddclient -daemon=0 -debug -verbose -noquiet -force
 
 f_record_to_installation_log "installed basic utilities"
+
+
+#####################################################################################################
+# INSTALL MAILUTILS (INCLUDING POSTFIX)
+#####################################################################################################
+
+echo "$0: Installing mailutils (including postfix)."
+
+yes | apt install --yes mailutils
+
+ecord_to_installation_log "installed mailutils (including postfix)"
+
+
+#####################################################################################################
+# INSTALL WEBMIN
+#####################################################################################################
+
+echo "$0: Installing webmin."
+
+wget http://www.webmin.com/download/deb/webmin-current.deb
+WEBMIN_PACKAGES="openssl libcurl4-openssl-dev libssl-dev perl"
+WEBMIN_PACKAGES+=" libnet-ssleay-perl libauthen-pam-perl"
+WEBMIN_PACKAGES+=" libpam-runtime libio-pty-perl apt-show-versions"
+WEBMIN_PACKATES+=" python libsocket6-perl libapt-pkg-perl"
+apt install --yes $WEBMIN_PACKAGES
+dpkg --install ./webmin-current.deb
+rm -f ./webmin-current.deb
+
+f_record_to_installation_log "installed webmin"
+
+
+#####################################################################################################
+# INSTALL OpenVPN Access Server
+#   CRUCIAL: This is as far as we can go with CLI.
+#   INSTRUCTIONS FOR THE MANUAL PART OF THE INSTALLATION
+# 	    Go to https://192.168.168.8:943/admin 
+#	        Ignore browser security warnings, 
+#               and login with username "openvpn" 
+#               and the password in /home/lhensley/.openvpn_as_password 
+#           Ignore the "Get Activation Key" button.
+#		Under Configuration / Network Settings,
+#			In section "VPN Server"
+#				Change "Hostname or IP Address" to vpn.lanehensley.org
+#				Change Protocol to udp
+#				Change port number near the bottom to 1194
+#				Press the "Save Settings" button at the bottom of the page.
+#				Press the "Update Running Server" button at the top of the page.
+#		Under User Management / User Permissions, 
+#			Select user openvpn, click on More Settings, 
+#               and change the local password to the one in 1Password under OpenVPN Access Server.
+#			Create user lhensley (NOT an Admin).
+#				Click on "Allow Auto-login" for lhensley.
+#				Click on More Settings, 
+#                   and change the local password to the one in 1Password 
+#                   under OpenVPN Client (lhensley). 
+#				Press the "Save Settings" button at the bottom of the page.
+#				Press the "Update Running Server" button at the top of the page.
+#		Under User Management / User Profiles,
+#			Choose "+ New Profile" for user lhensley. 
+#			In the pop-up window, select "Autologin" and "tls-crypt v2".
+#			Click "+ Create Profile". It will download a file to your computer.
+#		Use your existing activation key if possible. (Install on pd1 ONLY and not dsm1.) 
+#           Otherwise, follow the prompts to get and install a new activation key. 
+#       Logout
+#####################################################################################################
+
+echo "$0: Installing OpenVPN Access Server."
+
+if [ $HOSTNAME == "dsm1" ]; then
+    INSTALL_DIR="/tmp/.openvpn"
+    rm -rf "$INSTALL_DIR"
+    mkdir -p "$INSTALL_DIR"
+    cd "$INSTALL_DIR"
+    rm -f ./install.sh
+    wget https://packages.openvpn.net/as/install.sh
+    chmod 700 ./install.sh
+    systemctl stop openvpn*
+    systemctl disable openvpn* 2>> /dev/null
+    rm -rf /usr/local/openvpn_as
+    apt -y purge openvpn*
+    apt -y autoremove
+    bash ./install.sh --yes
+    rm -f ./install.sh
+    systemctl enable openvpnas --no-pager
+    cat /usr/local/openvpn_as/init.log | grep "To login please use" > ./password_temp
+    grep -oP 'account with "\K.*?(?=\" password)' ./password_temp > $ADMIN_DIR/.openvpn_as_password
+    rm ./password_temp
+    chmod 600 $ADMIN_DIR/.openvpn_as_password
+    chown $ADMIN_USER:$ADMIN_USER $ADMIN_DIR/.openvpn_as_password
+    fi
+
+f_record_to_installation_log "installed OpenVPN Access Server"
 
 
 #####################################################################################################
@@ -197,7 +304,7 @@ f_record_to_installation_log "queued copying lifeboat to ~/lifeboat"
 
 
 #####################################################################################################
-# DOWNLOAD THE ubuntu-tools REPOSTORY
+# DOWNLOAD THE ubuntu-tools REPOSITORY
 #####################################################################################################
 
 echo "$0: Downloading the ubuntu-tools repository to $REPO_DIR."
@@ -251,17 +358,6 @@ f_record_to_installation_log "initialized and populating $SBIN_DIR"
 
 
 #####################################################################################################
-# ENTER NON-INTERACTIVE MODE
-#####################################################################################################
-
-echo "$0: Turning on non-interactive mode for installing applications."
-
-export DEBIAN_FRONTEND=noninteractive
-
-f_record_to_installation_log "turned on non-interactive mode for installing applications"
-
-
-#####################################################################################################
 # INCLUDE SCRIPT SETUP FILE
 #####################################################################################################
 
@@ -307,13 +403,20 @@ f_record_to_installation_log "installed php"
 
 echo "$0: Installing certbot and LetsEncrypt."
 
+# Purge any existing installations of certbot
 command -v apt >/dev/null 2>&1 && apt --yes remove certbot
-command -v cnf >/dev/null 2>&1 && dnf remove certbot
-command -v yum >/dev/null 2>&1 && yum remove certbot
+command -v dnf >/dev/null 2>&1 && dnf --yes remove certbot
+command -v yum >/dev/null 2>&1 && yum --yes remove certbot
+# Install certbot
 if ! snap info certbot > /dev/null 2> /dev/null ; then 
   snap install --classic certbot
   ln -s /snap/bin/certbot /usr/bin/certbot
   fi
+# Create the certificates
+certbot certonly --apache --no-redirect -d lanehensley.org
+certbot certonly --apache --no-redirect -d files.lanehensley.org
+certbot certonly --apache --no-redirect -d dsm1.lanehensley.org
+certbot certonly --apache --no-redirect -d pd1.lanehensley.org
 
 f_record_to_installation_log "installed certbot and LetsEncrypt"
 
@@ -411,14 +514,40 @@ exit 0
 
 # Alert to reboot
 # 
+# Other from setup-pre-2026
+# 
+# mysql configs
+# phpmyadmin
+# plexmediaserver
+# restoring crontab
+# Restore /var/www
+# Move 'home/lhensley/lifeboat/*' into /var/restores/{date}/ (all owned by root:root)
+# Adjust owners in /var
+# Restore plexmediaserver '/home/lhensley/lifeboat/backups/Plex Media Server'
+# Restore mysql by run the sql file (set up user admin first!)
+# rm /home/lhensley/lifeboat
+# reboot
+#
+#
 # Passwords in config files: BAD BAD BAD!
 #   ddclient
 #   phpmyadmin blowfish secret 
 #   review ALL of them
 #
 # Manual processes
-#    User admin for mysql
-#    OpenVPN on dsm1 only
+#   User admin for mysql
+#   OpenVPN on dsm1 only
+#   Ubuntu Pro (https://ubuntu.com/pro)
 #
 # Restores
 #
+#
+# Dynamic DNS service provider: other
+# 
+#
+
+# Jersey wall ...
+exit 1
+
+
+
