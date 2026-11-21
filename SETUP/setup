@@ -92,7 +92,7 @@ echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"): Checking that you're root or 
 
 if [[ $EUID -ne 0 ]]; then
     echo ""
-    echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Use sudo. $0 must be run as root." 1>&2
+    echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Use sudo. $0 must be run as root." 1>&2
     echo "  *** ABORTED ***" 1>&2
     exit 1
     fi
@@ -113,7 +113,7 @@ ABORT=false
 #     fi
 
 if $ABORT ; then
-    echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "ABORTED." 1>&2
+    echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  ABORTED." 1>&2
     exit 1
     fi
 
@@ -136,7 +136,7 @@ f_record_to_installation_log "Time zone set to $TIMEZONE"
 # SAVE THE ORIGINAL / AND /boot FILE SYSTEMS. 2024-07-07
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Saving the original /etc/fstab."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Saving the original /etc/fstab."
 
 cp --update /etc/fstab /etc/fstab.original.install
 
@@ -145,7 +145,7 @@ cp --update /etc/fstab /etc/fstab.original.install
 # ENTER NON-INTERACTIVE MODE
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Turning on non-interactive mode for installing applications."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Turning on non-interactive mode for installing applications."
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -156,7 +156,7 @@ f_record_to_installation_log "turned on non-interactive mode for installing appl
 # INSTALL universe REPOSITORY AND UPGRADES
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing universe repository and apt packages updated."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing universe repository and apt packages updated."
 
 add-apt-repository universe --yes
 apt --yes clean
@@ -169,7 +169,7 @@ f_record_to_installation_log "universe repository installed and apt packages upd
 # INSTALL BASIC UTILITIES
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing basic utilities."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing basic utilities."
 
 # Not used currently: git git-doc
 apt --yes install apg at curl ddclient debconf-utils fail2ban \
@@ -186,7 +186,7 @@ f_record_to_installation_log "installed basic utilities"
 # INSTALL MAILUTILS (INCLUDING POSTFIX)
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing mailutils (including postfix)."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing mailutils (including postfix)."
 
 yes | apt install --yes mailutils
 
@@ -197,7 +197,7 @@ ecord_to_installation_log "installed mailutils (including postfix)"
 # INSTALL WEBMIN
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing webmin."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing webmin."
 
 wget http://www.webmin.com/download/deb/webmin-current.deb
 WEBMIN_PACKAGES="openssl libcurl4-openssl-dev libssl-dev perl"
@@ -246,7 +246,7 @@ f_record_to_installation_log "installed webmin"
 #       Logout
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing OpenVPN Access Server."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing OpenVPN Access Server."
 
 if [ $HOSTNAME == "dsm1" ]; then
     INSTALL_DIR="/tmp/.openvpn"
@@ -278,7 +278,7 @@ f_record_to_installation_log "installed OpenVPN Access Server"
 # CREATE MOUNT POINTS FOR EXTERNAL STORAGE
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Creating mount points for external storage."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Creating mount points for external storage."
 
 if [ $HOSTNAME == "dsm1" ]; then
     mkdir -p /mnt/2TBA /mnt/3TBB /mnt/4TBA /mnt/5TBC /mnt/5TBD /mnt/5TBE /mnt/12TBA /mnt/12TBB \
@@ -301,7 +301,7 @@ f_record_to_installation_log "mount points created for external storage"
 if $COPY_LIFEBOAT ; then
   if [ $HOSTNAME == "dsm1" ]; then
     mkdir -p $LIFEBOAT_MOUNT_POINT; mount -U $LIFEBOAT_DRIVE_UUID -t ext4 $LIFEBOAT_MOUNT_POINT
-    echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Copying content into ~/lifeboat."
+    echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Copying content into ~/lifeboat."
       # rsync
       # -a = archive mode is -rlptgoD (no -A,-X,-U,-N,-H)
       # -E = preserve executability
@@ -321,7 +321,7 @@ f_record_to_installation_log "queued copying lifeboat to ~/lifeboat"
 # DOWNLOAD THE ubuntu-tools REPOSITORY
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Downloading the ubuntu-tools repository to $REPO_DIR."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Downloading the ubuntu-tools repository to $REPO_DIR."
 
 rm -fr "$REPO_DIR"
 curl -L -s -o "$REPO_DIR.zip" \
@@ -337,7 +337,7 @@ f_record_to_installation_log "downloaded the ubuntu-tools repository"
 # INITIALIZING AND POPULATING $SBIN_DIR
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Initializing and populating $SBIN_DIR."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Initializing and populating $SBIN_DIR."
 
 mkdir -p "$SBIN_DIR"              # Make $SBIN_DIR
 chmod 755 "$SBIN_DIR"             # Set permissions
@@ -352,7 +352,7 @@ f_record_to_installation_log "initialized and populating $SBIN_DIR"
 # Unclear what purpose this serves. Disabled 10/07/2026 pending need for this.
 #####################################################################################################
 
-# echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Reloading systemd manager configuration"
+# echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Reloading systemd manager configuration"
 
 # systemctl daemon-reload   # Line 69 in setup-pre-2026
 
@@ -364,7 +364,7 @@ f_record_to_installation_log "initialized and populating $SBIN_DIR"
 # Unclear what purpose this serves. Disabled 10/07/2026 pending need for this.
 #####################################################################################################
 
-# echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Getting a timestamp"
+# echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Getting a timestamp"
 
 # TIMESTAMP=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')   # Line 77 in setup-pre-2026
 
@@ -384,7 +384,7 @@ if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; 
 # INSTALL APACHE2
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing apache2."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing apache2."
 
 apt --yes install --yes apache2-doc apache2-suexec-pristine
 a2enmod ssl rewrite
@@ -397,7 +397,7 @@ f_record_to_installation_log "installed apache2"
 # INSTALL PHP
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing php."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing php."
 
 PHP_PACKAGES="build-essential php libapache2-mod-php"
 PHP_PACKAGES+=" php-cli php-mysql php-gd"
@@ -415,7 +415,7 @@ f_record_to_installation_log "installed php"
 # INSTALL CERTBOT AND LETSENCRYPT
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing certbot and LetsEncrypt."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing certbot and LetsEncrypt."
 
 # Purge any existing installations of certbot
 command -v apt >/dev/null 2>&1 && apt --yes remove certbot
@@ -439,7 +439,7 @@ f_record_to_installation_log "installed certbot and LetsEncrypt"
 # INSTALL MySQL
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing MySQL."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing MySQL."
 
 # Install the package
 export DEBIAN_FRONTEND=noninteractive
@@ -627,7 +627,7 @@ f_record_to_installation_log "installed mysql"
 # INSTALL phpMyAdmin
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing phpMyAdmin."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing phpMyAdmin."
 
 # Based on https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04
 # UPDATED TO: https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-22-04
