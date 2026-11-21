@@ -10,21 +10,21 @@
 # Copy this file to the ~ directory and set its permissions for 700.
 # Edit the file to adjust the VARIABLES definitions below.
 # When changes are To start the Execute this file with this command:
-#   sudo ~/setup
+#       
 
 #####################################################################################################
 # VARIABLES
 #####################################################################################################
 
-f_marker "Defining variables."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"): Defining variables."
 
 # EXTREMELY IMPORTANT:
 # Do NOT define the Security Variables on the version in repository! MAJOR security problem
 # Instead, copy this to the server, define 
 
 # Security Variables
-MYSQL_ADMIN_PWD="" # Found in 1Password
-MYSQL_LHENSLEY_PWD="" # Found in 1Password
+MYSQL_ADMIN_PWD="-fVji8AV2NP_wYsED4-HWUwYbb7Ls-" # Found in 1Password
+MYSQL_LHENSLEY_PWD="Hi3B9bbazZrF2aBD8WshWbf*9GYf*2" # Found in 1Password
 
 # true causes script pathname, line number, and date
 # false causes markers to be silenced
@@ -47,6 +47,7 @@ LIFEBOAT_MOUNT_POINT=/mnt/4TBA
 LIFEBOAT_DRIVE_UUID=41102e3a-dac6-45b4-9a5b-20816b7530ea
 
 INSTALL_LOG="$ADMIN_DIR/installation.log"
+
 # Possible values for TIMEZONE: 
 # "America/Honolulu" "America/Anchorage" "America/Los_Angeles" "America/Phoenix" 
 # "America/Denver" "America/Chicago" "America/New_York"
@@ -57,7 +58,7 @@ TIMEZONE="America/Chicago"
 # FUNCTIONS
 #####################################################################################################
 
-f_marker "Defining functions."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"): Defining functions."
 
 function f_dirname () {
     # returns directory of a full path and/or file
@@ -72,11 +73,6 @@ function f_is_file {
     if [ -f "$1" ]; then echo true; else echo false; fi
 	}
 
-# OPTIONAL: $1 = a custom message
-function f_marker {
-	if $MARKERS ; then echo "$0: line ${LINENO} - " $(date +"%F %T.%3N %Z") " $1"	 ; fi
-	}
-
 function f_pause () {
     read -s -n 1 -p "Press any key to continue . . .\n"
     }
@@ -86,17 +82,17 @@ function f_record_to_installation_log () {
     # Usage f_record_to_installation_log $message
     echo "$(date)   $1" >> $INSTALL_LOG
     }
-    
+
 
 #####################################################################################################
 # CHECK FOR SUDO
 #####################################################################################################
 
-f_marker "Checking that we're root or sudo."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"): Checking that you're root or sudo."
 
 if [[ $EUID -ne 0 ]]; then
     echo ""
-    f_marker "Use sudo. $0 must be run as root." 1>&2
+    echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Use sudo. $0 must be run as root." 1>&2
     echo "  *** ABORTED ***" 1>&2
     exit 1
     fi
@@ -106,7 +102,7 @@ if [[ $EUID -ne 0 ]]; then
 # CHECK FOR REQUIRED FILES
 #####################################################################################################
 
-f_marker "Checking that all required files are present."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"): Checking that all required files are present."
 
 ABORT=false
 
@@ -117,7 +113,7 @@ ABORT=false
 #     fi
 
 if $ABORT ; then
-    f_marker "ABORTED." 1>&2
+    echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "ABORTED." 1>&2
     exit 1
     fi
 
@@ -126,7 +122,7 @@ if $ABORT ; then
 # SET TIMEZONE
 #####################################################################################################
 
-echo "Setting time zone."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"): Setting time zone."
 
 echo "" >> $INSTALL_LOG
 echo "" >> $INSTALL_LOG
@@ -140,16 +136,16 @@ f_record_to_installation_log "Time zone set to $TIMEZONE"
 # SAVE THE ORIGINAL / AND /boot FILE SYSTEMS. 2024-07-07
 #####################################################################################################
 
-    f_marker "Saving the original /etc/fstab."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Saving the original /etc/fstab."
 
-	cp --update /etc/fstab /etc/fstab.original.install
+cp --update /etc/fstab /etc/fstab.original.install
 
 
 #####################################################################################################
 # ENTER NON-INTERACTIVE MODE
 #####################################################################################################
 
-f_marker "Turning on non-interactive mode for installing applications."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Turning on non-interactive mode for installing applications."
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -160,7 +156,7 @@ f_record_to_installation_log "turned on non-interactive mode for installing appl
 # INSTALL universe REPOSITORY AND UPGRADES
 #####################################################################################################
 
-f_marker "Installing universe repository and apt packages updated."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing universe repository and apt packages updated."
 
 add-apt-repository universe --yes
 apt --yes clean
@@ -173,7 +169,7 @@ f_record_to_installation_log "universe repository installed and apt packages upd
 # INSTALL BASIC UTILITIES
 #####################################################################################################
 
-f_marker "Installing basic utilities."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing basic utilities."
 
 # Not used currently: git git-doc
 apt --yes install apg at curl ddclient debconf-utils fail2ban \
@@ -190,7 +186,7 @@ f_record_to_installation_log "installed basic utilities"
 # INSTALL MAILUTILS (INCLUDING POSTFIX)
 #####################################################################################################
 
-f_marker "Installing mailutils (including postfix)."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing mailutils (including postfix)."
 
 yes | apt install --yes mailutils
 
@@ -201,7 +197,7 @@ ecord_to_installation_log "installed mailutils (including postfix)"
 # INSTALL WEBMIN
 #####################################################################################################
 
-f_marker "Installing webmin."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing webmin."
 
 wget http://www.webmin.com/download/deb/webmin-current.deb
 WEBMIN_PACKAGES="openssl libcurl4-openssl-dev libssl-dev perl"
@@ -250,7 +246,7 @@ f_record_to_installation_log "installed webmin"
 #       Logout
 #####################################################################################################
 
-f_marker "Installing OpenVPN Access Server."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing OpenVPN Access Server."
 
 if [ $HOSTNAME == "dsm1" ]; then
     INSTALL_DIR="/tmp/.openvpn"
@@ -282,7 +278,7 @@ f_record_to_installation_log "installed OpenVPN Access Server"
 # CREATE MOUNT POINTS FOR EXTERNAL STORAGE
 #####################################################################################################
 
-f_marker "Creating mount points for external storage."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Creating mount points for external storage."
 
 if [ $HOSTNAME == "dsm1" ]; then
     mkdir -p /mnt/2TBA /mnt/3TBB /mnt/4TBA /mnt/5TBC /mnt/5TBD /mnt/5TBE /mnt/12TBA /mnt/12TBB \
@@ -305,8 +301,8 @@ f_record_to_installation_log "mount points created for external storage"
 if $COPY_LIFEBOAT ; then
   if [ $HOSTNAME == "dsm1" ]; then
     mkdir -p $LIFEBOAT_MOUNT_POINT; mount -U $LIFEBOAT_DRIVE_UUID -t ext4 $LIFEBOAT_MOUNT_POINT
-    f_marker "Copying content into ~/lifeboat."
-    # rsync
+    echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Copying content into ~/lifeboat."
+      # rsync
       # -a = archive mode is -rlptgoD (no -A,-X,-U,-N,-H)
       # -E = preserve executability
       # --info-progress2 = outputs overall transfer statistics for the entire job
@@ -325,7 +321,7 @@ f_record_to_installation_log "queued copying lifeboat to ~/lifeboat"
 # DOWNLOAD THE ubuntu-tools REPOSITORY
 #####################################################################################################
 
-f_marker "Downloading the ubuntu-tools repository to $REPO_DIR."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Downloading the ubuntu-tools repository to $REPO_DIR."
 
 rm -fr "$REPO_DIR"
 curl -L -s -o "$REPO_DIR.zip" \
@@ -341,7 +337,7 @@ f_record_to_installation_log "downloaded the ubuntu-tools repository"
 # INITIALIZING AND POPULATING $SBIN_DIR
 #####################################################################################################
 
-f_marker "Initializing and populating $SBIN_DIR."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Initializing and populating $SBIN_DIR."
 
 mkdir -p "$SBIN_DIR"              # Make $SBIN_DIR
 chmod 755 "$SBIN_DIR"             # Set permissions
@@ -356,7 +352,7 @@ f_record_to_installation_log "initialized and populating $SBIN_DIR"
 # Unclear what purpose this serves. Disabled 10/07/2026 pending need for this.
 #####################################################################################################
 
-# f_marker "Reloading systemd manager configuration"
+# echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Reloading systemd manager configuration"
 
 # systemctl daemon-reload   # Line 69 in setup-pre-2026
 
@@ -368,7 +364,7 @@ f_record_to_installation_log "initialized and populating $SBIN_DIR"
 # Unclear what purpose this serves. Disabled 10/07/2026 pending need for this.
 #####################################################################################################
 
-# f_marker "Getting a timestamp"
+# echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Getting a timestamp"
 
 # TIMESTAMP=$(/bin/date '+%Y-%m-%d-%H-%M-%S-%Z')   # Line 77 in setup-pre-2026
 
@@ -388,7 +384,7 @@ if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; 
 # INSTALL APACHE2
 #####################################################################################################
 
-f_marker "Installing apache2."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing apache2."
 
 apt --yes install --yes apache2-doc apache2-suexec-pristine
 a2enmod ssl rewrite
@@ -401,7 +397,7 @@ f_record_to_installation_log "installed apache2"
 # INSTALL PHP
 #####################################################################################################
 
-f_marker "Installing php."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing php."
 
 PHP_PACKAGES="build-essential php libapache2-mod-php"
 PHP_PACKAGES+=" php-cli php-mysql php-gd"
@@ -419,7 +415,7 @@ f_record_to_installation_log "installed php"
 # INSTALL CERTBOT AND LETSENCRYPT
 #####################################################################################################
 
-f_marker "Installing certbot and LetsEncrypt."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing certbot and LetsEncrypt."
 
 # Purge any existing installations of certbot
 command -v apt >/dev/null 2>&1 && apt --yes remove certbot
@@ -443,7 +439,7 @@ f_record_to_installation_log "installed certbot and LetsEncrypt"
 # INSTALL MySQL
 #####################################################################################################
 
-f_marker "Installing MySQL."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing MySQL."
 
 # Install the package
 export DEBIAN_FRONTEND=noninteractive
@@ -631,7 +627,7 @@ f_record_to_installation_log "installed mysql"
 # INSTALL phpMyAdmin
 #####################################################################################################
 
-f_marker "Installing phpMyAdmin."
+echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  "Installing phpMyAdmin."
 
 # Based on https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04
 # UPDATED TO: https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-22-04
@@ -747,3 +743,5 @@ lhensley@10.0.0.0/8
 
 
 CREATE ROLE IF NOT EXISTS admin, 
+
+
