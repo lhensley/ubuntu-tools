@@ -9,14 +9,15 @@
 
 # Copy this file to the ~ directory and set its permissions for 700.
 # Edit the file to adjust the VARIABLES definitions below.
-# When changes are To start the Execute this file with this command:
-#       
+# To start the Execute this file with this command:
+#    cd ; sudo ./setup
 
 #####################################################################################################
 # VARIABLES
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"): Defining variables."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Defining variables."
 
 # EXTREMELY IMPORTANT:
 # Do NOT define the Security Variables on the version in repository! MAJOR security problem
@@ -42,7 +43,7 @@ SBIN_PARENT="$(dirname $SBIN_DIR)"
 REPO_DIR="/var/local/ubuntu-tools"
 REPO_PARENT="$(dirname $REPO_DIR)"
 
-COPY_LIFEBOAT=true
+COPY_LIFEBOAT=false
 LIFEBOAT_MOUNT_POINT=/mnt/4TBA
 LIFEBOAT_DRIVE_UUID=41102e3a-dac6-45b4-9a5b-20816b7530ea
 
@@ -58,7 +59,8 @@ TIMEZONE="America/Chicago"
 # FUNCTIONS
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"): Defining functions."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Defining functions."
 
 function f_dirname () {
     # returns directory of a full path and/or file
@@ -85,15 +87,27 @@ function f_record_to_installation_log () {
 
 
 #####################################################################################################
+# CHANGING DIRECTORY TO ~
+#####################################################################################################
+
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Changing directory to ~"
+
+cd ~/
+
+
+#####################################################################################################
 # CHECK FOR SUDO
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"): Checking that you're root or sudo."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Checking that you're root or sudo."
 
 if [[ $EUID -ne 0 ]]; then
     echo ""
-    echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Use sudo. $0 must be run as root." 1>&2
-    echo "  *** ABORTED ***" 1>&2
+    echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+        "\e[1;31mUse sudo. $0 must be run as root.\n\033[0m" 1>&2
+    echo "\e[1;31m  *** ABORTED ***\n\033[0m" 1>&2
     exit 1
     fi
 
@@ -102,7 +116,8 @@ if [[ $EUID -ne 0 ]]; then
 # CHECK FOR REQUIRED FILES
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"): Checking that all required files are present."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Checking that all required files are present."
 
 ABORT=false
 
@@ -113,7 +128,8 @@ ABORT=false
 #     fi
 
 if $ABORT ; then
-    echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  ABORTED." 1>&2
+    echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+        "\e[1;31m  *** ABORTED. ***\n\033[0m:" 1>&2
     exit 1
     fi
 
@@ -122,7 +138,8 @@ if $ABORT ; then
 # SET TIMEZONE
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"): Setting time zone."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Setting time zone."
 
 echo "" >> $INSTALL_LOG
 echo "" >> $INSTALL_LOG
@@ -136,7 +153,8 @@ f_record_to_installation_log "Time zone set to $TIMEZONE"
 # SAVE THE ORIGINAL / AND /boot FILE SYSTEMS. 2024-07-07
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Saving the original /etc/fstab."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Saving the original /etc/fstab."
 
 cp --update /etc/fstab /etc/fstab.original.install
 
@@ -145,7 +163,8 @@ cp --update /etc/fstab /etc/fstab.original.install
 # ENTER NON-INTERACTIVE MODE
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Turning on non-interactive mode for installing applications."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Turning on non-interactive mode for installing applications."
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -156,7 +175,8 @@ f_record_to_installation_log "turned on non-interactive mode for installing appl
 # INSTALL universe REPOSITORY AND UPGRADES
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing universe repository and apt packages updated."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Installing universe repository and apt packages updated."
 
 add-apt-repository universe --yes
 apt --yes clean
@@ -169,11 +189,19 @@ f_record_to_installation_log "universe repository installed and apt packages upd
 # INSTALL BASIC UTILITIES
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing basic utilities."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Installing basic utilities."
 
 # Not used currently: git git-doc
+# apt --yes purge apg at curl ddclient debconf-utils fail2ban \
+#    fwupd gpg gzip libssl-dev moreutils openssl tzdata ubuntu-pro-client ufw unzip uuid-runtime
 apt --yes install apg at curl ddclient debconf-utils fail2ban \
-    fwupd gpg gzip libssl-dev moreutils openssl tzdata ufw unzip uuid-runtime
+    fwupd gpg gzip libssl-dev moreutils openssl tzdata ubuntu-pro-client ufw unzip uuid-runtime
+apt install --only-upgrade ubuntu-pro-client
+
+
+
+
 # NOTES:
 # As of 11/14/2026 (and earlier), the ddns service is at namecheap
 # To force an update and give you diagnostic data: 
@@ -186,24 +214,29 @@ f_record_to_installation_log "installed basic utilities"
 # INSTALL MAILUTILS (INCLUDING POSTFIX)
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing mailutils (including postfix)."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Installing mailutils (including postfix)."
 
-yes | apt install --yes mailutils
+# apt purge --yes mailutils
+# yes | apt install --yes mailutils
+apt install --yes mailutils
 
-ecord_to_installation_log "installed mailutils (including postfix)"
+record_to_installation_log "installed mailutils (including postfix)"
 
 
 #####################################################################################################
 # INSTALL WEBMIN
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing webmin."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Installing webmin."
 
 wget http://www.webmin.com/download/deb/webmin-current.deb
 WEBMIN_PACKAGES="openssl libcurl4-openssl-dev libssl-dev perl"
 WEBMIN_PACKAGES+=" libnet-ssleay-perl libauthen-pam-perl"
 WEBMIN_PACKAGES+=" libpam-runtime libio-pty-perl apt-show-versions"
 WEBMIN_PACKATES+=" python libsocket6-perl libapt-pkg-perl"
+# apt purge --yes $WEBMIN_PACKAGES
 apt install --yes $WEBMIN_PACKAGES
 dpkg --install ./webmin-current.deb
 rm -f ./webmin-current.deb
@@ -246,7 +279,12 @@ f_record_to_installation_log "installed webmin"
 #       Logout
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing OpenVPN Access Server."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Installing OpenVPN Access Server."
+
+#====================================================================================================
+# WARNING: I THINK THIS CODE DOESN'T WORK. NEED TO VERIFY. 23 Nov 2026
+#====================================================================================================
 
 if [ $HOSTNAME == "dsm1" ]; then
     INSTALL_DIR="/tmp/.openvpn"
@@ -261,7 +299,13 @@ if [ $HOSTNAME == "dsm1" ]; then
     rm -rf /usr/local/openvpn_as
     apt -y purge openvpn*
     apt -y autoremove
-    bash ./install.sh --yes
+
+    echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+        "Executing ./install.sh"
+      bash ./install.sh --yes
+    echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+        "End ./install.sh; continuing installing OpenVPN Access Server."
+
     rm -f ./install.sh
     systemctl enable openvpnas --no-pager
     cat /usr/local/openvpn_as/init.log | grep "To login please use" > ./password_temp
@@ -278,7 +322,8 @@ f_record_to_installation_log "installed OpenVPN Access Server"
 # CREATE MOUNT POINTS FOR EXTERNAL STORAGE
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Creating mount points for external storage."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Creating mount points for external storage."
 
 if [ $HOSTNAME == "dsm1" ]; then
     mkdir -p /mnt/2TBA /mnt/3TBB /mnt/4TBA /mnt/5TBC /mnt/5TBD /mnt/5TBE /mnt/12TBA /mnt/12TBB \
@@ -298,10 +343,14 @@ f_record_to_installation_log "mount points created for external storage"
 # COPY THE LIFEBOAT TO HOME DIRECTORY FOR dsm1 ONLY
 #####################################################################################################
 
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Copying the lifeboat to home directory for dsm1 only."
+
 if $COPY_LIFEBOAT ; then
   if [ $HOSTNAME == "dsm1" ]; then
-    mkdir -p $LIFEBOAT_MOUNT_POINT; mount -U $LIFEBOAT_DRIVE_UUID -t ext4 $LIFEBOAT_MOUNT_POINT
-    echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Copying content into ~/lifeboat."
+    mkdir -p $LIFEBOAT_MOUNT_POINT; mount -a -U $LIFEBOAT_DRIVE_UUID -t ext4 $LIFEBOAT_MOUNT_POINT
+    echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+        "Copying content into ~/lifeboat."
       # rsync
       # -a = archive mode is -rlptgoD (no -A,-X,-U,-N,-H)
       # -E = preserve executability
@@ -321,7 +370,8 @@ f_record_to_installation_log "queued copying lifeboat to ~/lifeboat"
 # DOWNLOAD THE ubuntu-tools REPOSITORY
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Downloading the ubuntu-tools repository to $REPO_DIR."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Downloading the ubuntu-tools repository to $REPO_DIR."
 
 rm -fr "$REPO_DIR"
 curl -L -s -o "$REPO_DIR.zip" \
@@ -337,7 +387,8 @@ f_record_to_installation_log "downloaded the ubuntu-tools repository"
 # INITIALIZING AND POPULATING $SBIN_DIR
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Initializing and populating $SBIN_DIR."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Initializing and populating $SBIN_DIR."
 
 mkdir -p "$SBIN_DIR"              # Make $SBIN_DIR
 chmod 755 "$SBIN_DIR"             # Set permissions
@@ -376,17 +427,21 @@ f_record_to_installation_log "initialized and populating $SBIN_DIR"
 #####################################################################################################
 
 source script-setup
-if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo $0: Functions not defined. Aborting; logger $0: Functions not defined. Aborting; exit 1; fi
-if [ ! $VARIABLES_ARE_DEFINED ]; then echo $0: Variables not defined. Aborting; logger $0: Variables not defined. Aborting; exit 1; fi
+if [ ! $FUNCTIONS_ARE_DEFINED ]; then echo -e $0: "\e[1;31mFunctions not defined. Aborting\n\033[0m:" \
+    logger $0: Functions not defined. Aborting; exit 1; fi
+if [ ! $VARIABLES_ARE_DEFINED ]; then echo -e $0: "\e[1;31mVariables not defined. Aborting\n\033[0m:" \ 
+    logger $0: Variables not defined. Aborting; exit 1; fi
 
 
 #####################################################################################################
 # INSTALL APACHE2
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing apache2."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Installing apache2."
 
-apt --yes install --yes apache2-doc apache2-suexec-pristine
+# apt --yes purge apache2-doc apache2-suexec-pristine
+apt --yes install apache2-doc apache2-suexec-pristine
 a2enmod ssl rewrite
 systemctl restart apache2
 
@@ -397,13 +452,15 @@ f_record_to_installation_log "installed apache2"
 # INSTALL PHP
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing php."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Installing php."
 
 PHP_PACKAGES="build-essential php libapache2-mod-php"
 PHP_PACKAGES+=" php-cli php-mysql php-gd"
 PHP_PACKAGES+=" php-curl php-ldap libmcrypt-dev"
 PHP_PACKAGES+=" php-mbstring php-dev php-pear"
 PHP_PACKAGES+=" libc-client2007e mlock uw-mailutils"
+# apt purge --yes $PHP_PACKAGES
 apt install --yes $PHP_PACKAGES
 phpenmod gd curl ldap mbstring
 systemctl restart apache2
@@ -415,17 +472,18 @@ f_record_to_installation_log "installed php"
 # INSTALL CERTBOT AND LETSENCRYPT
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing certbot and LetsEncrypt."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Installing certbot and LetsEncrypt."
 
 # Purge any existing installations of certbot
-command -v apt >/dev/null 2>&1 && apt --yes remove certbot
+command -v apt >/dev/null 2>&1 && dpkg -s <package_name> &> /dev/null && apt --yes remove certbot
 command -v dnf >/dev/null 2>&1 && dnf --yes remove certbot
 command -v yum >/dev/null 2>&1 && yum --yes remove certbot
 # Install certbot
-if ! snap info certbot > /dev/null 2> /dev/null ; then 
+#if ! snap info certbot > /dev/null 2> /dev/null ; then 
   snap install --classic certbot
   ln -s /snap/bin/certbot /usr/bin/certbot
-  fi
+#  fi
 # Create the certificates
 certbot certonly --apache --no-redirect -d lanehensley.org
 certbot certonly --apache --no-redirect -d files.lanehensley.org
@@ -439,11 +497,13 @@ f_record_to_installation_log "installed certbot and LetsEncrypt"
 # INSTALL MySQL
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing MySQL."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Installing MySQL."
 
 # Install the package
 export DEBIAN_FRONTEND=noninteractive
-apt-get install --yes mysql-server
+# apt purge --yes mysql-server
+apt install --yes mysql-server
 # Harden the installation
 mysql -e "DELETE FROM mysql.user WHERE User='';" # Delete anonymous users
 mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');" # Ensure the root user can not log in remotely
@@ -627,12 +687,14 @@ f_record_to_installation_log "installed mysql"
 # INSTALL phpMyAdmin
 #####################################################################################################
 
-echo "$0, line ${LINENO}, $(date +"%F %T.%3N %Z"):  Installing phpMyAdmin."
+echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
+    "Installing phpMyAdmin."
 
 # Based on https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04
 # UPDATED TO: https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-22-04
 export DEBIAN_FRONTEND=noninteractive
-apt-get install --yes phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+# apt purge --yes phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+apt install --yes phpmyadmin php-mbstring php-zip php-gd php-json php-curl
 phpenmod mbstring
 cp $GIT_UBUNTU_TOOLS_CONFIGS/etc/phpmyadmin/config.inc.php $PHPMYADMIN_DIR/config.inc.php
 chown -R www-data:www-data $PHPMYADMIN_DIR
