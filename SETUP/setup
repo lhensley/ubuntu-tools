@@ -1,6 +1,6 @@
 #!/bin/bash
 # setup2026
-# Updated 25 Nov 2026
+# Updated 28 Nov 2026
 
 
 #####################################################################################################
@@ -16,13 +16,16 @@
 # VARIABLES
 #####################################################################################################
 
-# These need to be defined before the following echo because that command references them.
+# These need to be defined here. DON'T MOVE THEM!
 ADMIN_DIR="/home/lhensley"
 ADMIN_HOME_DIR="$ADMIN_DIR"
+INSTALL_LOG="$ADMIN_DIR/installation.log"
 DETAIL_LOG="$ADMIN_DIR/detail.log"
 
+# Get rid of old logs.
+rm -f "$DETAIL_LOG" "$INSTALL_LOG"
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Defining variables." | tee -a "$DETAIL_LOG"
+    "Defining variables." 2>&1 | tee -a "$DETAIL_LOG"
 
 # EXTREMELY IMPORTANT:
 # Do NOT define the Security Variables on the version in repository! MAJOR security problem
@@ -46,12 +49,9 @@ SBIN_PARENT="$(dirname $SBIN_DIR)"
 REPO_DIR="/var/local/ubuntu-tools"
 REPO_PARENT="$(dirname $REPO_DIR)"
 
-COPY_LIFEBOAT=false
+COPY_LIFEBOAT=true
 LIFEBOAT_MOUNT_POINT=/mnt/4TBA
 LIFEBOAT_DRIVE_UUID=41102e3a-dac6-45b4-9a5b-20816b7530ea
-
-INSTALL_LOG="$ADMIN_DIR/installation.log"
-DETAIL_LOG="$ADMIN_DIR/detail.log"
 
 # Possible values for TIMEZONE: 
 # "America/Honolulu" "America/Anchorage" "America/Los_Angeles" "America/Phoenix" 
@@ -64,7 +64,7 @@ TIMEZONE="America/Chicago"
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Defining functions." | tee -a "$DETAIL_LOG"
+    "Defining functions." 2>&1 | tee -a "$DETAIL_LOG"
 
 function f_dirname () {
     # returns directory of a full path and/or file
@@ -86,7 +86,7 @@ function f_pause () {
 function f_record_to_installation_log () {
     # records a log entry in $INSTALL_LOG
     # Usage f_record_to_installation_log $message
-    echo "$(date)   $1" | tee -a "$DETAIL_LOG" &>> $INSTALL_LOG
+    echo "$(date)   $1" 2>&1 | tee -a "$DETAIL_LOG" &>> $INSTALL_LOG
     }
 
 
@@ -95,7 +95,7 @@ function f_record_to_installation_log () {
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Changing directory to ~" | tee -a "$DETAIL_LOG"
+    "Changing directory to ~" 2>&1 | tee -a "$DETAIL_LOG"
 
 cd ~/
 
@@ -105,13 +105,13 @@ cd ~/
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Checking that you're root or sudo." | tee -a "$DETAIL_LOG"
+    "Checking that you're root or sudo." 2>&1 | tee -a "$DETAIL_LOG"
 
 if [[ $EUID -ne 0 ]]; then
-    echo "" | tee -a "$DETAIL_LOG"
+    echo "" 2>&1 | tee -a "$DETAIL_LOG"
     echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-        "\e[1;31mUse sudo. $0 must be run as root.\n\033[0m" | tee -a "$DETAIL_LOG"
-    echo "\e[1;31m  *** ABORTED ***\n\033[0m" | tee -a "$DETAIL_LOG"
+        "\e[1;31mUse sudo. $0 must be run as root.\n\033[0m" 2>&1 | tee -a "$DETAIL_LOG"
+    echo "\e[1;31m  *** ABORTED ***\n\033[0m" 2>&1 | tee -a "$DETAIL_LOG"
     exit 1
     fi
 
@@ -121,19 +121,19 @@ if [[ $EUID -ne 0 ]]; then
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Checking that all required files are present." | tee -a "$DETAIL_LOG"
+    "Checking that all required files are present." 2>&1 | tee -a "$DETAIL_LOG"
 
 ABORT=false
 
 # EXAMPLE:
 # if ! $(f_is_file $ADMIN_DIR/'Contents of gitconfig.txt') ; then
 #     set ABORT=true
-#     echo $0: \'$ADMIN_DIR/Contents of gitconfig.txt\' is REQUIRED. | tee -a "$DETAIL_LOG"
+#     echo $0: \'$ADMIN_DIR/Contents of gitconfig.txt\' is REQUIRED. 2>&1 | tee -a "$DETAIL_LOG"
 #     fi
 
 if $ABORT ; then
     echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-        "\e[1;31m  *** ABORTED. ***\n\033[0m:" | tee -a "$DETAIL_LOG"
+        "\e[1;31m  *** ABORTED. ***\n\033[0m:" 2>&1 | tee -a "$DETAIL_LOG"
     exit 1
     fi
 
@@ -143,10 +143,10 @@ if $ABORT ; then
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Setting time zone." | tee -a "$DETAIL_LOG"
+    "Setting time zone." 2>&1 | tee -a "$DETAIL_LOG"
 
-echo "" | tee -a "$DETAIL_LOG" >> $INSTALL_LOG
-echo "" | tee -a "$DETAIL_LOG" >> $INSTALL_LOG
+echo "" 2>&1 | tee -a "$DETAIL_LOG" >> $INSTALL_LOG
+echo "" 2>&1 | tee -a "$DETAIL_LOG" >> $INSTALL_LOG
 f_record_to_installation_log "Begin execution of $0"
 ln -fs /usr/share/zoneinfo/"$TIMEZONE" /etc/localtime
 timedatectl set-timezone $TIMEZONE
@@ -158,7 +158,7 @@ f_record_to_installation_log "Time zone set to $TIMEZONE"
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Saving the original /etc/fstab." | tee -a "$DETAIL_LOG"
+    "Saving the original /etc/fstab." 2>&1 | tee -a "$DETAIL_LOG"
 
 cp --update /etc/fstab /etc/fstab.original.install
 
@@ -168,7 +168,7 @@ cp --update /etc/fstab /etc/fstab.original.install
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Turning on non-interactive mode for installing applications." | tee -a "$DETAIL_LOG"
+    "Turning on non-interactive mode for installing applications." 2>&1 | tee -a "$DETAIL_LOG"
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -180,7 +180,7 @@ f_record_to_installation_log "turned on non-interactive mode for installing appl
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Installing universe repository and apt packages updated." | tee -a "$DETAIL_LOG"
+    "Installing universe repository and apt packages updated." 2>&1 | tee -a "$DETAIL_LOG"
 
 add-apt-repository universe --yes &>> "$DETAIL_LOG"
 apt-get --yes clean
@@ -194,7 +194,7 @@ f_record_to_installation_log "universe repository installed and apt packages upd
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Installing basic utilities." | tee -a "$DETAIL_LOG"
+    "Installing basic utilities." 2>&1 | tee -a "$DETAIL_LOG"
 
 # Not used currently: git git-doc
 # apt --yes purge apg at curl ddclient debconf-utils fail2ban \
@@ -220,7 +220,7 @@ f_record_to_installation_log "installed basic utilities"
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Installing mailutils (including postfix)." | tee -a "$DETAIL_LOG"
+    "Installing mailutils (including postfix)." 2>&1 | tee -a "$DETAIL_LOG"
 
 # apt purge --yes mailutils
 # yes | apt install --yes mailutils
@@ -234,9 +234,9 @@ f_record_to_installation_log "installed mailutils (including postfix)"
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Installing webmin." | tee -a "$DETAIL_LOG"
+    "Installing webmin." 2>&1 | tee -a "$DETAIL_LOG"
 
-wget http://www.webmin.com/download/deb/webmin-current.deb
+wget http://www.webmin.com/download/deb/webmin-current.deb &>> "$DETAIL_LOG"
 WEBMIN_PACKAGES="openssl libcurl4-openssl-dev libssl-dev perl"
 WEBMIN_PACKAGES+=" libnet-ssleay-perl libauthen-pam-perl"
 WEBMIN_PACKAGES+=" libpam-runtime libio-pty-perl apt-show-versions"
@@ -285,7 +285,7 @@ f_record_to_installation_log "installed webmin"
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Installing OpenVPN Access Server." | tee -a "$DETAIL_LOG"
+    "Installing OpenVPN Access Server." 2>&1 | tee -a "$DETAIL_LOG"
 
 #====================================================================================================
 # WARNING: I THINK THIS CODE DOESN'T WORK. NEED TO VERIFY. 23 Nov 2026
@@ -297,7 +297,7 @@ if [ $HOSTNAME == "dsm1" ]; then
     mkdir -p "$INSTALL_DIR" &>> "$DETAIL_LOG"
     cd "$INSTALL_DIR" &>> "$DETAIL_LOG"
     rm -f ./install.sh &>> "$DETAIL_LOG"
-    wget https://packages.openvpn.net/as/install.sh &>> "$DETAIL_LOG"
+    wget -O ./install.sh https://packages.openvpn.net/as/install.sh &>> "$DETAIL_LOG"
     chmod 700 ./install.sh &>> "$DETAIL_LOG"
     systemctl stop openvpn* &>> "$DETAIL_LOG"
     systemctl disable openvpn* &>> "$DETAIL_LOG"
@@ -306,12 +306,12 @@ if [ $HOSTNAME == "dsm1" ]; then
     apt-get -y autoremove  &>> "$DETAIL_LOG"
 
     echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-        "Executing ./install.sh" &>> "$DETAIL_LOG"
-      "$ADMIN_DIR"/install.sh --yes &>> "$DETAIL_LOG" 
+        "Executing ./install.sh" 2>&1 | tee -a "$DETAIL_LOG"    
+      ./install.sh --yes &>> "$DETAIL_LOG" 
     echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-        "End ./install.sh; continuing installing OpenVPN Access Server." | tee -a "$DETAIL_LOG"
+        "End ./install.sh; continuing installing OpenVPN Access Server." 2>&1 | tee -a "$DETAIL_LOG"
 
-    rm -f ./install.sh &>> "$DETAIL_LOG"
+    rm -f ./install.sh &>> "$DETAIL_LOG" &>> "$DETAIL_LOG"
     systemctl enable openvpnas --no-pager &>> "$DETAIL_LOG"
     cat /usr/local/openvpn_as/init.log | grep "To login please use" &>> ./password_temp
     grep -oP 'account with "\K.*?(?=\" password)' ./password_temp \
@@ -329,7 +329,7 @@ f_record_to_installation_log "installed OpenVPN Access Server"
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Creating mount points for external storage." | tee -a "$DETAIL_LOG"
+    "Creating mount points for external storage." 2>&1 | tee -a "$DETAIL_LOG"
 
 if [ $HOSTNAME == "dsm1" ]; then
     mkdir -p /mnt/2TBA /mnt/3TBB /mnt/4TBA /mnt/5TBC /mnt/5TBD /mnt/5TBE /mnt/12TBA /mnt/12TBB \
@@ -351,14 +351,14 @@ f_record_to_installation_log "mount points created for external storage"
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Copying the lifeboat to home directory for dsm1 only." | tee -a "$DETAIL_LOG"
+    "Copying the lifeboat to home directory for dsm1 only." 2>&1 | tee -a "$DETAIL_LOG"
 
 if $COPY_LIFEBOAT ; then
   if [ $HOSTNAME == "dsm1" ]; then
     mkdir -p $LIFEBOAT_MOUNT_POINT &>> "$DETAIL_LOG"
     mount -a -U $LIFEBOAT_DRIVE_UUID -t ext4 $LIFEBOAT_MOUNT_POINT &>> "$DETAIL_LOG"
     echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-        "Copying content into ~/lifeboat." | tee -a "$DETAIL_LOG"
+        "Copying content into ~/lifeboat." 2>&1 | tee -a "$DETAIL_LOG"
       # rsync
       # -a = archive mode is -rlptgoD (no -A,-X,-U,-N,-H)
       # -E = preserve executability
@@ -380,7 +380,7 @@ f_record_to_installation_log "queued copying lifeboat to ~/lifeboat"
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Downloading the ubuntu-tools repository to $REPO_DIR." | tee -a "$DETAIL_LOG"
+    "Downloading the ubuntu-tools repository to $REPO_DIR." 2>&1 | tee -a "$DETAIL_LOG"
 
 rm -fr "$REPO_DIR" &>> "$DETAIL_LOG"
 curl -L -s -o "$REPO_DIR.zip" \
@@ -397,7 +397,7 @@ f_record_to_installation_log "downloaded the ubuntu-tools repository"
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Initializing and populating $SBIN_DIR." | tee -a "$DETAIL_LOG"
+    "Initializing and populating $SBIN_DIR." 2>&1 | tee -a "$DETAIL_LOG"
 
 mkdir -p "$SBIN_DIR" &>> "$DETAIL_LOG"              # Make $SBIN_DIR
 chmod 755 "$SBIN_DIR" &>> "$DETAIL_LOG"             # Set permissions
@@ -447,7 +447,7 @@ if [ ! $VARIABLES_ARE_DEFINED ]; then echo -e $0: "\e[1;31mVariables not defined
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Installing apache2." | tee -a "$DETAIL_LOG"
+    "Installing apache2." 2>&1 | tee -a "$DETAIL_LOG"
 
 # apt --yes purge apache2-doc apache2-suexec-pristine
 apt-get --yes install apache2-doc apache2-suexec-pristine &>> "$DETAIL_LOG"
@@ -462,7 +462,7 @@ f_record_to_installation_log "installed apache2"
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Installing php." | tee -a "$DETAIL_LOG"
+    "Installing php." 2>&1 | tee -a "$DETAIL_LOG"
 
 PHP_PACKAGES="build-essential php libapache2-mod-php"
 PHP_PACKAGES+=" php-cli php-mysql php-gd"
@@ -484,7 +484,7 @@ f_record_to_installation_log "installed php"
 # ALL CLEAR!
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Installing certbot and LetsEncrypt." | tee -a "$DETAIL_LOG"
+    "Installing certbot and LetsEncrypt." 2>&1 | tee -a "$DETAIL_LOG"
 
 # Purge any existing installations of certbot
 command -v apt &>> "$DETAIL_LOG" && dpkg -s certbot &>> "$DETAIL_LOG" && \
@@ -498,10 +498,14 @@ command -v yum &>> "$DETAIL_LOG" && yum --yes remove certbot
   ln -s /snap/bin/certbot /usr/bin/certbot &>> "$DETAIL_LOG"
 #  fi
 # Create the certificates
-certbot certonly --apache --no-redirect -d lanehensley.org &>> "$DETAIL_LOG"
-certbot certonly --apache --no-redirect -d files.lanehensley.org &>> "$DETAIL_LOG"
-certbot certonly --apache --no-redirect -d dsm1.lanehensley.org &>> "$DETAIL_LOG"
-certbot certonly --apache --no-redirect -d pd1.lanehensley.org &>> "$DETAIL_LOG"
+certbot certonly --apache --no-redirect --non-interactive --agree-tos -m $my_email \
+    -d lanehensley.org &>> "$DETAIL_LOG"
+certbot certonly --apache --no-redirect --non-interactive --agree-tos -m $my_email \
+    -d files.lanehensley.org &>> "$DETAIL_LOG"
+certbot certonly --apache --no-redirect --non-interactive --agree-tos -m $my_email \
+    -d dsm1.lanehensley.org &>> "$DETAIL_LOG"
+certbot certonly --apache --no-redirect --non-interactive --agree-tos -m $my_email \
+    -d pd1.lanehensley.org &>> "$DETAIL_LOG"
 
 f_record_to_installation_log "installed certbot and LetsEncrypt"
 
@@ -511,12 +515,12 @@ f_record_to_installation_log "installed certbot and LetsEncrypt"
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Installing MySQL." | tee -a "$DETAIL_LOG"
+    "Installing MySQL." 2>&1 | tee -a "$DETAIL_LOG"
 
 # Install the package
 export DEBIAN_FRONTEND=noninteractive
 # apt purge --yes mysql-server
-apt install --yes mysql-server &>> "$DETAIL_LOG"
+apt-get install --yes mysql-server &>> "$DETAIL_LOG"
 # Harden the installation
 mysql -e "DELETE FROM mysql.user WHERE User='';" &>> "$DETAIL_LOG" # Delete anonymous users
 mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');" \
@@ -527,12 +531,12 @@ mysql -e "FLUSH PRIVILEGES;"  &>> "$DETAIL_LOG" # Flush the privileges tables
 # Open the eligible client addresses
 sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf &>> "$DETAIL_LOG"
 # Set security
-mysql -e "CREATE USER `admin`@`localhost` IDENTIFIED BY '$MYSQL_ADMIN_PWD';" \
+mysql -e "CREATE USER 'admin'@'localhost' IDENTIFIED BY \"$MYSQL_ADMIN_PWD\";" \
     &>> "$DETAIL_LOG"
-mysql -e "CREATE USER `admin`@`192.168.168.0/24` IDENTIFIED BY \"$MYSQL_ADMIN_PWD';" \
+mysql -e "CREATE USER 'admin'@'192.168.168.0/24' IDENTIFIED BY \"$MYSQL_ADMIN_PWD\";" \
     &>> "$DETAIL_LOG"
-mysql -e "CREATE USER `admin`@`10.0.0.0/8` IDENTIFIED BY \"$MYSQL_ADMIN_PWD\';" &>> "$DETAIL_LOG"
-mysql -e "CREATE USER `lhensley`@`%` IDENTIFIED BY \"$MYSQL_LHENSLEY_PWD\';" &>> "$DETAIL_LOG"
+mysql -e "CREATE USER 'admin'@'10.0.0.0/8' IDENTIFIED BY \"$MYSQL_ADMIN_PWD\';" &>> "$DETAIL_LOG"
+mysql -e "CREATE USER 'lhensley'@'%' IDENTIFIED BY \"$MYSQL_LHENSLEY_PWD\';" &>> "$DETAIL_LOG"
 mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, \
     RELOAD, SHUTDOWN, PROCESS, FILE, REFERENCES, INDEX, \
     ALTER, SHOW DATABASES, SUPER, CREATE TEMPORARY TABLES, \
@@ -540,7 +544,7 @@ mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, \
     REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, \
     CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, \
     TRIGGER, CREATE TABLESPACE, CREATE ROLE, \
-    DROP ROLE ON *.* TO `admin`@`localhost` WITH GRANT OPTION;" &>> "$DETAIL_LOG"
+    DROP ROLE ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;" &>> "$DETAIL_LOG"
 mysql -e "GRANT ALLOW_NONEXISTENT_DEFINER, \
     APPLICATION_PASSWORD_ADMIN,AUDIT_ABORT_EXEMPT, \
     AUDIT_ADMIN,AUTHENTICATION_POLICY_ADMIN,BACKUP_ADMIN, \
@@ -559,7 +563,7 @@ mysql -e "GRANT ALLOW_NONEXISTENT_DEFINER, \
     SYSTEM_USER,SYSTEM_VARIABLES_ADMIN, \
     TABLE_ENCRYPTION_ADMIN,TELEMETRY_LOG_ADMIN, \
     TRANSACTION_GTID_TAG,XA_RECOVER_ADMIN ON *.*  \
-    TO `admin`@`localhost` WITH GRANT OPTION;" &>> "$DETAIL_LOG"
+    TO 'admin'@'localhost' WITH GRANT OPTION;" &>> "$DETAIL_LOG"
 mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, \
     RELOAD, SHUTDOWN, PROCESS, FILE, REFERENCES, INDEX, \
     ALTER, SHOW DATABASES, SUPER, CREATE TEMPORARY TABLES, \
@@ -567,7 +571,7 @@ mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, \
     REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, \
     CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, \
     TRIGGER, CREATE TABLESPACE, CREATE ROLE, \
-    DROP ROLE ON *.* TO `admin`@`192.168.168.0/24` WITH GRANT OPTION;" &>> "$DETAIL_LOG"
+    DROP ROLE ON *.* TO 'admin'@'192.168.168.0/24' WITH GRANT OPTION;" &>> "$DETAIL_LOG"
 mysql -e "GRANT ALLOW_NONEXISTENT_DEFINER, \
     APPLICATION_PASSWORD_ADMIN,AUDIT_ABORT_EXEMPT, \
     AUDIT_ADMIN,AUTHENTICATION_POLICY_ADMIN,BACKUP_ADMIN, \
@@ -586,7 +590,7 @@ mysql -e "GRANT ALLOW_NONEXISTENT_DEFINER, \
     SYSTEM_USER,SYSTEM_VARIABLES_ADMIN, \
     TABLE_ENCRYPTION_ADMIN,TELEMETRY_LOG_ADMIN, \
     TRANSACTION_GTID_TAG,XA_RECOVER_ADMIN ON *.*  \
-    TO `admin`@`192.168.168.0/24` WITH GRANT OPTION;" &>> "$DETAIL_LOG"
+    TO 'admin'@'192.168.168.0/24' WITH GRANT OPTION;" &>> "$DETAIL_LOG"
 mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, \
     RELOAD, SHUTDOWN, PROCESS, FILE, REFERENCES, INDEX, \
     ALTER, SHOW DATABASES, SUPER, CREATE TEMPORARY TABLES, \
@@ -594,7 +598,7 @@ mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, \
     REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, \
     CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, \
     TRIGGER, CREATE TABLESPACE, CREATE ROLE, \
-    DROP ROLE ON *.* TO `admin`@`10.0.0.0/8` WITH GRANT OPTION;" &>> "$DETAIL_LOG"
+    DROP ROLE ON *.* TO 'admin'@'10.0.0.0/8' WITH GRANT OPTION;" &>> "$DETAIL_LOG"
 mysql -e "GRANT ALLOW_NONEXISTENT_DEFINER, \
     APPLICATION_PASSWORD_ADMIN,AUDIT_ABORT_EXEMPT, \
     AUDIT_ADMIN,AUTHENTICATION_POLICY_ADMIN,BACKUP_ADMIN, \
@@ -613,7 +617,7 @@ mysql -e "GRANT ALLOW_NONEXISTENT_DEFINER, \
     SYSTEM_USER,SYSTEM_VARIABLES_ADMIN, \
     TABLE_ENCRYPTION_ADMIN,TELEMETRY_LOG_ADMIN, \
     TRANSACTION_GTID_TAG,XA_RECOVER_ADMIN ON *.*  \
-    TO `admin`@`10.0.0.0/8` WITH GRANT OPTION;" &>> "$DETAIL_LOG"
+    TO 'admin'@'10.0.0.0/8' WITH GRANT OPTION;" &>> "$DETAIL_LOG"
 mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, 
     RELOAD, SHUTDOWN, PROCESS, FILE, REFERENCES, INDEX, 
     ALTER, SHOW DATABASES, SUPER, CREATE TEMPORARY TABLES, 
@@ -621,7 +625,7 @@ mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP,
     REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, 
     CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, 
     TRIGGER, CREATE TABLESPACE, CREATE ROLE, 
-    DROP ROLE ON *.* TO `lhensley`@`localhost` WITH GRANT OPTION;" &>> "$DETAIL_LOG"
+    DROP ROLE ON *.* TO 'lhensley'@'localhost' WITH GRANT OPTION;" &>> "$DETAIL_LOG"
 mysql -e "GRANT ALLOW_NONEXISTENT_DEFINER, \
     APPLICATION_PASSWORD_ADMIN,AUDIT_ABORT_EXEMPT, \
     AUDIT_ADMIN,AUTHENTICATION_POLICY_ADMIN,BACKUP_ADMIN, \
@@ -640,7 +644,7 @@ mysql -e "GRANT ALLOW_NONEXISTENT_DEFINER, \
     SYSTEM_USER,SYSTEM_VARIABLES_ADMIN, \
     TABLE_ENCRYPTION_ADMIN,TELEMETRY_LOG_ADMIN,  \
     TRANSACTION_GTID_TAG,XA_RECOVER_ADMIN ON *.*  \
-    TO `lhensley`@`localhost` WITH GRANT OPTION;" &>> "$DETAIL_LOG"
+    TO 'lhensley'@'localhost' WITH GRANT OPTION;" &>> "$DETAIL_LOG"
 mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, 
     RELOAD, SHUTDOWN, PROCESS, FILE, REFERENCES, INDEX, 
     ALTER, SHOW DATABASES, SUPER, CREATE TEMPORARY TABLES, 
@@ -648,7 +652,7 @@ mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP,
     REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, 
     CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, 
     TRIGGER, CREATE TABLESPACE, CREATE ROLE, 
-    DROP ROLE ON *.* TO `lhensley`@`192.168.168.0/24` WITH GRANT OPTION;" &>> "$DETAIL_LOG"
+    DROP ROLE ON *.* TO 'lhensley'@'192.168.168.0/24' WITH GRANT OPTION;" &>> "$DETAIL_LOG"
 mysql -e "GRANT ALLOW_NONEXISTENT_DEFINER, \
     APPLICATION_PASSWORD_ADMIN,AUDIT_ABORT_EXEMPT, \
     AUDIT_ADMIN,AUTHENTICATION_POLICY_ADMIN,BACKUP_ADMIN, \
@@ -667,7 +671,7 @@ mysql -e "GRANT ALLOW_NONEXISTENT_DEFINER, \
     SYSTEM_USER,SYSTEM_VARIABLES_ADMIN, \
     TABLE_ENCRYPTION_ADMIN,TELEMETRY_LOG_ADMIN,  \
     TRANSACTION_GTID_TAG,XA_RECOVER_ADMIN ON *.*  \
-    TO `lhensley`@`192.168.168.0/24` WITH GRANT OPTION;" &>> "$DETAIL_LOG"
+    TO 'lhensley'@'192.168.168.0/24' WITH GRANT OPTION;" &>> "$DETAIL_LOG"
 mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, 
     RELOAD, SHUTDOWN, PROCESS, FILE, REFERENCES, INDEX, 
     ALTER, SHOW DATABASES, SUPER, CREATE TEMPORARY TABLES, 
@@ -675,7 +679,7 @@ mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP,
     REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, 
     CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, 
     TRIGGER, CREATE TABLESPACE, CREATE ROLE, 
-    DROP ROLE ON *.* TO `lhensley`@`10.0.0.0/8` WITH GRANT OPTION;" &>> "$DETAIL_LOG"
+    DROP ROLE ON *.* TO 'lhensley'@'10.0.0.0/8' WITH GRANT OPTION;" &>> "$DETAIL_LOG"
 mysql -e "GRANT ALLOW_NONEXISTENT_DEFINER, \
     APPLICATION_PASSWORD_ADMIN,AUDIT_ABORT_EXEMPT, \
     AUDIT_ADMIN,AUTHENTICATION_POLICY_ADMIN,BACKUP_ADMIN, \
@@ -694,7 +698,7 @@ mysql -e "GRANT ALLOW_NONEXISTENT_DEFINER, \
     SYSTEM_USER,SYSTEM_VARIABLES_ADMIN, \
     TABLE_ENCRYPTION_ADMIN,TELEMETRY_LOG_ADMIN,  \
     TRANSACTION_GTID_TAG,XA_RECOVER_ADMIN ON *.*  \
-    TO `lhensley`@`10.0.0.0/8` WITH GRANT OPTION;" &>> "$DETAIL_LOG"
+    TO 'lhensley'@'10.0.0.0/8' WITH GRANT OPTION;" &>> "$DETAIL_LOG"
 mysql -e "FLUSH PRIVILEGES;" &>> "$DETAIL_LOG"
 
 f_record_to_installation_log "installed mysql"
@@ -705,13 +709,13 @@ f_record_to_installation_log "installed mysql"
 #####################################################################################################
 
 echo -e "\n\033[1;34m$0, line ${LINENO}, $(date +"%F %T.%3N %Z")\033[0m:" \
-    "Installing phpMyAdmin." | tee -a "$DETAIL_LOG"
+    "Installing phpMyAdmin." 2>&1 | tee -a "$DETAIL_LOG"
 
 # Based on https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04
 # UPDATED TO: https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-22-04
 export DEBIAN_FRONTEND=noninteractive
 # apt purge --yes phpmyadmin php-mbstring php-zip php-gd php-json php-curl
-apt-all install --yes phpmyadmin php-mbstring php-zip php-gd php-json php-curl &>> "$DETAIL_LOG"
+apt-get install --yes phpmyadmin php-mbstring php-zip php-gd php-json php-curl &>> "$DETAIL_LOG"
 phpenmod mbstring &>> "$DETAIL_LOG"
 cp $GIT_UBUNTU_TOOLS_CONFIGS/etc/phpmyadmin/config.inc.php $PHPMYADMIN_DIR/config.inc.php &>> "$DETAIL_LOG"
 chown -R www-data:www-data $PHPMYADMIN_DIR &>> "$DETAIL_LOG"
@@ -729,32 +733,13 @@ systemctl restart apache2 &>> "$DETAIL_LOG"
 f_record_to_installation_log "installed phpMyAdmin"
 
 
-
-
-
-
-
-
-
-
-
-
-### Good from set-pre-2026 line 205
-
-
-
-
-
-
-
-
 #####################################################################################################
 # END
 #####################################################################################################
 
 # echo "Done." 1>&2
-echo "" | tee -a "$DETAIL_LOG"
-echo "You may want to delete file $0" | tee -a "$DETAIL_LOG"
+echo "" 2>&1 | tee -a "$DETAIL_LOG"
+echo "You may want to delete file $0" 2>&1 | tee -a "$DETAIL_LOG"
 
 f_record_to_installation_log "$0 done"
 
@@ -765,6 +750,17 @@ f_record_to_installation_log "$0 done"
 exit 0
 
 
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+# Last Jersey Wall ...
+exit 1
 
 
 #############################################
@@ -806,23 +802,5 @@ exit 0
 # Dynamic DNS service provider: other
 # 
 #
-
-# Jersey wall ...
-exit 1
-
-
-
-
-admin@localhost
-admin@192.168.168.0/24
-admin@10.0.0.0/8
-lhensley@localhost
-lhensley@192.168.168.0/24
-lhensley@10.0.0.0/8
-
-
-CREATE ROLE IF NOT EXISTS admin, 
-
-
 
 
